@@ -26,7 +26,7 @@ const fs = require('fs');
 const path = require('path');
 
 const RESOLVED_ROOT = path.resolve(__dirname, '..', '..');
-const ENV_OVERRIDE = 'SM_OS_ROOT';
+const ENV_OVERRIDE = 'MYTHOS_ROOT';
 const ANCHORS = ['instructions/canonical', '.git', 'package.json'];
 
 function isValidRoot(root) {

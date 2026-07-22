@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://mythos.dev/schemas/canonical-entry.schema.json",
+  "title": "Canonical Memory Entry",
+  "description": "Schema for entries under _dev/state/kernel-memory/entries/. The canonical source of truth for Mythos memory. Harness-local memory (Claude per-project pocket, etc.) is a regenerable projection of this entry; this entry is never a projection.",
+  "type": "object",
+  "required": [
+    "id",
+    "schema_version",
+    "type",
+    "title",
+    "body",
+    "anchor_ref",
+    "source_artifact",
+    "created_ts",
+    "content_hash"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,127}$",
+      "description": "Stable canonical id. ULID, kebab-slug, or other content-addressable token."
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "1"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["user", "feedback", "project", "reference"]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "body": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Memory content. Markdown permitted. Stored verbatim; content_hash is sha256 of this field exactly."
+    },
+    "anchor_ref": {
+      "type": "string",
+      "pattern": "^(commit|path|signal|concept|transcript|operator-instruction):.+"
+    },
+    "source_artifact": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Origin descriptor — e.g. 'chat:2026-05-14', 'debrief:<run-id>', 'convene:<scope>'."
+    },
+    "created_ts": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "sha256(body) — the load-bearing integrity anchor."
+    },
+    "supersedes": {
+      "type": ["string", "null"],
+      "description": "Prior canonical entry id this entry supersedes, if any."
+    },
+    "actor": {
+      "type": "string",
+      "enum": ["claude", "codex", "gemini", "operator", "human", "cron", "other"],
+      "default": "claude"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": []
+    },
+    "ledger_event_id": {
+      "type": ["string", "null"],
+      "description": "Set by the writer after the paired ledger append succeeds. Receipt-binding field."
+    }
+  }
+}

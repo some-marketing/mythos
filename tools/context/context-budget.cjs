@@ -353,7 +353,7 @@ function buildChildScopeArtifacts({ parentScope = 'system', childScope = '', run
 }
 
 function buildContextBudgetReport(projectRoot, opts = {}) {
-  const sessionId = opts.sessionId || process.env.SM_OS_SESSION_ID || process.env.CLAUDE_SESSION_ID || process.env.CODEX_SESSION_ID || `session-${Date.now()}`;
+  const sessionId = opts.sessionId || process.env.MYTHOS_SESSION_ID || process.env.CLAUDE_SESSION_ID || process.env.CODEX_SESSION_ID || `session-${Date.now()}`;
   const proxy = { ...(opts.proxy || {}) };
   if (proxy.dirtyFileCount === undefined && proxy.dirty_file_count === undefined && opts.includeGitDirtyCount !== false) {
     const dirtyCount = gitDirtyCount(projectRoot);

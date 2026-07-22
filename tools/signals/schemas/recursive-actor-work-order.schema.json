@@ -1,0 +1,465 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "recursive-actor-work-order.schema.json",
+  "title": "RecursiveActorWorkOrder/1.0",
+  "description": "Compact recursive routing work order for child actor delegation.",
+  "type": "object",
+  "required": [
+    "schema",
+    "critical_ref",
+    "conversation_ref",
+    "prompt_ref",
+    "workstream",
+    "parent",
+    "actor",
+    "routing",
+    "delegation",
+    "task",
+    "custody",
+    "evidence",
+    "branch",
+    "open_questions",
+    "child_work_orders",
+    "aggregation_contract",
+    "cost_preference",
+    "determinism_level",
+    "model_downshift_reason",
+    "decomposition_state",
+    "three_step_plan",
+    "ready_to_execute_when_three_steps",
+    "fractal_until_executable",
+    "stop_conditions",
+    "return_contract"
+  ],
+  "properties": {
+    "schema": {
+      "enum": ["RecursiveActorWorkOrder/1.0"]
+    },
+    "critical_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "conversation_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "prompt_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "workstream": {
+      "type": "object",
+      "required": ["scope", "scope_tier"],
+      "properties": {
+        "scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope_tier": {
+          "enum": ["system", "client", "project", "task", "leaf"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "parent": {
+      "type": "object",
+      "required": ["scope", "scope_tier"],
+      "properties": {
+        "scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope_tier": {
+          "enum": ["system", "client", "project", "task", "leaf"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "actor": {
+      "type": "object",
+      "required": ["role", "target", "transport", "model", "kind", "launch_contract"],
+      "properties": {
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transport": {
+          "enum": ["local-cli", "local-model", "api", "api-router"]
+        },
+        "model": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "launch_contract": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "routing": {
+      "type": "object",
+      "required": [
+        "scope_tier",
+        "scope_tier_rank",
+        "child_depth_budget",
+        "transport",
+        "api_allowed",
+        "capability_floor",
+        "model_class",
+        "smallest_sufficient_local_class",
+        "local_tiny_available",
+        "raspi_available",
+        "cost_priority",
+        "selection_precedence",
+        "selected_as_cheapest_sufficient",
+        "rejected_overqualified_options",
+        "preferred_transport",
+        "prefers_logged_in_before_api",
+        "transport_preference"
+      ],
+      "properties": {
+        "scope_tier": {
+          "enum": ["system", "client", "project", "task", "leaf"]
+        },
+        "scope_tier_rank": {
+          "type": ["integer", "null"]
+        },
+        "child_depth_budget": {
+          "type": ["integer", "null"]
+        },
+        "transport": {
+          "enum": ["local-cli", "local-model", "api", "api-router"]
+        },
+        "provider": {
+          "enum": ["openrouter"]
+        },
+        "api_allowed": {
+          "type": "boolean"
+        },
+        "capability_floor": {
+          "enum": ["broad", "narrowing", "narrow", "mechanical"]
+        },
+        "smallest_sufficient_local_class": {
+          "enum": ["frontier", "logged-in", "local-model", "local-tiny", "raspi", "api-router"]
+        },
+        "local_tiny_available": {
+          "type": "boolean"
+        },
+        "raspi_available": {
+          "type": "boolean"
+        },
+        "cost_priority": {
+          "enum": ["free", "low", "balanced", "best_available"]
+        },
+        "selection_precedence": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "frontier_for_broad_or_ambiguous",
+              "cheapest_sufficient_within_capability_floor",
+              "downshift_as_scope_narrows"
+            ]
+          }
+        },
+        "selected_as_cheapest_sufficient": {
+          "type": "boolean"
+        },
+        "rejected_overqualified_options": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "model_class": {
+          "type": "string",
+          "minLength": 1
+        },
+        "preferred_transport": {
+          "enum": ["local-cli", "local-model", "api", "api-router"]
+        },
+        "prefers_logged_in_before_api": {
+          "type": "boolean"
+        },
+        "transport_preference": {
+          "type": "array",
+          "items": {
+            "enum": ["local-cli", "local-model", "api", "api-router"]
+          }
+        },
+        "model": {
+          "type": "string"
+        },
+        "selected_model": {
+          "type": "string"
+        },
+        "model_downshift_reason": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "decomposition_state": {
+      "enum": ["fan-out", "fan-in", "ready", "blocked"]
+    },
+    "three_step_plan": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "ready_to_execute_when_three_steps": {
+      "type": "boolean"
+    },
+    "fractal_until_executable": {
+      "type": "boolean"
+    },
+    "delegation": {
+      "type": "object",
+      "required": [
+        "child_scope",
+        "child_scope_tier",
+        "child_depth_budget",
+        "child_authority",
+        "child_write_set"
+      ],
+      "properties": {
+        "child_scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "child_scope_tier": {
+          "enum": ["system", "client", "project", "task", "leaf"]
+        },
+        "child_depth_budget": {
+          "type": "integer"
+        },
+        "child_authority": {
+          "type": "string",
+          "minLength": 1
+        },
+        "child_write_set": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "task": {
+      "type": "object",
+      "required": ["summary", "command"],
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "objective": {
+          "type": "string"
+        },
+        "command": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "custody": {
+      "type": "object",
+      "required": ["owner", "held_by", "write_set", "forbidden_surfaces"],
+      "properties": {
+        "owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "held_by": {
+          "type": "string",
+          "minLength": 1
+        },
+        "write_set": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "forbidden_surfaces": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["references", "locations"],
+      "properties": {
+        "references": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "locations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "branch": {
+      "type": "object",
+      "required": [
+        "target_branch",
+        "reference_set",
+        "grounding_summary",
+        "grounding_state",
+        "github_connector_available"
+      ],
+      "properties": {
+        "target_branch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reference_set": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "grounding_summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "grounding_state": {
+          "enum": ["live", "unverified", "assumed"]
+        },
+        "github_connector_available": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "open_questions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "child_work_orders": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "aggregation_contract": {
+      "type": "object",
+      "required": ["kind", "merge_strategy", "required_fields", "notes"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "merge_strategy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "required_fields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "optional_fields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "cost_preference": {
+      "enum": ["free", "low", "balanced", "best_available"]
+    },
+    "determinism_level": {
+      "enum": ["low", "medium", "high", "mechanical"]
+    },
+    "model_downshift_reason": {
+      "type": "string"
+    },
+    "stop_conditions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "return_contract": {
+      "type": "object",
+      "required": ["kind", "delivery", "required_fields", "notes"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "delivery": {
+          "type": "string",
+          "minLength": 1
+        },
+        "required_fields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "optional_fields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

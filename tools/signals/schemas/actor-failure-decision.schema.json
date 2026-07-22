@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "actor-failure-decision.schema.json",
+  "title": "ActorFailureDecision/1.0",
+  "type": "object",
+  "required": ["schema", "dispatch_id", "work_order_sha256", "target_tuple", "attempt_count", "max_retries", "failure_class", "disposition", "evidence"],
+  "properties": {
+    "schema": { "const": "ActorFailureDecision/1.0" },
+    "dispatch_id": { "type": "string", "minLength": 1 },
+    "work_order_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "target_tuple": { "type": "object" },
+    "attempt_count": { "type": "integer", "minimum": 1 },
+    "max_retries": { "type": "integer", "minimum": 0, "maximum": 2 },
+    "failure_class": { "enum": ["timeout", "transport", "auth", "permission", "safety", "privacy", "mode", "custody", "semantic", "unknown"] },
+    "disposition": { "enum": ["retry_same_target", "stop_terminal", "escalate_coordinator"] },
+    "evidence": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false
+}

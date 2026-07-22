@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "actor-work-order.schema.json",
+  "title": "ActorWorkOrder/1.0",
+  "type": "object",
+  "required": ["schema", "dispatch_id", "continuity", "actor", "execution", "custody", "privacy", "disclosure", "max_retries"],
+  "properties": {
+    "schema": { "const": "ActorWorkOrder/1.0" },
+    "dispatch_id": { "type": "string", "minLength": 1 },
+    "continuity": {
+      "type": "object",
+      "required": ["current_state", "question_work", "desired_state"],
+      "properties": {
+        "current_state": { "type": "string", "minLength": 1 },
+        "question_work": { "type": "string", "minLength": 1 },
+        "desired_state": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "actor": {
+      "type": "object",
+      "required": ["target", "model", "mind", "command"],
+      "properties": {
+        "target": { "type": "string", "minLength": 1, "pattern": "^[a-z0-9][a-z0-9-]*$" },
+        "model": { "type": "string", "minLength": 1 },
+        "mind": { "type": "string", "minLength": 1 },
+        "command": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "execution": {
+      "type": "object",
+      "required": ["mode", "required_mcp"],
+      "properties": {
+        "mode": { "enum": ["FINDINGS_ONLY", "RUN_ONLY", "REVIEW_ONLY", "PATCH_ALLOWED", "COORDINATOR", "REPO_HYGIENE", "read-only", "workspace-write"] },
+        "required_mcp": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true }
+      },
+      "additionalProperties": false
+    },
+    "custody": {
+      "type": "object",
+      "required": ["scope", "owner"],
+      "properties": {
+        "scope": { "type": "string", "minLength": 1 },
+        "owner": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "privacy": {
+      "type": "object",
+      "required": ["access", "allowed_refs"],
+      "properties": {
+        "access": { "enum": ["public", "repository", "synthetic", "private-bounded", "none"] },
+        "allowed_refs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      },
+      "additionalProperties": false
+    },
+    "disclosure": {
+      "type": "object",
+      "required": ["model", "mind"],
+      "properties": {
+        "model": { "type": "string", "minLength": 1 },
+        "mind": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "fable_conduct": { "type": "boolean" },
+    "max_retries": { "type": "integer", "minimum": 0, "maximum": 2 }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": { "properties": { "actor": { "properties": { "target": { "const": "claude" } }, "required": ["target"] } } },
+      "then": { "required": ["fable_conduct"], "properties": { "fable_conduct": { "const": false } } },
+      "else": { "not": { "required": ["fable_conduct"] } }
+    }
+  ]
+}

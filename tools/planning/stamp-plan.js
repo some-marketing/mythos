@@ -11,7 +11,7 @@
  *   cannot be checked (offline / CI / Dart unreachable, per G-COND-2).
  *
  * THREAT MODEL:
- *   The operator holds a single secret SM_OS_OPERATOR_APPROVAL_SECRET in the
+ *   The operator holds a single secret MYTHOS_OPERATOR_APPROVAL_SECRET in the
  *   on-device secret store (macOS Keychain / 1Password) that the agent
  *   environment deliberately does NOT receive (same discipline as
  *   tools/dart-integration/lib/dart-api.js token resolution). The agent has
@@ -40,9 +40,9 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-const OPERATOR_APPROVAL_SECRET_ENV = 'SM_OS_OPERATOR_APPROVAL_SECRET';
+const OPERATOR_APPROVAL_SECRET_ENV = 'MYTHOS_OPERATOR_APPROVAL_SECRET';
 // On-device secret store coordinates (mirrors the dart-api.js Keychain pattern).
-const SECRET_KEYCHAIN_SERVICE = 'SM_OS_OPERATOR_APPROVAL_SECRET';
+const SECRET_KEYCHAIN_SERVICE = 'MYTHOS_OPERATOR_APPROVAL_SECRET';
 const SECRET_KEYCHAIN_ACCOUNT = 'smos';
 
 const STAMP_MECHANISM = 'hmac-sha256';
@@ -158,7 +158,7 @@ function verifyHmacStamp(secret, stamp, expected) {
  *
  * SECURITY (F1 — Stage E repair): the DEFAULT source is the macOS Keychain ONLY.
  * The process environment is NEVER read by default, because an agent sharing the
- * process could otherwise plant SM_OS_OPERATOR_APPROVAL_SECRET in its own env and
+ * process could otherwise plant MYTHOS_OPERATOR_APPROVAL_SECRET in its own env and
  * forge an approval. Reading env requires the EXPLICITLY named `allowEnvSecret:true`
  * option — reserved for the operator-run TTY CLI (and controlled tests). The
  * default run-time verifier path NEVER sets it, so the verifier cannot be fooled

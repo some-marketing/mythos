@@ -19,7 +19,7 @@ repo_root() {
   local mode="${1:-hard}"
   local self_dir root
   self_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)" || return 3
-  root="${SM_OS_ROOT:-$(cd "$self_dir/../.." && pwd -P)}"
+  root="${MYTHOS_ROOT:-$(cd "$self_dir/../.." && pwd -P)}"
   # .git is a directory in a normal checkout but a file in legitimate
   # worktrees/submodules — accept either, matching canonical-root.cjs's
   # existsSync semantics. Requiring -d here false-positives on git worktrees.

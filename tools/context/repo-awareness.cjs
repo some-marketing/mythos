@@ -226,7 +226,7 @@ function summarizeGit(projectRoot) {
 }
 
 function buildSnapshot(projectRoot, opts = {}) {
-  const sessionId = opts.sessionId || process.env.SM_OS_SESSION_ID || process.env.CLAUDE_SESSION_ID || process.env.CODEX_SESSION_ID || `session-${Date.now()}`;
+  const sessionId = opts.sessionId || process.env.MYTHOS_SESSION_ID || process.env.CLAUDE_SESSION_ID || process.env.CODEX_SESSION_ID || `session-${Date.now()}`;
   const generatedAt = opts.generatedAt || nowIso();
   return {
     schema: SNAPSHOT_SCHEMA,
@@ -271,7 +271,7 @@ function initRepoAwareness(projectRoot, opts = {}) {
 }
 
 function buildCloseout(projectRoot, opts = {}) {
-  const sessionId = opts.sessionId || process.env.SM_OS_SESSION_ID || process.env.CLAUDE_SESSION_ID || process.env.CODEX_SESSION_ID || `session-${Date.now()}`;
+  const sessionId = opts.sessionId || process.env.MYTHOS_SESSION_ID || process.env.CLAUDE_SESSION_ID || process.env.CODEX_SESSION_ID || `session-${Date.now()}`;
   const generatedAt = opts.generatedAt || nowIso();
   const latest = safeReadJson(latestPath(projectRoot));
   const planVisibility = summarizePlanVisibility(projectRoot);

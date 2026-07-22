@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "cat-memory/adapter-role/1.0",
+  "title": "Per-harness memory adapter role",
+  "description": "Declares the memory-topology role of one harness against the canonical memory layer (write-canonical-entry.js + the ledger). Exactly one declared role per harness. See _dev/concepts/topological-sovereignty-memory/concept.md and tools/memory/README.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["role"],
+  "properties": {
+    "role": {
+      "enum": ["source", "cache+native-hint", "explicit-read+hook-emulated", "unavailable"],
+      "description": "source = the one canonical store of truth (only ONE harness may be source). cache+native-hint = a local cache the harness reads natively, receipt-bound to canonical (no cache write without a canonical receipt). explicit-read+hook-emulated = no native pocket; reads canonical explicitly and emulates write/recall via hooks. unavailable = no memory surface yet; declares incapability honestly rather than claiming an unverified capability."
+    },
+    "cache_path": {
+      "type": ["string", "null"],
+      "description": "For cache roles: the local pocket path (informational). Null for source/unavailable."
+    },
+    "receipt_bound": {
+      "type": "boolean",
+      "description": "True if this adapter blocks cache writes until canonical returns a receipt. MUST be true for any cache role (the load-bearing invariant). N/A (false) for unavailable."
+    },
+    "next_step": {
+      "type": ["string", "null"],
+      "description": "REQUIRED when role=unavailable: the named work that would close the gap (so 'unavailable' carries a path forward, not a dead end). Null otherwise."
+    },
+    "notes": { "type": ["string", "null"] }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "role": { "const": "unavailable" } } },
+      "then": { "required": ["next_step"], "properties": { "next_step": { "type": "string", "minLength": 1 } } }
+    },
+    {
+      "if": { "properties": { "role": { "enum": ["cache+native-hint", "explicit-read+hook-emulated"] } } },
+      "then": { "required": ["receipt_bound"], "properties": { "receipt_bound": { "const": true } } }
+    }
+  ]
+}

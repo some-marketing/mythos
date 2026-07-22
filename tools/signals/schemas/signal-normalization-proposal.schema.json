@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SignalNormalizationProposal/1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "proposal_id", "created_at", "signal_basename", "signal_path", "signal_content_sha256", "classification", "disposition", "close_reason", "successor", "deferral_reason", "authority_decision", "evidence_refs", "proposal_sha256"],
+  "properties": {
+    "schema": { "type": "string", "enum": ["SignalNormalizationProposal/1.0"] },
+    "proposal_id": { "type": "string", "minLength": 1 },
+    "created_at": { "type": "string", "minLength": 1 },
+    "signal_basename": { "type": "string", "minLength": 1 },
+    "signal_path": { "type": "string", "minLength": 1 },
+    "signal_content_sha256": { "type": "string", "minLength": 71 },
+    "classification": { "type": "string", "enum": ["eligible", "ambiguous", "stale", "duplicate", "superseded", "review_required", "blocked"] },
+    "disposition": { "type": "string", "enum": ["close", "duplicate", "superseded", "review_required"] },
+    "close_reason": { "type": ["string", "null"], "enum": ["closed", "consumed", "duplicate", "superseded", null] },
+    "successor": { "type": ["string", "null"] },
+    "deferral_reason": { "type": ["string", "null"] },
+    "authority_decision": {
+      "type": "object",
+      "required": ["schema", "signal_basename", "signal_content_sha256", "status", "capability_granted", "checks"],
+      "properties": {
+        "schema": { "type": "string", "enum": ["SignalAuthorityDecision/1.0"] },
+        "signal_basename": { "type": "string", "minLength": 1 },
+        "signal_content_sha256": { "type": "string", "minLength": 71 },
+        "status": { "type": "string", "enum": ["eligible", "blocked", "review_required"] },
+        "capability_granted": { "type": "boolean" },
+        "checks": { "type": "array", "minItems": 1 }
+      }
+    },
+    "evidence_refs": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "proposal_sha256": { "type": "string", "minLength": 71 }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SignalAuthorityDecision/1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "decision_id", "evaluated_at", "signal_basename", "signal_content_sha256", "status", "requested_scope", "signal_scope", "actor_id", "target_actor", "capability_granted", "checks", "evidence_refs"],
+  "properties": {
+    "schema": { "type": "string", "enum": ["SignalAuthorityDecision/1.0"] },
+    "decision_id": { "type": "string", "minLength": 1 },
+    "evaluated_at": { "type": "string", "minLength": 1 },
+    "signal_basename": { "type": "string", "minLength": 1 },
+    "signal_content_sha256": { "type": "string", "minLength": 71 },
+    "status": { "type": "string", "enum": ["eligible", "blocked", "review_required"] },
+    "requested_scope": { "type": "string" },
+    "signal_scope": { "type": "string" },
+    "actor_id": { "type": "string" },
+    "target_actor": { "type": "string" },
+    "capability_granted": { "type": "boolean" },
+    "checks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "status", "detail"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "status": { "type": "string", "enum": ["PASS", "FAIL", "REVIEW"] },
+          "detail": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "evidence_refs": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+  }
+}

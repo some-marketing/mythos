@@ -84,7 +84,16 @@
     "dart:plan:create-task:dry": "node tools/dart-integration/create-task-from-plan.js --dry-run",
     "dart:plan:comment": "node tools/dart-integration/post-plan-comment.js",
     "lint:spans": "node tools/telemetry/dispatches/lint-spans.cjs",
-    "lint:spans:enforce": "node tools/telemetry/dispatches/lint-spans.cjs --enforce"
+    "lint:spans:enforce": "node tools/telemetry/dispatches/lint-spans.cjs --enforce",
+    "lessons:scan": "node tools/lessons/scan-session-data.js",
+    "lessons:check": "node tools/lessons/check-reconciliation-due.cjs --json",
+    "lessons:check:emit": "node tools/lessons/check-reconciliation-due.cjs --emit --json",
+    "ai:gemini:api": "node tools/ai-bridge/adapters/gemini-api.js",
+    "sessions:continuity": "node tools/sessions/continuity-index.cjs",
+    "session:monitor": "node tools/sessions/session.js monitor",
+    "session:whoami": "node tools/sessions/session.js whoami",
+    "session:update": "node tools/sessions/session.js update",
+    "end-session": "node tools/maintenance/end-session-closeout.js"
   },
   "devDependencies": {
     "playwright": "^1.58.2",

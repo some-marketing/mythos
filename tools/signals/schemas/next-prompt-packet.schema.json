@@ -1,0 +1,313 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "next-prompt-packet.schema.json",
+  "title": "NextPromptPacket/1.0",
+  "description": "Structured prompt packet contract for next-action generation across worker, reviewer, bridge, closeout, handoff, and systemization-init roles.",
+  "type": "object",
+  "required": [
+    "schema",
+    "role",
+    "workstream_scope",
+    "actor_role",
+    "write_set",
+    "forbidden_surfaces",
+    "expected_evidence",
+    "tests",
+    "review_lane",
+    "closeout_owner",
+    "grounding_posture",
+    "local_model_preflight_summary",
+    "exact_return_contract",
+    "advisory_not_authority"
+  ],
+  "properties": {
+    "schema": { "const": "NextPromptPacket/1.0" },
+    "role": {
+      "enum": ["worker", "reviewer", "bridge", "closeout", "handoff", "systemization-init"]
+    },
+    "workstream_scope": { "type": "string", "minLength": 1 },
+    "actor_role": { "type": "string", "minLength": 1 },
+    "scope_identity": {
+      "type": "object",
+      "description": "Optional custody or scope identity context preserved from the source signal or task plan.",
+      "properties": {
+        "workstream_scope": { "type": "string", "minLength": 1 },
+        "workflow_scope": { "type": "string", "minLength": 1 },
+        "scope": { "type": "string", "minLength": 1 },
+        "session_id": { "type": "string", "minLength": 1 },
+        "session_or_run_id": { "type": "string", "minLength": 1 },
+        "execution_id": { "type": "string", "minLength": 1 },
+        "signal_id": { "type": "string", "minLength": 1 },
+        "actor_id": { "type": "string", "minLength": 1 },
+        "owner": { "type": "string", "minLength": 1 },
+        "working_surface": {
+          "anyOf": [
+            { "type": "string", "minLength": 1 },
+            { "type": "object" }
+          ]
+        },
+        "custody_hierarchy": {
+          "type": "object",
+          "properties": {
+            "system_id": { "type": "string", "minLength": 1 },
+            "client_code": { "type": ["string", "null"] },
+            "project_id": { "type": ["string", "null"] },
+            "task_id": { "type": "string", "minLength": 1 },
+            "parent_scope": { "type": ["string", "null"] },
+            "child_scopes": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "owned_artifacts": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "forbidden_artifacts": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      },
+      "additionalProperties": false
+    },
+    "write_set": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "forbidden_surfaces": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "expected_evidence": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "tests": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "review_lane": { "type": "string", "minLength": 1 },
+    "closeout_owner": { "type": "string", "minLength": 1 },
+    "grounding_posture": {
+      "type": "object",
+      "required": ["mode", "interpretive_posture", "advisory_only"],
+      "properties": {
+        "mode": { "type": "string", "minLength": 1 },
+        "interpretive_posture": { "type": "string", "minLength": 1 },
+        "advisory_only": { "type": "boolean" },
+        "summary": { "type": "string" },
+        "files": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "notes": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      },
+      "additionalProperties": false
+    },
+    "local_model_preflight_summary": {
+      "type": "object",
+      "required": ["status", "summary"],
+      "properties": {
+        "status": {
+          "enum": ["not_applicable", "passed", "warned", "blocked", "unknown"]
+        },
+        "summary": { "type": "string" },
+        "observed_at": { "type": "string" },
+        "host_state": { "type": "object" },
+        "blockers": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "warnings": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "notes": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      },
+      "additionalProperties": false
+    },
+    "work_order_summary": {
+      "type": "object",
+      "description": "Validated RecursiveActorWorkOrder/1.0 summary emitted for the next actor prompt.",
+      "required": [
+        "schema",
+        "validated",
+        "next_actor_role",
+        "workstream_scope",
+        "scope_tier",
+        "exact_next_command",
+        "summary",
+        "model_class",
+        "smallest_sufficient_local_class",
+        "local_tiny_available",
+        "raspi_available",
+        "decomposition_state",
+        "three_step_plan",
+        "ready_to_execute_when_three_steps",
+        "fractal_until_executable",
+        "write_set",
+        "forbidden_surfaces",
+        "expected_evidence",
+        "tests",
+        "review_lane",
+        "closeout_owner",
+        "blocked_by",
+        "open_questions",
+        "child_work_orders",
+        "aggregation_contract",
+        "target_branch",
+        "branch_reference_set",
+        "repo_specific_assumptions",
+        "repo_specific_assumptions_verified",
+        "model_downshift_reason",
+        "cost_preference",
+        "determinism_level"
+      ],
+      "properties": {
+        "schema": { "const": "RecursiveActorWorkOrder/1.0" },
+        "validated": { "type": "boolean" },
+        "next_actor_role": { "type": "string", "minLength": 1 },
+        "workstream_scope": { "type": "string", "minLength": 1 },
+        "scope_tier": { "enum": ["system", "client", "project", "task", "leaf"] },
+        "exact_next_command": { "type": "string" },
+        "summary": { "type": "string", "minLength": 1 },
+        "model_class": { "type": "string", "minLength": 1 },
+        "smallest_sufficient_local_class": {
+          "enum": ["frontier", "logged-in", "local-model", "local-tiny", "raspi", "api-router"]
+        },
+        "local_tiny_available": { "type": "boolean" },
+        "raspi_available": { "type": "boolean" },
+        "decomposition_state": { "enum": ["fan-out", "fan-in", "ready", "blocked"] },
+        "three_step_plan": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "ready_to_execute_when_three_steps": { "type": "boolean" },
+        "fractal_until_executable": { "type": "boolean" },
+        "write_set": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "forbidden_surfaces": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "expected_evidence": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "tests": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "review_lane": { "type": "string", "minLength": 1 },
+        "closeout_owner": { "type": "string", "minLength": 1 },
+        "blocked_by": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "open_questions": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "child_work_orders": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "aggregation_contract": {
+          "type": "object",
+          "required": ["schema", "mode", "strategy", "upstream_owner", "child_result_fields", "aggregation_fields"],
+          "properties": {
+            "schema": { "type": "string", "minLength": 1 },
+            "mode": { "type": "string", "minLength": 1 },
+            "strategy": { "type": "string", "minLength": 1 },
+            "upstream_owner": { "type": "string", "minLength": 1 },
+            "child_result_fields": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 }
+            },
+            "aggregation_fields": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 }
+            },
+            "notes": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 }
+            }
+          },
+          "additionalProperties": false
+        },
+        "target_branch": { "type": "string" },
+        "branch_reference_set": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "repo_specific_assumptions": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "repo_specific_assumptions_verified": { "type": "boolean" },
+        "model_downshift_reason": { "type": "string", "minLength": 1 },
+        "cost_preference": { "enum": ["free", "low", "balanced", "best_available"] },
+        "determinism_level": { "enum": ["low", "medium", "high", "mechanical"] },
+        "prompt_hint": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "exact_return_contract": {
+      "type": "object",
+      "required": ["kind", "delivery", "required_fields", "notes"],
+      "properties": {
+        "kind": { "type": "string", "minLength": 1 },
+        "delivery": { "type": "string", "minLength": 1 },
+        "required_fields": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "optional_fields": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "blocked_when_missing": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "notes": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      },
+      "additionalProperties": false
+    },
+    "advisory_not_authority": { "type": "boolean" },
+    "prompt_hint": { "type": "string" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "role": { "const": "systemization-init" }
+        },
+        "required": ["role"]
+      },
+      "then": {
+        "properties": {
+          "advisory_not_authority": { "const": true }
+        }
+      },
+      "else": {
+        "properties": {
+          "advisory_not_authority": { "const": false }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

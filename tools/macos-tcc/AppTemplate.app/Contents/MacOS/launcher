@@ -1,0 +1,8 @@
+#!/bin/bash
+# Placeholder launcher -- build-and-sign.sh overwrites this file with a
+# job-specific script that execs the real node entrypoint. This stub only
+# needs to exist so the template copies and signs cleanly before that
+# overwrite happens.
+set -euo pipefail
+echo "This is an unbuilt AppTemplate.app placeholder. Run build-and-sign.sh --job <name> --script <path> to produce a real launcher." >&2
+exit 1

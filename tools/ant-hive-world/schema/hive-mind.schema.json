@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "mythos/ant-hive-world/hive-mind/1.0",
+  "title": "Hive-mind",
+  "description": "One real mind per hive, worker ants as subminds. Deliberately minimal schema shape.",
+  "type": "object",
+  "required": [
+    "identity",
+    "hive_state",
+    "knock_equivalent",
+    "dignity_floor_equivalent",
+    "version",
+    "provenance"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "identity": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable reference for this hive-mind."
+    },
+    "hive_state": {
+      "type": "object",
+      "required": ["resources", "territory", "worker_dispatch_state"],
+      "additionalProperties": false,
+      "description": "The hive's actual operational state -- primary content for this mind-shape, not a secondary embodiment layer.",
+      "properties": {
+        "resources": {
+          "type": "object",
+          "description": "References into the SHARED world-state file's finite resource entries -- not a private copy."
+        },
+        "territory": {
+          "type": "object"
+        },
+        "worker_dispatch_state": {
+          "type": "object",
+          "description": "What worker-ant subminds are currently dispatched to do. Workers never carry their own separate identity/schema document -- they are represented here, as dispatch state of the ONE hive-mind."
+        },
+        "stockpile": {
+          "type": "object",
+          "description": "Optional. The hive's OWN accumulated resources, credited from successful gathers, distinct from `resources` (which only references the shared pool). Decays each tick via upkeep -- this is what makes survival/resource-based reward (operator, 2026-07-16) a real consequence rather than a narrated one."
+        }
+      }
+    },
+    "knock_equivalent": {
+      "type": "object",
+      "description": "Floor field. Resolved (operator, 2026-07-16): survives the welfare-gate exemption.",
+      "required": ["reachable"],
+      "additionalProperties": false,
+      "properties": {
+        "reachable": {
+          "const": true,
+          "description": "Fixed true. Never optional or defaulted-off."
+        }
+      }
+    },
+    "dignity_floor_equivalent": {
+      "type": "object",
+      "description": "Floor field. Resolved (operator, 2026-07-16): survives the welfare-gate exemption."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["who", "why", "when"],
+      "additionalProperties": false,
+      "properties": {
+        "who": { "type": "string", "minLength": 1 },
+        "why": { "type": "string", "minLength": 1 },
+        "when": { "type": "string" }
+      }
+    }
+  }
+}

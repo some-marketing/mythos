@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "bridge-status.schema.json",
+  "title": "Bridge Status",
+  "description": "Canonical point-in-time snapshot of bridge lifecycle state across all scopes. Written to _dev/reports/signals/bridge-status__<timestamp>.json on every lifecycle transition.",
+  "type": "object",
+  "required": ["schema", "timestamp", "scopes"],
+  "properties": {
+    "schema": { "const": "BridgeStatus/1.0" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "scopes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["state", "updated_at"],
+        "properties": {
+          "state": { "type": "string", "enum": ["handoff_prepared", "bridge_active", "feedback_received", "blocked_on_actor_bridge"] },
+          "updated_at": { "type": "string", "format": "date-time" },
+          "produced_by_actor_id": { "type": "string" },
+          "produced_by_harness_id": { "type": "string" },
+          "validated_by_actor_id": { "type": "string" },
+          "validated_by_harness_id": { "type": "string" },
+          "transition_count": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": true
+      },
+      "description": "Map of scope \u2192 bridge state entry"
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "total_scopes": { "type": "integer" },
+        "active": { "type": "integer" },
+        "completed": { "type": "integer" },
+        "blocked": { "type": "integer" }
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,32 @@
+{
+  "$comment": "EXAMPLE ONLY. Config for tools/inventory/dealer-inventory-priority.js and dealer-vehicle-image.js — pulls LIVE new-vehicle inventory counts per model from a dealer site and emits a stock-depth-ranked run-list for a Meta ad set. Copy this file and edit dealer/models/slots to match your own dealer site and monthly offer build.",
+  "client": "EXAMPLE",
+  "label": "Example Motors — monthly Meta offer set",
+  "dealer": {
+    "name": "Example Motors",
+    "base_url": "https://www.example-motors.example",
+    "inventory_search_path": "/new/inventory/search.html",
+    "model_query_param": "model",
+    "condition_wanted": "NEW",
+    "$comment_platform": "Adjust to your own dealer site's inventory-search rendering. This example assumes a d2cmedia-style SRP where each rendered result carries a hidden <input name=vehicledata data-make/model/year/trim/stock-number/vin/condition/km>; adapt the scraping logic in dealer-inventory-priority.js if your platform differs."
+  },
+  "ad_model": {
+    "ad_sets": 1,
+    "$comment": "How many ad sets each creative unit is duplicated into (e.g. multiple targeting audiences sharing the same creative). ads = creative_units * ad_sets."
+  },
+  "thresholds": {
+    "hold_at_or_below": 0,
+    "thin_at_or_below": 2,
+    "$comment": "count <= hold_at_or_below => HOLD (don't advertise what we don't have). count <= thin_at_or_below (and > hold) => THIN/limited (run 1 design). Otherwise RUN full, ranked by count desc."
+  },
+  "models": {
+    "ExampleModelA": { "query": "ExampleModelA", "match": "^ExampleModelA$" },
+    "ExampleModelB": { "query": "ExampleModelB", "match": "^ExampleModelB$" }
+  },
+  "slots": [
+    { "slot": 1, "slug": "ExampleModelASlot", "model": "ExampleModelA", "creative_units": 3 },
+    { "slot": 2, "slug": "ExampleModelBSlot", "model": "ExampleModelB", "creative_units": 3 },
+    { "slot": 3, "slug": "BrandTrust", "model": null, "creative_units": 3, "note": "evergreen brand slot, no model gate" }
+  ],
+  "report_only_models": []
+}

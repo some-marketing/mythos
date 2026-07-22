@@ -1,0 +1,32 @@
+{
+  "_comment": "EXAMPLE ONLY. Copy this file, rename it, and fill in your own delivery's real grounding data (year/make/model/promo per slot, taken from your own brief/offer documents -- never guessed or read from image pixels). deliveryRoot points at wherever your delivered assets actually live (a mounted Drive folder, a local export dir, etc).",
+  "deliveryRoot": "/path/to/your/delivered-assets-root",
+  "ratioMap": {
+    "1_1": "1x1",
+    "4_5": "4x5",
+    "4.5": "4x5",
+    "9.16": "9x16",
+    "9_16": "9x16",
+    "1.1": "1x1"
+  },
+  "folders": {
+    "ExampleDealer/2026-07 July": {
+      "make": "ExampleMake",
+      "year": "2026",
+      "format": "concept",
+      "slots": {
+        "1": {
+          "model": "ExampleModel",
+          "promo": "ExamplePromoOffer"
+        },
+        "2": {
+          "model": "ExampleModel2",
+          "variants": {
+            "A": { "promo": "ExamplePromoA" },
+            "B": { "promo": "ExamplePromoB" }
+          }
+        }
+      }
+    }
+  }
+}

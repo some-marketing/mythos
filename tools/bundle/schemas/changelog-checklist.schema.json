@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "changelog-checklist.schema.json",
+  "title": "Changelog Checklist",
+  "description": "dev_changelog.checklist.json — structured checklist derived from dev changelog",
+  "type": "object",
+  "required": ["source_changelog", "generated_at", "items"],
+  "properties": {
+    "source_changelog": {
+      "type": "string",
+      "description": "Path to the source dev_changelog.md"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "category", "description", "verified"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^CL-[0-9]+$"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "behavioral_change",
+              "data_format_change",
+              "field_mapping_change",
+              "bug_fix",
+              "new_feature",
+              "deprecation",
+              "other"
+            ]
+          },
+          "description": { "type": "string" },
+          "verified": { "type": "boolean" },
+          "verification_note": { "type": "string" },
+          "affected_testcases": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "delegation-contract.schema.json",
+  "title": "Delegation Contract",
+  "description": "Schema for a bounded worker delegation contract in the system control plane. Governs scope, depth, and authority limits for fractal delegation.",
+  "type": "object",
+  "required": ["schema", "delegation_id", "parent_actor_id", "worker_id", "scope", "depth", "authority", "status", "created_at"],
+  "properties": {
+    "schema": { "const": "DelegationContract/1.0" },
+    "delegation_id": { "type": "string", "description": "Unique delegation identifier" },
+    "parent_actor_id": { "type": "string", "description": "Actor ID of the delegator" },
+    "parent_harness_id": { "type": "string", "description": "Harness ID of the delegator" },
+    "worker_id": { "type": "string", "description": "Identifier for the bounded worker" },
+    "worker_type": { "type": "string", "enum": ["subagent", "external_actor", "bounded_task"], "description": "Type of the delegated worker" },
+    "scope": {
+      "type": "object",
+      "required": ["allowed_paths", "workflow_type"],
+      "properties": {
+        "allowed_paths": { "type": "array", "items": { "type": "string" }, "description": "File paths the worker may read/write" },
+        "denied_paths": { "type": "array", "items": { "type": "string" }, "description": "File paths explicitly excluded" },
+        "workflow_type": { "type": "string", "description": "The workflow type this delegation covers" },
+        "task_description": { "type": "string", "description": "Human-readable bounded task description" }
+      },
+      "additionalProperties": false
+    },
+    "depth": {
+      "type": "object",
+      "required": ["current_depth", "max_depth"],
+      "properties": {
+        "current_depth": { "type": "integer", "minimum": 0, "description": "Current delegation depth (0 = top-level)" },
+        "max_depth": { "type": "integer", "minimum": 0, "description": "Maximum delegation depth allowed" }
+      },
+      "additionalProperties": false
+    },
+    "authority": {
+      "type": "object",
+      "required": ["may_expand_scope", "may_self_close", "may_spawn_workers"],
+      "properties": {
+        "may_expand_scope": { "type": "boolean", "description": "Whether the worker may expand beyond declared scope (must be false for bounded workers)" },
+        "may_self_close": { "type": "boolean", "description": "Whether the worker may self-close acceptance-grade outcomes (must be false)" },
+        "may_spawn_workers": { "type": "boolean", "description": "Whether the worker may create sub-workers (false at max_depth)" },
+        "acceptance_grade_events": { "type": "array", "items": { "type": "string" }, "description": "Which acceptance-grade events this worker may produce (validation flows upward)" }
+      },
+      "additionalProperties": false
+    },
+    "status": { "type": "string", "enum": ["active", "completed", "revoked", "expired"], "description": "Current delegation status" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "completed_at": { "type": "string", "format": "date-time" },
+    "completed_by_actor_id": { "type": "string", "description": "Actor who marked completion (must be distinct from worker for acceptance-grade)" },
+    "revoked_at": { "type": "string", "format": "date-time" },
+    "revocation_reason": { "type": "string" },
+    "parent_delegation_id": { "type": "string", "description": "ID of parent delegation if this is a sub-delegation" }
+  },
+  "additionalProperties": false
+}

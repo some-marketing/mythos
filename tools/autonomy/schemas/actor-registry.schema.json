@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "actor-registry.schema.json",
+  "title": "Actor Registry Entry",
+  "description": "Schema for a registered actor in the system control plane. An actor is any intelligence (human or AI) that can produce, validate, or route work. The identity triple (actor_id, actor_type, harness_id) is the canonical identity used across provenance, validation, and routing surfaces.",
+  "type": "object",
+  "properties": {
+    "actor_id": {
+      "type": "string",
+      "description": "Unique identifier for the actor (e.g., 'claude', 'codex', 'gpt-5.4')"
+    },
+    "actor_type": {
+      "type": "string",
+      "enum": ["human", "intelligence", "hybrid"],
+      "description": "Whether the actor is a human, an AI intelligence, or a hybrid"
+    },
+    "harness_id": {
+      "type": "string",
+      "description": "The harness/runtime through which this actor operates (e.g., 'claude-code', 'codex-cli')"
+    },
+    "label": {
+      "type": "string",
+      "description": "Human-readable display name"
+    },
+    "binary": {
+      "type": "string",
+      "description": "CLI binary name for runtime detection"
+    },
+    "runtime": {
+      "type": "string",
+      "enum": ["cli", "api", "browser", "verification-only", "manual"],
+      "description": "How this actor is invoked"
+    },
+    "verification_only": {
+      "type": "boolean",
+      "description": "Whether this actor can only verify, not produce work"
+    },
+    "experimental": {
+      "type": "boolean",
+      "description": "Whether this actor is experimental"
+    },
+    "cost_rank": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Relative cost ranking (0 = cheapest)"
+    },
+    "preferred_for": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Workflow types this actor is preferred for"
+    },
+    "supports": {
+      "type": "object",
+      "properties": {
+        "read_only": { "type": "boolean" },
+        "patch_allowed": { "type": "boolean" },
+        "full_auto": { "type": "boolean" }
+      },
+      "description": "Execution mode support flags"
+    },
+    "adapter_surface": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Harness-specific capabilities this actor's adapter provides"
+    }
+  },
+  "required": ["actor_id", "actor_type", "harness_id", "label", "runtime"],
+  "additionalProperties": true
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "stage-maturity.schema.json",
+  "title": "StageMaturity/1.0",
+  "type": "object",
+  "required": ["schema", "stage_id", "projected_level", "evidence_sha256", "exceptions", "next_gate", "reopen_condition", "authority", "promotion_eligible", "promotion_receipt", "operator_acceptance"],
+  "properties": {
+    "schema": { "const": "StageMaturity/1.0" },
+    "stage_id": { "type": "string", "minLength": 1 },
+    "projected_level": { "enum": ["unverified", "L0", "L1", "L2", "L3", "L4", "reopened"] },
+    "evidence_sha256": { "type": "array", "items": { "type": "string", "pattern": "^[a-f0-9]{64}$" } },
+    "exceptions": { "type": "array", "items": { "type": "string" } },
+    "next_gate": { "type": "string" },
+    "reopen_condition": { "type": "string" },
+    "authority": { "const": "advisory_only" },
+    "promotion_eligible": { "const": false },
+    "promotion_receipt": { "type": "null" },
+    "operator_acceptance": { "const": "not_evaluated" }
+  },
+  "additionalProperties": false
+}

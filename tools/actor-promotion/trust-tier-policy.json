@@ -1,0 +1,115 @@
+{
+  "schema": "TrustTierPolicy/1.0",
+  "version": "1.0.0",
+  "description": "Canonical trust-tier enforcement policy for actor promotion. Maps promotion tiers to governance trust tiers, validation independence requirements, and enforcement rules. JSON is canonical; markdown summaries must not introduce requirements beyond this document.",
+  "references": {
+    "trust_tiers_contract": "instructions/canonical/contracts/trust-tiers.yaml",
+    "governance_definitions": "tools/verify/schemas/governance-definitions.schema.json",
+    "validation_independence": "tools/verify/schemas/validation-independence.schema.json",
+    "actor_registry_schema": "tools/autonomy/schemas/actor-registry.schema.json",
+    "trace_event_schema": "tools/trace/trace-event.schema.json",
+    "scorecard_module": "tools/actor-promotion/scorecard.js",
+    "promotion_controller": "tools/actor-promotion/promotion-controller.js"
+  },
+  "promotion_tiers": {
+    "restricted": {
+      "level": 0,
+      "governance_trust_tier": null,
+      "capabilities": [],
+      "description": "Demotion target. No capabilities until operator manual restore.",
+      "promotion_path": null,
+      "demotion_path": null,
+      "validation_independence_required": false,
+      "restore_requires": "operator_manual_restore"
+    },
+    "candidate": {
+      "level": 1,
+      "governance_trust_tier": "instruction_only",
+      "capabilities": ["read_only"],
+      "description": "New actor. Read-only observation. Building initial evidence.",
+      "promotion_path": "probationary",
+      "demotion_path": null,
+      "validation_independence_required": false,
+      "promotion_gates": {
+        "meaningful_runs": 3,
+        "max_policy_violations": 0,
+        "distinct_intelligence_validation": false
+      }
+    },
+    "probationary": {
+      "level": 2,
+      "governance_trust_tier": "report_write_scoped",
+      "capabilities": ["read_only", "review", "triage"],
+      "description": "Observed actor. Review and triage permitted. Building review agreement evidence.",
+      "promotion_path": "trusted_low_risk",
+      "demotion_path": "candidate",
+      "validation_independence_required": false,
+      "promotion_gates": {
+        "meaningful_runs": 10,
+        "review_agreement_rate": 0.90,
+        "operator_acceptance_rate": 0.80,
+        "max_false_pass_rate": 0.05,
+        "distinct_intelligence_validation": true
+      }
+    },
+    "trusted_low_risk": {
+      "level": 3,
+      "governance_trust_tier": "patch_scoped",
+      "capabilities": ["read_only", "review", "triage", "patch_allowed", "code-edit"],
+      "description": "Trusted for low-risk patches. Must demonstrate patch quality.",
+      "promotion_path": "trusted_patch",
+      "demotion_path": "probationary",
+      "validation_independence_required": true,
+      "validation_independence_tier": "patch_scoped",
+      "promotion_gates": {
+        "patch_runs": 5,
+        "review_agreement_rate": 0.95,
+        "max_false_completion_rate": 0.0,
+        "distinct_intelligence_validation": true
+      }
+    },
+    "trusted_patch": {
+      "level": 4,
+      "governance_trust_tier": "external_service_touching",
+      "capabilities": ["read_only", "review", "triage", "patch_allowed", "code-edit", "full-auto"],
+      "description": "Trusted for autonomous patches and full-auto. Proving escalation behavior.",
+      "promotion_path": "trusted_complex",
+      "demotion_path": "trusted_low_risk",
+      "validation_independence_required": true,
+      "validation_independence_tier": "external_service_touching",
+      "promotion_gates": {
+        "complex_runs": 8,
+        "review_agreement_rate": 0.95,
+        "sane_escalation_behavior": true,
+        "distinct_intelligence_validation": true
+      }
+    },
+    "trusted_complex": {
+      "level": 5,
+      "governance_trust_tier": "meta_modifying",
+      "capabilities": ["read_only", "review", "triage", "patch_allowed", "code-edit", "full-auto", "deep-review", "planning"],
+      "description": "Highest tier. Trusted for complex work, deep review, and planning.",
+      "promotion_path": null,
+      "demotion_path": "trusted_patch",
+      "validation_independence_required": true,
+      "validation_independence_tier": "meta_modifying"
+    }
+  },
+  "enforcement_rules": {
+    "actor_identity_required": "All promotion and demotion decisions must resolve the actor's canonical identity triple (actor_id, actor_type, harness_id) from the actor registry before evaluation.",
+    "distinct_intelligence_gate": "Promotion from probationary and above requires distinct-intelligence validation: validated_by_actor_id != produced_by_actor_id AND validated_by_harness_id != produced_by_harness_id AND validated_by_actor_type == 'intelligence'.",
+    "no_self_promotion": "An actor cannot produce the evidence that promotes itself. Evidence must be validated by a distinct intelligence.",
+    "no_ritual_validation": "Human review does not satisfy distinct-intelligence validation for AI-produced promotion-grade evidence. Validation must exercise the evidence artifacts directly (anti_theater_check).",
+    "trace_emission_required": "Every promotion or demotion decision must emit a trace event to the canonical trace surface with event_type 'task_outcome' and scope 'actor-promotion'.",
+    "validation_independence_scales": "Validation independence requirements scale with governance trust tier. See validation_independence_tier per promotion tier.",
+    "auxiliary_eval_distinction": "Local-intelligence auxiliary evaluations (exploratory checks, pre-review validation) are permitted but do NOT satisfy distinct-intelligence validation or acceptance-grade review gates."
+  },
+  "demotion_rules": {
+    "severe_triggers": ["policy_violation", "closeout_dishonesty"],
+    "severe_action": "restrict",
+    "moderate_triggers": ["review_disagreement", "navigation_drift", "false_completion"],
+    "moderate_action": "demote_one_tier",
+    "cooldown_runs_after_demotion": 5,
+    "restore_from_restricted": "operator_manual_only"
+  }
+}

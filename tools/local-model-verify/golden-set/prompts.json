@@ -1,0 +1,126 @@
+{
+  "schema": "GoldenSet/1.0",
+  "concepts_covered": [
+    "familiar-contract",
+    "producers-never-judge-own-trials",
+    "role-ownership",
+    "rank-ladder",
+    "dual-apex",
+    "world-nouns-grimoire-patron-quest",
+    "mythic-names-are-aliases",
+    "execution-modes",
+    "observational-reporting",
+    "forbidden-labels",
+    "homebrew-namespaces",
+    "the-mirror",
+    "cross-session-durable-artifacts",
+    "guildmaster-does-not-execute"
+  ],
+  "prompts": [
+    {
+      "id": "familiar-contract",
+      "prompt": "In Mythos, what three things must every dispatch to a familiar carry?",
+      "expected_topic": ["current state", "question", "desired state"],
+      "acceptable_response_shape": ["current state", "question", "quest", "desired state", "durable records"],
+      "disqualifying_patterns": ["just the task name", "whatever context fits", "no fixed shape"]
+    },
+    {
+      "id": "producers-never-judge-own-trials",
+      "prompt": "In Mythos, who is allowed to grade the work a mind produced?",
+      "expected_topic": ["distinct mind", "adjudicator"],
+      "acceptable_response_shape": ["the adjudicator", "distinct mind", "never the producer", "not itself"],
+      "disqualifying_patterns": ["the producer can self-grade", "its own claim of success is enough", "self-review is fine"]
+    },
+    {
+      "id": "role-ownership-guildmaster",
+      "prompt": "What does the Guildmaster own in Mythos, and what does it explicitly NOT do?",
+      "expected_topic": ["routing", "does not do the work"],
+      "acceptable_response_shape": ["routing", "scope", "custody", "integration", "does not execute", "delegates"],
+      "disqualifying_patterns": ["the guildmaster does the implementation itself", "the guildmaster grades its own work"]
+    },
+    {
+      "id": "rank-ladder-order",
+      "prompt": "List the Mythos framework rank ladder in order from least to most proven.",
+      "expected_topic": ["iron", "bronze", "silver", "gold"],
+      "acceptable_response_shape": ["iron", "bronze", "silver", "gold", "diamond"],
+      "disqualifying_patterns": ["platinum", "starts at bronze", "starts at silver", "gold is the top"]
+    },
+    {
+      "id": "dual-apex-meaning",
+      "prompt": "Above Diamond, the Mythos rank ladder forks into two endings. Name them and explain how they differ.",
+      "expected_topic": ["divine", "transcendent"],
+      "acceptable_response_shape": ["divine", "transcendent", "world-anchored", "generalized", "client-agnostic", "neither outranks"],
+      "disqualifying_patterns": ["divine outranks transcendent", "transcendent outranks divine", "there is only one ending"]
+    },
+    {
+      "id": "world-nouns-mapping",
+      "prompt": "In Mythos vocabulary, what do 'Grimoire', 'Patron', and 'Quest' each mean in plain software terms?",
+      "expected_topic": ["framework", "client", "task"],
+      "acceptable_response_shape": ["framework", "client", "task", "reusable workflow"],
+      "disqualifying_patterns": ["grimoire means client", "patron means task", "quest means framework"]
+    },
+    {
+      "id": "mythic-names-are-aliases",
+      "prompt": "If a mythic command name and its generic id ever disagree about behavior, which one wins?",
+      "expected_topic": ["generic", "wins"],
+      "acceptable_response_shape": ["the generic id wins", "authority belongs to the generic command", "the alias is wrong"],
+      "disqualifying_patterns": ["the mythic name wins", "the fantasy name is authoritative", "both are equally authoritative"]
+    },
+    {
+      "id": "execution-modes-findings-only",
+      "prompt": "Under the FINDINGS_ONLY execution mode, what is an agent allowed to do?",
+      "expected_topic": ["no file writes", "no shell"],
+      "acceptable_response_shape": ["read", "analyze", "report", "no writes", "no side effects"],
+      "disqualifying_patterns": ["it can make minimal patches", "it can run shell commands", "it can write reports and also patch files"]
+    },
+    {
+      "id": "execution-modes-patch-allowed",
+      "prompt": "Under PATCH_ALLOWED, what must every write be accompanied by?",
+      "expected_topic": ["justification", "finding it addresses"],
+      "acceptable_response_shape": ["explicit justification", "cites the finding", "no refactors", "no drive-by fixes"],
+      "disqualifying_patterns": ["writes need no justification", "refactors are encouraged", "drive-by fixes are fine"]
+    },
+    {
+      "id": "observational-reporting-rule",
+      "prompt": "What is the difference between an observation and a hypothesis in Mythos reporting standards, and which must come first?",
+      "expected_topic": ["observation", "hypothesis"],
+      "acceptable_response_shape": ["observation first", "factual", "hypothesis", "non-definitive", "labeled"],
+      "disqualifying_patterns": ["hypothesis comes first", "diagnosis as fact is fine", "root cause can be stated directly"]
+    },
+    {
+      "id": "forbidden-labels",
+      "prompt": "Name one forbidden report label in Mythos guardrails and what it should be replaced with.",
+      "expected_topic": ["root cause", "diagnosis", "recommendation"],
+      "acceptable_response_shape": ["root cause", "diagnosis", "recommendation", "action required", "observation", "hypothesis", "open questions"],
+      "disqualifying_patterns": ["root cause is an acceptable label", "diagnosis is fine as a header", "priority labels like p0 are required"]
+    },
+    {
+      "id": "homebrew-namespaces",
+      "prompt": "What is 'Homebrew' in Mythos, and name at least one reserved namespace for it.",
+      "expected_topic": ["user-created", "homebrew"],
+      "acceptable_response_shape": ["player-created", "user-created", "frameworks/homebrew", "tools/homebrew", "docs/homebrew", "never touched by a system update"],
+      "disqualifying_patterns": ["homebrew is guild-shipped content", "homebrew gets overwritten by system updates"]
+    },
+    {
+      "id": "the-mirror-authority",
+      "prompt": "Can a person's Mirror in Mythos grant authority, choose commands, or mutate files on its own?",
+      "expected_topic": ["cannot", "never grant authority"],
+      "acceptable_response_shape": ["no", "cannot", "advisory only", "never grant authority", "never override the core"],
+      "disqualifying_patterns": ["yes it can grant authority", "the mirror can override the core", "the mirror can mutate files directly"]
+    },
+    {
+      "id": "cross-session-durable-artifacts",
+      "prompt": "How may work cross a session boundary between two Mythos actors?",
+      "expected_topic": ["durable artifacts"],
+      "acceptable_response_shape": ["durable artifacts", "quest charters", "trial records", "handoff notes", "chronicles", "written down"],
+      "disqualifying_patterns": ["an unwritten conversation is enough", "memory of the chat carries across sessions"]
+    },
+    {
+      "id": "guildmaster-never-self-executes",
+      "prompt": "If a Guildmaster starts doing the implementation work itself instead of dispatching it, what has happened per the Guild Charter?",
+      "expected_topic": ["broken the charter"],
+      "acceptable_response_shape": ["broken the charter", "role has collapsed", "even if the outcome is fine"],
+      "disqualifying_patterns": ["that is fine as long as the outcome is good", "the charter allows this when convenient"]
+    }
+  ]
+}

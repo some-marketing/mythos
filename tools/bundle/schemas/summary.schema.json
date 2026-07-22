@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "summary.schema.json",
+  "title": "Bundle Summary",
+  "description": "SUMMARY.json — machine-friendly single-screen summary of the bundle",
+  "type": "object",
+  "required": [
+    "bundle_id",
+    "created_at",
+    "status",
+    "runs",
+    "key_findings",
+    "open_questions",
+    "known_issues"
+  ],
+  "properties": {
+    "bundle_id": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "complete", "needs_dev_input"],
+      "description": "Bundle status — draft while LLM is writing content, complete when validated"
+    },
+    "runs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["testcase", "run_id", "env", "form_id"],
+        "properties": {
+          "testcase": { "type": "string" },
+          "run_id": { "type": "string" },
+          "env": { "type": "string" },
+          "form_id": { "type": "string" },
+          "verdict": {
+            "type": "string",
+            "enum": ["pass", "fail", "partial", "unknown"],
+            "description": "Overall run verdict from evidence analysis"
+          }
+        }
+      }
+    },
+    "key_findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "summary"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^OBS-[0-9]+$" },
+          "summary": { "type": "string" },
+          "severity": {
+            "type": "string",
+            "enum": ["info", "warning", "blocking"]
+          },
+          "affected_runs": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "open_questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "question"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^Q-[0-9]+$" },
+          "question": { "type": "string" },
+          "category": { "type": "string" },
+          "evidence_path": { "type": "string" }
+        }
+      }
+    },
+    "known_issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "description"],
+        "properties": {
+          "id": { "type": "string" },
+          "description": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["new", "known", "resolved", "wont_fix"]
+          }
+        }
+      }
+    },
+    "evidence_paths": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Map of logical names to relative paths within the bundle"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "schema": "AutonomyTaskProfile/1.0",
+  "profile_id": "verify-framework",
+  "description": "Validates framework structure after manifest, prompt, or guardrail changes",
+  "match": {
+    "changed_paths": [
+      "frameworks/**/manifest.json",
+      "frameworks/**/guardrails.md",
+      "frameworks/**/prompts/**"
+    ],
+    "commands": ["verify:framework"]
+  },
+  "execution": {
+    "completion_gate": {
+      "script": "tools/verify/verify-framework.cjs",
+      "args_template": "${framework_id}",
+      "output_template": "_dev/reports/signals/verify-framework__${framework_id_safe}.signal.json"
+    },
+    "watch_triggers": ["frameworks/**/manifest.json"]
+  }
+}

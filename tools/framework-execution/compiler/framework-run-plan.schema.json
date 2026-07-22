@@ -1,0 +1,14 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema","$id":"framework-run-plan.schema.json","title":"FrameworkRunPlan/1.0","type":"object",
+  "required":["schema","plan_id","framework_id","run_id","manifest_sha256","inputs_sha256","compiled_sha256","state","blocked_reasons","nodes","requirements","boundary","authority","semantic_acceptance","operator_acceptance"],
+  "properties":{
+    "schema":{"const":"FrameworkRunPlan/1.0"},"plan_id":{"pattern":"^frp_[a-f0-9]{24}$"},"framework_id":{"type":"string","minLength":1},"run_id":{"type":"string","minLength":1},
+    "manifest_sha256":{"pattern":"^[a-f0-9]{64}$"},"inputs_sha256":{"pattern":"^[a-f0-9]{64}$"},"compiled_sha256":{"pattern":"^[a-f0-9]{64}$"},
+    "state":{"enum":["compiled_valid","compiled_blocked","semantic_review_required"]},"blocked_reasons":{"type":"array","items":{"type":"string"},"uniqueItems":true},
+    "nodes":{"type":"array","items":{"type":"object","required":["id","prompt_id","mode","kind","dependencies","writes","source_authority_sha256"],"properties":{"id":{"type":"string","minLength":1},"prompt_id":{"type":"string","minLength":1},"mode":{"type":"string","minLength":1},"kind":{"enum":["mechanical","semantic"]},"dependencies":{"type":"array","items":{"type":"string"},"uniqueItems":true},"writes":{"type":"array","items":{"type":"string"},"uniqueItems":true},"source_authority_sha256":{"pattern":"^[a-f0-9]{64}$"}},"additionalProperties":false}},
+    "requirements":{"type":"array","items":{"type":"object","required":["id","available","receipt_sha256"],"properties":{"id":{"type":"string","minLength":1},"available":{"type":"boolean"},"receipt_sha256":{"pattern":"^[a-f0-9]{64}$"}},"additionalProperties":false}},
+    "boundary":{"type":"object","required":["state","receipt_sha256"],"properties":{"state":{"enum":["valid","missing","invalid","out_of_bounds"]},"receipt_sha256":{"type":["string","null"],"pattern":"^[a-f0-9]{64}$"}},"additionalProperties":false},
+    "authority":{"type":"object","required":["mode","can_execute","can_dispatch","can_write_project","can_complete","executor"],"properties":{"mode":{"const":"observe_only"},"can_execute":{"const":false},"can_dispatch":{"const":false},"can_write_project":{"const":false},"can_complete":{"const":false},"executor":{"const":"existing_coordinator_only"}},"additionalProperties":false},
+    "semantic_acceptance":{"const":"not_evaluated"},"operator_acceptance":{"const":"not_evaluated"}
+  },"additionalProperties":false
+}

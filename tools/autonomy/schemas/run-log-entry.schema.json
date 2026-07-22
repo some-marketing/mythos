@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Autonomy Run Log Entry",
+  "description": "Single JSONL line representing one verification run for maturity tracking.",
+  "type": "object",
+  "required": [
+    "timestamp",
+    "profile_id",
+    "run_id",
+    "signal_path",
+    "verdict",
+    "attempt",
+    "duration_ms",
+    "has_next_actions",
+    "check_summary"
+  ],
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "profile_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "framework_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "signal_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "verdict": {
+      "enum": ["PASS", "FAIL", "WARN"]
+    },
+    "attempt": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "duration_ms": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "has_next_actions": {
+      "type": "boolean"
+    },
+    "check_summary": {
+      "type": "object",
+      "required": ["total", "passed", "failed", "warned"],
+      "properties": {
+        "total": { "type": "integer", "minimum": 0 },
+        "passed": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "warned": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,68 @@
+{
+  "_comment": "Copy this file to actor-registry.json (same directory) and edit for your setup. Each top-level key is an actor id. This is the same shape as schemas/actor-registry.schema.json.",
+
+  "claude": {
+    "id": "claude",
+    "label": "Claude Code",
+    "actor_type": "intelligence",
+    "harness_id": "claude-code",
+    "binary": "claude",
+    "runtime": "cli",
+    "verification_only": false,
+    "experimental": false,
+    "cost_rank": 1,
+    "preferred_for": ["review", "triage", "planning", "deep-review"],
+    "model_defaults": { "low": "haiku", "medium": "sonnet", "high": "opus" },
+    "budget_defaults_usd": { "low": 1, "medium": 3, "high": 8 },
+    "supports": { "read_only": true, "patch_allowed": true, "full_auto": true },
+    "adapter_surface": ["tool-use", "subagent-spawn", "mcp-integration", "skill-execution"]
+  },
+
+  "codex": {
+    "id": "codex",
+    "label": "Codex",
+    "actor_type": "intelligence",
+    "harness_id": "codex-cli",
+    "binary": "codex",
+    "runtime": "cli",
+    "verification_only": false,
+    "experimental": false,
+    "cost_rank": 2,
+    "preferred_for": ["patch", "full-auto", "code-edit"],
+    "model_defaults": { "low": "", "medium": "", "high": "" },
+    "supports": { "read_only": true, "patch_allowed": true, "full_auto": true },
+    "adapter_surface": ["sandbox-execution", "git-aware-edits", "batch-processing"]
+  },
+
+  "gemini": {
+    "id": "gemini",
+    "label": "Gemini",
+    "actor_type": "intelligence",
+    "harness_id": "gemini-cli",
+    "binary": "gemini",
+    "runtime": "cli",
+    "verification_only": false,
+    "experimental": false,
+    "cost_rank": 1,
+    "preferred_for": ["breadth", "lateral", "second-mind-review"],
+    "model_defaults": { "low": "", "medium": "", "high": "" },
+    "supports": { "read_only": true, "patch_allowed": true, "full_auto": true },
+    "adapter_surface": ["breadth-review", "second-mind-review"]
+  },
+
+  "operator": {
+    "id": "operator",
+    "label": "Operator (human)",
+    "actor_type": "human",
+    "harness_id": "manual",
+    "binary": "",
+    "runtime": "manual",
+    "verification_only": false,
+    "experimental": false,
+    "cost_rank": 0,
+    "preferred_for": ["approval", "judgment", "gate-resolution"],
+    "model_defaults": { "low": "", "medium": "", "high": "" },
+    "supports": { "read_only": true, "patch_allowed": true, "full_auto": false },
+    "adapter_surface": ["judgment", "approval", "gate-resolution"]
+  }
+}

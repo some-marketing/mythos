@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Autonomy Task Profile",
+  "description": "Machine-readable profile for recurring task detection and completion gating.",
+  "type": "object",
+  "required": [
+    "schema",
+    "profile_id",
+    "description",
+    "match",
+    "execution"
+  ],
+  "properties": {
+    "schema": {
+      "const": "AutonomyTaskProfile/1.0"
+    },
+    "profile_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]*$"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 10
+    },
+    "match": {
+      "type": "object",
+      "properties": {
+        "changed_paths": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "commands": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "skills": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      },
+      "additionalProperties": false
+    },
+    "execution": {
+      "type": "object",
+      "required": ["completion_gate"],
+      "properties": {
+        "completion_gate": {
+          "type": "object",
+          "required": ["script", "output_template"],
+          "properties": {
+            "script": { "type": "string", "minLength": 1 },
+            "args_template": { "type": "string" },
+            "output_template": { "type": "string", "minLength": 1 }
+          },
+          "additionalProperties": false
+        },
+        "watch_triggers": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "lane_eligibility": {
+          "type": "object",
+          "description": "Lane eligibility settings for local-first and fast/slow governance",
+          "properties": {
+            "local_eligible": {
+              "type": "boolean",
+              "description": "Whether this profile is eligible for local-model execution (default true)"
+            },
+            "cloud_eligible": {
+              "type": "boolean",
+              "description": "Whether this profile is eligible for cloud-model execution (default true)"
+            },
+            "acceptance_grade": {
+              "type": "boolean",
+              "description": "Whether completion of this profile's task is an acceptance-grade event requiring distinct-intelligence validation"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

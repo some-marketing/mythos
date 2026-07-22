@@ -1,0 +1,15 @@
+{
+  "_comment": "Copy this file to convene-adapters.json (same directory) and edit for your setup. Each top-level key is an actor name you can pass to --origin, --actor <slot>=<actor>, or a profile's default_actor. convene-adapters.json is gitignored by default so populated entries never get committed by accident.",
+
+  "opencode": {
+    "_comment": "Example: dispatch to the OpenCode CLI. Adjust argv to match how your installed version reads a prompt from stdin.",
+    "command": "opencode",
+    "argv": ["run", "--stdin"]
+  },
+
+  "my-local-model": {
+    "_comment": "Example: a custom wrapper script around any local or vendor CLI. The prompt is piped to this command's stdin; its stdout becomes the slot's response.",
+    "command": "node",
+    "argv": ["tools/convene/my-local-model-bridge.js"]
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema": "TextIngestionBridge/1.1",
+  "description": "One-way text ingestion bridge. Verbatim forwarding only, no LLM in loop.",
+  "mode": "live",
+  "safety": {
+    "outbound_messaging": "NEVER",
+    "auto_claiming": false,
+    "auto_execution": false,
+    "dart_mutation": "forward_only"
+  },
+  "contacts": [
+    {
+      "name": "Example Contact",
+      "handle": "+15555550123",
+      "client_code": null,
+      "enabled": true,
+      "forward_to_dart_board": "<your-dartboard-name>/Tasks",
+      "source": "contacts-sync",
+      "company": null,
+      "notes": "Synced from macOS Contacts group \"Dart Inbox\" -- this is an example row, not a real contact"
+    }
+  ],
+  "ingestion": { "scan_interval_minutes": 1, "max_messages_per_scan": 50, "dedup_window_hours": 24 },
+  "routing": { "use_client_routing": true, "client_routing_path": "tools/dart-integration/client-routing.json", "default_action": "draft_artifact" }
+}

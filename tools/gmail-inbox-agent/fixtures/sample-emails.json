@@ -1,0 +1,20 @@
+[
+  {
+    "id": "fixture-digest",
+    "from": "Updates <user@example.com>",
+    "subject": "Weekly industry digest",
+    "snippet": "Roundup of product updates. Unsubscribe or manage preferences."
+  },
+  {
+    "id": "fixture-task",
+    "from": "Ops <user@example.com>",
+    "subject": "Please review the launch checklist",
+    "snippet": "Can you confirm the final decision?"
+  },
+  {
+    "id": "fixture-watch",
+    "from": "Billing <user@example.com>",
+    "subject": "Payment receipt",
+    "snippet": "Your subscription payment receipt is ready."
+  }
+]

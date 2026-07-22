@@ -1,0 +1,42 @@
+{
+  "tool": "stock-image-scout",
+  "fields": {
+    "DP_API_KEY": {
+      "envVar": "DP_API_KEY",
+      "keychainService": "mythos-depositphotos-api-api-key",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "mythos-depositphotos-api",
+      "opField": "api key",
+      "description": "Depositphotos Partner API key (https://depositphotos.com/api-program.html)."
+    },
+    "DP_LOGIN_USER": {
+      "envVar": "DP_LOGIN_USER",
+      "keychainService": "mythos-depositphotos-api-login-user",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "mythos-depositphotos-api",
+      "opField": "login user",
+      "description": "Depositphotos account login (email/username) for the API session."
+    },
+    "DP_LOGIN_PASSWORD": {
+      "envVar": "DP_LOGIN_PASSWORD",
+      "keychainService": "mythos-depositphotos-api-login-password",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "mythos-depositphotos-api",
+      "opField": "login password",
+      "description": "Depositphotos account password for the API session."
+    },
+    "UNSPLASH_ACCESS_KEY": {
+      "envVar": "UNSPLASH_ACCESS_KEY",
+      "keychainService": "mythos-unsplash-access-key",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "mythos-unsplash-api",
+      "opField": "access key",
+      "required": false,
+      "description": "Optional Unsplash API access key. Without it, scout.cjs falls back to mock results for the unsplash provider."
+    }
+  }
+}

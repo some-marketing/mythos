@@ -1,0 +1,4 @@
+{
+  "_note": "action/payableInvoices/search was probed live on 2026-07-08 and returned an EMPTY bare array ([]) for every status value tried (all/paid/unpaid/sent/draft/partial/overdue/open) and every query. This endpoint exposes only currently-payable (outstanding) invoices, and this workspace had none payable at probe time — so no per-invoice field shape could be observed. The `data` array is therefore intentionally empty: it reflects the real observed response and avoids inventing an unconfirmed invoice shape. Invoice HISTORY is not available from the public API at all; it must come from the logged-in web app (browser lane). See _dev/reports/analysis/moxie-live-probe-findings__20260708.md.",
+  "data": []
+}

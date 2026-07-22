@@ -1,0 +1,30 @@
+{
+  "_comment": "Per-field credential resolution config for tools/expressionengine. Consumed by resolveCredential() once tools/lib/resolve-credential.cjs ships; until then, lib/ee-auth.js resolves credentials itself via the same four-source order (env -> 1Password service-account -> 1Password ambient session -> error).",
+  "fields": {
+    "url": {
+      "envVar": "EE_URL",
+      "keychainService": null,
+      "keychainAccount": null,
+      "opVault": null,
+      "opItem": "EE CP - <your-site-nickname>",
+      "opField": null,
+      "note": "Resolved from the 1Password item's top-level .urls array, not a named field."
+    },
+    "username": {
+      "envVar": "EE_USERNAME",
+      "keychainService": "op-service-account-automation",
+      "keychainAccount": "mythos",
+      "opVault": null,
+      "opItem": "EE CP - <your-site-nickname>",
+      "opField": "username"
+    },
+    "password": {
+      "envVar": "EE_PASSWORD",
+      "keychainService": "op-service-account-automation",
+      "keychainAccount": "mythos",
+      "opVault": null,
+      "opItem": "EE CP - <your-site-nickname>",
+      "opField": "password"
+    }
+  }
+}

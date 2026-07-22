@@ -1,0 +1,14 @@
+{
+  "tool": "mcp/delesign",
+  "fields": {
+    "DELESIGN_API_TOKEN": {
+      "envVar": "DELESIGN_API_TOKEN",
+      "keychainService": "mythos-delesign-api-token",
+      "keychainAccount": "mythos",
+      "opVault": "Employee",
+      "opItem": "Delesign",
+      "opField": "credential",
+      "description": "Delesign API token."
+    }
+  }
+}

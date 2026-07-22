@@ -1,0 +1,35 @@
+# Setting up credentials for `<TOOL_NAME>`
+
+This tool resolves its own credentials at runtime through
+`tools/lib/resolve-credential.cjs` — a 4-source chain, first hit wins:
+
+1. **Environment variable** — set it in your shell or CI config.
+2. **macOS Keychain** — seed it once, headless-friendly forever after:
+   ```
+   tools/boot/keychain-store.sh <KEYCHAIN_SERVICE> <KEYCHAIN_ACCOUNT>
+   ```
+3. **1Password** — `op read op://<VAULT>/<ITEM>/<FIELD>`, resolved via a
+   service-account token (`OP_SERVICE_ACCOUNT_TOKEN` env var, or a Keychain
+   item named `mythos-1p-automation-token`/`mythos`).
+4. **Env file fallback** — `.env.local` or `.env` at the repo root, or
+   `~/.mythos/.env`. See `env.example` in this directory for the exact keys.
+
+## This tool's fields
+
+See `creds.config.json` in this directory for the authoritative field list
+(env var names, Keychain service/account, 1Password vault/item/field). Run:
+
+```
+node tools/lib/generate-env-example.cjs <this-tool>/creds.config.json
+```
+
+to regenerate `env.example` if the config changes.
+
+## Verify
+
+```
+<PASTE THE TOOL'S OWN DRY-RUN OR VERIFY COMMAND HERE>
+```
+
+A successful verify should report which source resolved each field (or that
+none did, with the exact seed command to run) — never print secret values.

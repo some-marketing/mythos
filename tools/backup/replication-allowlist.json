@@ -1,0 +1,23 @@
+{
+  "purpose": "Illustrative EXAMPLE allowlist. Defines what MAY be replicated off-machine (e.g. cloud drive, docs, notes app) in addition to your local encrypted backups. Local backups (the internxt-*.sh scripts + git) are unrestricted; THIS file is a pattern for gating anything that leaves the machine to a less-controlled destination. Adapt the include/exclude globs to your own project before using this pattern for real.",
+  "status": "EXAMPLE — not wired to any script in this directory; copy and adapt",
+  "approved": false,
+  "cloud_targets_note": "Replace with whatever off-machine destinations you actually use (cloud drive, docs, notes sync). Anything copied into a locally-synced folder is a publication event just like an explicit upload.",
+  "include_cloud_safe": [
+    "docs/**.md                          — public-facing docs, verified no PII/credentials",
+    "README*.md, CHANGELOG*.md           — project overview docs"
+  ],
+  "exclude_hard_local_only": [
+    "**/.env, **/.env.*, **/*secret*, **/*credential*, **/*.key, **/*.pem  — credentials",
+    "clients/**, customers/**            — any per-customer or per-client data",
+    "**/private/**                       — anything you've marked private",
+    "**/state/**, **/logs/**             — runtime state and operational logs",
+    ".git/** internals                   — a git bundle is your repo backup; cloud gets readable docs only"
+  ],
+  "rules": [
+    "Default-deny: a path is replicable ONLY if it matches include_cloud_safe AND matches no exclude pattern.",
+    "Per-file PII/credential scan before the FIRST upload of any included path; halt + surface on any hit.",
+    "This allowlist is itself local-only and never uploaded.",
+    "Re-approve when the include set changes."
+  ]
+}

@@ -271,9 +271,9 @@ costs or saves, the timeline, and why it's safe/invisible. No jargon, no task ID
 Type name: `for_grouping`. A per-contributor grouping subtask that sits between the Owner Summary and the implementation tasks. It holds one person's scope and their questions, and the implementation/verification/etc. tasks nest under it. One `For X` per contributor (including the operator). Required when 2+ people contribute to one deliverable.
 
 **Title:** Literally `For <Name>`
-- Good: "For Taylor"
+- Good: "For {OPERATOR_NAME}"
 - Good: "For the Operator"
-- Avoid: "Taylor's tasks" (use the exact `For <Name>` form)
+- Avoid: "{OPERATOR_NAME}'s tasks" (use the exact `For <Name>` form)
 
 **Dart properties:** Type: Subtask | Status: derived from children (see BOARD_CONVENTIONS Parent Movement) | Assignee: that person | Priority: maximum of that person's child tasks
 

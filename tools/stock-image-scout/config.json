@@ -1,0 +1,20 @@
+{
+  "default_provider": "depositphotos",
+  "providers": {
+    "depositphotos": {
+      "session_path": "tools/stock-image-scout/sessions/depositphotos-state.json",
+      "search_base_url": "https://depositphotos.com",
+      "plan_tier_hints": "All-In-One"
+    },
+    "unsplash": {
+      "api_base_url": "https://api.unsplash.com",
+      "plan_tier_hints": "Free"
+    },
+    "shutterstock": {
+      "api_base_url": "https://api.shutterstock.com/v2"
+    },
+    "adobe-stock": {
+      "api_base_url": "https://stock.adobe.io/api/v1"
+    }
+  }
+}

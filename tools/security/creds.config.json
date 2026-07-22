@@ -1,0 +1,13 @@
+{
+  "tool": "security",
+  "_comment": "The tools in this directory (elevenlabs-keys, vault-hygiene) manage 1Password items and ElevenLabs API keys -- they are naturally lower-level than a typical tools/lib/resolve-credential.cjs consumer, since their whole job IS 1Password/keychain management, not just reading one secret. They invoke the `op` CLI directly (behind a strict, tested subcommand allow-list -- see each tool's lib.cjs) rather than going through the shared resolver. The one credential these tools DO need to bootstrap `op` itself in headless/CI contexts is a 1Password service-account token, which follows the exact same OP_SERVICE_ACCOUNT_TOKEN convention tools/lib/resolve-credential.cjs already uses for its own 1Password source -- documented here for consistency, not re-wired.",
+  "fields": {
+    "OP_SERVICE_ACCOUNT_TOKEN": {
+      "envVar": "OP_SERVICE_ACCOUNT_TOKEN",
+      "keychainService": "mythos-1p-automation-token",
+      "keychainAccount": "mythos",
+      "required": false,
+      "description": "1Password service-account token, scoped to the Automation vault, for headless/non-interactive `op` use (no desktop-app unlock prompt). Optional: an interactive shell with `op signin` already run works without it. Same convention as tools/lib/resolve-credential.cjs's own 1Password source."
+    }
+  }
+}

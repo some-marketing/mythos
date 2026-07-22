@@ -1,0 +1,12 @@
+{
+  "fields": {
+    "GEMINI_API_KEY": {
+      "envVar": "GEMINI_API_KEY",
+      "keychainService": "gemini-api-key",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "gemini-api-key",
+      "opField": "credential"
+    }
+  }
+}

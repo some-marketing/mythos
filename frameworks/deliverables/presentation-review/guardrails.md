@@ -42,7 +42,7 @@ This document consolidates all safety rules, execution modes, and constraints fo
 - Compare sources: "Presentation uses Zocdoc 2024 data; Gemini prompt suggested BrightLocal healthcare data"
 
 ### What NOT to do:
-- Do NOT diagnose root causes -- Don't say "The problem is Taylor forgot to update this"
+- Do NOT diagnose root causes -- Don't say "The problem is {OPERATOR_NAME} forgot to update this"
 - Do NOT suggest presentation edits -- No "Change slide 5 to show 5 checkmarks instead of 6"
 - Do NOT prescribe design changes -- No "Move the pricing to slide 9 instead of slide 12"
 - Do NOT make editorial decisions -- No "The Zocdoc source is better than BrightLocal"

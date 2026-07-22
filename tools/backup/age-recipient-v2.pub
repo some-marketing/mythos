@@ -1,0 +1,21 @@
+# Backup age recipient (public key — safe to track in version control).
+#
+# Age recipients are public keys: they are designed to be shared, since only
+# the matching PRIVATE key (identity file) can decrypt anything encrypted to
+# them. Tracking a public key in git is not a leak.
+#
+# That said, the line below is a PLACEHOLDER, not a real, live recipient.
+# Generate your own keypair and replace it before using these scripts:
+#
+#   age-keygen -o age-key.txt      # writes a new "AGE-SECRET-KEY-1..." identity
+#                                   # to age-key.txt and prints the matching
+#                                   # "age1..." public recipient to stderr
+#   age-keygen -y age-key.txt       # re-derive just the public recipient later
+#
+# Then:
+#   1. Replace the age1... line below with YOUR public recipient.
+#   2. Store age-key.txt's contents (the private identity) in macOS Keychain —
+#      never commit it. See SETUP.md in this directory.
+#
+# EXAMPLE PLACEHOLDER RECIPIENT — replace with your own `age-keygen -y` output:
+age1qyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqgpqyqs

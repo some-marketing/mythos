@@ -1,0 +1,32 @@
+{
+  "tool": "mcp/youtube",
+  "fields": {
+    "YT_CLIENT_ID": {
+      "envVar": "YT_CLIENT_ID",
+      "keychainService": "mythos-youtube-oauth-client-id",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "YouTube Channel",
+      "opField": "client id",
+      "description": "Google OAuth client id for the YouTube upload tool."
+    },
+    "YT_CLIENT_SECRET": {
+      "envVar": "YT_CLIENT_SECRET",
+      "keychainService": "mythos-youtube-oauth-client-secret",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "YouTube Channel",
+      "opField": "client secret",
+      "description": "Google OAuth client secret for the YouTube upload tool."
+    },
+    "YT_REFRESH_TOKEN": {
+      "envVar": "YT_REFRESH_TOKEN",
+      "keychainService": "mythos-youtube-oauth-refresh-token",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "YouTube Channel",
+      "opField": "refresh token",
+      "description": "Google OAuth refresh token minted via bootstrap-oauth.js, signed in as your target channel account."
+    }
+  }
+}

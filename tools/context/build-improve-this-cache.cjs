@@ -46,7 +46,7 @@ const FORBIDDEN_PATH_PATTERNS = [
   /^clients\//,
   /^secrets\//,
   /^Mythos-memories\//,
-  /^_dev\/research\/taylor-philosophy\//,
+  /^_dev\/research\/{OPERATOR_NAME}-philosophy\//,
   /^_dev\/state\/private\//
 ];
 

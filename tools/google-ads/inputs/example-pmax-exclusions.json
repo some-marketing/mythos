@@ -1,0 +1,12 @@
+{
+  "task_id": "example-pmax-url-exclusions",
+  "customer_id": "1234567890",
+  "exclusions": [
+    {
+      "campaign_id": "3333333333",
+      "campaign_name": "Performance Max — New Inventory",
+      "operator": "CONTAINS",
+      "paths": ["/careers", "/service-specials", "/blog"]
+    }
+  ]
+}

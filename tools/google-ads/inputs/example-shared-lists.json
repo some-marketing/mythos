@@ -1,0 +1,22 @@
+{
+  "task_id": "example-shared-lists-setup",
+  "customer_id": "1234567890",
+  "campaigns": {
+    "used_inventory": { "id": "1111111111", "name": "Used Inventory" },
+    "new_inventory": { "id": "2222222222", "name": "New Inventory" }
+  },
+  "shared_lists": [
+    {
+      "name": "Bad Loan Intent",
+      "match_type": "PHRASE",
+      "keywords": ["personal loans", "free loans", "payday", "cash loan", "debt consolidation"],
+      "apply_to_campaigns": ["used_inventory"]
+    },
+    {
+      "name": "Parts Service and Research",
+      "match_type": "PHRASE",
+      "keywords": ["parts", "service", "recall", "manual", "reviews", "specs"],
+      "apply_to_campaigns": ["new_inventory"]
+    }
+  ]
+}

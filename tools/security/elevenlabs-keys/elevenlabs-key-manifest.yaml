@@ -1,0 +1,105 @@
+# tools/security/elevenlabs-keys/elevenlabs-key-manifest.yaml
+#
+# Canonical trust-boundary manifest for ElevenLabs workload API keys.
+#
+# PRINCIPLE: one key per TRUST BOUNDARY (a workload with a distinct blast
+# radius AND a distinct runtime), NOT one key per permission. See
+# _dev/concepts/elevenlabs-key-provisioning/concept.md for the reasoning.
+#
+# HARD INVARIANTS (enforced by lib.cjs `assertManifestSafe`):
+#   - No profile carries any admin scope (Workspace:Write, Service Accounts,
+#     Group/Workspace Members, ToS Accept, User:Write, Ads Engine, Webhooks).
+#     Those are dashboard-human-only and out of scope for any workload key.
+#   - Voices:Write (synthetic-identity control) and voice_generation are
+#     ISOLATED to `voice-cloning-mgmt` only. No other profile may carry them.
+#   - eleven_agents write is isolated to `agent-phone-prod`.
+#   - `voice-cloning-mgmt` must NOT carry text_to_speech (over-privilege).
+#   - `ip_restricted` is false on every key (dynamic runtime IPs).
+#   - `auto_disable_if_leaked` is true on every key.
+#   - `quota_credit_limit` must be a positive integer (never Unlimited/null).
+#     The NUMBERS below are conservative placeholders — the operator MUST
+#     review them against the actual monthly credit budget before provisioning.
+#
+# Key CREATION is a human dashboard action (needs admin scope). This manifest
+# and its tool operate on ALREADY-CREATED raw keys: storing them into the
+# 1Password "Automation" vault and validating their live scopes. The raw key
+# value lives ONLY in the vault; app config references a key by PROFILE NAME.
+
+vault: Automation
+
+profiles:
+  - profile: tts-narration-prod
+    vault_path: elevenlabs/tts-narration-prod
+    trust_boundary: narration-tts-runtime
+    purpose: Text-to-speech narration for produced media.
+    scopes:
+      access: [text_to_speech]
+      read: [voices, pronunciation_dictionaries]   # history read optional; omitted by default
+      write: []
+    quota_credit_refresh: monthly
+    quota_credit_limit: 500000
+    ip_restricted: false
+    auto_disable_if_leaked: true
+    rotation_days: 90
+    used_by: [media-narration-pipeline]
+
+  - profile: stt-transcription-prod
+    vault_path: elevenlabs/stt-transcription-prod
+    trust_boundary: transcription-runtime
+    purpose: Speech-to-text transcription.
+    scopes:
+      access: [speech_to_text]   # forced_alignment optional; omitted by default
+      read: []
+      write: []
+    quota_credit_refresh: monthly
+    quota_credit_limit: 500000
+    ip_restricted: false
+    auto_disable_if_leaked: true
+    rotation_days: 90
+    used_by: [transcription-pipeline]
+
+  - profile: voice-cloning-mgmt
+    vault_path: elevenlabs/voice-cloning-mgmt
+    trust_boundary: synthetic-identity-management
+    purpose: HIGHEST sensitivity. Creates/manages synthetic voices. Backend/admin-only, never client-side.
+    scopes:
+      access: [voice_generation]
+      read: []
+      write: [voices]   # pronunciation_dictionaries write optional; omitted by default
+    quota_credit_refresh: monthly
+    quota_credit_limit: 100000
+    ip_restricted: false
+    auto_disable_if_leaked: true
+    rotation_days: 30
+    used_by: [voice-cloning-backend]
+
+  - profile: agent-phone-prod
+    vault_path: elevenlabs/agent-phone-prod
+    trust_boundary: conversational-phone-runtime
+    purpose: Conversational / phone agent runtime.
+    scopes:
+      access: [text_to_speech, speech_to_text]
+      read: [voices]
+      write: [eleven_agents]
+    quota_credit_refresh: monthly
+    quota_credit_limit: 500000
+    ip_restricted: false
+    auto_disable_if_leaked: true
+    rotation_days: 60
+    used_by: [conversational-agent-runtime]
+
+  - profile: media-utilities-optional
+    vault_path: elevenlabs/media-utilities-optional
+    trust_boundary: media-utilities-runtime
+    purpose: Audio isolation / music generation / sound effects. NOT provisioned yet.
+    status: not_provisioned
+    scopes:
+      access: [audio_isolation, music_generation, sound_effects]
+      read: []
+      write: []
+    quota_credit_refresh: monthly
+    quota_credit_limit: 250000
+    ip_restricted: false
+    auto_disable_if_leaked: true
+    rotation_days: 90
+    used_by: []

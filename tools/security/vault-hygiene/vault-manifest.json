@@ -1,0 +1,89 @@
+{
+  "$schema_note": "Example 1Password vault-hygiene manifest. Metadata only -- NO secret values live here. This file demonstrates the class1_move / class1_already_automation / class2_anchors_never_move shape that check-vault-boundary.js and move-to-automation.js expect. Replace every entry with your own vault's real item titles before use.",
+  "purpose": "Scope your automation identity to ONLY the `Automation` 1Password vault. Class-1 automation credentials belong in Automation (safe for a scoped bot). Class-2 trust anchors must stay operator-only and NEVER enter Automation (a bot that can read them could forge its own authorization).",
+  "OPERATOR_MUST_VERIFY": "Entries below are illustrative placeholders. Replace them with entries DERIVED FROM `op://` REFERENCES FOUND IN YOUR OWN CODEBASE, then VERIFY every title/vault against your live 1Password BEFORE running `move-to-automation.js --apply`. Item titles are the join key for `op item move`; a wrong title is a silent no-op or a wrong move.",
+  "destination_vault": "Automation",
+  "personal_vaults": ["Employee", "Work Info", "Personal", "Private"],
+
+  "class1_move": [
+    {
+      "title": "Example GitHub PAT",
+      "current_vault": "Employee",
+      "field": "credential",
+      "op_ref": "op://Employee/Example GitHub PAT/credential",
+      "seen_in": "tools/example-integration/README.md",
+      "action": "move"
+    },
+    {
+      "title": "EXAMPLE_BOT_TOKEN",
+      "current_vault": "Work Info",
+      "field": "credential",
+      "op_ref": "op://Work Info/EXAMPLE_BOT_TOKEN/credential",
+      "seen_in": "tools/example-bot/*, tools/example-bot/run.sh",
+      "action": "move"
+    },
+    {
+      "title": "example-cloud-storage-oauth",
+      "current_vault": "Work Info",
+      "field": "(multiple)",
+      "op_ref": "op://Work Info/example-cloud-storage-oauth",
+      "seen_in": "tools/example-cloud-storage/config.js, tools/example-cloud-storage/SETUP.md",
+      "action": "move"
+    },
+    {
+      "title": "example-vps-password",
+      "current_vault": "Employee",
+      "field": "password",
+      "op_ref": "op://Employee/example-vps-password/password",
+      "seen_in": "tools/example-vps/README.md",
+      "action": "move"
+    },
+    {
+      "title": "example-third-party-api-key",
+      "current_vault": "Employee",
+      "field": "credential",
+      "op_ref": "op://Employee/example-third-party-api-key/credential",
+      "seen_in": "tools/example-integration/README.md",
+      "action": "consolidate",
+      "consolidate": true,
+      "duplicate_of": "Example Third Party API",
+      "duplicate_note": "A distinct item `Example Third Party API` ALREADY EXISTS in Automation (op://Automation/Example Third Party API/credential). DO NOT blind-move this duplicate. Operator must decide: consolidate onto the existing Automation item and delete the Employee duplicate, OR confirm they are genuinely different keys. The mover SKIPS this entry."
+    },
+    {
+      "title": "example-bootstrap-passphrase",
+      "current_vault": "Personal",
+      "field": "password",
+      "op_ref": "op://Personal/example-bootstrap-passphrase/password",
+      "seen_in": "tools/example-bootstrap/RUNBOOK.md",
+      "action": "hold",
+      "needs_classification": true,
+      "classification_note": "This is a bootstrap/kernel passphrase example. It may be a TRUST ANCHOR (class-2), not an ordinary automation credential -- if the bot can read it, it can decrypt/forge bootstrap material. DO NOT MOVE until the operator explicitly classifies it. The mover SKIPS this entry and reports it as needs-operator-decision."
+    }
+  ],
+
+  "class1_already_automation": [
+    { "title": "EXAMPLE_API_TOKEN", "op_ref": "op://Automation/EXAMPLE_API_TOKEN/credential", "assert": "present_in_automation" },
+    { "title": "example-search-api-key", "op_ref": "op://Automation/example-search-api-key/credential", "assert": "present_in_automation" },
+    { "title": "example-telemetry-api", "op_ref": "op://Automation/example-telemetry-api/credential", "assert": "present_in_automation" },
+    { "title": "example-oauth-client", "op_ref": "op://Automation/example-oauth-client", "assert": "present_in_automation" },
+    { "title": "Example Third Party API", "op_ref": "op://Automation/Example Third Party API/credential", "assert": "present_in_automation" }
+  ],
+
+  "class2_anchors_never_move": [
+    {
+      "title": "example-governance-unlock",
+      "current_vault": "Employee",
+      "op_ref": "op://Employee/example-governance-unlock",
+      "reason": "Governance unlock / approval-mint anchor. If the automation identity could read this, it could self-issue governance approvals. MUST stay operator-only and MUST NOT be in Automation.",
+      "assert": "absent_from_automation"
+    },
+    {
+      "title": "example-approval-signing-key",
+      "current_vault": "Private",
+      "op_ref": "op://Private/example-approval-signing-key/password",
+      "seen_in": "tools/example-approval-bridge/approval-sign.js",
+      "reason": "Approval HMAC signing key. If the automation identity could read this, it could forge approvals. MUST stay operator-only and MUST NOT be in Automation.",
+      "assert": "absent_from_automation"
+    }
+  ]
+}

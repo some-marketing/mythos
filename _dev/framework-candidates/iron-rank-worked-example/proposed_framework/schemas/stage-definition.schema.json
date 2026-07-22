@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Staged Remediation Stage Definition",
+  "type": "object",
+  "required": [
+    "stage_id",
+    "title",
+    "purpose",
+    "allowed_write_paths",
+    "required_reads",
+    "validation_commands",
+    "exit_criteria",
+    "stop_conditions",
+    "next_stage_on_success"
+  ],
+  "properties": {
+    "stage_id": { "type": "string" },
+    "title": { "type": "string" },
+    "purpose": { "type": "string" },
+    "allowed_write_paths": { "type": "array" },
+    "required_reads": { "type": "array" },
+    "validation_commands": { "type": "array" },
+    "exit_criteria": { "type": "array" },
+    "stop_conditions": { "type": "array" },
+    "next_stage_on_success": { "type": "string" },
+    "planned_only": { "type": "boolean" }
+  }
+}
+

@@ -512,6 +512,20 @@ function exportFramework(fwId, exportMap, denylist, opts) {
   const subs = buildSubstitutions(denylist);
   const staging = fs.mkdtempSync(path.join(os.tmpdir(), 'export-public-'));
 
+  // MDS-D4 (membrane amendment): a unit whose target lands under _dev/ ships
+  // already-authored, already-genericized workshop content — there is nothing
+  // legitimate left to substitute. For these units the private-signature
+  // classes (client codes, private hostnames, forbidden world-canon terms, and
+  // the private dispatch schema family covered by denylist-mythos.json's
+  // forbidden[] entries) are a RAW pre-substitution hard-fail, exactly like
+  // forbidden[], instead of the ordinary substitute-and-pass mechanism every
+  // other lane uses: a contaminated _dev source must never be sanitized into
+  // passing. Non-_dev lanes are completely unaffected by this flag. (Maintainer
+  // note: never spell the private schema family's literal name out in a
+  // comment in this file — see denylist-mythos.json's forbidden[] entries for
+  // why it lives as data, not code, here.)
+  const isDevLane = entry.target === '_dev' || entry.target.startsWith('_dev/');
+
   // Directory-level pruning (EP-S2-011): never descend into a subtree the map
   // wholesale-excludes, so a symlink deep inside it (e.g. a checked-in
   // node_modules) can't trip the symlink refusal. Mock targets stay reachable
@@ -538,6 +552,10 @@ function exportFramework(fwId, exportMap, denylist, opts) {
       // (an adversarial probe confirmed a file simply NAMED after a forbidden term
       // slipped past every content-only scan) — check the relative path/filename itself.
       rawForbiddenHits.push(...scanForbidden(rel, denylist, rel));
+      // MDS-D4: for a _dev-lane unit, the path/filename itself is also checked
+      // against the full private-signature class set (not just forbidden[]),
+      // for the same reason as the content check below.
+      if (isDevLane) rawForbiddenHits.push(...scanForDenylist(rel, denylist, rel));
       const dest = path.join(staging, rel);
       fs.mkdirSync(path.dirname(dest), { recursive: true });
       // R2-6 (mock-bypass mechanic): mocks used to copy verbatim, meaning
@@ -557,13 +575,21 @@ function exportFramework(fwId, exportMap, denylist, opts) {
         const inspected = inspectFile(mockSrc, rel, denylist);
         rawForbiddenHits.push(...inspected.hits);
         if (inspected.text !== null) {
-          // EP-S2-012: forbidden[] must be checked on the RAW (pre-substitution)
-          // decoded text — inspectFile's own `hits` only cover binary/undecodable
-          // cases, so the ordinary raw-forbidden scan still runs here explicitly.
-          rawForbiddenHits.push(...scanForbidden(inspected.text, denylist, rel));
-          const { text, applied } = applySubstitutions(inspected.text, subs);
-          fs.writeFileSync(dest, text);
-          if (applied.length) substitutions.push({ file: rel, applied });
+          if (isDevLane) {
+            // MDS-D4: raw pre-substitution hard-fail on the full private-signature
+            // class set — a contaminated _dev source must never be sanitized into
+            // passing, so it is never handed to applySubstitutions at all.
+            rawForbiddenHits.push(...scanForDenylist(inspected.text, denylist, rel));
+            fs.writeFileSync(dest, inspected.text);
+          } else {
+            // EP-S2-012: forbidden[] must be checked on the RAW (pre-substitution)
+            // decoded text — inspectFile's own `hits` only cover binary/undecodable
+            // cases, so the ordinary raw-forbidden scan still runs here explicitly.
+            rawForbiddenHits.push(...scanForbidden(inspected.text, denylist, rel));
+            const { text, applied } = applySubstitutions(inspected.text, subs);
+            fs.writeFileSync(dest, text);
+            if (applied.length) substitutions.push({ file: rel, applied });
+          }
         } else {
           fs.copyFileSync(mockSrc, dest);
         }
@@ -574,6 +600,9 @@ function exportFramework(fwId, exportMap, denylist, opts) {
     if (!matchesAny(rel, entry.files.export)) { excluded.push(rel); continue; }
     // R2-3: path/filename scan (see comment above) applies to plain-export files too.
     rawForbiddenHits.push(...scanForbidden(rel, denylist, rel));
+    // MDS-D4: see the matching comment in the mock lane above — a _dev-lane
+    // path/filename is checked against the full private-signature class set.
+    if (isDevLane) rawForbiddenHits.push(...scanForDenylist(rel, denylist, rel));
     const src = path.join(sourceDir, rel);
     const dest = path.join(staging, rel);
     fs.mkdirSync(path.dirname(dest), { recursive: true });
@@ -581,11 +610,18 @@ function exportFramework(fwId, exportMap, denylist, opts) {
       const inspected = inspectFile(src, rel, denylist);
       rawForbiddenHits.push(...inspected.hits);
       if (inspected.text !== null) {
-        // EP-S2-012: same raw-forbidden scan on the decoded text, before substitution.
-        rawForbiddenHits.push(...scanForbidden(inspected.text, denylist, rel));
-        const { text, applied } = applySubstitutions(inspected.text, subs);
-        fs.writeFileSync(dest, text);
-        if (applied.length) substitutions.push({ file: rel, applied });
+        if (isDevLane) {
+          // MDS-D4: raw pre-substitution hard-fail — see the mock-lane comment
+          // above. Never handed to applySubstitutions.
+          rawForbiddenHits.push(...scanForDenylist(inspected.text, denylist, rel));
+          fs.writeFileSync(dest, inspected.text);
+        } else {
+          // EP-S2-012: same raw-forbidden scan on the decoded text, before substitution.
+          rawForbiddenHits.push(...scanForbidden(inspected.text, denylist, rel));
+          const { text, applied } = applySubstitutions(inspected.text, subs);
+          fs.writeFileSync(dest, text);
+          if (applied.length) substitutions.push({ file: rel, applied });
+        }
       } else {
         fs.copyFileSync(src, dest);
       }

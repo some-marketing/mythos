@@ -13,10 +13,10 @@ Plan a quest: compare a task to the hardened grimoires (frameworks), present the
 <process>
 1. **Assess grimoire similarity.** Compare the task to registered grimoires and to broader workflow patterns. Present scored top matches and pattern matches as separate classes of evidence. Pattern matches widen inspection; they do not fabricate certainty or override stronger contradictory evidence.
 2. **Check for existing work.** Detect any existing quest charter that overlaps this scope. If a strong owning charter exists, PREFER amending it over authoring a parallel one — authoring a new charter despite a strong match requires an explicit reason.
-3. **Declare scope explicitly.** If the task is patron-delivery work, scope is `client` and the charter is stored under that patron's `plans/`. If it is grimoire, runtime, or cross-patron system work, scope is `system` and stored under the system plans root. Ambiguous scope must block — do not default silently. If neither `--client CODE` nor an explicit system-scope declaration is present, ask the operator to clarify.
+3. **Declare scope explicitly.** If the task is patron-delivery work, scope is `client` and the charter is stored under that patron's `clients/{CODE}/plans/`. If it is grimoire, runtime, or cross-patron system work, scope is `system` and stored under `_dev/reports/analysis/task-plans/`. Ambiguous scope must block — do not default silently. If neither `--client CODE` nor an explicit system-scope declaration is present, ask the operator to clarify.
 4. **Generate the bounded charter:** covered steps, gap steps, gates (saving throws), and risk notes.
 5. **Emit routing metadata** for `/embark`: `risk_tier` (low/medium/high), `review_lane` (verify-local / independent-review / operator-gate), a rationale, and any escalation triggers.
-6. Write the charter artifacts (JSON + matching markdown summary) to the scope-appropriate plans root.
+6. Write the charter artifacts (JSON + matching markdown summary) to the scope-appropriate plans root (`clients/{CODE}/plans/` for patron scope, `_dev/reports/analysis/task-plans/` for system scope).
 7. This is REVIEW_ONLY — propose the charter only; attempt no execution.
 </process>
 

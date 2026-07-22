@@ -11,8 +11,8 @@ Run the Guildmaster loop: a reusable control loop for work that needs more than 
 </objective>
 
 <process>
-1. **Resolve the target first.** Treat the argument as a quest charter (task plan), a plan path, or a named workstream. If more than one target matches, stop and report the ambiguity — do not guess.
-2. **Load context.** Read the governing plan, the latest review (trial) artifact for the same scope, and any prior debrief (chronicle) for the same scope.
+1. **Resolve the target first.** Treat the argument as a quest charter (task plan), a plan path, a loop charter under `_dev/loops/`, or a named workstream. If more than one target matches, stop and report the ambiguity — do not guess.
+2. **Load context.** Read the governing plan (or, for a loop charter, the charter file itself under `_dev/loops/`), the latest review (trial) artifact for the same scope, and any prior debrief (chronicle) for the same scope.
 3. **Normalize into the task kernel** before choosing a route: Current State (what is true now), Question / Work (the one central work-unit), and Desired State (what should be true after). The middle question is the work.
 4. **Fractalize before delegating.** If there is exactly one safe next step, take it inside the current scope. If a safe binary choice appears, default to yes. If a "do both" option exists among three, treat do-both as the answer. If more than three peer steps or questions appear at one level, split into child quests (shared desired state) or sibling quests (differing desired states).
 5. **Resolve questions at the lowest level.** Bubble up to the human operator only what needs human judgment: approval, budget/scope/timeline commitment, client-facing risk, destructive or irreversible action, credential access, or a same-rank authority conflict.
@@ -28,7 +28,7 @@ Run the Guildmaster loop: a reusable control loop for work that needs more than 
 15. **Never advance a downstream stage** while an unresolved CRITICAL/MAJOR blocker stands on the current one, unless the deferral is recorded durably.
 16. **Collect evidence before closeout:** changed files, commands run, test/check outputs, review artifacts. Missing evidence means the state is evidence_missing, not complete.
 17. **The producer cannot self-validate acceptance-grade work.** Run the independent review lane the plan or risk requires before declaring done.
-18. **Close the loop** with `/chronicle` for meaningful multi-step work, write a truthful status note in your project, and return a concise status: resolved target, loop state, actor roles, review classification, evidence, blockers, and the exact next command.
+18. **Close the loop** with `/chronicle` for meaningful multi-step work, write a truthful status note under `_dev/reports/analysis/`, and return a concise status: resolved target, loop state, actor roles, review classification, evidence, blockers, and the exact next command.
 </process>
 
 <role_boundaries>

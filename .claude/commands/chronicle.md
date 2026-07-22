@@ -15,7 +15,7 @@ Write the chronicle (debrief a run): evaluate a completed execution slice by con
 2. **Read the evidence:** the session's learning notes, the stage report for the slice, and any independent review artifacts that exist for the matching scope.
 3. **Evaluate from the builder's seat:** what was hard, what flowed, what surprised — friction points, spec/prompt gaps, validation misses, and patterns that worked.
 4. **Classify each finding into one of two buckets:** *improve* (a local corrective change) or *replicate* (spreading a proven pattern laterally). A finding may be neither — discard anything below the threshold.
-5. **Write three artifacts** under your analysis directory:
+5. **Write three artifacts** under `_dev/reports/analysis/`:
    - a short debrief markdown with 3–7 findings maximum, each citing a specific artifact or observation as evidence;
    - an improve-plan (0–3 items), each targeting a specific surface (spec, command contract, validation, closeout rule, orchestration primitive, grimoire prompt, or review gate) with a concrete suggested change, how to validate it, evidence references, and urgency;
    - a replicate-plan (0–3 items), each describing a proven pattern, what it applies to, a confidence level, evidence, and replication risk.

@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Mythos Capture Meta",
+  "type": "object",
+  "required": [
+    "capture_id",
+    "task_type",
+    "service_category",
+    "source_mode",
+    "source_type",
+    "source_root",
+    "imported_files",
+    "normalization_status",
+    "operator",
+    "created_at",
+    "status"
+  ],
+  "properties": {
+    "capture_id": { "type": "string" },
+    "task_type": { "type": "string" },
+    "service_category": { "type": "string" },
+    "source_mode": {
+      "type": "string",
+      "enum": ["manual", "llm", "hybrid"]
+    },
+    "source_type": {
+      "type": "string",
+      "enum": ["workspace", "files", "folder", "summary", "hybrid"]
+    },
+    "source_root": { "type": "string" },
+    "imported_files": { "type": "array" },
+    "normalization_status": {
+      "type": "string",
+      "enum": ["raw", "normalized", "incomplete"]
+    },
+    "normalization_notes": { "type": "array" },
+    "operator": { "type": "string" },
+    "created_at": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["incomplete", "ready_for_scaffold", "archived"]
+    }
+  }
+}

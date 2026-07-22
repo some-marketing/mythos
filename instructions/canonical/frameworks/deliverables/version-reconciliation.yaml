@@ -1,0 +1,11 @@
+{
+  "id": "deliverables/version-reconciliation",
+  "manifest_path": "frameworks/deliverables/version-reconciliation/manifest.json",
+  "description": "Structured diff and contradiction detection between two versions of a deliverable, supporting cross-format comparison",
+  "inputs": ["version_a", "version_b"],
+  "outputs": ["reconciliation_output/CONTRADICTION_REPORT.md", "reconciliation_output/reconciliation_summary.json"],
+  "modes": ["FINDINGS_ONLY", "PATCH_ALLOWED"],
+  "operations": ["version-reconciliation:reconcile", "version-reconciliation:extract", "version-reconciliation:diff", "version-reconciliation:report", "version-reconciliation:status"],
+  "agent_profiles": ["extraction", "diff", "report"],
+  "guardrail_overrides": ["Every number mismatch is CRITICAL", "Speaker notes are first-class content", "Bidirectional reporting"]
+}

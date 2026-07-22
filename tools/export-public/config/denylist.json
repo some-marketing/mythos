@@ -1,0 +1,22 @@
+{
+  "schema": "ExportDenylist/1.0",
+  "notes": "EXAMPLE denylist — replace with your own private terms. Client codes match case-SENSITIVE word-boundary (case-insensitive matching of short month/hour-shaped codes produces catastrophic false positives against date placeholders such as YYYY-MM-DD; use the optional per-entry regex override to add adjacency negation). Domains and identifiers match as substrings. Every term maps to a generic replacement; any post-strip hit fails the export.",
+  "client_codes": [
+    { "term": "ACMECO", "replacement": "{CLIENT_CODE}" },
+    { "term": "XX", "replacement": "{CLIENT_CODE}", "regex": "(?<![\\w:-])XX(?![\\w:-])", "note": "adjacency negation example: a two-letter code that must not match inside hyphen/colon-joined placeholders" }
+  ],
+  "domains": [
+    { "term": "acme-client.com", "replacement": "example-client.com" }
+  ],
+  "identifiers": [
+    { "term": "000000000000000", "replacement": "{AD_ACCOUNT_ID}" }
+  ],
+  "patterns": [
+    {
+      "regex": "[a-zA-Z0-9._%+-]+@(?!example\\.com|example-)[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}",
+      "flags": "g",
+      "replacement": "user@example.com",
+      "description": "email addresses (except example placeholders)"
+    }
+  ]
+}

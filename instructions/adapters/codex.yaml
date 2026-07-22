@@ -1,0 +1,18 @@
+{
+  "harness_id": "codex",
+  "enabled": true,
+  "target_paths": {
+    "root_instructions": "AGENTS.md"
+  },
+  "format_rules": {
+    "markdown": true,
+    "concise": true
+  },
+  "capability_mapping": {
+    "commands": "terminal_commands",
+    "skills": "instruction_workflows",
+    "agents": "subagent_roles"
+  },
+  "unsupported_features_policy": "warn",
+  "post_processors": []
+}

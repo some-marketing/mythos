@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Mythos Feedback Entry",
+  "description": "User or operator feedback on a framework run. External signal class.",
+  "type": "object",
+  "required": [
+    "entry_id",
+    "framework_id",
+    "outcome",
+    "captured_at"
+  ],
+  "properties": {
+    "entry_id": {
+      "type": "string",
+      "description": "Unique identifier for this feedback entry"
+    },
+    "run_id": {
+      "type": "string",
+      "description": "Optional reference to a specific run"
+    },
+    "framework_id": {
+      "type": "string",
+      "description": "Framework identifier (service/name)"
+    },
+    "outcome": {
+      "type": "string",
+      "enum": ["accepted", "accepted_with_edits", "rejected", "partial"],
+      "description": "Overall outcome assessment"
+    },
+    "satisfaction": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "1-5 satisfaction score"
+    },
+    "fit_for_purpose": {
+      "type": "boolean",
+      "description": "Whether the output was appropriate for its intended use"
+    },
+    "requested_changes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Specific changes the user requested"
+    },
+    "friction_notes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Points of friction in the workflow"
+    },
+    "strengths": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "What worked well"
+    },
+    "operator": {
+      "type": "string",
+      "description": "Who provided this feedback"
+    },
+    "captured_at": {
+      "type": "string",
+      "description": "ISO 8601 timestamp"
+    },
+    "produced_by_actor_id": {
+      "type": ["string", "null"],
+      "description": "Actor ID that produced the artifact being evaluated"
+    },
+    "produced_by_actor_type": {
+      "type": ["string", "null"],
+      "enum": ["human", "intelligence", "hybrid", null],
+      "description": "Type of the producing actor"
+    },
+    "produced_by_harness_id": {
+      "type": ["string", "null"],
+      "description": "Harness ID of the producing actor"
+    },
+    "produced_at": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "When the artifact was produced"
+    },
+    "validated_by_actor_id": {
+      "type": ["string", "null"],
+      "description": "Actor ID that performed acceptance-grade validation"
+    },
+    "validated_by_actor_type": {
+      "type": ["string", "null"],
+      "enum": ["human", "intelligence", "hybrid", null],
+      "description": "Type of the validating actor"
+    },
+    "validated_by_harness_id": {
+      "type": ["string", "null"],
+      "description": "Harness ID of the validating actor"
+    },
+    "validated_at": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "When validation occurred"
+    },
+    "validation_artifact": {
+      "type": ["string", "null"],
+      "description": "Path to the durable validation artifact"
+    },
+    "validation_method": {
+      "type": ["string", "null"],
+      "description": "How validation was performed"
+    },
+    "validation_confidence": {
+      "type": ["string", "null"],
+      "enum": ["confirmed", "probable", "uncertain", null],
+      "description": "Confidence level of the validation"
+    }
+  }
+}

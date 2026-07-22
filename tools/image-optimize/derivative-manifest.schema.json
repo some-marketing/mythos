@@ -1,0 +1,141 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://mythos/tools/image-optimize/derivative-manifest.schema.json",
+  "title": "DerivativeManifest",
+  "description": "Idempotency + verify-by-record manifest emitted by tools/image-optimize. Maps every optimized source raster to its derivative by sha256 so re-runs are a no-op and a deploy preflight can verify by record instead of re-deriving. S0 = foundation fields; S1 adds OPTIONAL policy fields (tier, target_width, quality, has_alpha, downscaled) and OPTIONAL avif/png_fallback sub-records produced by the format/sizing policy engine.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "generated_at", "entries"],
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "DerivativeManifest/1.0",
+      "description": "Schema version tag. Bump on any breaking field change."
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 timestamp the manifest file was last written."
+    },
+    "entries": {
+      "type": "array",
+      "description": "One entry per optimized source file.",
+      "items": { "$ref": "#/definitions/entry" }
+    }
+  },
+  "definitions": {
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_path",
+        "source_sha256",
+        "derivative_path",
+        "derivative_sha256",
+        "width",
+        "height",
+        "bytes",
+        "encoder",
+        "encoder_version",
+        "created_at"
+      ],
+      "properties": {
+        "source_path": {
+          "type": "string",
+          "description": "Path to the source raster, relative to the manifest's base (or absolute). The idempotency key together with source_sha256."
+        },
+        "source_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "Lowercase hex sha256 of the source file bytes. Skip-by-source-hash key."
+        },
+        "derivative_path": {
+          "type": "string",
+          "description": "Path to the produced derivative (e.g. the .webp)."
+        },
+        "derivative_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "Lowercase hex sha256 of the derivative file bytes."
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Derivative pixel width."
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Derivative pixel height."
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Derivative size in bytes."
+        },
+        "encoder": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Adapter id that produced the derivative (e.g. cwebp, sharp)."
+        },
+        "encoder_version": {
+          "type": "string",
+          "description": "Version string reported by the encoder at run time, or 'unknown' if not resolvable."
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO-8601 timestamp the derivative was produced. Supplied by the caller so runs are stampable and tests stay deterministic."
+        },
+        "tier": {
+          "type": "string",
+          "enum": ["hero", "content", "thumb"],
+          "description": "S1: sizing tier applied (selects the max-width + byte caps)."
+        },
+        "target_width": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "S1: the width the source was resized to (never above source width — no upscale)."
+        },
+        "quality": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "S1: WebP lossy quality used."
+        },
+        "has_alpha": {
+          "type": "boolean",
+          "description": "S1: whether the produced WebP carries an alpha channel (mechanically detected from the source)."
+        },
+        "downscaled": {
+          "type": "boolean",
+          "description": "S1: true if the source width exceeded the tier cap and was downscaled; false if kept at source width."
+        },
+        "avif": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "S1: OPTIONAL additional AVIF derivative (--also-avif). Never the sole asset.",
+          "required": ["derivative_path", "derivative_sha256", "bytes", "encoder"],
+          "properties": {
+            "derivative_path": { "type": "string" },
+            "derivative_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+            "bytes": { "type": "integer", "minimum": 0 },
+            "encoder": { "type": "string", "minLength": 1 }
+          }
+        },
+        "png_fallback": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "S1: OPTIONAL quantized-PNG retain derivative for alpha sources (pngquant). Absent when pngquant is unavailable; the alpha-WebP remains the default asset.",
+          "required": ["derivative_path", "derivative_sha256", "bytes", "encoder"],
+          "properties": {
+            "derivative_path": { "type": "string" },
+            "derivative_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+            "bytes": { "type": "integer", "minimum": 0 },
+            "encoder": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "service_category": "deliverables",
+  "framework_name": "scope-verification",
+  "version": "1.0.0",
+  "description": "Verifies scope/proposal documents against source data by exact categorization, counting, and discrepancy detection",
+  "prompt_count": 2,
+  "input_contract": {
+    "required": [
+      {
+        "name": "scope_document",
+        "description": "Path to scope or proposal document (.md, .docx, .pdf)"
+      },
+      {
+        "name": "source_data",
+        "description": "Path to source data (crawl directory, sitemap file, spreadsheet, or URL)"
+      }
+    ],
+    "optional": [
+      {
+        "name": "source_type",
+        "description": "Type hint: crawl|sitemap|spreadsheet|url (auto-detected if omitted)"
+      },
+      {
+        "name": "category_map",
+        "description": "Custom category definitions for content classification"
+      }
+    ]
+  },
+  "output_contract": {
+    "directories": [
+      "verification_output/"
+    ],
+    "artifacts": [
+      "DISCREPANCY_REPORT.md",
+      "verification_summary.json"
+    ]
+  },
+  "output_contract_v2": {
+    "directories": [
+      {
+        "path": "verification_output/",
+        "required": true,
+        "description": "All verification artifacts and intermediate data"
+      }
+    ],
+    "artifacts": [
+      {
+        "name": "source_manifest.json",
+        "path_pattern": "verification_output/source_manifest.json",
+        "required": true
+      },
+      {
+        "name": "categorized_inventory.json",
+        "path_pattern": "verification_output/categorized_inventory.json",
+        "required": true
+      },
+      {
+        "name": "scope_claims.json",
+        "path_pattern": "verification_output/scope_claims.json",
+        "required": true
+      },
+      {
+        "name": "comparison_matrix.json",
+        "path_pattern": "verification_output/comparison_matrix.json",
+        "required": true
+      },
+      {
+        "name": "DISCREPANCY_REPORT.md",
+        "path_pattern": "verification_output/DISCREPANCY_REPORT.md",
+        "required": true
+      },
+      {
+        "name": "verification_summary.json",
+        "path_pattern": "verification_output/verification_summary.json",
+        "required": true
+      }
+    ],
+    "bundle_types": []
+  },
+  "execution_modes": [
+    "FINDINGS_ONLY",
+    "PATCH_ALLOWED"
+  ],
+  "mcp_requirements": [
+    "playwright"
+  ],
+  "prompt_chain": {
+    "analysis": [
+      "01_ANALYZE"
+    ],
+    "remediation": [
+      "02_REPORT_AND_UPDATE"
+    ]
+  },
+  "skills_path": ".claude/skills/scope-verification/",
+  "commands_path": ".claude/commands/scope-verification/",
+  "agents_path": ".claude/agents/scope-verification/",
+  "skills": [
+    "scope-verification/SKILL.md"
+  ],
+  "commands": [
+    "run",
+    "status",
+    "analyze",
+    "report-and-update"
+  ],
+  "agents": [
+    "analyze-agent",
+    "report-and-update-agent"
+  ],
+  "patterns": [
+    "scope-source-reconciliation",
+    "inventory-count-verification",
+    "discrepancy-reporting",
+    "client-deliverable-qa"
+  ]
+}

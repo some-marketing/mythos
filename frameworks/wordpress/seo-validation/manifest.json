@@ -1,0 +1,247 @@
+{
+  "service_category": "wordpress",
+  "framework_name": "seo-validation",
+  "version": "0.2.0",
+  "description": "Playwright-based pre-launch SEO validation crawl for WordPress sites. Discovers pages via sitemap, renders in a real browser, extracts and validates SEO signals (H1, canonical, OG, alt text, structured data, links), checks mobile rendering with device emulation, and produces an observational findings report.",
+  "prompt_count": 6,
+  "input_contract": {
+    "required": [
+      {
+        "name": "site-config.json",
+        "description": "Target site URL, optional auth credentials reference, crawl scope rules (include/exclude patterns), and page-type classification hints"
+      }
+    ],
+    "optional": [
+      {
+        "name": "check-config.json",
+        "description": "Which checks to run, pass/fail thresholds, mobile devices to emulate. Defaults to all checks with standard thresholds."
+      },
+      {
+        "name": "known-issues.json",
+        "description": "Known issues to suppress from the findings report (e.g., expected missing alt text on decorative images)"
+      }
+    ]
+  },
+  "output_contract": {
+    "directories": [
+      "crawl/",
+      "checks/",
+      "mobile/",
+      "reports/",
+      "handoff/"
+    ],
+    "artifacts": [
+      "crawl/page-inventory.json",
+      "crawl/extracted/",
+      "crawl/crawl-summary.json",
+      "crawl/errors.json",
+      "checks/results.json",
+      "mobile/results.json",
+      "reports/findings.md",
+      "reports/summary.json",
+      "handoff/classification.json",
+      "handoff/DEV_HANDOFF.md"
+    ]
+  },
+  "output_contract_v2": {
+    "directories": [
+      {
+        "path": "crawl/",
+        "required": true,
+        "description": "Page inventory, raw HTML snapshots, and extracted SEO signals per page"
+      },
+      {
+        "path": "crawl/extracted/",
+        "required": true,
+        "description": "Per-page JSON files with extracted SEO signals"
+      },
+      {
+        "path": "checks/",
+        "required": true,
+        "description": "Per-check pass/fail results with evidence"
+      },
+      {
+        "path": "mobile/",
+        "required": false,
+        "description": "Mobile emulation results and screenshots"
+      },
+      {
+        "path": "reports/",
+        "required": true,
+        "description": "Aggregate findings report and JSON summary"
+      }
+    ],
+    "artifacts": [
+      {
+        "name": "page-inventory.json",
+        "path_pattern": "crawl/page-inventory.json",
+        "required": true
+      },
+      {
+        "name": "results.json",
+        "path_pattern": "checks/results.json",
+        "required": true
+      },
+      {
+        "name": "findings.md",
+        "path_pattern": "reports/findings.md",
+        "required": true
+      },
+      {
+        "name": "summary.json",
+        "path_pattern": "reports/summary.json",
+        "required": true
+      }
+    ],
+    "bundle_types": []
+  },
+  "execution_modes": [
+    "FINDINGS_ONLY",
+    "RUN_ONLY",
+    "REVIEW_ONLY"
+  ],
+  "mcp_requirements": [],
+  "runtime_requirements": {
+    "playwright": ">=1.50.0",
+    "node": ">=18.0.0"
+  },
+  "prompt_chain": {
+    "intake": [
+      "01_INTAKE_AND_SITE_DISCOVERY"
+    ],
+    "execution": [
+      "02_CRAWL_AND_EXTRACT",
+      "03_VALIDATE_CHECKS"
+    ],
+    "mobile": [
+      "04_MOBILE_AND_PERFORMANCE"
+    ],
+    "reporting": [
+      "05_FINDINGS_REPORT"
+    ],
+    "handoff": [
+      "06_DEV_HANDOFF"
+    ]
+  },
+  "skills_path": "",
+  "commands_path": "",
+  "agents_path": "",
+  "_quarantine_note": "Harness assets not yet created. Framework has prompts and guardrails only. Register in system.yaml and create .claude/ assets before promotion.",
+  "skills": [
+    "seo-validation/SKILL.md"
+  ],
+  "commands": [
+    "run",
+    "status",
+    "intake-and-site-discovery",
+    "crawl-and-extract",
+    "validate-checks",
+    "mobile-and-performance",
+    "findings-report",
+    "dev-handoff"
+  ],
+  "agents": [
+    "intake-and-site-discovery-agent",
+    "crawl-and-extract-agent",
+    "validate-checks-agent",
+    "mobile-and-performance-agent",
+    "findings-report-agent",
+    "dev-handoff-agent"
+  ],
+  "component_tags": {
+    "prompt::01_INTAKE_AND_SITE_DISCOVERY": {
+      "similarity_tags": [
+        "intake",
+        "site-discovery",
+        "url-inventory",
+        "crawl-scope"
+      ],
+      "domain": "wordpress",
+      "surfaces": [
+        "public-site"
+      ],
+      "related_artifacts": [],
+      "transfer_notes": "Site URL inventory build; transferable to any whole-site audit (QA, CRO, accessibility) by swapping the signal list."
+    },
+    "prompt::02_CRAWL_AND_EXTRACT": {
+      "similarity_tags": [
+        "crawl",
+        "extraction",
+        "seo-signals",
+        "meta-tags",
+        "batch-fetch"
+      ],
+      "domain": "wordpress",
+      "surfaces": [
+        "public-site"
+      ],
+      "related_artifacts": [],
+      "transfer_notes": "curl+parse signal extraction over a URL inventory; signal schema is the tweak point."
+    },
+    "prompt::03_VALIDATE_CHECKS": {
+      "similarity_tags": [
+        "validation",
+        "checks",
+        "redirect-matrix",
+        "canonical",
+        "structured-data",
+        "broken-links"
+      ],
+      "domain": "wordpress",
+      "surfaces": [
+        "public-site"
+      ],
+      "related_artifacts": [],
+      "transfer_notes": "Deterministic check battery over extracted signals incl. redirect-matrix evidence; check definitions are data, the loop is generic."
+    },
+    "prompt::04_MOBILE_AND_PERFORMANCE": {
+      "similarity_tags": [
+        "mobile-rendering",
+        "performance",
+        "viewport",
+        "lighthouse"
+      ],
+      "domain": "wordpress",
+      "surfaces": [
+        "public-site",
+        "browser"
+      ],
+      "related_artifacts": [],
+      "transfer_notes": "Browser-based rendering/perf pass; transfers to any responsive QA with viewport list tweak."
+    },
+    "prompt::05_FINDINGS_REPORT": {
+      "similarity_tags": [
+        "reporting",
+        "findings",
+        "severity-classification",
+        "evidence-citation"
+      ],
+      "domain": "wordpress",
+      "surfaces": [
+        "report"
+      ],
+      "related_artifacts": [],
+      "transfer_notes": "Findings->severity->evidence report shape; transferable as-is to any audit domain."
+    },
+    "prompt::06_DEV_HANDOFF": {
+      "similarity_tags": [
+        "dev-handoff",
+        "remediation-tasks",
+        "handoff-bundle"
+      ],
+      "domain": "wordpress",
+      "surfaces": [
+        "report",
+        "task-board"
+      ],
+      "related_artifacts": [],
+      "transfer_notes": "Converts findings to actionable dev tasks; pairs with any findings report."
+    }
+  },
+  "patterns": [
+    "seo-crawl-validation",
+    "metadata-verification",
+    "structured-data-check",
+    "prelaunch-site-validation"
+  ]
+}

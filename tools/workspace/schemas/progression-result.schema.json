@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ProgressionResult/1.0",
+  "title": "ProgressionResult",
+  "description": "Bridge progression result — structured recommendation from Codex bridge after reviewing a bounded slice.",
+  "type": "object",
+  "required": [
+    "schema",
+    "review_verdict",
+    "next_recommended_command",
+    "next_step_kind",
+    "progression_mode",
+    "progression_reason",
+    "evidence_refs",
+    "decision_context_artifacts",
+    "timestamp"
+  ],
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "ProgressionResult/1.0"
+    },
+    "review_verdict": {
+      "type": "string",
+      "enum": ["confirmed", "confirmed_with_caveats", "needs_correction"]
+    },
+    "next_recommended_command": {
+      "type": "string",
+      "minLength": 1
+    },
+    "next_step_kind": {
+      "type": "string",
+      "enum": ["command", "implementation_slice"]
+    },
+    "progression_mode": {
+      "type": "string",
+      "enum": ["advisory", "auto_once", "operator_gate"]
+    },
+    "progression_reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "next_prompt_stub": {
+      "type": "string",
+      "default": ""
+    },
+    "stop_reason": {
+      "type": "string",
+      "default": ""
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "decision_context_artifacts": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "timestamp": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "_conditional_constraints_note": "The Mythos schema validator does not support if/then/allOf. These constraints are enforced in the JS factory and validator: (1) stop_reason required when progression_mode is not auto_once; (2) needs_correction cannot use auto_once.",
+  "additionalProperties": false
+}

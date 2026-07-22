@@ -1,0 +1,10 @@
+{
+  "immutable": true,
+  "safety_rules": [
+    "Never expose PII, credentials, API keys, or .env values",
+    "Never write client-specific data into frameworks",
+    "Never skip declared execution mode constraints",
+    "Never run destructive operations without explicit confirmation",
+    "Use observational reporting: observations and hypotheses, not diagnoses"
+  ]
+}

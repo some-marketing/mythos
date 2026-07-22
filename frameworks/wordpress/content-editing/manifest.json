@@ -1,0 +1,191 @@
+{
+  "service_category": "wordpress",
+  "framework_name": "content-editing",
+  "version": "0.1.0",
+  "description": "Scoped WordPress admin content editing with authenticated navigation, bounded changes, visual and functional verification, and publish/freeze handoff reporting",
+  "prompt_count": 6,
+  "input_contract": {
+    "required": [
+      {
+        "name": "site-config.json",
+        "description": "Target WordPress site, credential reference, editor expectations, and environment safety rules"
+      },
+      {
+        "name": "edit-request.json",
+        "description": "Target page/post identifiers, allowed change scope, field-level edit intent, and publish policy"
+      },
+      {
+        "name": "success-criteria.md",
+        "description": "Human-readable acceptance criteria for the requested content changes"
+      }
+    ],
+    "optional": [
+      {
+        "name": "selector-hints.json",
+        "description": "Known editor selectors or field mappings for custom page builders"
+      },
+      {
+        "name": "reference-artifacts/",
+        "description": "Supporting copy decks, screenshots, structured payloads, prior page captures, or source-of-truth visual references"
+      }
+    ]
+  },
+  "output_contract": {
+    "directories": [
+      "captures/",
+      "edits/",
+      "reports/",
+      "handoff/"
+    ],
+    "artifacts": [
+      "capture-log.json",
+      "edit-plan.json",
+      "verification-report.json",
+      "publish-report.json",
+      "change-summary.md"
+    ]
+  },
+  "output_contract_v2": {
+    "directories": [
+      {
+        "path": "captures/",
+        "required": true,
+        "description": "Pre-edit evidence, editor mapping, screenshots, and visual baselines"
+      },
+      {
+        "path": "edits/",
+        "required": true,
+        "description": "Planned and applied field-level content changes"
+      },
+      {
+        "path": "reports/",
+        "required": true,
+        "description": "Verification, visual review, and drift reports"
+      },
+      {
+        "path": "handoff/",
+        "required": false,
+        "description": "Operator-facing publish/freeze packet and rollback notes"
+      }
+    ],
+    "artifacts": [
+      {
+        "name": "capture-log.json",
+        "path_pattern": "captures/capture-log.json",
+        "required": true
+      },
+      {
+        "name": "visual-baseline",
+        "path_pattern": "captures/visual-baseline/",
+        "required": false
+      },
+      {
+        "name": "edit-plan.json",
+        "path_pattern": "edits/edit-plan.json",
+        "required": true
+      },
+      {
+        "name": "verification-report.json",
+        "path_pattern": "reports/verification-report.json",
+        "required": true
+      },
+      {
+        "name": "visual-review.md",
+        "path_pattern": "reports/visual-review.md",
+        "required": false
+      },
+      {
+        "name": "review-gate.md",
+        "path_pattern": "reports/review-gate.md",
+        "required": false
+      },
+      {
+        "name": "publish-report.json",
+        "path_pattern": "handoff/publish-report.json",
+        "required": false
+      },
+      {
+        "name": "change-summary.md",
+        "path_pattern": "handoff/change-summary.md",
+        "required": false
+      }
+    ],
+    "bundle_types": [
+      {
+        "type_id": "content-edit-run",
+        "path_pattern": ".",
+        "required_files": [
+          "captures/capture-log.json",
+          "edits/edit-plan.json",
+          "reports/verification-report.json"
+        ],
+        "required_directories": [
+          "captures/",
+          "edits/",
+          "reports/"
+        ],
+        "description": "Single scoped content-editing run with pre/post evidence and verification"
+      }
+    ]
+  },
+  "execution_modes": [
+    "FINDINGS_ONLY",
+    "RUN_ONLY",
+    "REVIEW_ONLY",
+    "PATCH_ALLOWED",
+    "COORDINATOR"
+  ],
+  "mcp_requirements": [
+    "playwright"
+  ],
+  "prompt_chain": {
+    "intake": [
+      "00_INTAKE_AND_SCOPE"
+    ],
+    "capture": [
+      "01_ADMIN_RECON_AND_PRE_EDIT_CAPTURE"
+    ],
+    "execution": [
+      "02_APPLY_BOUNDED_EDITS"
+    ],
+    "verification": [
+      "03_VERIFY_EDITOR_AND_FRONTEND"
+    ],
+    "review": [
+      "04_REVIEW_AND_APPROVAL_GATE"
+    ],
+    "handoff": [
+      "05_PUBLISH_OR_FREEZE_AND_HANDOFF"
+    ]
+  },
+  "skills_path": ".claude/skills/content-editing/",
+  "commands_path": ".claude/commands/content-editing/",
+  "agents_path": ".claude/agents/content-editing/",
+  "skills": [
+    "content-editing/SKILL.md"
+  ],
+  "commands": [
+    "run",
+    "status",
+    "intake-and-scope",
+    "admin-recon-and-pre-edit-capture",
+    "apply-bounded-edits",
+    "verify-editor-and-frontend",
+    "review-and-approval-gate",
+    "publish-or-freeze-and-handoff"
+  ],
+  "agents": [
+    "intake-and-scope-agent",
+    "admin-recon-and-pre-edit-capture-agent",
+    "apply-bounded-edits-agent",
+    "verify-editor-and-frontend-agent",
+    "review-and-approval-gate-agent",
+    "publish-or-freeze-and-handoff-agent"
+  ],
+  "patterns": [
+    "wordpress-content-editing",
+    "browser-content-verification",
+    "cms-page-update",
+    "visual-regression-check"
+  ]
+}

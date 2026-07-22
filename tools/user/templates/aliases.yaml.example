@@ -1,0 +1,47 @@
+# Your called names — a personal vocabulary layered over the guild's canonical one,
+# never replacing it. Copy this file to $MYTHOS_HOME/aliases.yaml (default
+# ~/.mythos/aliases.yaml) and edit it there; this template is never read directly.
+#
+# Same schema as the canonical registry (instructions/canonical/command-aliases.yaml),
+# scoped to four domains. Each entry is {resolves_to, status}; resolves_to must be a
+# real canonical id in that domain (single-hop — an alias may not point at another
+# alias). status is one of: primary | cross-alias | compatibility | deprecated | inactive.
+#
+# Lookup is domain-qualified: within a domain, a canonical name always wins over a
+# called name of the same spelling. A called name in one domain never affects lookups
+# in a different domain, so reusing a short, memorable word across domains is fine.
+#
+# The generator never reads this file, and nothing in it is ever written into any
+# tracked, staged, generated, or exported surface — it only ever reaches a session as
+# labeled advisory context via the SessionStart hook.
+
+version: "MythosAliasRegistry/1.0"
+
+# Called names for commands (canonical domain: aliases in command-aliases.yaml).
+aliases:
+  # Example only — not a real, functional entry until you point it at a command that
+  # actually exists in your installed copy of Mythos.
+  status-check:
+    resolves_to: system-status
+    status: primary
+
+# Called names for grimoires (frameworks), keyed by service/name.
+framework_aliases:
+  # Example only.
+  my-go-to:
+    resolves_to: wordpress/design-research
+    status: primary
+
+# Called names for essences (skills).
+skill_aliases:
+  # Example only.
+  the-usual:
+    resolves_to: execute-framework
+    status: primary
+
+# Called names for tools (package scripts or paths).
+tool_aliases:
+  # Example only.
+  quick-setup:
+    resolves_to: setup
+    status: primary

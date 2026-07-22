@@ -1,0 +1,156 @@
+{
+  "service_category": "wordpress",
+  "framework_name": "seo-audit",
+  "version": "0.1.0",
+  "description": "Multi-phase SEO audit for WordPress sites: technical, on-page, content quality, and prioritized action plan",
+  "prompt_count": 5,
+  "input_contract": {
+    "required": [
+      {
+        "name": "site_url",
+        "description": "URL of the WordPress site to audit"
+      },
+      {
+        "name": "site_type",
+        "description": "Type of site (e.g., ecommerce, blog, SaaS, local business)"
+      },
+      {
+        "name": "seo_goals",
+        "description": "Primary SEO objectives and target outcomes"
+      }
+    ],
+    "optional": [
+      {
+        "name": "priority_keywords",
+        "description": "Target keywords or keyword clusters to focus the audit on"
+      },
+      {
+        "name": "search_console_access",
+        "description": "Google Search Console access details for performance data"
+      },
+      {
+        "name": "current_traffic_baseline",
+        "description": "Current organic traffic baseline for benchmarking"
+      },
+      {
+        "name": "recent_changes",
+        "description": "Recent site changes that may affect SEO (redesign, migration, content updates)"
+      },
+      {
+        "name": "competitor_urls",
+        "description": "Competitor URLs for comparative SEO analysis"
+      },
+      {
+        "name": "audit_scope",
+        "description": "Specific audit scope or focus areas (technical, on-page, content, or all)"
+      }
+    ]
+  },
+  "output_contract": {
+    "directories": [
+      "outputs/seo-audit/"
+    ],
+    "artifacts": [
+      "outputs/seo-audit/technical-findings.md",
+      "outputs/seo-audit/on-page-findings.md",
+      "outputs/seo-audit/content-findings.md",
+      "outputs/seo-audit/action-plan.md",
+      "outputs/seo-audit/executive-summary.md"
+    ]
+  },
+  "output_contract_v2": {
+    "directories": [
+      {
+        "path": "outputs/seo-audit/",
+        "required": true,
+        "description": "All SEO audit findings and action plan deliverables"
+      }
+    ],
+    "artifacts": [
+      {
+        "name": "technical-findings.md",
+        "path_pattern": "outputs/seo-audit/technical-findings.md",
+        "required": true
+      },
+      {
+        "name": "on-page-findings.md",
+        "path_pattern": "outputs/seo-audit/on-page-findings.md",
+        "required": true
+      },
+      {
+        "name": "content-findings.md",
+        "path_pattern": "outputs/seo-audit/content-findings.md",
+        "required": true
+      },
+      {
+        "name": "action-plan.md",
+        "path_pattern": "outputs/seo-audit/action-plan.md",
+        "required": true
+      },
+      {
+        "name": "executive-summary.md",
+        "path_pattern": "outputs/seo-audit/executive-summary.md",
+        "required": true
+      }
+    ],
+    "bundle_types": []
+  },
+  "execution_modes": [
+    "FINDINGS_ONLY",
+    "RUN_ONLY",
+    "REVIEW_ONLY"
+  ],
+  "mcp_requirements": [
+    "playwright"
+  ],
+  "prompt_chain": {
+    "intake": [
+      "01_INTAKE_AND_SCOPE"
+    ],
+    "technical": [
+      "02_TECHNICAL_AUDIT"
+    ],
+    "on_page": [
+      "03_ON_PAGE_AUDIT"
+    ],
+    "content": [
+      "04_CONTENT_QUALITY_AUDIT"
+    ],
+    "reporting": [
+      "05_ACTION_PLAN_AND_SUMMARY"
+    ]
+  },
+  "skills": [
+    "seo-audit/SKILL.md"
+  ],
+  "commands": [
+    "run",
+    "status",
+    "intake-and-scope",
+    "technical-audit",
+    "on-page-audit",
+    "content-quality-audit",
+    "action-plan-and-summary"
+  ],
+  "agents": [
+    "intake-and-scope-agent",
+    "technical-audit-agent",
+    "on-page-audit-agent",
+    "content-quality-audit-agent",
+    "action-plan-and-summary-agent"
+  ],
+  "distilled_from": {
+    "source": "coreyhaines31/marketingskills",
+    "skill": "seo-audit",
+    "version": "1.1.0",
+    "license": "MIT",
+    "classification": "framework-candidate",
+    "classification_date": "2026-03-31"
+  },
+  "patterns": [
+    "seo-audit",
+    "crawl-findings-analysis",
+    "technical-seo-review",
+    "content-seo-gap-analysis"
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Audit Summary",
+  "description": "Machine-readable summary of the presentation audit results",
+  "type": "object",
+  "required": ["presentation_file", "audit_date", "overall_verdict", "metrics"],
+  "properties": {
+    "presentation_file": {
+      "type": "string",
+      "description": "Path to the audited presentation file"
+    },
+    "audit_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the audit was performed"
+    },
+    "overall_verdict": {
+      "type": "string",
+      "enum": ["STRONG PASS", "PASS WITH NOTES", "NEEDS REVIEW", "SIGNIFICANT ISSUES"],
+      "description": "Overall audit verdict"
+    },
+    "metrics": {
+      "type": "object",
+      "required": ["total_slides", "slides_passing", "finding_counts"],
+      "properties": {
+        "total_slides": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "slides_passing": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "finding_counts": {
+          "type": "object",
+          "properties": {
+            "CRITICAL": {"type": "integer", "minimum": 0},
+            "MAJOR": {"type": "integer", "minimum": 0},
+            "MINOR": {"type": "integer", "minimum": 0},
+            "INFO": {"type": "integer", "minimum": 0}
+          }
+        },
+        "screenshot_completeness": {
+          "type": "string",
+          "pattern": "^\\d+/\\d+$",
+          "description": "Format: verified/total"
+        },
+        "corrections_compliance": {
+          "type": "string",
+          "pattern": "^\\d+/\\d+$",
+          "description": "Format: applied/total"
+        }
+      }
+    },
+    "critical_findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "finding_id": {"type": "string"},
+          "slide_number": {"type": "integer"},
+          "observation": {"type": "string"}
+        }
+      }
+    },
+    "major_findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "finding_id": {"type": "string"},
+          "slide_number": {"type": "integer"},
+          "observation": {"type": "string"}
+        }
+      }
+    },
+    "open_questions": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "source_documents_reviewed": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "coverage": {
+      "type": "object",
+      "properties": {
+        "spec_coverage_pct": {"type": "number"},
+        "fact_accuracy_pct": {"type": "number"},
+        "screenshot_completeness_pct": {"type": "number"},
+        "correction_compliance_pct": {"type": "number"}
+      }
+    }
+  }
+}

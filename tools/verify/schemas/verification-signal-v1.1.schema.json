@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VerificationSignal v1.1",
+  "description": "Extended verification contract with profile awareness and structured next actions.",
+  "type": "object",
+  "required": [
+    "schema",
+    "timestamp",
+    "source",
+    "scope",
+    "tier",
+    "verdict",
+    "summary",
+    "checks",
+    "failures",
+    "next_actions",
+    "remediation",
+    "gate_decision"
+  ],
+  "properties": {
+    "schema": {
+      "const": "VerificationSignal/1.1"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source": {
+      "type": "string"
+    },
+    "scope": {
+      "type": "string"
+    },
+    "profile_id": {
+      "type": "string"
+    },
+    "attempt": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "tier": {
+      "enum": ["mechanical", "nuance", "combined"]
+    },
+    "verdict": {
+      "enum": ["PASS", "FAIL", "WARN"]
+    },
+    "summary": {
+      "type": "object",
+      "required": ["total", "passed", "failed", "warned", "skipped"],
+      "properties": {
+        "total": { "type": "integer", "minimum": 0 },
+        "passed": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "warned": { "type": "integer", "minimum": 0 },
+        "skipped": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "category", "severity", "status", "message"],
+        "properties": {
+          "id": { "type": "string" },
+          "category": { "type": "string" },
+          "severity": { "enum": ["critical", "warning", "info"] },
+          "status": { "enum": ["PASS", "FAIL", "WARN", "SKIP"] },
+          "message": { "type": "string" },
+          "evidence": { "type": "string" },
+          "detail": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "failures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "category", "message"],
+        "properties": {
+          "id": { "type": "string" },
+          "category": { "type": "string" },
+          "message": { "type": "string" },
+          "fix_hint": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "next_actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type"],
+        "properties": {
+          "type": {
+            "enum": [
+              "patch_file",
+              "run_command",
+              "rerun_verifier",
+              "escalate_to_llm",
+              "request_user_decision"
+            ]
+          },
+          "target": { "type": "string" },
+          "command": { "type": "string" },
+          "reason": { "type": "string" },
+          "safe": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "remediation": {
+      "type": "object",
+      "required": ["auto_fix_safe_actions", "max_attempts", "remaining_attempts"],
+      "properties": {
+        "auto_fix_safe_actions": { "type": "boolean" },
+        "max_attempts": { "type": "integer", "minimum": 0 },
+        "remaining_attempts": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "token_guidance": {
+      "type": "object",
+      "properties": {
+        "recommended_context_mode": {
+          "enum": ["broad", "profile", "narrow", "exception_only"]
+        },
+        "include_files": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "omit_repo_wide_context": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "gate_decision": {
+      "type": "object",
+      "required": ["proceed", "reason"],
+      "properties": {
+        "proceed": { "type": "boolean" },
+        "reason": { "type": "string" },
+        "blocked_by": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

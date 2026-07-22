@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Task Index",
+  "description": "Maps Dart tasks to workspace context. Accepts either the legacy flat id->entry map or the nested 3-level owner_summary -> for_grouping -> implementation shape.",
+  "oneOf": [
+    { "$ref": "#/$defs/flatIndex" },
+    { "$ref": "#/$defs/nestedIndex" }
+  ],
+  "$defs": {
+    "flatIndex": {
+      "title": "Legacy flat task index",
+      "description": "Flat map of Dart task id -> entry. Backward-compatible original shape.",
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "required": ["context_file", "type"],
+        "properties": {
+          "context_file": {
+            "type": "string",
+            "description": "Filename in the tasks/ directory"
+          },
+          "type": {
+            "$ref": "#/$defs/taskType"
+          },
+          "verdict": {
+            "type": "string",
+            "enum": [
+              "VERIFIED",
+              "VERIFIED_FIXED",
+              "VERIFIED_CONFIRMED",
+              "VERIFIED_CHANGED",
+              "NOT_FOUND",
+              "INCONCLUSIVE",
+              "KNOWN_STATE",
+              "UNVERIFIED",
+              "NOT_TESTABLE"
+            ],
+            "description": "Verification verdict (primarily for verification/implementation tasks)"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["closable", "needs_attention", "blocked", "open"],
+            "description": "Workspace-level status independent of Dart status"
+          },
+          "evidence": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Paths to evidence files relative to project root"
+          },
+          "dart_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Full Dart task URL for round-trip navigation"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "nestedIndex": {
+      "title": "Nested 3-level task index",
+      "description": "owner_summary (parent) -> groups[] (for_grouping, one per person) -> tasks[] (implementation).",
+      "type": "object",
+      "required": ["owner_summary", "groups"],
+      "properties": {
+        "workspace": {
+          "type": "string",
+          "description": "Workspace / project slug"
+        },
+        "shape": {
+          "type": "string",
+          "description": "Human-readable description of the index shape"
+        },
+        "_note": {
+          "type": "string",
+          "description": "Free-form note describing the convention used"
+        },
+        "context_file": {
+          "type": "string",
+          "description": "Filename in the tasks/ directory for shared context"
+        },
+        "owner_summary": {
+          "type": "object",
+          "description": "Parent stakeholder/plain-language summary task.",
+          "required": ["title"],
+          "properties": {
+            "type": {
+              "$ref": "#/$defs/taskType",
+              "description": "When present, should be owner_summary"
+            },
+            "title": { "type": "string" },
+            "audience": { "type": "string" },
+            "assignee": { "type": "string" },
+            "doc": {
+              "type": "string",
+              "description": "Relative path to the owner summary document"
+            },
+            "board": { "type": "string" },
+            "dart_task_id": { "type": "string" },
+            "dart_url": { "type": "string", "format": "uri" }
+          },
+          "additionalProperties": false
+        },
+        "groups": {
+          "type": "array",
+          "description": "Per-person 'For X' grouping subtasks.",
+          "items": {
+            "type": "object",
+            "required": ["slug", "title"],
+            "properties": {
+              "type": {
+                "$ref": "#/$defs/taskType",
+                "description": "When present, should be for_grouping"
+              },
+              "slug": { "type": "string" },
+              "title": { "type": "string" },
+              "assignee": { "type": "string" },
+              "board": { "type": "string" },
+              "note": { "type": "string" },
+              "dart_task_id": { "type": "string" },
+              "dart_url": { "type": "string", "format": "uri" },
+              "tasks": {
+                "type": "array",
+                "description": "Implementation tasks nested under this grouping.",
+                "items": {
+                  "type": "object",
+                  "required": ["slug", "title"],
+                  "properties": {
+                    "type": {
+                      "$ref": "#/$defs/taskType",
+                      "description": "When present, typically implementation"
+                    },
+                    "slug": { "type": "string" },
+                    "title": { "type": "string" },
+                    "note": { "type": "string" },
+                    "dart_task_id": { "type": "string" },
+                    "dart_url": { "type": "string", "format": "uri" }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "taskType": {
+      "type": "string",
+      "enum": [
+        "brief",
+        "design_decision",
+        "implementation",
+        "verification",
+        "investigation",
+        "documentation",
+        "owner_summary",
+        "for_grouping"
+      ],
+      "description": "Task type per TASK_TYPES.md, plus owner_summary and for_grouping for the nested shape"
+    }
+  }
+}

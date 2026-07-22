@@ -1,0 +1,7 @@
+# .cursorrules
+
+> AUTO-GENERATED FILE. Edit canonical source in `instructions/canonical/*` and regenerate.
+
+- Primary policy lives in `.cursor/rules/llmos.mdc`.
+- Apply strict execution mode enforcement.
+- Keep outputs observational and evidence-cited.

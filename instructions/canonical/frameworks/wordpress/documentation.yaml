@@ -1,0 +1,11 @@
+{
+  "id": "wordpress/documentation",
+  "manifest_path": "frameworks/wordpress/documentation/manifest.json",
+  "description": "WordPress admin walkthrough capture and guide generation",
+  "inputs": ["config.json", "guides.json"],
+  "outputs": ["captures/", "guides/"],
+  "modes": ["FINDINGS_ONLY", "PATCH_ALLOWED", "REVIEW_ONLY"],
+  "operations": ["documentation:setup", "documentation:capture", "documentation:full"],
+  "agent_profiles": ["documentation capture", "documentation writer"],
+  "guardrail_overrides": ["No live-site persistence", "credential masking in screenshots"]
+}

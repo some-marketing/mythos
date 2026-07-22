@@ -1,0 +1,20 @@
+{
+  "harness_id": "cursor",
+  "enabled": true,
+  "target_paths": {
+    "root_rules": ".cursorrules",
+    "rules_dir": ".cursor/rules",
+    "main_rule": ".cursor/rules/llmos.mdc"
+  },
+  "format_rules": {
+    "markdown": true,
+    "cursor_mdc": true
+  },
+  "capability_mapping": {
+    "commands": "workspace_commands",
+    "skills": "rule_sections",
+    "agents": "delegation_guidance"
+  },
+  "unsupported_features_policy": "warn",
+  "post_processors": []
+}

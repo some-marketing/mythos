@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Docgen Client Configuration",
+  "description": "Configuration for a client's WordPress site documentation generation",
+  "type": "object",
+  "required": [
+    "client_code",
+    "client_name",
+    "site_url",
+    "wp_admin_url",
+    "notion_portal_root_id",
+    "notion_guide_pages"
+  ],
+  "properties": {
+    "client_code": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "description": "Lowercase client code (e.g., mm, clientc, clienta)"
+    },
+    "client_name": {
+      "type": "string",
+      "description": "Human-readable client name"
+    },
+    "site_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Client site base URL (no trailing slash)"
+    },
+    "wp_admin_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "WordPress admin URL (usually {site_url}/wp-admin)"
+    },
+    "wp_username": {
+      "type": "string",
+      "description": "WordPress admin username for login"
+    },
+    "notion_portal_root_id": {
+      "type": "string",
+      "description": "Notion page ID of the duplicated client portal root"
+    },
+    "notion_guide_pages": {
+      "type": "object",
+      "properties": {
+        "wp_login": { "type": "string", "description": "Notion page ID for How to Log into WordPress" },
+        "edit_text": { "type": "string", "description": "Notion page ID for How to Edit Text on a Page (Gutenberg)" },
+        "edit_text_lc": { "type": "string", "description": "Notion page ID for How to Edit Text on a Page (LiveCanvas)" },
+        "change_image": { "type": "string", "description": "Notion page ID for How to Change a Page Image (Gutenberg)" },
+        "change_image_lc": { "type": "string", "description": "Notion page ID for How to Change a Page Image (LiveCanvas)" },
+        "publish_blog": { "type": "string", "description": "Notion page ID for How to Publish a Blog Post" },
+        "featured_image": { "type": "string", "description": "Notion page ID for How to Set a Featured Image" },
+        "update_seo": { "type": "string", "description": "Notion page ID for How to Update SEO" }
+      },
+      "required": ["wp_login", "edit_text", "change_image", "publish_blog", "featured_image", "update_seo"],
+      "additionalProperties": false,
+      "description": "Map of guide slugs to Notion page IDs. LC variants are optional — only present for LiveCanvas sites."
+    },
+    "page_editor": {
+      "type": ["string", "null"],
+      "enum": ["gutenberg", "livecanvas", "elementor", "divi", null],
+      "description": "Page editor used for content pages (not blog posts). Detected during setup."
+    },
+    "seo_plugin": {
+      "type": ["string", "null"],
+      "enum": ["yoast", "rankmath", "aioseo", "none", null],
+      "description": "Detected SEO plugin, or none/null if not yet detected"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO timestamp of when this config was created"
+    },
+    "last_capture": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "ISO timestamp of last screenshot capture run"
+    },
+    "last_notion_update": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "ISO timestamp of last Notion guide update"
+    }
+  },
+  "additionalProperties": false
+}

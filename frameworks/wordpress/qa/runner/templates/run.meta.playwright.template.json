@@ -1,0 +1,24 @@
+{
+  "run_id": "A_run2",
+  "environment": "A",
+  "site": "example.test",
+  "config_era": "era01",
+  "test_links": {
+    "decorated_landing": "https://example.test/?utm_source=TEST_A_RUN_2&utm_medium=TEST_A_RUN_2&utm_campaign=TEST_A_RUN_2&utm_content=TEST_A_RUN_2&utm_term=TEST_A_RUN_2&gclid=TEST_A_RUN_2&msclkid=TEST_A_RUN_2&fbclid=TEST_A_RUN_2",
+    "direct": "https://example.test/",
+    "apply": "https://example.test/apply"
+  },
+  "test_identity": {
+    "first_name": "TEST_A",
+    "last_name": "RUN_2",
+    "email": "user@example.com",
+    "phone": "+19025550123",
+    "job_title": "chromium",
+    "employer": "darwin-arm64-25"
+  },
+  "runner": {
+    "type": "playwright",
+    "headed": false,
+    "next_wait_ms": 3000
+  }
+}

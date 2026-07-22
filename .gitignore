@@ -1,0 +1,19 @@
+node_modules/
+.env
+.env.*
+!.env.example
+secrets/
+config/*.local.json
+*.local.json
+clients/*/
+!clients/_template/
+*.local
+.DS_Store
+
+# Export receipts — local audit trail, not shipped.
+.export-receipts/
+
+# Your Mirror lives OUTSIDE this repo (~/.mythos) — nothing personal belongs
+# here. These patterns are a safety net in case one is copied in by mistake.
+.mythos/
+mirror/

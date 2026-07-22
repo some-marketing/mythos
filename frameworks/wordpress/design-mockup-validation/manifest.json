@@ -1,0 +1,156 @@
+{
+  "service_category": "wordpress",
+  "framework_name": "design-mockup-validation",
+  "version": "0.2.0",
+  "description": "Cross-AI design mockup validation: evidence scrape, design token extraction, iterative Gemini mockup generation (3-attempt truth/variation/convergence cycle), Codex review gate, post-review fixes, and operator review packet assembly",
+  "prompt_count": 3,
+  "input_contract": {
+    "required": [
+      {
+        "name": "intake.json",
+        "description": "Normalized task inputs for a new execution"
+      },
+      {
+        "name": "context.md",
+        "description": "Non-secret context for the task run"
+      }
+    ],
+    "optional": [
+      {
+        "name": "reference_artifacts/",
+        "description": "Optional supporting artifacts referenced during execution"
+      }
+    ]
+  },
+  "output_contract": {
+    "directories": [
+      "outputs/",
+      "outputs/elements/",
+      "reports/"
+    ],
+    "artifacts": [
+      "execution-summary.json",
+      "review-report.json",
+      "visual-validation.json",
+      "FINAL_*.html"
+    ]
+  },
+  "output_contract_v2": {
+    "directories": [
+      {
+        "path": "outputs/",
+        "required": true,
+        "description": "Execution plan and summary artifacts"
+      },
+      {
+        "path": "outputs/elements/",
+        "required": true,
+        "description": "Per-element attempt directories and FINAL HTML files"
+      },
+      {
+        "path": "reports/",
+        "required": true,
+        "description": "Review and comparison reports"
+      }
+    ],
+    "artifacts": [
+      {
+        "name": "execution-plan.json",
+        "path_pattern": "outputs/execution-plan.json",
+        "required": true
+      },
+      {
+        "name": "execution-summary.json",
+        "path_pattern": "outputs/execution-summary.json",
+        "required": true
+      },
+      {
+        "name": "review-report.json",
+        "path_pattern": "reports/review-report.json",
+        "required": true
+      }
+    ],
+    "bundle_types": [
+      {
+        "type_id": "mockup-element-bundle",
+        "path_pattern": "outputs/elements/element-*",
+        "required_files": [
+          "FINAL_*.html"
+        ],
+        "required_directories": [
+          "attempt-1/",
+          "attempt-2/",
+          "attempt-3/"
+        ],
+        "file_schemas": {
+          "execution-summary.json": "execution-summary.schema.json",
+          "review-report.json": "review-report.schema.json"
+        },
+        "description": "Per-element mockup bundle with iteration attempts and final validated HTML"
+      }
+    ]
+  },
+  "execution_modes": [
+    "RUN_ONLY",
+    "REVIEW_ONLY",
+    "PATCH_ALLOWED"
+  ],
+  "mcp_requirements": [
+    "playwright"
+  ],
+  "tool_dependencies": {
+    "required": [
+      "tools/ai-bridge/design-validate.js"
+    ],
+    "optional": [
+      "clients/{client}/tools/landing-page/mobile-layout-assessment.js"
+    ]
+  },
+  "api_requirements": {
+    "optional": [
+      "GEMINI_API_KEY"
+    ]
+  },
+  "prompt_chain": {
+    "intake": [
+      "01_INTAKE_FROM_CAPTURE"
+    ],
+    "execution": [
+      "02_EXECUTE_STABLE_WORKFLOW"
+    ],
+    "review": [
+      "03_REVIEW_AND_COMPARE"
+    ]
+  },
+  "harness_paths": {
+    "claude": {
+      "skills": ".claude/skills/design-mockup-validation/",
+      "commands": ".claude/commands/design-mockup-validation/",
+      "agents": ".claude/agents/design-mockup-validation/"
+    }
+  },
+  "skills_path": ".claude/skills/design-mockup-validation/",
+  "commands_path": ".claude/commands/design-mockup-validation/",
+  "agents_path": ".claude/agents/design-mockup-validation/",
+  "skills": [
+    "design-mockup-validation/SKILL.md"
+  ],
+  "commands": [
+    "run",
+    "status",
+    "intake-from-capture",
+    "execute-stable-workflow",
+    "review-and-compare"
+  ],
+  "agents": [
+    "intake-from-capture-agent",
+    "execute-stable-workflow-agent",
+    "review-and-compare-agent"
+  ],
+  "patterns": [
+    "visual-design-comparison",
+    "browser-render-validation",
+    "screenshot-evidence-review",
+    "wordpress-page-qa"
+  ]
+}

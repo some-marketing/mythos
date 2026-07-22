@@ -1,0 +1,28 @@
+{
+  "version": "1.0",
+  "metadata": {
+    "description": "Placeholder default locator map. Copy this file into a testcase folder (as locator_map.json) and update selectors/URLs for the target site before running real tests.",
+    "start_url": "https://example.test/apply/",
+    "testcase_id": "example_wpforms_apply",
+    "notes": "This framework intentionally ships only generic defaults (no client URLs/IDs)."
+  },
+  "form": {
+    "root_css": "#wpforms-form-00000",
+    "is_multipage": false
+  },
+  "pages": [],
+  "submit": {
+    "button_css": "#wpforms-form-00000 button[type='submit']",
+    "success": {
+      "css": ".wpforms-confirmation-container-full, .wpforms-confirmation-container, .wpforms-confirmation-message",
+      "expected_text_contains": "",
+      "expected_url_contains": ""
+    },
+    "error_selectors": [
+      {
+        "css": "#wpforms-form-00000 .wpforms-error",
+        "text_contains": ""
+      }
+    ]
+  }
+}

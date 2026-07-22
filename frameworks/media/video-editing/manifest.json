@@ -1,0 +1,147 @@
+{
+  "service_category": "media",
+  "framework_name": "video-editing",
+  "version": "0.1.2",
+  "description": "Conversation-driven video editing: transcribe, cut, color grade, burn subtitles, self-evaluate — for talking heads, montages, tutorials, interviews. No presets, no menus. Adapted from browser-use/video-use.",
+  "prompt_count": 6,
+  "input_contract": {
+    "required": [
+      {
+        "name": "videos_dir",
+        "description": "Directory containing source video files to edit"
+      },
+      {
+        "name": "api_key",
+        "description": "ElevenLabs API key for Scribe transcription (or set ELEVENLABS_API_KEY in environment)"
+      }
+    ],
+    "optional": [
+      {
+        "name": "edit_dir",
+        "description": "Custom output directory (defaults to <videos_dir>/edit/)"
+      },
+      {
+        "name": "num_speakers",
+        "description": "Number of speakers for diarization (improves accuracy when known)"
+      },
+      {
+        "name": "language",
+        "description": "ISO language code for transcription (auto-detected if omitted)"
+      },
+      {
+        "name": "target_length",
+        "description": "Target runtime in seconds for the final edit"
+      },
+      {
+        "name": "subtitle_style",
+        "description": "Subtitle style preference (bold-overlay, natural-sentence, or custom)"
+      },
+      {
+        "name": "grade_preset",
+        "description": "Color grade preset (warm_cinematic, neutral_punch, none, or custom ffmpeg filter)"
+      },
+      {
+        "name": "delivery_spec",
+        "description": "Optional delivery target (operator/upstream-supplied; defaults to none): aspect ratio, resolution, safe-zone %, caption-style, encoding target. When supplied (e.g. a Meta Reels brief), honor it; source the values from the upstream brief / the canonical Meta reference at frameworks/_shared/reference/meta-video-creative-2025-2026.md. Platform-agnostic runs leave this unset."
+      }
+    ]
+  },
+  "output_contract": {
+    "directories": [
+      "<videos_dir>/edit/"
+    ],
+    "artifacts": [
+      "<videos_dir>/edit/takes_packed.md",
+      "<videos_dir>/edit/edl.json",
+      "<videos_dir>/edit/master.srt",
+      "<videos_dir>/edit/preview.mp4",
+      "<videos_dir>/edit/final.mp4",
+      "<videos_dir>/edit/project.md"
+    ]
+  },
+  "execution_modes": [
+    "FINDINGS_ONLY",
+    "PATCH_ALLOWED",
+    "REVIEW_ONLY"
+  ],
+  "mcp_requirements": [],
+  "prompt_chain": {
+    "intake": [
+      "01_INVENTORY_AND_TRANSCRIBE"
+    ],
+    "analysis": [
+      "02_PRE_SCAN_AND_CONVERSE"
+    ],
+    "planning": [
+      "03_STRATEGY_PROPOSAL"
+    ],
+    "execution": [
+      "04_EXECUTE_EDIT"
+    ],
+    "verification": [
+      "05_SELF_EVAL_AND_RENDER"
+    ],
+    "iteration": [
+      "06_ITERATE_AND_PERSIST"
+    ]
+  },
+  "skills": [
+    "media/video-editing/SKILL.md"
+  ],
+  "commands": [
+    "run",
+    "status"
+  ],
+  "agents": [
+    "video-editing-agent"
+  ],
+  "distilled_from": {
+    "source": "browser-use/video-use",
+    "skill": "video-use",
+    "version": "0.1.0",
+    "license": "MIT",
+    "commit_sha": "cf12ac35143caa48db76efa35b1cb439582333bb",
+    "classification": "framework-component",
+    "classification_date": "2026-06-03",
+    "rationale": "Creative toolkit for conversation-driven video editing. Classified as framework-component (not standalone client-service framework) — reusable inside broader content-production workflows."
+  },
+  "components": [
+    {
+      "name": "animation-overlay-remotion",
+      "slot": "animation",
+      "status": "available",
+      "doc": "docs/animation-overlay-remotion.md",
+      "engine": "Remotion",
+      "install": "lazy project-local (per-slot npx create-video@latest); never framework-root or global",
+      "distilled_from": {
+        "source": "remotion-dev/skills",
+        "commit_sha": "8dad6ec5c5c7cedee4d2aa620bb68386f8fe8eb9",
+        "license": "UNSPECIFIED (no LICENSE file; no package.json license field)",
+        "method": "clean-room re-expression",
+        "clean_room_receipt": "reports/clean-room/receipts/remotion-animation-overlay.json",
+        "classification_date": "2026-06-24",
+        "note": "Remotion library is separately licensed and free for the operator as an individual; this provenance covers only the skills rule-content repo."
+      }
+    }
+  ],
+  "prerequisites": {
+    "system": [
+      "ffmpeg and ffprobe on PATH",
+      "Python >= 3.10 with requests, librosa, matplotlib, pillow, numpy"
+    ],
+    "api": [
+      "ElevenLabs API key (scribe_v1 model for transcription)"
+    ],
+    "optional": [
+      "yt-dlp for downloading online sources",
+      "Node.js 22+ for HyperFrames animations",
+      "Remotion (lazy project-local; see components.animation-overlay-remotion and docs/animation-overlay-remotion.md) and Manim for advanced animation overlays"
+    ]
+  },
+  "patterns": [
+    "video-editing-workflow",
+    "transcript-based-cutting",
+    "subtitle-burn-in",
+    "render-quality-review"
+  ]
+}

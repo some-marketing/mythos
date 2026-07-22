@@ -1,0 +1,26 @@
+{
+  "service_category": "{{SERVICE_CATEGORY}}",
+  "framework_name": "{{FRAMEWORK_NAME}}",
+  "version": "0.1.0",
+  "description": "{{DESCRIPTION}}",
+  "prompt_count": 0,
+  "input_contract": {
+    "required": [],
+    "optional": []
+  },
+  "output_contract": {
+    "directories": [],
+    "artifacts": []
+  },
+  "output_contract_v2": {
+    "directories": [],
+    "artifacts": [],
+    "bundle_types": []
+  },
+  "execution_modes": [],
+  "mcp_requirements": [],
+  "prompt_chain": {},
+  "skills_path": ".claude/skills/{{FRAMEWORK_NAME}}/",
+  "commands_path": ".claude/commands/{{FRAMEWORK_NAME}}/",
+  "agents_path": ".claude/agents/{{FRAMEWORK_NAME}}/"
+}

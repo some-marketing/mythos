@@ -1,0 +1,109 @@
+{
+  "service_category": "deliverables",
+  "framework_name": "version-reconciliation",
+  "version": "1.0.0",
+  "description": "Structured diff and contradiction detection between two versions of a deliverable, supporting cross-format comparison",
+  "prompt_count": 2,
+  "input_contract": {
+    "required": [
+      {
+        "name": "version_a",
+        "description": "Path to first version (.md, .docx, .pptx, .pdf)"
+      },
+      {
+        "name": "version_b",
+        "description": "Path to second version (may differ in format from version_a)"
+      }
+    ],
+    "optional": [
+      {
+        "name": "source_of_truth",
+        "description": "Which version is authoritative: 'a' or 'b' (default: neither)"
+      },
+      {
+        "name": "focus_sections",
+        "description": "Comma-separated section names to prioritize"
+      }
+    ]
+  },
+  "output_contract": {
+    "directories": [
+      "reconciliation_output/"
+    ],
+    "artifacts": [
+      "CONTRADICTION_REPORT.md",
+      "reconciliation_summary.json",
+      "reconciliation_log.json"
+    ]
+  },
+  "output_contract_v2": {
+    "directories": [
+      {
+        "path": "reconciliation_output/",
+        "required": true,
+        "description": "All reconciliation artifacts"
+      }
+    ],
+    "artifacts": [
+      {
+        "name": "CONTRADICTION_REPORT.md",
+        "path_pattern": "reconciliation_output/CONTRADICTION_REPORT.md",
+        "required": true
+      },
+      {
+        "name": "reconciliation_summary.json",
+        "path_pattern": "reconciliation_output/reconciliation_summary.json",
+        "required": true
+      },
+      {
+        "name": "reconciliation_log.json",
+        "path_pattern": "reconciliation_output/reconciliation_log.json",
+        "required": false
+      }
+    ],
+    "bundle_types": []
+  },
+  "execution_modes": [
+    "FINDINGS_ONLY",
+    "PATCH_ALLOWED"
+  ],
+  "mcp_requirements": [],
+  "mechanical_transform_pilot": {
+    "schema": "MechanicalTransformPilot/1.0",
+    "enabled_by": "VERSION_RECON_TRANSFORM_PILOT",
+    "execution_mode": "FINDINGS_ONLY",
+    "adapter": "runtime/transforms/read-only-adapter.cjs",
+    "authority": "structural_observation_only",
+    "semantic_acceptance": "reviewer_owned"
+  },
+  "prompt_chain": {
+    "analysis": [
+      "01_EXTRACT_AND_DIFF"
+    ],
+    "remediation": [
+      "02_REPORT_AND_RECONCILE"
+    ]
+  },
+  "skills_path": ".claude/skills/version-reconciliation/",
+  "commands_path": ".claude/commands/version-reconciliation/",
+  "agents_path": ".claude/agents/version-reconciliation/",
+  "skills": [
+    "version-reconciliation/SKILL.md"
+  ],
+  "commands": [
+    "run",
+    "status",
+    "extract-and-diff",
+    "report-and-reconcile"
+  ],
+  "agents": [
+    "extract-and-diff-agent",
+    "report-and-reconcile-agent"
+  ],
+  "patterns": [
+    "document-version-diff",
+    "contradiction-detection",
+    "change-reconciliation",
+    "client-deliverable-qa"
+  ]
+}

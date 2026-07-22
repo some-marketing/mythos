@@ -1,0 +1,9 @@
+{
+  "form_container": "{{FORM_SELECTOR}}",
+  "fields": {},
+  "submit_button": "{{SUBMIT_SELECTOR}}",
+  "confirmation": {
+    "selector": "{{CONFIRMATION_SELECTOR}}",
+    "expected_text": "{{CONFIRMATION_TEXT}}"
+  }
+}

@@ -1,0 +1,317 @@
+{
+  "service_category": "wordpress",
+  "framework_name": "qa",
+  "version": "1.1.0",
+  "changelog": [
+    "1.1.0: CRM pipeline integrity discipline + currency/handoff gates"
+  ],
+  "description": "Playwright-based site functionality testing across multi-environment pipelines with CRM integration validation",
+  "prompt_count": 16,
+  "input_contract": {
+    "required": [
+      {
+        "name": "testcase.json",
+        "description": "Test configuration with run sequence and phase definitions"
+      },
+      {
+        "name": "identity.json",
+        "description": "Email and token templates per environment"
+      },
+      {
+        "name": "locator_map.json",
+        "description": "CSS/XPath selectors for form elements"
+      },
+      {
+        "name": "EXPECTED_OUTCOMES.md",
+        "description": "Test specifications and success criteria"
+      }
+    ],
+    "optional": [
+      {
+        "name": "config.json",
+        "description": "Runner configuration overrides"
+      }
+    ]
+  },
+  "output_contract": {
+    "directories": [
+      "runs/",
+      "reports/",
+      "dev_handoff/"
+    ],
+    "artifacts": [
+      "run.meta.json",
+      "environment reports",
+      "payload reports",
+      "dev handoff bundles"
+    ]
+  },
+  "output_contract_v2": {
+    "directories": [
+      {
+        "path": "runs/",
+        "required": true,
+        "description": "Test run output directories"
+      },
+      {
+        "path": "reports/",
+        "required": true,
+        "description": "Canonical payload and analysis reports"
+      },
+      {
+        "path": "dev_handoff/",
+        "required": false,
+        "description": "Developer handoff bundles"
+      }
+    ],
+    "artifacts": [
+      {
+        "name": "run.meta.json",
+        "path_pattern": "runs/**/run.meta.json",
+        "required": true
+      }
+    ],
+    "bundle_types": [
+      {
+        "type_id": "dev-handoff-bundle",
+        "path_pattern": "dev_handoff/DEV_HANDOFF__*",
+        "required_files": [
+          "LLM_MANIFEST.json",
+          "INDEX.json",
+          "INDEX.md",
+          "SUMMARY.json",
+          "QUESTIONS_FOR_DEVELOPER.md"
+        ],
+        "required_file_patterns": [
+          "For_*.md"
+        ],
+        "required_directories": [
+          "reports/",
+          "raw/",
+          "evidence/",
+          "llm/"
+        ],
+        "file_schemas": {
+          "LLM_MANIFEST.json": "llm-manifest.schema.json",
+          "INDEX.json": "index-json.schema.json",
+          "SUMMARY.json": "summary-json.schema.json"
+        },
+        "description": "Developer handoff bundle with payload analysis, evidence, and agent harness"
+      }
+    ]
+  },
+  "execution_modes": [
+    "FINDINGS_ONLY",
+    "RUN_ONLY",
+    "REVIEW_ONLY",
+    "PATCH_ALLOWED",
+    "COORDINATOR",
+    "REPO_HYGIENE"
+  ],
+  "mcp_requirements": [
+    "playwright"
+  ],
+  "prompt_chain": {
+    "intake": [
+      "01_INTAKE_AND_SCAFFOLD"
+    ],
+    "preparation": [
+      "02_LOCATORS_AND_CORRECTION"
+    ],
+    "execution": [
+      "04_PARALLEL_RUN_MANAGER"
+    ],
+    "iteration": [
+      "05_MCP_WALKTHROUGH_FINDINGS_ONLY",
+      "06_ITERATE_UNTIL_PASS",
+      "07_IMPLEMENT_FIXES",
+      "08_RERUN_VERIFY"
+    ],
+    "reporting": [
+      "03_REPORT_AND_DEV_HANDOFF"
+    ],
+    "analysis": [
+      "10_DEEP_PIPELINE_ANALYSIS",
+      "11_CROSS_RUN_ANOMALY_INDEX",
+      "12_DEV_PACKET_GENERATOR",
+      "13_PAYLOAD_DEEP_ANALYSIS_AND_{DEVELOPER_NAME}_HANDOFF",
+      "14_APPEND_PAYLOAD_REPORTING_TO_EXISTING_HANDOFF"
+    ],
+    "maintenance": [
+      "15_NAVIGATION_CLEANUP_AND_DEPRECATION",
+      "16_CHANGELOG_CAPTURE_FROM_DEV"
+    ],
+    "reference": [
+      "09_SHARED_BLOCKS"
+    ]
+  },
+  "skills_path": ".claude/skills/qa/",
+  "commands_path": ".claude/commands/qa/",
+  "agents_path": ".claude/agents/qa/",
+  "skills": [
+    "qa/SKILL.md"
+  ],
+  "commands": [
+    "run",
+    "status",
+    "intake-and-scaffold",
+    "locators-and-correction",
+    "report-and-dev-handoff",
+    "parallel-run-manager",
+    "mcp-walkthrough-findings-only",
+    "iterate-until-pass",
+    "implement-fixes",
+    "rerun-verify",
+    "shared-blocks",
+    "deep-pipeline-analysis",
+    "cross-run-anomaly-index",
+    "dev-packet-generator",
+    "payload-deep-analysis-and-{DEVELOPER_NAME}-handoff",
+    "append-payload-reporting-to-existing-handoff",
+    "navigation-cleanup-and-deprecation",
+    "changelog-capture-from-dev",
+    "readme"
+  ],
+  "agents": [
+    "intake-and-scaffold-agent",
+    "locators-and-correction-agent",
+    "report-and-dev-handoff-agent",
+    "parallel-run-manager-agent",
+    "mcp-walkthrough-findings-only-agent",
+    "iterate-until-pass-agent",
+    "implement-fixes-agent",
+    "rerun-verify-agent",
+    "shared-blocks-agent",
+    "deep-pipeline-analysis-agent",
+    "cross-run-anomaly-index-agent",
+    "dev-packet-generator-agent",
+    "payload-deep-analysis-and-{DEVELOPER_NAME}-handoff-agent",
+    "append-payload-reporting-to-existing-handoff-agent",
+    "navigation-cleanup-and-deprecation-agent",
+    "changelog-capture-from-dev-agent",
+    "readme-agent"
+  ],
+  "component_tags": {
+    "prompt::01_INTAKE_AND_SCAFFOLD": {
+      "similarity_tags": [
+        "intake",
+        "scaffold",
+        "test-setup",
+        "run-directory"
+      ],
+      "domain": "wordpress",
+      "surfaces": [
+        "repo",
+        "test-harness"
+      ],
+      "related_artifacts": [],
+      "transfer_notes": "Generic run-scaffold shape; testcase.json contract is the tweak point."
+    },
+    "prompt::02_LOCATORS_AND_CORRECTION": {
+      "similarity_tags": [
+        "locators",
+        "selector-correction",
+        "dom",
+        "self-healing"
+      ],
+      "domain": "wordpress",
+      "surfaces": [
+        "browser",
+        "dom"
+      ],
+      "related_artifacts": [],
+      "transfer_notes": "Locator map build+repair; transfers to any browser-automation target with selector strategy tweak."
+    },
+    "prompt::03_REPORT_AND_DEV_HANDOFF": {
+      "similarity_tags": [
+        "reporting",
+        "dev-handoff",
+        "payload-analysis",
+        "evidence-citation"
+      ],
+      "domain": "wordpress",
+      "surfaces": [
+        "report"
+      ],
+      "related_artifacts": [],
+      "transfer_notes": "Run-evidence report + handoff bundle; pairs with truth-gate outputs."
+    },
+    "prompt::04_PARALLEL_RUN_MANAGER": {
+      "similarity_tags": [
+        "parallel-execution",
+        "run-manager",
+        "batch",
+        "worker-fanout"
+      ],
+      "domain": "wordpress",
+      "surfaces": [
+        "test-harness"
+      ],
+      "related_artifacts": [],
+      "transfer_notes": "Fan-out run manager over test cases; transferable to any parallel batch execution with run.meta contract tweak."
+    },
+    "prompt::05_MCP_WALKTHROUGH_FINDINGS_ONLY": {
+      "similarity_tags": [
+        "browser-walkthrough",
+        "findings-only",
+        "mcp",
+        "observation"
+      ],
+      "domain": "wordpress",
+      "surfaces": [
+        "browser"
+      ],
+      "related_artifacts": [],
+      "transfer_notes": "Read-only browser walkthrough emitting findings; REVIEW_ONLY pattern transfers to any UI audit."
+    },
+    "prompt::06_ITERATE_UNTIL_PASS": {
+      "similarity_tags": [
+        "iterate",
+        "fix-loop",
+        "truth-gate",
+        "convergence"
+      ],
+      "domain": "wordpress",
+      "surfaces": [
+        "test-harness"
+      ],
+      "related_artifacts": [],
+      "transfer_notes": "Iterate-until-green loop with truth gates; gate definitions are the tweak point."
+    },
+    "prompt::07_IMPLEMENT_FIXES": {
+      "similarity_tags": [
+        "fix-implementation",
+        "patch",
+        "scoped-change"
+      ],
+      "domain": "wordpress",
+      "surfaces": [
+        "repo",
+        "wp-admin"
+      ],
+      "related_artifacts": [],
+      "transfer_notes": "Bounded fix application from findings; pairs with any findings source."
+    },
+    "prompt::08_RERUN_VERIFY": {
+      "similarity_tags": [
+        "rerun",
+        "verification",
+        "regression-check",
+        "readback-verify"
+      ],
+      "domain": "wordpress",
+      "surfaces": [
+        "test-harness"
+      ],
+      "related_artifacts": [],
+      "transfer_notes": "Post-fix verification rerun; transferable as-is wherever a run manager exists."
+    }
+  },
+  "patterns": [
+    "browser-functional-test",
+    "form-submission-testing",
+    "crm-payload-validation",
+    "tracking-event-validation",
+    "multi-environment-verification"
+  ]
+}

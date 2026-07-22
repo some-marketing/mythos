@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Presentation Review Intake",
+  "description": "Input schema for the presentation review framework",
+  "type": "object",
+  "required": ["presentation_file", "project_directory"],
+  "properties": {
+    "presentation_file": {
+      "type": "string",
+      "description": "Absolute path to the .pptx presentation file"
+    },
+    "project_directory": {
+      "type": "string",
+      "description": "Absolute path to the project directory containing source documents and screenshots"
+    },
+    "slide_content_spec": {
+      "type": ["string", "null"],
+      "description": "Path to markdown file defining intended slide content. Auto-detected if not specified."
+    },
+    "errata_file": {
+      "type": ["string", "null"],
+      "description": "Path to markdown file with corrections/errata. Auto-detected if not specified."
+    },
+    "screenshot_manifest": {
+      "type": ["string", "null"],
+      "description": "Path to screenshot-to-slide mapping. Extracted from slide content spec if not separate."
+    },
+    "audit_output_directory": {
+      "type": "string",
+      "default": "audit_output/",
+      "description": "Directory for audit output artifacts. Created if it does not exist."
+    }
+  }
+}

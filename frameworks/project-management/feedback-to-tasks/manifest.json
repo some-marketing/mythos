@@ -1,0 +1,140 @@
+{
+  "service_category": "project-management",
+  "framework_name": "feedback-to-tasks",
+  "version": "1.0.0",
+  "description": "Compiles stakeholder feedback from PM tools into provenance-cited task lists for developers without tool access",
+  "prompt_count": 5,
+  "input_contract": {
+    "required": [
+      {
+        "name": "source_tool",
+        "description": "PM tool containing feedback: 'dart' or 'notion'"
+      },
+      {
+        "name": "source_location",
+        "description": "Board name, page URL, or database ID in the source tool"
+      },
+      {
+        "name": "destination_format",
+        "description": "Output format: 'markdown', 'json', or 'github-issues'"
+      }
+    ],
+    "optional": [
+      {
+        "name": "stakeholder_map",
+        "description": "JSON mapping stakeholder names to roles and communication notes"
+      },
+      {
+        "name": "scope_document",
+        "description": "Path to scope document for scope-boundary checking"
+      },
+      {
+        "name": "task_prefix",
+        "description": "Prefix for task IDs (e.g., 'CLIENTB' for CLIENTB-001)"
+      }
+    ]
+  },
+  "output_contract": {
+    "directories": [
+      "task_output/"
+    ],
+    "artifacts": [
+      "TASK_LIST.md",
+      "task_compilation_summary.json"
+    ]
+  },
+  "output_contract_v2": {
+    "directories": [
+      {
+        "path": "task_output/",
+        "required": true,
+        "description": "All task compilation artifacts"
+      }
+    ],
+    "artifacts": [
+      {
+        "name": "communication_architecture.json",
+        "path_pattern": "task_output/communication_architecture.json",
+        "required": true
+      },
+      {
+        "name": "raw_feedback.json",
+        "path_pattern": "task_output/raw_feedback.json",
+        "required": true
+      },
+      {
+        "name": "provenance_audit.json",
+        "path_pattern": "task_output/provenance_audit.json",
+        "required": true
+      },
+      {
+        "name": "ambiguity_flags.json",
+        "path_pattern": "task_output/ambiguity_flags.json",
+        "required": true
+      },
+      {
+        "name": "TASK_LIST.md",
+        "path_pattern": "task_output/TASK_LIST.md",
+        "required": true
+      },
+      {
+        "name": "task_compilation_summary.json",
+        "path_pattern": "task_output/task_compilation_summary.json",
+        "required": true
+      }
+    ],
+    "bundle_types": []
+  },
+  "execution_modes": [
+    "FINDINGS_ONLY",
+    "RUN_ONLY",
+    "PATCH_ALLOWED"
+  ],
+  "mcp_requirements": [
+    "dart",
+    "notion"
+  ],
+  "prompt_chain": {
+    "architecture": [
+      "01_COMMUNICATION_ARCHITECTURE"
+    ],
+    "fetch": [
+      "02_SOURCE_FETCH"
+    ],
+    "audit": [
+      "03_PROVENANCE_AUDIT",
+      "04_AMBIGUITY_FLAGGING"
+    ],
+    "output": [
+      "05_TASK_FORMATTING"
+    ]
+  },
+  "skills_path": ".claude/skills/feedback-to-tasks/",
+  "commands_path": ".claude/commands/feedback-to-tasks/",
+  "agents_path": ".claude/agents/feedback-to-tasks/",
+  "skills": [
+    "feedback-to-tasks/SKILL.md"
+  ],
+  "commands": [
+    "run",
+    "status",
+    "communication-architecture",
+    "source-fetch",
+    "provenance-audit",
+    "ambiguity-flagging",
+    "task-formatting"
+  ],
+  "agents": [
+    "communication-architecture-agent",
+    "source-fetch-agent",
+    "provenance-audit-agent",
+    "ambiguity-flagging-agent",
+    "task-formatting-agent"
+  ],
+  "patterns": [
+    "stakeholder-feedback-triage",
+    "feedback-to-task-extraction",
+    "provenance-cited-task-list",
+    "project-management-intake"
+  ]
+}

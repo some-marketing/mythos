@@ -1,0 +1,11 @@
+{
+  "id": "deliverables/presentation-review",
+  "manifest_path": "frameworks/deliverables/presentation-review/manifest.json",
+  "description": "Cross-reference audit of client presentations against project plan documents, screenshots, and errata",
+  "inputs": ["presentation_file", "project_directory"],
+  "outputs": ["audit_output/AUDIT_REPORT.md", "audit_output/audit_summary.json"],
+  "modes": ["FINDINGS_ONLY", "REVIEW_ONLY"],
+  "operations": ["presentation-review:review", "presentation-review:extract", "presentation-review:audit-slides", "presentation-review:audit-screenshots", "presentation-review:report", "presentation-review:status"],
+  "agent_profiles": ["discovery", "extraction", "slide-auditor", "screenshot-auditor", "report"],
+  "guardrail_overrides": ["No input file modification", "Observational reporting only", "Read-only framework"]
+}

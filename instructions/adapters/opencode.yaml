@@ -1,0 +1,19 @@
+{
+  "harness_id": "opencode",
+  "enabled": true,
+  "target_paths": {
+    "root_instructions": "OPENCODE.md",
+    "rules_dir": ".opencode/rules"
+  },
+  "format_rules": {
+    "markdown": true,
+    "portable": true
+  },
+  "capability_mapping": {
+    "commands": "task_commands",
+    "skills": "workflow_guidance",
+    "agents": "worker_roles"
+  },
+  "unsupported_features_policy": "fallback",
+  "post_processors": []
+}

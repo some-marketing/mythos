@@ -1,0 +1,173 @@
+{
+  "service_category": "meta",
+  "framework_name": "execution-normalization",
+  "version": "1.0.0",
+  "description": "Tool-agnostic pipeline for normalizing framework execution models with progressive code offloading",
+  "prompt_count": 11,
+  "execution_modes": [
+    "REVIEW_ONLY",
+    "RUN_ONLY",
+    "PATCH_ALLOWED",
+    "COORDINATOR"
+  ],
+  "mcp_requirements": [],
+  "prompt_authority": [
+    {
+      "schema": "PromptAuthority/1.0",
+      "prompt_id": "01_ARTIFACT_CONTRACT_DEFINITION",
+      "mode": "REVIEW_ONLY",
+      "effects": { "read": true, "write": false, "execute": false, "dispatch": false }
+    },
+    {
+      "schema": "PromptAuthority/1.0",
+      "prompt_id": "02_NORMALIZED_EXECUTION_MODEL_DESIGN",
+      "mode": "REVIEW_ONLY",
+      "effects": { "read": true, "write": false, "execute": false, "dispatch": false }
+    },
+    {
+      "schema": "PromptAuthority/1.0",
+      "prompt_id": "03_SOURCE_FORMAT_COMPILER",
+      "mode": "PATCH_ALLOWED",
+      "effects": { "read": true, "write": true, "execute": true, "dispatch": false }
+    },
+    {
+      "schema": "PromptAuthority/1.0",
+      "prompt_id": "04_NATIVE_RUN_LIFECYCLE",
+      "mode": "PATCH_ALLOWED",
+      "effects": { "read": true, "write": true, "execute": true, "dispatch": false }
+    },
+    {
+      "schema": "PromptAuthority/1.0",
+      "prompt_id": "05_NATIVE_EXECUTION_ENGINE",
+      "mode": "PATCH_ALLOWED",
+      "effects": { "read": true, "write": true, "execute": true, "dispatch": false }
+    },
+    {
+      "schema": "PromptAuthority/1.0",
+      "prompt_id": "06_PARITY_VERIFICATION",
+      "mode": "RUN_ONLY",
+      "effects": { "read": true, "write": true, "execute": true, "dispatch": false, "write_scope": "reports_only" }
+    },
+    {
+      "schema": "PromptAuthority/1.0",
+      "prompt_id": "07_DETERMINISTIC_REPORTING",
+      "mode": "PATCH_ALLOWED",
+      "effects": { "read": true, "write": true, "execute": true, "dispatch": false }
+    },
+    {
+      "schema": "PromptAuthority/1.0",
+      "prompt_id": "08_OUTPUT_RECONCILIATION",
+      "mode": "PATCH_ALLOWED",
+      "effects": { "read": true, "write": true, "execute": true, "dispatch": false }
+    },
+    {
+      "schema": "PromptAuthority/1.0",
+      "prompt_id": "09_BUNDLE_CONSOLIDATION",
+      "mode": "PATCH_ALLOWED",
+      "effects": { "read": true, "write": true, "execute": true, "dispatch": false }
+    },
+    {
+      "schema": "PromptAuthority/1.0",
+      "prompt_id": "10_TEMPLATE_AND_BOOTSTRAP",
+      "mode": "COORDINATOR",
+      "effects": { "read": true, "write": true, "execute": true, "dispatch": true }
+    }
+  ],
+  "input_contract": {
+    "required": [
+      {
+        "name": "framework_id",
+        "description": "Mythos framework to normalize (e.g. wordpress/qa)"
+      },
+      {
+        "name": "source_formats",
+        "description": "List of source format names the framework currently uses"
+      }
+    ],
+    "optional": [
+      {
+        "name": "legacy_runner",
+        "description": "Path to existing execution code for parity comparison"
+      },
+      {
+        "name": "external_systems",
+        "description": "List of external systems outputs are reconciled against"
+      }
+    ]
+  },
+  "output_contract": {
+    "directories": [
+      "docs/",
+      "schemas/"
+    ],
+    "artifacts": [
+      "docs/ARTIFACT_CONTRACT.md",
+      "docs/NORMALIZED_EXECUTION_MODEL.md"
+    ]
+  },
+  "prompt_chain": {
+    "contract_definition": [
+      "01_ARTIFACT_CONTRACT_DEFINITION"
+    ],
+    "design": [
+      "02_NORMALIZED_EXECUTION_MODEL_DESIGN"
+    ],
+    "compilation": [
+      "03_SOURCE_FORMAT_COMPILER"
+    ],
+    "implementation": [
+      "04_NATIVE_RUN_LIFECYCLE",
+      "05_NATIVE_EXECUTION_ENGINE"
+    ],
+    "verification": [
+      "06_PARITY_VERIFICATION"
+    ],
+    "reporting": [
+      "07_DETERMINISTIC_REPORTING",
+      "08_OUTPUT_RECONCILIATION",
+      "09_BUNDLE_CONSOLIDATION"
+    ],
+    "distribution": [
+      "10_TEMPLATE_AND_BOOTSTRAP"
+    ]
+  },
+  "skills": [
+    "execution-normalization/SKILL.md"
+  ],
+  "commands": [
+    "run",
+    "status",
+    "shared-definitions",
+    "artifact-contract-definition",
+    "normalized-execution-model-design",
+    "source-format-compiler",
+    "native-run-lifecycle",
+    "native-execution-engine",
+    "parity-verification",
+    "deterministic-reporting",
+    "output-reconciliation",
+    "bundle-consolidation",
+    "template-and-bootstrap",
+    "readme"
+  ],
+  "agents": [
+    "shared-definitions-agent",
+    "artifact-contract-definition-agent",
+    "normalized-execution-model-design-agent",
+    "source-format-compiler-agent",
+    "native-run-lifecycle-agent",
+    "native-execution-engine-agent",
+    "parity-verification-agent",
+    "deterministic-reporting-agent",
+    "output-reconciliation-agent",
+    "bundle-consolidation-agent",
+    "template-and-bootstrap-agent",
+    "readme-agent"
+  ],
+  "patterns": [
+    "framework-runtime-normalization",
+    "workflow-contract-extraction",
+    "cross-harness-standardization",
+    "system-behavior-hardening"
+  ]
+}

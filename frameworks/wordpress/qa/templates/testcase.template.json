@@ -1,0 +1,19 @@
+{
+  "testcase_id": "{{TESTCASE_ID}}",
+  "description": "{{DESCRIPTION}}",
+  "target_url": "{{TARGET_URL}}",
+  "form_type": "{{FORM_TYPE}}",
+  "environments": {
+    "A": {"label": "logged_out", "description": "Anonymous user"},
+    "B": {"label": "logged_in", "description": "Authenticated user"},
+    "C": {"label": "incognito", "description": "Private browsing"}
+  },
+  "phases": [
+    {"id": "P1", "name": "navigate", "description": "Navigate to form page"},
+    {"id": "P2", "name": "fill", "description": "Fill form fields"},
+    {"id": "P3", "name": "submit", "description": "Submit the form"},
+    {"id": "P4", "name": "confirm", "description": "Verify confirmation page"},
+    {"id": "P5", "name": "validate", "description": "Validate backend processing"}
+  ],
+  "run_sequence": []
+}

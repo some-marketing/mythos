@@ -1,0 +1,11 @@
+{
+  "id": "wordpress/design-research",
+  "manifest_path": "frameworks/wordpress/design-research/manifest.json",
+  "description": "Pre-build design research prompt generation",
+  "inputs": ["intake.json"],
+  "outputs": ["completed_research_prompt.md"],
+  "modes": ["FINDINGS_ONLY"],
+  "operations": ["design-research:intake", "design-research:generate"],
+  "agent_profiles": ["design-research agent"],
+  "guardrail_overrides": ["No live system interaction"]
+}

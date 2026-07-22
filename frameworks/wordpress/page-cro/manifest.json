@@ -1,0 +1,152 @@
+{
+  "service_category": "wordpress",
+  "framework_name": "page-cro",
+  "version": "0.1.0",
+  "description": "Multi-phase conversion rate optimization audit for marketing pages: value proposition, CTA analysis, trust signals, friction assessment, and A/B experiment design",
+  "prompt_count": 4,
+  "input_contract": {
+    "required": [
+      {
+        "name": "page_urls",
+        "description": "URLs of the pages to audit for conversion optimization"
+      },
+      {
+        "name": "conversion_goals",
+        "description": "Primary conversion goals for the pages (e.g., form submissions, purchases, signups)"
+      },
+      {
+        "name": "page_type",
+        "description": "Type of page being audited (e.g., landing page, product page, pricing page)"
+      }
+    ],
+    "optional": [
+      {
+        "name": "traffic_sources",
+        "description": "Primary traffic sources driving visitors to the pages"
+      },
+      {
+        "name": "current_conversion_rate",
+        "description": "Current conversion rate baseline for benchmarking"
+      },
+      {
+        "name": "target_conversion_rate",
+        "description": "Target conversion rate to achieve"
+      },
+      {
+        "name": "heatmap_data",
+        "description": "Heatmap or click-tracking data for user behavior analysis"
+      },
+      {
+        "name": "session_recordings",
+        "description": "Session recording tool access for user journey analysis"
+      },
+      {
+        "name": "existing_ab_tests",
+        "description": "Currently running or past A/B test results"
+      },
+      {
+        "name": "analytics_access",
+        "description": "Analytics platform access details for data-driven recommendations"
+      },
+      {
+        "name": "competitor_urls",
+        "description": "Competitor page URLs for comparative analysis"
+      }
+    ]
+  },
+  "output_contract": {
+    "directories": [
+      "outputs/page-cro/"
+    ],
+    "artifacts": [
+      "outputs/page-cro/intake-summary.md",
+      "outputs/page-cro/conversion-analysis.md",
+      "outputs/page-cro/recommendations.md",
+      "outputs/page-cro/experiment-design.md"
+    ]
+  },
+  "output_contract_v2": {
+    "directories": [
+      {
+        "path": "outputs/page-cro/",
+        "required": true,
+        "description": "All CRO audit deliverables and experiment plans"
+      }
+    ],
+    "artifacts": [
+      {
+        "name": "intake-summary.md",
+        "path_pattern": "outputs/page-cro/intake-summary.md",
+        "required": true
+      },
+      {
+        "name": "conversion-analysis.md",
+        "path_pattern": "outputs/page-cro/conversion-analysis.md",
+        "required": true
+      },
+      {
+        "name": "recommendations.md",
+        "path_pattern": "outputs/page-cro/recommendations.md",
+        "required": true
+      },
+      {
+        "name": "experiment-design.md",
+        "path_pattern": "outputs/page-cro/experiment-design.md",
+        "required": true
+      }
+    ],
+    "bundle_types": []
+  },
+  "execution_modes": [
+    "FINDINGS_ONLY",
+    "REVIEW_ONLY"
+  ],
+  "mcp_requirements": [
+    "playwright"
+  ],
+  "prompt_chain": {
+    "intake": [
+      "01_INTAKE_AND_SCOPE"
+    ],
+    "analysis": [
+      "02_CONVERSION_ANALYSIS"
+    ],
+    "recommendations": [
+      "03_RECOMMENDATIONS"
+    ],
+    "experimentation": [
+      "04_EXPERIMENT_DESIGN"
+    ]
+  },
+  "skills": [
+    "page-cro/SKILL.md"
+  ],
+  "commands": [
+    "run",
+    "status",
+    "intake-and-scope",
+    "conversion-analysis",
+    "recommendations",
+    "experiment-design"
+  ],
+  "agents": [
+    "intake-and-scope-agent",
+    "conversion-analysis-agent",
+    "recommendations-agent",
+    "experiment-design-agent"
+  ],
+  "distilled_from": {
+    "source": "coreyhaines31/marketingskills",
+    "skill": "page-cro",
+    "version": "1.1.0",
+    "license": "MIT",
+    "classification": "framework-candidate",
+    "classification_date": "2026-03-31"
+  },
+  "patterns": [
+    "conversion-rate-review",
+    "landing-page-audit",
+    "cta-friction-analysis",
+    "marketing-page-optimization"
+  ]
+}

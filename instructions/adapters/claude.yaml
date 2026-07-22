@@ -1,0 +1,21 @@
+{
+  "harness_id": "claude",
+  "enabled": true,
+  "target_paths": {
+    "root_router": "CLAUDE.md",
+    "project_instructions": ".claude/CLAUDE.md",
+    "guardrails": ".claude/guardrails.md"
+  },
+  "format_rules": {
+    "markdown": true,
+    "yaml_frontmatter": true,
+    "xml_skill_blocks": true
+  },
+  "capability_mapping": {
+    "commands": "slash_commands",
+    "skills": "skills",
+    "agents": "subagents"
+  },
+  "unsupported_features_policy": "error",
+  "post_processors": []
+}

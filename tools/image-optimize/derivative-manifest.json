@@ -1,0 +1,6 @@
+{
+  "schema": "DerivativeManifest/1.0",
+  "generated_at": null,
+  "entries": [],
+  "_comment": "Example manifest. The optimizer appends an entry per derivative it produces: { source_path, derivative_path, tier, width, bytes, encoder, created_at }. See derivative-manifest.schema.json for the full schema."
+}

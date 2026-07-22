@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "QA Dev Handoff Bundle SUMMARY.json",
+  "type": "object",
+  "required": ["runs", "key_findings", "open_questions"],
+  "properties": {
+    "runs": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "key_findings": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "open_questions": {
+      "type": "array",
+      "items": { "type": "object" }
+    }
+  }
+}

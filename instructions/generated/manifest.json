@@ -1,0 +1,38 @@
+{
+  "generated_at": "2026-07-21T22:49:34.554Z",
+  "write_claude": true,
+  "files": [
+    {
+      "harness": "generic",
+      "path": "INSTRUCTIONS.md"
+    },
+    {
+      "harness": "codex",
+      "path": "AGENTS.md"
+    },
+    {
+      "harness": "cursor",
+      "path": ".cursorrules"
+    },
+    {
+      "harness": "cursor",
+      "path": ".cursor/rules/llmos.mdc"
+    },
+    {
+      "harness": "opencode",
+      "path": "OPENCODE.md"
+    },
+    {
+      "harness": "claude",
+      "path": "CLAUDE.md"
+    },
+    {
+      "harness": "claude",
+      "path": ".claude/CLAUDE.md"
+    },
+    {
+      "harness": "claude",
+      "path": ".claude/guardrails.md"
+    }
+  ]
+}

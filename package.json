@@ -1,0 +1,50 @@
+{
+  "name": "mythos",
+  "private": true,
+  "version": "1.0.0",
+  "description": "An adventurer's guild for AI coding agents — reusable, guardrailed grimoires (workflow frameworks) dressed in a dual D&D/HWFWM lexicon.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/some-marketing/mythos.git"
+  },
+  "homepage": "https://github.com/some-marketing/mythos",
+  "bugs": {
+    "url": "https://github.com/some-marketing/mythos/issues"
+  },
+  "scripts": {
+    "instructions:generate": "node tools/instructions/generate.js",
+    "instructions:generate:preview": "node tools/instructions/generate.js --preview-claude",
+    "instructions:validate": "node tools/instructions/validate.js",
+    "instructions:validate:skip-claude": "node tools/instructions/validate.js --skip-claude",
+    "instructions:check": "node tools/instructions/generate.js && node tools/instructions/validate.js",
+    "workspace:scaffold": "node tools/workspace/scaffold-workspace.js",
+    "workspace:project": "node tools/workspace/scaffold-project.js",
+    "workspace:validate": "node tools/workspace/validate-workspace.js",
+    "workspace:capture": "node tools/workspace/capture-task.js",
+    "workspace:capture:normalize": "node tools/workspace/normalize-capture.js",
+    "workspace:capture:status": "node tools/workspace/capture-status.js",
+    "workspace:candidate:scaffold": "node tools/workspace/scaffold-candidate.js",
+    "workspace:candidate:status": "node tools/workspace/candidate-status.js",
+    "workspace:candidate:replay": "node tools/workspace/replay-candidate.js",
+    "workspace:candidate:promote": "node tools/workspace/promote-candidate.js",
+    "workspace:output:validate": "node tools/workspace/validate-output.js",
+    "workspace:run:init": "node tools/workspace/init-run.js",
+    "workspace:run:finalize": "node tools/workspace/finalize-run.js",
+    "manifest:validate": "node tools/instructions/validate-manifest.js",
+    "verify": "node tools/verify/verify-system.cjs",
+    "verify:framework": "node tools/verify/verify-framework.cjs",
+    "verify:skill": "node tools/verify/verify-skill.cjs",
+    "verify:guardrails": "node tools/verify/verify-guardrails.cjs",
+    "verify:run-evidence": "node tools/verify/verify-run-evidence.cjs",
+    "verify:site-audit": "node tools/verify/verify-site-audit.cjs",
+    "verify:report-claims": "node tools/verify/verify-report-claims.cjs",
+    "manifest:sync": "node tools/verify/sync-manifest.cjs",
+    "manifest:check": "node tools/verify/sync-manifest.cjs --check",
+    "research:perplexity": "node tools/perplexity/cli.js",
+    "setup": "node tools/setup/first-run.cjs",
+    "mirror:init": "node tools/user/init-mirror.cjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.58.2"
+  }
+}

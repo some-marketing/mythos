@@ -1,0 +1,11 @@
+{
+  "id": "wordpress/design-mockup-validation",
+  "manifest_path": "frameworks/wordpress/design-mockup-validation/manifest.json",
+  "description": "Cross-AI design mockup validation with evidence capture, iterative mockup generation, browser rendering checks, and review packet assembly",
+  "inputs": ["intake.json", "context.md", "reference_artifacts/"],
+  "outputs": ["outputs/execution-summary.json", "reports/review-report.json", "reports/visual-validation.json", "outputs/elements/FINAL_*.html"],
+  "modes": ["RUN_ONLY", "REVIEW_ONLY", "PATCH_ALLOWED"],
+  "operations": ["design-mockup-validation:run", "design-mockup-validation:status", "design-mockup-validation:intake-from-capture", "design-mockup-validation:execute-stable-workflow", "design-mockup-validation:review-and-compare"],
+  "agent_profiles": ["intake-from-capture-agent", "execute-stable-workflow-agent", "review-and-compare-agent"],
+  "guardrail_overrides": ["No private client infrastructure paths", "Screenshot evidence required", "Operator review gate before finalization"]
+}

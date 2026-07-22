@@ -1,0 +1,346 @@
+version: "MythosAliasRegistry/1.0"
+# Multi-domain alias registry. Four sibling domains, each a map of
+# alias-key -> { resolves_to (a terminal canonical id, single-hop), status }.
+# Domain -> resolver token: aliases=commands, framework_aliases=frameworks,
+# skill_aliases=skills, tool_aliases=tools. Names are lowercase-kebab; lookup is
+# case-insensitive. resolves_to must be a terminal id in that domain's catalog
+# (commands -> .claude/commands files; frameworks -> system.yaml ids; skills ->
+# shipped skills; tools -> package.json scripts). Alias -> alias is forbidden.
+aliases:
+  # --- Primary mythic names ---
+  guild-ledger:
+    resolves_to: system-status
+    status: primary
+  guildmaster-loop:
+    resolves_to: orchestrate-loop
+    status: primary
+  commune:
+    resolves_to: deliberate
+    status: primary
+  conclave:
+    resolves_to: convene-review
+    status: primary
+  charter-quest:
+    resolves_to: blueprint
+    status: primary
+  inscribe-lore:
+    resolves_to: concept-init
+    status: primary
+  plan-quest:
+    resolves_to: plan-task
+    status: primary
+  trial-quest:
+    resolves_to: review-task-plan
+    status: primary
+  embark:
+    resolves_to: run-plan
+    status: primary
+  gauntlet:
+    resolves_to: evidence-loop
+    status: primary
+  site:
+    resolves_to: route
+    status: primary
+  chronicle:
+    resolves_to: debrief-run
+    status: primary
+  cast-grimoire:
+    resolves_to: run-framework
+    status: primary
+  bookshelf:
+    resolves_to: list-frameworks
+    status: primary
+  forge-grimoire:
+    resolves_to: new-framework
+    status: primary
+  scribe-grimoire:
+    resolves_to: scaffold-framework
+    status: primary
+  appraise-grimoire:
+    resolves_to: audit-framework
+    status: primary
+  empower-grimoire:
+    resolves_to: improve-framework
+    status: primary
+  rank-up:
+    resolves_to: promote-framework
+    status: primary
+  enshrine-grimoire:
+    resolves_to: publish-framework
+    status: primary
+  rehearse-grimoire:
+    resolves_to: replay-framework
+    status: primary
+  initiate-status:
+    resolves_to: candidate-status
+    status: primary
+  attune-codex:
+    resolves_to: sync-manifest
+    status: primary
+  claim-spoils:
+    resolves_to: capture-task
+    status: primary
+  refine-spoils:
+    resolves_to: normalize-capture
+    status: primary
+  spoils-ledger:
+    resolves_to: capture-status
+    status: primary
+  awaken-essence:
+    resolves_to: extract-skill
+    status: primary
+  enroll-patron:
+    resolves_to: new-client
+    status: primary
+  open-contract:
+    resolves_to: new-project
+    status: primary
+  contract-ledger:
+    resolves_to: project-status
+    status: primary
+
+  # --- Short forms ---
+  scry:
+    resolves_to: system-status
+    status: primary
+  gm:
+    resolves_to: orchestrate-loop
+    status: primary
+  cast:
+    resolves_to: run-framework
+    status: primary
+  chron:
+    resolves_to: debrief-run
+    status: primary
+  attune:
+    resolves_to: sync-manifest
+    status: primary
+
+  # --- Cross-aliases (other canon) ---
+  aura:
+    resolves_to: system-status
+    status: cross-alias
+  post-contract:
+    resolves_to: blueprint
+    status: cross-alias
+  draft-contract:
+    resolves_to: plan-task
+    status: cross-alias
+  save-throw:
+    resolves_to: review-task-plan
+    status: cross-alias
+  accept-contract:
+    resolves_to: run-plan
+    status: cross-alias
+  augur:
+    resolves_to: route
+    status: cross-alias
+  consult-oracle:
+    resolves_to: route
+    status: cross-alias
+  invoke:
+    resolves_to: run-framework
+    status: cross-alias
+  spellbook:
+    resolves_to: list-frameworks
+    status: cross-alias
+  identify:
+    resolves_to: audit-framework
+    status: cross-alias
+  cultivate:
+    resolves_to: improve-framework
+    status: cross-alias
+  level-up:
+    resolves_to: promote-framework
+    status: cross-alias
+  loot:
+    resolves_to: capture-task
+    status: cross-alias
+  feat:
+    resolves_to: extract-skill
+    status: cross-alias
+  campaign:
+    resolves_to: new-project
+    status: cross-alias
+
+  # --- Compatibility aliases ---
+  owl:
+    resolves_to: orchestrate-loop
+    status: compatibility
+  oa:
+    resolves_to: orchestrate-loop
+    status: compatibility
+  dl:
+    resolves_to: deliberate
+    status: compatibility
+  oc:
+    resolves_to: convene-review
+    status: compatibility
+  council:
+    resolves_to: convene-review
+    status: compatibility
+
+# --- Grimoire (framework) aliases: short name -> service/framework id ---
+# The lexicon names commands and world-nouns, not individual grimoires, so each
+# grimoire takes its plain short name (the segment after the service). No invention.
+framework_aliases:
+  presentation-review:
+    resolves_to: deliverables/presentation-review
+    status: primary
+  scope-verification:
+    resolves_to: deliverables/scope-verification
+    status: primary
+  version-reconciliation:
+    resolves_to: deliverables/version-reconciliation
+    status: primary
+  video-editing:
+    resolves_to: media/video-editing
+    status: primary
+  dreaming-system:
+    resolves_to: meta/dreaming-system
+    status: primary
+  execution-normalization:
+    resolves_to: meta/execution-normalization
+    status: primary
+  dart-collaboration:
+    resolves_to: project-management/dart-collaboration
+    status: primary
+  feedback-to-tasks:
+    resolves_to: project-management/feedback-to-tasks
+    status: primary
+  analytics-tracking:
+    resolves_to: wordpress/analytics-tracking
+    status: primary
+  content-editing:
+    resolves_to: wordpress/content-editing
+    status: primary
+  design-mockup-validation:
+    resolves_to: wordpress/design-mockup-validation
+    status: primary
+  design-research:
+    resolves_to: wordpress/design-research
+    status: primary
+  documentation:
+    resolves_to: wordpress/documentation
+    status: primary
+  page-cro:
+    resolves_to: wordpress/page-cro
+    status: primary
+  qa:
+    resolves_to: wordpress/qa
+    status: primary
+  seo-audit:
+    resolves_to: wordpress/seo-audit
+    status: primary
+  seo-validation:
+    resolves_to: wordpress/seo-validation
+    status: primary
+
+# --- Essence (skill) aliases: mythic name -> shipped skill id ---
+# Names derive from world-nouns (grimoire=framework, patron=client, essence=skill).
+skill_aliases:
+  manage-grimoires:
+    resolves_to: manage-frameworks
+    status: primary
+  manage-patrons:
+    resolves_to: manage-clients
+    status: primary
+  execute-grimoire:
+    resolves_to: execute-framework
+    status: primary
+  extract-essence:
+    resolves_to: extract-skill
+    status: primary
+
+# --- Tool aliases: kebab short name -> package.json script id ---
+tool_aliases:
+  generate:
+    resolves_to: instructions:generate
+    status: primary
+  generate-preview:
+    resolves_to: instructions:generate:preview
+    status: primary
+  validate:
+    resolves_to: instructions:validate
+    status: primary
+  validate-skip-claude:
+    resolves_to: instructions:validate:skip-claude
+    status: primary
+  check:
+    resolves_to: instructions:check
+    status: primary
+  scaffold-workspace:
+    resolves_to: workspace:scaffold
+    status: primary
+  scaffold-project:
+    resolves_to: workspace:project
+    status: primary
+  validate-workspace:
+    resolves_to: workspace:validate
+    status: primary
+  capture:
+    resolves_to: workspace:capture
+    status: primary
+  normalize-capture:
+    resolves_to: workspace:capture:normalize
+    status: primary
+  capture-status:
+    resolves_to: workspace:capture:status
+    status: primary
+  scaffold-candidate:
+    resolves_to: workspace:candidate:scaffold
+    status: primary
+  candidate-status:
+    resolves_to: workspace:candidate:status
+    status: primary
+  replay-candidate:
+    resolves_to: workspace:candidate:replay
+    status: primary
+  promote-candidate:
+    resolves_to: workspace:candidate:promote
+    status: primary
+  validate-output:
+    resolves_to: workspace:output:validate
+    status: primary
+  init-run:
+    resolves_to: workspace:run:init
+    status: primary
+  finalize-run:
+    resolves_to: workspace:run:finalize
+    status: primary
+  validate-manifest:
+    resolves_to: manifest:validate
+    status: primary
+  verify-system:
+    resolves_to: verify
+    status: primary
+  verify-framework:
+    resolves_to: verify:framework
+    status: primary
+  verify-skill:
+    resolves_to: verify:skill
+    status: primary
+  verify-guardrails:
+    resolves_to: verify:guardrails
+    status: primary
+  verify-run-evidence:
+    resolves_to: verify:run-evidence
+    status: primary
+  verify-site-audit:
+    resolves_to: verify:site-audit
+    status: primary
+  verify-report-claims:
+    resolves_to: verify:report-claims
+    status: primary
+  sync-manifest:
+    resolves_to: manifest:sync
+    status: primary
+  check-manifest:
+    resolves_to: manifest:check
+    status: primary
+  research:
+    resolves_to: research:perplexity
+    status: primary
+  first-run:
+    resolves_to: setup
+    status: primary

@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Mythos Capture Success Criteria",
+  "type": "object",
+  "required": ["criteria"],
+  "properties": {
+    "criteria": { "type": "array" },
+    "notes": { "type": "array" }
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "service_category": "project-management",
+  "framework_name": "dart-collaboration",
+  "version": "1.0.0",
+  "description": "Abstract task creation and collaboration framework using Dart as human frontend and git workspace repos as LLM-consumable backend",
+  "prompt_count": 2,
+  "input_contract": {
+    "required": [
+      {
+        "name": "Dart workspace access",
+        "description": "Dart workspace with board access. Canonical automation path is the REST API client (tools/dart-integration/lib/dart-api.js) authenticated via DART_TOKEN from env, the 1Password Automation vault item DART, or macOS Keychain; writes pass the Mythos identity gate (ensureWriteIdentity). A connected Dart MCP session is an optional human-frontend/auth surface and is not required for programmatic task creation."
+      },
+      {
+        "name": "Workspace repo",
+        "description": "Git repo following Mythos workspace pattern with tasks/index.json"
+      }
+    ],
+    "optional": [
+      {
+        "name": "Dart MCP session",
+        "description": "Optional connected Dart MCP session for human-frontend auth. As of 2026-05-29 the connected MCP surface exposes only authenticate/complete_authentication (no task CRUD); programmatic CRUD runs through the REST client above."
+      },
+      {
+        "name": "config/client.json",
+        "description": "Client identity metadata in workspace repo"
+      },
+      {
+        "name": "config/defaults.json",
+        "description": "Naming and timezone defaults"
+      }
+    ]
+  },
+  "output_contract": {
+    "directories": [
+      "tasks/",
+      "evidence/"
+    ],
+    "artifacts": [
+      "tasks/index.json",
+      "Dart tasks via REST API (tools/dart-integration)"
+    ]
+  },
+  "output_contract_v2": {
+    "directories": [
+      {
+        "path": "tasks/",
+        "required": true,
+        "description": "Context files linked from Dart task footers"
+      },
+      {
+        "path": "evidence/",
+        "required": false,
+        "description": "Validation artifacts and audit evidence"
+      }
+    ],
+    "artifacts": [
+      {
+        "name": "tasks/index.json",
+        "path_pattern": "tasks/index.json",
+        "required": true
+      }
+    ],
+    "bundle_types": []
+  },
+  "execution_modes": [
+    "REVIEW_ONLY",
+    "PATCH_ALLOWED"
+  ],
+  "mcp_requirements": [],
+  "prompt_chain": {
+    "task_creation": [
+      "01_TASK_FROM_CONTEXT"
+    ],
+    "maintenance": [
+      "02_SYNC_INDEX"
+    ]
+  },
+  "skills_path": ".claude/skills/dart-collaboration/",
+  "commands_path": ".claude/commands/dart-collaboration/",
+  "agents_path": ".claude/agents/dart-collaboration/",
+  "skills": [
+    "dart-collaboration/SKILL.md"
+  ],
+  "commands": [
+    "run",
+    "status",
+    "task-from-context",
+    "sync-index"
+  ],
+  "agents": [
+    "task-from-context-agent",
+    "sync-index-agent"
+  ],
+  "patterns": [
+    "task-board-collaboration",
+    "owner-summary-planning",
+    "human-readable-work-breakdown",
+    "dart-task-writeback"
+  ]
+}

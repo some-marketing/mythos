@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Slide Finding",
+  "description": "Schema for individual slide audit findings",
+  "type": "object",
+  "required": ["finding_id", "severity", "category", "observation"],
+  "properties": {
+    "finding_id": {
+      "type": "string",
+      "pattern": "^(S\\d+-F\\d+|SS-\\d+|CR-\\d+)$",
+      "description": "Unique finding identifier. Format: S{slide}-F{seq} for slide findings, SS-{seq} for screenshots, CR-{seq} for corrections"
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["CRITICAL", "MAJOR", "MINOR", "INFO"],
+      "description": "Finding severity per guardrails.md#severity-classification"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["content", "pricing", "timeline", "statistics", "quote", "deliverable", "image", "narrative", "screenshot", "correction", "branding"],
+      "description": "Finding category"
+    },
+    "observation": {
+      "type": "string",
+      "description": "Factual description of what was observed"
+    },
+    "expected": {
+      "type": ["string", "null"],
+      "description": "What was expected based on source documents"
+    },
+    "actual": {
+      "type": ["string", "null"],
+      "description": "What was actually found in the presentation"
+    },
+    "hypothesis": {
+      "type": ["string", "null"],
+      "description": "Labeled interpretation with evidence citation (optional)"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source", "location"],
+        "properties": {
+          "source": {
+            "type": "string",
+            "description": "Source document filename"
+          },
+          "location": {
+            "type": "string",
+            "description": "Line number, slide number, or section reference"
+          },
+          "text": {
+            "type": "string",
+            "description": "Exact text quoted from the source"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "service_category": "wordpress",
+  "framework_name": "documentation",
+  "version": "1.0.0",
+  "description": "Client-facing WordPress admin documentation via MCP browser walkthroughs with Notion output",
+  "prompt_count": 4,
+  "input_contract": {
+    "required": [
+      {
+        "name": "config.json",
+        "description": "Client config with WordPress URL, credentials reference, Notion page IDs"
+      },
+      {
+        "name": "guides.json",
+        "description": "Guide definitions with steps, screenshots, and safety rules"
+      }
+    ],
+    "optional": []
+  },
+  "output_contract": {
+    "directories": [
+      "captures/",
+      "guides/"
+    ],
+    "artifacts": [
+      "step_log.json",
+      "drift_report.md",
+      "guide content in Notion"
+    ]
+  },
+  "execution_modes": [
+    "FINDINGS_ONLY",
+    "PATCH_ALLOWED",
+    "REVIEW_ONLY"
+  ],
+  "mcp_requirements": [
+    "playwright",
+    "notion"
+  ],
+  "prompt_chain": {
+    "setup": [
+      "00_INTAKE"
+    ],
+    "capture": [
+      "01_MCP_WALKTHROUGH_CAPTURE"
+    ],
+    "write": [
+      "02_DRAFT_GUIDE_FROM_STEP_LOG"
+    ],
+    "verify": [
+      "03_VERIFY_GUIDE_VIA_MCP"
+    ]
+  },
+  "guide_count": 8,
+  "guide_variants": {
+    "all": [
+      "wp_login",
+      "publish_blog",
+      "featured_image",
+      "update_seo"
+    ],
+    "gutenberg": [
+      "edit_text",
+      "change_image"
+    ],
+    "livecanvas": [
+      "edit_text_lc",
+      "change_image_lc"
+    ]
+  },
+  "skills_path": ".claude/skills/documentation/",
+  "commands_path": ".claude/commands/documentation/",
+  "agents_path": ".claude/agents/documentation/",
+  "skills": [
+    "documentation/SKILL.md"
+  ],
+  "commands": [
+    "run",
+    "status",
+    "intake",
+    "mcp-walkthrough-capture",
+    "draft-guide-from-step-log",
+    "verify-guide-via-mcp"
+  ],
+  "agents": [
+    "intake-agent",
+    "mcp-walkthrough-capture-agent",
+    "draft-guide-from-step-log-agent",
+    "verify-guide-via-mcp-agent"
+  ],
+  "patterns": [
+    "browser-walkthrough-documentation",
+    "wordpress-admin-documentation",
+    "operator-guide-generation",
+    "notion-documentation-output"
+  ]
+}

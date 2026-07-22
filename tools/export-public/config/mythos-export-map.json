@@ -1,0 +1,25 @@
+{
+  "schema": "ExportMap/1.0",
+  "target_repo": "~/path/to/your-public-repo",
+  "target_remote": "https://github.com/YOUR-ORG/YOUR-PUBLIC-REPO.git",
+  "target_branch": "main",
+  "notes": "Private-by-default: a unit absent from this map is never exported. File classes: export (copied with denylist stripping), exclude (never shipped), mock (replaced from mocks/<unit-with-__>/). Stale refreshes rebuild the target dir wholesale — no diff-merge. Framework units get manifest validation; tool/doc units set validate: none.",
+  "frameworks": {
+    "example-category/example-framework": {
+      "source": "frameworks/example-category/example-framework",
+      "target": "frameworks/example-category/example-framework",
+      "files": {
+        "export": [
+          "**"
+        ],
+        "exclude": [
+          "tests/*client-fixture*"
+        ],
+        "mock": {
+          "config/settings.json": "settings.example.json"
+        }
+      }
+    }
+  },
+  "units": {}
+}

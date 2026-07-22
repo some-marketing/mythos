@@ -1,0 +1,547 @@
+{
+  "version": "1.1.0",
+  "description": "Data-driven guide definitions for WordPress client documentation generator",
+  "screenshot_rules": {
+    "ensure_visibility": "Before taking a screenshot, ensure all UI elements referenced in the step's guide_text and expected_label are visible. This includes: (1) hovering to reveal hover-dependent elements like WordPress row actions, (2) scrolling the referenced element into the viewport, (3) waiting for animations/transitions to complete.",
+    "pre_screenshot_actions": "Steps may include an optional 'pre_screenshot' field with actions to execute before the screenshot. These are hints — the capture agent should also use its judgment to ensure referenced elements are visible even when no pre_screenshot is specified.",
+    "scroll_into_view": "If the step's target element or the element referenced in guide_text is below the fold, scroll it into view before taking the screenshot. Use browser_evaluate with element.scrollIntoView({ behavior: 'instant', block: 'center' })."
+  },
+  "guides": {
+    "wp_login": {
+      "title": "How to Log into WordPress",
+      "slug": "wp_login",
+      "emoji": "\ud83d\udd10",
+      "description": "Step-by-step guide to accessing your WordPress admin dashboard",
+      "safety": {
+        "modifies_site": false,
+        "requires_undo": false,
+        "notes": "Login only, no changes made"
+      },
+      "steps": [
+        {
+          "index": 1,
+          "action": "navigate",
+          "target": "{site_url}/wp-admin",
+          "expected_label": "WordPress login page loads with username and password fields",
+          "screenshot": "step-01__login-page.png",
+          "guide_text": "Open your browser and go to **{site_url}/wp-admin**. You'll see the WordPress login page."
+        },
+        {
+          "index": 2,
+          "action": "fill",
+          "target": "#user_login, #user_pass",
+          "expected_label": "Username and password fields filled (password masked before screenshot)",
+          "screenshot": "step-02__enter-credentials.png",
+          "guide_text": "Enter your **username** and **password** in the fields provided.",
+          "safety": "MASK password field value before taking screenshot"
+        },
+        {
+          "index": 3,
+          "action": "click",
+          "target": "#wp-submit",
+          "expected_label": "WordPress dashboard loads after successful login",
+          "screenshot": "step-03__dashboard.png",
+          "guide_text": "Click the **Log In** button. You'll be taken to your WordPress dashboard."
+        }
+      ]
+    },
+    "edit_text": {
+      "title": "How to Edit Text on a Page",
+      "slug": "edit_text",
+      "emoji": "\u270f\ufe0f",
+      "editor_variant": "gutenberg",
+      "description": "How to find and edit text content on any page of your website using the WordPress editor",
+      "safety": {
+        "modifies_site": true,
+        "requires_undo": true,
+        "undo_method": "Ctrl+Z before leaving editor",
+        "notes": "Test edit must be undone. NEVER click Update/Save."
+      },
+      "steps": [
+        {
+          "index": 1,
+          "action": "verify",
+          "target": "#adminmenu",
+          "expected_label": "WordPress dashboard with Pages menu visible in left sidebar",
+          "screenshot": "step-01__dashboard.png",
+          "guide_text": "From your WordPress dashboard, look at the left sidebar menu."
+        },
+        {
+          "index": 2,
+          "action": "click",
+          "target": "#menu-pages, [href*='edit.php?post_type=page']",
+          "expected_label": "Pages list loads showing all site pages with row actions visible",
+          "screenshot": "step-02__pages-list.png",
+          "guide_text": "Click **Pages** in the left sidebar. You'll see a list of all your website's pages.",
+          "pre_screenshot": [
+            {
+              "action": "hover",
+              "target": ".wp-list-table tbody tr:first-child .row-title",
+              "purpose": "Reveal row actions (Edit, Quick Edit, Trash, View) so the Edit option referenced in the next step is visible"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "action": "click",
+          "target": ".row-actions .edit a, .row-title",
+          "expected_label": "Page editor opens (Gutenberg block editor or Classic editor)",
+          "screenshot": "step-03__editor.png",
+          "guide_text": "Hover over the page you want to edit and click **Edit**. The page editor will open.",
+          "detect": ["gutenberg", "classic_editor", "elementor", "divi"]
+        },
+        {
+          "index": 4,
+          "action": "click",
+          "target": ".wp-block-paragraph, .mce-content-body p",
+          "expected_label": "Text block is selected and editable",
+          "screenshot": "step-04__text-selected.png",
+          "guide_text": "Click on any text block to select it. You'll see a cursor appear."
+        },
+        {
+          "index": 5,
+          "action": "fill",
+          "target": ".wp-block-paragraph:focus, .mce-content-body p",
+          "expected_label": "Test text typed into the text block",
+          "screenshot": "step-05__text-edited.png",
+          "guide_text": "Type your changes. The text updates in real-time.",
+          "test_value": "[DOCGEN TEST - WILL BE UNDONE]"
+        },
+        {
+          "index": 6,
+          "action": "verify",
+          "target": ".editor-post-publish-button, #publish, .editor-post-save-draft",
+          "expected_label": "Update/Save button is visible in the editor",
+          "screenshot": "step-06__update-button.png",
+          "guide_text": "When you're happy with your changes, click the **Update** button to save."
+        },
+        {
+          "index": 7,
+          "action": "undo",
+          "target": null,
+          "expected_label": "Test edit reverted via Ctrl+Z, page is clean",
+          "screenshot": "step-07__view-page-link.png",
+          "guide_text": "You can preview your page using the **View Page** link before or after saving.",
+          "safety": "UNDO test edit with Ctrl+Z. Do NOT click Update/Save."
+        }
+      ]
+    },
+    "change_image": {
+      "title": "How to Change a Page Image",
+      "slug": "change_image",
+      "emoji": "\ud83d\uddbc\ufe0f",
+      "editor_variant": "gutenberg",
+      "description": "How to replace a content image on a page using the WordPress block editor",
+      "safety": {
+        "modifies_site": true,
+        "requires_undo": true,
+        "undo_method": "Ctrl+Z before leaving editor",
+        "notes": "Image swap must be undone. NEVER click Update/Save."
+      },
+      "steps": [
+        {
+          "index": 1,
+          "action": "navigate",
+          "target": "page_with_image",
+          "expected_label": "Page open in WordPress block editor with at least one image visible",
+          "screenshot": "step-01__page-editor.png",
+          "guide_text": "Open a page that has an image you want to change. From the Pages list, hover over the page and click **Edit**. The block editor will open.",
+          "detect": ["gutenberg", "classic_editor"]
+        },
+        {
+          "index": 2,
+          "action": "click",
+          "target": ".wp-block-image img, figure.wp-block-image",
+          "expected_label": "Image block is selected with block toolbar visible above it",
+          "screenshot": "step-02__image-selected.png",
+          "guide_text": "Click on the image you want to change. You'll see a toolbar appear above the image block."
+        },
+        {
+          "index": 3,
+          "action": "click",
+          "target": ".block-editor-block-toolbar button[aria-label='Replace']",
+          "expected_label": "Replace dropdown showing Upload, Media Library, and URL options",
+          "screenshot": "step-03__replace-menu.png",
+          "guide_text": "In the toolbar above the image, click **Replace**. You'll see options to upload a new image or choose from the Media Library."
+        },
+        {
+          "index": 4,
+          "action": "click",
+          "target": ".media-modal, .components-dropdown-menu__menu button",
+          "expected_label": "Media Library dialog opens showing available images",
+          "screenshot": "step-04__media-library.png",
+          "guide_text": "Click **Open Media Library** to browse your uploaded images. Click the image you want to use, then click **Select**."
+        },
+        {
+          "index": 5,
+          "action": "verify",
+          "target": ".wp-block-image img",
+          "expected_label": "New image is visible on the page in the editor",
+          "screenshot": "step-05__image-replaced.png",
+          "guide_text": "The image on your page will update immediately. Review the change to make sure it looks right."
+        },
+        {
+          "index": 6,
+          "action": "verify",
+          "target": ".editor-post-publish-button, #publish",
+          "expected_label": "Update button visible in the editor top bar",
+          "screenshot": "step-06__click-save.png",
+          "guide_text": "When you're happy with the new image, click the **Update** button to save your change.",
+          "safety": "UNDO image replacement with Ctrl+Z. Do NOT click Update/Save."
+        }
+      ]
+    },
+    "publish_blog": {
+      "title": "How to Publish a Blog Post",
+      "slug": "publish_blog",
+      "emoji": "\ud83d\udcdd",
+      "description": "How to create and publish a new blog post on your website",
+      "safety": {
+        "modifies_site": true,
+        "requires_undo": true,
+        "undo_method": "Cancel publish flow, then move draft to Trash",
+        "notes": "Draft must be trashed. NEVER click the final Publish confirmation."
+      },
+      "steps": [
+        {
+          "index": 1,
+          "action": "click",
+          "target": "#menu-posts, [href*='edit.php']",
+          "expected_label": "Posts menu with Add New Post button visible",
+          "screenshot": "step-01__posts-menu.png",
+          "guide_text": "In the left sidebar, click **Posts**. You'll see a list of your blog posts and an **Add New Post** button at the top."
+        },
+        {
+          "index": 2,
+          "action": "click",
+          "target": ".page-title-action, [href*='post-new.php']",
+          "expected_label": "Block editor with title field, block inserter, and settings gear",
+          "screenshot": "step-02__editor-overview.png",
+          "guide_text": "Click **Add New Post**. The block editor opens with a title field at the top, a content area below, and a settings gear in the top right."
+        },
+        {
+          "index": 3,
+          "action": "verify",
+          "target": ".block-editor-default-block-appender, .block-editor-inserter",
+          "expected_label": "Slash command block inserter dropdown showing block types",
+          "screenshot": "step-03__using-blocks.png",
+          "guide_text": "Click in the content area and type **/** to see a list of available blocks (paragraph, heading, image, list, etc.). Select a block type to add it."
+        },
+        {
+          "index": 4,
+          "action": "verify",
+          "target": ".editor-post-featured-image, .components-panel__body",
+          "expected_label": "Post sidebar showing Featured Image section and Categories",
+          "screenshot": "step-04__sidebar-settings.png",
+          "guide_text": "In the right sidebar under **Post**, you'll find **Featured Image** (your post's thumbnail) and **Categories** (how your post is organized). Click the settings gear if the sidebar isn't visible."
+        },
+        {
+          "index": 5,
+          "action": "verify",
+          "target": ".editor-post-publish-button, #publish",
+          "expected_label": "Publish button in the editor top bar",
+          "screenshot": "step-05__publish.png",
+          "guide_text": "When your post is ready, click the **Publish** button in the top-right corner."
+        },
+        {
+          "index": 6,
+          "action": "cleanup",
+          "target": ".editor-post-publish-panel, .editor-post-trash",
+          "expected_label": "Publish confirmation panel with final Publish button",
+          "screenshot": "step-06__publish-confirm.png",
+          "guide_text": "A confirmation panel appears. Review the settings, then click **Publish** to make your post live.",
+          "safety": "Do NOT confirm publish. Cancel the publish flow, then move test draft to Trash."
+        }
+      ]
+    },
+    "featured_image": {
+      "title": "How to Set a Featured Image",
+      "slug": "featured_image",
+      "emoji": "\ud83d\uddbc\ufe0f",
+      "description": "How to set or change the featured image (thumbnail) for a page or post",
+      "safety": {
+        "modifies_site": true,
+        "requires_undo": true,
+        "undo_method": "Remove featured image before leaving editor",
+        "notes": "Set a test featured image, then remove it. Never click Update."
+      },
+      "steps": [
+        {
+          "index": 1,
+          "action": "navigate",
+          "target": "page_editor",
+          "expected_label": "Page or post open in the WordPress editor with right sidebar visible",
+          "screenshot": "step-01__open-editor.png",
+          "guide_text": "Open any page or post in the editor. In the left sidebar, click **Pages** (or **Posts**), then hover over the item you want and click **Edit**."
+        },
+        {
+          "index": 2,
+          "action": "verify",
+          "target": ".editor-post-featured-image, #postimagediv",
+          "expected_label": "Featured Image panel visible in the right sidebar",
+          "screenshot": "step-02__featured-image-panel.png",
+          "guide_text": "In the right sidebar, scroll down to find the **Featured Image** section. If the sidebar isn't visible, click the **Settings** gear icon in the top-right corner.",
+          "pre_screenshot": [
+            {
+              "action": "scroll",
+              "target": ".editor-post-featured-image, #postimagediv",
+              "purpose": "Scroll the Featured Image panel into view in the sidebar"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "action": "click",
+          "target": ".editor-post-featured-image__toggle, #set-post-thumbnail",
+          "expected_label": "Media Library dialog opens for image selection",
+          "screenshot": "step-03__media-library.png",
+          "guide_text": "Click **Set featured image**. The Media Library will open, showing your uploaded images."
+        },
+        {
+          "index": 4,
+          "action": "click",
+          "target": ".attachment, .media-modal .thumbnail",
+          "expected_label": "An image is selected and featured image thumbnail appears in sidebar",
+          "screenshot": "step-04__image-selected.png",
+          "guide_text": "Click the image you want to use, then click **Set featured image** at the bottom. You'll see a thumbnail preview in the sidebar.",
+          "safety": "Select any existing image for demonstration. Do NOT upload new images."
+        },
+        {
+          "index": 5,
+          "action": "cleanup",
+          "target": ".editor-post-featured-image__action, #remove-post-thumbnail",
+          "expected_label": "Featured image removed, panel shows Set featured image button again",
+          "screenshot": "step-05__save-reminder.png",
+          "guide_text": "When you're happy with your featured image, click **Update** to save the change.",
+          "safety": "REMOVE the test featured image by clicking 'Remove featured image'. Do NOT click Update."
+        }
+      ]
+    },
+    "update_seo": {
+      "title": "How to Update SEO",
+      "slug": "update_seo",
+      "emoji": "\ud83d\udd0d",
+      "description": "How to update your page's SEO title and meta description for search engines",
+      "safety": {
+        "modifies_site": false,
+        "requires_undo": false,
+        "notes": "View-only. Do NOT edit any SEO fields."
+      },
+      "prerequisite_check": {
+        "detect": "seo_plugin",
+        "supported": ["yoast", "rankmath", "aioseo"],
+        "on_missing": "skip_guide"
+      },
+      "steps": [
+        {
+          "index": 1,
+          "action": "navigate",
+          "target": "page_editor",
+          "expected_label": "Page editor open with content visible",
+          "screenshot": "step-01__page-editor.png",
+          "guide_text": "Open any page in the editor (follow the **How to Edit Text** guide to get there)."
+        },
+        {
+          "index": 2,
+          "action": "verify",
+          "target_by_plugin": {
+            "yoast": "#wpseo_meta, .yoast-seo-panel",
+            "rankmath": ".rank-math-editor, #rank_math_metabox",
+            "aioseo": ".aioseo-post-settings, #aioseo-post-settings"
+          },
+          "expected_label": "SEO plugin panel visible below editor or in sidebar",
+          "screenshot": "step-02__seo-panel.png",
+          "guide_text": "Scroll down below the editor content to find your SEO settings panel.",
+          "detect": "seo_plugin_type"
+        },
+        {
+          "index": 3,
+          "action": "verify",
+          "target_by_plugin": {
+            "yoast": "#yoast-google-preview-title-metabox, .yoast_seo_title",
+            "rankmath": ".rank-math-editor input[name='rank_math_title']",
+            "aioseo": ".aioseo-post-title input"
+          },
+          "expected_label": "SEO title field visible with current value",
+          "screenshot": "step-03__seo-title.png",
+          "guide_text": "Find the **SEO Title** field. This is what appears as the clickable headline in Google search results."
+        },
+        {
+          "index": 4,
+          "action": "verify",
+          "target_by_plugin": {
+            "yoast": "#yoast-google-preview-description-metabox, .yoast_seo_metadesc",
+            "rankmath": ".rank-math-editor textarea[name='rank_math_description']",
+            "aioseo": ".aioseo-post-description textarea"
+          },
+          "expected_label": "Meta description field visible with current value",
+          "screenshot": "step-04__meta-description.png",
+          "guide_text": "Find the **Meta Description** field. This is the short summary shown below your title in search results."
+        },
+        {
+          "index": 5,
+          "action": "verify",
+          "target": ".snippet-editor, .serp-preview, .google-preview",
+          "expected_label": "Google search preview snippet showing title and description",
+          "screenshot": "step-05__google-preview.png",
+          "guide_text": "Look at the **Google Preview** section to see how your page will appear in search results."
+        },
+        {
+          "index": 6,
+          "action": "verify",
+          "target": ".editor-post-publish-button, #publish",
+          "expected_label": "Update button visible. Do NOT click it.",
+          "screenshot": "step-06__update-button.png",
+          "guide_text": "After making your SEO changes, click the **Update** button to save.",
+          "safety": "Do NOT modify any SEO fields. This is view-only for screenshots."
+        }
+      ]
+    },
+    "edit_text_lc": {
+      "title": "How to Edit Text on a Page (LiveCanvas)",
+      "slug": "edit_text_lc",
+      "emoji": "\u270f\ufe0f",
+      "editor_variant": "livecanvas",
+      "description": "How to find and edit text content on any page using the LiveCanvas editor",
+      "safety": {
+        "modifies_site": true,
+        "requires_undo": true,
+        "undo_method": "Ctrl+Z in LiveCanvas, then exit without saving",
+        "notes": "Test edit must be undone. NEVER click Save in LiveCanvas."
+      },
+      "steps": [
+        {
+          "index": 1,
+          "action": "verify",
+          "target": "#adminmenu",
+          "expected_label": "WordPress dashboard with Pages menu visible in left sidebar",
+          "screenshot": "step-01__dashboard.png",
+          "guide_text": "From your WordPress dashboard, look at the left sidebar menu."
+        },
+        {
+          "index": 2,
+          "action": "click",
+          "target": "#menu-pages, [href*='edit.php?post_type=page']",
+          "expected_label": "Pages list loads showing all site pages with row actions visible",
+          "screenshot": "step-02__pages-list.png",
+          "guide_text": "Click **Pages** in the left sidebar. You'll see a list of all your website's pages.",
+          "pre_screenshot": [
+            {
+              "action": "hover",
+              "target": ".wp-list-table tbody tr:first-child .row-title",
+              "purpose": "Reveal row actions (Edit, Edit with LiveCanvas, Trash, View) so the Edit with LiveCanvas option is visible"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "action": "click",
+          "target": ".row-actions a[href*='livecanvas'], .row-actions a:contains('LiveCanvas')",
+          "expected_label": "LiveCanvas editor opens with the page content loaded",
+          "screenshot": "step-03__livecanvas-editor.png",
+          "guide_text": "Hover over the page you want to edit and click **Edit with LiveCanvas**. The LiveCanvas visual editor will open.",
+          "detect": ["livecanvas"]
+        },
+        {
+          "index": 4,
+          "action": "click",
+          "target": "[data-lc-type='text'], .lc-text-element, p, h1, h2, h3",
+          "expected_label": "Text element is selected and editable in LiveCanvas",
+          "screenshot": "step-04__text-selected.png",
+          "guide_text": "Click on any text element to select it. A blue outline will appear around it and you can start typing."
+        },
+        {
+          "index": 5,
+          "action": "fill",
+          "target": "[data-lc-type='text']:focus, .lc-text-element:focus",
+          "expected_label": "Test text typed into the text element",
+          "screenshot": "step-05__text-edited.png",
+          "guide_text": "Type your changes. The text updates in real-time on the page.",
+          "test_value": "[DOCGEN TEST - WILL BE UNDONE]"
+        },
+        {
+          "index": 6,
+          "action": "verify",
+          "target": ".lc-save-button, [data-action='save']",
+          "expected_label": "LiveCanvas Save button visible in the editor toolbar",
+          "screenshot": "step-06__save-button.png",
+          "guide_text": "When you're happy with your changes, click the **Save** button in the LiveCanvas toolbar to publish."
+        },
+        {
+          "index": 7,
+          "action": "undo",
+          "target": null,
+          "expected_label": "Test edit reverted via Ctrl+Z, page is clean",
+          "screenshot": "step-07__exit-editor.png",
+          "guide_text": "You can exit the editor by clicking the **X** button or navigating back to the Pages list.",
+          "safety": "UNDO test edit with Ctrl+Z. Do NOT click Save in LiveCanvas."
+        }
+      ]
+    },
+    "change_image_lc": {
+      "title": "How to Change a Page Image (LiveCanvas)",
+      "slug": "change_image_lc",
+      "emoji": "\ud83d\uddbc\ufe0f",
+      "editor_variant": "livecanvas",
+      "description": "How to replace a content image on a page using the LiveCanvas editor",
+      "safety": {
+        "modifies_site": true,
+        "requires_undo": true,
+        "undo_method": "Ctrl+Z in LiveCanvas editor, then close without saving",
+        "notes": "Image swap must be undone in LiveCanvas. NEVER click Save in LC."
+      },
+      "steps": [
+        {
+          "index": 1,
+          "action": "navigate",
+          "target": "page_with_image",
+          "expected_label": "Page open in LiveCanvas editor with at least one image visible",
+          "screenshot": "step-01__page-editor.png",
+          "guide_text": "Open a page that has an image you want to change. From the Pages list, hover over the page and click **Edit with LiveCanvas**. The visual editor will open.",
+          "detect": ["livecanvas"]
+        },
+        {
+          "index": 2,
+          "action": "click",
+          "target": "img, [data-lc-type='image']",
+          "expected_label": "Image element is selected in LiveCanvas, showing the Image settings panel in the sidebar",
+          "screenshot": "step-02__image-selected.png",
+          "guide_text": "Click on the image you want to change. The **Image** settings panel will appear in the left sidebar."
+        },
+        {
+          "index": 3,
+          "action": "verify",
+          "target": ".lc-sidebar-panel, [data-panel='image']",
+          "expected_label": "Image panel shows current image source with Replace/Upload options",
+          "screenshot": "step-03__image-panel.png",
+          "guide_text": "In the sidebar panel, you'll see options to change the image. Click **Replace Image** or **Choose from Library** to pick a new image."
+        },
+        {
+          "index": 4,
+          "action": "click",
+          "target": ".media-modal, .lc-media-library",
+          "expected_label": "Media library or Unsplash browser opens showing available images",
+          "screenshot": "step-04__media-library.png",
+          "guide_text": "Browse your uploaded images in the Media Library, or search for free stock photos via Unsplash (if available). Click the image you want to use."
+        },
+        {
+          "index": 5,
+          "action": "verify",
+          "target": "img, [data-lc-type='image']",
+          "expected_label": "New image is visible on the page in the LiveCanvas editor",
+          "screenshot": "step-05__image-replaced.png",
+          "guide_text": "The image on your page will update immediately. Review the change to make sure it looks right."
+        },
+        {
+          "index": 6,
+          "action": "verify",
+          "target": ".lc-save-button, [data-action='save']",
+          "expected_label": "LiveCanvas Save button is visible in the editor toolbar",
+          "screenshot": "step-06__click-save.png",
+          "guide_text": "When you're happy with the new image, click the **Save** button in the LiveCanvas toolbar to publish your change.",
+          "safety": "UNDO image replacement with Ctrl+Z. Do NOT click Save in LiveCanvas."
+        }
+      ]
+    }
+  }
+}

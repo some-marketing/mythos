@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "QA Dev Handoff Bundle INDEX.json",
+  "type": "object",
+  "required": ["bundle_id", "artifacts"],
+  "properties": {
+    "bundle_id": { "type": "string" },
+    "artifacts": {
+      "type": "array",
+      "items": { "type": "object" }
+    }
+  }
+}

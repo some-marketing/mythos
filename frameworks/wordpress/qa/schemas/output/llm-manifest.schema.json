@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "QA Dev Handoff Bundle LLM Manifest",
+  "type": "object",
+  "required": ["bundle_version", "generated_at", "framework_id", "runs", "reporting_expectations"],
+  "properties": {
+    "bundle_version": { "type": "string" },
+    "generated_at": { "type": "string" },
+    "framework_id": { "type": "string" },
+    "scope": { "type": "string" },
+    "runs": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "reporting_expectations": { "type": "object" },
+    "canonical_changelog_path": { "type": "string" },
+    "changelog_status": { "type": "string" },
+    "required_prompts": { "type": "array" },
+    "entry_points": { "type": "array" },
+    "stakeholder_gate": { "type": "object" }
+  }
+}

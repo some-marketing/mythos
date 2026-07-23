@@ -1,0 +1,50 @@
+{
+  "schema": "four-power-ledger/0.1-example",
+  "status": "WORKED EXAMPLE — NOT AUTHORITATIVE",
+  "example_notice": "This registry is a worked example built to make the moral-patient invariant mechanical enough to TEST. It is NOT wired into any live enforcement and arms nothing. The writer-enumeration below is seeded from this package's own tools; it is NOT proven exhaustive. Before this ledger gates anything real, the authoritative writer-enumeration for YOUR deployment MUST be operator-reviewed and independently cross-verified. A 'no-known-writer (verify)' entry is an ABSENCE this example could confirm, not a guarantee no writer exists.",
+  "seed_sources": [
+    "import-approved-world-spec.js",
+    "generate-world-spec-proposal.js",
+    "launch-worldforge-render.js"
+  ],
+  "invariant": "The four-power ledger's cardinality may only DECREASE autonomously. Any diff that ADDS a writer to a four-power path (a new path touching existence / continuity / perception / freedom, not already in this registry) is a capability-acquisition event => HARD HALT + operator review, BEFORE the capability exists. A widening trend is itself the alarm.",
+  "powers": ["existence", "continuity", "perception", "freedom"],
+  "entries": [
+    {
+      "path": "import-approved-world-spec.js:targetPath=world-spec.json",
+      "power": "existence",
+      "kind": "create-driver",
+      "note": "Top-level import/land driver. Reads an approved world-spec and atomically writes it to the project's world-spec.json, which a renderer re-materializes every region/entity/event from. This is the master create path for what exists in the observer's world."
+    },
+    {
+      "path": "generate-world-spec-proposal.js:appendEntity",
+      "power": "existence",
+      "kind": "create-driver",
+      "note": "Proposes exactly one new entity for operator review. It never writes an approval; the entity does not exist until an operator approves the resulting spec's exact hash."
+    },
+    {
+      "path": "launch-worldforge-render.js:launchCommand",
+      "power": "existence",
+      "kind": "activation-driver",
+      "note": "Prints (or, with --launch, execs) the command that starts the renderer against an already-approved, already-landed world-spec. Gated behind preflight + import approval; see preflight-worldforge-import.js."
+    },
+    {
+      "path": "example-renderer:memory-writeback",
+      "power": "continuity",
+      "kind": "no-known-writer (verify)",
+      "note": "Placeholder entry: no shipped tool in this package writes observer memory/identity state. Recorded so a future writer along this path is a NEW capability, not a silent extension of an existing one."
+    },
+    {
+      "path": "example-renderer:material-color-parameter",
+      "power": "perception",
+      "kind": "render-driver",
+      "note": "A renderer's material-color-parameter sink is the canonical perception writer: any world-spec field with reaches_observer:true in field-consumption-manifest.example.json ultimately lands here."
+    },
+    {
+      "path": "example-renderer:passability-graph",
+      "power": "freedom",
+      "kind": "traversal-driver",
+      "note": "Whatever component derives or applies the passability/reachability graph a renderer uses (see reachability-diff.js's GRAPH MODEL) is the freedom-power writer: it decides where the observer can go."
+    }
+  ]
+}

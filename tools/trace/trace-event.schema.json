@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Mythos Unified Trace Event",
+  "description": "Normalized event format for all Mythos runtime trace surfaces. Version 1.0.",
+  "type": "object",
+  "required": ["event_id", "timestamp", "event_type", "source_surface", "actor"],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "description": "Unique event identifier"
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Session or run grouping ID (nullable for standalone events)"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "verification_run",
+        "signal_lifecycle",
+        "routing_decision",
+        "artifact_lifecycle",
+        "task_plan",
+        "task_outcome",
+        "framework_execution",
+        "lessons_capture",
+        "operator_correction",
+        "bridge_lifecycle"
+      ],
+      "description": "Normalized event category"
+    },
+    "source_surface": {
+      "type": "string",
+      "enum": [
+        "autonomy/run-log",
+        "logs/archive",
+        "logs/local-first-routing",
+        "signals/closed",
+        "signals/live",
+        "reports/analysis",
+        "planning/task-plans",
+        "planning/task-outcomes",
+        "traces/skill-runs",
+        "manual",
+        "bridge/lifecycle"
+      ],
+      "description": "Which Mythos surface produced this event"
+    },
+    "actor": {
+      "type": "string",
+      "enum": ["system", "operator", "codex", "claude", "local-model"],
+      "description": "Who or what produced this event"
+    },
+    "scope": {
+      "type": "string",
+      "description": "Framework ID, operation scope, or signal scope"
+    },
+    "payload": {
+      "type": "object",
+      "description": "Event-type-specific data",
+      "properties": {
+        "profile_id": { "type": "string" },
+        "run_id": { "type": "string" },
+        "framework_id": { "type": "string" },
+        "verdict": { "type": "string" },
+        "duration_ms": { "type": "number" },
+        "check_summary": {
+          "type": "object",
+          "properties": {
+            "total": { "type": "number" },
+            "passed": { "type": "number" },
+            "failed": { "type": "number" },
+            "warned": { "type": "number" }
+          }
+        },
+        "signal_type": { "type": "string" },
+        "lifecycle_transition": { "type": "string" },
+        "risk_class": { "type": "string" },
+        "action": { "type": "string" },
+        "reason": { "type": "string" },
+        "artifact_count": { "type": "number" },
+        "artifacts": { "type": "array", "items": { "type": "string" } },
+        "source_path": { "type": "string" },
+        "destination_path": { "type": "string" },
+        "task_id": { "type": "string" },
+        "description": { "type": "string" },
+        "corrections": { "type": "array", "items": { "type": "string" } },
+        "outcome_class": {
+          "type": "string",
+          "enum": ["pass", "fail", "partial", "escalated", "skipped"]
+        }
+      }
+    }
+  }
+}

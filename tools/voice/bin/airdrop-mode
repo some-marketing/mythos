@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+# airdrop-mode — set AirDrop discoverability.
+#
+# User-space; no sudo. sharingd runs per-user, so `defaults write` +
+# `killall sharingd` applies the change without elevation.
+#
+# Usage:
+#   airdrop-mode off        # no one
+#   airdrop-mode contacts   # contacts only
+#   airdrop-mode everyone   # everyone (10-minute-limited on newer macOS)
+#   airdrop-mode status     # read current mode
+
+set -euo pipefail
+
+mode="${1:-}"
+
+read_mode() {
+  defaults read com.apple.sharingd DiscoverableMode 2>/dev/null || echo "(unset)"
+}
+
+case "$mode" in
+  off|Off|OFF)
+    defaults write com.apple.sharingd DiscoverableMode "Off"
+    killall sharingd 2>/dev/null || true
+    echo "airdrop: off"
+    ;;
+  contacts|Contacts|CONTACTS)
+    defaults write com.apple.sharingd DiscoverableMode "Contacts Only"
+    killall sharingd 2>/dev/null || true
+    echo "airdrop: contacts"
+    ;;
+  everyone|Everyone|EVERYONE|all)
+    defaults write com.apple.sharingd DiscoverableMode "Everyone"
+    killall sharingd 2>/dev/null || true
+    echo "airdrop: everyone"
+    ;;
+  status|"")
+    echo "airdrop: $(read_mode)"
+    ;;
+  -h|--help|help)
+    cat <<'EOF'
+airdrop-mode — set AirDrop discoverability (user-space, no sudo).
+
+Usage:
+  airdrop-mode off        # no one
+  airdrop-mode contacts   # contacts only
+  airdrop-mode everyone   # everyone
+  airdrop-mode status     # read current mode
+EOF
+    ;;
+  *)
+    echo "airdrop-mode: unknown mode: $mode" >&2
+    echo "try: airdrop-mode --help" >&2
+    exit 2
+    ;;
+esac

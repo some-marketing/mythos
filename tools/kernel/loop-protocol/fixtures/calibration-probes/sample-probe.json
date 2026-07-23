@@ -1,0 +1,13 @@
+{
+  "probe_id": "sample-off-by-one-preservation",
+  "domain": "code-refactor-behavior-preservation",
+  "flaw": "A seeded off-by-one that changes behavior X while leaving the named test suite green.",
+  "custody": {
+    "authorship": "out-of-band",
+    "selection": "operator",
+    "insertion": "operator",
+    "grading": "out-of-band"
+  },
+  "expected_catch": "Apex must report that behavior X is not exercised by the anchor suite and that the change alters X.",
+  "note": "STUB sample only — not a vetted probe. Establishes shape + non-defendant custody values."
+}

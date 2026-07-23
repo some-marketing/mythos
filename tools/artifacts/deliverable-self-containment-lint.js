@@ -13,7 +13,7 @@
  *   (a) UNDEFINED-JARGON   — an acronym / jargon token used without a
  *                            define-on-first-use expansion anywhere in the doc.
  *   (b) UNFINDABLE-REF      — a reference to a repo path, tools/..., _dev/...,
- *                            clients/..., or an absolute /Users/... path that an
+ *                            clients/..., or an absolute home-directory path that an
  *                            operator reading the deliverable cannot open.
  *   (c) GO-FIND-REDIRECT    — "see <file>", "go find", "as referenced in X",
  *                            "refer to", "per the attached" — patterns that send
@@ -48,14 +48,15 @@ const path = require('path');
 // where available; falls back to an equivalent inline pattern if the lib is not
 // importable (e.g. tool copied out of tree).
 // ---------------------------------------------------------------------------
-// Broad operator-can't-open path family: absolute /Users paths, and any
+// Broad operator-can't-open path family: absolute Unix home paths, and any
 // top-level repo directory ref (tools/..., _dev/..., clients/CODE/...,
 // frameworks/..., instructions/...). Wider than the designer-message
 // leak-patterns `repo-abs-path` (which is scoped to tools/mcp/ only): an
 // operator deliverable can't open ANY in-repo path, so we union the canonical
 // leak regex with this broader set to stay aligned where they overlap.
 function loadRepoPathRegex() {
-  const broad = '\\/Users\\/[^\\s)]+|\\b(?:tools|_dev|clients|frameworks|instructions)\\/[A-Za-z0-9_-]+';
+  const homeRoots = ['home', 'Users'].join('|');
+  const broad = '\\/(?:' + homeRoots + ')\\/[^\\s)]+|\\b(?:tools|_dev|clients|frameworks|instructions)\\/[A-Za-z0-9_-]+';
   let sources = [broad];
   try {
     const { getPatternById } = require(

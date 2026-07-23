@@ -100,11 +100,13 @@ function collectCandidateBlockingIssues(candidateRoot, candidate, { workspaceRoo
   }
 
   const suspicious = [];
+  const homeRoots = ['home', 'Users'].join('|');
+  const absoluteHomePath = new RegExp('/(?:' + homeRoots + ')/[^\\s]+');
   if (exists(proposedFrameworkRoot)) {
     for (const relFile of listFilesRecursive(proposedFrameworkRoot)) {
       const absFile = path.join(proposedFrameworkRoot, relFile);
       const text = readText(absFile);
-      if (text.includes('/Users/')) suspicious.push(`${relFile}: absolute filesystem path`);
+      if (absoluteHomePath.test(text)) suspicious.push(`${relFile}: absolute filesystem path`);
       if (workspaceRoot && text.includes(workspaceRoot)) suspicious.push(`${relFile}: workspace root reference`);
       if (projectRoot && text.includes(projectRoot)) suspicious.push(`${relFile}: project root reference`);
       if (/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i.test(text)) suspicious.push(`${relFile}: email-like content`);

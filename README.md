@@ -1,6 +1,6 @@
 # Mythos — an Adventurer's Guild for AI Coding Agents
 
-Mythos is an LLM operating system for reusable work frameworks, dressed as a Guild System. It is the same idea as any workflow-framework library — a filesystem workspace where an AI coding agent (Claude Code, Cursor, Codex, OpenCode, or any harness that can read a folder and follow structured instructions) loads reusable task templates and runs them with explicit guardrails — but every noun and verb in the surface vocabulary comes from a fixed, dual-canon fantasy lexicon: **Dungeons & Dragons** and **He Who Fights With Monsters (HWFWM)**.
+Mythos is an LLM operating system for reusable work frameworks, dressed as a Guild System. It is the same idea as any workflow-framework library — a filesystem workspace where an AI coding agent (Claude Code, Cursor, Codex, OpenCode, or any harness that can read a folder and follow structured instructions) loads reusable task templates and runs them with explicit guardrails — but its surface vocabulary uses a consistent tabletop-fantasy guild lexicon.
 
 That's not decoration for its own sake. A guild metaphor happens to describe this kind of system unusually well: a guildhall holds proven procedures (grimoires), members take on bounded jobs (quests) under a charter (a quest charter), someone checks the work before it counts (a trial), and members advance by demonstrated capability, not by claim (rank). The lexicon is a lens, never the mechanism — see [`docs/LEXICON.md`](docs/LEXICON.md) for the full design law on that point.
 

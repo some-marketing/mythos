@@ -41,7 +41,7 @@ function buildPrompt(opts, closeoutPath, route) {
     ? fs.readFileSync(opts.contractFile, 'utf8')
     : opts.task;
   return [
-    `You are a SPAWNED COORDINATOR session (repo: ${PROJECT_ROOT}).`,
+    `You are a SPAWNED COORDINATOR session in Mythos (repo: ${PROJECT_ROOT}).`,
     `Work in that repo. Advisory tier for this work: ${route.tier} (${route.justification}).`,
     '',
     '## Question / Work (bounded — do not expand scope)',

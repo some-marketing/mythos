@@ -64,7 +64,7 @@
           },
           "command_surface_path": {
             "type": "string",
-            "description": "Path on the remote host to the command surface (e.g., C:/Users/you/mythos/.claude/commands/). Only used when managed_commands_enabled is true."
+            "description": "Path on the remote host to the command surface (e.g., C:/<profile>/mythos/.claude/commands/). Only used when managed_commands_enabled is true."
           },
           "tags": {
             "type": "array",

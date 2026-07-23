@@ -37,20 +37,13 @@ function readHookPayload() {
   }
 }
 
-// Claude Code names each project's transcript directory after the absolute
-// cwd path with path separators (and underscores/dots) replaced by dashes.
-// Derive it from cwd instead of hardcoding one operator's path.
-function projectTranscriptDir(cwd = process.cwd()) {
-  return path.join(require('os').homedir(), '.claude', 'projects', cwd.replace(/[\/_.]/g, '-'));
-}
-
 function findSessionJsonl(payload) {
   // Prefer hook-provided transcript_path
   if (payload && payload.transcript_path && fs.existsSync(payload.transcript_path)) {
     return payload.transcript_path;
   }
   // Fall back: most recently modified JSONL under this project's claude session dir
-  const projectsDir = (payload && payload.cwd) ? projectTranscriptDir(payload.cwd) : projectTranscriptDir();
+  const projectsDir = '/Users/admin/.claude/projects/-Users-admin-Documents-GitHub-mythos';
   if (!fs.existsSync(projectsDir)) return null;
   const candidates = fs.readdirSync(projectsDir)
     .filter(f => f.endsWith('.jsonl'))

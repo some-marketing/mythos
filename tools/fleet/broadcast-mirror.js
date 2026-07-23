@@ -6,7 +6,7 @@ const { spawn } = require('child_process');
 
 function parseArgs(argv) {
   const args = {
-    nodes: 'example-gpu-host,example-workstation',
+    nodes: 'orwell,rupert',
     uri: '',
     host: 'macbook-pro',
     port: 8765,
@@ -43,7 +43,7 @@ Usage:
   node tools/fleet/broadcast-mirror.js [options]
 
 Options:
-  --nodes <csv>       Node hostnames/worker IDs to target. Default: example-gpu-host,example-workstation
+  --nodes <csv>       Node hostnames/worker IDs to target. Default: orwell,rupert
   --uri <url>         URI to open on each node. Default: http://<host>:<port>/_dev/outputs/mirrors/composite-truth-mirror-1.png
   --host <name>       Host used for the default URI. Default: macbook-pro
   --port <port>       Temporary static server port when --serve is used. Default: 8765
@@ -54,7 +54,7 @@ Options:
 
 Examples:
   node tools/fleet/broadcast-mirror.js --serve
-  node tools/fleet/broadcast-mirror.js --nodes example-gpu-host --uri file:///C:/Users/youruser/Pictures/composite-truth-mirror.png
+  node tools/fleet/broadcast-mirror.js --nodes orwell --uri file:///C:/Users/taylo/Pictures/composite-truth-mirror.png
 `.trim());
 }
 

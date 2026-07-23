@@ -29,7 +29,8 @@ function commandHash(command) {
 
 function redactPreview(command) {
   let preview = String(command || '').slice(0, 240);
-  preview = preview.replace(/\/Users\/[^/\s]+/g, '/Users/[redacted]');
+  const homeRoots = ['home', 'Users'].join('|');
+  preview = preview.replace(new RegExp('/(?:' + homeRoots + ')/[^/\\s]+', 'g'), '~/[redacted]');
   preview = preview.replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, '[redacted-email]');
   preview = preview.replace(/\b(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b/g, '[redacted-phone]');
   preview = preview.replace(/\b(?:token|secret|password|credential|apikey|api_key)=?[^\s&]+/gi, '[redacted-credential]');

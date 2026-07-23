@@ -1,5 +1,5 @@
 ---
-description: Cross-alias (HWFWM canon) for /charter-quest
+description: Compatibility cross-alias for /charter-quest
 allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, Task]
 ---
 

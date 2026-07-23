@@ -5,36 +5,14 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-// CascadeSpan/1.0 emission. The session close path is one of the enforcement
-// homes that emits the shared span shape; a crashed/TTL-expired session swept
-// below writes a lineage-carrying tombstone so no cascade is silently lost
-// (registry-as-coroner). trace-context.cjs is the identity source lineage is
-// CONSUMED from. All emission is fail-open (see emitCloseSpan's try/catch).
-//
-// This scaffold inlines a minimal local stand-in for the two functions this
-// originally depended on (a `kernel/cascade-span` lib building/persisting
-// CascadeSpan/1.0 records, and a debrief-close observation projection over
-// them) since that lib is a separate, not-yet-shipped scaffold in this tree.
-// Swap `cascadeSpan` and `observeExistingDebriefCloseSpan` below for the real
-// implementations once you have them — the call sites don't need to change.
-const cascadeSpan = {
-  fromSessionClose(fields) {
-    return { schema: 'CascadeSpan/1.0', ...fields };
-  },
-  writeSpan(span, { projectRoot }) {
-    const dir = path.join(projectRoot, '_dev', 'state', 'cascade-spans');
-    fs.mkdirSync(dir, { recursive: true });
-    fs.appendFileSync(path.join(dir, 'spans.jsonl'), JSON.stringify(span) + '\n');
-  }
-};
-function observeExistingDebriefCloseSpan(opts) {
-  // Minimal local stand-in: just append the observation, no cross-checking
-  // against a kernel-side debrief record (that projection isn't shipped here).
-  const logPath = opts.observationLogPath;
-  if (!logPath) return;
-  fs.mkdirSync(path.dirname(logPath), { recursive: true });
-  fs.appendFileSync(logPath, JSON.stringify({ observed_at: new Date().toISOString(), ...opts }) + '\n');
-}
+// CascadeSpan/1.0 emission (sovereign-core-harness P0). The session close path is
+// one of the two enforcement homes that must emit the shared span shape; a
+// crashed/TTL-expired session swept below writes a lineage-carrying tombstone so
+// no cascade is silently lost (registry-as-coroner). trace-context.cjs is the
+// owner's identity source we CONSUME lineage from. Both requires only pull in
+// fs/path/os/crypto/ajv transitively — safe at load; all emission is fail-open.
+const cascadeSpan = require('../../kernel/cascade-span/cascade-span.js');
+const { observeExistingDebriefCloseSpan } = require('../../kernel/cascade-span/debrief-close-span-projection.cjs');
 const { getTraceContext } = require('../../telemetry/dispatches/lib/trace-context.cjs');
 
 const PROJECT_ROOT = path.resolve(__dirname, '..', '..', '..');

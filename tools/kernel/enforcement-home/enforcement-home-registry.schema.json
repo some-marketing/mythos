@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mythos.local/schemas/enforcement-home-registry/1.0.json",
+  "title": "EnforcementHomeRegistry/1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "revision", "updated_at", "protocols"],
+  "properties": {
+    "schema": { "const": "EnforcementHomeRegistry/1.0" },
+    "revision": { "type": "integer", "minimum": 0 },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "protocols": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["debrief_before_closeout"],
+      "properties": {
+        "debrief_before_closeout": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["blocking_owner", "claude_hook", "native_fork", "reason"],
+          "properties": {
+            "blocking_owner": { "enum": ["claude_hook", "native_fork"] },
+            "claude_hook": { "$ref": "#/$defs/home" },
+            "native_fork": { "$ref": "#/$defs/home" },
+            "reason": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "home": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "health"],
+      "properties": {
+        "mode": { "enum": ["blocking", "report-only"] },
+        "health": { "enum": ["healthy", "degraded"] }
+      }
+    }
+  }
+}

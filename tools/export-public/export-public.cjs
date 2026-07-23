@@ -36,7 +36,7 @@
  * overwrite consent is the --force flag, never a prompt. --force is WHOLE-INVOCATION
  * consent: it authorizes overwriting every existing target in the selected batch, and
  * preflight prints exactly which targets that consent covers before any write. To
- * scope consent to one unit, combine --framework <id> with --force.
+ * scope consent to selected units, repeat --framework <id> with --force.
  */
 
 const fs = require('fs');
@@ -62,6 +62,14 @@ try { ({ appendReceipt } = require('../maintenance/lib/hygiene-lane-health.cjs')
 const TEXT_EXTENSIONS = new Set(['.md', '.json', '.yaml', '.yml', '.js', '.cjs', '.mjs', '.txt', '.html', '.css', '.sh', '.ps1', '.py', '.env', '.example']);
 
 function loadJson(p) { return JSON.parse(fs.readFileSync(p, 'utf8')); }
+
+function optionValues(args, option) {
+  const values = [];
+  for (let i = 0; i < args.length; i += 1) {
+    if (args[i] === option && args[i + 1] && !args[i + 1].startsWith('--')) values.push(args[i + 1]);
+  }
+  return values;
+}
 
 // R4 regression: a small, deliberately minimal allowlist of well-known
 // EXTENSIONLESS text files. Before the R3-1 shared-primitive refactor, the
@@ -946,7 +954,7 @@ function main() {
   const force = args.includes('--force');
   const allowDirty = args.includes('--allow-dirty');
   const json = args.includes('--json');
-  const fwArg = args.includes('--framework') ? args[args.indexOf('--framework') + 1] : null;
+  const fwArgs = optionValues(args, '--framework');
   const mapArg = args.includes('--map') ? args[args.indexOf('--map') + 1] : null;
   const denylistArg = args.includes('--denylist') ? args[args.indexOf('--denylist') + 1] : null;
 
@@ -965,7 +973,7 @@ function main() {
   // private repo): basename of the map file, extension stripped.
   const mapId = path.basename(mapPath).replace(/\.json$/, '');
   const targetRepo = exportMap.target_repo.replace(/^~/, os.homedir());
-  const ids = fwArg ? [fwArg] : [...Object.keys(exportMap.frameworks), ...Object.keys(exportMap.units || {})];
+  const ids = fwArgs.length ? fwArgs : [...Object.keys(exportMap.frameworks), ...Object.keys(exportMap.units || {})];
 
   // stages 1-5: stage every unit (no target writes)
   const results = [];
@@ -1025,7 +1033,7 @@ function main() {
     }
   }
   if (json) console.log(JSON.stringify({ apply, applied, results: results.map(({ staging, ...r }) => r) }, null, 2));
-  process.exit(failed ? 1 : 0);
+  process.exitCode = failed ? 1 : 0;
 }
 
 if (require.main === module) main();
@@ -1034,4 +1042,5 @@ module.exports = {
   exportFramework, preflightApply, applyBatch, globToRegex, walk, assertContained, resolveTargetPath,
   REQUIRED_MANIFEST_KEYS, isTextFile, decodeTextBuffer, scanBinaryForForbidden, inspectFile,
   EXTENSIONLESS_TEXT_BASENAMES,
+  optionValues,
 };

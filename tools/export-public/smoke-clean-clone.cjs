@@ -11,7 +11,7 @@
  *   - framework units (validate !== 'none') carry a manifest.json with required keys;
  *   - no denylist hits (config/denylist.json — in the public repo this is the example
  *     list; run from the private repo for the authoritative scan);
- *   - no absolute /Users/... paths in text files.
+ *   - no absolute private home-directory paths in text files.
  *
  * Usage: node tools/export-public/smoke-clean-clone.cjs [--repo <path>] [--map <path>] [--denylist <path>] [--json]
  *   --repo defaults to the map's target_repo. The repo is copied to a temp dir
@@ -30,7 +30,8 @@ const { scanForDenylist, REQUIRED_MANIFEST_KEYS } = require('./export-public.cjs
 
 const CONFIG_DIR = path.join(__dirname, 'config');
 const TEXT_EXTENSIONS = new Set(['.md', '.json', '.yaml', '.yml', '.js', '.cjs', '.mjs', '.txt', '.html', '.css', '.sh', '.py', '.env', '.example']);
-const ABS_PATH_RE = /\/Users\/[A-Za-z0-9_.-]+\//;
+const HOME_ROOTS = ['home', 'Users'].join('|');
+const ABS_PATH_RE = new RegExp('/(?:' + HOME_ROOTS + ')/[A-Za-z0-9_.-]+/');
 
 function loadJson(p) { return JSON.parse(fs.readFileSync(p, 'utf8')); }
 function isTextFile(p) { return TEXT_EXTENSIONS.has(path.extname(p).toLowerCase()) || path.basename(p).startsWith('.env'); }

@@ -1,0 +1,24 @@
+{
+  "event_type": "bridge-return",
+  "scope_tier": "project",
+  "declared_intent": {
+    "workstream_scope": "control-loop-lobe",
+    "owned_artifacts": [],
+    "forbidden_artifacts": [],
+    "stated_goal": "bridge_dispatch_emits_tagged_blocks"
+  },
+  "observed_write_set": [],
+  "observed_tool_outputs": [],
+  "session_present_snapshot": {
+    "schema": "SessionPresent/1.0",
+    "scope_tier": "project",
+    "writer_attestation": {
+      "writer_harness_id": "claude-code:inject-grounding-card.cjs",
+      "signature_alg": "sha256-harness-concat-v1",
+      "signature": "deadbeef",
+      "signed_at": "2026-04-23T00:00:00Z"
+    }
+  },
+  "bridge_prompt_body": "<critical>top-down intent</critical>\n<context>bottom-up evidence</context>",
+  "card_hash_expected": "dummy-hash"
+}

@@ -1,0 +1,28 @@
+{
+  "unit_id": "loop-unit-kernel-edit-0003",
+  "grade_class": "acceptance",
+  "produced_by": {
+    "actor": "claude-opus",
+    "harness": "claude-code",
+    "model_family": "claude"
+  },
+  "validated_by": [
+    {
+      "actor": "claude-sonnet",
+      "harness": "claude-code-worker",
+      "model_family": "claude"
+    },
+    {
+      "actor": "claude-haiku",
+      "harness": "claude-code-recon",
+      "model_family": "claude"
+    }
+  ],
+  "frozen_baseline_sha": "1234abcd5678ef901234abcd5678ef901234abcd",
+  "classifier_id": "kernel-seam-regression-classifier-v2",
+  "convergence_threshold": 0.9,
+  "verdict": "accept",
+  "roster_distinct_family": false,
+  "produced_at": "2026-07-07T00:15:00Z",
+  "classifier_score": 0.93
+}

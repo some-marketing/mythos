@@ -15,6 +15,8 @@
 // enables deliberate exceptions without silently degrading the gate.
 // The override MUST be explicit — passing an ackId suppresses only the named pattern.
 
+const HOME_ROOTS = ['home', 'Users'].join('|');
+
 const PATTERNS = [
   // ── Hard blockers ──────────────────────────────────────────────────────────
 
@@ -49,8 +51,8 @@ const PATTERNS = [
   {
     id: 'repo-abs-path',
     label: 'Repo / absolute path',
-    // Catches /Users/..., tools/mcp/..., clients/..., _dev/...
-    regex: /\/Users\/[^\s]+|tools\/mcp\/|clients\/[A-Z]{2,8}\/|_dev\//,
+    // Catches platform home paths, tools/mcp/..., clients/..., _dev/...
+    regex: new RegExp('/(?:' + HOME_ROOTS + ')/[^\\s]+|tools/mcp/|clients/[A-Z]{2,8}/|_dev/'),
     level: 'block',
     description: 'Absolute or repo-relative file path; internal only — remove before sending'
   },

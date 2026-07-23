@@ -2,7 +2,7 @@
   "name": "mythos",
   "private": true,
   "version": "1.0.0",
-  "description": "An adventurer's guild for AI coding agents — reusable, guardrailed grimoires (workflow frameworks) dressed in a dual D&D/HWFWM lexicon.",
+  "description": "An adventurer's guild for AI coding agents — reusable, guardrailed grimoires (workflow frameworks) in a tabletop-fantasy lexicon.",
   "repository": {
     "type": "git",
     "url": "https://github.com/some-marketing/mythos.git"

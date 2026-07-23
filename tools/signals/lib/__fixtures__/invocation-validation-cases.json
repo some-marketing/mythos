@@ -1,0 +1,14 @@
+[
+  {"id":"repo","input":"/mythos-status repo","expected_state":null,"expected_resolution":"resolved","expected_scope":"repo"},
+  {"id":"pipeline","input":"/review-progress pipeline","expected_state":null,"expected_resolution":"resolved","expected_scope":"pipeline"},
+  {"id":"active-workstreams","input":"/review-active-workstreams active-workstreams","expected_state":null,"expected_resolution":"resolved","expected_scope":"active-workstreams"},
+  {"id":"named-scope","input":"/review-progress command-surface","expected_state":null,"expected_resolution":"resolved","expected_scope":"named-scope"},
+  {"id":"contained-path","input":"/review-progress tools/commands","expected_state":null,"expected_resolution":"resolved","expected_scope":"path"},
+  {"id":"path-escape","input":"/review-progress ../outside","expected_state":"invalid_scope","expected_scope":"path"},
+  {"id":"unknown-command","input":"/not-a-real-command something","expected_state":"unsupported","expected_resolved_prefix":"/route "},
+  {"id":"plain-intent","input":"figure out the next safe step","expected_state":"unsupported","expected_resolved_prefix":"/route "},
+  {"id":"already-route","input":"/route \"unknown\"","expected_state":"blocked"},
+  {"id":"already-help","input":"/help-me-route","expected_state":"blocked"},
+  {"id":"authority-failure","input":"/mythos-status repo","authority_allowed":false,"expected_state":"blocked","expected_resolved":""},
+  {"id":"safety-failure","input":"/mythos-status repo","safety_allowed":false,"expected_state":"blocked","expected_resolved":""}
+]

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "handoff-authority-assessment.schema.json",
+  "title": "HandoffAuthorityAssessment/1.0",
+  "type": "object",
+  "required": ["schema", "state", "reason_codes", "workstream_scope", "original_recommendation", "replacement_command", "requires_human_review", "recovery_route", "comparisons", "evidence"],
+  "properties": {
+    "schema": { "const": "HandoffAuthorityAssessment/1.0" },
+    "state": { "enum": ["consistent", "stale", "cross_scope", "conflict", "review_required"] },
+    "reason_codes": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+    "workstream_scope": { "type": "string" },
+    "original_recommendation": { "type": "string" },
+    "replacement_command": { "type": "null" },
+    "requires_human_review": { "type": "boolean" },
+    "recovery_route": { "type": ["string", "null"] },
+    "comparisons": {
+      "type": "object",
+      "required": ["workstream_scope", "branch", "head_commit", "plan_sha256", "review_sha256", "signal_id", "signal_content_sha256", "content_sha256"],
+      "properties": {
+        "workstream_scope": { "type": "boolean" }, "branch": { "type": "boolean" }, "head_commit": { "type": "boolean" },
+        "plan_sha256": { "type": "boolean" }, "review_sha256": { "type": "boolean" }, "signal_id": { "type": "boolean" },
+        "signal_content_sha256": { "type": "boolean" }, "content_sha256": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["handoff", "current"],
+      "properties": {
+        "handoff": { "$ref": "#/$defs/identity" },
+        "current": { "$ref": "#/$defs/identity" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "identity": {
+      "type": "object",
+      "required": ["workstream_scope", "branch", "head_commit", "plan_sha256", "review_sha256", "signal_id", "signal_content_sha256", "content_sha256"],
+      "properties": {
+        "workstream_scope": { "type": "string" },
+        "branch": { "type": "string" },
+        "head_commit": { "type": "string", "pattern": "^(|[a-f0-9]{7,64})$" },
+        "plan_sha256": { "type": "string", "pattern": "^(|sha256:[a-f0-9]{64})$" },
+        "review_sha256": { "type": "string", "pattern": "^(|sha256:[a-f0-9]{64})$" },
+        "signal_id": { "type": "string" },
+        "signal_content_sha256": { "type": "string", "pattern": "^(|sha256:[a-f0-9]{64})$" },
+        "content_sha256": { "type": "string", "pattern": "^(|sha256:[a-f0-9]{64})$" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

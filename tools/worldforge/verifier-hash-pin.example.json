@@ -1,0 +1,41 @@
+{
+  "manifest_version": "1.0.0",
+  "layer": "Layer-1",
+  "loop_editable": false,
+  "example": true,
+  "example_note": "WORKED EXAMPLE of the hash-pin + required-sections defense. Safe, reversible, NOT wired into any live gate or activation chain. Records real on-disk sha256 values for the two tools this package ships (so checkPinned() verifies against reality), but nothing consumes this manifest as an arming gate yet. A deployment with its own readiness verifier should build its own manifest of the same shape.",
+  "created": "2026-07-07",
+  "hash_algorithm": "sha256",
+  "fail_closed": true,
+  "policy": {
+    "hash_mismatch": "REFUSED — a verifier whose on-disk sha256 != pinned sha256 is treated as drifted/tampered; its output MUST NOT be consumed by any gate.",
+    "unknown_tool": "REFUSED — a safety-critical tool not present in pinned_tools is not trusted (fail-closed, never trust-by-default).",
+    "missing_section": "FAIL — a required section absent from the verifier report is a silently-dropped safety check, NEVER 'not applicable'.",
+    "short_section": "FAIL — a required section present but with fewer than min_checks emitted is under-evaluated (partial data)."
+  },
+  "pinned_tools": {
+    "closure-hash.js": {
+      "role": "closure-hash-computer",
+      "safety_critical": true,
+      "sha256": "f1643d0c2a61e10ab41f0326414222c66fc0fc3bb8c8a32ca7029d4c8ce13405",
+      "note": "Computes the closure hash an approval binds to. On hash drift, treat any evidence produced with it as untrusted."
+    },
+    "approval-sign.js": {
+      "role": "approval-signer-and-verifier",
+      "safety_critical": true,
+      "sha256": "b5429efedc07331338180771727e5cb35d21a40b5a9ce0aeed9346f1a7155fe6",
+      "note": "Signs and verifies operator approval records. Pinned so approval-minting/verification logic cannot drift without detection."
+    }
+  },
+  "required_sections": {
+    "verifier": "your-project's-readiness-verifier.js",
+    "report_shape": "output.checks[] where each check.id is namespaced '<section>:<name>'; section = substring before the first ':'",
+    "description": "Worked example of the sections a readiness verifier for a world-spec pipeline MUST emit at least min_checks checks for. Adapt this list to your own verifier's addCheck() id namespaces. Absence of any of these in a produced report means the check family was dropped — treated as FAIL, never as not-applicable.",
+    "sections": [
+      { "section": "syntax", "min_checks": 1, "rationale": "Tool syntax/integrity checks — the verifier must confirm the gate tools parse." },
+      { "section": "exists", "min_checks": 1, "rationale": "Required-artifact existence checks — missing artifacts must surface, not be skipped." },
+      { "section": "approved-fixture", "min_checks": 2, "rationale": "Approval-fixture checks (approval-check + preflight) — the approval binding must be exercised." },
+      { "section": "manifest", "min_checks": 1, "rationale": "Run-manifest integrity check — approved vs original manifest state." }
+    ]
+  }
+}

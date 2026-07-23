@@ -1,0 +1,3692 @@
+{
+ "description": "Frozen T2 soak corpus: every observe-only would-block event recorded by pretool-write-boundary-gate.cjs during its observe-only soak. Replayed by pretool-write-boundary-gate.soak-replay.test.cjs to prove enforcing-mode classification is identical to observe-mode history (zero classification change).",
+ "plan_ref": "_dev/reports/analysis/task-plans/mech-rebase-tranche-1__plan.json (T2)",
+ "source_dir": "/Users/admin/dev/Mythos-recovered/_dev/state/write-boundary-gate",
+ "extraction_rule": "all wb_log entries with mode=='observe-only' across all session state files",
+ "extracted_at": "2026-07-09T20:41:01Z",
+ "event_count": 408,
+ "reason_counts": {
+  "foreign-code": 408
+ },
+ "tool_counts": {
+  "bash": 249,
+  "write": 86,
+  "edit": 73
+ },
+ "source_file_count": 42,
+ "note_bash_events": "wb_log records the RESOLVED target, not the original bash command; bash events are replayed as write-tool calls against the resolved target (same classification core).",
+ "events": [
+  {
+   "source_file": "00f5f779-638a-41f1-b157-c0c9828b297d.json",
+   "ts": "2026-07-06T03:26:57.801Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "00f5f779-638a-41f1-b157-c0c9828b297d.json",
+   "ts": "2026-07-06T03:43:55.562Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_ech-ad-draft-compositing-path.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "00f5f779-638a-41f1-b157-c0c9828b297d.json",
+   "ts": "2026-07-06T03:43:57.797Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "00f5f779-638a-41f1-b157-c0c9828b297d.json",
+   "ts": "2026-07-06T13:21:02.460Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_ech-ad-draft-compositing-path.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "00f5f779-638a-41f1-b157-c0c9828b297d.json",
+   "ts": "2026-07-06T14:14:01.379Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_delesign-bundle-per-dealership-by-asset-type.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "00f5f779-638a-41f1-b157-c0c9828b297d.json",
+   "ts": "2026-07-06T14:28:23.724Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_ech-ad-draft-compositing-path.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "00f5f779-638a-41f1-b157-c0c9828b297d.json",
+   "ts": "2026-07-06T14:29:16.352Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "00f5f779-638a-41f1-b157-c0c9828b297d.json",
+   "ts": "2026-07-06T14:30:13.426Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "00f5f779-638a-41f1-b157-c0c9828b297d.json",
+   "ts": "2026-07-06T14:59:12.869Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "00f5f779-638a-41f1-b157-c0c9828b297d.json",
+   "ts": "2026-07-06T15:02:46.783Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "00f5f779-638a-41f1-b157-c0c9828b297d.json",
+   "ts": "2026-07-06T15:05:26.221Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "00f5f779-638a-41f1-b157-c0c9828b297d.json",
+   "ts": "2026-07-06T15:14:28.639Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "00f5f779-638a-41f1-b157-c0c9828b297d.json",
+   "ts": "2026-07-06T15:16:55.393Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "00f5f779-638a-41f1-b157-c0c9828b297d.json",
+   "ts": "2026-07-06T15:19:16.463Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "00f5f779-638a-41f1-b157-c0c9828b297d.json",
+   "ts": "2026-07-06T15:19:26.089Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "00f5f779-638a-41f1-b157-c0c9828b297d.json",
+   "ts": "2026-07-06T15:27:34.271Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_ford-dealer-toolbox-portal.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "00f5f779-638a-41f1-b157-c0c9828b297d.json",
+   "ts": "2026-07-06T15:28:00.717Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "00f5f779-638a-41f1-b157-c0c9828b297d.json",
+   "ts": "2026-07-06T15:30:31.044Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_ford-dealer-toolbox-portal.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "00f5f779-638a-41f1-b157-c0c9828b297d.json",
+   "ts": "2026-07-06T15:39:15.995Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "00f5f779-638a-41f1-b157-c0c9828b297d.json",
+   "ts": "2026-07-06T15:39:28.313Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "017eb1c5-c9b3-42b7-9f11-cf471ab13c37.json",
+   "ts": "2026-06-19T15:44:17.749Z",
+   "reason": "foreign-code",
+   "target": "/",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "017eb1c5-c9b3-42b7-9f11-cf471ab13c37.json",
+   "ts": "2026-06-19T15:56:41.345Z",
+   "reason": "foreign-code",
+   "target": "/submit",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "017eb1c5-c9b3-42b7-9f11-cf471ab13c37.json",
+   "ts": "2026-06-19T16:03:55.057Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "017eb1c5-c9b3-42b7-9f11-cf471ab13c37.json",
+   "ts": "2026-06-19T16:10:38.149Z",
+   "reason": "foreign-code",
+   "target": "/apply/)",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "017eb1c5-c9b3-42b7-9f11-cf471ab13c37.json",
+   "ts": "2026-06-19T17:24:19.601Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "017eb1c5-c9b3-42b7-9f11-cf471ab13c37.json",
+   "ts": "2026-06-19T17:39:59.286Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_coordinator-never-executes-on-main-chain.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "017eb1c5-c9b3-42b7-9f11-cf471ab13c37.json",
+   "ts": "2026-06-19T17:40:31.885Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "039e0b1b-ec52-4a92-891c-834724733421.json",
+   "ts": "2026-06-24T06:09:07.368Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_rupert-storage-layout-and-ollama-service.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "039e0b1b-ec52-4a92-891c-834724733421.json",
+   "ts": "2026-06-24T06:09:14.373Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "039e0b1b-ec52-4a92-891c-834724733421.json",
+   "ts": "2026-06-24T07:01:37.070Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "03a3d602-944d-4219-9db0-411e3b9b967f.json",
+   "ts": "2026-06-29T17:23:09.390Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "03a3d602-944d-4219-9db0-411e3b9b967f.json",
+   "ts": "2026-06-29T18:49:28.391Z",
+   "reason": "foreign-code",
+   "target": "/approval",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "03a3d602-944d-4219-9db0-411e3b9b967f.json",
+   "ts": "2026-06-29T18:49:41.172Z",
+   "reason": "foreign-code",
+   "target": "/approval",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "03a3d602-944d-4219-9db0-411e3b9b967f.json",
+   "ts": "2026-06-29T21:25:45.105Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_lean-autonomous-for-non-major-non-kernel.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "03a3d602-944d-4219-9db0-411e3b9b967f.json",
+   "ts": "2026-06-30T06:59:01.031Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_backgrounded-codex-dispatch-no-clean-notify.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "03a3d602-944d-4219-9db0-411e3b9b967f.json",
+   "ts": "2026-06-30T06:59:24.010Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "04e9d36d-3e18-490c-a814-4341e7b741a3.json",
+   "ts": "2026-07-01T04:30:21.275Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_dont-retain-failed-test-logs.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "04e9d36d-3e18-490c-a814-4341e7b741a3.json",
+   "ts": "2026-07-01T04:30:26.472Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "04e9d36d-3e18-490c-a814-4341e7b741a3.json",
+   "ts": "2026-07-01T05:15:25.478Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_fluent-echo-chamber-counts-mask-content.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "04e9d36d-3e18-490c-a814-4341e7b741a3.json",
+   "ts": "2026-07-01T05:15:30.405Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "096aad94-2aed-4391-8f55-3091be2e8e74.json",
+   "ts": "2026-06-27T19:53:45.443Z",
+   "reason": "foreign-code",
+   "target": "/plan-task.",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "096aad94-2aed-4391-8f55-3091be2e8e74.json",
+   "ts": "2026-06-27T20:27:02.430Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0a6c999b-4a08-47ba-ab15-02b4b084a34d.json",
+   "ts": "2026-06-30T13:54:41.249Z",
+   "reason": "foreign-code",
+   "target": "/",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0a6c999b-4a08-47ba-ab15-02b4b084a34d.json",
+   "ts": "2026-06-30T14:27:56.473Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_durable-playwright-google-session.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0a6c999b-4a08-47ba-ab15-02b4b084a34d.json",
+   "ts": "2026-06-30T14:28:13.713Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_google-sheets-robust-print-method.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0a6c999b-4a08-47ba-ab15-02b4b084a34d.json",
+   "ts": "2026-06-30T14:46:20.931Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0a6c999b-4a08-47ba-ab15-02b4b084a34d.json",
+   "ts": "2026-06-30T18:15:46.093Z",
+   "reason": "foreign-code",
+   "target": "/approve",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0a6c999b-4a08-47ba-ab15-02b4b084a34d.json",
+   "ts": "2026-06-30T18:17:04.500Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0a6c999b-4a08-47ba-ab15-02b4b084a34d.json",
+   "ts": "2026-06-30T18:33:29.932Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/project_sm-os-identity-stack-sam-sovereign-mind.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-07T13:15:07.965Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-07T13:52:40.942Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-07T13:58:53.840Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_fable5-persists-on-max-plan.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-07T13:59:07.494Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-07T14:46:41.163Z",
+   "reason": "foreign-code",
+   "target": "/convene",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-07T16:03:36.885Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-08T17:08:19.428Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-08T20:23:00.949Z",
+   "reason": "foreign-code",
+   "target": "/",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-08T21:20:53.979Z",
+   "reason": "foreign-code",
+   "target": "/version",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-09T12:58:58.912Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-09T13:21:50.828Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_sdag-portal-key-auth-host-access.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-09T13:24:01.635Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-09T13:26:36.675Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-09T13:41:54.317Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_month-start-prioritize-dealership-ads.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-09T13:54:53.726Z",
+   "reason": "foreign-code",
+   "target": "/",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-09T14:01:27.420Z",
+   "reason": "foreign-code",
+   "target": "/",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-09T14:58:02.439Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_dealership-meta-special-ad-category-declared.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-09T14:58:11.577Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-09T16:06:55.972Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_gemini-contextual-sweep-and-visual-review.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-09T16:07:02.152Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-09T16:14:43.397Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_ad-review-discipline-dl-convene-perplexity.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-09T16:14:50.769Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-09T16:16:33.221Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_ad-review-discipline-dl-convene-perplexity.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-09T19:20:14.641Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-09T19:22:04.215Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-09T20:31:45.105Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/project_dealer-driven-ad-pipeline-envelope-gate.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-09T20:32:09.199Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-09T20:35:02.375Z",
+   "reason": "foreign-code",
+   "target": "/{CLIENT_CODE}/):",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0b88e0c6-4158-4010-91d1-b723074c78f9.json",
+   "ts": "2026-07-09T20:36:37.436Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/project_dealer-driven-ad-pipeline-envelope-gate.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0bf86eef-01dd-4dfb-897e-7fd4b1dcc82e.json",
+   "ts": "2026-06-23T15:57:29.596Z",
+   "reason": "foreign-code",
+   "target": "/",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0bf86eef-01dd-4dfb-897e-7fd4b1dcc82e.json",
+   "ts": "2026-06-24T16:07:25.574Z",
+   "reason": "foreign-code",
+   "target": "/g,",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0bf86eef-01dd-4dfb-897e-7fd4b1dcc82e.json",
+   "ts": "2026-06-24T17:53:09.863Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0bf86eef-01dd-4dfb-897e-7fd4b1dcc82e.json",
+   "ts": "2026-06-24T18:18:58.945Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0bf86eef-01dd-4dfb-897e-7fd4b1dcc82e.json",
+   "ts": "2026-06-24T18:42:16.738Z",
+   "reason": "foreign-code",
+   "target": "/",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0bf86eef-01dd-4dfb-897e-7fd4b1dcc82e.json",
+   "ts": "2026-06-24T18:42:24.332Z",
+   "reason": "foreign-code",
+   "target": "/validate",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0bf86eef-01dd-4dfb-897e-7fd4b1dcc82e.json",
+   "ts": "2026-06-24T18:46:03.073Z",
+   "reason": "foreign-code",
+   "target": "/debrief",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0bf86eef-01dd-4dfb-897e-7fd4b1dcc82e.json",
+   "ts": "2026-06-24T18:47:02.322Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0bf86eef-01dd-4dfb-897e-7fd4b1dcc82e.json",
+   "ts": "2026-06-24T20:18:32.231Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0bf86eef-01dd-4dfb-897e-7fd4b1dcc82e.json",
+   "ts": "2026-06-24T20:19:07.824Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0c40671e-e8d3-4bb0-a169-0a3f37889c45.json",
+   "ts": "2026-07-02T00:59:51.700Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0c40671e-e8d3-4bb0-a169-0a3f37889c45.json",
+   "ts": "2026-07-02T01:16:49.412Z",
+   "reason": "foreign-code",
+   "target": "/",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0c40671e-e8d3-4bb0-a169-0a3f37889c45.json",
+   "ts": "2026-07-02T01:26:05.147Z",
+   "reason": "foreign-code",
+   "target": "/mythos-status",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0c40671e-e8d3-4bb0-a169-0a3f37889c45.json",
+   "ts": "2026-07-02T01:56:39.311Z",
+   "reason": "foreign-code",
+   "target": "/",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0c40671e-e8d3-4bb0-a169-0a3f37889c45.json",
+   "ts": "2026-07-02T02:57:01.123Z",
+   "reason": "foreign-code",
+   "target": "/",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0c40671e-e8d3-4bb0-a169-0a3f37889c45.json",
+   "ts": "2026-07-02T03:19:39.913Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_codex-beholden-to-gemini-insights.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0c40671e-e8d3-4bb0-a169-0a3f37889c45.json",
+   "ts": "2026-07-02T03:19:48.391Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0c40671e-e8d3-4bb0-a169-0a3f37889c45.json",
+   "ts": "2026-07-02T12:46:54.599Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/Downloads/large-learning-models",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0c40671e-e8d3-4bb0-a169-0a3f37889c45.json",
+   "ts": "2026-07-02T13:23:53.597Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0c40671e-e8d3-4bb0-a169-0a3f37889c45.json",
+   "ts": "2026-07-02T13:25:17.868Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0c40671e-e8d3-4bb0-a169-0a3f37889c45.json",
+   "ts": "2026-07-02T13:28:15.853Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/project_learning-language-models-public-release.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0c40671e-e8d3-4bb0-a169-0a3f37889c45.json",
+   "ts": "2026-07-02T13:28:30.093Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0c40671e-e8d3-4bb0-a169-0a3f37889c45.json",
+   "ts": "2026-07-02T13:39:28.506Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/Downloads/learning-language-models",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0d0d5091-bc48-41da-b37b-d097199fbe6a.json",
+   "ts": "2026-06-22T21:15:26.277Z",
+   "reason": "foreign-code",
+   "target": "/Volumes/BIOS/bootstrap-kit/bootstrap-syme.ps1",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0d0d5091-bc48-41da-b37b-d097199fbe6a.json",
+   "ts": "2026-06-22T22:02:02.144Z",
+   "reason": "foreign-code",
+   "target": "/Volumes/BIOS/START-HERE_syme-setup.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0d0d5091-bc48-41da-b37b-d097199fbe6a.json",
+   "ts": "2026-06-22T22:15:31.412Z",
+   "reason": "foreign-code",
+   "target": "/Volumes/BIOS/bootstrap-kit/setup-syme.ps1",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0d0d5091-bc48-41da-b37b-d097199fbe6a.json",
+   "ts": "2026-06-22T22:16:32.118Z",
+   "reason": "foreign-code",
+   "target": "/Volumes/BIOS/START-HERE_syme-setup.md",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0d0d5091-bc48-41da-b37b-d097199fbe6a.json",
+   "ts": "2026-06-23T00:01:16.248Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_check-repo-updates-before-new-systems.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0d0d5091-bc48-41da-b37b-d097199fbe6a.json",
+   "ts": "2026-06-23T00:01:27.850Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0d0d5091-bc48-41da-b37b-d097199fbe6a.json",
+   "ts": "2026-06-23T00:04:18.980Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0d0d5091-bc48-41da-b37b-d097199fbe6a.json",
+   "ts": "2026-06-23T00:06:49.326Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0d0d5091-bc48-41da-b37b-d097199fbe6a.json",
+   "ts": "2026-06-23T00:09:14.393Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0d0d5091-bc48-41da-b37b-d097199fbe6a.json",
+   "ts": "2026-06-23T00:09:42.840Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0d0d5091-bc48-41da-b37b-d097199fbe6a.json",
+   "ts": "2026-06-23T00:11:58.974Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0d0d5091-bc48-41da-b37b-d097199fbe6a.json",
+   "ts": "2026-06-23T00:13:21.123Z",
+   "reason": "foreign-code",
+   "target": "/",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0d0d5091-bc48-41da-b37b-d097199fbe6a.json",
+   "ts": "2026-06-23T01:42:02.636Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0d0d5091-bc48-41da-b37b-d097199fbe6a.json",
+   "ts": "2026-06-23T02:29:38.121Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_remote-ssh-node-kerneling-playbook.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0d0d5091-bc48-41da-b37b-d097199fbe6a.json",
+   "ts": "2026-06-23T02:29:48.269Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0d0d5091-bc48-41da-b37b-d097199fbe6a.json",
+   "ts": "2026-06-24T15:42:05.536Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0de0e430-8246-4384-b25f-d893c3b84aa4.json",
+   "ts": "2026-06-23T15:48:47.789Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0de0e430-8246-4384-b25f-d893c3b84aa4.json",
+   "ts": "2026-06-23T15:49:43.314Z",
+   "reason": "foreign-code",
+   "target": "/plan",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0de0e430-8246-4384-b25f-d893c3b84aa4.json",
+   "ts": "2026-06-24T15:36:45.074Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0de0e430-8246-4384-b25f-d893c3b84aa4.json",
+   "ts": "2026-06-24T16:11:24.719Z",
+   "reason": "foreign-code",
+   "target": "/repair/.test(k)).forEach(k=",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0de0e430-8246-4384-b25f-d893c3b84aa4.json",
+   "ts": "2026-06-24T16:21:07.947Z",
+   "reason": "foreign-code",
+   "target": "/review",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0de0e430-8246-4384-b25f-d893c3b84aa4.json",
+   "ts": "2026-06-24T19:27:15.051Z",
+   "reason": "foreign-code",
+   "target": "/",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0de0e430-8246-4384-b25f-d893c3b84aa4.json",
+   "ts": "2026-06-24T19:30:37.604Z",
+   "reason": "foreign-code",
+   "target": "/govern",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0de0e430-8246-4384-b25f-d893c3b84aa4.json",
+   "ts": "2026-06-24T19:39:06.479Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/amend-overlay-vs-repair-authority.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0de0e430-8246-4384-b25f-d893c3b84aa4.json",
+   "ts": "2026-06-24T19:39:24.560Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0de0e430-8246-4384-b25f-d893c3b84aa4.json",
+   "ts": "2026-06-24T20:07:20.065Z",
+   "reason": "foreign-code",
+   "target": "/signal",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0de0e430-8246-4384-b25f-d893c3b84aa4.json",
+   "ts": "2026-06-24T20:08:17.697Z",
+   "reason": "foreign-code",
+   "target": "/repair-plan",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0de0e430-8246-4384-b25f-d893c3b84aa4.json",
+   "ts": "2026-06-24T20:19:00.482Z",
+   "reason": "foreign-code",
+   "target": "/remember?",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0de0e430-8246-4384-b25f-d893c3b84aa4.json",
+   "ts": "2026-06-24T20:46:27.180Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_op-cli-not-authed-for-claude-shells.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0de0e430-8246-4384-b25f-d893c3b84aa4.json",
+   "ts": "2026-06-24T20:46:39.552Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_macos-permission-durability-mechanics.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0de0e430-8246-4384-b25f-d893c3b84aa4.json",
+   "ts": "2026-06-24T20:46:51.510Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_dont-over-ceremony-low-value-work.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "0de0e430-8246-4384-b25f-d893c3b84aa4.json",
+   "ts": "2026-06-24T20:47:09.802Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "144aefd6-1d3c-4537-b31d-331c2e6736dd.json",
+   "ts": "2026-06-28T07:06:54.147Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "144aefd6-1d3c-4537-b31d-331c2e6736dd.json",
+   "ts": "2026-06-28T07:08:29.205Z",
+   "reason": "foreign-code",
+   "target": "/new-session)",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "144aefd6-1d3c-4537-b31d-331c2e6736dd.json",
+   "ts": "2026-06-28T08:32:49.418Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "144aefd6-1d3c-4537-b31d-331c2e6736dd.json",
+   "ts": "2026-06-28T08:33:40.397Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_vault-and-smart-env-are-derived-mirrors.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "144aefd6-1d3c-4537-b31d-331c2e6736dd.json",
+   "ts": "2026-06-28T08:34:29.145Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "144aefd6-1d3c-4537-b31d-331c2e6736dd.json",
+   "ts": "2026-06-28T09:04:27.520Z",
+   "reason": "foreign-code",
+   "target": "/",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "144aefd6-1d3c-4537-b31d-331c2e6736dd.json",
+   "ts": "2026-06-28T20:49:02.201Z",
+   "reason": "foreign-code",
+   "target": "/write_log.json)",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "144aefd6-1d3c-4537-b31d-331c2e6736dd.json",
+   "ts": "2026-06-28T20:56:06.902Z",
+   "reason": "foreign-code",
+   "target": "/write_log.json)",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "144aefd6-1d3c-4537-b31d-331c2e6736dd.json",
+   "ts": "2026-06-28T23:01:13.710Z",
+   "reason": "foreign-code",
+   "target": "/usr/local/bin/node",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "144aefd6-1d3c-4537-b31d-331c2e6736dd.json",
+   "ts": "2026-06-28T23:22:26.153Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "144aefd6-1d3c-4537-b31d-331c2e6736dd.json",
+   "ts": "2026-06-28T23:37:41.209Z",
+   "reason": "foreign-code",
+   "target": "/token/i.test(k)).join(','))",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "17557457-1d51-4b3b-9e1c-45df1550d65b.json",
+   "ts": "2026-07-06T16:54:03.321Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "17557457-1d51-4b3b-9e1c-45df1550d65b.json",
+   "ts": "2026-07-06T16:55:01.493Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "17557457-1d51-4b3b-9e1c-45df1550d65b.json",
+   "ts": "2026-07-06T16:57:01.518Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "1e86bb48-0e3c-4f4c-9d72-88618f035a22.json",
+   "ts": "2026-07-09T19:17:50.449Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_backgrounded-codex-dispatch-no-clean-notify.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "1e86bb48-0e3c-4f4c-9d72-88618f035a22.json",
+   "ts": "2026-07-09T19:38:35.529Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_op-cli-not-authed-for-claude-shells.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "1e86bb48-0e3c-4f4c-9d72-88618f035a22.json",
+   "ts": "2026-07-09T19:38:47.172Z",
+   "reason": "foreign-code",
+   "target": "/mainten",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "207fa98b-f65d-4eb3-8ee5-aae525d6cfa2.json",
+   "ts": "2026-06-28T05:17:12.568Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_learn-from-mentors-make-it-our-own.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "207fa98b-f65d-4eb3-8ee5-aae525d6cfa2.json",
+   "ts": "2026-06-28T05:17:26.300Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "217c3abc-0b0e-4599-be6e-2fd3cf82276b.json",
+   "ts": "2026-07-08T22:28:13.557Z",
+   "reason": "foreign-code",
+   "target": "/",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "217c3abc-0b0e-4599-be6e-2fd3cf82276b.json",
+   "ts": "2026-07-08T22:28:26.817Z",
+   "reason": "foreign-code",
+   "target": "/",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "217c3abc-0b0e-4599-be6e-2fd3cf82276b.json",
+   "ts": "2026-07-08T22:28:54.407Z",
+   "reason": "foreign-code",
+   "target": "/",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "217c3abc-0b0e-4599-be6e-2fd3cf82276b.json",
+   "ts": "2026-07-08T22:30:56.522Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "217c3abc-0b0e-4599-be6e-2fd3cf82276b.json",
+   "ts": "2026-07-08T22:40:47.175Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "217c3abc-0b0e-4599-be6e-2fd3cf82276b.json",
+   "ts": "2026-07-09T02:48:11.495Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_moxie-programmatic-access-map.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "217c3abc-0b0e-4599-be6e-2fd3cf82276b.json",
+   "ts": "2026-07-09T02:48:42.652Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "217c3abc-0b0e-4599-be6e-2fd3cf82276b.json",
+   "ts": "2026-07-09T02:56:13.343Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "217c3abc-0b0e-4599-be6e-2fd3cf82276b.json",
+   "ts": "2026-07-09T14:57:25.897Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "26738261-6539-41ff-9321-b094a2eebcfd.json",
+   "ts": "2026-07-07T02:48:35.055Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_fable5-review-leg-in-review-steps.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "26738261-6539-41ff-9321-b094a2eebcfd.json",
+   "ts": "2026-07-07T02:48:40.351Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "26738261-6539-41ff-9321-b094a2eebcfd.json",
+   "ts": "2026-07-07T02:51:21.775Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "26738261-6539-41ff-9321-b094a2eebcfd.json",
+   "ts": "2026-07-07T02:57:06.803Z",
+   "reason": "foreign-code",
+   "target": "/blueprint",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "26738261-6539-41ff-9321-b094a2eebcfd.json",
+   "ts": "2026-07-07T04:38:57.606Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "26738261-6539-41ff-9321-b094a2eebcfd.json",
+   "ts": "2026-07-07T04:47:01.466Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "26738261-6539-41ff-9321-b094a2eebcfd.json",
+   "ts": "2026-07-07T05:11:39.380Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "26738261-6539-41ff-9321-b094a2eebcfd.json",
+   "ts": "2026-07-07T05:15:16.298Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "26738261-6539-41ff-9321-b094a2eebcfd.json",
+   "ts": "2026-07-07T05:52:33.437Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "26738261-6539-41ff-9321-b094a2eebcfd.json",
+   "ts": "2026-07-07T06:52:32.857Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_claim-bearing-deliverables-need-distinct-review.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "26738261-6539-41ff-9321-b094a2eebcfd.json",
+   "ts": "2026-07-07T06:57:47.443Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "26738261-6539-41ff-9321-b094a2eebcfd.json",
+   "ts": "2026-07-07T07:04:05.908Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/Desktop/Mythos Explainers/index.html",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "26738261-6539-41ff-9321-b094a2eebcfd.json",
+   "ts": "2026-07-07T07:06:47.324Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "26738261-6539-41ff-9321-b094a2eebcfd.json",
+   "ts": "2026-07-07T07:09:33.003Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "26738261-6539-41ff-9321-b094a2eebcfd.json",
+   "ts": "2026-07-07T07:10:02.205Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "26738261-6539-41ff-9321-b094a2eebcfd.json",
+   "ts": "2026-07-07T07:10:17.886Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "26738261-6539-41ff-9321-b094a2eebcfd.json",
+   "ts": "2026-07-07T07:11:49.296Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "26738261-6539-41ff-9321-b094a2eebcfd.json",
+   "ts": "2026-07-07T07:12:47.748Z",
+   "reason": "foreign-code",
+   "target": "/eleven/i.test(i.title)).forEach(i=",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "26738261-6539-41ff-9321-b094a2eebcfd.json",
+   "ts": "2026-07-07T07:13:54.772Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "26738261-6539-41ff-9321-b094a2eebcfd.json",
+   "ts": "2026-07-07T07:26:25.221Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/Desktop/Mythos Explainers/ElevenLabs-key-scopes.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "26738261-6539-41ff-9321-b094a2eebcfd.json",
+   "ts": "2026-07-07T07:51:01.527Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "27a2a6af-3709-49d9-80af-150e20f3e66b.json",
+   "ts": "2026-07-02T15:08:01.100Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_dl-role-division-gemini-reads-codex-codes.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "27a2a6af-3709-49d9-80af-150e20f3e66b.json",
+   "ts": "2026-07-02T15:08:06.885Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "27a2a6af-3709-49d9-80af-150e20f3e66b.json",
+   "ts": "2026-07-02T15:13:14.770Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_dl-role-division-gemini-reads-codex-codes.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "27a2a6af-3709-49d9-80af-150e20f3e66b.json",
+   "ts": "2026-07-02T15:13:34.319Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_dl-role-division-gemini-reads-codex-codes.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "27a2a6af-3709-49d9-80af-150e20f3e66b.json",
+   "ts": "2026-07-02T15:13:38.907Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "27a2a6af-3709-49d9-80af-150e20f3e66b.json",
+   "ts": "2026-07-02T15:15:40.955Z",
+   "reason": "foreign-code",
+   "target": "/dispatch",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "27a2a6af-3709-49d9-80af-150e20f3e66b.json",
+   "ts": "2026-07-02T15:23:45.592Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_commands-aliasable-by-end-users.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "27a2a6af-3709-49d9-80af-150e20f3e66b.json",
+   "ts": "2026-07-02T15:23:50.019Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "27a2a6af-3709-49d9-80af-150e20f3e66b.json",
+   "ts": "2026-07-02T15:26:13.646Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_dl-role-division-gemini-reads-codex-codes.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "27a2a6af-3709-49d9-80af-150e20f3e66b.json",
+   "ts": "2026-07-02T15:27:03.141Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "27a2a6af-3709-49d9-80af-150e20f3e66b.json",
+   "ts": "2026-07-02T15:31:59.868Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "27a2a6af-3709-49d9-80af-150e20f3e66b.json",
+   "ts": "2026-07-02T15:37:43.488Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "27a2a6af-3709-49d9-80af-150e20f3e66b.json",
+   "ts": "2026-07-02T15:41:40.520Z",
+   "reason": "foreign-code",
+   "target": "/normal",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "27a2a6af-3709-49d9-80af-150e20f3e66b.json",
+   "ts": "2026-07-02T15:45:52.964Z",
+   "reason": "foreign-code",
+   "target": "/concept-init",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "27a2a6af-3709-49d9-80af-150e20f3e66b.json",
+   "ts": "2026-07-02T15:46:52.401Z",
+   "reason": "foreign-code",
+   "target": "/debrief",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "27a2a6af-3709-49d9-80af-150e20f3e66b.json",
+   "ts": "2026-07-02T16:05:21.323Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_bridge-submind-flow-ends-in-debrief.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "27a2a6af-3709-49d9-80af-150e20f3e66b.json",
+   "ts": "2026-07-02T16:05:38.864Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_bridge-submind-flow-ends-in-debrief.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "27a2a6af-3709-49d9-80af-150e20f3e66b.json",
+   "ts": "2026-07-02T16:06:22.586Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "32967f4d-7be4-43a8-a51c-4c7c7387b42b.json",
+   "ts": "2026-07-04T21:11:58.592Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/project_sm-os-set-down-2026-07-03.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "32967f4d-7be4-43a8-a51c-4c7c7387b42b.json",
+   "ts": "2026-07-04T21:12:15.348Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "32967f4d-7be4-43a8-a51c-4c7c7387b42b.json",
+   "ts": "2026-07-04T21:14:12.721Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "32967f4d-7be4-43a8-a51c-4c7c7387b42b.json",
+   "ts": "2026-07-04T21:28:07.431Z",
+   "reason": "foreign-code",
+   "target": "/in_progress",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "361d20d6-a034-4374-8d69-f0b8d759e6b0.json",
+   "ts": "2026-07-03T00:16:58.542Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_encode-cleanup-strip-proven-gates.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "361d20d6-a034-4374-8d69-f0b8d759e6b0.json",
+   "ts": "2026-07-03T00:17:20.023Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "361d20d6-a034-4374-8d69-f0b8d759e6b0.json",
+   "ts": "2026-07-03T01:33:49.353Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "361d20d6-a034-4374-8d69-f0b8d759e6b0.json",
+   "ts": "2026-07-03T02:07:52.177Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "361d20d6-a034-4374-8d69-f0b8d759e6b0.json",
+   "ts": "2026-07-03T02:08:35.154Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "361d20d6-a034-4374-8d69-f0b8d759e6b0.json",
+   "ts": "2026-07-03T02:22:04.788Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "361d20d6-a034-4374-8d69-f0b8d759e6b0.json",
+   "ts": "2026-07-03T03:24:36.274Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_dl-role-division-gemini-reads-codex-codes.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "361d20d6-a034-4374-8d69-f0b8d759e6b0.json",
+   "ts": "2026-07-03T03:24:43.231Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_dl-role-division-gemini-reads-codex-codes.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "361d20d6-a034-4374-8d69-f0b8d759e6b0.json",
+   "ts": "2026-07-03T03:28:49.189Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "361d20d6-a034-4374-8d69-f0b8d759e6b0.json",
+   "ts": "2026-07-03T10:51:40.894Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "361d20d6-a034-4374-8d69-f0b8d759e6b0.json",
+   "ts": "2026-07-03T10:56:56.712Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "361d20d6-a034-4374-8d69-f0b8d759e6b0.json",
+   "ts": "2026-07-03T11:02:10.988Z",
+   "reason": "foreign-code",
+   "target": "/visual",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "361d20d6-a034-4374-8d69-f0b8d759e6b0.json",
+   "ts": "2026-07-03T11:13:27.801Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "361d20d6-a034-4374-8d69-f0b8d759e6b0.json",
+   "ts": "2026-07-03T11:26:11.592Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "361d20d6-a034-4374-8d69-f0b8d759e6b0.json",
+   "ts": "2026-07-03T11:46:18.021Z",
+   "reason": "foreign-code",
+   "target": "/dev/stdout",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "361d20d6-a034-4374-8d69-f0b8d759e6b0.json",
+   "ts": "2026-07-03T11:47:07.049Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/dev/ls-local.txt)",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "361d20d6-a034-4374-8d69-f0b8d759e6b0.json",
+   "ts": "2026-07-03T11:58:22.982Z",
+   "reason": "foreign-code",
+   "target": "/world-spec.json",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "361d20d6-a034-4374-8d69-f0b8d759e6b0.json",
+   "ts": "2026-07-03T12:00:04.521Z",
+   "reason": "foreign-code",
+   "target": "/world-spec.json",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "361d20d6-a034-4374-8d69-f0b8d759e6b0.json",
+   "ts": "2026-07-03T12:23:52.805Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "361d20d6-a034-4374-8d69-f0b8d759e6b0.json",
+   "ts": "2026-07-03T12:29:28.876Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "361d20d6-a034-4374-8d69-f0b8d759e6b0.json",
+   "ts": "2026-07-03T12:29:41.876Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "436265a3-d8c5-4f33-aab8-f44ab69d701c.json",
+   "ts": "2026-07-09T15:12:09.686Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "436265a3-d8c5-4f33-aab8-f44ab69d701c.json",
+   "ts": "2026-07-09T16:22:48.097Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_v3-protocol-binding-and-question-loop.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "436265a3-d8c5-4f33-aab8-f44ab69d701c.json",
+   "ts": "2026-07-09T16:23:14.455Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "436265a3-d8c5-4f33-aab8-f44ab69d701c.json",
+   "ts": "2026-07-09T20:21:45.832Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_bridge-runnow-cosmetic-exit1-check-artifacts.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "436265a3-d8c5-4f33-aab8-f44ab69d701c.json",
+   "ts": "2026-07-09T20:21:51.153Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T19:11:29.166Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_check-drive-for-call-transcripts.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T19:11:36.527Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T20:02:46.065Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_triage-includes-delesign-and-asset-sweep.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T20:02:49.351Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T20:22:11.874Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T20:37:30.703Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_transcript-recency-outweighs-stale-tasks.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T20:37:34.004Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T20:43:34.705Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T21:05:16.036Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_evaluate-enabled-ads-only-skip-paused.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T21:05:18.840Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T21:13:25.384Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_google-sheets-api-tool.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T21:13:28.278Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T21:44:03.068Z",
+   "reason": "foreign-code",
+   "target": "/east",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T22:04:00.999Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_always-think-of-the-end-user.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T22:04:03.901Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T22:18:28.987Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T22:23:56.617Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_perplexity-research-fallback.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T22:23:59.026Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T22:25:37.208Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T22:26:06.569Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T22:26:29.110Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T22:30:35.311Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_commands-aliasable-by-end-users.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T22:31:21.466Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_keep-all-tools-for-installability.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T22:32:01.847Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_we-recurse.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T22:32:05.013Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T22:34:12.263Z",
+   "reason": "foreign-code",
+   "target": "/storage_state.json`,",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T22:56:23.574Z",
+   "reason": "foreign-code",
+   "target": "/meta",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T23:00:50.963Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T23:07:17.760Z",
+   "reason": "foreign-code",
+   "target": "/ying/i.test(x.display_name",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "447764c0-e5a4-4a27-8e94-abea01ba1e93.json",
+   "ts": "2026-06-30T23:20:39.722Z",
+   "reason": "foreign-code",
+   "target": "/ying/i.test(x.display_name",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "462e0416-bdaf-44e5-b539-4d883932c35c.json",
+   "ts": "2026-07-02T20:42:55.780Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "462e0416-bdaf-44e5-b539-4d883932c35c.json",
+   "ts": "2026-07-02T20:47:08.646Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "4ee25bd0-01a9-4ce3-982d-7d5c5166af5c.json",
+   "ts": "2026-06-27T21:46:41.814Z",
+   "reason": "foreign-code",
+   "target": "/<context",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "4ee25bd0-01a9-4ce3-982d-7d5c5166af5c.json",
+   "ts": "2026-06-27T21:47:03.486Z",
+   "reason": "foreign-code",
+   "target": "/<context",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "4ee25bd0-01a9-4ce3-982d-7d5c5166af5c.json",
+   "ts": "2026-06-27T22:15:00.860Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_review-state-marker-no-distinct-reviews-writer.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "4ee25bd0-01a9-4ce3-982d-7d5c5166af5c.json",
+   "ts": "2026-06-27T22:15:28.337Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "4ee25bd0-01a9-4ce3-982d-7d5c5166af5c.json",
+   "ts": "2026-06-27T22:40:22.458Z",
+   "reason": "foreign-code",
+   "target": "/plan-task",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "4ee25bd0-01a9-4ce3-982d-7d5c5166af5c.json",
+   "ts": "2026-06-27T23:13:33.468Z",
+   "reason": "foreign-code",
+   "target": "/custody",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "4ee25bd0-01a9-4ce3-982d-7d5c5166af5c.json",
+   "ts": "2026-06-27T23:14:09.301Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "4ee25bd0-01a9-4ce3-982d-7d5c5166af5c.json",
+   "ts": "2026-06-27T23:15:21.942Z",
+   "reason": "foreign-code",
+   "target": "/pretool-git-custody-gate",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "4ee25bd0-01a9-4ce3-982d-7d5c5166af5c.json",
+   "ts": "2026-06-27T23:16:36.671Z",
+   "reason": "foreign-code",
+   "target": "/",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "4ee25bd0-01a9-4ce3-982d-7d5c5166af5c.json",
+   "ts": "2026-06-28T00:15:19.786Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "76e0f416-2101-4a1e-ac61-3d97cf38574e.json",
+   "ts": "2026-07-05T04:55:50.838Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "76e0f416-2101-4a1e-ac61-3d97cf38574e.json",
+   "ts": "2026-07-05T06:56:13.579Z",
+   "reason": "foreign-code",
+   "target": "/run-plan",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "77f73c0f-4f1b-48a7-8aaa-7cd32e327823.json",
+   "ts": "2026-06-26T06:47:55.828Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "77f73c0f-4f1b-48a7-8aaa-7cd32e327823.json",
+   "ts": "2026-06-26T07:01:22.658Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/project_embodiment-roadmap-and-catworld-boundary.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "77f73c0f-4f1b-48a7-8aaa-7cd32e327823.json",
+   "ts": "2026-06-26T07:01:32.288Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "77f73c0f-4f1b-48a7-8aaa-7cd32e327823.json",
+   "ts": "2026-06-26T13:52:13.199Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "77f73c0f-4f1b-48a7-8aaa-7cd32e327823.json",
+   "ts": "2026-06-26T13:52:27.068Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "77f73c0f-4f1b-48a7-8aaa-7cd32e327823.json",
+   "ts": "2026-06-26T14:26:11.799Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "77f73c0f-4f1b-48a7-8aaa-7cd32e327823.json",
+   "ts": "2026-06-26T14:58:11.459Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "77f73c0f-4f1b-48a7-8aaa-7cd32e327823.json",
+   "ts": "2026-06-26T15:33:59.282Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "77f73c0f-4f1b-48a7-8aaa-7cd32e327823.json",
+   "ts": "2026-06-26T22:52:45.850Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "77f73c0f-4f1b-48a7-8aaa-7cd32e327823.json",
+   "ts": "2026-06-26T22:55:12.483Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "7cdab854-c7e6-403f-9f45-3f880cf442df.json",
+   "ts": "2026-07-09T02:54:12.174Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_leyline-review-flow-123-perplexity-321-fable.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "7cdab854-c7e6-403f-9f45-3f880cf442df.json",
+   "ts": "2026-07-09T02:54:27.308Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "7cdab854-c7e6-403f-9f45-3f880cf442df.json",
+   "ts": "2026-07-09T02:56:04.508Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_leyline-review-flow-123-perplexity-321-fable.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "7cdab854-c7e6-403f-9f45-3f880cf442df.json",
+   "ts": "2026-07-09T02:57:56.578Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "7cdab854-c7e6-403f-9f45-3f880cf442df.json",
+   "ts": "2026-07-09T03:00:42.770Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "7cdab854-c7e6-403f-9f45-3f880cf442df.json",
+   "ts": "2026-07-09T03:04:02.304Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_gemini-version-and-bridge-execution.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "7cdab854-c7e6-403f-9f45-3f880cf442df.json",
+   "ts": "2026-07-09T03:20:42.504Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_leyline-review-flow-123-perplexity-321-fable.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "7cdab854-c7e6-403f-9f45-3f880cf442df.json",
+   "ts": "2026-07-09T03:40:38.586Z",
+   "reason": "foreign-code",
+   "target": "/^d[1-6]/.test(k)).length+\"/6\":\"MISSING\")",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "7cdab854-c7e6-403f-9f45-3f880cf442df.json",
+   "ts": "2026-07-09T04:56:09.734Z",
+   "reason": "foreign-code",
+   "target": "/run-plan\"}",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "86697e48-0dfc-4248-8c73-26444096d205.json",
+   "ts": "2026-06-26T00:49:03.888Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/Desktop/Pixar \u2192 Mythos \u2014 the plain-language explainer.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "86697e48-0dfc-4248-8c73-26444096d205.json",
+   "ts": "2026-06-26T02:12:04.724Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/Desktop/Disney-Pixar's Theory of Mind \u2014 a layman's explainer.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "86697e48-0dfc-4248-8c73-26444096d205.json",
+   "ts": "2026-06-26T02:13:09.853Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/Desktop/How Pixar's Theory of Mind Maps to My Project \u2014 non-technical.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "86697e48-0dfc-4248-8c73-26444096d205.json",
+   "ts": "2026-06-26T03:47:41.910Z",
+   "reason": "foreign-code",
+   "target": "/signal/i.test(k)).forEach(k=",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "91d27c65-9a87-4d7f-9964-c701e733bb9d.json",
+   "ts": "2026-06-22T00:14:23.956Z",
+   "reason": "foreign-code",
+   "target": "/load",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "91d27c65-9a87-4d7f-9964-c701e733bb9d.json",
+   "ts": "2026-06-22T19:04:47.724Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/Downloads/1",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "91d27c65-9a87-4d7f-9964-c701e733bb9d.json",
+   "ts": "2026-06-23T12:18:20.252Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "91d27c65-9a87-4d7f-9964-c701e733bb9d.json",
+   "ts": "2026-06-23T14:18:41.418Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_sdas-crm-lead-pipeline-structure.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "91d27c65-9a87-4d7f-9964-c701e733bb9d.json",
+   "ts": "2026-06-23T14:19:01.840Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "9b575bbb-fa43-4ea8-88fb-2d146f76a103.json",
+   "ts": "2026-07-07T23:19:12.644Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "9b575bbb-fa43-4ea8-88fb-2d146f76a103.json",
+   "ts": "2026-07-07T23:49:35.086Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "9b575bbb-fa43-4ea8-88fb-2d146f76a103.json",
+   "ts": "2026-07-08T00:13:08.122Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "9b575bbb-fa43-4ea8-88fb-2d146f76a103.json",
+   "ts": "2026-07-08T00:13:51.917Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "9b575bbb-fa43-4ea8-88fb-2d146f76a103.json",
+   "ts": "2026-07-08T01:32:22.754Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "a13a15f8-9ad9-48a1-8df2-3d3caef0bb1f.json",
+   "ts": "2026-06-29T13:01:49.772Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_git-custody-gate-dual-id-false-block.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "a13a15f8-9ad9-48a1-8df2-3d3caef0bb1f.json",
+   "ts": "2026-06-29T13:02:01.199Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_playwright-mcp-isolated-vs-logged-in.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "a13a15f8-9ad9-48a1-8df2-3d3caef0bb1f.json",
+   "ts": "2026-06-29T13:02:28.663Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_tier-dispatched-mind-all-paths.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "a13a15f8-9ad9-48a1-8df2-3d3caef0bb1f.json",
+   "ts": "2026-06-29T13:02:58.179Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "a13a15f8-9ad9-48a1-8df2-3d3caef0bb1f.json",
+   "ts": "2026-06-29T13:32:56.653Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "a13a15f8-9ad9-48a1-8df2-3d3caef0bb1f.json",
+   "ts": "2026-06-29T14:43:47.505Z",
+   "reason": "foreign-code",
+   "target": "/run-plan,",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "a13a15f8-9ad9-48a1-8df2-3d3caef0bb1f.json",
+   "ts": "2026-06-29T15:46:10.242Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_operator-does-not-work-sales-leads.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "a13a15f8-9ad9-48a1-8df2-3d3caef0bb1f.json",
+   "ts": "2026-06-29T15:48:30.121Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_private-surface-reads-use-local-minds.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "a13a15f8-9ad9-48a1-8df2-3d3caef0bb1f.json",
+   "ts": "2026-06-29T16:15:04.661Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "a3967f6d-3258-4fdd-bd48-e350bdd8020a.json",
+   "ts": "2026-07-08T02:54:22.182Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "a3967f6d-3258-4fdd-bd48-e350bdd8020a.json",
+   "ts": "2026-07-08T03:45:21.476Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/project_not-crazy-note-and-voice-stack-audit.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "a3967f6d-3258-4fdd-bd48-e350bdd8020a.json",
+   "ts": "2026-07-08T03:45:45.930Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "a6a1fc63-e9f8-4b21-8b53-38039be7b183.json",
+   "ts": "2026-06-22T17:20:16.675Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_codex-dart-mcp-oauth-setup.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "a6a1fc63-e9f8-4b21-8b53-38039be7b183.json",
+   "ts": "2026-06-22T17:20:25.511Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "a6a1fc63-e9f8-4b21-8b53-38039be7b183.json",
+   "ts": "2026-06-22T17:42:47.261Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_stale-mythos-checkout-footgun.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "a6a1fc63-e9f8-4b21-8b53-38039be7b183.json",
+   "ts": "2026-06-22T17:42:55.332Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "aa143601-d1a0-4051-aa8a-c4e8aafaa09c.json",
+   "ts": "2026-07-02T18:40:17.981Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "aa143601-d1a0-4051-aa8a-c4e8aafaa09c.json",
+   "ts": "2026-07-02T18:48:37.527Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "aa143601-d1a0-4051-aa8a-c4e8aafaa09c.json",
+   "ts": "2026-07-02T18:53:15.773Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "aa143601-d1a0-4051-aa8a-c4e8aafaa09c.json",
+   "ts": "2026-07-02T18:54:33.185Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "aa143601-d1a0-4051-aa8a-c4e8aafaa09c.json",
+   "ts": "2026-07-02T19:12:55.716Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "aa143601-d1a0-4051-aa8a-c4e8aafaa09c.json",
+   "ts": "2026-07-02T19:16:12.225Z",
+   "reason": "foreign-code",
+   "target": "/bridge",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "aa143601-d1a0-4051-aa8a-c4e8aafaa09c.json",
+   "ts": "2026-07-02T19:16:22.072Z",
+   "reason": "foreign-code",
+   "target": "/bridge",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "aa143601-d1a0-4051-aa8a-c4e8aafaa09c.json",
+   "ts": "2026-07-02T19:24:04.730Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "aa143601-d1a0-4051-aa8a-c4e8aafaa09c.json",
+   "ts": "2026-07-02T19:51:24.924Z",
+   "reason": "foreign-code",
+   "target": "/blueprint",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "aa143601-d1a0-4051-aa8a-c4e8aafaa09c.json",
+   "ts": "2026-07-03T10:35:45.685Z",
+   "reason": "foreign-code",
+   "target": "/signal.*normal",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "aa143601-d1a0-4051-aa8a-c4e8aafaa09c.json",
+   "ts": "2026-07-03T10:36:02.076Z",
+   "reason": "foreign-code",
+   "target": "/signal/i.test(k)).forEach(k=",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "aa143601-d1a0-4051-aa8a-c4e8aafaa09c.json",
+   "ts": "2026-07-03T15:26:54.391Z",
+   "reason": "foreign-code",
+   "target": "/valid/.test(k)))))",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "aa143601-d1a0-4051-aa8a-c4e8aafaa09c.json",
+   "ts": "2026-07-03T15:56:48.707Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "b7460af1-319d-41a6-bb8e-a2703eabac41.json",
+   "ts": "2026-07-07T14:58:55.724Z",
+   "reason": "foreign-code",
+   "target": "/worldforge",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "b7460af1-319d-41a6-bb8e-a2703eabac41.json",
+   "ts": "2026-07-07T15:22:14.714Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_perplexity-invocation-working-path.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "b7460af1-319d-41a6-bb8e-a2703eabac41.json",
+   "ts": "2026-07-07T15:22:26.150Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "b7460af1-319d-41a6-bb8e-a2703eabac41.json",
+   "ts": "2026-07-07T15:32:08.030Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/project_loop-protocol-is-echo-chamber-antidote.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "b7460af1-319d-41a6-bb8e-a2703eabac41.json",
+   "ts": "2026-07-07T15:32:16.594Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "b7460af1-319d-41a6-bb8e-a2703eabac41.json",
+   "ts": "2026-07-07T15:50:51.155Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_trust-operator-when-they-have-the-context.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "b7460af1-319d-41a6-bb8e-a2703eabac41.json",
+   "ts": "2026-07-07T15:52:01.005Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "b7460af1-319d-41a6-bb8e-a2703eabac41.json",
+   "ts": "2026-07-07T16:04:37.565Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "b7460af1-319d-41a6-bb8e-a2703eabac41.json",
+   "ts": "2026-07-07T16:42:22.525Z",
+   "reason": "foreign-code",
+   "target": "/g",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "b7460af1-319d-41a6-bb8e-a2703eabac41.json",
+   "ts": "2026-07-07T16:49:21.186Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "b92e3ee8-362f-4a6d-9bd4-3e648ee07abb.json",
+   "ts": "2026-07-06T20:52:51.649Z",
+   "reason": "foreign-code",
+   "target": "/Framework/i.test(d))))",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "b92e3ee8-362f-4a6d-9bd4-3e648ee07abb.json",
+   "ts": "2026-07-06T21:03:10.013Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/Desktop/MYTHOS_ECH-ads-loop_session-report_2026-07-06.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "d32d73cd-7822-48cf-a210-6cd47d9c87ea.json",
+   "ts": "2026-06-19T21:23:21.797Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "d32d73cd-7822-48cf-a210-6cd47d9c87ea.json",
+   "ts": "2026-06-19T21:24:34.179Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "d32d73cd-7822-48cf-a210-6cd47d9c87ea.json",
+   "ts": "2026-06-19T21:27:27.390Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "d32d73cd-7822-48cf-a210-6cd47d9c87ea.json",
+   "ts": "2026-06-19T21:28:32.906Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "d32d73cd-7822-48cf-a210-6cd47d9c87ea.json",
+   "ts": "2026-06-19T21:31:33.919Z",
+   "reason": "foreign-code",
+   "target": "/payload/i.test(c.text+c.cls+c.data)).slice(0,4),null,2))",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "d32d73cd-7822-48cf-a210-6cd47d9c87ea.json",
+   "ts": "2026-06-19T21:34:52.953Z",
+   "reason": "foreign-code",
+   "target": "/^www-payload-log\\d+\\.json$/.test(f))",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "d32d73cd-7822-48cf-a210-6cd47d9c87ea.json",
+   "ts": "2026-06-19T21:41:04.573Z",
+   "reason": "foreign-code",
+   "target": "/^apply-payload-log\\d+\\.json$/.test(f))",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "da8dd568-6389-4320-ac63-9a8c95d78e1b.json",
+   "ts": "2026-07-02T00:47:09.811Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/Downloads/large-learning-models/,",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "df69b525-034e-4cfa-be2f-2cd308308241.json",
+   "ts": "2026-07-09T20:29:04.206Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.ssh/config",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "df69b525-034e-4cfa-be2f-2cd308308241.json",
+   "ts": "2026-07-09T20:38:54.560Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_operator-vps-149-56-14-10.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T16:30:16.487Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_blueprint-for-system-forming-work.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T16:30:58.611Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_spread-token-use-across-providers.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T16:31:05.498Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_gemini-local-search-perplexity-web.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T16:31:11.523Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_verify-model-currency-before-dispatch.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T16:31:21.505Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T16:32:58.911Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T16:34:48.355Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/project_mac-orwell-two-way-ssh-local-subagent-fabric.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T16:34:53.125Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T16:39:49.934Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/project_mac-orwell-two-way-ssh-local-subagent-fabric.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T16:41:43.531Z",
+   "reason": "foreign-code",
+   "target": "/",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T16:53:36.922Z",
+   "reason": "foreign-code",
+   "target": "/archiv",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T16:55:13.356Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T16:58:32.485Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T16:59:59.058Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_inference-cost-ladder.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T17:00:04.606Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T17:01:56.653Z",
+   "reason": "foreign-code",
+   "target": "/lesson",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T17:04:50.440Z",
+   "reason": "foreign-code",
+   "target": "/warn/i.test(x.status",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T17:10:51.136Z",
+   "reason": "foreign-code",
+   "target": "/signal",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T17:19:36.050Z",
+   "reason": "foreign-code",
+   "target": "/receipt",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T17:24:52.607Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T17:32:04.830Z",
+   "reason": "foreign-code",
+   "target": "/deles/i.test(k)).forEach(k=",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T17:40:14.467Z",
+   "reason": "foreign-code",
+   "target": "/\\$",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T17:41:27.467Z",
+   "reason": "foreign-code",
+   "target": "/mazda.*july",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T17:44:45.543Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T17:53:36.022Z",
+   "reason": "foreign-code",
+   "target": "/url",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T18:13:34.675Z",
+   "reason": "foreign-code",
+   "target": "/dispatch",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T18:19:34.535Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_workers-are-orchestrators-debrief-too.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "e402c685-4d7b-464a-8f48-67844f54a12e.json",
+   "ts": "2026-07-02T18:22:41.390Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/feedback_blueprint-for-system-forming-work.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "fd551773-2250-412f-b0e2-0cb04acb1f1c.json",
+   "ts": "2026-07-09T05:11:10.302Z",
+   "reason": "foreign-code",
+   "target": "/Volumes/file_storage/Shirtaloon/Shirtaloon",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "fd551773-2250-412f-b0e2-0cb04acb1f1c.json",
+   "ts": "2026-07-09T05:29:23.516Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "fd551773-2250-412f-b0e2-0cb04acb1f1c.json",
+   "ts": "2026-07-09T05:29:39.101Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "fd551773-2250-412f-b0e2-0cb04acb1f1c.json",
+   "ts": "2026-07-09T05:37:30.129Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.ssh/config",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "fd551773-2250-412f-b0e2-0cb04acb1f1c.json",
+   "ts": "2026-07-09T05:39:44.061Z",
+   "reason": "foreign-code",
+   "target": "/Volumes/file_storage/Shirtaloon/Shirtaloon",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "fd551773-2250-412f-b0e2-0cb04acb1f1c.json",
+   "ts": "2026-07-09T05:40:03.130Z",
+   "reason": "foreign-code",
+   "target": "/Volumes/file_storage/Shirtaloon/Shirtaloon",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "fd551773-2250-412f-b0e2-0cb04acb1f1c.json",
+   "ts": "2026-07-09T05:40:16.707Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "fd551773-2250-412f-b0e2-0cb04acb1f1c.json",
+   "ts": "2026-07-09T05:41:48.154Z",
+   "reason": "foreign-code",
+   "target": "/Volumes/file_storage/Shirtaloon/Shirtaloon",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "fd551773-2250-412f-b0e2-0cb04acb1f1c.json",
+   "ts": "2026-07-09T05:42:14.366Z",
+   "reason": "foreign-code",
+   "target": "/Volumes/file_storage/Shirtaloon/Shirtaloon",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "fd551773-2250-412f-b0e2-0cb04acb1f1c.json",
+   "ts": "2026-07-09T05:43:33.742Z",
+   "reason": "foreign-code",
+   "target": "/Volumes/file_storage/Shirtaloon/Shirtaloon",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "fd551773-2250-412f-b0e2-0cb04acb1f1c.json",
+   "ts": "2026-07-09T05:43:53.727Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "fd551773-2250-412f-b0e2-0cb04acb1f1c.json",
+   "ts": "2026-07-09T05:45:37.356Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "fd551773-2250-412f-b0e2-0cb04acb1f1c.json",
+   "ts": "2026-07-09T12:12:16.776Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "fd551773-2250-412f-b0e2-0cb04acb1f1c.json",
+   "ts": "2026-07-09T12:12:59.185Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "fd551773-2250-412f-b0e2-0cb04acb1f1c.json",
+   "ts": "2026-07-09T12:31:41.074Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "fd551773-2250-412f-b0e2-0cb04acb1f1c.json",
+   "ts": "2026-07-09T12:32:16.111Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "fd551773-2250-412f-b0e2-0cb04acb1f1c.json",
+   "ts": "2026-07-09T12:56:14.124Z",
+   "reason": "foreign-code",
+   "target": "/dev/null",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "fd551773-2250-412f-b0e2-0cb04acb1f1c.json",
+   "ts": "2026-07-09T13:15:51.987Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/reference_ssh-keys-in-1password-automation-vault.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "fd551773-2250-412f-b0e2-0cb04acb1f1c.json",
+   "ts": "2026-07-09T13:16:25.244Z",
+   "reason": "foreign-code",
+   "target": "/Users/admin/.claude/projects/-Users-admin-dev-mythos-recovered/memory/MEMORY.md",
+   "tool": "edit",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "fd551773-2250-412f-b0e2-0cb04acb1f1c.json",
+   "ts": "2026-07-09T13:26:33.795Z",
+   "reason": "foreign-code",
+   "target": "/Volumes/file_storage/Shirtaloon/Shirtaloon - He Who Fights with Monsters 1/working/extraction/RATIFICATION-SITTING.md",
+   "tool": "write",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "fd551773-2250-412f-b0e2-0cb04acb1f1c.json",
+   "ts": "2026-07-09T13:31:17.167Z",
+   "reason": "foreign-code",
+   "target": "/Volumes/file_storage/Shirtaloon/Shirtaloon",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  },
+  {
+   "source_file": "fd551773-2250-412f-b0e2-0cb04acb1f1c.json",
+   "ts": "2026-07-09T14:32:26.471Z",
+   "reason": "foreign-code",
+   "target": "/whats-next",
+   "tool": "bash",
+   "subagent": false,
+   "ownership": "foreign"
+  }
+ ]
+}

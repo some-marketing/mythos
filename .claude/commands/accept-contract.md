@@ -1,5 +1,5 @@
 ---
-description: Cross-alias (HWFWM canon) for /embark
+description: Compatibility cross-alias for /embark
 allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, Task]
 ---
 

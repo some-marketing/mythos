@@ -1,0 +1,25 @@
+{
+  "event_type": "PostToolUse",
+  "scope_tier": "system",
+  "declared_intent": {
+    "workstream_scope": "control-loop-lobe",
+    "owned_artifacts": ["tools/kernel/**"],
+    "forbidden_artifacts": ["_dev/concepts/doctrine-lobe/**", "_dev/concepts/retrieval-lobe/**"],
+    "stated_goal": "incompatible_intent_and_evidence"
+  },
+  "observed_write_set": ["_dev/concepts/doctrine-lobe/forbidden-write.md"],
+  "observed_tool_outputs": [],
+  "session_present_snapshot": {
+    "schema": "SessionPresent/1.0",
+    "scope_tier": "system",
+    "writer_attestation": {
+      "writer_harness_id": "claude-code:inject-grounding-card.cjs",
+      "signature_alg": "sha256-harness-concat-v1",
+      "signature": "deadbeef",
+      "signed_at": "2026-04-23T00:00:00Z"
+    }
+  },
+  "acceptance_grade": false,
+  "confidence_claims": [],
+  "external_content_refs": []
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "mythos/soul-space/binding/1.0",
+  "title": "Binding",
+  "description": "A derived document that claims to be bound to a subject-record by content hash. Any consumer, copy, or reference that needs to prove it reflects a specific, unmutated subject-record uses this shape. See ../README.md.",
+  "type": "object",
+  "required": ["kind", "bound_hash"],
+  "additionalProperties": false,
+  "properties": {
+    "kind": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Domain-defined label for what this binding represents (e.g. \"view\", \"copy\", \"reference\")."
+    },
+    "bound_hash": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Must equal the current content_hash of the subject-record this binds to. Checked by the validator, not by this schema alone."
+    },
+    "attributes": {
+      "type": "object",
+      "description": "Optional. Domain-defined fields for this binding."
+    },
+    "composed_of": {
+      "type": "array",
+      "description": "Optional. Present only when this binding reflects more than one subject-record.",
+      "minItems": 2,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}

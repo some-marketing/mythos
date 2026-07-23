@@ -9,7 +9,7 @@
  * returns null so callers can use their JSONL fallback.
  *
  * Resolution order:
- *   1. env override MYTHOS_SQLITE3 (absolute path to the binary)
+ *   1. env override SMOS_SQLITE3 (absolute path to the binary)
  *   2. platform lookup: `where sqlite3` on win32, else `which sqlite3`
  *   3. common absolute install locations per platform
  *   4. null  → caller should degrade to the JSONL store
@@ -58,7 +58,7 @@ function looksRunnable(p) {
 
 function doResolve() {
   // 1. explicit override
-  const override = process.env.MYTHOS_SQLITE3;
+  const override = process.env.SMOS_SQLITE3;
   if (override && looksRunnable(override)) return override;
 
   // 2. platform PATH lookup

@@ -2,7 +2,8 @@
 'use strict';
 
 /**
- * component-index.cjs — a composable-framework-substrate indexer.
+ * component-index.cjs — S1 of composable-framework-substrate
+ * (_dev/reports/analysis/task-plans/composable-framework-substrate__plan.json).
  *
  * Deterministic, read-only walker over frameworks/<service>/<name>/manifest.json
  * plus frameworks/_shared/blocks/. Emits one node per component — prompt,

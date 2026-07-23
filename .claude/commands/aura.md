@@ -1,5 +1,5 @@
 ---
-description: Cross-alias (HWFWM canon) for /guild-ledger
+description: Compatibility cross-alias for /guild-ledger
 allowed-tools: [Read, Glob, Grep]
 ---
 

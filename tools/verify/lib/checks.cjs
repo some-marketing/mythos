@@ -236,6 +236,48 @@ function jsonSchemaValid(filePath, schemaPath, { id, category = 'schema', severi
   };
 }
 
+function planOutcomeCoverage(projectRoot, threshold = 0.8, { id, category = 'integrity', severity = 'warning', message } = {}) {
+  const planRoots = [path.join(projectRoot, '_dev/reports/analysis/task-plans')];
+  const clientsDir = path.join(projectRoot, 'clients');
+  if (fs.existsSync(clientsDir)) {
+    for (const c of fs.readdirSync(clientsDir)) {
+      const cp = path.join(clientsDir, c, 'plans');
+      if (fs.existsSync(cp)) planRoots.push(cp);
+    }
+  }
+  const outcomesDir = path.join(projectRoot, '_dev/reports/analysis/task-outcomes');
+
+  const planTaskIds = [];
+  for (const root of planRoots) {
+    if (!fs.existsSync(root)) continue;
+    for (const f of fs.readdirSync(root)) {
+      if (f.endsWith('__plan.json')) planTaskIds.push(f.replace(/__plan\.json$/, ''));
+    }
+  }
+
+  let withOutcome = 0;
+  if (fs.existsSync(outcomesDir)) {
+    for (const id of planTaskIds) {
+      if (fs.existsSync(path.join(outcomesDir, `${id}.json`))) withOutcome++;
+    }
+  }
+
+  const total = planTaskIds.length;
+  const ratio = total === 0 ? 1 : withOutcome / total;
+  const passes = ratio >= threshold;
+
+  return {
+    id: id || 'plans.outcome_coverage',
+    category,
+    severity,
+    message: message || `Task-plan outcome coverage >= ${(threshold * 100).toFixed(0)}%`,
+    evidence: '_dev/reports/analysis/task-plans + task-outcomes',
+    test: () => passes,
+    detail: () => `${withOutcome}/${total} plans have outcome artifacts (${(ratio * 100).toFixed(1)}%, threshold ${(threshold * 100).toFixed(0)}%)`,
+    fix_hint: 'Run /reconcile-task-outcomes to refresh staging batch, then operator-review the staged outcomes before they land canonical.'
+  };
+}
+
 module.exports = {
   fileExists,
   dirExists,
@@ -248,5 +290,6 @@ module.exports = {
   countMatches,
   referenceResolves,
   fileContains,
-  jsonSchemaValid
+  jsonSchemaValid,
+  planOutcomeCoverage
 };

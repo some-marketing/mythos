@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://mythos.dev/schemas/canonical-entry.schema.json",
+  "$id": "https://mythos/canonical-entry.schema.json",
   "title": "Canonical Memory Entry",
   "description": "Schema for entries under _dev/state/kernel-memory/entries/. The canonical source of truth for Mythos memory. Harness-local memory (Claude per-project pocket, etc.) is a regenerable projection of this entry; this entry is never a projection.",
   "type": "object",

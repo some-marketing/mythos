@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ReviewPacket/1.0",
+  "description": "Standardized review artifact contract for cross-instance and cross-model handoff in Mythos.",
+  "type": "object",
+  "required": [
+    "schema",
+    "scope",
+    "reviewed_at",
+    "source_of_truth",
+    "findings",
+    "expectation_failures_path",
+    "open_decisions",
+    "artifacts_produced",
+    "next_step"
+  ],
+  "properties": {
+    "schema": {
+      "const": "ReviewPacket/1.0"
+    },
+    "scope": {
+      "type": "string",
+      "minLength": 1,
+      "description": "What was reviewed"
+    },
+    "reviewed_at": {
+      "type": "string",
+      "description": "ISO-8601 timestamp of when the review was performed"
+    },
+    "source_of_truth": {
+      "anyOf": [
+        { "type": "string", "minLength": 1 },
+        { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 }
+      ],
+      "description": "Path(s) to the authoritative document(s) used for this review"
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/finding"
+      },
+      "description": "Structured findings array; empty when no findings"
+    },
+    "expectation_failures_path": {
+      "type": "string",
+      "description": "Path to this artifact (self-referential)"
+    },
+    "open_decisions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/open_decision"
+      },
+      "description": "Decisions that need operator input before the next step can proceed"
+    },
+    "artifacts_produced": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Paths to all review output files produced"
+    },
+    "next_step": {
+      "$ref": "#/$defs/next_step",
+      "description": "Exact bounded next step"
+    },
+    "signal_path": {
+      "type": "string",
+      "description": "Path to the coordination signal that triggered this review, if any"
+    }
+  },
+  "$defs": {
+    "finding": {
+      "type": "object",
+      "required": ["id", "severity", "expected", "observed"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "severity": { "enum": ["blocker", "major", "warning", "info"] },
+        "expected": { "type": "string" },
+        "observed": { "type": "string" },
+        "evidence": {
+          "anyOf": [
+            { "type": "string" },
+            { "type": "array", "items": { "type": "string" } }
+          ]
+        },
+        "recommended_next_action": { "type": "string" }
+      }
+    },
+    "open_decision": {
+      "type": "object",
+      "required": ["id", "question", "context"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "question": { "type": "string", "minLength": 1 },
+        "context": { "type": "string" },
+        "options": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "blocking": { "type": "boolean" }
+      }
+    },
+    "next_step": {
+      "type": "object",
+      "required": ["command", "actor"],
+      "properties": {
+        "command": { "type": "string", "minLength": 1 },
+        "actor": { "type": "string", "minLength": 1 },
+        "bounded_context": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Flat step list for the next actor"
+        },
+        "artifacts_to_read": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Artifacts the next actor must read before acting"
+        }
+      }
+    }
+  }
+}

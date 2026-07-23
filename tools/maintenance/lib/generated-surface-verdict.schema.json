@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "generated-surface-verdict.schema.json", "title": "GeneratedSurfaceVerdict/1.0", "type": "object",
+  "required": ["schema", "state", "source_sha256", "generator_sha256", "output_sha256", "reason", "authority", "can_generate", "can_overwrite"],
+  "properties": { "schema": { "const": "GeneratedSurfaceVerdict/1.0" }, "state": { "enum": ["disabled", "clean", "missing", "stale_input", "byte_drift", "generator_version_drift", "unclassified"] }, "source_sha256": { "type": ["string", "null"] }, "generator_sha256": { "type": ["string", "null"] }, "output_sha256": { "type": ["string", "null"] }, "reason": { "type": "string" }, "authority": { "const": "report_only" }, "can_generate": { "const": false }, "can_overwrite": { "const": false } },
+  "additionalProperties": false
+}

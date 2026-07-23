@@ -17,7 +17,7 @@ Practically, that means:
 |---|---|
 | Grimoire | Framework — a reusable workflow template |
 | Patron | Client |
-| Contract (HWFWM) / Campaign (D&D) | Project — a specific engagement linking a patron to a grimoire |
+| Contract / Campaign | Project — a specific engagement linking a patron to a grimoire |
 | Quest | Task |
 | Quest charter | Task plan |
 | Trial | Review |
@@ -30,7 +30,7 @@ Practically, that means:
 | Saving throw | Test / gate |
 | Stat block | Manifest |
 | Homebrew | User-created content (D&D canon) — a grimoire, tool, or doc you built yourself, as opposed to one the guild shipped |
-| The Mirror (soul-mirror) | Your external user kernel — identity, principles, and preferences layered over the Core (HWFWM canon: every person's inner world, reflected) |
+| The Mirror (soul-mirror) | Your external user kernel — identity, principles, and preferences layered over the Core |
 | The Core | The System kernel — immutable safety rules plus the guild's own doctrine |
 | True name | A thing's canonical, guild-given name — the `resolves_to` authority every alias points to |
 | Called name | Your own personal name for a thing, defined in your Mirror's alias overlay — never replaces a true name, only adds a second way to say it |
@@ -106,8 +106,7 @@ rather than anything the guild shipped. Three reserved namespaces hold it
 touched by a System update. A homebrew grimoire climbs the same rank ladder as any
 other, starting at Iron.
 
-**The Mirror** (soul-mirror) is HWFWM canon for a person's own inner world, reflected —
-your external, personal counterpart to the Core. It lives entirely outside this
+**The Mirror** (soul-mirror) is your external, personal counterpart to the Core. It lives entirely outside this
 repository at `$MYTHOS_HOME` (default `~/.mythos/`) and holds your identity, your working
 principles, a small set of allowlisted preferences, and your own alias overlay. A
 `SessionStart` hook reads it and hands the AI a labeled, advisory-only summary; the

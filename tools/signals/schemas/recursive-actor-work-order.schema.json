@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "recursive-actor-work-order.schema.json",
   "title": "RecursiveActorWorkOrder/1.0",
-  "description": "Compact recursive routing work order for child actor delegation.",
+  "description": "Compact recursive routing work order for child actor delegation in Mythos.",
   "type": "object",
   "required": [
     "schema",

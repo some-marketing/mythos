@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "mythos/soul-space/subject-record/1.0",
+  "title": "Subject record",
+  "description": "A content-addressed identity/provenance record: an immutable, hash-verified statement about one subject, with a version history that must be provenance-backed. See ../README.md for the invariants this schema alone cannot express (hash recomputation, provenance-chain matching, non-self-attestation) — those are enforced by validate-soul-space.js.",
+  "type": "object",
+  "required": [
+    "subject_id",
+    "attributes",
+    "version",
+    "content_hash",
+    "provenance_chain"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "subject_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable identifier for the subject this record describes."
+    },
+    "attributes": {
+      "type": "object",
+      "description": "Freeform, domain-defined fields describing the subject. This is the extension point: a concrete deployment replaces or extends this with its own vocabulary."
+    },
+    "attestation": {
+      "type": "object",
+      "description": "Optional. A third-party verification claim about this record. Absent unless verifier_provenance is populated — a record cannot carry an attestation with no evidence of who made it.",
+      "required": ["level", "verifier_provenance"],
+      "additionalProperties": false,
+      "properties": {
+        "level": { "type": "number" },
+        "verifier_provenance": {
+          "type": "object",
+          "required": ["eval_id", "verifier_id"],
+          "additionalProperties": false,
+          "properties": {
+            "eval_id": { "type": "string", "minLength": 1 },
+            "verifier_id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Must identify a party other than the subject itself. Checked by the validator, not by this schema alone — see G4 in validate-soul-space.js."
+            }
+          }
+        }
+      }
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "content_hash": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Recomputed by the validator, never author-supplied as authority."
+    },
+    "provenance_chain": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["version", "who", "why", "when"],
+        "additionalProperties": false,
+        "properties": {
+          "version": { "type": "string" },
+          "who": { "type": "string", "minLength": 1 },
+          "why": { "type": "string", "minLength": 1 },
+          "when": { "type": "string" }
+        }
+      }
+    }
+  }
+}

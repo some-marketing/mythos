@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://mythos.dev/schemas/session-note.schema.json",
+  "$id": "https://mythos/session-note.schema.json",
   "title": "Mythos Session Note",
-  "description": "Canonical frontmatter contract for LLM session notes mirrored into the Obsidian vault (your configured memory-mirror directory). Modeled on the richest existing example (hermes-session-2026-06-09.md) and expanded per amendment AMD-3 (memory-dreaming-obsidian-improvements__amendment__20260610T111449Z) with Actor Continuity Contract fields: session_id, parent_session_id, source_artifacts, termination_status, writer, schema_version, privacy_classification, human_operator, started_at, ended_at. Fields are required where mechanically determinable; otherwise they must be present and explicitly null (documented semantics below). Authored repo-side only — the vault is a one-way mirror.",
+  "description": "Canonical frontmatter contract for LLM session notes mirrored into the Obsidian vault (Mythos-memories/transcripts/). Modeled on the richest existing example (hermes-session-2026-06-09.md) and expanded per amendment AMD-3 (memory-dreaming-obsidian-improvements__amendment__20260610T111449Z) with Actor Continuity Contract fields: session_id, parent_session_id, source_artifacts, termination_status, writer, schema_version, privacy_classification, human_operator, started_at, ended_at. Fields are required where mechanically determinable; otherwise they must be present and explicitly null (documented semantics below). Authored repo-side only — the vault is a one-way mirror.",
   "type": "object",
   "required": [
     "type",
@@ -88,7 +88,7 @@
     },
     "human_operator": {
       "type": ["string", "null"],
-      "description": "Human operator who owned/ratified the session (e.g. the operator's name). null = unattended/daemon session with no operator in the loop."
+      "description": "Human operator who owned/ratified the session (e.g. {OPERATOR_NAME}). null = unattended/daemon session with no operator in the loop."
     },
     "started_at": {
       "type": ["string", "null"],

@@ -6,7 +6,7 @@
 //
 // Usage:
 //   node tools/sessions/consume-boundary.cjs <scope>
-//   e.g. node tools/sessions/consume-boundary.cjs client:ACME
+//   e.g. node tools/sessions/consume-boundary.cjs client:{CLIENT_CODE}
 //
 // Run by /new-session (or the operator) when committing to resume a scope.
 //

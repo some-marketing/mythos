@@ -1,0 +1,23 @@
+{
+  "unit_id": "loop-unit-draft-copy-0007",
+  "grade_class": "routine",
+  "produced_by": {
+    "actor": "claude-opus",
+    "harness": "claude-code",
+    "model_family": "claude"
+  },
+  "validated_by": [
+    {
+      "actor": "claude-sonnet",
+      "harness": "claude-code-worker",
+      "model_family": "claude"
+    }
+  ],
+  "frozen_baseline_sha": "0f1e2d3c4b5a69788796a5b4c3d2e1f000ffee11",
+  "classifier_id": "draft-copy-rubric-classifier-v1",
+  "convergence_threshold": 0.7,
+  "verdict": "accept",
+  "roster_distinct_family": false,
+  "produced_at": "2026-07-07T00:05:00Z",
+  "classifier_score": 0.77
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VerdictEnvelope/1.0",
+  "type": "object",
+  "required": ["schema", "task_id", "structural", "semantic", "acceptance", "aggregate_state", "derived_at", "authority"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "const": "VerdictEnvelope/1.0" },
+    "task_id": { "type": "string", "minLength": 1 },
+    "structural": { "$ref": "#/$defs/layer" },
+    "semantic": { "$ref": "#/$defs/layer" },
+    "acceptance": { "$ref": "#/$defs/layer" },
+    "aggregate_state": { "enum": ["evidence_missing", "structural_failed", "semantic_review_required", "semantic_rejected", "acceptance_pending", "acceptance_rejected", "accepted"] },
+    "derived_at": { "type": "string", "minLength": 1 },
+    "authority": { "const": "verdict_report" }
+  },
+  "$defs": {
+    "layer": {
+      "type": "object",
+      "required": ["state", "reason_code", "receipt_sha256", "receipt"],
+      "additionalProperties": false,
+      "properties": {
+        "state": { "type": "string", "minLength": 1 },
+        "reason_code": { "type": ["string", "null"] },
+        "receipt_sha256": { "type": ["string", "null"] },
+        "receipt": { "type": ["object", "null"] }
+      }
+    }
+  }
+}

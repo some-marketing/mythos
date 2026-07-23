@@ -47,7 +47,7 @@ does not reimplement export or substitution logic.
 |---|---|---|
 | `needs-human` | Credentials, `op://` refs, hardcoded secrets/keys, and operator names/hosts from `scan-config.json` | **Always blocks.** Never auto-altered — you must resolve each one. |
 | `client-data` | Client codes, domains, ad IDs, emails in the export denylist | **Blocks by default** so you can confirm. Pass `--allow-substitutions` to let the exporter genericize them deterministically instead. |
-| `auto-scrub` | Absolute home paths (`/Users/you/...`) | Rewritten to `~` under `--apply`. |
+| `auto-scrub` | Absolute platform home-directory paths | Rewritten to `~` under `--apply`. |
 | `mock-candidate` | Files that hold real env/credential/state (`.env`, `.env.*`, `*-manifest.json`, `*state.json`, `*secrets*`, `*credentials*`, `*.local.json`) | **Blocks** until the export map excludes or mocks the real file — ship a sanitized `.example` instead. A `.example`/`.sample`/`.template` sibling is already treated as sanitized. |
 | `binary` | Files that cannot be decoded as text | **Blocks** for human review — never copied verbatim unseen. Allowlist known-safe shapes via `binary_allowlist` globs in `scan-config.json`. |
 

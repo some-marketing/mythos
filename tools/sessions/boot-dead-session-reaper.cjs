@@ -16,7 +16,7 @@
 //   2. stale-completed scopes — a pending marker whose referenced plan already
 //      shows completion evidence in plan-task-review-state (last_event at an
 //      approved/stamped/complete grade). The next consumer would RE-PLAN work
-//      that is already done. Reconciliation case #1: a plan whose scope carries a versioned milestone id.
+//      that is already done. Reconciliation case #1: worldforge-m135.
 
 const fs = require('fs');
 const path = require('path');
@@ -67,7 +67,7 @@ function toPosix(relPath) { return String(relPath).replace(/\\/g, '/'); }
 
 // Candidate plan-ids a pending marker could reference: the scope itself, plus
 // any non-flag, non-slash token in the recommended_next_command (e.g.
-// "/plan-task example-milestone-feature-render --scope system").
+// "/plan-task worldforge-m135-presence-runtime-render --scope system").
 function planIdCandidates(marker) {
   const out = new Set();
   if (marker.scope) out.add(String(marker.scope));
@@ -77,7 +77,7 @@ function planIdCandidates(marker) {
     const token = tokens[i];
     if (!token || token.startsWith('-') || token.startsWith('/')) continue;
     // Skip a token that is the VALUE of a preceding flag (e.g. "--scope system",
-    // "--client ACME"), which is a scope value, not a plan-id.
+    // "--client {CLIENT_CODE}"), which is a scope value, not a plan-id.
     if (i > 0 && tokens[i - 1].startsWith('--')) continue;
     out.add(token);
   }
@@ -85,7 +85,7 @@ function planIdCandidates(marker) {
 }
 
 // Every review-state marker linked to this pending scope, exact-id or
-// scope-prefixed (example-milestone -> example-milestone-feature-render).
+// scope-prefixed (worldforge-m135 -> worldforge-m135-presence-runtime-render).
 function linkedReviewStates(projectRoot, marker) {
   const dir = path.join(projectRoot, REVIEW_STATE_REL);
   let names;

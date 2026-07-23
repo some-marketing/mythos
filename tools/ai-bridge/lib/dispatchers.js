@@ -14,19 +14,14 @@
  * both defined in dispatch-contract.js.
  *
  * Currently registered:
+ *   - 'gemini-browser': Wraps the existing Gemini Playwright pipeline
  *   - 'ollama': Generic model-runtime dispatcher
  *   - 'openai-compatible': Generic model-runtime dispatcher
- *   - 'openrouter': Generic model-runtime dispatcher
  *
- * Not implemented in this export slice (will produce a `not_implemented`
- * DispatchResult rather than error):
- *   - 'gemini-browser': A Playwright-driven Gemini dispatcher exists in the
- *     private original but is out of scope for this port — see
- *     adapters/gemini-api.js for the API-key-based Gemini path instead.
+ * Not yet implemented (will error with a clear message):
  *   - 'perplexity': Planned for research workflows
  *   - 'chatgpt-api': Planned for QA/review workflows
  *   - 'claude-api': Planned for Agent SDK delegation
- *   - 'codex': Planned dispatch surface for a harness-CLI actor
  */
 
 const { VALID_PROVIDERS, createNotImplementedResult } = require('./dispatch-contract');
@@ -47,13 +42,11 @@ const dispatcherCache = {};
 
 /**
  * Map of provider names to their module paths.
- * '__generic__' providers are wired through the shared model-runtime adapter
- * layer (lib/model-runtime.js). `null` means registered but not implemented
- * in this export slice — dispatching to it returns a `not_implemented`
- * DispatchResult rather than throwing.
+ * Only 'gemini-browser' has a real implementation.
+ * Others are marked as null (not implemented).
  */
 const DISPATCHER_MODULES = {
-  'gemini-browser': null,
+  'gemini-browser': '../dispatchers/gemini-browser',
   'openai-compatible': '__generic__',
   'perplexity': null,
   'chatgpt-api': null,

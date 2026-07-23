@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "repair-action.schema.json",
+  "title": "Repair Action",
+  "description": "Schema for recording repair lifecycle actions (reopen, supersede, retract, correct, repair-note)",
+  "type": "object",
+  "properties": {
+    "action": {
+      "type": "string",
+      "enum": ["reopen", "supersede", "retract", "correct", "repair-note"],
+      "description": "The type of repair action"
+    },
+    "target_artifact": {
+      "type": "string",
+      "description": "Path to the outcome artifact being repaired"
+    },
+    "actor": {
+      "type": "object",
+      "properties": {
+        "actor_id": { "type": "string" },
+        "actor_type": { "type": "string", "enum": ["human", "ai"] },
+        "harness_id": { "type": "string" }
+      },
+      "required": ["actor_id", "actor_type"]
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "justification": {
+          "type": "string",
+          "description": "Why this repair action is needed"
+        },
+        "evidence_paths": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Paths to evidence artifacts supporting the repair"
+        },
+        "impact_assessment": {
+          "type": "string",
+          "description": "Assessment of downstream impact (required for retract)"
+        }
+      },
+      "required": ["justification", "evidence_paths"]
+    },
+    "correction_details": {
+      "type": "object",
+      "description": "Only for 'correct' actions — specifies what fields changed",
+      "properties": {
+        "field": { "type": "string" },
+        "old_value": {},
+        "new_value": {}
+      }
+    },
+    "supersedes": {
+      "type": "string",
+      "description": "Only for 'supersede' — path to the prior outcome being replaced"
+    },
+    "reopen_count": {
+      "type": "integer",
+      "description": "Only for 'reopen' — how many times this outcome has been reopened (max 2 before escalation)"
+    }
+  },
+  "required": ["action", "target_artifact", "actor", "timestamp", "evidence"],
+  "allOf": [
+    {
+      "if": { "properties": { "action": { "const": "retract" } } },
+      "then": { "required": ["action", "target_artifact", "actor", "timestamp", "evidence"], "properties": { "evidence": { "required": ["justification", "evidence_paths", "impact_assessment"] } } }
+    },
+    {
+      "if": { "properties": { "action": { "const": "correct" } } },
+      "then": { "required": ["action", "target_artifact", "actor", "timestamp", "evidence", "correction_details"] }
+    },
+    {
+      "if": { "properties": { "action": { "const": "supersede" } } },
+      "then": { "required": ["action", "target_artifact", "actor", "timestamp", "evidence", "supersedes"] }
+    },
+    {
+      "if": { "properties": { "action": { "const": "reopen" } } },
+      "then": { "required": ["action", "target_artifact", "actor", "timestamp", "evidence", "reopen_count"] }
+    }
+  ]
+}

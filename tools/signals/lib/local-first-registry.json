@@ -1,0 +1,25 @@
+{
+  "_doc": "Registry for local-first dispatch. Scopes listed here get local verification before Codex. Patterns listed here always escalate unconditionally.",
+  "low_risk_scopes": [
+    "local-model-structural-lane",
+    "local-model-verify-local",
+    "simpleminions-routing-integration"
+  ],
+  "always_escalate_patterns": [
+    "\\.env",
+    "credentials",
+    "secrets?\\.",
+    "guardrails\\.md",
+    "client\\.json",
+    "WORKSPACE_MANIFEST",
+    "instructions/canonical"
+  ],
+  "proposed_lanes": [
+    {
+      "scope": "verify-framework-output",
+      "description": "Framework verification signal review — mechanical structured output, bounded scope, low judgment requirement",
+      "status": "proposed",
+      "rationale": "verify-framework.cjs produces structured PASS/FAIL/WARN signals. Local model can review the signal output for consistency and flag obvious issues before Codex reviews the full framework state. Same pattern: local-first on structured output, escalate on uncertainty."
+    }
+  ]
+}

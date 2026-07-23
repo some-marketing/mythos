@@ -2,19 +2,10 @@
 'use strict';
 
 /**
- * tick.js — Fleet Ticker
+ * tick.js — Mythos Fleet Ticker
  *
- * Reads a hosts config (see hosts.example.json for the shape), SSHes to each
- * host, runs a remote probe script that returns a JSON status blob, collects
- * it, and writes a fleet index. Offline hosts fall back to their last-known
- * state rather than dropping out of the index.
- *
- * This ticker expects each remote host to already have its own probe script
- * installed at PROBE_REMOTE_PATH (env-overridable) that prints a single JSON
- * object to stdout describing that host's state (models available, free RAM,
- * uptime, etc. — whatever fields your worker/orchestrator care about). That
- * probe script is host-provisioning-specific and isn't shipped here; write
- * your own to match your fleet.
+ * Reads remote-hosts.json, SSHes to each host, runs fleet-probe.ps1,
+ * collects JSON, and writes fleet-index.json.
  *
  * Usage: node tools/fleet/tick.js
  *        npm run fleet:tick
@@ -25,9 +16,9 @@ const path = require('path');
 const { spawnSync } = require('child_process');
 
 const PROJECT_ROOT = path.resolve(__dirname, '../..');
-const REMOTE_HOSTS_PATH = process.env.FLEET_HOSTS_PATH || path.join(PROJECT_ROOT, '_dev', 'config', 'remote-hosts.json');
-const FLEET_INDEX_PATH = process.env.FLEET_INDEX_PATH || path.join(PROJECT_ROOT, '_dev', 'config', 'fleet-index.json');
-const PROBE_REMOTE_PATH = process.env.FLEET_PROBE_REMOTE_PATH || 'C:\\fleet\\fleet-probe.ps1';
+const REMOTE_HOSTS_PATH = path.join(PROJECT_ROOT, '_dev', 'config', 'remote-hosts.json');
+const FLEET_INDEX_PATH = path.join(PROJECT_ROOT, '_dev', 'config', 'fleet-index.json');
+const PROBE_REMOTE_PATH = 'C:\\smos\\fleet-probe.ps1';
 
 // Read prior index for stale-preservation
 let priorIndex = { hosts: {} };
@@ -38,7 +29,6 @@ if (fs.existsSync(FLEET_INDEX_PATH)) {
 // Read remote hosts config
 if (!fs.existsSync(REMOTE_HOSTS_PATH)) {
   console.error('Remote hosts config not found:', REMOTE_HOSTS_PATH);
-  console.error('See tools/fleet/hosts.example.json for the expected shape.');
   process.exit(1);
 }
 const remoteHosts = JSON.parse(fs.readFileSync(REMOTE_HOSTS_PATH, 'utf8'));
@@ -104,7 +94,8 @@ for (const [alias, cfg] of Object.entries(remoteHosts.hosts || {})) {
     fleetIndex.hosts[alias] = {
       ...probeData,
       status: 'ok',
-      tags: cfg.tags || []
+      tags: cfg.tags || [],
+      tailscale_ip: priorIndex.hosts?.[alias]?.tailscale_ip || null
     };
     console.log(`  ${alias}: ok (${probeData.ollama?.models?.length || 0} models, ${probeData.ram?.free_gb || '?'}GB free RAM, ${probeData.uptime_hours || '?'}h uptime)`);
   } catch (e) {

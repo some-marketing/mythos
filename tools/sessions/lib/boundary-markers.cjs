@@ -50,7 +50,7 @@ function isValid(payload) {
 }
 
 // Stable, filesystem-safe slug for a scope. Preserves case + client code:
-//   "client:ACME" -> "client-ACME", "--system" -> "system", "system" -> "system".
+//   "client:{CLIENT_CODE}" -> "client-{CLIENT_CODE}", "--system" -> "system", "system" -> "system".
 function slugForScope(scope) {
   const raw = String(scope || '').trim().replace(/^--/, '');
   const slug = raw.replace(/[^A-Za-z0-9._-]+/g, '-').replace(/^-+|-+$/g, '');

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * build-memory-db.js — LOCAL-ONLY memory + "dreaming" database.
+ * build-memory-db.js — LOCAL-ONLY memory + "dreaming" database for Mythos.
  *
  * No network calls, no external services, no heavy deps. Uses the macOS
  * preinstalled `sqlite3` CLI if present; otherwise falls back to a
@@ -33,17 +33,11 @@ const { resolveSqlite3 } = require('./lib/resolve-sqlite3.cjs');
 // Paths
 // ---------------------------------------------------------------------------
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
-// Claude Code names each project's transcript directory after the absolute
-// cwd path with separators (and underscores/dots) replaced by dashes.
-// Derive it instead of hardcoding one operator's path.
-function projectDirName(cwd = REPO_ROOT) {
-  return cwd.replace(/[\/_.]/g, '-');
-}
 const POCKET_MEMORY_DIR = path.join(
   os.homedir(),
   '.claude',
   'projects',
-  projectDirName(),
+  '-Users-admin-dev-mythos-recovered',
   'memory'
 );
 const KERNEL_ENTRIES_DIR = path.join(REPO_ROOT, '_dev', 'state', 'kernel-memory', 'entries');
@@ -55,7 +49,7 @@ const DREAM_REPORT_PATH = path.join(OUT_DIR, 'dream-report.md');
 // Privacy floor: directory substrings that must never be ingested.
 const FORBIDDEN_PATH_SUBSTRINGS = [
   path.sep + 'clients' + path.sep,
-  path.sep + 'research' + path.sep + 'personal-notes' + path.sep,
+  path.sep + 'research' + path.sep + '{OPERATOR_NAME}-philosophy' + path.sep,
   '.env',
 ];
 
@@ -64,7 +58,7 @@ const FORBIDDEN_PATH_SUBSTRINGS = [
 // ---------------------------------------------------------------------------
 function detectSqlite3() {
   // Cross-platform binary resolution (win32 `where`, macOS/Linux `which`,
-  // common install paths, MYTHOS_SQLITE3 override). Null → JSONL fallback.
+  // common install paths, SMOS_SQLITE3 override). Null → JSONL fallback.
   return resolveSqlite3();
 }
 
@@ -133,10 +127,10 @@ function parseFrontmatter(fmText) {
   for (const line of lines) {
     if (!line.trim()) continue;
     const indent = line.match(/^(\s*)/)[1].length;
-    const fieldMatch = line.match(/^\s*([A-Za-z0-9_.-]+):\s*(.*)$/);
-    if (!fieldMatch) continue;
-    const key = fieldMatch[1];
-    let val = fieldMatch[2].trim();
+    const mm = line.match(/^\s*([A-Za-z0-9_.-]+):\s*(.*)$/);
+    if (!mm) continue;
+    const key = mm[1];
+    let val = mm[2].trim();
     if (indent >= 2 && parentKey) {
       out[parentKey] = out[parentKey] || {};
       out[parentKey][key] = stripQuotes(val);

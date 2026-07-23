@@ -1,29 +1,26 @@
 #!/usr/bin/env node
 'use strict';
 
-const REPO_DIR = process.env.FLEET_NODE_REPO_DIR || 'C:\\mythos';
-const BRANCH = process.env.FLEET_NODE_BRANCH || 'main';
-const WORKER_SERVICE = process.env.FLEET_NODE_WORKER_SERVICE || 'fleet-worker';
-
 const commandLines = [
-  `cd ${REPO_DIR}`,
+  'cd C:\\Mythos',
   'git fetch origin',
-  `git switch ${BRANCH}`,
+  'git switch recovery/clean-lineage-2026-05-18',
   'git pull --ff-only',
-  'powershell -ExecutionPolicy Bypass -File <your-cloud-stack-ensure-script.ps1> -OpenCloudApps',
-  `Restart-Service ${WORKER_SERVICE}`
+  'powershell -ExecutionPolicy Bypass -File tools\\fleet\\ensure-node-cloud-stack.ps1 -OpenCloudApps',
+  'Restart-Service simpleminions-worker'
 ];
 
-const EXAMPLE_NODES = (process.env.FLEET_NODE_LIST || 'example-gpu-host,example-workstation').split(',').map(n => n.trim()).filter(Boolean);
-
-const verificationLines = EXAMPLE_NODES.flatMap(node => [
-  `curl http://${node}:8001/api/health`,
-  `curl http://${node}:11434/api/tags`
-]).concat(['npm run fleet:broadcast-mirror -- --serve']);
+const verificationLines = [
+  'curl http://orwell:8001/api/health',
+  'curl http://orwell:11434/api/tags',
+  'curl http://rupert:8001/api/health',
+  'curl http://rupert:11434/api/tags',
+  'npm run fleet:broadcast-mirror -- --serve'
+];
 
 if (process.argv.includes('--json')) {
   console.log(JSON.stringify({
-    branch: BRANCH,
+    branch: 'recovery/clean-lineage-2026-05-18',
     node_command: commandLines,
     verify_from_orchestrator: verificationLines
   }, null, 2));

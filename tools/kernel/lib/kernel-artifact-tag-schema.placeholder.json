@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "tools/kernel/lib/kernel-artifact-tag-schema.placeholder.json",
+  "title": "KernelArtifactTagSchemaPlaceholder",
+  "description": "PLACEHOLDER schema for kernel-artifact YAML frontmatter fields. Mirrors the six required fields declared by _dev/concepts/retrieval-lobe/concept.md:46. Consumed by tools/kernel/lib/retrieval-adapter.cjs via import path; when the Retrieval lobe ships its authoritative schema, the adapter's import path swaps to the Retrieval module with NO OTHER Control Loop code changes. This file is owned by Control Loop only until that swap.",
+  "version": "0.1.0-placeholder",
+  "source_of_truth": "_dev/concepts/retrieval-lobe/concept.md:46",
+  "type": "object",
+  "required": [
+    "similarity_tags",
+    "domain",
+    "surfaces",
+    "related_artifacts",
+    "kernel_level",
+    "state_lifecycle"
+  ],
+  "properties": {
+    "similarity_tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Controlled-vocabulary tag list plus free-text tags (free-text flagged)."
+    },
+    "domain": {
+      "type": "string",
+      "description": "Primary domain of the artifact (e.g., kernel, client, framework)."
+    },
+    "surfaces": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "File/path surfaces the artifact touches or references."
+    },
+    "related_artifacts": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Reachable artifact paths for related-work graph traversal."
+    },
+    "kernel_level": {
+      "type": "string",
+      "enum": ["leaf", "task", "project", "system"],
+      "description": "Actor-tier the artifact is authored at."
+    },
+    "state_lifecycle": {
+      "type": "string",
+      "enum": ["draft", "active", "archived", "superseded", "promoted", "draft-pending-plan-task"],
+      "description": "Lifecycle phase of the artifact."
+    }
+  },
+  "additionalProperties": true
+}

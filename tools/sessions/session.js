@@ -50,7 +50,7 @@ function parseArgs(argv) {
 function printHelp() {
   console.log(`Usage: node tools/sessions/session.js <command> [options]
 
-Track active agent sessions.
+Track active Mythos agent sessions.
 
 Commands:
   register                         Register or refresh an active session
@@ -65,7 +65,7 @@ Commands:
 
 Options:
   --session-id <id>                Session identifier (defaults to _current-id sidecar for update/whoami)
-  --actor-id <id>                  Actor identifier, e.g. claude-opus-4-7:my-workstream
+  --actor-id <id>                  Actor identifier, e.g. claude-opus-4-7:kerneling-rupert
   --actor-type <type>              Actor type for TTL policy lookup, e.g. claude-opus-4-7
   --current-branch <branch>        Current git branch
   --expected-interval-ms <ms>      Expected interval for computed TTL actors

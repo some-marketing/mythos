@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Delesign deliverable poller. Wakes every 30 minutes, queries all live
+  Delesign projects (status != Completed/Archived), and writes a
+  ready-for-review CoordinationSignal whenever a project's status or
+  project_link transitions.
+
+  Install:
+    cp tools/launchd/ca.somemarketing.smos.delesign-poll.plist ~/Library/LaunchAgents/
+    launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/ca.somemarketing.smos.delesign-poll.plist
+
+  Reload after edit:
+    launchctl bootout gui/$(id -u) ~/Library/LaunchAgents/ca.somemarketing.smos.delesign-poll.plist
+    cp tools/launchd/ca.somemarketing.smos.delesign-poll.plist ~/Library/LaunchAgents/
+    launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/ca.somemarketing.smos.delesign-poll.plist
+
+  Status / kick:
+    launchctl print gui/$(id -u)/ca.somemarketing.smos.delesign-poll
+    launchctl kickstart -k gui/$(id -u)/ca.somemarketing.smos.delesign-poll
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>ca.somemarketing.smos.delesign-poll</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/env</string>
+        <string>node</string>
+        <string>/Users/admin/dev/SM_OS-recovered/tools/launchd/run-delesign-poll.cjs</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/admin/dev/SM_OS-recovered</string>
+
+    <key>StartInterval</key>
+    <integer>1800</integer>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/admin/dev/SM_OS-recovered/_dev/state/delesign-poll/launchd.stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/admin/dev/SM_OS-recovered/_dev/state/delesign-poll/launchd.stderr.log</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>HOME</key>
+        <string>/Users/admin</string>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+    </dict>
+</dict>
+</plist>

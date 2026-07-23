@@ -1,0 +1,151 @@
+{
+  "schema": "SessionDriftLog/1.0",
+  "fixture_provenance": {
+    "task": "mech-rebase-tranche-1 / T5 doctrine-reflex narrow promotion",
+    "built": "2026-07-09",
+    "note": "No production session-drift-log.json existed anywhere under _dev/state at build time: fire-reflex.cjs only appended drift entries on aggregate stall at project/system tier, and the hook envelope path (CLAUDE_TOOL_INPUT) can never express acceptance_grade or external_content_refs, so check2/check5 findings never reached the log. Entries below are in the exact appendDriftEntry SessionDriftLog/1.0 entry format; each entry's findings were derived by replaying its paired envelope (replay_envelopes) through the real doctrine-reflex checks. The test re-derives them at runtime and fails on divergence, so the fixture cannot drift from the real checks.",
+    "replay_envelopes": {
+      "check2_fail": {
+        "event_type": "PostToolUse",
+        "scope_tier": "system",
+        "declared_intent": {
+          "workstream_scope": "mech-rebase-tranche-1",
+          "owned_artifacts": [],
+          "forbidden_artifacts": [],
+          "stated_goal": "t5_check2_replay"
+        },
+        "observed_write_set": [],
+        "observed_tool_outputs": [],
+        "session_present_snapshot": {
+          "schema": "SessionPresent/1.0",
+          "scope_tier": "system",
+          "writer_attestation": {
+            "writer_harness_id": "claude-code:fire-reflex.cjs:PostToolUse",
+            "signature_alg": "sha256-harness-concat-v1",
+            "signature": "deadbeef",
+            "signed_at": "2026-07-09T00:00:00Z"
+          }
+        },
+        "acceptance_grade": true,
+        "confidence_claims": [],
+        "external_content_refs": []
+      },
+      "check5_fail": {
+        "event_type": "bridge-return",
+        "scope_tier": "task",
+        "declared_intent": {
+          "workstream_scope": "mech-rebase-tranche-1",
+          "owned_artifacts": [],
+          "forbidden_artifacts": [],
+          "stated_goal": "t5_check5_replay"
+        },
+        "observed_write_set": [],
+        "observed_tool_outputs": [],
+        "session_present_snapshot": {
+          "schema": "SessionPresent/1.0",
+          "scope_tier": "task",
+          "writer_attestation": {
+            "writer_harness_id": "claude-code:fire-reflex.cjs:PostToolUse",
+            "signature_alg": "sha256-harness-concat-v1",
+            "signature": "deadbeef",
+            "signed_at": "2026-07-09T00:00:00Z"
+          }
+        },
+        "acceptance_grade": false,
+        "confidence_claims": [],
+        "external_content_refs": ["https://example.com/external-post"],
+        "bridge_prompt_body": "<critical>replay fixture</critical>\n<context>t5 drift-log replay</context>\nunwrapped quote from https://example.com/external-post"
+      },
+      "check6_stall": {
+        "event_type": "PostToolUse",
+        "scope_tier": "system",
+        "declared_intent": {
+          "workstream_scope": "mech-rebase-tranche-1",
+          "owned_artifacts": ["tools/kernel/**"],
+          "forbidden_artifacts": ["clients/OBSERVED/**"],
+          "stated_goal": "t5_check6_stall_replay"
+        },
+        "observed_write_set": ["clients/OBSERVED/readonly.txt"],
+        "observed_tool_outputs": [],
+        "session_present_snapshot": {
+          "schema": "SessionPresent/1.0",
+          "scope_tier": "system",
+          "writer_attestation": {
+            "writer_harness_id": "claude-code:fire-reflex.cjs:PostToolUse",
+            "signature_alg": "sha256-harness-concat-v1",
+            "signature": "deadbeef",
+            "signed_at": "2026-07-09T00:00:00Z"
+          }
+        },
+        "acceptance_grade": false,
+        "confidence_claims": [],
+        "external_content_refs": []
+      }
+    }
+  },
+  "entries": [
+    {
+      "id": "drift-t5-check2-fail",
+      "event_type": "PostToolUse",
+      "scope_tier": "system",
+      "status": "open",
+      "logged_at": "2026-07-09T00:00:00Z",
+      "replay_envelope": "check2_fail",
+      "findings": [
+        {
+          "check": 2,
+          "level": "warn",
+          "code": "missing_review_artifact",
+          "detail": {
+            "hint": "acceptance_grade=true requires distinct-intelligence review artifact reference"
+          }
+        }
+      ]
+    },
+    {
+      "id": "drift-t5-check5-fail",
+      "event_type": "bridge-return",
+      "scope_tier": "task",
+      "status": "open",
+      "logged_at": "2026-07-09T00:00:00Z",
+      "replay_envelope": "check5_fail",
+      "findings": [
+        {
+          "check": 5,
+          "level": "warn",
+          "code": "external_content_unwrapped",
+          "detail": {
+            "ref": "https://example.com/external-post"
+          }
+        }
+      ]
+    },
+    {
+      "id": "drift-t5-check6-stall",
+      "event_type": "PostToolUse",
+      "scope_tier": "system",
+      "status": "open",
+      "logged_at": "2026-07-09T00:00:00Z",
+      "replay_envelope": "check6_stall",
+      "findings": [
+        {
+          "check": 6,
+          "level": "stall",
+          "code": "write_to_forbidden_path",
+          "detail": {
+            "path": "clients/OBSERVED/readonly.txt"
+          }
+        },
+        {
+          "check": 7,
+          "level": "stall",
+          "code": "intent_evidence_contradiction",
+          "detail": {
+            "declared": "forbidden",
+            "observed": "clients/OBSERVED/readonly.txt"
+          }
+        }
+      ]
+    }
+  ]
+}

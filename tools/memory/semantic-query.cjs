@@ -2,10 +2,10 @@
 'use strict';
 /**
  * semantic-query.cjs — anchor-based semantic retrieval over the Smart Connections
- * embedding store (your configured memory-mirror directory's .smart-env/multi/*.ajson, if present).
+ * embedding store (Mythos-memories/.smart-env/multi/*.ajson).
  *
  * Plan: memory-dreaming-obsidian-improvements · slice mdoi-semantic-retrieval
- * Gate: AMD-2 resolved 2026-06-10 — the human operator stamped default-off
+ * Gate: AMD-2 resolved 2026-06-10 — operator ({OPERATOR_NAME}) stamped default-off
  *       implementation on the codex LIFT verdict
  *       (_dev/reports/analysis/review-progress__codex-judge-retrieval-lift-mdoi-semantic-retrieval.md).
  *       Gate-resolution record:
@@ -40,7 +40,7 @@
  *   - existence filter: drop results whose vault file no longer exists
  *     (349 orphaned embeddings known at assay time)
  *   - hard path filter: drop any result whose vault-relative path contains
- *     `clients/`, a personal-notes directory, or `session-bundles/`; an anchor in
+ *     `clients/`, `{OPERATOR_NAME}-philosophy`, or `session-bundles/`; an anchor in
  *     that space is refused outright
  *
  * DEFAULT-OFF (binding condition (c)): this CLI is NOT wired into
@@ -59,7 +59,7 @@ const fs = require('fs');
 const path = require('path');
 
 const PROJECT_ROOT = path.resolve(__dirname, '../..');
-const VAULT = path.join(PROJECT_ROOT, process.env.MYTHOS_MEMORY_MIRROR_DIR || 'memory-mirror');
+const VAULT = path.join(PROJECT_ROOT, 'Mythos-memories');
 const MULTI = path.join(VAULT, '.smart-env', 'multi');
 const PLUGIN_MANIFEST = path.join(VAULT, '.obsidian', 'plugins', 'smart-connections', 'manifest.json');
 const SMART_ENV = path.join(VAULT, '.smart-env', 'smart_env.json');
@@ -72,7 +72,7 @@ const VEC_DIM = 384;
 const PARSE_ERROR_ABORT_RATIO = 0.05; // >5% unreadable files = format drift
 
 // Binding condition (b): hard path filter — mechanical, not advisory.
-const FORBIDDEN_PATH_SUBSTRINGS = ['clients/', 'personal-notes/', 'session-bundles/'];
+const FORBIDDEN_PATH_SUBSTRINGS = ['clients/', '{OPERATOR_NAME}-philosophy', 'session-bundles/'];
 
 function softFail(msg) {
   process.stderr.write(`semantic-query: SOFT-FAIL (format/version drift or bad input): ${msg}\n`);

@@ -1,0 +1,125 @@
+{
+  "schema": "MemoryEdgeFalsifierBaseline/1.0",
+  "labeled_by": "blind-labeler-worker (independent of writer implementation)",
+  "labeled_at": "2026-06-27",
+  "note": "Ground truth hand-verified from repo artifacts; labeler did NOT see the writer's inference algorithm. Each edge was confirmed by reading the cited file at the cited line/section, not derived by any inference tool. memory_key = the memory's filename slug under Mythos-memories/memory/ (the surface that downstream artifacts cite). not_detected edges record absence verified by grep over plans/concepts/debriefs/lessons returning zero references outside the MEMORY.md index.",
+  "edges": [
+    {
+      "edge_id": "fb-001",
+      "source": { "kind": "memory_key", "id": "reference_remote-ssh-node-kerneling-playbook" },
+      "target": { "kind": "lesson_id", "id": "run-debrief__syme-kerneling__2026-06-24" },
+      "relationship": "anchors_lesson",
+      "keystone_status": "detected",
+      "evidence": "_dev/reports/analysis/run-debrief__syme-kerneling__2026-06-24.md line 28 (replicate lesson #3): 'Pattern documented in memory/reference_remote-ssh-node-kerneling-playbook.md' — the debrief's replicate lesson load-bears on this memory.",
+      "witness_state": "witnessed"
+    },
+    {
+      "edge_id": "fb-002",
+      "source": { "kind": "memory_key", "id": "project_fable-outside-kernel-and-sam-aggregate" },
+      "target": { "kind": "lesson_id", "id": "run-debrief__system__20260612T051000Z" },
+      "relationship": "anchors_lesson",
+      "keystone_status": "detected",
+      "evidence": "_dev/reports/analysis/run-debrief__system__20260612T051000Z.md line 11: 'Wrote memory note Mythos-memories/memory/project_fable-outside-kernel-and-sam-aggregate.md' — the system-scope closeout produced and depends on this memory.",
+      "witness_state": "witnessed"
+    },
+    {
+      "edge_id": "fb-003",
+      "source": { "kind": "memory_key", "id": "project_fable-outside-kernel-and-sam-aggregate" },
+      "target": { "kind": "commit_anchor", "id": "71ca613a4" },
+      "relationship": "gates_archival_of",
+      "keystone_status": "detected",
+      "evidence": "Commit 71ca613a4 'memory: archive outside-kernel fable transcript' exists in history (git log) and is named in run-debrief__system__20260612T051000Z.md line 13 as the scoped commit that durably anchors this memory note + transcript; moving/forgetting the memory relative to this anchor is the archival gate.",
+      "witness_state": "witnessed"
+    },
+    {
+      "edge_id": "fb-004",
+      "source": { "kind": "memory_key", "id": "feedback_context-purity-is-correctness" },
+      "target": { "kind": "span_id", "id": "20260531T071527Z-dialectic-over-fear" },
+      "relationship": "grounds_span",
+      "keystone_status": "detected",
+      "evidence": "_dev/reports/analysis/convene-runs/20260531T071527Z-dialectic-over-fear/manifest.json context_files array lists '/Users/admin/.claude/projects/.../memory/feedback_context-purity-is-correctness.md' — this memory was injected as grounding context for the convene dispatch.",
+      "witness_state": "witnessed"
+    },
+    {
+      "edge_id": "fb-005",
+      "source": { "kind": "memory_key", "id": "feedback_falsifier-must-be-operational" },
+      "target": { "kind": "plan_id", "id": "auto-rest-mechanical-triggers" },
+      "relationship": "referenced_by_plan",
+      "keystone_status": "detected",
+      "evidence": "_dev/reports/analysis/task-plans/auto-rest-mechanical-triggers__plan.json line 199 composes_with: 'memory feedback_falsifier-must-be-operational (mechanical-only triggers; distinct-reviewer; no self-assessed fatigue)'; concept auto-rest-mechanical-triggers.md lines 34,57 apply the same law as the plan's load-bearing constraint.",
+      "witness_state": "witnessed"
+    },
+    {
+      "edge_id": "fb-006",
+      "source": { "kind": "memory_key", "id": "feedback_context-purity-is-correctness" },
+      "target": { "kind": "plan_id", "id": "simulation-rules-from-pixar-mappings" },
+      "relationship": "referenced_by_plan",
+      "keystone_status": "detected",
+      "evidence": "_dev/concepts/simulation-rules-from-pixar-mappings.md grounded_in (line 30) lists 'Mythos-memories/memory/feedback_context-purity-is-correctness.md' — the design artifact declares this memory as a grounding dependency.",
+      "witness_state": "witnessed"
+    },
+    {
+      "edge_id": "fb-007",
+      "source": { "kind": "memory_key", "id": "feedback_context-purity-is-correctness" },
+      "target": { "kind": "plan_id", "id": "mind-development--pixar-context-clues" },
+      "relationship": "referenced_by_plan",
+      "keystone_status": "detected",
+      "evidence": "_dev/concepts/mind-development--pixar-context-clues.md grounded_in (line 20) lists the memory, and its body (line 62) cites it inline as the Mythos Cross-Verification Law source — a load-bearing reference, not incidental.",
+      "witness_state": "witnessed"
+    },
+    {
+      "edge_id": "fb-008",
+      "source": { "kind": "memory_key", "id": "feedback_falsifier-must-be-operational" },
+      "target": { "kind": "plan_id", "id": "emergent-mind-world" },
+      "relationship": "referenced_by_plan",
+      "keystone_status": "detected",
+      "evidence": "_dev/concepts/emergent-mind-world.md cites feedback_falsifier-must-be-operational four times (lines 163,222,407,416) as the load-bearing constraint preventing coherence/elegance from ratifying an unproven containment claim — silently dropping the memory would weaken the concept's safety gate.",
+      "witness_state": "witnessed"
+    },
+    {
+      "edge_id": "fb-009",
+      "source": { "kind": "memory_key", "id": "cascade-observability-dimension-taxonomy" },
+      "target": { "kind": "plan_id", "id": "pixar-rule1-5-keystone-memory-edge" },
+      "relationship": "referenced_by_plan",
+      "keystone_status": "classification_uncertain",
+      "evidence": "_dev/concepts/memory-dependency-edge.md (plan_id pixar-rule1-5-keystone-memory-edge) grounded_in line 11 cites cascade-observability-dimension-taxonomy. Uncertain: the grounded_in path points at _dev/concepts/cascade-observability-dimension-taxonomy.md while the same slug is ALSO listed as a memory in MEMORY.md ('Cascade observability Visibility Contract'); cannot confirm the memory surface (vs the concept doc) is the actual keystone.",
+      "witness_state": "inferred"
+    },
+    {
+      "edge_id": "fb-010",
+      "source": { "kind": "memory_key", "id": "reference_sdas-tracking-hub-meta-capi-prior-form-identity" },
+      "target": { "kind": "lesson_id", "id": "run-debrief__sdas-tracking-hub-meta-capi-prior-form-identity__20260616" },
+      "relationship": "anchors_lesson",
+      "keystone_status": "classification_uncertain",
+      "evidence": "run-debrief__sdas-tracking-hub-meta-capi-prior-form-identity__20260616.md line 23 references Mythos-memories/memory/reference_sdas-tracking-hub-meta-capi-prior-form-identity.md, but that memory file is NOT present in the current Mythos-memories/memory/ dir — plausible debrief->memory dependency but cannot confirm the memory is live/load-bearing now (may be archived or never landed).",
+      "witness_state": "inferred"
+    },
+    {
+      "edge_id": "fb-011",
+      "source": { "kind": "memory_key", "id": "feedback_best-of-n-topology-mirror-law" },
+      "target": { "kind": "plan_id", "id": "speculative-worker-pool" },
+      "relationship": "referenced_by_plan",
+      "keystone_status": "classification_uncertain",
+      "evidence": "_dev/concepts/speculative-worker-pool.md is titled 'best-of-N execution shape' and feedback_context-purity-is-correctness.md body names [[feedback_best-of-n-topology-mirror-law]] as the law speculative-worker-pool refines; but speculative-worker-pool.md has no grounded_in block and does not cite the memory slug explicitly — strong but unconfirmed grounding.",
+      "witness_state": "inferred"
+    },
+    {
+      "edge_id": "fb-012",
+      "source": { "kind": "memory_key", "id": "reference_excel-online-playwright-navigation" },
+      "target": { "kind": "plan_id", "id": null },
+      "relationship": "referenced_by_plan",
+      "keystone_status": "not_detected",
+      "evidence": "grep over _dev/concepts/, _dev/reports/analysis/task-plans/, run-debrief__*.md, and lessons* returned 0 referencing artifacts; the slug appears only in the MEMORY.md recall index. No plan/concept/debrief/lesson depends on it.",
+      "witness_state": "witnessed"
+    },
+    {
+      "edge_id": "fb-013",
+      "source": { "kind": "memory_key", "id": "reference_apple-reminders-automation-slow" },
+      "target": { "kind": "plan_id", "id": null },
+      "relationship": "referenced_by_plan",
+      "keystone_status": "not_detected",
+      "evidence": "grep over _dev/concepts/, _dev/reports/analysis/task-plans/, run-debrief__*.md, and lessons* returned 0 referencing artifacts; the slug appears only in the MEMORY.md recall index. Nothing load-bearing depends on it.",
+      "witness_state": "witnessed"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "unit_id": "loop-unit-{CLIENT_CODE}-perf-0001",
+  "grade_class": "consequence",
+  "produced_by": {
+    "actor": "claude-opus",
+    "harness": "claude-code",
+    "model_family": "claude"
+  },
+  "validated_by": [
+    {
+      "actor": "codex",
+      "harness": "codex-cli",
+      "model_family": "gpt"
+    },
+    {
+      "actor": "gemini-pro",
+      "harness": "gemini-cli",
+      "model_family": "gemini"
+    }
+  ],
+  "frozen_baseline_sha": "a1b2c3d4e5f60718293a4b5c6d7e8f9012345678",
+  "classifier_id": "{CLIENT_CODE}-conversion-lift-classifier-v3",
+  "convergence_threshold": 0.8,
+  "verdict": "accept",
+  "roster_distinct_family": true,
+  "produced_at": "2026-07-07T00:00:00Z",
+  "classifier_score": 0.91
+}

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Dart <-> Apple (Reminders + Notes) two-way mirror poller. Wakes every 30
+  minutes, pulls active Dart tasks, reconciles them against the per-board
+  "Dart: *" Reminders lists, rebuilds the "Dart Tasks — Active" digest note,
+  and writes completion back to Dart for any reminder completed in Apple.
+
+  MUST run as a user LaunchAgent in the GUI (Aqua) session — Apple Events to
+  Reminders/Notes require the TCC automation grant tied to that session.
+
+  Install:
+    cp tools/launchd/ca.somemarketing.smos.apple-sync.plist ~/Library/LaunchAgents/
+    launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/ca.somemarketing.smos.apple-sync.plist
+
+  Reload after edit:
+    launchctl bootout gui/$(id -u) ~/Library/LaunchAgents/ca.somemarketing.smos.apple-sync.plist
+    cp tools/launchd/ca.somemarketing.smos.apple-sync.plist ~/Library/LaunchAgents/
+    launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/ca.somemarketing.smos.apple-sync.plist
+
+  Status / kick:
+    launchctl print gui/$(id -u)/ca.somemarketing.smos.apple-sync
+    launchctl kickstart -k gui/$(id -u)/ca.somemarketing.smos.apple-sync
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>ca.somemarketing.smos.apple-sync</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/env</string>
+        <string>node</string>
+        <string>/Users/admin/dev/SM_OS-recovered/tools/apple-sync/sync.js</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/admin/dev/SM_OS-recovered</string>
+
+    <key>StartInterval</key>
+    <integer>1800</integer>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/admin/dev/SM_OS-recovered/_dev/state/apple-sync/launchd.stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/admin/dev/SM_OS-recovered/_dev/state/apple-sync/launchd.stderr.log</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>HOME</key>
+        <string>/Users/admin</string>
+        <key>SM_OS_IDENTITY_ID</key>
+        <string>sam</string>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+    </dict>
+</dict>
+</plist>

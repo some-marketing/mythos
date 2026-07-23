@@ -2,112 +2,99 @@
 'use strict';
 
 /**
- * check-reconciliation-due.cjs — STUB of the lessons-reconciliation due-check.
+ * check-reconciliation-due.cjs — standalone mechanical driver for the
+ * lessons-reconciliation lane.
  *
- * This is a scaffold, not a working port. The original tool depended on a
- * private auto-run/signals stack (a Codex-specific auto-run status reader
- * and a live-signal scanner tied to that same private coordination
- * contract) that hasn't shipped here. Rather than leave broken requires,
- * this stub implements the PATTERN with a self-contained, genuinely
- * generic due-check: "has it been more than N days since the last
- * reconciliation artifact, or are there N or more unreconciled session-
- * learnings files?" — swap getReconciliationStatus() for your own real
- * cadence/signal logic once you have one.
+ * PURPOSE
+ *   The reconciliation signal was previously emitted ONLY inside the Codex
+ *   auto-run closeout (tools/signals/lib/codex-auto.js), so it could never
+ *   fire when runs bypassed that path — and a filename/timestamp contract
+ *   drift meant it never fired at all (0 reconciliation artifacts ever,
+ *   diagnosed 2026-06-10). This tool makes due-checking and signal emission
+ *   independently invocable: by launchd, by end-session closeout, or by hand.
  *
- * Mechanical tier: this script detects and reports; it performs no
- * reconciliation judgment itself. Wire its output to whatever review step
- * (a command, a task, an operator ping) your own guild uses to actually
- * reconcile lessons.
+ *   Mechanical tier per process-tier doctrine: this script detects and
+ *   packages; it performs NO reconciliation judgment. The signal it emits
+ *   routes to the /reconcile-lessons command (REVIEW_ONLY) for an LLM actor.
  *
- * Usage:
- *   node tools/lessons/check-reconciliation-due.cjs         # status only
- *   node tools/lessons/check-reconciliation-due.cjs --json   # machine output
+ * USAGE
+ *   node tools/lessons/check-reconciliation-due.cjs            # status only
+ *   node tools/lessons/check-reconciliation-due.cjs --emit     # emit signal if due
+ *   node tools/lessons/check-reconciliation-due.cjs --json     # machine output
+ *
+ * IDEMPOTENT: --emit skips (exit 0) when a live lessons-reconciliation signal
+ * already exists. Exit codes: 0 ok (due or not), 1 unexpected error.
+ *
+ * Stdlib + in-repo libs only.
  */
 
-const fs = require('fs');
 const path = require('path');
 
-const PROJECT_ROOT = path.resolve(__dirname, '..', '..');
-const ANALYSIS_DIR = path.join(PROJECT_ROOT, '_dev', 'reports', 'analysis');
+const PROJECT_ROOT = path.resolve(__dirname, '../..');
 
-const DUE_AFTER_DAYS = 7;
-const DUE_AFTER_UNRECONCILED_COUNT = 5;
+const {
+  getLessonsReconciliationStatus,
+  emitLessonsReconciliationSignal,
+  lessonsReconciliationCommand,
+  LESSONS_RECONCILIATION_SCOPE
+} = require('../signals/lib/codex-auto');
+const { scanLiveHandoffSignals } = require('../signals/lib/pipeline-loop');
 
-function safeReaddir(dirPath) {
-  try {
-    return fs.readdirSync(dirPath);
-  } catch {
-    return [];
-  }
-}
-
-function safeStat(filePath) {
-  try {
-    return fs.statSync(filePath);
-  } catch {
-    return null;
-  }
-}
-
-// Replace this with your own reconciliation cadence/signal logic.
-function getReconciliationStatus(projectRoot) {
-  const names = safeReaddir(ANALYSIS_DIR);
-  const learningsFiles = names.filter((name) => name.startsWith('session-learnings__') && name.endsWith('.md'));
-  const reconciliationFiles = names.filter((name) => name.startsWith('lessons-reconciliation__') && name.endsWith('.md'));
-
-  let lastReconciledAt = null;
-  for (const name of reconciliationFiles) {
-    const stat = safeStat(path.join(ANALYSIS_DIR, name));
-    if (stat && (!lastReconciledAt || stat.mtimeMs > lastReconciledAt)) lastReconciledAt = stat.mtimeMs;
-  }
-
-  const unreconciledLearnings = learningsFiles.filter((name) => {
-    const stat = safeStat(path.join(ANALYSIS_DIR, name));
-    return stat && (!lastReconciledAt || stat.mtimeMs > lastReconciledAt);
+function liveReconciliationSignals(projectRoot) {
+  // scanLiveHandoffSignals takes the SIGNALS DIRECTORY, not the project root.
+  const signalDir = path.join(projectRoot, '_dev', 'reports', 'signals');
+  const live = scanLiveHandoffSignals(signalDir) || [];
+  return live.filter((entry) => {
+    const sig = entry.signal || entry;
+    return (sig.signal_scope || sig.scope) === LESSONS_RECONCILIATION_SCOPE;
   });
-
-  const daysSinceLastReconciliation = lastReconciledAt
-    ? (Date.now() - lastReconciledAt) / (24 * 60 * 60 * 1000)
-    : Infinity;
-
-  const reasons = [];
-  if (!Number.isFinite(daysSinceLastReconciliation)) {
-    if (learningsFiles.length > 0) reasons.push('no reconciliation artifact has ever been produced');
-  } else if (daysSinceLastReconciliation >= DUE_AFTER_DAYS) {
-    reasons.push(`${Math.floor(daysSinceLastReconciliation)} days since last reconciliation (threshold ${DUE_AFTER_DAYS})`);
-  }
-  if (unreconciledLearnings.length >= DUE_AFTER_UNRECONCILED_COUNT) reasons.push(`${unreconciledLearnings.length} unreconciled session-learnings files (threshold ${DUE_AFTER_UNRECONCILED_COUNT})`);
-
-  return {
-    due: reasons.length > 0,
-    reasons,
-    notesSinceLastReconciliation: unreconciledLearnings.length,
-    lessonsFiles: learningsFiles.map((name) => path.relative(projectRoot, path.join(ANALYSIS_DIR, name)))
-  };
 }
 
 function main() {
   const args = process.argv.slice(2);
+  const emit = args.includes('--emit');
   const json = args.includes('--json');
+  // --supersede: close any live same-scope signal and emit a fresh one (use
+  // after semantics change so a stale recommended command is replaced).
+  const supersede = args.includes('--supersede');
 
-  const status = getReconciliationStatus(PROJECT_ROOT);
+  const status = getLessonsReconciliationStatus(PROJECT_ROOT, new Date().toISOString(), {});
+  const live = liveReconciliationSignals(PROJECT_ROOT);
   const result = {
-    schema: 'LessonsReconciliationCheckStub/1.0',
+    schema: 'LessonsReconciliationCheck/1.0',
     checked_at: new Date().toISOString(),
     due: status.due,
     reasons: status.reasons,
     notes_since_last_reconciliation: status.notesSinceLastReconciliation,
-    lessons_files: status.lessonsFiles,
-    recommended_next_command: status.due ? 'reconcile your lessons (wire this to your own reconcile command)' : ''
+    uncovered_dates: status.uncoveredDates,
+    recommended_next_command: lessonsReconciliationCommand(status),
+    lessons_files: status.lessonsFiles.map((f) => path.relative(PROJECT_ROOT, f)),
+    live_signal_already_present: live.length > 0,
+    emitted_signal: '',
+    skipped_reason: ''
   };
 
+  if (emit && status.due) {
+    const emitted = emitLessonsReconciliationSignal(PROJECT_ROOT, status, {
+      supersede,
+      summarySuffix: 'Emitted by the standalone mechanical checker (tools/lessons/check-reconciliation-due.cjs).'
+    });
+    result.emitted_signal = emitted.emitted ? path.relative(PROJECT_ROOT, emitted.signalPath) : '';
+    result.skipped_reason = emitted.skippedReason;
+  }
+
   if (json) {
-    process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+    process.stdout.write(JSON.stringify(result, null, 2) + '\n');
   } else {
-    process.stdout.write([
+    const lines = [
       `due: ${result.due} (${result.reasons.join(', ') || 'no trigger'})`,
-      `notes since last reconciliation: ${result.notes_since_last_reconciliation}`
-    ].join('\n') + '\n');
+      `notes since last reconciliation: ${result.notes_since_last_reconciliation}`,
+      `live signal already present: ${result.live_signal_already_present}`
+    ];
+    if (result.emitted_signal) lines.push(`emitted: ${result.emitted_signal}`);
+    else if (emit && result.due) lines.push(`emit skipped: ${result.skipped_reason || 'live signal already present'}`);
+    else if (emit) lines.push('emit skipped: not due');
+    process.stdout.write(lines.join('\n') + '\n');
   }
 }
 
@@ -120,4 +107,4 @@ if (require.main === module) {
   }
 }
 
-module.exports = { getReconciliationStatus };
+module.exports = { liveReconciliationSignals };

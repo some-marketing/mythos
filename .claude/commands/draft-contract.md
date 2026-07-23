@@ -1,5 +1,5 @@
 ---
-description: Cross-alias (HWFWM canon) for /plan-quest
+description: Compatibility cross-alias for /plan-quest
 allowed-tools: [Read, Write, Edit, Glob, Grep, Bash]
 ---
 

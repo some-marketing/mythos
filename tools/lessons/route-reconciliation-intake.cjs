@@ -2,26 +2,21 @@
 'use strict';
 
 /**
- * route-reconciliation-intake.cjs — actionable-item router for the lessons
- * loop.
+ * route-reconciliation-intake.cjs — L6 of the lessons-loop mechanization
+ * (convene 20260610T175230Z: actionable reconciliation items flow into BOTH
+ * operator-visible intake (Dart) and next-session continuity (boundary
+ * markers); automatic promotion to durable law stays forbidden).
  *
- * Genericized from a private-ops version that always posted findings into a
- * specific task tracker. This version: parses
- * lessons-reconciliation__<date>.expectation-failures.json artifacts,
- * collects findings with status "actionable" that have not been routed
- * before, writes an intake handoff document, and (best-effort) drops/
- * refreshes a per-scope session-boundary marker via
- * tools/sessions/write-boundary.cjs if that script exists in your repo — so
- * the next booted session can inherit the items as current state. If your
- * repo doesn't have that script (or a different session-lifecycle
- * mechanism), the boundary-marker step is skipped with a note; the handoff
- * document and routing state still get written either way.
+ * Mechanical tier: parses lessons-reconciliation__<date>.expectation-failures.json
+ * artifacts, collects findings with status "actionable" that have not been
+ * routed before, writes an intake handoff document, and drops/refreshes a
+ * per-scope session-boundary marker (scope: lessons-intake) so the next booted
+ * session inherits the items as Current State.
  *
- * Task-tracker lane: this tool does NOT post to any task tracker itself. It
- * lists the items needing tasks in the handoff document; wire your own
- * task-creation step to read that document and mark routed_to_tracker.
- * Routing state lives at _dev/state/lessons-reconcile/routed.json
- * (idempotent re-runs).
+ * Dart lane: this tool does NOT post to Dart (no MCP here). It lists the items
+ * needing Dart tasks in the handoff document; a booted session with the Dart
+ * MCP posts them and marks routed_to_dart. Routing state lives at
+ * _dev/state/lessons-reconcile/routed.json (idempotent re-runs).
  *
  * USAGE
  *   node tools/lessons/route-reconciliation-intake.cjs [--json] [--dry-run]
@@ -88,10 +83,10 @@ function writeHandoff(fresh, alreadyRouted) {
     '# Lessons Intake — actionable reconciliation items',
     '',
     `Generated: ${new Date().toISOString()} by tools/lessons/route-reconciliation-intake.cjs`,
-    'Promotion to durable law/framework hardening REQUIRES distinct-intelligence',
-    'validation — these are intake items, not law.',
+    'Authority: convene 20260610T175230Z item L6. Promotion to durable law/framework',
+    'hardening REQUIRES distinct-intelligence validation — these are intake items, not law.',
     '',
-    '## New this routing pass (need tracker tasks — post via your own task-tracker integration, then mark routed in _dev/state/lessons-reconcile/routed.json)',
+    '## New this routing pass (need Dart tasks — post via a booted session with Dart MCP, then mark routed_to_dart in _dev/state/lessons-reconcile/routed.json)',
     ''
   ];
   for (const it of fresh) {
@@ -107,25 +102,16 @@ function writeHandoff(fresh, alreadyRouted) {
   return HANDOFF_PATH;
 }
 
-// Best-effort: only attempts the boundary marker if your repo has a
-// tools/sessions/write-boundary.cjs (or equivalent session-lifecycle
-// mechanism). If it doesn't exist, this step is skipped with a clear note
-// rather than failing — the handoff document above is the durable record
-// either way.
 function writeBoundaryMarker(freshCount, totalCount) {
-  const writerPath = path.join(ROOT, 'tools', 'sessions', 'write-boundary.cjs');
-  if (!fs.existsSync(writerPath)) {
-    return { exit: 0, out: 'skipped (no tools/sessions/write-boundary.cjs in this repo — wire your own session-lifecycle marker here if you have one)' };
-  }
   const payload = JSON.stringify({
     schema: 'SessionBoundary/1.0',
     scope: 'lessons-intake',
     handoff_path: path.relative(ROOT, HANDOFF_PATH),
-    recommended_next_command: 'review ' + path.relative(ROOT, HANDOFF_PATH),
-    summary: `${freshCount} new actionable lessons item(s) (${totalCount} total tracked) awaiting task-tracker routing + bounded task creation.`,
+    recommended_next_command: '/review-progress ' + path.relative(ROOT, HANDOFF_PATH),
+    summary: `${freshCount} new actionable lessons item(s) (${totalCount} total tracked) awaiting Dart routing + bounded task creation.`,
     written_by: 'tools/lessons/route-reconciliation-intake.cjs'
   });
-  const child = spawnSync('node', [writerPath, '-'], {
+  const child = spawnSync('node', [path.join(ROOT, 'tools', 'sessions', 'write-boundary.cjs'), '-'], {
     cwd: ROOT,
     input: payload,
     encoding: 'utf8',
@@ -151,7 +137,7 @@ function main() {
     boundary = writeBoundaryMarker(fresh.length, all.length);
     if (boundary.exit === 0) {
       for (const it of fresh) {
-        state.routed[it.key] = { routed_at: new Date().toISOString(), routed_to_tracker: false };
+        state.routed[it.key] = { routed_at: new Date().toISOString(), routed_to_dart: false };
       }
       saveRouted(state);
     }

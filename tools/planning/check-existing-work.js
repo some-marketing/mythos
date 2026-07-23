@@ -24,8 +24,8 @@ const fs = require('fs');
 const path = require('path');
 
 const PROJECT_ROOT = path.resolve(__dirname, '../..');
-const SIGNALS_DIR = path.join(PROJECT_ROOT, 'reports/signals');
-const ANALYSIS_DIR = path.join(PROJECT_ROOT, 'reports/analysis');
+const SIGNALS_DIR = path.join(PROJECT_ROOT, '_dev/reports/signals');
+const ANALYSIS_DIR = path.join(PROJECT_ROOT, '_dev/reports/analysis');
 
 let listAllTaskPlans;
 try {

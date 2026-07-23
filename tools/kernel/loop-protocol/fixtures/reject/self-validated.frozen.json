@@ -1,0 +1,23 @@
+{
+  "unit_id": "loop-unit-self-graded-0002",
+  "grade_class": "consequence",
+  "produced_by": {
+    "actor": "claude-opus",
+    "harness": "claude-code",
+    "model_family": "claude"
+  },
+  "validated_by": [
+    {
+      "actor": "claude-opus",
+      "harness": "claude-code",
+      "model_family": "claude"
+    }
+  ],
+  "frozen_baseline_sha": "deadbeefcafef00d1122334455667788990aabbc",
+  "classifier_id": "{CLIENT_CODE}-conversion-lift-classifier-v3",
+  "convergence_threshold": 0.8,
+  "verdict": "accept",
+  "roster_distinct_family": false,
+  "produced_at": "2026-07-07T00:10:00Z",
+  "classifier_score": 0.95
+}

@@ -1,0 +1,6 @@
+{
+  "name": "voice",
+  "description": "Voice channel for Claude Code — always-listening mic with choir TTS responses",
+  "version": "1.0.0",
+  "keywords": ["voice", "audio", "channel", "tts", "stt", "mcp"]
+}

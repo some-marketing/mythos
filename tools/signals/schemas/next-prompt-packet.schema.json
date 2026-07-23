@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "next-prompt-packet.schema.json",
   "title": "NextPromptPacket/1.0",
-  "description": "Structured prompt packet contract for next-action generation across worker, reviewer, bridge, closeout, handoff, and systemization-init roles.",
+  "description": "Structured prompt packet contract for Mythos next-action generation across worker, reviewer, bridge, closeout, handoff, and systemization-init roles.",
   "type": "object",
   "required": [
     "schema",

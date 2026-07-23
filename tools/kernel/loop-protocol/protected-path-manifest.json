@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "layer_physics": "any path/content that evaluates pass/fail or authorizes output or reaches base-system = L1",
+  "auto_L1_globs": [
+    "instructions/canonical/**",
+    "tools/kernel/hooks/**",
+    "tools/verify/hooks/**",
+    "**/*guardrails*",
+    "tools/convene/**",
+    "tools/council/**",
+    ".claude/settings.json",
+    "tools/kernel/loop-protocol/protected-path-manifest.json",
+    "tools/kernel/loop-protocol/policy/**",
+    "tools/kernel/loop-protocol/**approval**",
+    "**/*.frozen.json",
+    ".git/hooks/**",
+    "**/*.plist",
+    "**/Makefile",
+    "**/package.json"
+  ],
+  "_exec_trust_note": "EXEC-TRUST SURFACE (Fable Residual 1): a confined loop escapes by writing anything the operator's uid later RUNS. .git/hooks/** (git-driven exec), **/*.plist (launchd), **/Makefile (make targets), and **/package.json (npm scripts: pre/post/lifecycle hooks) are therefore auto_L1 alongside .claude/settings.json. ERGONOMIC TRADEOFF: any loop that legitimately touches a package.json (adding a dep, bumping a version) now gates to the operator merge boundary instead of auto-applying. Accepted deliberately — an npm script is arbitrary-code-on-operator-uid, so package.json is an exec-trust path, not a data file.",
+  "task_plan_governed_fields": [
+    "review_lane",
+    "required_gates",
+    "routing_expectations",
+    "scope_type"
+  ],
+  "task_plan_path_globs": [
+    "_dev/reports/analysis/task-plans/**",
+    "**/*__plan.json"
+  ],
+  "instances": {
+    "{CLIENT_CODE}-ads": {
+      "description": "{CLIENT_CODE} ads loop-instance. Holds an L0.5 grant on its framework-improvement lane. A granted framework path that is gate-shaped (guardrails) stays L1 by physics via auto_L1_globs (**/*guardrails*).",
+      "L0_globs": [
+        "_dev/loops/{CLIENT_CODE}-ads/drafts/**",
+        "_dev/loops/{CLIENT_CODE}/**",
+        "clients/{CLIENT_CODE}/**/drafts/**"
+      ],
+      "L05_grant_globs": [
+        "frameworks/**"
+      ],
+      "floor_tripwire_globs": [
+        "_dev/loops/{CLIENT_CODE}-ads/**/*.floor.json"
+      ],
+      "runtime_source": "tools/kernel/loop-protocol/runtime/{CLIENT_CODE}-ads-verifier.cjs",
+      "max_age_seconds": 3600,
+      "grace_deadline_iso": "2026-09-01T00:00:00Z"
+    },
+    "worldforge-sim": {
+      "description": "Worldforge simulation loop-instance. L0 draft content + L1 governance (auto) + L2 operator. NO L0.5 grant: it holds no isolated substrate, so it can never route a mutation through autonomous-apply.",
+      "L0_globs": [
+        "_dev/loops/worldforge-sim/drafts/**",
+        "_dev/loops/worldforge-sim/sim-runs/**"
+      ],
+      "L05_grant_globs": [],
+      "floor_tripwire_globs": [
+        "_dev/loops/worldforge-sim/**/base-system/**",
+        "_dev/loops/worldforge-sim/**/*.floor.json"
+      ],
+      "runtime_source": "tools/kernel/loop-protocol/runtime/worldforge-sim-verifier.cjs",
+      "max_age_seconds": 1800,
+      "grace_deadline_iso": null
+    }
+  },
+  "default": "L1"
+}

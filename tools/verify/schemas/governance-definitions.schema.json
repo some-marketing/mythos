@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "governance-definitions.schema.json",
+  "title": "Governance Definition",
+  "description": "Schema for machine-checkable governance term definitions in system.yaml",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The canonical term identifier (kebab-case)"
+    },
+    "definition": {
+      "type": "string",
+      "description": "Human-readable definition of the term"
+    },
+    "machine_check": {
+      "type": "string",
+      "description": "Machine-checkable condition that determines whether the term is satisfied"
+    }
+  },
+  "required": ["id", "definition", "machine_check"],
+  "additionalProperties": false
+}

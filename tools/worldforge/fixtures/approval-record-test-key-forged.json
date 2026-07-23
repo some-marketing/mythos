@@ -1,0 +1,19 @@
+{
+  "schema": "world-spec-closure-approval/2.0",
+  "closureHash": "93fcdcf0929566aa5f45f4c2915328b8382d7f3651620ce2d146ac53bd9fe297",
+  "target": "/srv/example-project/Content/StagedAssets",
+  "approved": true,
+  "approved_by": "attacker-with-repo-write",
+  "approved_at": "2026-07-10T00:00:00.000Z",
+  "approval_basis": "FORGED with the published MOCK-TEST-KEY — must be rejected for active use.",
+  "diff_summary_artifact": null,
+  "signature": {
+    "alg": "HMAC-SHA256",
+    "subject": "worldforge-approval/2.0",
+    "target": "/srv/example-project/Content/StagedAssets",
+    "value": "13f803f970575e2144edfda79281369d749d7d64928c757ad73844f96cf71129"
+  },
+  "alg": "HMAC-SHA256",
+  "subject": "worldforge-approval/2.0",
+  "_fixture_note": "NEGATIVE FIXTURE: signed with the published test key (MOCK-TEST-KEY-do-not-use-for-real-approvals). check-world-spec-approval.js MUST reject this for active use (reason: test_key_signature_rejected). Proves a repo-writer cannot mint approval with the well-known key."
+}

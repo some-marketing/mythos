@@ -44,8 +44,8 @@ the same terms of evidence, not intention.
 
 Beyond data and things you build, Mythos gives you a place for *you* — how you like to
 work, how you'd like the guild to address you, your own working principles. This is the
-**Mirror** (soul-mirror, in guild flavor — public HWFWM book canon: every person's inner
-world, reflected). It lives entirely outside this repository, at `$MYTHOS_HOME` (default
+**Mirror** (soul-mirror, in guild flavor — a reflection of your own working world). It
+lives entirely outside this repository, at `$MYTHOS_HOME` (default
 `~/.mythos/`), and Mythos never writes your Mirror content into anything tracked,
 generated, or exported.
 

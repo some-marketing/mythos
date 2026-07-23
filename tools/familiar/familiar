@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Generic launcher for a personal AI-companion CLI ("familiar").
+#
+# This script does not ship the companion CLI itself — bring your own. It
+# resolves the CLI entrypoint in this order:
+#   1. $FAMILIAR_CLI_PATH, if set (absolute path to the CLI's JS entrypoint)
+#   2. ~/.mythos/familiar-cli/bin/familiar.js (documented default location)
+#
+# Configure by exporting FAMILIAR_CLI_PATH in your shell profile, e.g.:
+#   export FAMILIAR_CLI_PATH="$HOME/.mythos/familiar-cli/bin/familiar.js"
+
+default_cli_path="${HOME}/.mythos/familiar-cli/bin/familiar.js"
+cli_path="${FAMILIAR_CLI_PATH:-$default_cli_path}"
+
+if [ ! -f "$cli_path" ]; then
+  echo "familiar: no companion CLI found at '$cli_path'." >&2
+  echo "familiar: set FAMILIAR_CLI_PATH to your companion CLI's entrypoint, or install it at the default location." >&2
+  exit 1
+fi
+
+exec node "$cli_path" "$@"

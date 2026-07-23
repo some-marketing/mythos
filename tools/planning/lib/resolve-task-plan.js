@@ -7,7 +7,7 @@ const path = require('path');
  * Relative path from project root to the system-level task-plan directory.
  * @type {string}
  */
-const SYSTEM_PLAN_DIR = path.join('reports', 'analysis', 'task-plans');
+const SYSTEM_PLAN_DIR = path.join('_dev', 'reports', 'analysis', 'task-plans');
 
 /**
  * Return the absolute path to a client's plan directory.
@@ -97,7 +97,7 @@ function extractClientCode(projectRoot, absPath) {
  * 1. If the reference looks like a path (contains `/`, `.json`, or `.md`),
  *    resolve directly relative to projectRoot (unless already absolute).
  * 2. Otherwise treat as a task-id:
- *    a. Check system root: `reports/analysis/task-plans/{id}__plan.json`
+ *    a. Check system root: `_dev/reports/analysis/task-plans/{id}__plan.json`
  *    b. Check ALL client roots: `clients/* /plans/{id}__plan.json`
  *    c. Exactly one match  => return it
  *    d. Multiple matches   => throw (ambiguity blocking)

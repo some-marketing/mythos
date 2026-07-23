@@ -64,7 +64,7 @@ def _activation_path(base: Optional[Path] = None) -> Path:
 
 
 def _apply_window() -> int:
-    raw = os.getenv("MYTHOS_HYGIENE_APPLY_WINDOW")
+    raw = os.getenv("SMOS_HYGIENE_APPLY_WINDOW")
     if raw is None:
         return DEFAULT_APPLY_WINDOW
     try:
@@ -352,7 +352,7 @@ class HomeostasisSupervisor:
 
         if not ollama_reachable:
             issues.append("Ollama unreachable (Contract: 0.0.0.0:11434 + Firewall)")
-            fixes.append(f"ssh {name} 'powershell -ExecutionPolicy Bypass -File <your-cloud-stack-ensure-script.ps1>'")
+            fixes.append(f"ssh {name} 'powershell -ExecutionPolicy Bypass -File C:\\Mythos\\tools\\fleet\\ensure-node-cloud-stack.ps1'")
 
         # 2. Work = Life (Balance)
         # Check if worker reports high load or is degraded
@@ -371,8 +371,7 @@ class HomeostasisSupervisor:
             identity = False
             issues.append(f"Branch mismatch: {current_branch} (Expected: {self.target_branch})")
             if self.target_branch != "unknown":
-                repo_dir = os.environ.get("FLEET_NODE_REPO_DIR", "C:\\mythos")
-                fixes.append(f"ssh {name} 'cd {repo_dir} && git fetch && git switch {self.target_branch} && git pull'")
+                fixes.append(f"ssh {name} 'cd C:\\Mythos && git fetch && git switch {self.target_branch} && git pull'")
 
         return HostVerdict(
             name=name,
@@ -475,6 +474,6 @@ def parse_args(argv=None):
 
 if __name__ == "__main__":
     args = parse_args()
-    nodes = os.environ.get("FLEET_NODE_LIST", "example-gpu-host,example-workstation").split(",")
+    nodes = ["orwell", "rupert"]
     supervisor = HomeostasisSupervisor(nodes)
     asyncio.run(supervisor.run(apply=args.apply))

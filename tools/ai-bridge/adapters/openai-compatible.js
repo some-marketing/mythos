@@ -2,7 +2,6 @@
 
 const http = require('http');
 const https = require('https');
-const path = require('path');
 const {
   createProviderInfo,
   createHealthStatus,
@@ -10,7 +9,11 @@ const {
   createModelInventory,
   createModelResult
 } = require('../lib/provider-contract');
-const { resolveCredentialsFromFile } = require('../../lib/resolve-credential.cjs');
+// P1.5 correlation-wiring: when this adapter is pointed at the LiteLLM gateway,
+// stamp the active cascade correlation id onto the request as LiteLLM metadata so
+// the LiteLLM->Langfuse generation joins the Mythos span tree. Fail-open + gated to
+// LiteLLM endpoints only (never injected into OpenAI/OpenRouter calls).
+const { applyLitellmTraceMetadata } = require('../../telemetry/dispatches/lib/litellm-trace-metadata.cjs');
 
 const DEFAULT_BASE_URL = process.env.OPENAI_BASE_URL || 'https://api.openai.com/v1';
 const HEALTH_TIMEOUT_MS = 5000;
@@ -261,31 +264,9 @@ function mapResponseToResult(modelId, providerModelId, response) {
   });
 }
 
-/**
- * Resolve the OpenAI (or OpenAI-compatible-gateway) API key through the
- * shared BYO-credential resolver (tools/lib/resolve-credential.cjs), honoring
- * OPENAI_COMPAT_API_KEY as a caller override before the tool's own
- * creds.config.json declaration for OPENAI_API_KEY. Never throws — a missing
- * key degrades to an unauthenticated adapter (checkHealth/listModels/invoke
- * will simply fail against providers that require auth; local/no-auth
- * OpenAI-compatible gateways still work with an empty key).
- */
-function resolveApiKey() {
-  if (process.env.OPENAI_COMPAT_API_KEY) return process.env.OPENAI_COMPAT_API_KEY.trim();
-  try {
-    const creds = resolveCredentialsFromFile(
-      path.join(__dirname, '..', 'creds.config.json'),
-      { optional: ['OPENAI_API_KEY'] }
-    );
-    return creds.OPENAI_API_KEY || '';
-  } catch {
-    return '';
-  }
-}
-
 function createOpenAICompatibleAdapter(opts = {}) {
   const baseUrl = opts.baseUrl || process.env.OPENAI_COMPAT_BASE_URL || process.env.OPENAI_BASE_URL || DEFAULT_BASE_URL;
-  const apiKey = opts.apiKey || resolveApiKey();
+  const apiKey = opts.apiKey || process.env.OPENAI_COMPAT_API_KEY || process.env.OPENAI_API_KEY || '';
   const endpointRef = opts.endpointRef || 'OPENAI_COMPAT_BASE_URL';
 
   return {
@@ -365,6 +346,10 @@ function createOpenAICompatibleAdapter(opts = {}) {
         }));
       }
 
+      // P1.5: centralized correlation-id -> LiteLLM metadata injection. No-op
+      // unless baseUrl is the LiteLLM gateway and a real cascade trace is in scope.
+      applyLitellmTraceMetadata(body, { baseUrl, opts });
+
       const response = await requestJson(
         baseUrl,
         'POST',
@@ -381,7 +366,6 @@ function createOpenAICompatibleAdapter(opts = {}) {
 
 module.exports = {
   createOpenAICompatibleAdapter,
-  resolveApiKey,
   inferCapabilities,
   DEFAULT_BASE_URL,
   HEALTH_TIMEOUT_MS,

@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "maintenance-disposition.schema.json", "title": "MaintenanceDisposition/1.0", "type": "object",
+  "required": ["schema", "finding_id", "state", "reason", "fingerprint_sha256", "finding_content_sha256", "evidence_binding_sha256", "append_only", "can_dispatch", "can_delete_or_suppress", "authority"],
+  "properties": {
+    "schema": { "const": "MaintenanceDisposition/1.0" }, "finding_id": { "type": "string" }, "state": { "enum": ["new", "confirmed_mechanical", "semantic_review", "operator_decision", "duplicate", "superseded", "false_positive", "resolved", "reopened"] }, "reason": { "type": "string" },
+    "fingerprint_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "finding_content_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "evidence_binding_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "append_only": { "const": true }, "can_dispatch": { "const": false }, "can_delete_or_suppress": { "const": false }, "authority": { "const": "advisory_only" }
+  }, "additionalProperties": false
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OperatorPublicKeyring/1.0",
+  "type": "object",
+  "required": ["schema", "current_fingerprint", "keys"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "const": "OperatorPublicKeyring/1.0" },
+    "current_fingerprint": { "type": ["string", "null"] },
+    "keys": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["fingerprint", "public_key_pem", "status", "created_at"],
+        "additionalProperties": false,
+        "properties": {
+          "fingerprint": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+          "public_key_pem": { "type": "string", "minLength": 1 },
+          "status": { "enum": ["current", "verification_only"] },
+          "created_at": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

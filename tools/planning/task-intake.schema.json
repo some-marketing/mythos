@@ -1,0 +1,396 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "mythos/task-intake/1.0",
+  "title": "Mythos Task Intake",
+  "description": "Contract for task-driven operational planning. Tracks a task from intake through similarity assessment, bounded planning, execution, and outcome delta capture.",
+  "type": "object",
+  "required": ["task_id", "description", "source", "requested_by", "timestamp", "scope_type", "storage_root"],
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "description": "Unique identifier for the task (slug or UUID)"
+    },
+    "title": {
+      "type": "string",
+      "description": "Human-readable title for the task."
+    },
+    "task_summary": {
+      "type": "string",
+      "description": "One-line summary of what the task accomplishes."
+    },
+    "scope_type": {
+      "type": "string",
+      "enum": ["system", "client"],
+      "description": "Whether this task is system/framework/runtime work or client-scoped delivery work."
+    },
+    "scope_justification": {
+      "type": "string",
+      "description": "Why the chosen scope_type is correct for this task."
+    },
+    "storage_root": {
+      "type": "string",
+      "description": "Canonical storage directory for this task plan's artifacts. Must be _dev/reports/analysis/task-plans for system scope or clients/{client_code}/plans for client scope."
+    },
+    "origin_client_code": {
+      "type": ["string", "null"],
+      "description": "Client code that originated the task, even if the task itself is system-scoped."
+    },
+    "origin_project_id": {
+      "type": ["string", "null"],
+      "description": "Project that originated the task, even if the task itself is system-scoped."
+    },
+    "description": {
+      "type": "string",
+      "description": "The actual task description as stated by the operator or source"
+    },
+    "client_code": {
+      "type": ["string", "null"],
+      "description": "Client code if the task is client-scoped (e.g., CLIENTA, CLIENTB)"
+    },
+    "project_id": {
+      "type": ["string", "null"],
+      "description": "Project identifier if the task is project-scoped"
+    },
+    "source": {
+      "type": "string",
+      "enum": ["dart", "operator", "signal"],
+      "description": "Where the task originated"
+    },
+    "requested_by": {
+      "type": "string",
+      "description": "Who requested the task (operator name, signal ID, or Dart task ID)"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of task intake"
+    },
+    "similarity_assessment": {
+      "type": ["object", "null"],
+      "description": "Result of running assess-similarity.js against registered frameworks",
+      "properties": {
+        "top_framework": {
+          "type": "string",
+          "description": "Framework ID of the best match"
+        },
+        "match_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Similarity score (0-100)"
+        },
+        "match_rationale": {
+          "type": "string",
+          "description": "Why this framework was the top match"
+        },
+        "gaps": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "What the matched framework does not cover"
+        },
+        "applicable_modes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Execution modes compatible with this task"
+        },
+        "trust_tier": {
+          "type": "string",
+          "enum": ["hardened", "applicable-with-gaps", "partial-coverage", "no-match"],
+          "description": "Trust classification based on match score"
+        }
+      },
+      "required": ["top_framework", "match_score", "match_rationale", "gaps", "applicable_modes", "trust_tier"]
+    },
+    "bounded_plan": {
+      "type": ["object", "null"],
+      "description": "Operational plan mapping task steps to framework steps where possible",
+      "properties": {
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["step_id", "description", "mode", "is_gap"],
+            "properties": {
+              "step_id": {
+                "type": "string",
+                "description": "Unique step identifier"
+              },
+              "description": {
+                "type": "string",
+                "description": "What this step does"
+              },
+              "framework_step": {
+                "type": ["string", "null"],
+                "description": "Corresponding framework prompt chain step, null if gap"
+              },
+              "stage": {
+                "type": "string",
+                "description": "Optional human-facing phase/stage label for audience-adaptive rendering and plan diagrams."
+              },
+              "stage_title": {
+                "type": "string",
+                "description": "Optional human-facing title for this stage when stage is a terse identifier."
+              },
+              "domain": {
+                "type": "string",
+                "description": "Optional explicit domain for audience-adaptive rendering. If absent, renderers may derive it from framework_step."
+              },
+              "depends_on": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Optional list of step_id values this step depends on. Additive; absent means sequence order is authoritative."
+              },
+              "audiences": {
+                "type": "object",
+                "description": "Optional pre-authored per-audience What/Why voicings. Renderers must treat missing entries as visible needs-authoring/fallback states, not silent omission.",
+                "additionalProperties": {
+                  "type": "object",
+                  "properties": {
+                    "what": {
+                      "description": "Audience-specific what-this-step-does phrasing. Transitional flat strings are accepted; nested objects carry the full provenance contract.",
+                      "anyOf": [
+                        { "type": "string" },
+                        {
+                          "type": "object",
+                          "required": ["text", "provenance_handle", "source_field", "provenance_state"],
+                          "properties": {
+                            "text": { "type": "string" },
+                            "provenance_handle": { "type": "string" },
+                            "source_field": { "type": "string" },
+                            "provenance_state": {
+                              "type": "string",
+                              "enum": ["source-derived", "enriched", "authored", "needs-authoring"]
+                            }
+                          },
+                          "additionalProperties": true
+                        }
+                      ]
+                    },
+                    "why": {
+                      "description": "Audience-specific why-this-step-matters phrasing. Transitional flat strings are accepted; nested objects carry the full provenance contract.",
+                      "anyOf": [
+                        { "type": "string" },
+                        {
+                          "type": "object",
+                          "required": ["text", "provenance_handle", "source_field", "provenance_state"],
+                          "properties": {
+                            "text": { "type": "string" },
+                            "provenance_handle": { "type": "string" },
+                            "source_field": { "type": "string" },
+                            "provenance_state": {
+                              "type": "string",
+                              "enum": ["source-derived", "enriched", "authored", "needs-authoring"]
+                            }
+                          },
+                          "additionalProperties": true
+                        }
+                      ]
+                    },
+                    "what_provenance": {
+                      "type": "string",
+                      "description": "Transitional flat-shape source/provenance handle for the what field."
+                    },
+                    "why_provenance": {
+                      "type": "string",
+                      "description": "Transitional flat-shape source/provenance handle for the why field."
+                    },
+                    "source": {
+                      "type": "string",
+                      "description": "Optional source label such as authored, enriched, or derived."
+                    }
+                  },
+                  "additionalProperties": true
+                }
+              },
+              "mode": {
+                "type": "string",
+                "description": "Execution mode for this step"
+              },
+              "is_gap": {
+                "type": "boolean",
+                "description": "True if this step has no framework coverage"
+              }
+            }
+          }
+        },
+        "required_gates": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Gates from the matched framework's guardrails"
+        },
+        "expected_outcomes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Observable outcomes upon successful completion"
+        },
+        "risk_notes": {
+          "type": "string",
+          "description": "Known risks or cautions for this plan"
+        },
+        "hardening_opportunity": {
+          "type": ["string", "null"],
+          "description": "If this task succeeds, what framework hardening could it enable"
+        }
+      },
+      "required": ["steps", "required_gates", "expected_outcomes", "risk_notes"]
+    },
+    "produced_by_actor_id": {
+      "type": ["string", "null"],
+      "description": "Actor ID that produced this plan"
+    },
+    "produced_by_actor_type": {
+      "type": ["string", "null"],
+      "enum": ["human", "intelligence", "hybrid", null],
+      "description": "Type of the producing actor"
+    },
+    "produced_by_harness_id": {
+      "type": ["string", "null"],
+      "description": "Harness ID of the producing actor"
+    },
+    "produced_at": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "When the plan was produced"
+    },
+    "validated_by_actor_id": {
+      "type": ["string", "null"],
+      "description": "Actor ID that validated this plan for acceptance"
+    },
+    "validated_by_actor_type": {
+      "type": ["string", "null"],
+      "enum": ["human", "intelligence", "hybrid", null],
+      "description": "Type of the validating actor"
+    },
+    "validated_by_harness_id": {
+      "type": ["string", "null"],
+      "description": "Harness ID of the validating actor"
+    },
+    "validated_at": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "When validation occurred"
+    },
+    "validation_artifact": {
+      "type": ["string", "null"],
+      "description": "Path to the durable validation artifact"
+    },
+    "validation_method": {
+      "type": ["string", "null"],
+      "description": "How validation was performed"
+    },
+    "validation_confidence": {
+      "type": ["string", "null"],
+      "enum": ["confirmed", "probable", "uncertain", null],
+      "description": "Confidence level of the validation"
+    },
+    "routing_expectations": {
+      "type": ["object", "null"],
+      "description": "Explicit execution-closeout routing expectations for run-plan after bounded task execution",
+      "properties": {
+        "risk_tier": {
+          "type": "string",
+          "enum": ["low", "medium", "high"],
+          "description": "Overall execution risk tier for post-execution review routing"
+        },
+        "review_lane": {
+          "type": "string",
+          "enum": ["verify-local", "codex-bridge", "operator-gate"],
+          "description": "Expected post-execution review lane for run-plan closeout"
+        },
+        "review_lane_rationale": {
+          "type": "string",
+          "description": "Why this review lane is the expected closeout path"
+        },
+        "escalation_triggers": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Conditions that should force escalation above the expected lane"
+        }
+      },
+      "required": ["risk_tier", "review_lane", "review_lane_rationale"]
+    },
+    "outcome_delta": {
+      "type": ["object", "null"],
+      "description": "Post-execution comparison of plan vs actual results",
+      "properties": {
+        "completed": {
+          "type": "boolean",
+          "description": "Whether the task completed successfully"
+        },
+        "divergences": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Where execution diverged from the plan"
+        },
+        "gates_triggered": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Which gates fired during execution"
+        },
+        "corrections_made": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Mid-execution corrections applied"
+        },
+        "should_harden_framework": {
+          "type": "boolean",
+          "description": "Whether the outcome suggests the framework should be hardened"
+        },
+        "hardening_notes": {
+          "type": "string",
+          "description": "Specific hardening recommendations based on outcome"
+        },
+        "completion_evidence": {
+          "type": "object",
+          "description": "Durable evidence for all four completion criteria. Completion requires all four to be true.",
+          "properties": {
+            "all_steps_done": {
+              "type": "boolean",
+              "description": "Whether all plan steps have been executed"
+            },
+            "verification_passed": {
+              "type": "boolean",
+              "description": "Whether verification ran and passed"
+            },
+            "no_open_blockers": {
+              "type": "boolean",
+              "description": "Whether all blockers are resolved"
+            },
+            "operator_acceptance_received": {
+              "type": "boolean",
+              "description": "Whether operator acceptance has been recorded"
+            }
+          },
+          "required": ["all_steps_done", "verification_passed", "no_open_blockers", "operator_acceptance_received"]
+        },
+        "produced_by_actor_id": {
+          "type": ["string", "null"],
+          "description": "Actor ID that produced this outcome"
+        },
+        "produced_by_actor_type": {
+          "type": ["string", "null"],
+          "enum": ["human", "intelligence", "hybrid", null],
+          "description": "Type of the producing actor"
+        },
+        "produced_by_harness_id": {
+          "type": ["string", "null"],
+          "description": "Harness ID of the producing actor"
+        },
+        "validated_by_actor_id": {
+          "type": ["string", "null"],
+          "description": "Actor ID that validated this outcome for acceptance"
+        },
+        "validated_by_actor_type": {
+          "type": ["string", "null"],
+          "enum": ["human", "intelligence", "hybrid", null],
+          "description": "Type of the validating actor"
+        },
+        "validated_by_harness_id": {
+          "type": ["string", "null"],
+          "description": "Harness ID of the validating actor"
+        }
+      },
+      "required": ["completed", "divergences", "gates_triggered", "corrections_made", "should_harden_framework"]
+    }
+  }
+}

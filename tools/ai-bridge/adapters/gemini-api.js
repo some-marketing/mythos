@@ -17,30 +17,33 @@
  *     [--aspect-ratio <ratio>] \
  *     [--image-size <1K|2K|4K>]
  *
- * Credentials:
- *   GEMINI_API_KEY, resolved through the shared BYO-credential resolver
- *   (tools/lib/resolve-credential.cjs) via this tool's creds.config.json —
- *   env var, then macOS Keychain, then 1Password, then an env file
- *   (.env.local/.env at the repo root, or ~/.mythos/.env). See SETUP.md.
+ * Environment:
+ *   GEMINI_API_KEY — required. Can also be in ~/.Mythos/.env
  */
 
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 const https = require('https');
 const { parseResponse } = require('../lib/response-parser');
-const { resolveCredentialsFromFile } = require('../../lib/resolve-credential.cjs');
 
 // ---------------------------------------------------------------------------
-// Load API key via the shared credential resolver
+// Load API key from env or ~/.Mythos/.env
 // ---------------------------------------------------------------------------
 
 function loadApiKey() {
-  try {
-    const creds = resolveCredentialsFromFile(path.join(__dirname, '..', 'creds.config.json'));
-    return creds.GEMINI_API_KEY || null;
-  } catch {
-    return null;
+  if (process.env.GEMINI_API_KEY) return process.env.GEMINI_API_KEY;
+
+  const envFile = path.join(os.homedir(), '.Mythos', '.env');
+  if (fs.existsSync(envFile)) {
+    const lines = fs.readFileSync(envFile, 'utf8').split('\n');
+    for (const line of lines) {
+      const match = line.match(/^GEMINI_API_KEY=(.+)$/);
+      if (match) return match[1].trim();
+    }
   }
+
+  return null;
 }
 
 // ---------------------------------------------------------------------------
@@ -92,9 +95,8 @@ Options:
   --aspect-ratio <ratio>   Image aspect ratio for image-capable models (e.g. 16:9)
   --image-size <size>      Image size for image-capable models (e.g. 1K, 2K, 4K)
 
-Credentials:
-  GEMINI_API_KEY resolved via tools/lib/resolve-credential.cjs (env,
-  macOS Keychain, 1Password, or .env.local/.env/~/.mythos/.env). See SETUP.md.
+Environment:
+  GEMINI_API_KEY           API key (or set in ~/.Mythos/.env)
 `);
         process.exit(0);
     }
@@ -252,7 +254,7 @@ async function main() {
   if (!fs.existsSync(opts.prompt)) die(`Prompt file not found: ${opts.prompt}`);
 
   const apiKey = loadApiKey();
-  if (!apiKey) die('GEMINI_API_KEY not resolvable. See tools/ai-bridge/SETUP.md — set it in your environment, seed it in macOS Keychain, store it in 1Password, or add it to .env.local/.env/~/.mythos/.env.');
+  if (!apiKey) die('GEMINI_API_KEY not found. Set it in environment or ~/.Mythos/.env');
 
   const promptText = fs.readFileSync(opts.prompt, 'utf8').trim();
   if (!promptText) die('Prompt file is empty');

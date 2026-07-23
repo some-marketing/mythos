@@ -1,5 +1,5 @@
 ---
-description: Cross-alias (HWFWM canon) for /empower-grimoire
+description: Compatibility cross-alias for /empower-grimoire
 allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, Agent]
 ---
 

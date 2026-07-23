@@ -4664,7 +4664,7 @@ function buildVisualPlanAdapterManifest(projectRoot, options = {}) {
         'task-plan JSON/MD',
         'plan amendments',
         'reviews',
-        'handoff signals',
+        'HandoffSignals',
         'canonical command specs'
       ],
       client_visibility: includeClient ? 'included_by_explicit_request' : 'excluded_by_default'

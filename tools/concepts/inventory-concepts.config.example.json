@@ -1,0 +1,32 @@
+{
+  "_comment": "Copy this file to inventory-concepts.config.json (sibling to inventory-concepts.cjs) and fill it in with YOUR guild's own concept-routing data. inventory-concepts.cjs ships with none of this baked in -- every field below is optional and defaults to an empty/generic value if the config file is absent.",
+
+  "parent_plan_id": "concept-program-inventory-and-implementation-order",
+
+  "memory_mirror_root": null,
+
+  "semantic_owner_rules": [
+    {
+      "_comment": "Fictional worked example -- routes any concept slug matching the pattern to an existing owner plan instead of letting the inventory suggest a brand-new /plan-task for it.",
+      "pattern": "^(homebrew-grimoire-cache-warming|homebrew-grimoire-replay-speedup)$",
+      "owner_plan": "homebrew-grimoires-hardening",
+      "owner_path": "_dev/reports/analysis/task-plans/homebrew-grimoires-hardening__plan.json",
+      "route": "/amend-plan homebrew-grimoires-hardening"
+    }
+  ],
+
+  "closure_review_rules": [
+    {
+      "_comment": "Fictional worked example -- flags a concept slug as needing a closure/supersession check rather than fresh planning.",
+      "pattern": "^patron-alpha-onboarding-v1$",
+      "reason": "Likely superseded by patron-alpha-onboarding-v2; inspect the live proposal before creating any new plan."
+    }
+  ],
+
+  "owner_group_priority_order": [
+    "homebrew-grimoires-hardening"
+  ],
+
+  "reviewer_actor_id": "distinct-family-reviewer",
+  "reviewer_harness_id": "external-cli"
+}

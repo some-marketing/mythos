@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "report-claim-manifest.schema.json", "title": "ReportClaimManifest/1.0", "type": "object",
+  "required": ["schema", "report_path", "claims"],
+  "properties": { "schema": { "const": "ReportClaimManifest/1.0" }, "report_path": { "type": "string" }, "claims": { "type": "array", "items": { "type": "object", "required": ["id", "type", "path"], "properties": { "id": { "type": "string" }, "type": { "enum": ["citation_exists", "path_missing", "file_count"] }, "path": { "type": "string" }, "expected_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "line": { "type": "integer", "minimum": 1 }, "filename": { "type": "string" }, "expected_count": { "type": "integer", "minimum": 0 } }, "additionalProperties": false } } },
+  "additionalProperties": false
+}

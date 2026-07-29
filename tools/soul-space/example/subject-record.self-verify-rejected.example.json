@@ -1,0 +1,21 @@
+{
+  "subject_id": "subject-example",
+  "attributes": {},
+  "version": "1.0.0",
+  "provenance_chain": [
+    {
+      "version": "1.0.0",
+      "who": "example-author",
+      "why": "genesis: blank example record, no pre-loaded content",
+      "when": "2026-01-01T00:00:00Z"
+    }
+  ],
+  "content_hash": "e511f05223fa07f94e694f263683630ebce0179e001ade67acccc71d190d0ac1",
+  "attestation": {
+    "level": 5,
+    "verifier_provenance": {
+      "eval_id": "eval-1",
+      "verifier_id": "subject-example"
+    }
+  }
+}

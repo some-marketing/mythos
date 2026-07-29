@@ -1,0 +1,32 @@
+{
+  "tool": "mcp/sheets",
+  "fields": {
+    "SHEETS_CLIENT_ID": {
+      "envVar": "SHEETS_CLIENT_ID",
+      "keychainService": "mythos-google-oauth-client-client-id",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "mythos-google-oauth-client",
+      "opField": "client id",
+      "description": "Google OAuth client id for the Sheets API writer."
+    },
+    "SHEETS_CLIENT_SECRET": {
+      "envVar": "SHEETS_CLIENT_SECRET",
+      "keychainService": "mythos-google-oauth-client-client-secret",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "mythos-google-oauth-client",
+      "opField": "client secret",
+      "description": "Google OAuth client secret for the Sheets API writer."
+    },
+    "SHEETS_REFRESH_TOKEN": {
+      "envVar": "SHEETS_REFRESH_TOKEN",
+      "keychainService": "mythos-google-oauth-client-refresh-token",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "mythos-google-oauth-client",
+      "opField": "refresh token",
+      "description": "Google OAuth refresh token minted via bootstrap-oauth.js."
+    }
+  }
+}

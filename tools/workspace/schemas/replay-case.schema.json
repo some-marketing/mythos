@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Mythos Replay Case",
+  "type": "object",
+  "required": ["case_id", "name", "source", "variant_type", "ready", "expected_success"],
+  "properties": {
+    "case_id": { "type": "string" },
+    "name": { "type": "string" },
+    "source": { "type": "string" },
+    "variant_type": { "type": "string" },
+    "ready": { "type": "boolean" },
+    "expected_success": { "type": "boolean" }
+  }
+}

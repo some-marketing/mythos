@@ -1,0 +1,128 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://mythos/session-note.schema.json",
+  "title": "Mythos Session Note",
+  "description": "Canonical frontmatter contract for LLM session notes mirrored into the Obsidian vault (Mythos-memories/transcripts/). Modeled on the richest existing example (hermes-session-2026-06-09.md) and expanded per amendment AMD-3 (memory-dreaming-obsidian-improvements__amendment__20260610T111449Z) with Actor Continuity Contract fields: session_id, parent_session_id, source_artifacts, termination_status, writer, schema_version, privacy_classification, human_operator, started_at, ended_at. Fields are required where mechanically determinable; otherwise they must be present and explicitly null (documented semantics below). Authored repo-side only — the vault is a one-way mirror.",
+  "type": "object",
+  "required": [
+    "type",
+    "schema_version",
+    "date",
+    "agent",
+    "writer",
+    "session_id",
+    "parent_session_id",
+    "termination_status",
+    "privacy_classification",
+    "human_operator",
+    "started_at",
+    "ended_at",
+    "source_artifacts",
+    "summary",
+    "tags"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "type": {
+      "const": "llm_session",
+      "description": "Discriminator. Files without type: llm_session are not session notes and are flagged by lint as nonconforming transcript surfaces."
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "SessionNote/1.0",
+      "description": "Contract version. Bump on breaking frontmatter changes."
+    },
+    "date": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Session date (local), YYYY-MM-DD. Mechanically determinable — never null."
+    },
+    "agent": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Acting agent/harness identity (e.g. claude-code, hermes, pi, codex). Never null."
+    },
+    "model": {
+      "type": ["string", "null"],
+      "description": "Model id (e.g. moonshotai/kimi-k2.5, claude-fable-5). null = not mechanically determinable from the source."
+    },
+    "provider": {
+      "type": ["string", "null"],
+      "description": "Model provider/router (e.g. anthropic, openrouter). null = unknown."
+    },
+    "platform": {
+      "type": ["string", "null"],
+      "description": "Interaction surface (e.g. cli, signal, discord, imessage, cowork). null = unknown."
+    },
+    "scope": {
+      "type": ["string", "null"],
+      "description": "Project/scope the session served (e.g. system, personal, a client project name). null = unclassified; prefer setting it."
+    },
+    "session_id": {
+      "type": ["string", "null"],
+      "description": "Harness session id (e.g. Claude Code session UUID). Required when the source carries one; null only for surfaces with no session identity (with a note in the body)."
+    },
+    "parent_session_id": {
+      "type": ["string", "null"],
+      "description": "Session this one was spawned from / resumed out of (cross-session continuation, subagent parent, bridge origin). null = root session or unknown lineage."
+    },
+    "source_artifacts": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Repo-relative or well-known paths this note was distilled from (session JSONL, debrief, handoff, signals). Empty array = hand-authored with no machine source."
+    },
+    "termination_status": {
+      "type": "string",
+      "enum": ["clean", "crashed", "timeout", "handoff", "daemon", "active", "unknown"],
+      "description": "How the session ended. clean = explicit close (/end-session, /cross-session); handoff = closed via next-session/boundary handoff; daemon = long-running background session (no terminal end); active = note written mid-session; unknown = not determinable from source."
+    },
+    "writer": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Actor that wrote THIS note (may differ from agent — e.g. tools/transcripts/distill-session-note.cjs, hermes, human-operator). Never null."
+    },
+    "privacy_classification": {
+      "type": "string",
+      "pattern": "^(SYSTEM|PERSONAL|CLIENT:[A-Za-z0-9_-]+)$",
+      "description": "Session content classification, made by reading prose turns (never keyword counts — see jsonl-grep-counts-misleading). Gate key for the distiller (AMD-1): PERSONAL sessions are excluded from distillation by default; CLIENT:<code> notes must carry titles/paths only, no client data."
+    },
+    "human_operator": {
+      "type": ["string", "null"],
+      "description": "Human operator who owned/ratified the session (e.g. {OPERATOR_NAME}). null = unattended/daemon session with no operator in the loop."
+    },
+    "started_at": {
+      "type": ["string", "null"],
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T.*",
+      "description": "ISO 8601 session start. Required when the source carries timestamps; null = not determinable."
+    },
+    "ended_at": {
+      "type": ["string", "null"],
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T.*",
+      "description": "ISO 8601 session end. null = not determinable, or termination_status is daemon/active."
+    },
+    "time": {
+      "type": ["string", "null"],
+      "description": "Optional human-friendly time range (e.g. 13:29-19:42). Convenience only; started_at/ended_at are authoritative."
+    },
+    "session_type": {
+      "type": ["string", "null"],
+      "description": "Optional legacy field (e.g. cli). Prefer platform."
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Vault tags. Must include 'session-transcript' for discoverability.",
+      "contains": { "const": "session-transcript" }
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "description": "One-paragraph plain-language session summary. Never null — a note without a summary is not a session note."
+    },
+    "outcome": {
+      "type": ["string", "null"],
+      "description": "Terminal outcome / resulting state (Actor Continuity Contract: what is true now). null only when termination_status is active."
+    }
+  }
+}

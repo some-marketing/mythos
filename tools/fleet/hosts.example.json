@@ -1,0 +1,64 @@
+{
+  "_comment": "Fleet host registry. Each entry declares a compute node and its LLM provider config. Copy this file to _dev/config/remote-hosts.json (gitignored) and fill in your own hosts -- never commit real hostnames, IPs, or credentials here.",
+  "hosts": {
+    "example-gpu-host": {
+      "user": "youruser",
+      "host": "example-gpu-host",
+      "ssh_identity": "~/.ssh/id_ed25519",
+      "provider": "ollama",
+      "provider_config": {
+        "host": "127.0.0.1",
+        "port": 11434,
+        "api_base": "/api"
+      },
+      "default_model": "qwen2.5-coder:14b",
+      "models": [
+        "qwen2.5-coder:14b",
+        "qwen3:4b"
+      ],
+      "hw": {
+        "gpu": "example GPU model",
+        "vram_gb": 16,
+        "ram_gb": 32,
+        "os": "win11"
+      },
+      "tags": ["gpu", "primary"],
+      "notes": "Example entry. Ollama bound to localhost; access via SSH port-forward or your own tunnel."
+    },
+    "example-workstation": {
+      "user": "youruser",
+      "host": "example-workstation",
+      "ssh_identity": "~/.ssh/id_ed25519",
+      "provider": "ollama",
+      "provider_config": {
+        "host": "127.0.0.1",
+        "port": 11434,
+        "api_base": "/api"
+      },
+      "default_model": "qwen2.5-coder:14b",
+      "models": [
+        "qwen2.5-coder:14b"
+      ],
+      "hw": {
+        "gpu": "example GPU model",
+        "vram_gb": 16,
+        "ram_gb": 32,
+        "os": "win11"
+      },
+      "tags": ["secondary"],
+      "notes": "Example entry."
+    }
+  },
+  "providers": {
+    "ollama": {
+      "endpoints": {
+        "generate": "/api/generate",
+        "tags": "/api/tags",
+        "version": "/api/version"
+      },
+      "stream_field": "stream",
+      "response_field": "response",
+      "done_field": "done"
+    }
+  }
+}

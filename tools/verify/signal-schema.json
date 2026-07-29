@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VerificationSignal",
+  "description": "Standard contract for all verification script outputs in Mythos.",
+  "type": "object",
+  "required": ["schema", "timestamp", "source", "scope", "tier", "verdict", "summary", "checks", "failures", "gate_decision"],
+  "properties": {
+    "schema": {
+      "const": "VerificationSignal/1.0",
+      "description": "Schema identifier and version"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 timestamp of when verification ran"
+    },
+    "source": {
+      "type": "string",
+      "description": "Name of the script that produced this signal"
+    },
+    "scope": {
+      "type": "string",
+      "description": "What was verified (e.g., 'system', 'framework:wordpress/qa', 'skill:parallel-run')"
+    },
+    "tier": {
+      "enum": ["mechanical", "nuance", "combined"],
+      "description": "Which verification tier produced this signal"
+    },
+    "verdict": {
+      "enum": ["PASS", "FAIL", "WARN"],
+      "description": "Top-level result. PASS=all critical pass. FAIL=any critical fail. WARN=all critical pass but warnings exist."
+    },
+    "summary": {
+      "type": "object",
+      "required": ["total", "passed", "failed", "warned", "skipped"],
+      "properties": {
+        "total": { "type": "integer", "minimum": 0 },
+        "passed": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "warned": { "type": "integer", "minimum": 0 },
+        "skipped": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "category", "severity", "status", "message"],
+        "properties": {
+          "id": { "type": "string", "description": "Unique check identifier" },
+          "category": { "type": "string", "description": "Grouping (e.g., 'structure', 'manifest', 'skills')" },
+          "severity": { "enum": ["critical", "warning", "info"] },
+          "status": { "enum": ["PASS", "FAIL", "WARN", "SKIP"] },
+          "message": { "type": "string", "description": "Human-readable check description" },
+          "evidence": { "type": "string", "description": "File path or reference backing this check" },
+          "detail": { "type": "string", "description": "Additional context" }
+        }
+      }
+    },
+    "failures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "category", "message"],
+        "properties": {
+          "id": { "type": "string" },
+          "category": { "type": "string" },
+          "message": { "type": "string" },
+          "fix_hint": { "type": "string", "description": "Actionable fix suggestion" }
+        }
+      }
+    },
+    "gate_decision": {
+      "type": "object",
+      "required": ["proceed", "reason"],
+      "properties": {
+        "proceed": { "type": "boolean", "description": "true=continue, false=stop" },
+        "reason": { "type": "string", "description": "Why proceed is true/false" },
+        "blocked_by": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "IDs of critical checks that failed"
+        }
+      }
+    }
+  }
+}

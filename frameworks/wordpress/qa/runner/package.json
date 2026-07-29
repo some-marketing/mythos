@@ -1,0 +1,21 @@
+{
+  "name": "smos-playwright-phased-runner",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "install:browsers": "node runner/tools/install-browsers.js",
+    "run:phased": "node runner/tools/run-phased-wrapper.js",
+    "run:phased:headed": "node runner/tools/run-phased-wrapper.js --headed",
+    "run:runset:new": "node runner/tools/new-runset.js",
+    "run:runset:summary": "node runner/tools/compile-runset.js",
+    "run:runsets:index": "node runner/tools/index-runsets.js",
+    "run:handoff:new": "node runner/tools/make-dev-handoff.js",
+    "auth:record": "node runner/tools/record-storage-state.js",
+    "lint:json": "node runner/tools/validate-json.js",
+    "lint:locator-maps": "node runner/tools/validate-locator-maps.js"
+  },
+  "dependencies": {
+    "playwright": "^1.45.0"
+  }
+}

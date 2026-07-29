@@ -1,0 +1,11 @@
+{
+  "dmPolicy": "allowlist",
+  "allowFrom": [
+    "+15555550123",
+    "someone@example.com"
+  ],
+  "groups": {},
+  "pending": {},
+  "mentionPatterns": [],
+  "_managed_handles": []
+}

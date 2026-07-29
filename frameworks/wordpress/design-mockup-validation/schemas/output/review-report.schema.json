@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "required": ["result", "element_reviews", "success_criteria_check", "recommendations"],
+  "properties": {
+    "result": {
+      "type": "string",
+      "enum": ["pass", "fail", "partial"]
+    },
+    "element_reviews": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["element_id", "verdict", "notes"],
+        "properties": {
+          "element_id": { "type": "string" },
+          "verdict": { "type": "string", "enum": ["pass", "fail", "partial"] },
+          "notes": { "type": "array", "items": { "type": "string" } },
+          "evidence_gaps": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "success_criteria_check": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["criterion_id", "met"],
+        "properties": {
+          "criterion_id": { "type": "string" },
+          "met": { "type": "boolean" },
+          "evidence": { "type": "string" }
+        }
+      }
+    },
+    "recommendations": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

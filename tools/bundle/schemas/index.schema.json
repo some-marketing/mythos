@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "index.schema.json",
+  "title": "Bundle Index",
+  "description": "INDEX.json — stable-order artifact listing for the bundle",
+  "type": "object",
+  "required": ["bundle_id", "created_at", "runs"],
+  "properties": {
+    "bundle_id": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "scope": { "type": "string" },
+    "runs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["form_id", "testcase", "run_id", "env"],
+        "properties": {
+          "form_id": { "type": "string" },
+          "testcase": { "type": "string" },
+          "run_id": { "type": "string" },
+          "env": { "type": "string" },
+          "crm_table": { "type": "string" },
+          "canonical_report": { "type": "string" },
+          "deep_analysis": { "type": "string" },
+          "sent_payload": { "type": "string" },
+          "expected_payload": { "type": "string" },
+          "evidence_dir": { "type": "string" }
+        }
+      }
+    },
+    "summary_documents": {
+      "type": "object",
+      "properties": {
+        "for_{DEVELOPER_NAME}": { "type": "string" },
+        "questions": { "type": "string" },
+        "index_md": { "type": "string" },
+        "index_json": { "type": "string" }
+      }
+    },
+    "raw_artifacts": {
+      "type": "object",
+      "properties": {
+        "sent_payloads": { "type": "array", "items": { "type": "string" } },
+        "expected_payloads": { "type": "array", "items": { "type": "string" } },
+        "crm_exports": { "type": "array", "items": { "type": "string" } },
+        "wpforms_exports": { "type": "array", "items": { "type": "string" } },
+        "stakeholder_answers": { "type": "string" },
+        "dev_changelog": { "type": "string" }
+      }
+    },
+    "llm_harness": {
+      "type": "object",
+      "properties": {
+        "manifest": { "type": "string" },
+        "agents": { "type": "string" },
+        "claude": { "type": "string" }
+      }
+    }
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mythos.local/schemas/cascade-span/1.0.json",
+  "title": "CascadeSpan/1.0",
+  "description": "CANONICAL enforcement-span contract. The single non-negotiable shape binding the enforcement homes named in _dev/concepts/sovereign-core-harness.md (Claude-Code hook today; forked pi-mono native later; Tool Broker for brokered/external-model action). Every home emits THIS shape with identical node/work lineage so the control plane never bifurcates (the council's #1 ranked risk: 'schema bifurcation under urgency'). OWNERSHIP: master-program-of-work Phase-1 is the canonical owner of the cascade identity/lineage discipline, whose emergent implementation is tools/telemetry/dispatches/lib/emit-span.cjs (span_schema_version 3) + tools/telemetry/dispatches/lib/trace-context.cjs. This contract CONSUMES those identity fields (trace_id, span_id, parent_span_id, scope lineage) with the owner's field names/semantics and ADDS the enforcement superstructure {node, action, enforcement_home, status}; it does not re-author or fork the identity schema. Each field notes the live owner/concept field it is grounded in.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "schema_version",
+    "span_id",
+    "node",
+    "scope",
+    "action",
+    "enforcement_home",
+    "timestamps",
+    "status"
+  ],
+  "properties": {
+    "schema_id": {
+      "description": "Contract identity. Constant for CascadeSpan/1.0 (concept: 'CascadeSpan/1.0 is the single non-negotiable contract').",
+      "const": "CascadeSpan/1.0"
+    },
+    "schema_version": {
+      "description": "Contract version. Mirrors the monotonic span_schema_version pattern live in emit-span.cjs (SPAN_SCHEMA_VERSION).",
+      "const": "1.0"
+    },
+    "span_id": {
+      "description": "This action's span identity. Owner field: emit-span.cjs / trace-context.cjs span_id. Any stable non-empty id (UUID-shaped in practice).",
+      "type": "string",
+      "minLength": 1
+    },
+    "parent_span_id": {
+      "description": "Lineage edge to the parent span. Owner field: emit-span.cjs / trace-context.cjs parent_span_id. null at a trace root.",
+      "type": ["string", "null"]
+    },
+    "trace_id": {
+      "description": "Cascade/correlation id shared across the whole action tree. Owner field: emit-span.cjs trace_id (=== correlation_id, physical-equivalence contract in trace-context.cjs). null tolerated but SHOULD be set to the cascade root.",
+      "type": ["string", "null"]
+    },
+    "node": {
+      "description": "Node/actor identity. Concept names exactly these three sub-fields: {actor, harness, model_family}. Grounded in emit-span.cjs {actor_role, harness, model/model_tier/mind_class}.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["actor", "harness", "model_family"],
+      "properties": {
+        "actor": {
+          "description": "The role/identity acting (e.g. coordinator, worker, reviewer, broker-adapter). Owner field: emit-span.cjs actor_role.",
+          "type": "string",
+          "minLength": 1
+        },
+        "harness": {
+          "description": "The runtime the action ran under (e.g. claude-code-cli, pi-mono, tool-broker). Owner field: emit-span.cjs harness.",
+          "type": "string",
+          "minLength": 1
+        },
+        "model_family": {
+          "description": "The mind family (e.g. claude, gemini, gpt, local-qwen). Grounded in emit-span.cjs model/model_tier/mind_class. null when no model took the action (pure mechanical hook/sweep).",
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "scope": {
+      "description": "Work/scope lineage. Concept requires 'identical node/work lineage' across homes. Sub-fields consume the owner's live scope/lineage fields in emit-span.cjs / trace-context.cjs.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope_identity", "work_unit"],
+      "properties": {
+        "scope_identity": {
+          "description": "Stable scope id the action belongs to. Owner field: emit-span.cjs / trace-context.cjs scope_identity (env MYTHOS_WORKSTREAM_SCOPE).",
+          "type": ["string", "null"]
+        },
+        "work_unit": {
+          "description": "The bounded question/work-unit id (plan id, signal id, step id). Owner field: emit-span.cjs / trace-context.cjs step_id (env MYTHOS_STEP_ID), named work_unit at the enforcement layer.",
+          "type": ["string", "null"]
+        },
+        "lineage_root": {
+          "description": "Root of the cascade lineage. Owner field: emit-span.cjs / trace-context.cjs lineage_root_session_id (env MYTHOS_LINEAGE_ROOT_SESSION_ID), named lineage_root at the enforcement layer.",
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "action": {
+      "description": "The action the enforcement home saw and ruled on. Concept (Tool Broker): it 'maps a model's proposed action', validates 'scope + execution mode + permission stage', and 'denies/escalates unsafe actions'. Sub-fields {proposed, classified_layer, verdict}. Session close/sweep maps here as a read-only lifecycle action.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["proposed", "classified_layer", "verdict"],
+      "properties": {
+        "proposed": {
+          "description": "The proposed action, home-neutral (e.g. tool name + summary, or 'session-close: <reason>'). Concept: adapter 'can propose an action; it can never perform one.'",
+          "type": "string",
+          "minLength": 1
+        },
+        "classified_layer": {
+          "description": "The permission/hardening layer the action was classified into. Concept 4-phase Permission Staging + hardening gradient.",
+          "type": "string",
+          "enum": ["read-only", "proposal", "bounded-patch", "autonomous"]
+        },
+        "verdict": {
+          "description": "The enforcement home's ruling. Concept: 'denies/escalates unsafe actions'; allow = permitted. Grounded in the Claude hook permissionDecision (allow/deny/ask).",
+          "type": "string",
+          "enum": ["allow", "deny", "escalate"]
+        }
+      }
+    },
+    "evidence": {
+      "description": "Artifact refs recorded with the span. Concept (Tool Broker): 'It records artifacts + spans'. Grounded in emit-span.cjs frameworks_referenced/frameworks_adopted array convention. Array of path/URI strings.",
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "default": []
+    },
+    "enforcement_home": {
+      "description": "Which home emitted this span. Concept adjustment #5: Claude action -> claude-hook; brokered/external action -> tool-broker; the fork's native code -> native. This is the field that PROVES convergence: identical shape, different home value.",
+      "type": "string",
+      "enum": ["claude-hook", "tool-broker", "native"]
+    },
+    "timestamps": {
+      "description": "Timestamps as PASSED IN by the emitting home, never generated inside the span builder (passive-sensor invariant carried from emit-span.cjs).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["started_at"],
+      "properties": {
+        "started_at": {
+          "description": "ISO-8601 action start, supplied by the caller.",
+          "type": "string",
+          "format": "date-time"
+        },
+        "ended_at": {
+          "description": "ISO-8601 action end, supplied by the caller. null while in flight.",
+          "type": ["string", "null"],
+          "format": "date-time"
+        }
+      }
+    },
+    "status": {
+      "description": "Terminal status of the action. 'tombstone' carries the concept's requirement that a crashed/TTL-expired sub-mind in EITHER home 'must write a consistent lineage-carrying tombstone' (no silent loss; registry-as-coroner).",
+      "type": "string",
+      "enum": ["ok", "denied", "escalated", "tombstone"]
+    }
+  }
+}

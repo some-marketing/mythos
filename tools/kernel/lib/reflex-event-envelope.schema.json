@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "tools/kernel/lib/reflex-event-envelope.schema.json",
+  "title": "ReflexEventEnvelope/1.0",
+  "description": "Typed event envelope consumed by doctrine-reflex.cjs check #7 (stall-on-contradiction). Raw freeform tool outputs are NOT the input — this envelope is. Firing points (PostToolUse, Stop, signal-close x3, bridge-return, worker-return) MUST construct the envelope from their call-site data.",
+  "type": "object",
+  "required": [
+    "event_type",
+    "scope_tier",
+    "declared_intent",
+    "observed_write_set",
+    "observed_tool_outputs",
+    "session_present_snapshot"
+  ],
+  "properties": {
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "PostToolUse",
+        "Stop",
+        "signal-close",
+        "bridge-return",
+        "worker-return"
+      ]
+    },
+    "scope_tier": {
+      "type": "string",
+      "enum": ["leaf", "task", "project", "system"]
+    },
+    "declared_intent": {
+      "type": "object",
+      "description": "Top-down intent from the grounding card and the active task plan.",
+      "properties": {
+        "workstream_scope": { "type": "string" },
+        "owned_artifacts": { "type": "array", "items": { "type": "string" } },
+        "forbidden_artifacts": { "type": "array", "items": { "type": "string" } },
+        "stated_goal": { "type": "string" }
+      }
+    },
+    "observed_write_set": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Absolute or repo-relative paths written during this firing window."
+    },
+    "observed_tool_outputs": {
+      "type": "array",
+      "items": { "type": "object" },
+      "description": "Structured tool-call summaries (not raw text) with { tool, target, verdict } shape."
+    },
+    "session_present_snapshot": {
+      "type": "object",
+      "description": "Contents of _dev/state/session-present.json at firing time."
+    },
+    "acceptance_grade": {
+      "type": "boolean",
+      "default": false
+    },
+    "confidence_claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "claim": { "type": "string" },
+          "evidence_artifact": { "type": "string" }
+        }
+      }
+    },
+    "bridge_prompt_body": { "type": "string" },
+    "external_content_refs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "card_hash_expected": { "type": "string" }
+  }
+}

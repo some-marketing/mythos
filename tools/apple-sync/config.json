@@ -1,0 +1,14 @@
+{
+  "listPrefix": "Dart: ",
+  "digestNoteTitle": "Dart Tasks — Active",
+  "digestNoteFolder": "Notes",
+  "excludeBoards": ["Personal/Tutorial tasks"],
+  "includeBoards": null,
+  "activeLimitPerBoard": 300,
+  "writeBack": {
+    "enabled": true,
+    "completionOnly": true,
+    "maxPerRun": 25
+  },
+  "doneStatus": "Done"
+}

@@ -1,0 +1,13 @@
+{"fact":{"aboutBeings":false,"id":"example-b01-c01-f001","relationForm":"diffusion","statement":"The husk of a spent wisp crumbles to ash and scatters.","subjects":["spent wisp","husk"]}}
+{"fact":{"aboutBeings":true,"id":"example-b01-c01-f002","relationForm":"band-response","statement":"A warding charm blunts injuries but is less effective on higher-ranked travelers.","subjects":["warding charm","injuries"]}}
+{"fact":{"aboutBeings":true,"id":"example-b01-c01-f003","relationForm":"band-response","statement":"Bronze-ranked travelers shrug off minor injuries almost instantly.","subjects":["bronze-ranked travelers","injuries"]}}
+{"fact":{"aboutBeings":false,"id":"example-b01-c01-f004","relationForm":"transform","statement":"Ember shards are common components for rune-craft and charm-making.","subjects":["ember shard","rune-craft"]}}
+{"fact":{"aboutBeings":false,"id":"example-b01-c01-f005","relationForm":"transform","statement":"Lesser glimmer coins are essential for powering lower-tier charms.","subjects":["lesser glimmer coin","charms"]}}
+{"fact":{"aboutBeings":false,"id":"example-b01-c01-f006","relationForm":"source","statement":"Lesser glimmer coins are produced by defeating lesser wisps.","subjects":["lesser glimmer coins","lesser wisps"]}}
+{"fact":{"aboutBeings":false,"id":"example-b01-c01-f007","relationForm":"source","statement":"Defeating lesser wisps yields exactly ten glimmer coins each time.","subjects":["lesser wisps","glimmer coins"]}}
+{"fact":{"aboutBeings":false,"id":"example-b01-c01-f008","relationForm":"source","statement":"Defeating lesser wisps also produces one wisp core each time.","subjects":["lesser wisps","wisp cores"]}}
+{"fact":{"aboutBeings":false,"id":"example-b01-c01-f009","relationForm":"source","statement":"Glimmer wells produce glimmer coins by condensing ambient leyline energy.","subjects":["glimmer wells","glimmer coins"]}}
+{"fact":{"aboutBeings":false,"id":"example-b01-c01-f010","relationForm":"gradient","statement":"Storm intensity scales directly with ambient heat.","subjects":["ambient heat","storm intensity"]}}
+{"fact":{"aboutBeings":false,"id":"example-b01-c01-f011","relationForm":"threshold-conversion","statement":"A ward charge above five triggers an overload state.","subjects":["ward charge","overload"]}}
+{"fact":{"aboutBeings":true,"id":"example-b01-c01-f012","relationForm":"sink","statement":"Casting a rite from a rune tablet consumes stamina and can lead to exhaustion.","subjects":["stamina"]}}
+{"fact":{"aboutBeings":false,"id":"example-b01-c01-f013","relationForm":"unknown","statement":"Leyline resonance sometimes hums at dusk for reasons no scholar has explained.","subjects":["leyline resonance","dusk"]}}

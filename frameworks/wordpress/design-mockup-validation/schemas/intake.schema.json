@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "required": [
+    "task_goal",
+    "context"
+  ],
+  "properties": {
+    "task_goal": {
+      "type": "string"
+    },
+    "context": {
+      "type": "string"
+    },
+    "reference_artifacts": {
+      "type": "array"
+    }
+  }
+}

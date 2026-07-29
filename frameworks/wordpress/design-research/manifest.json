@@ -1,0 +1,77 @@
+{
+  "service_category": "wordpress",
+  "framework_name": "design-research",
+  "version": "1.2.0",
+  "description": "Pre-build design research, competitive site analysis, and design mockup creation for web development projects",
+  "prompt_count": 3,
+  "input_contract": {
+    "required": [
+      {
+        "name": "intake.json",
+        "description": "Client info, business details, design preferences, and target audience data"
+      }
+    ],
+    "optional": [
+      {
+        "name": "sites.json",
+        "description": "Array of site definitions for competitive audit (slug, name, url, inventory_path)"
+      }
+    ]
+  },
+  "output_contract": {
+    "directories": [
+      "sites/",
+      "mockups/",
+      "_handoffs/"
+    ],
+    "artifacts": [
+      "completed_research_prompt.md",
+      "FEATURE_MATRIX.md",
+      "COMPETITIVE_SUMMARY.md",
+      "mockup_brief.json",
+      "DESIGN_SPEC.md"
+    ]
+  },
+  "execution_modes": [
+    "FINDINGS_ONLY",
+    "PATCH_ALLOWED"
+  ],
+  "mcp_requirements": [
+    "playwright"
+  ],
+  "prompt_chain": {
+    "intake": [
+      "01_RESEARCH_PROMPT_INPUTS"
+    ],
+    "generate": [
+      "02_RESEARCH_PROMPT"
+    ],
+    "expand": [
+      "03_FARTHER_AFIELD_AND_BUNDLED_VARIATIONS_PROMPT"
+    ]
+  },
+  "skills_path": ".claude/skills/design-research/",
+  "commands_path": ".claude/commands/design-research/",
+  "agents_path": ".claude/agents/design-research/",
+  "skills": [
+    "design-research/SKILL.md"
+  ],
+  "commands": [
+    "run",
+    "status",
+    "research-prompt-inputs",
+    "research-prompt",
+    "farther-afield-and-bundled-variations-prompt"
+  ],
+  "agents": [
+    "research-prompt-inputs-agent",
+    "research-prompt-agent",
+    "farther-afield-and-bundled-variations-prompt-agent"
+  ],
+  "patterns": [
+    "competitive-site-research",
+    "design-pattern-analysis",
+    "prebuild-web-research",
+    "wordpress-design-planning"
+  ]
+}

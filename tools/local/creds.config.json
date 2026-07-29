@@ -1,0 +1,37 @@
+{
+  "fields": {
+    "GMAIL_FETCH_EMAIL": {
+      "envVar": "GMAIL_FETCH_EMAIL",
+      "keychainService": "gmail-fetch",
+      "keychainAccount": "email",
+      "opVault": "Automation",
+      "opItem": "gmail-fetch",
+      "opField": "username"
+    },
+    "GMAIL_FETCH_APP_PASSWORD": {
+      "envVar": "GMAIL_FETCH_APP_PASSWORD",
+      "keychainService": "gmail-fetch",
+      "keychainAccount": "app-password",
+      "opVault": "Automation",
+      "opItem": "gmail-fetch",
+      "opField": "credential"
+    },
+    "GOOGLE_HOME_EMAIL": {
+      "envVar": "GOOGLE_HOME_EMAIL",
+      "keychainService": "google-home",
+      "keychainAccount": "email",
+      "opVault": "Automation",
+      "opItem": "google-home",
+      "opField": "username"
+    },
+    "GOOGLE_HOME_APP_PASSWORD": {
+      "envVar": "GOOGLE_HOME_APP_PASSWORD",
+      "keychainService": "google-home",
+      "keychainAccount": "app-password",
+      "opVault": "Automation",
+      "opItem": "google-home",
+      "opField": "credential"
+    }
+  },
+  "_note": "gmail-fetch-attachment.js and gmail-home-imap-check.js/google-home-login.js also fall back to a local secrets/mythos.home.env file (see lib/instance-secrets.js) for these same keys -- point MYTHOS_HOME_SECRET_FILE at your own file if you'd rather not use env vars or Keychain directly."
+}

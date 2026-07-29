@@ -1,0 +1,12 @@
+{
+  "overrides": {
+    "opencode": {
+      "root_instructions": "OPENCODE.md",
+      "rules_dir": ".opencode/rules"
+    },
+    "cursor": {
+      "root_rules": ".cursorrules",
+      "main_rule": ".cursor/rules/llmos.mdc"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "chromeUserDataDir": "~/Library/Application Support/Chrome-Automation",
+  "chromeProfile": "Profile 1",
+  "channel": "chrome",
+  "headless": false,
+  "viewport": { "width": 1440, "height": 960 },
+  "_comments": {
+    "chromeUserDataDir": "Persistent Chrome user-data-dir signed into your-account@example.com. Override with env SHEET_WRITER_CHROME_USER_DATA_DIR.",
+    "chromeProfile": "Profile directory name inside the user-data-dir (passed as --profile-directory). Override with env SHEET_WRITER_CHROME_PROFILE.",
+    "channel": "Playwright browser channel; 'chrome' uses the operator's installed Google Chrome (required so the signed-in profile is honored).",
+    "headless": "MUST be false: launchPersistentContext against a real signed-in profile needs a headed window, and Sheets clipboard paste depends on a focused, rendered grid."
+  }
+}

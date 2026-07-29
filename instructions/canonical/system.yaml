@@ -1,0 +1,352 @@
+{
+  "version": "1.0.0",
+  "project": {
+    "name": "Mythos",
+    "description": "An adventurer's guild for AI coding agents — reusable, guardrailed grimoires (workflow frameworks) for real work",
+    "source_of_truth": "instructions/canonical"
+  },
+  "policy": {
+    "parity": "strict",
+    "rollout": "claude_cutover",
+    "default_write_claude": true
+  },
+  "goals": [
+    "Keep behavior consistent across harnesses",
+    "Generate harness-native instruction files from one canonical model",
+    "Validate drift and parity before runtime use"
+  ],
+  "frameworks": [
+    {
+      "id": "deliverables/presentation-review",
+      "manifest": "frameworks/deliverables/presentation-review/manifest.json",
+      "guardrails": "frameworks/deliverables/presentation-review/guardrails.md"
+    },
+    {
+      "id": "deliverables/scope-verification",
+      "manifest": "frameworks/deliverables/scope-verification/manifest.json",
+      "guardrails": "frameworks/deliverables/scope-verification/guardrails.md"
+    },
+    {
+      "id": "deliverables/version-reconciliation",
+      "manifest": "frameworks/deliverables/version-reconciliation/manifest.json",
+      "guardrails": "frameworks/deliverables/version-reconciliation/guardrails.md"
+    },
+    {
+      "id": "media/video-editing",
+      "manifest": "frameworks/media/video-editing/manifest.json",
+      "guardrails": "frameworks/media/video-editing/guardrails.md"
+    },
+    {
+      "id": "meta/dreaming-system",
+      "manifest": "frameworks/meta/dreaming-system/manifest.json",
+      "guardrails": "frameworks/meta/dreaming-system/guardrails.md"
+    },
+    {
+      "id": "meta/execution-normalization",
+      "manifest": "frameworks/meta/execution-normalization/manifest.json",
+      "guardrails": "frameworks/meta/execution-normalization/guardrails.md"
+    },
+    {
+      "id": "project-management/dart-collaboration",
+      "manifest": "frameworks/project-management/dart-collaboration/manifest.json",
+      "guardrails": "frameworks/project-management/dart-collaboration/guardrails.md"
+    },
+    {
+      "id": "project-management/feedback-to-tasks",
+      "manifest": "frameworks/project-management/feedback-to-tasks/manifest.json",
+      "guardrails": "frameworks/project-management/feedback-to-tasks/guardrails.md"
+    },
+    {
+      "id": "wordpress/analytics-tracking",
+      "manifest": "frameworks/wordpress/analytics-tracking/manifest.json",
+      "guardrails": "frameworks/wordpress/analytics-tracking/guardrails.md"
+    },
+    {
+      "id": "wordpress/content-editing",
+      "manifest": "frameworks/wordpress/content-editing/manifest.json",
+      "guardrails": "frameworks/wordpress/content-editing/guardrails.md"
+    },
+    {
+      "id": "wordpress/design-mockup-validation",
+      "manifest": "frameworks/wordpress/design-mockup-validation/manifest.json",
+      "guardrails": "frameworks/wordpress/design-mockup-validation/guardrails.md"
+    },
+    {
+      "id": "wordpress/design-research",
+      "manifest": "frameworks/wordpress/design-research/manifest.json",
+      "guardrails": "frameworks/wordpress/design-research/guardrails.md"
+    },
+    {
+      "id": "wordpress/documentation",
+      "manifest": "frameworks/wordpress/documentation/manifest.json",
+      "guardrails": "frameworks/wordpress/documentation/guardrails.md"
+    },
+    {
+      "id": "wordpress/page-cro",
+      "manifest": "frameworks/wordpress/page-cro/manifest.json",
+      "guardrails": "frameworks/wordpress/page-cro/guardrails.md"
+    },
+    {
+      "id": "wordpress/qa",
+      "manifest": "frameworks/wordpress/qa/manifest.json",
+      "guardrails": "frameworks/wordpress/qa/guardrails.md"
+    },
+    {
+      "id": "wordpress/seo-audit",
+      "manifest": "frameworks/wordpress/seo-audit/manifest.json",
+      "guardrails": "frameworks/wordpress/seo-audit/guardrails.md"
+    },
+    {
+      "id": "wordpress/seo-validation",
+      "manifest": "frameworks/wordpress/seo-validation/manifest.json",
+      "guardrails": "frameworks/wordpress/seo-validation/guardrails.md"
+    }
+  ],
+  "routing": {
+    "framework_context": "frameworks/{service}/{framework}/manifest.json",
+    "framework_guardrails": "frameworks/{service}/{framework}/guardrails.md",
+    "project_context": "clients/{client_code}/{project_name}/project.json",
+    "framework_skills": "frameworks/{service}/{framework}/.claude/skills/"
+  },
+  "execution_modes": [
+    {
+      "id": "FINDINGS_ONLY",
+      "can_write": false,
+      "can_execute": false,
+      "description": "Observe and report only"
+    },
+    {
+      "id": "RUN_ONLY",
+      "can_write": "reports_only",
+      "can_execute": true,
+      "description": "Execute runs without applying fixes"
+    },
+    {
+      "id": "REVIEW_ONLY",
+      "can_write": "analysis_only",
+      "can_execute": false,
+      "description": "Analyze existing outputs"
+    },
+    {
+      "id": "PATCH_ALLOWED",
+      "can_write": "scoped",
+      "can_execute": true,
+      "description": "Apply minimal targeted changes"
+    },
+    {
+      "id": "COORDINATOR",
+      "can_write": "delegated",
+      "can_execute": "delegated",
+      "description": "Orchestrate sub-workflows"
+    },
+    {
+      "id": "REPO_HYGIENE",
+      "can_write": "docs_cleanup",
+      "can_execute": false,
+      "description": "Navigation and cleanup only"
+    }
+  ],
+  "safety_rules": [
+    "Never expose PII, credentials, API keys, or .env values",
+    "Never write client-specific data into frameworks",
+    "Never skip declared execution mode constraints",
+    "Never run destructive operations without explicit confirmation",
+    "Use observational reporting: observations and hypotheses, not diagnoses",
+    "Contribution workflow: always work on a feature branch and open a pull request — never commit or push directly to `main`"
+  ],
+  "operations": [
+    {
+      "id": "capture-task",
+      "description": "claim-spoils — Import successful ad-hoc work into a normalized spoils bundle",
+      "mode": "PATCH_ALLOWED"
+    },
+    {
+      "id": "normalize-capture",
+      "description": "refine-spoils — Validate and normalize a spoils bundle",
+      "mode": "PATCH_ALLOWED"
+    },
+    {
+      "id": "capture-status",
+      "description": "spoils-ledger — Report spoils readiness and missing fields",
+      "mode": "REVIEW_ONLY"
+    },
+    {
+      "id": "scaffold-framework",
+      "description": "scribe-grimoire — Scaffold a grimoire candidate from spoils",
+      "mode": "PATCH_ALLOWED"
+    },
+    {
+      "id": "candidate-status",
+      "description": "initiate-status — Report grimoire candidate maturity and blockers",
+      "mode": "REVIEW_ONLY"
+    },
+    {
+      "id": "replay-framework",
+      "description": "rehearse-grimoire — Run replay-readiness checks for a grimoire candidate",
+      "mode": "PATCH_ALLOWED"
+    },
+    {
+      "id": "promote-framework",
+      "description": "rank-up — Promote a validated grimoire candidate into the guild",
+      "mode": "PATCH_ALLOWED"
+    },
+    {
+      "id": "publish-framework",
+      "description": "enshrine-grimoire — Scan, sanitize, and export a grimoire to the public repo in one guided motion",
+      "mode": "PATCH_ALLOWED"
+    },
+    {
+      "id": "new-framework",
+      "description": "forge-grimoire — Forge a new grimoire from intake or example",
+      "mode": "PATCH_ALLOWED"
+    },
+    {
+      "id": "audit-framework",
+      "description": "appraise-grimoire — Validate a grimoire's structure and references",
+      "mode": "REVIEW_ONLY"
+    },
+    {
+      "id": "improve-framework",
+      "description": "empower-grimoire — Empower a grimoire based on run outputs",
+      "mode": "PATCH_ALLOWED"
+    },
+    {
+      "id": "list-frameworks",
+      "description": "bookshelf — List registered grimoires",
+      "mode": "REVIEW_ONLY"
+    },
+    {
+      "id": "new-client",
+      "description": "enroll-patron — Register a new patron entry",
+      "mode": "PATCH_ALLOWED"
+    },
+    {
+      "id": "new-project",
+      "description": "open-contract — Open a contract linking a patron to a grimoire",
+      "mode": "PATCH_ALLOWED"
+    },
+    {
+      "id": "project-status",
+      "description": "contract-ledger — Report contract progression",
+      "mode": "REVIEW_ONLY"
+    },
+    {
+      "id": "run-framework",
+      "description": "cast-grimoire — Cast a grimoire's prompt chain against a patron contract",
+      "mode": "COORDINATOR"
+    },
+    {
+      "id": "system-status",
+      "description": "guild-ledger — Global guild inventory and health summary",
+      "mode": "REVIEW_ONLY"
+    },
+    {
+      "id": "extract-skill",
+      "description": "awaken-essence — Awaken a reusable essence from a conversation workflow",
+      "mode": "PATCH_ALLOWED"
+    },
+    {
+      "id": "sync-manifest",
+      "description": "attune-codex — Attune the project-claude.yml codex with assets on disk",
+      "mode": "PATCH_ALLOWED"
+    },
+    {
+      "id": "orchestrate-loop",
+      "description": "guildmaster-loop — Drive the general review-driven orchestration loop: resolve targets, route work, preserve coordinator/worker/reviewer boundaries, and close through evidence and debrief",
+      "mode": "COORDINATOR"
+    },
+    {
+      "id": "deliberate",
+      "description": "commune — Reason solo, gather multi-familiar counsel, synthesize, then route through the orchestration loop",
+      "mode": "COORDINATOR"
+    },
+    {
+      "id": "convene-review",
+      "description": "conclave — Convene multiple distinct minds for adversarial review when a single trial isn't enough",
+      "mode": "COORDINATOR"
+    },
+    {
+      "id": "blueprint",
+      "description": "charter-quest — Take a rough request from intent to a bounded, review-gated quest charter: deliberate, initialize a durable concept artifact, then route to plan-quest",
+      "mode": "COORDINATOR"
+    },
+    {
+      "id": "concept-init",
+      "description": "inscribe-lore — Create a new concept artifact, sized to scope",
+      "mode": "PATCH_ALLOWED"
+    },
+    {
+      "id": "plan-task",
+      "description": "plan-quest — Draft a bounded quest charter for a task, grounded against existing grimoires",
+      "mode": "REVIEW_ONLY"
+    },
+    {
+      "id": "review-task-plan",
+      "description": "trial-quest — Put a generated quest charter through independent review before it runs",
+      "mode": "REVIEW_ONLY"
+    },
+    {
+      "id": "run-plan",
+      "description": "embark — Resolve an approved quest charter and route it to the correct execution pathway",
+      "mode": "COORDINATOR"
+    },
+    {
+      "id": "evidence-loop",
+      "description": "gauntlet — Run the high-rigor review profile: adversarial review by a distinct mind, a third-mind context check, and a research disposition for every finding",
+      "mode": "COORDINATOR"
+    },
+    {
+      "id": "route",
+      "description": "site — Resolve and recommend the correct command for a stated goal",
+      "mode": "REVIEW_ONLY"
+    },
+    {
+      "id": "debrief-run",
+      "description": "chronicle — Run end-of-session debrief producing improve and replicate notes",
+      "mode": "REVIEW_ONLY"
+    }
+  ],
+  "agents": [
+    {
+      "id": "framework-auditor",
+      "purpose": "Read-only structure and policy validation"
+    },
+    {
+      "id": "framework-executor",
+      "purpose": "Prompt execution with mode enforcement"
+    },
+    {
+      "id": "output-reviewer",
+      "purpose": "Output quality validation"
+    },
+    {
+      "id": "completion-auditor",
+      "purpose": "Evidence-based completion verification against acceptance criteria"
+    },
+    {
+      "id": "extract-skill-agent",
+      "purpose": "Conversation workflow analysis and skill artifact generation"
+    }
+  ],
+  "orchestration_policy": {
+    "completion_auditing": "required_for_substantial_changes",
+    "max_reopen_cycles": 2,
+    "audit_exemptions": [
+      "FINDINGS_ONLY",
+      "REVIEW_ONLY",
+      "REPO_HYGIENE"
+    ],
+    "evidence_required": [
+      "changed_files",
+      "test_results",
+      "acceptance_criteria"
+    ]
+  },
+  "harness_targets": [
+    "claude",
+    "codex",
+    "cursor",
+    "opencode",
+    "generic"
+  ]
+}

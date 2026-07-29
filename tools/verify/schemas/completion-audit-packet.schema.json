@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CompletionAuditPacket/1.0",
+  "type": "object",
+  "required": ["schema", "task_id", "plan", "run_evidence", "verdict", "criteria", "changed_files", "tests", "blockers", "rollback_evidence", "packet_producer", "packet_state", "missing_reasons", "built_at", "authority"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "const": "CompletionAuditPacket/1.0" },
+    "task_id": { "type": "string", "minLength": 1 },
+    "plan": { "type": "object" },
+    "run_evidence": { "type": "object" },
+    "verdict": { "type": "object" },
+    "criteria": { "type": "array", "items": { "type": "object" } },
+    "changed_files": { "type": "array", "items": { "type": "object" } },
+    "tests": { "type": "array", "items": { "type": "object" } },
+    "blockers": { "type": "array" },
+    "rollback_evidence": { "type": "array" },
+    "packet_producer": { "type": "object" },
+    "packet_state": { "enum": ["evidence_missing", "audit_ready"] },
+    "missing_reasons": { "type": "array", "items": { "type": "string" } },
+    "built_at": { "type": "string", "minLength": 1 },
+    "authority": { "const": "report_only" }
+  }
+}

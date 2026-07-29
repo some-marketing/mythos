@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Staged Remediation Stage Status",
+  "type": "object",
+  "required": [
+    "run_id",
+    "stage_id",
+    "status",
+    "changed_files",
+    "blockers",
+    "warnings",
+    "reports"
+  ],
+  "properties": {
+    "run_id": { "type": "string" },
+    "stage_id": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["planned", "in_progress", "blocked", "completed", "failed"]
+    },
+    "changed_files": { "type": "array" },
+    "blockers": { "type": "array" },
+    "warnings": { "type": "array" },
+    "reports": { "type": "array" },
+    "notes": { "type": "array" }
+  }
+}
+

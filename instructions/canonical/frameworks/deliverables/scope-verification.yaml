@@ -1,0 +1,11 @@
+{
+  "id": "deliverables/scope-verification",
+  "manifest_path": "frameworks/deliverables/scope-verification/manifest.json",
+  "description": "Verifies scope/proposal documents against source data by exact categorization, counting, and discrepancy detection",
+  "inputs": ["scope_document", "source_data"],
+  "outputs": ["verification_output/DISCREPANCY_REPORT.md", "verification_output/verification_summary.json"],
+  "modes": ["FINDINGS_ONLY", "PATCH_ALLOWED"],
+  "operations": ["scope-verification:verify", "scope-verification:count", "scope-verification:compare", "scope-verification:report", "scope-verification:status"],
+  "agent_profiles": ["source-loader", "counter", "comparison", "report"],
+  "guardrail_overrides": ["Zero tolerance for approximation", "Bidirectional verification", "Count integrity enforcement"]
+}

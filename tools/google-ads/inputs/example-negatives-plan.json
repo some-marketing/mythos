@@ -1,0 +1,20 @@
+{
+  "task_id": "example-negatives-cleanup",
+  "customer_id": "1234567890",
+  "plan": [
+    {
+      "list": "Bad Loan Intent",
+      "keywords": ["personal loans", "free loans", "payday", "cash loan", "debt consolidation"],
+      "targets": [
+        { "id": "1111111111", "name": "Used Inventory" }
+      ]
+    },
+    {
+      "list": "Parts Service and Research",
+      "keywords": ["parts", "service", "recall", "manual", "reviews", "specs"],
+      "targets": [
+        { "id": "2222222222", "name": "New Inventory" }
+      ]
+    }
+  ]
+}

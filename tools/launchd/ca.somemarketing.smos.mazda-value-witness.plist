@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Mazda lead-value clearance witness. Fires daily at 09:05 local; the runner is
+  date-gated (waits until 2026-06-10, stops after 2026-06-24) and SELF-RETIRES
+  the moment it reads a clean PASS. Read-only: runs the canonical
+  tools/google-ads/lead-value-monitor.js, never mutates the Google Ads account.
+  Holds Owner Decision 2 (hold the Mazda budget bump until corrected lead values
+  are witnessed firing clean). NOTE: only the runner .cjs logic changed in the
+  2026-06-02 consolidation; this plist invokes the runner by path, so the
+  already-installed copy in ~/Library/LaunchAgents is functionally current.
+
+  Install:
+    cp tools/launchd/ca.somemarketing.smos.mazda-value-witness.plist ~/Library/LaunchAgents/
+    launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/ca.somemarketing.smos.mazda-value-witness.plist
+
+  Reload after edit:
+    launchctl bootout gui/$(id -u) ~/Library/LaunchAgents/ca.somemarketing.smos.mazda-value-witness.plist
+    cp tools/launchd/ca.somemarketing.smos.mazda-value-witness.plist ~/Library/LaunchAgents/
+    launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/ca.somemarketing.smos.mazda-value-witness.plist
+
+  Status / kick (force a run now, e.g. to test the date gate):
+    launchctl print gui/$(id -u)/ca.somemarketing.smos.mazda-value-witness
+    launchctl kickstart -k gui/$(id -u)/ca.somemarketing.smos.mazda-value-witness
+
+  Retire early (if cleared by hand): bootout (the runner also self-retires).
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>ca.somemarketing.smos.mazda-value-witness</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/env</string>
+        <string>node</string>
+        <string>/Users/admin/dev/SM_OS-recovered/tools/launchd/run-mazda-value-witness.cjs</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/admin/dev/SM_OS-recovered</string>
+
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>9</integer>
+        <key>Minute</key>
+        <integer>5</integer>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/admin/dev/SM_OS-recovered/_dev/state/mazda-value-witness/launchd.stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/admin/dev/SM_OS-recovered/_dev/state/mazda-value-witness/launchd.stderr.log</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>HOME</key>
+        <string>/Users/admin</string>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+    </dict>
+</dict>
+</plist>

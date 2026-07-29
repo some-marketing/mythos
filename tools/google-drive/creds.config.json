@@ -1,0 +1,33 @@
+{
+  "_comment": "Credential fields for the Google Drive OAuth (installed-app / desktop client) flow, resolved via tools/lib/resolve-credential.cjs. Field keys double as the default env var names. opVault/opItem below are the shipped defaults for this tool's own 1Password item -- override the vault/item this tool targets via the GDRIVE_OP_VAULT / GDRIVE_OP_ITEM env vars (see config.js) without editing this file.",
+  "tool": "google-drive",
+  "fields": {
+    "GOOGLE_OAUTH_CLIENT_ID": {
+      "envVar": "GOOGLE_OAUTH_CLIENT_ID",
+      "keychainService": "mythos-google-drive",
+      "keychainAccount": "client-id",
+      "opVault": "Automation",
+      "opItem": "Mythos Google Drive",
+      "opField": "client_id",
+      "description": "OAuth 2.0 Desktop client ID (Google Cloud Console -> Credentials)."
+    },
+    "GOOGLE_OAUTH_CLIENT_SECRET": {
+      "envVar": "GOOGLE_OAUTH_CLIENT_SECRET",
+      "keychainService": "mythos-google-drive",
+      "keychainAccount": "client-secret",
+      "opVault": "Automation",
+      "opItem": "Mythos Google Drive",
+      "opField": "client_secret",
+      "description": "OAuth 2.0 Desktop client secret, paired with the client ID above."
+    },
+    "GOOGLE_OAUTH_REFRESH_TOKEN": {
+      "envVar": "GOOGLE_OAUTH_REFRESH_TOKEN",
+      "keychainService": "mythos-google-drive",
+      "keychainAccount": "refresh-token",
+      "opVault": "Automation",
+      "opItem": "Mythos Google Drive",
+      "opField": "refresh_token",
+      "description": "Long-lived refresh token minted once via authorize.js (offline access, prompt=consent)."
+    }
+  }
+}

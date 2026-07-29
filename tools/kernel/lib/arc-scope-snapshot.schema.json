@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "tools/kernel/lib/arc-scope-snapshot.schema.json",
+  "title": "ActorArcScopeSnapshot",
+  "description": "Canonical snapshot contract for an authorized actor arc. The file is persisted under _dev/state/actor-arc/<actor-id>.json and acts as the mechanical boundary artifact for declared write authority, forbidden surfaces, lifecycle transitions, and closeout state.",
+  "type": "object",
+  "required": [
+    "arc_id",
+    "workstream_scope",
+    "scope_identity",
+    "declared_write_set",
+    "forbidden_artifacts",
+    "authority_source",
+    "parent_arc_id",
+    "authorized_at",
+    "lifecycle_state",
+    "actor_id",
+    "actor_tier",
+    "arc_ended_at",
+    "end_reason",
+    "history"
+  ],
+  "properties": {
+    "arc_id": { "type": "string" },
+    "workstream_scope": { "type": "string" },
+    "scope_identity": { "type": "object" },
+    "declared_write_set": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "forbidden_artifacts": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "authority_source": {
+      "type": "object",
+      "required": ["kind", "ref"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "operator-turn",
+            "live-signal",
+            "approved-plan",
+            "worker-return",
+            "coordinator-dispatch"
+          ]
+        },
+        "ref": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "parent_arc_id": {
+      "type": ["string", "null"]
+    },
+    "authorized_at": { "type": "string" },
+    "lifecycle_state": {
+      "type": "string",
+      "enum": [
+        "awaiting-authorization",
+        "authorized-for-arc",
+        "executing",
+        "closing",
+        "resting",
+        "blocked",
+        "arc-complete"
+      ]
+    },
+    "actor_id": { "type": "string" },
+    "actor_tier": {
+      "type": "string",
+      "enum": ["main-chain", "subagent", "bridge", "unknown"]
+    },
+    "arc_ended_at": {
+      "type": ["string", "null"]
+    },
+    "end_reason": {
+      "type": ["string", "null"]
+    },
+    "history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["from_state", "to_state", "trigger", "transitioned_at"],
+        "properties": {
+          "from_state": {
+            "type": ["string", "null"]
+          },
+          "to_state": { "type": "string" },
+          "trigger": { "type": "string" },
+          "transitioned_at": { "type": "string" },
+          "evidence": {}
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

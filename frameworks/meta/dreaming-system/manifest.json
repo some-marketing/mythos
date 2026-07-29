@@ -1,0 +1,106 @@
+{
+  "service_category": "meta",
+  "framework_name": "dreaming-system",
+  "version": "1.0.0",
+  "description": "Framework for integrating a deterministic associative recombination engine (TF-IDF + graph traversal) into a knowledge-management system's session lifecycle, including session hook wiring, Tier 0 hint extension, scheduled rebuild, and entity persistence.",
+  "prompt_count": 7,
+  "input_contract": {
+    "required": [
+      {
+        "name": "corpus_config.json",
+        "description": "Ingest surface paths, forbidden paths, threshold, max dreams"
+      },
+      {
+        "name": "integration_config.json",
+        "description": "Hook surface path, output surface path, scheduling mechanism"
+      }
+    ],
+    "optional": [
+      {
+        "name": "persistence_config.json",
+        "description": "Entity types and persistence options — if omitted, entity persistence is skipped"
+      }
+    ]
+  },
+  "output_contract": {
+    "directories": [
+      "reports/dreaming-system/memory-db/",
+      "reports/dreaming-system/archive/"
+    ],
+    "artifacts": [
+      "build-memory-db.js",
+      "dream-report.md",
+      "session hook configuration",
+      "launchd plist",
+      "agent-state.schema.json",
+      "agent-state.js",
+      "verify-evidence.json"
+    ]
+  },
+  "execution_modes": [
+    "FINDINGS_ONLY",
+    "REVIEW_ONLY",
+    "PATCH_ALLOWED",
+    "RUN_ONLY"
+  ],
+  "mcp_requirements": [],
+  "prompt_chain": {
+    "assess": [
+      "01_assess_corpus"
+    ],
+    "build": [
+      "02_implement_scoring"
+    ],
+    "integrate": [
+      "03_wire_session_hooks",
+      "04_surface_output"
+    ],
+    "schedule": [
+      "05_schedule_rebuild"
+    ],
+    "design": [
+      "06_design_persistence"
+    ],
+    "verify": [
+      "07_verify_e2e"
+    ]
+  },
+  "skills_path": ".claude/skills/dreaming-system",
+  "commands_path": ".claude/commands/dreaming-system",
+  "agents_path": ".claude/agents/dreaming-system",
+  "skills": [
+    ".claude/skills/dreaming-system/integrate/SKILL.md"
+  ],
+  "commands": [
+    ".claude/commands/dreaming-system/integrate.md"
+  ],
+  "agents": [
+    ".claude/agents/dreaming-system/integrator.md"
+  ],
+  "guardrails": "guardrails.md",
+  "source": "capture",
+  "capture_id": "dreaming-system",
+  "capture_distilled": true,
+  "review_lane": "verify-local",
+  "risk_tier": "low",
+  "gates": [
+    "Privacy floor: no PII, credentials, or client data in dream corpus",
+    "Advisory surface: dreams must not block session boot on failure",
+    "Deterministic: same corpus → same output, no LLM in the scoring pass",
+    "Schema coexistence: entity persistence tables must not couple to concept tables",
+    "Launchd non-overlap: scheduled rebuild must not conflict with existing jobs"
+  ],
+  "expected_outcomes": [
+    "Deterministic associative engine rebuilding at session start",
+    "Non-obvious associations surfaced in operator-facing glanceable output",
+    "Scheduled periodic rebuild keeping associations fresh",
+    "Entity persistence layer for simulated entities, no coupling to concept tables"
+  ],
+  "hardening_opportunity": "If entity persistence proves reliable, it becomes the canonical state store for all simulated entities — single source of truth for world-state across sessions.",
+  "patterns": [
+    "dreaming-system-synthesis",
+    "concept-signal-recombination",
+    "ambient-idea-processing",
+    "system-behavior-hardening"
+  ]
+}

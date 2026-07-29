@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.smos.operator-response-poller</string>
+
+	<key>ProgramArguments</key>
+	<array>
+		<string>/opt/homebrew/bin/node</string>
+		<string>/Users/admin/dev/SM_OS-recovered/tools/dart-integration/operator-response-poller.js</string>
+		<string>--apply</string>
+		<string>--assign-active</string>
+		<string>--json</string>
+	</array>
+
+	<key>WorkingDirectory</key>
+	<string>/Users/admin/dev/SM_OS-recovered</string>
+
+	<key>StartInterval</key>
+	<integer>300</integer>
+
+	<key>StandardOutPath</key>
+	<string>/Users/admin/dev/SM_OS-recovered/_dev/logs/operator-response-poller.log</string>
+	<key>StandardErrorPath</key>
+	<string>/Users/admin/dev/SM_OS-recovered/_dev/logs/operator-response-poller.err.log</string>
+
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+	</dict>
+
+	<key>ProcessType</key>
+	<string>Background</string>
+</dict>
+</plist>

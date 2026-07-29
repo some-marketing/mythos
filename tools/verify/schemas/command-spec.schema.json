@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Mythos Command Spec",
+  "type": "object",
+  "required": ["id", "description", "mode", "objective", "process", "success_criteria"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "description": { "type": "string", "minLength": 1 },
+    "mode": {
+      "type": "string",
+      "enum": ["FINDINGS_ONLY", "RUN_ONLY", "REVIEW_ONLY", "PATCH_ALLOWED", "COORDINATOR", "REPO_HYGIENE"]
+    },
+    "objective": { "type": "string", "minLength": 1 },
+    "process": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "success_criteria": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

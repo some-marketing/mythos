@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleIdentifier</key>
+    <string>com.example.mythos.JOBNAME</string>
+
+    <key>CFBundleName</key>
+    <string>JOBNAME</string>
+
+    <key>CFBundleDisplayName</key>
+    <string>JOBNAME</string>
+
+    <key>CFBundleExecutable</key>
+    <string>launcher</string>
+
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+
+    <key>CFBundleVersion</key>
+    <string>1</string>
+
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
+
+    <key>LSUIElement</key>
+    <true/>
+
+    <key>LSMinimumSystemVersion</key>
+    <string>12.0</string>
+
+    <!-- TCC usage descriptions — macOS shows these in Privacy prompts. -->
+    <!-- Replace these with your own job's actual descriptions. -->
+    <key>NSAppleEventsUsageDescription</key>
+    <string>This automation needs to control other apps (e.g. Reminders, Contacts) to sync data.</string>
+
+    <key>NSRemindersUsageDescription</key>
+    <string>Syncs tasks to and from Apple Reminders.</string>
+
+    <key>NSContactsUsageDescription</key>
+    <string>Reads Contacts to resolve names during sync.</string>
+
+    <key>NSCalendarsUsageDescription</key>
+    <string>May read Calendar data as part of task context sync.</string>
+</dict>
+</plist>

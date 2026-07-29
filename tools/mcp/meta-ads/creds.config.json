@@ -1,0 +1,14 @@
+{
+  "tool": "mcp/meta-ads",
+  "fields": {
+    "META_ACCESS_TOKEN": {
+      "envVar": "META_ACCESS_TOKEN",
+      "keychainService": "mythos-meta-ads-mcp",
+      "keychainAccount": "mythos",
+      "opVault": "Employee",
+      "opItem": "Example Group BM Meta App",
+      "opField": "credential",
+      "description": "Meta system-user access token, shared across every ad account in your Business Manager."
+    }
+  }
+}

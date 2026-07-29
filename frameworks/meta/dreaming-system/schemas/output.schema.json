@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dreaming-system-output/1.0",
+  "title": "Dreaming System Integration Output",
+  "description": "Output schema for the dreaming system integration framework. Captures what was built and verified.",
+  "type": "object",
+  "required": ["build_script", "dream_report", "hook_wired", "output_surface_wired", "scheduling_active", "persistence_active", "verification"],
+  "properties": {
+    "build_script": {
+      "type": "object",
+      "required": ["path", "node_count", "association_count", "rebuild_duration_s"],
+      "properties": {
+        "path": { "type": "string" },
+        "node_count": { "type": "integer" },
+        "association_count": { "type": "integer" },
+        "rebuild_duration_s": { "type": "number" }
+      }
+    },
+    "dream_report": {
+      "type": "object",
+      "required": ["path", "generated_at", "top_associations", "non_obvious_pairs"],
+      "properties": {
+        "path": { "type": "string" },
+        "generated_at": { "type": "string", "format": "date-time" },
+        "top_associations": { "type": "integer" },
+        "non_obvious_pairs": { "type": "integer" }
+      }
+    },
+    "hook_wired": {
+      "type": "object",
+      "required": ["path", "position", "timeout_s"],
+      "properties": {
+        "path": { "type": "string" },
+        "position": { "type": "string", "description": "before|after relative to hint injection" },
+        "timeout_s": { "type": "integer" }
+      }
+    },
+    "output_surface_wired": {
+      "type": "object",
+      "required": ["path", "dream_entries_surfaced"],
+      "properties": {
+        "path": { "type": "string" },
+        "dream_entries_surfaced": { "type": "integer" }
+      }
+    },
+    "scheduling_active": {
+      "type": "object",
+      "required": ["mechanism", "schedule", "loaded"],
+      "properties": {
+        "mechanism": { "type": "string" },
+        "schedule": { "type": "string" },
+        "loaded": { "type": "boolean" }
+      }
+    },
+    "persistence_active": {
+      "type": "object",
+      "required": ["schema_version", "tables", "operations"],
+      "properties": {
+        "schema_version": { "type": "string" },
+        "tables": { "type": "array", "items": { "type": "string" } },
+        "operations": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "required": ["evidence_path", "checks_passed", "checks_total"],
+      "properties": {
+        "evidence_path": { "type": "string" },
+        "checks_passed": { "type": "integer" },
+        "checks_total": { "type": "integer" }
+      }
+    }
+  }
+}

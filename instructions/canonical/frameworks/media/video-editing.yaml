@@ -1,0 +1,11 @@
+{
+  "id": "media/video-editing",
+  "manifest_path": "frameworks/media/video-editing/manifest.json",
+  "description": "Conversation-driven video editing with transcription, edit decision lists, subtitle burn-in, rendering, and self-evaluation",
+  "inputs": ["videos_dir", "ELEVENLABS_API_KEY"],
+  "outputs": ["edit/takes_packed.md", "edit/edl.json", "edit/master.srt", "edit/preview.mp4", "edit/final.mp4", "edit/project.md"],
+  "modes": ["FINDINGS_ONLY", "PATCH_ALLOWED", "REVIEW_ONLY"],
+  "operations": ["video-editing:run", "video-editing:status"],
+  "agent_profiles": ["video-editing-agent"],
+  "guardrail_overrides": ["Never log API keys", "Preserve source footage", "Render outputs only into the edit directory"]
+}

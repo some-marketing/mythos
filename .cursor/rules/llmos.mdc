@@ -1,0 +1,69 @@
+# Mythos Rule
+
+> AUTO-GENERATED FILE. Edit canonical source in `instructions/canonical/*` and regenerate.
+
+## Scope
+Mythos instruction policy for Cursor.
+
+## Required Behavior
+- Never expose PII, credentials, API keys, or .env values
+- Never write client-specific data into frameworks
+- Never skip declared execution mode constraints
+- Never run destructive operations without explicit confirmation
+- Use observational reporting: observations and hypotheses, not diagnoses
+- Contribution workflow: always work on a feature branch and open a pull request — never commit or push directly to `main`
+
+## Execution Modes
+| Mode | Can Write | Can Execute | Description |
+|---|---|---|---|
+| FINDINGS_ONLY | false | false | Observe and report only |
+| RUN_ONLY | reports_only | true | Execute runs without applying fixes |
+| REVIEW_ONLY | analysis_only | false | Analyze existing outputs |
+| PATCH_ALLOWED | scoped | true | Apply minimal targeted changes |
+| COORDINATOR | delegated | delegated | Orchestrate sub-workflows |
+| REPO_HYGIENE | docs_cleanup | false | Navigation and cleanup only |
+
+## Operations
+- `capture-task` (PATCH_ALLOWED): claim-spoils — Import successful ad-hoc work into a normalized spoils bundle
+- `normalize-capture` (PATCH_ALLOWED): refine-spoils — Validate and normalize a spoils bundle
+- `capture-status` (REVIEW_ONLY): spoils-ledger — Report spoils readiness and missing fields
+- `scaffold-framework` (PATCH_ALLOWED): scribe-grimoire — Scaffold a grimoire candidate from spoils
+- `candidate-status` (REVIEW_ONLY): initiate-status — Report grimoire candidate maturity and blockers
+- `replay-framework` (PATCH_ALLOWED): rehearse-grimoire — Run replay-readiness checks for a grimoire candidate
+- `promote-framework` (PATCH_ALLOWED): rank-up — Promote a validated grimoire candidate into the guild
+- `publish-framework` (PATCH_ALLOWED): enshrine-grimoire — Scan, sanitize, and export a grimoire to the public repo in one guided motion
+- `new-framework` (PATCH_ALLOWED): forge-grimoire — Forge a new grimoire from intake or example
+- `audit-framework` (REVIEW_ONLY): appraise-grimoire — Validate a grimoire's structure and references
+- `improve-framework` (PATCH_ALLOWED): empower-grimoire — Empower a grimoire based on run outputs
+- `list-frameworks` (REVIEW_ONLY): bookshelf — List registered grimoires
+- `new-client` (PATCH_ALLOWED): enroll-patron — Register a new patron entry
+- `new-project` (PATCH_ALLOWED): open-contract — Open a contract linking a patron to a grimoire
+- `project-status` (REVIEW_ONLY): contract-ledger — Report contract progression
+- `run-framework` (COORDINATOR): cast-grimoire — Cast a grimoire's prompt chain against a patron contract
+- `system-status` (REVIEW_ONLY): guild-ledger — Global guild inventory and health summary
+- `extract-skill` (PATCH_ALLOWED): awaken-essence — Awaken a reusable essence from a conversation workflow
+- `sync-manifest` (PATCH_ALLOWED): attune-codex — Attune the project-claude.yml codex with assets on disk
+- `orchestrate-loop` (COORDINATOR): guildmaster-loop — Drive the general review-driven orchestration loop: resolve targets, route work, preserve coordinator/worker/reviewer boundaries, and close through evidence and debrief
+- `deliberate` (COORDINATOR): commune — Reason solo, gather multi-familiar counsel, synthesize, then route through the orchestration loop
+- `convene-review` (COORDINATOR): conclave — Convene multiple distinct minds for adversarial review when a single trial isn't enough
+- `blueprint` (COORDINATOR): charter-quest — Take a rough request from intent to a bounded, review-gated quest charter: deliberate, initialize a durable concept artifact, then route to plan-quest
+- `concept-init` (PATCH_ALLOWED): inscribe-lore — Create a new concept artifact, sized to scope
+- `plan-task` (REVIEW_ONLY): plan-quest — Draft a bounded quest charter for a task, grounded against existing grimoires
+- `review-task-plan` (REVIEW_ONLY): trial-quest — Put a generated quest charter through independent review before it runs
+- `run-plan` (COORDINATOR): embark — Resolve an approved quest charter and route it to the correct execution pathway
+- `evidence-loop` (COORDINATOR): gauntlet — Run the high-rigor review profile: adversarial review by a distinct mind, a third-mind context check, and a research disposition for every finding
+- `route` (REVIEW_ONLY): site — Resolve and recommend the correct command for a stated goal
+- `debrief-run` (REVIEW_ONLY): chronicle — Run end-of-session debrief producing improve and replicate notes
+
+## Agents
+- `framework-auditor`: Read-only structure and policy validation
+- `framework-executor`: Prompt execution with mode enforcement
+- `output-reviewer`: Output quality validation
+- `completion-auditor`: Evidence-based completion verification against acceptance criteria
+- `extract-skill-agent`: Conversation workflow analysis and skill artifact generation
+
+## Orchestration Policy
+- Completion auditing: required_for_substantial_changes
+- Max reopen cycles: 2
+- Audit exemptions: FINDINGS_ONLY, REVIEW_ONLY, REPO_HYGIENE
+- Evidence required: changed_files, test_results, acceptance_criteria

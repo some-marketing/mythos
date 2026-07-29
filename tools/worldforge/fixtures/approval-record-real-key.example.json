@@ -1,0 +1,20 @@
+{
+  "schema": "world-spec-closure-approval/2.0",
+  "closureHash": "93fcdcf0929566aa5f45f4c2915328b8382d7f3651620ce2d146ac53bd9fe297",
+  "target": "/srv/example-project/Content/StagedAssets",
+  "approved": true,
+  "approved_by": "operator",
+  "approved_at": "2026-07-10T00:00:00.000Z",
+  "approval_basis": "EXAMPLE of a target-bound v2 approval. Real approvals are signed with a secret-store-backed key, never one stored in the repo.",
+  "diff_summary_artifact": null,
+  "signature": {
+    "alg": "HMAC-SHA256",
+    "subject": "worldforge-approval/2.0",
+    "target": "/srv/example-project/Content/StagedAssets",
+    "value": "18f0e0ef0b9fee6350af77cf5a984cbbdf16a9913666ff8eab00700a92bfff7b"
+  },
+  "alg": "HMAC-SHA256",
+  "subject": "worldforge-approval/2.0",
+  "_fixture_note": "POSITIVE/DOCUMENTATION FIXTURE: worldforge-approval/2.0 target-bound record. Signed with _example_key below (illustrative, NOT the published test key and NOT a real operator secret). Verifies under _example_key over subject+closureHash+normalized target; verification FAILS if the target is changed. A real approval uses the operator's secret store.",
+  "_example_key": "EXAMPLE-OPERATOR-KEY-illustrative-only-not-a-real-secret"
+}

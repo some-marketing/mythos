@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dreaming-system-input/1.0",
+  "title": "Dreaming System Integration Input",
+  "description": "Input schema for the dreaming system integration framework. Captures the corpus configuration and integration targets before building the engine.",
+  "type": "object",
+  "required": ["corpus", "integration"],
+  "properties": {
+    "corpus": {
+      "type": "object",
+      "required": ["ingest_surfaces", "forbidden_paths"],
+      "properties": {
+        "ingest_surfaces": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Directory paths to ingest as dream corpus. At least 2 surfaces required.",
+          "minItems": 2
+        },
+        "forbidden_paths": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Paths to exclude from ingest (privacy floor)."
+        },
+        "threshold": {
+          "type": "number",
+          "default": 3.0,
+          "description": "Minimum association score to surface."
+        },
+        "max_dreams": {
+          "type": "integer",
+          "default": 25,
+          "description": "Maximum dreams to surface in report."
+        }
+      }
+    },
+    "integration": {
+      "type": "object",
+      "required": ["hook_surface", "output_surface", "scheduling"],
+      "properties": {
+        "hook_surface": {
+          "type": "string",
+          "description": "Path to session boot hook configuration."
+        },
+        "output_surface": {
+          "type": "string",
+          "description": "Path to Tier 0 hint or context injection script."
+        },
+        "scheduling": {
+          "type": "object",
+          "properties": {
+            "mechanism": { "enum": ["launchd", "systemd", "cron", "manual"] },
+            "schedule": { "type": "string", "description": "Cron-like schedule expression" }
+          }
+        },
+        "persistence": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean", "default": true },
+            "entity_types": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    }
+  }
+}

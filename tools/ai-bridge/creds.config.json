@@ -1,0 +1,35 @@
+{
+  "tool": "ai-bridge",
+  "fields": {
+    "OPENROUTER_API_KEY": {
+      "envVar": "OPENROUTER_API_KEY",
+      "keychainService": "mythos-ai-bridge-openrouter-api-key",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "Mythos OpenRouter",
+      "opField": ["credential", "api key", "password"],
+      "required": false,
+      "description": "OpenRouter API key. Enables adapters/openrouter.js to dispatch to any openrouter:<vendor>/<model> mind. Without it, the openrouter provider is skipped (routing falls through to other providers in the chain)."
+    },
+    "OPENAI_API_KEY": {
+      "envVar": "OPENAI_API_KEY",
+      "keychainService": "mythos-ai-bridge-openai-api-key",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "Mythos OpenAI",
+      "opField": ["credential", "api key", "password"],
+      "required": false,
+      "description": "API key for the generic OpenAI-compatible chat-completions adapter (adapters/openai-compatible.js) — OpenAI itself, or any compatible gateway pointed at via OPENAI_COMPAT_BASE_URL / OPENAI_BASE_URL. Not required for a no-auth local gateway."
+    },
+    "GEMINI_API_KEY": {
+      "envVar": "GEMINI_API_KEY",
+      "keychainService": "mythos-ai-bridge-gemini-api-key",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "Mythos Gemini",
+      "opField": ["credential", "api key", "password"],
+      "required": false,
+      "description": "Google Gemini API key for adapters/gemini-api.js (text/image REST dispatch)."
+    }
+  }
+}

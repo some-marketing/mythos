@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "review-status.schema.json",
+  "title": "Review Status",
+  "description": "Schema for independently-reviewed outcome status using the canonical flat provenance model. An outcome satisfies independently-reviewed when all required fields are present and the validator identity is distinct from the producer identity.",
+  "type": "object",
+  "properties": {
+    "completed": {
+      "type": "boolean",
+      "description": "Whether the outcome is marked complete"
+    },
+    "produced_by_actor_id": {
+      "type": "string",
+      "description": "Unique identifier for the producing actor"
+    },
+    "produced_by_harness_id": {
+      "type": "string",
+      "description": "Unique identifier for the producing harness"
+    },
+    "validated_by_actor_id": {
+      "type": "string",
+      "description": "Unique identifier for the validating actor (must differ from produced_by_actor_id)"
+    },
+    "validated_by_harness_id": {
+      "type": "string",
+      "description": "Unique identifier for the validating harness (must differ from produced_by_harness_id)"
+    },
+    "validated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 timestamp of when validation occurred"
+    },
+    "validation_artifact": {
+      "type": "string",
+      "description": "File path to the durable validation evidence artifact"
+    },
+    "validation_method": {
+      "type": "string",
+      "description": "Description of the validation approach used"
+    }
+  },
+  "required": ["completed", "validated_by_actor_id", "validated_by_harness_id", "validated_at", "validation_artifact", "validation_method"]
+}

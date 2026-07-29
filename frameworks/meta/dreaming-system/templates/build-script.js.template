@@ -1,0 +1,73 @@
+#!/usr/bin/env node
+'use strict';
+
+/**
+ * build-memory-db.js — Deterministic associative recombination engine.
+ *
+ * Ingests a knowledge corpus, computes pairwise associations via a weighted
+ * scoring function, and writes a dream report + SQLite database.
+ *
+ * TEMPLATE — replace {{PLACEHOLDERS}} with corpus-specific configuration.
+ *
+ * Scoring function:
+ *   score = 3.0 × shared_rare_terms(idf-weighted)
+ *         + 2.5 × shared_wikilink
+ *         + 2.0 × directional_link
+ *         + 1.5 × shared_tag
+ *
+ * Properties:
+ *   - Deterministic: same input → same output
+ *   - Idempotent: safe to run repeatedly (scratch rebuild)
+ *   - Stdlib-only: no npm install
+ *   - Explainable: every association includes basis
+ *   - Privacy-floor enforced
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+// ---- CONFIGURATION (replace placeholders) ----
+const PROJECT_ROOT = path.resolve(__dirname, '../..');
+const DB_PATH = path.join(PROJECT_ROOT, '{{DB_PATH}}');
+const REPORT_PATH = path.join(PROJECT_ROOT, '{{REPORT_PATH}}');
+const INGEST_SURFACES = {{INGEST_SURFACES}};   // e.g. ['memory/', 'concepts/']
+const FORBIDDEN_PATHS = {{FORBIDDEN_PATHS}};   // e.g. ['clients/', '.env', 'private/']
+const THRESHOLD = {{THRESHOLD}};               // e.g. 3.0
+const MAX_DREAMS = {{MAX_DREAMS}};             // e.g. 25
+const STOPWORDS = new Set({{STOPWORDS}});       // e.g. ['the','and','that','this','with','for','from']
+const IDF_MAX_DOC_FREQ = {{IDF_MAX_DOC_FREQ}}; // e.g. 0.4
+
+// ---- Placeholder implementations ----
+// The actual implementation should:
+// 1. Walk INGEST_SURFACES, skip FORBIDDEN_PATHS
+// 2. Tokenize each document, compute TF-IDF
+// 3. Build pairwise association matrix
+// 4. Apply scoring function
+// 5. Surface top associations and non-obvious pairs
+// 6. Write SQLite DB and dream report
+
+function privacyCheck(filePath) {
+  for (const forbidden of FORBIDDEN_PATHS) {
+    if (filePath.includes(forbidden)) {
+      return false; // Rejected by privacy floor
+    }
+  }
+  return true;
+}
+
+function isStopword(term) {
+  return STOPWORDS.has(term.toLowerCase());
+}
+
+// TODO: Implement full build logic from the reference implementation
+// See captures/dreaming-system/ for the proven build-memory-db.js pattern
+
+function main() {
+  console.log('Dreaming engine — template. Replace placeholders with corpus config.');
+  console.log(`Ingest surfaces: ${INGEST_SURFACES.length}`);
+  console.log(`Forbidden paths: ${FORBIDDEN_PATHS.length}`);
+  console.log(`Threshold: ${THRESHOLD}, Max dreams: ${MAX_DREAMS}`);
+  // TODO: Run the full build
+}
+
+main();

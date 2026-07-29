@@ -1,0 +1,157 @@
+{
+  "service_category": "wordpress",
+  "framework_name": "analytics-tracking",
+  "version": "0.2.0",
+  "description": "Analytics implementation framework for WordPress sites: intake assessment, tracking plan development, GA4/GTM implementation, and validation",
+  "prompt_count": 4,
+  "input_contract": {
+    "required": [
+      {
+        "name": "site_url",
+        "description": "URL of the target WordPress site"
+      },
+      {
+        "name": "site_type",
+        "description": "Type of site (e.g., ecommerce, blog, SaaS)"
+      },
+      {
+        "name": "tracking_goals",
+        "description": "Business tracking objectives and KPIs to measure"
+      }
+    ],
+    "optional": [
+      {
+        "name": "ga4_measurement_id",
+        "description": "Existing GA4 measurement ID if already set up"
+      },
+      {
+        "name": "gtm_container_id",
+        "description": "Existing GTM container ID if already set up"
+      },
+      {
+        "name": "existing_tracking_tools",
+        "description": "Currently installed tracking tools and their state"
+      },
+      {
+        "name": "key_conversions",
+        "description": "Primary conversion events to track (form submissions, purchases, etc.)"
+      },
+      {
+        "name": "privacy_requirements",
+        "description": "Privacy/consent requirements (GDPR, CCPA, etc.)"
+      },
+      {
+        "name": "ecommerce_platform",
+        "description": "Ecommerce platform if applicable (WooCommerce, Shopify, etc.)"
+      },
+      {
+        "name": "consent_management_platform",
+        "description": "CMP in use for cookie/tracking consent"
+      },
+      {
+        "name": "utm_conventions",
+        "description": "UTM parameter naming conventions for campaign tracking"
+      }
+    ]
+  },
+  "output_contract": {
+    "directories": [
+      "outputs/analytics-tracking/"
+    ],
+    "artifacts": [
+      "outputs/analytics-tracking/intake-assessment.md",
+      "outputs/analytics-tracking/tracking-plan.md",
+      "outputs/analytics-tracking/implementation-spec.md",
+      "outputs/analytics-tracking/validation-report.md"
+    ]
+  },
+  "output_contract_v2": {
+    "directories": [
+      {
+        "path": "outputs/analytics-tracking/",
+        "required": true,
+        "description": "All analytics tracking deliverables and reports"
+      }
+    ],
+    "artifacts": [
+      {
+        "name": "intake-assessment.md",
+        "path_pattern": "outputs/analytics-tracking/intake-assessment.md",
+        "required": true
+      },
+      {
+        "name": "tracking-plan.md",
+        "path_pattern": "outputs/analytics-tracking/tracking-plan.md",
+        "required": true
+      },
+      {
+        "name": "implementation-spec.md",
+        "path_pattern": "outputs/analytics-tracking/implementation-spec.md",
+        "required": true
+      },
+      {
+        "name": "validation-report.md",
+        "path_pattern": "outputs/analytics-tracking/validation-report.md",
+        "required": true
+      }
+    ],
+    "bundle_types": []
+  },
+  "execution_modes": [
+    "FINDINGS_ONLY",
+    "RUN_ONLY",
+    "PATCH_ALLOWED"
+  ],
+  "mcp_requirements": [
+    "playwright"
+  ],
+  "prompt_chain": {
+    "intake": [
+      "01_INTAKE_AND_ASSESSMENT"
+    ],
+    "planning": [
+      "02_TRACKING_PLAN"
+    ],
+    "implementation": [
+      "03_IMPLEMENTATION"
+    ],
+    "validation": [
+      "04_VALIDATION"
+    ]
+  },
+  "skills_path": "",
+  "commands_path": "",
+  "agents_path": "",
+  "skills": [
+    "analytics-tracking/SKILL.md"
+  ],
+  "commands": [
+    "run",
+    "status",
+    "intake-and-assessment",
+    "tracking-plan",
+    "implementation",
+    "validation"
+  ],
+  "agents": [
+    "intake-and-assessment-agent",
+    "tracking-plan-agent",
+    "implementation-agent",
+    "validation-agent"
+  ],
+  "_quarantine_note": "Harness assets not yet created. Framework has prompts and guardrails only. Create .claude/ assets before promotion.",
+  "distilled_from": {
+    "source": "coreyhaines31/marketingskills",
+    "skill": "analytics-tracking",
+    "version": "1.1.0",
+    "license": "MIT",
+    "classification": "framework-candidate",
+    "classification_date": "2026-03-31"
+  },
+  "patterns": [
+    "tracking-event-validation",
+    "gtm-ga4-validation",
+    "form-submission-tracking",
+    "browser-event-instrumentation"
+  ]
+}

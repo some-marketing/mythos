@@ -1,0 +1,73 @@
+{
+  "_note": "Field shapes confirmed against a live read-only Moxie probe on 2026-07-08 (action/contacts/search → bare JSON array; an empty query returns all). All VALUES here are entirely synthetic. No real contact data appears in this file. Items live under `data`; the real Moxie endpoint returns them as a bare array. See _dev/reports/analysis/moxie-live-probe-findings__20260708.md.",
+  "data": [
+    {
+      "id": "2000000000000000000000b1",
+      "accountId": 90001,
+      "clientId": "1000000000000000000000a1",
+      "clientPortalUserId": -1,
+      "firstName": "Jordan",
+      "lastName": "Sample",
+      "role": "Owner",
+      "phone": "+15550000002",
+      "email": "user@example.com",
+      "mobile": null,
+      "notes": null,
+      "defaultContact": true,
+      "invoiceContact": true,
+      "portalAccess": true,
+      "customValues": [],
+      "importRecordId": null,
+      "sampleData": null,
+      "emulated": false,
+      "searchObject": {
+        "id": "2000000000000000000000b1",
+        "accountId": 90001,
+        "type": "CONTACT",
+        "clientId": "1000000000000000000000a1",
+        "archived": false,
+        "priority": 50,
+        "label": "Jordan Sample",
+        "timestamp": null,
+        "date": null,
+        "metaData": {},
+        "vector_search": null,
+        "content": null
+      }
+    },
+    {
+      "id": "2000000000000000000000b2",
+      "accountId": 90001,
+      "clientId": "1000000000000000000000a2",
+      "clientPortalUserId": -2,
+      "firstName": "Riley",
+      "lastName": "Placeholder",
+      "role": null,
+      "phone": null,
+      "email": "user@example.com",
+      "mobile": null,
+      "notes": null,
+      "defaultContact": true,
+      "invoiceContact": false,
+      "portalAccess": false,
+      "customValues": [],
+      "importRecordId": null,
+      "sampleData": null,
+      "emulated": false,
+      "searchObject": {
+        "id": "2000000000000000000000b2",
+        "accountId": 90001,
+        "type": "CONTACT",
+        "clientId": "1000000000000000000000a2",
+        "archived": false,
+        "priority": 50,
+        "label": "Riley Placeholder",
+        "timestamp": null,
+        "date": null,
+        "metaData": {},
+        "vector_search": null,
+        "content": null
+      }
+    }
+  ]
+}

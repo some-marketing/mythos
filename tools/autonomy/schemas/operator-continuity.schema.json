@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "operator-continuity.schema.json",
+  "title": "Operator Continuity State",
+  "description": "Schema for recording operator availability state and its effect on system behavior",
+  "type": "object",
+  "properties": {
+    "operator_state": {
+      "type": "string",
+      "enum": ["available", "unavailable", "overloaded", "conflicted", "succession"],
+      "description": "Current operator availability state"
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this state was last recorded"
+    },
+    "delegation_scope": {
+      "type": "object",
+      "description": "Only present when operator_state is succession",
+      "properties": {
+        "successor_id": {
+          "type": "string",
+          "description": "Identity of the successor actor"
+        },
+        "scope_boundary": {
+          "type": "string",
+          "description": "What actions the successor is authorized to take"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the delegation expires (if time-bounded)"
+        }
+      },
+      "required": ["successor_id", "scope_boundary"]
+    },
+    "paused_gates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "gate_id": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "paused_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": ["gate_id", "reason", "paused_at"]
+      },
+      "description": "Gates that are paused due to operator unavailability"
+    }
+  },
+  "required": ["operator_state", "recorded_at"]
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Mythos Replay Run",
+  "type": "object",
+  "required": [
+    "run_id",
+    "case_id",
+    "candidate_id",
+    "started_at",
+    "finished_at",
+    "result",
+    "run_type",
+    "manual_intervention_count",
+    "blocking_failures",
+    "prompt_failures"
+  ],
+  "properties": {
+    "run_id": { "type": "string" },
+    "case_id": { "type": "string" },
+    "candidate_id": { "type": "string" },
+    "started_at": { "type": "string" },
+    "finished_at": { "type": "string" },
+    "result": {
+      "type": "string",
+      "enum": ["pass", "fail", "partial"]
+    },
+    "run_type": {
+      "type": "string",
+      "enum": ["preflight", "manual_replay"]
+    },
+    "manual_intervention_count": { "type": "number" },
+    "blocking_failures": { "type": "array" },
+    "prompt_failures": { "type": "array" },
+    "preflight_warnings": { "type": "array" }
+  }
+}

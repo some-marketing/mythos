@@ -1,0 +1,36 @@
+<mujoco model="ant-hive-world-embodiment-s1">
+  <!-- tools/ant-hive-world/embodiment/scene.xml -- plan ant-hive-world-embodiment-s1, S2.
+       Minimal one-body scene: a ground plane plus one free-jointed placeholder
+       "ant" body -- not an anatomically-modeled ant, that is explicitly out of
+       scope for this first bounded step. Uses a SPHERE rather than a capsule:
+       a capsule can tumble and settle either standing or lying down (two
+       different resting heights, nondeterministic), which would make S4's
+       "expected resting height" check ambiguous. A sphere is rotationally
+       symmetric -- its resting center height is exactly its radius regardless
+       of orientation, keeping S4's verification a genuine deterministic check
+       rather than a coin-flip between two valid outcomes. Starts well above
+       the ground plane so gravity has a clear window to accelerate it
+       downward before contact (>= 0.5m, per the reviewed feasibility
+       guidance). -->
+
+  <option gravity="0 0 -9.81" timestep="0.002"/>
+
+  <worldbody>
+    <light name="light" pos="0 0 3" dir="0 0 -1" diffuse="1 1 1"/>
+    <!-- solref="0.005 1": stiffer contact than MuJoCo's default (0.02 1).
+         Discovered empirically: at the default stiffness, this light
+         (0.01kg), fast-falling (~3.7 m/s impact) sphere compressed ~26mm
+         into the ground -- over half its own 50mm radius -- before
+         rebounding, which is unrealistically soft for what is meant to be
+         a rigid body/rigid ground contact, not a real "how much should a
+         rigid sphere penetrate" answer. -->
+    <geom name="ground" type="plane" size="2 2 0.1" rgba="0.5 0.5 0.5 1" solref="0.005 1"/>
+
+    <body name="ant_placeholder" pos="0 0 0.75">
+      <!-- 0.75m start height, sphere radius 0.05 -> resting center height is
+           exactly 0.05m -- 0.70m of clear fall distance before contact. -->
+      <freejoint name="ant_placeholder_free"/>
+      <geom name="ant_placeholder_geom" type="sphere" size="0.05" rgba="0.8 0.3 0.1 1" mass="0.01" solref="0.005 1"/>
+    </body>
+  </worldbody>
+</mujoco>

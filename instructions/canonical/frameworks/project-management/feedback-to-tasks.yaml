@@ -1,0 +1,11 @@
+{
+  "id": "project-management/feedback-to-tasks",
+  "manifest_path": "frameworks/project-management/feedback-to-tasks/manifest.json",
+  "description": "Compiles stakeholder feedback from PM tools into provenance-cited task lists for developers without tool access",
+  "inputs": ["source_tool", "source_location", "destination_format"],
+  "outputs": ["task_output/TASK_LIST.md", "task_output/task_compilation_summary.json"],
+  "modes": ["FINDINGS_ONLY", "RUN_ONLY", "PATCH_ALLOWED"],
+  "operations": ["feedback-to-tasks:compile", "feedback-to-tasks:fetch", "feedback-to-tasks:audit", "feedback-to-tasks:format", "feedback-to-tasks:status"],
+  "agent_profiles": ["architect", "fetcher", "auditor", "formatter"],
+  "guardrail_overrides": ["Mandatory provenance", "No action inference", "Authority-aware priority", "Scope boundary enforcement"]
+}

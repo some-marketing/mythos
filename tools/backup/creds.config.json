@@ -1,0 +1,30 @@
+{
+  "tool": "backup",
+  "fields": {
+    "INTERNXT_REMOTE_NAME": {
+      "envVar": "INTERNXT_REMOTE_NAME",
+      "required": false,
+      "description": "rclone remote name pointing at your Internxt (or any other rclone-compatible) account, as configured via `rclone config`. Not a secret — it's a label, not a token. Scripts default to 'myremote' when unset."
+    },
+    "BACKUP_BUCKET_PREFIX": {
+      "envVar": "BACKUP_BUCKET_PREFIX",
+      "required": false,
+      "description": "Top-level folder/bucket prefix within the remote where backups are stored (e.g. 'backups'). Scripts default to 'backups' when unset."
+    },
+    "BACKUP_SOURCE_DIR": {
+      "envVar": "BACKUP_SOURCE_DIR",
+      "required": false,
+      "description": "Directory (relative to repo root, or absolute) that internxt-mind-delta.sh / internxt-mind-full.sh watch and snapshot. Scripts default to 'backup-source' when unset."
+    },
+    "AGE_KEYCHAIN_ACCOUNT": {
+      "envVar": "AGE_KEYCHAIN_ACCOUNT",
+      "required": false,
+      "description": "macOS Keychain account name under which your age private key is stored. Used by internxt-restore.sh and rotate-age-key.cjs to look the key up with `security find-generic-password`. Defaults to 'backup-tool'. Seed it with tools/boot/keychain-store.sh."
+    },
+    "AGE_KEYCHAIN_SERVICE": {
+      "envVar": "AGE_KEYCHAIN_SERVICE",
+      "required": false,
+      "description": "macOS Keychain service name under which your age private key is stored. Defaults to 'backup-age-key-v2'. Seed it with tools/boot/keychain-store.sh."
+    }
+  }
+}

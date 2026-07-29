@@ -1,0 +1,63 @@
+# CascadeSpan-fronting LiteLLM gateway config — bounded, committed, NO SECRETS.
+#
+# This is the "gateway layer" of the Tool Broker (sovereign-core-harness concept
+# §"The Tool Broker", layer 2): the OpenAI-compatible proxy fronting local +
+# remote models. It owns budgets, the virtual key (master_key), model
+# access-control, per-request ids, and cost logs. It is NOT the action-permission
+# layer — that is the Tool Broker (tools/broker/lib/tool-broker.js), which sits
+# ON TOP of this gateway.
+#
+# Secrets contract: every credential is an `os.environ/*` reference resolved at
+# proxy start from the process environment (see tools/broker/litellm-gateway.sh).
+# No key material lives in this file or anywhere in git.
+#
+# Model access-control: this committed model_list IS the allowlist. No database
+# is configured (store_model_in_db stays false), so a client can only reach a
+# model_name declared here. Adding a backend is a reviewed edit to this file.
+
+model_list:
+  # --- Proven-through path: OpenRouter (a real credential exists locally) -----
+  - model_name: analysis-small
+    litellm_params:
+      model: openrouter/openai/gpt-4o-mini
+      api_key: os.environ/OPENROUTER_API_KEY
+      api_base: https://openrouter.ai/api/v1
+    model_info:
+      mode: chat
+      description: >-
+        Cheap read-only analysis model fronted via OpenRouter. The acceptance
+        path (broker phase-1/2) is proven through this entry.
+
+  # --- Config-ready path: local Ollama (NOT reachable on this Mac) ------------
+  # Ollama lives on a remote host, not necessarily this machine. This entry is
+  # committed so the gateway supports an ollama backend by config, but acceptance
+  # is proven through OpenRouter above. Point OLLAMA_BASE_URL at a reachable host
+  # to activate it.
+  - model_name: local-analysis
+    litellm_params:
+      model: ollama/llama3.2
+      api_base: os.environ/OLLAMA_BASE_URL
+    model_info:
+      mode: chat
+      description: >-
+        Config-ready local Ollama backend. Inert until OLLAMA_BASE_URL resolves
+        to a reachable Ollama host.
+
+litellm_settings:
+  drop_params: true
+  # Per-request structured cost logs to stdout — the gateway script captures
+  # these into tools/broker/.runtime/gateway.log, keyed by litellm_call_id. This
+  # is the DB-free "cost logs per request id" surface.
+  json_logs: true
+  # Budget: a hard USD ceiling across the whole gateway over the rolling window.
+  # A brokered lane cannot outspend this cap regardless of how many requests it
+  # makes.
+  max_budget: 5
+  budget_duration: 30d
+  set_verbose: false
+
+general_settings:
+  # The virtual key every client must present as `Authorization: Bearer <key>`.
+  # Resolved from LITELLM_MASTER_KEY at start; a client without it gets 401
+  # (access-control). Must be an `sk-...` string.
+  master_key: os.environ/LITELLM_MASTER_KEY

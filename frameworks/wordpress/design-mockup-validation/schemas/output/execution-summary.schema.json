@@ -1,0 +1,48 @@
+{
+  "type": "object",
+  "required": ["elements", "attempt_count", "review_verdicts", "evidence_sources"],
+  "properties": {
+    "elements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["element_id", "name", "attempts_completed", "final_file", "review_verdict"],
+        "properties": {
+          "element_id": { "type": "string" },
+          "name": { "type": "string" },
+          "attempts_completed": { "type": "integer", "minimum": 1 },
+          "final_file": { "type": "string", "pattern": "^FINAL_.*\\.html$" },
+          "review_verdict": { "type": "string", "enum": ["PASS", "FAIL_FIXABLE", "FAIL_BLOCKED"] },
+          "fixes_applied": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "minItems": 1
+    },
+    "attempt_count": {
+      "type": "integer",
+      "description": "Total attempts across all elements"
+    },
+    "review_verdicts": {
+      "type": "object",
+      "required": ["pass", "fail_fixable", "fail_blocked"],
+      "properties": {
+        "pass": { "type": "integer" },
+        "fail_fixable": { "type": "integer" },
+        "fail_blocked": { "type": "integer" }
+      }
+    },
+    "evidence_sources": {
+      "type": "object",
+      "required": ["spec_reference", "constraint_reference"],
+      "properties": {
+        "spec_reference": { "type": "string" },
+        "constraint_reference": { "type": "string" },
+        "design_language_file": { "type": "string" }
+      }
+    },
+    "deviations": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

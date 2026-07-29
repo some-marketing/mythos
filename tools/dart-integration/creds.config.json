@@ -1,0 +1,15 @@
+{
+  "tool": "dart-integration",
+  "fields": {
+    "DART_TOKEN": {
+      "envVar": "DART_TOKEN",
+      "keychainService": "DART_TOKEN",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "DART",
+      "opField": ["DART_TOKEN", "credential"],
+      "required": true,
+      "description": "Dart REST API token (Profile -> API in the Dart app). Used by lib/dart-api.js for every request."
+    }
+  }
+}

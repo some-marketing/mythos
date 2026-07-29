@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Mythos Framework Candidate",
+  "type": "object",
+  "required": [
+    "candidate_id",
+    "service_category",
+    "framework_name",
+    "status",
+    "source_captures",
+    "created_at",
+    "updated_at",
+    "owner",
+    "promotion_ready",
+    "blocking_issues",
+    "replay_summary"
+  ],
+  "properties": {
+    "candidate_id": { "type": "string" },
+    "service_category": { "type": "string" },
+    "framework_name": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["seed", "candidate", "validated", "production", "deprecated"]
+    },
+    "source_captures": { "type": "array" },
+    "source_origins": { "type": "array" },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" },
+    "owner": { "type": "string" },
+    "promotion_ready": { "type": "boolean" },
+    "blocking_issues": { "type": "array" },
+    "replay_summary": { "type": "object" },
+    "sanitization_passed": { "type": "boolean" },
+    "learning_required": {
+      "type": "string",
+      "enum": ["advisory", "required"],
+      "description": "Whether learning evidence is advisory (warns) or required (blocks) for promotion"
+    }
+  }
+}

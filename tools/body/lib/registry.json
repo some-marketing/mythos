@@ -1,0 +1,82 @@
+{
+  "schema": "BodyAccessRegistry/1.0",
+  "mode": "advisory",
+  "policy": "instructions/policies/private-surface-introspection-rule.yaml",
+  "violation_log": "reports/perimeter-violations.jsonl",
+  "registered_wrappers": [
+    {
+      "id": "example-substrate-wrapper",
+      "status": "example",
+      "command_prefix": "node tools/your-wrapper/read-substrate.js",
+      "substrates": ["messages"],
+      "allowed_ops": ["read_inbound_allowlisted_contacts"],
+      "retention": "reports_and_signals_only",
+      "redaction_rule": "strip handles and private identifiers before writing artifacts",
+      "receipt_required": true,
+      "temp_paths": [],
+      "note": "Example entry. Set status to 'registered' and point command_prefix at your own ratified wrapper. Only status 'registered' entries route around the advisory."
+    }
+  ],
+  "private_path_patterns": [
+    {
+      "id": "apple-notes",
+      "substrate": "notes",
+      "patterns": ["NoteStore.sqlite", "group.com.apple.notes"]
+    },
+    {
+      "id": "messages",
+      "substrate": "messages",
+      "patterns": ["Library/Messages", "chat.db"]
+    },
+    {
+      "id": "mail",
+      "substrate": "mail",
+      "patterns": ["Library/Mail", "Envelope Index"]
+    },
+    {
+      "id": "calendar",
+      "substrate": "calendar",
+      "patterns": ["Library/Calendars", "Calendar.sqlitedb"]
+    },
+    {
+      "id": "voice-memos",
+      "substrate": "voice_memos",
+      "patterns": ["Voice Memos", "Recordings"]
+    },
+    {
+      "id": "photos",
+      "substrate": "photos",
+      "patterns": ["Photos Library.photoslibrary", "PhotoData"]
+    },
+    {
+      "id": "browser-data",
+      "substrate": "browser_data",
+      "patterns": ["Library/Safari", "Chrome/Default", "Firefox/Profiles", "History.db", "Cookies"]
+    },
+    {
+      "id": "icloud-cache",
+      "substrate": "icloud_cache",
+      "patterns": ["Library/Mobile Documents", "CloudDocs"]
+    },
+    {
+      "id": "keychain",
+      "substrate": "keychain",
+      "patterns": ["security find-", "security dump-keychain", "Library/Keychains"]
+    },
+    {
+      "id": "one-password",
+      "substrate": "one_password",
+      "patterns": ["op item get", "op read", "1Password"]
+    },
+    {
+      "id": "capture-devices",
+      "substrate": "live_capture",
+      "patterns": ["screencapture", "ffmpeg", "sox", "imagesnap"]
+    },
+    {
+      "id": "dotenv-secrets",
+      "substrate": "secrets",
+      "patterns": [".env", "printenv"]
+    }
+  ]
+}

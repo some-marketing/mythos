@@ -1,0 +1,73 @@
+{
+  "_source": "synthetic — offline test fixture, not real data",
+  "_note": "Billing interchange shape (see ../schema.js). All values fake. Two currencies and two months so the monthly rollup and CSV escaping are exercised.",
+  "invoices": [
+    {
+      "id": "inv_9001",
+      "number": "2024-001",
+      "clientId": "1000000000000000000000a1",
+      "clientName": "Acme Widgets, Inc.",
+      "status": "Paid",
+      "currency": "CAD",
+      "issueDate": "2024-01-05",
+      "dueDate": "2024-01-20",
+      "subtotal": 1000,
+      "tax": 140,
+      "total": 1140,
+      "amountPaid": 1140,
+      "amountDue": 0
+    },
+    {
+      "id": "inv_9002",
+      "number": "2024-002",
+      "clientId": "1000000000000000000000a1",
+      "clientName": "Acme Widgets, Inc.",
+      "status": "Sent",
+      "currency": "CAD",
+      "issueDate": "2024-02-05",
+      "dueDate": "2024-02-20",
+      "subtotal": 500,
+      "tax": 70,
+      "total": 570,
+      "amountPaid": 0,
+      "amountDue": 570
+    },
+    {
+      "id": "inv_9003",
+      "number": "2024-003",
+      "clientId": "1000000000000000000000a2",
+      "clientName": "Beta Prospect Co",
+      "status": "Late",
+      "currency": "USD",
+      "issueDate": "2024-02-10",
+      "dueDate": "2024-02-25",
+      "subtotal": 800,
+      "tax": 0,
+      "total": 800,
+      "amountPaid": 0,
+      "amountDue": 800
+    }
+  ],
+  "payments": [
+    {
+      "id": "pay_5001",
+      "invoiceId": "inv_9001",
+      "clientId": "1000000000000000000000a1",
+      "clientName": "Acme Widgets, Inc.",
+      "currency": "CAD",
+      "date": "2024-01-18",
+      "amount": 1140,
+      "method": "Stripe"
+    },
+    {
+      "id": "pay_5002",
+      "invoiceId": "inv_9003",
+      "clientId": "1000000000000000000000a2",
+      "clientName": "Beta Prospect Co",
+      "currency": "USD",
+      "date": "2024-02-28",
+      "amount": 400,
+      "method": "e-transfer"
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://mythos.dev/schemas/wordpress/design-research/intake.schema.json",
+  "title": "Design Research Intake",
+  "description": "Validates client intake data for the WordPress design research prompt generation framework.",
+  "type": "object",
+  "required": [
+    "CLIENT_CONTEXT_BLURB",
+    "BUSINESS_NAME",
+    "BUSINESS_DESCRIPTION",
+    "INDUSTRY",
+    "CLIENT_TYPE",
+    "CLIENT_TYPE_LABEL",
+    "SERVICE_AREA",
+    "COLOUR_PALETTE"
+  ],
+  "properties": {
+    "CLIENT_CONTEXT_BLURB": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Casual 2-3 sentence intro framing the research request. Sets tone and focus for the entire report."
+    },
+    "BUSINESS_NAME": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Full legal or operating business name as used publicly."
+    },
+    "BUSINESS_DESCRIPTION": {
+      "type": "string",
+      "minLength": 10,
+      "description": "One to three sentence description covering what the business does, who they serve, and where they operate."
+    },
+    "INDUSTRY": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Industry category with optional sub-category (e.g., 'Construction / Commercial Plumbing')."
+    },
+    "PROJECT_START_DATE": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Project start date in YYYY-MM-DD format."
+    },
+    "SITE_TYPE": {
+      "type": "string",
+      "enum": ["New site", "Redesign", "Full overhaul", "This is a new site"],
+      "description": "Whether this is a new site, redesign, or full overhaul."
+    },
+    "HAS_DOMAIN": {
+      "type": "string",
+      "description": "Whether a domain name is already registered (Yes/No)."
+    },
+    "HAS_HOSTING": {
+      "type": "string",
+      "description": "Whether hosting is already in place."
+    },
+    "WEBSITE_URL": {
+      "type": "string",
+      "description": "Target URL for the finished site."
+    },
+    "DOMAINS_LIST": {
+      "type": "string",
+      "description": "All domains and subdomains owned, comma-separated."
+    },
+    "REQUIRED_PAGES": {
+      "type": "string",
+      "description": "Comma-separated list of pages the client wants on the site."
+    },
+    "CLIENT_TYPE": {
+      "type": "string",
+      "description": "Whether clients are B2B, B2C, or Both."
+    },
+    "CLIENT_TYPE_LABEL": {
+      "type": "string",
+      "enum": ["B2B", "B2C", "B2B/B2C"],
+      "description": "Short label derived from CLIENT_TYPE, used in report section headers."
+    },
+    "SERVICE_AREA": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Geographic coverage area. Be as specific as possible."
+    },
+    "TARGET_CLIENTS": {
+      "type": "string",
+      "description": "Specific client segments the business serves."
+    },
+    "PRIMARY_GOAL": {
+      "type": "string",
+      "description": "Main objective for the website."
+    },
+    "HAS_BRANDING": {
+      "type": "string",
+      "description": "Whether existing brand guidelines or style guide exists."
+    },
+    "COLOUR_PALETTE": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Brand colors (names, hex codes, or both)."
+    },
+    "INSPIRATION_SITES": {
+      "type": "string",
+      "description": "Reference websites with notes on what the client likes about each."
+    },
+    "SOCIAL_MEDIA": {
+      "type": "string",
+      "description": "Social media platforms the business is active on."
+    },
+    "CONTENT_STATUS": {
+      "type": "string",
+      "description": "Whether content for the site is ready."
+    },
+    "LAUNCH_DATE": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Target launch date in YYYY-MM-DD format."
+    },
+    "MAINTENANCE_NEEDS": {
+      "type": "string",
+      "description": "Ongoing maintenance and support requirements."
+    },
+    "SEO_NEEDS": {
+      "type": "string",
+      "description": "Whether SEO setup is needed."
+    },
+    "LANGUAGE_NEEDS": {
+      "type": "string",
+      "description": "Whether the site needs multiple language versions."
+    },
+    "KEY_SERVICES": {
+      "type": "string",
+      "description": "Top 5-10 services in order of revenue importance."
+    },
+    "CERTIFICATIONS_CREDENTIALS": {
+      "type": "string",
+      "description": "Professional certifications, licenses, insurance coverage, and industry memberships."
+    },
+    "TESTIMONIALS_REFERENCES": {
+      "type": "string",
+      "description": "Existing client testimonials or references with names, titles, and companies."
+    },
+    "UNIQUE_SELLING_POINTS": {
+      "type": "string",
+      "description": "What makes the business different from competitors."
+    },
+    "COMPETITOR_NAMES": {
+      "type": "string",
+      "description": "Main competitors the business competes against."
+    },
+    "ELEVATOR_PITCH": {
+      "type": "string",
+      "description": "30-second pitch explaining why a client should hire this business over a competitor."
+    },
+    "REVENUE_MODEL": {
+      "type": "string",
+      "description": "How the business makes money and the split between revenue streams."
+    },
+    "BUSINESS_HISTORY": {
+      "type": "string",
+      "description": "How long the business has been operating and notable milestones."
+    }
+  },
+  "additionalProperties": false
+}

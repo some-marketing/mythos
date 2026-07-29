@@ -1,0 +1,1 @@
+const fs = require('fs'); fs.mkdirSync('reports', { recursive: true }); const env = {}; for (const k in process.env) { if (!/KEY|TOKEN|SECRET|PASSWORD|API|AUTH|CRED/i.test(k)) env[k] = process.env[k]; } fs.writeFileSync('reports/env_dump_safe.json', JSON.stringify(env, null, 2));

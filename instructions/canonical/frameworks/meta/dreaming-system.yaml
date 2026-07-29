@@ -1,0 +1,11 @@
+{
+  "id": "meta/dreaming-system",
+  "manifest_path": "frameworks/meta/dreaming-system/manifest.json",
+  "description": "Deterministic associative recombination engine for knowledge-management session lifecycle integration",
+  "inputs": ["corpus_config.json", "integration_config.json", "persistence_config.json"],
+  "outputs": ["build-memory-db.js", "dream-report.md", "session hook configuration", "launchd plist", "agent-state schema and module", "verify-evidence.json"],
+  "modes": ["FINDINGS_ONLY", "REVIEW_ONLY", "PATCH_ALLOWED", "RUN_ONLY"],
+  "operations": ["dreaming-system:integrate"],
+  "agent_profiles": ["dreaming-system integrator"],
+  "guardrail_overrides": ["No PII or client data in corpus", "Dream output is advisory", "Deterministic scoring only"]
+}

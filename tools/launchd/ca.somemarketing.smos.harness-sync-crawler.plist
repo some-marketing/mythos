@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>ca.somemarketing.smos.harness-sync-crawler</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/env</string>
+        <string>node</string>
+        <string>/Users/admin/dev/SM_OS-recovered/tools/launchd/run-harness-sync-crawler.cjs</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/admin/dev/SM_OS-recovered</string>
+
+    <!-- Every 5 minutes: bounded canonical-to-harness repair, then exit. -->
+    <key>StartInterval</key>
+    <integer>300</integer>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/admin/dev/SM_OS-recovered/_dev/state/harness-sync-crawler/launchd.stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/admin/dev/SM_OS-recovered/_dev/state/harness-sync-crawler/launchd.stderr.log</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>HOME</key>
+        <string>/Users/admin</string>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+    </dict>
+</dict>
+</plist>

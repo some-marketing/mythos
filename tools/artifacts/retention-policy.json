@@ -1,0 +1,101 @@
+{
+  "version": "1.2.0",
+  "description": "Mythos artifact retention policy. Governs cleanup, archival, and protection of system artifacts. Surfaces may declare a single-tier policy (retention + action) OR a generational tiers[] policy (hot -> archive -> delete). When a file matches more than one surface key, the most specific key (deepest path, longest match) owns it.",
+  "data_handling_policy": "_dev/policies/data-handling.md",
+  "lifecycle_states": ["active", "finished", "archived", "pinned"],
+  "archive_log": "_dev/logs/archive.jsonl",
+  "tiers_schema": {
+    "description": "A surface with a tiers[] array uses generational retention. Each tier is { after: <duration>, action: archive|delete }. For a given file the tier with the largest 'after' that is <= the file's age governs; files younger than the smallest 'after' are hot (kept). preserve_latest still exempts the newest file in the surface.",
+    "example": { "tiers": [ { "after": "30d", "action": "archive" }, { "after": "120d", "action": "delete" } ] }
+  },
+  "surfaces": {
+    "_dev/reports/analysis/visual-plans": {
+      "description": "Generated visual plan artifacts (F1: high-volume, previously swept only by the generic analysis 180d rule). Generational: hot -> archive at 30d -> delete at 120d.",
+      "tiers": [
+        { "after": "30d", "action": "archive" },
+        { "after": "120d", "action": "delete" }
+      ],
+      "preserve_latest": true
+    },
+    "_dev/reports/analysis/convene-runs": {
+      "description": "Convene run bundles (F1: high-volume timestamped subdirs). Generational: hot -> archive at 45d -> delete at 120d.",
+      "tiers": [
+        { "after": "45d", "action": "archive" },
+        { "after": "120d", "action": "delete" }
+      ],
+      "preserve_latest": true
+    },
+    "_dev/reports/analysis/end-session-closeout__*": {
+      "description": "End-session closeout artifacts (F1: one bundle per session closeout, dominant volume). Directory bundles named end-session-closeout__<scope>__<ts>. Generational: hot -> archive at 30d -> delete at 90d.",
+      "tiers": [
+        { "after": "30d", "action": "archive" },
+        { "after": "90d", "action": "delete" }
+      ],
+      "preserve_latest": true
+    },
+    "_dev/reports/signals": {
+      "description": "Verification and coordination signal files (live surface — only actionable items)",
+      "retention": "30d",
+      "action": "delete",
+      "preserve_latest": true
+    },
+    "_dev/reports/signals/closed": {
+      "description": "Closed coordination signals — resolved, consumed, or no longer actionable",
+      "retention": "30d",
+      "action": "archive",
+      "preserve_latest": false
+    },
+    "_handoffs/*/gemini-response-turn-*.json": {
+      "description": "Retry turn artifacts from Gemini AI bridge pipeline",
+      "retention": "90d",
+      "action": "archive",
+      "preserve_latest": true
+    },
+    "_dev/reports/audit": {
+      "description": "Timestamped project and framework audit reports",
+      "retention": "90d",
+      "action": "archive"
+    },
+    "_dev/reports/analysis": {
+      "description": "Explicitly authored decision memos and analysis documents",
+      "retention": "180d",
+      "action": "archive"
+    },
+    "_dev/logs": {
+      "description": "Operational event logs (lifecycle, compaction, etc.)",
+      "retention": "60d",
+      "action": "delete",
+      "preserve_latest": true
+    }
+  },
+  "protected": [
+    "*/learning/**",
+    "*/revisions/original.html",
+    "*/evidence/manifest.json",
+    "*/candidate.json",
+    "*/CAPTURE_META.json",
+    "*/learning-ledger.jsonl",
+    "*/feedback/**",
+    "*/replay_runs/*/summary.json",
+    "**/pinned/**",
+    "**/codex-run-active.json",
+    "**/codex-listener-status.json",
+    "_dev/reports/analysis/ai-layer-self-coding-plan.md",
+    "_dev/reports/analysis/codex-bridge-progression-governance-plan.md",
+    "_dev/reports/analysis/external-audit__gpt54pro__2026-04-01.md",
+    "_dev/reports/analysis/external-audit__gpt54pro__2026-04-01__response2.md",
+    "_dev/reports/analysis/gpt54pro-conversation-log__2026-04-01.md",
+    "_dev/reports/analysis/plan-pipeline.md",
+    "_dev/reports/analysis/plan-pipeline.next-step.json",
+    "_dev/reports/analysis/prompt-system-assembly.expectation-failures.json",
+    "_dev/reports/analysis/prompt-system-assembly.md",
+    "_dev/reports/analysis/prompt-system-authoring.expectation-failures.json",
+    "_dev/reports/analysis/prompt-system-authoring.md"
+  ],
+  "defaults": {
+    "dry_run": true,
+    "confirm_before_delete": true,
+    "archive_format": "directory",
+    "archive_path_pattern": "_dev/archive/{year}-{month}/{surface}"
+  }
+}

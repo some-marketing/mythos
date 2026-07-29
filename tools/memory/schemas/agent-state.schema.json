@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "agent-state/1.0",
+  "title": "Agent Persistence Schema for Simulated Minds",
+  "description": "SQLite schema for agent identity, state, and event history. Version 1.0. Separate from concept dreaming tables — same DB file, different writer scripts, no foreign-key coupling.",
+  "version": "1.0",
+  "database": "memory.sqlite",
+  "tables": {
+    "agents": {
+      "description": "Registered simulated agents. One row per agent per world.",
+      "columns": {
+        "id": { "type": "TEXT", "primary_key": true, "description": "UUID v4 agent identifier" },
+        "world_id": { "type": "TEXT", "not_null": true, "description": "FK to world-spec or simulation instance" },
+        "entity_type": { "type": "TEXT", "not_null": true, "description": "NPC, creature, object, system, observer, etc." },
+        "name": { "type": "TEXT", "not_null": true, "description": "Human-readable agent name" },
+        "created": { "type": "TEXT", "not_null": true, "description": "ISO 8601 creation timestamp" },
+        "last_updated": { "type": "TEXT", "not_null": true, "description": "ISO 8601 last-update timestamp" }
+      },
+      "indexes": ["world_id"],
+      "sql": "CREATE TABLE IF NOT EXISTS agents (id TEXT PRIMARY KEY, world_id TEXT NOT NULL, entity_type TEXT NOT NULL, name TEXT NOT NULL, created TEXT NOT NULL, last_updated TEXT NOT NULL)"
+    },
+    "agent_state": {
+      "description": "Current state snapshot per agent. One row per agent — upserted on each state write. The state_json is the canonical JSON blob for the agent's current runtime state.",
+      "columns": {
+        "agent_id": { "type": "TEXT", "primary_key": true, "description": "FK to agents.id" },
+        "state_json": { "type": "TEXT", "not_null": true, "description": "JSON blob of current agent state (position, inventory, mood, flags, etc.)" },
+        "tick": { "type": "INTEGER", "not_null": true, "default": 0, "description": "Monotonic tick counter for this agent" },
+        "written_at": { "type": "TEXT", "not_null": true, "description": "ISO 8601 write timestamp" }
+      },
+      "indexes": ["tick"],
+      "sql": "CREATE TABLE IF NOT EXISTS agent_state (agent_id TEXT PRIMARY KEY, state_json TEXT NOT NULL, tick INTEGER NOT NULL DEFAULT 0, written_at TEXT NOT NULL)"
+    },
+    "agent_history": {
+      "description": "Append-only event log per agent. Immutable — never updated, only inserted. Full replay from history reconstructs any past state.",
+      "columns": {
+        "id": { "type": "INTEGER", "primary_key": true, "autoincrement": true, "description": "Auto-increment row id" },
+        "agent_id": { "type": "TEXT", "not_null": true, "description": "FK to agents.id" },
+        "event_type": { "type": "TEXT", "not_null": true, "description": "spawn, move, interact, observe, tick, die, etc." },
+        "event_json": { "type": "TEXT", "not_null": true, "description": "JSON blob of event payload" },
+        "tick": { "type": "INTEGER", "not_null": true, "default": 0, "description": "Tick when event occurred" },
+        "written_at": { "type": "TEXT", "not_null": true, "description": "ISO 8601 write timestamp" }
+      },
+      "indexes": ["agent_id", "tick"],
+      "sql": "CREATE TABLE IF NOT EXISTS agent_history (id INTEGER PRIMARY KEY AUTOINCREMENT, agent_id TEXT NOT NULL, event_type TEXT NOT NULL, event_json TEXT NOT NULL, tick INTEGER NOT NULL DEFAULT 0, written_at TEXT NOT NULL)"
+    }
+  },
+  "privacy_floor": {
+    "rule": "No PII, credentials, or client data in agent state. Agent state is simulated world data only.",
+    "enforced_by": "agent-state.js writer script — validates state_json against privacy markers before write"
+  },
+  "coexistence": {
+    "rule": "Agent tables coexist in memory.sqlite alongside memories, concepts, and associations tables. No foreign keys between agent and concept tables. Separate writer scripts: agent-state.js (incremental append/upsert) vs build-memory-db.js (scratch rebuild).",
+    "no_coupling": true
+  },
+  "writer_script": "tools/memory/agent-state.js",
+  "writer_pattern": "incremental_append",
+  "writer_determinism": "Same input at same tick → same state_json hash. Node stdlib only, no randomness, no external API calls."
+}

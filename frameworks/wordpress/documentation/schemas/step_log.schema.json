@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Site Doc Step Log Line",
+  "type": "object",
+  "required": ["step_index", "task_slug", "action", "expected"],
+  "properties": {
+    "ts": { "type": "string", "description": "ISO timestamp" },
+    "step_index": { "type": "integer", "minimum": 1 },
+    "task_slug": { "type": "string" },
+    "action": {
+      "type": "string",
+      "enum": ["navigate", "click", "fill", "select", "verify", "submit", "wait", "note"]
+    },
+    "target": { "type": "string", "description": "Selector or UI label" },
+    "value": { "type": "string" },
+    "expected": { "type": "string", "description": "Success criteria for this step" },
+    "observed": { "type": "string" },
+    "url": { "type": "string" },
+    "screenshot": { "type": "string" },
+    "notes": { "type": "string" },
+    "branch": { "type": "string", "description": "Branch condition if the flow differs" }
+  },
+  "additionalProperties": true
+}

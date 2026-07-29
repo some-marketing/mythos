@@ -1,0 +1,28 @@
+{
+  "schema": "AutonomyTaskProfile/1.0",
+  "profile_id": "verify-system",
+  "description": "Validates system integrity after canonical, kernel, guardrail, or settings changes",
+  "match": {
+    "changed_paths": [
+      "instructions/canonical/system.yaml",
+      "instructions/canonical/kernel/**",
+      "instructions/canonical/guardrails.md",
+      "instructions/canonical/routing.md",
+      "instructions/canonical/commands/**",
+      ".claude/settings.json",
+      ".claude/guardrails.md"
+    ],
+    "commands": ["verify"]
+  },
+  "execution": {
+    "completion_gate": {
+      "script": "tools/verify/verify-system.cjs",
+      "args_template": "",
+      "output_template": "_dev/reports/signals/verify-system.signal.json"
+    },
+    "watch_triggers": [
+      "instructions/canonical/system.yaml",
+      ".claude/settings.json"
+    ]
+  }
+}

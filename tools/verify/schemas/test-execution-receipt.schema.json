@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TestExecutionReceipt/1.0",
+  "type": "object",
+  "required": ["schema", "command", "exit_code", "status", "started_at", "completed_at", "counts", "producer"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "const": "TestExecutionReceipt/1.0" },
+    "command": { "type": "string", "minLength": 1 },
+    "exit_code": { "type": "integer" },
+    "status": { "enum": ["passed", "failed"] },
+    "started_at": { "type": "string", "minLength": 1 },
+    "completed_at": { "type": "string", "minLength": 1 },
+    "counts": {
+      "type": "object",
+      "required": ["passed", "failed", "skipped", "todo"],
+      "additionalProperties": false,
+      "properties": {
+        "passed": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "skipped": { "type": "integer", "minimum": 0 },
+        "todo": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "producer": {
+      "type": "object",
+      "required": ["actor_id", "harness_id"],
+      "additionalProperties": false,
+      "properties": {
+        "actor_id": { "type": "string", "minLength": 1 },
+        "harness_id": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

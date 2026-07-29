@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://mythos.dev/schemas/creds.config.schema.json",
+  "title": "Tool Credential Config",
+  "description": "Declares the credential fields one tool needs, resolved through tools/lib/resolve-credential.cjs.",
+  "type": "object",
+  "required": ["fields"],
+  "properties": {
+    "tool": {
+      "type": "string",
+      "description": "Tool directory name, for diagnostics only."
+    },
+    "fields": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "envVar": {
+            "type": "string",
+            "description": "Environment variable name to check first. Defaults to the field's own key."
+          },
+          "keychainService": {
+            "type": "string",
+            "description": "macOS Keychain `-s` (service) value."
+          },
+          "keychainAccount": {
+            "type": "string",
+            "description": "macOS Keychain `-a` (account) value."
+          },
+          "opVault": {
+            "type": "string",
+            "description": "1Password vault name."
+          },
+          "opItem": {
+            "type": "string",
+            "description": "1Password item title."
+          },
+          "opField": {
+            "description": "1Password field label, or an array of candidate labels to try in order.",
+            "oneOf": [
+              { "type": "string" },
+              { "type": "array", "items": { "type": "string" } }
+            ]
+          },
+          "envFileKey": {
+            "type": "string",
+            "description": "Key to look for in an env file. Defaults to envVar."
+          },
+          "required": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether resolution failure should throw. Set false for optional fields."
+          },
+          "description": {
+            "type": "string",
+            "description": "Human-readable note for SETUP.md / env.example generation."
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "service_category": "deliverables",
+  "framework_name": "presentation-review",
+  "version": "1.0.0",
+  "description": "Cross-reference audit of client presentations against project plan documents, screenshots, and errata",
+  "prompt_count": 8,
+  "input_contract": {
+    "required": [
+      {
+        "name": "presentation_file",
+        "description": "Path to .pptx presentation file to audit"
+      },
+      {
+        "name": "project_directory",
+        "description": "Path to directory containing source documents, screenshots, and supporting files"
+      }
+    ],
+    "optional": [
+      {
+        "name": "slide_content_spec",
+        "description": "Markdown file specifying intended slide content (auto-detected if present)"
+      },
+      {
+        "name": "errata_file",
+        "description": "Markdown file with corrections/errata that must be applied (auto-detected if present)"
+      },
+      {
+        "name": "screenshot_manifest",
+        "description": "Screenshot-to-slide mapping (extracted from slide content spec if not separate)"
+      }
+    ]
+  },
+  "output_contract": {
+    "directories": [
+      "audit_output/"
+    ],
+    "artifacts": [
+      "AUDIT_REPORT.md",
+      "audit_summary.json"
+    ]
+  },
+  "output_contract_v2": {
+    "directories": [
+      {
+        "path": "audit_output/",
+        "required": true,
+        "description": "All audit artifacts and intermediate findings"
+      }
+    ],
+    "artifacts": [
+      {
+        "name": "intake_manifest.json",
+        "path_pattern": "audit_output/intake_manifest.json",
+        "required": true
+      },
+      {
+        "name": "presentation_content.json",
+        "path_pattern": "audit_output/presentation_content.json",
+        "required": true
+      },
+      {
+        "name": "source_document_index.json",
+        "path_pattern": "audit_output/source_document_index.json",
+        "required": true
+      },
+      {
+        "name": "slide_findings.json",
+        "path_pattern": "audit_output/slide_findings.json",
+        "required": true
+      },
+      {
+        "name": "screenshot_findings.json",
+        "path_pattern": "audit_output/screenshot_findings.json",
+        "required": true
+      },
+      {
+        "name": "corrections_findings.json",
+        "path_pattern": "audit_output/corrections_findings.json",
+        "required": true
+      },
+      {
+        "name": "gap_analysis.json",
+        "path_pattern": "audit_output/gap_analysis.json",
+        "required": true
+      },
+      {
+        "name": "AUDIT_REPORT.md",
+        "path_pattern": "audit_output/AUDIT_REPORT.md",
+        "required": true
+      },
+      {
+        "name": "audit_summary.json",
+        "path_pattern": "audit_output/audit_summary.json",
+        "required": true
+      }
+    ],
+    "bundle_types": []
+  },
+  "execution_modes": [
+    "FINDINGS_ONLY",
+    "REVIEW_ONLY"
+  ],
+  "mcp_requirements": [],
+  "mechanical_transform_pilot": {
+    "schema": "MechanicalTransformPilot/1.0",
+    "enabled_by": "PRESENTATION_REVIEW_TRANSFORM_PILOT",
+    "execution_mode": "FINDINGS_ONLY",
+    "adapter": "runtime/transforms/read-only-adapter.cjs",
+    "authority": "structural_observation_only",
+    "semantic_acceptance": "reviewer_owned"
+  },
+  "prompt_chain": {
+    "discovery": [
+      "01_INTAKE_AND_DISCOVERY"
+    ],
+    "extraction": [
+      "02_PRESENTATION_EXTRACTION",
+      "03_SOURCE_DOCUMENT_INDEX"
+    ],
+    "audit": [
+      "04_SLIDE_CONTENT_AUDIT",
+      "05_SCREENSHOT_MANIFEST_AUDIT",
+      "06_CORRECTIONS_AND_ERRATA_CHECK"
+    ],
+    "synthesis": [
+      "07_GAP_ANALYSIS_AND_SYNTHESIS"
+    ],
+    "reporting": [
+      "08_AUDIT_REPORT_ASSEMBLY"
+    ]
+  },
+  "skills_path": ".claude/skills/presentation-review/",
+  "commands_path": ".claude/commands/presentation-review/",
+  "agents_path": ".claude/agents/presentation-review/",
+  "skills": [
+    "presentation-review/SKILL.md"
+  ],
+  "commands": [
+    "run",
+    "status",
+    "intake-and-discovery",
+    "presentation-extraction",
+    "source-document-index",
+    "slide-content-audit",
+    "screenshot-manifest-audit",
+    "corrections-and-errata-check",
+    "gap-analysis-and-synthesis",
+    "audit-report-assembly"
+  ],
+  "agents": [
+    "intake-and-discovery-agent",
+    "presentation-extraction-agent",
+    "source-document-index-agent",
+    "slide-content-audit-agent",
+    "screenshot-manifest-audit-agent",
+    "corrections-and-errata-check-agent",
+    "gap-analysis-and-synthesis-agent",
+    "audit-report-assembly-agent"
+  ],
+  "patterns": [
+    "presentation-cross-reference-audit",
+    "slide-deck-review",
+    "source-evidence-comparison",
+    "client-deliverable-qa"
+  ]
+}

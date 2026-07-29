@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Mythos Output Contract V2",
+  "type": "object",
+  "required": ["directories", "artifacts"],
+  "properties": {
+    "directories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path"],
+        "properties": {
+          "path": { "type": "string" },
+          "required": { "type": "boolean" },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "path_pattern": { "type": "string" },
+          "schema_ref": { "type": "string" },
+          "required": { "type": "boolean" },
+          "hash_required": { "type": "boolean" },
+          "producer_stage": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "bundle_types": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type_id", "path_pattern", "required_files"],
+        "properties": {
+          "type_id": { "type": "string" },
+          "path_pattern": { "type": "string" },
+          "required_files": { "type": "array", "items": { "type": "string" } },
+          "required_file_patterns": { "type": "array", "items": { "type": "string" } },
+          "required_directories": { "type": "array", "items": { "type": "string" } },
+          "file_schemas": { "type": "object" },
+          "description": { "type": "string" }
+        }
+      }
+    }
+  }
+}

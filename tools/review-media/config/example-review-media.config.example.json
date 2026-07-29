@@ -1,0 +1,12 @@
+{
+  "$comment": "EXAMPLE ONLY. Config for tools/review-media/stage-review-media.js -- stages delivered format tiles into your own ads-approval portal and emits the per-ad media manifest. ad_id keys must be FIXED (match your review-data + capture log); slot->ad_id mapping should mirror your delivered SLOT numbers. Copy this file and fill in your own paths and ad_id/slot mapping.",
+  "code": "EXAMPLE",
+  "review_id": "EXAMPLE-2026-07",
+  "deliverables_dir": "/path/to/your/delesign-or-vendor/deliverables/dir",
+  "review_images_dir": "/path/to/your/ads-approval-portal/app/public/review-images/example",
+  "manifest_out": "/path/to/your/ads-approval-portal/app/data/EXAMPLE-review-media.json",
+  "ads": [
+    { "ad_id": "example-july-2026-01", "slot": 1, "match": "(^|/)(SLOT|Slot)[ _-]?1([^0-9]|$)" },
+    { "ad_id": "example-july-2026-02", "slot": 2, "match": "(^|/)(SLOT|Slot)[ _-]?2([^0-9]|$)" }
+  ]
+}

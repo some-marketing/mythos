@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "prompt-authority.schema.json",
+  "title": "PromptAuthority/1.0",
+  "type": "object",
+  "required": ["schema", "prompt_id", "mode", "effects"],
+  "properties": {
+    "schema": { "const": "PromptAuthority/1.0" },
+    "prompt_id": { "type": "string", "minLength": 1 },
+    "mode": { "enum": ["FINDINGS_ONLY", "RUN_ONLY", "REVIEW_ONLY", "PATCH_ALLOWED", "COORDINATOR", "REPO_HYGIENE"] },
+    "effects": {
+      "type": "object",
+      "required": ["read", "write", "execute", "dispatch"],
+      "properties": {
+        "read": { "type": "boolean" }, "write": { "type": "boolean" },
+        "execute": { "type": "boolean" }, "dispatch": { "type": "boolean" },
+        "write_scope": { "enum": ["reports_only", "scoped", "delegated"] }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

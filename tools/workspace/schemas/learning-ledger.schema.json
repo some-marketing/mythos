@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Mythos Learning Ledger",
+  "description": "Candidate-level summary of learning evidence. Aggregates feedback and signal entries.",
+  "type": "object",
+  "required": [
+    "framework_id",
+    "created_at",
+    "updated_at",
+    "feedback_count",
+    "signal_count",
+    "learning_ready"
+  ],
+  "properties": {
+    "framework_id": {
+      "type": "string",
+      "description": "Framework identifier (service/name)"
+    },
+    "created_at": {
+      "type": "string",
+      "description": "ISO 8601 timestamp of ledger creation"
+    },
+    "updated_at": {
+      "type": "string",
+      "description": "ISO 8601 timestamp of last update"
+    },
+    "feedback_count": {
+      "type": "number",
+      "description": "Total number of feedback entries"
+    },
+    "signal_count": {
+      "type": "number",
+      "description": "Total number of signal entries"
+    },
+    "accepted_runs": {
+      "type": "number",
+      "description": "Runs where outcome was accepted or accepted_with_edits"
+    },
+    "rejected_runs": {
+      "type": "number",
+      "description": "Runs where outcome was rejected"
+    },
+    "passing_signals": {
+      "type": "number",
+      "description": "Signals with result pass"
+    },
+    "failing_signals": {
+      "type": "number",
+      "description": "Signals with result fail"
+    },
+    "learning_ready": {
+      "type": "boolean",
+      "description": "Whether minimum learning evidence thresholds are met"
+    },
+    "learning_status": {
+      "type": "string",
+      "enum": [
+        "no_evidence",
+        "evidence_in_progress",
+        "learning_ready",
+        "legacy_missing_learning_evidence"
+      ],
+      "description": "Human-readable learning maturity status"
+    },
+    "learning_blockers": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Reasons learning is not yet ready"
+    },
+    "produced_by_actor_id": {
+      "type": ["string", "null"],
+      "description": "Actor ID that produced this ledger entry"
+    },
+    "produced_by_actor_type": {
+      "type": ["string", "null"],
+      "enum": ["human", "intelligence", "hybrid", null],
+      "description": "Type of the producing actor"
+    },
+    "produced_by_harness_id": {
+      "type": ["string", "null"],
+      "description": "Harness ID of the producing actor"
+    },
+    "produced_at": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "When the ledger entry was produced"
+    },
+    "validated_by_actor_id": {
+      "type": ["string", "null"],
+      "description": "Actor ID that validated this ledger for promotion-grade evidence"
+    },
+    "validated_by_actor_type": {
+      "type": ["string", "null"],
+      "enum": ["human", "intelligence", "hybrid", null],
+      "description": "Type of the validating actor"
+    },
+    "validated_by_harness_id": {
+      "type": ["string", "null"],
+      "description": "Harness ID of the validating actor"
+    },
+    "validated_at": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "When validation occurred"
+    },
+    "validation_artifact": {
+      "type": ["string", "null"],
+      "description": "Path to the durable validation artifact"
+    },
+    "validation_method": {
+      "type": ["string", "null"],
+      "description": "How validation was performed"
+    },
+    "validation_confidence": {
+      "type": ["string", "null"],
+      "enum": ["confirmed", "probable", "uncertain", null],
+      "description": "Confidence level of the validation"
+    }
+  }
+}

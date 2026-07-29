@@ -1,0 +1,77 @@
+Gaming Setup - Next Steps
+Captured: 2026-05-01
+
+Do not store Windows, Steam, or 1Password passwords in this file.
+
+1. Set up Windows Hello
+
+- Open Settings > Accounts > Sign-in options.
+- Add PIN (Windows Hello) first.
+- After the PIN is created, add the available face/eye/Tobii/biometric option if Windows shows it.
+- Lock the PC and confirm the Gaming user can sign in with Windows Hello.
+
+2. Sign into 1Password and enable Windows Hello unlock
+
+- To launch 1Password from the Run dialog, press Win + R and run:
+
+onepassword:
+
+- Open 1Password inside the Gaming Windows user.
+- Sign into the same 1Password account.
+- Open 1Password Settings > Security.
+- Enable unlock with Windows Hello.
+- Confirm 1Password accepts the same Windows Hello / Tobii method after the app is locked.
+
+1Password can only use Tobii after Windows Hello works for this Windows user.
+
+3. Microsoft Store access
+
+- To launch Microsoft Store from the Run dialog, press Win + R and run:
+
+ms-windows-store:
+
+- Use Microsoft Store from the Gaming user if you need to install/update Steam Link-adjacent apps, Xbox components, controller tools, or 1Password updates.
+- Avoid signing into unrelated Microsoft/work accounts in the Gaming profile unless needed.
+
+4. Run the gaming profile setup script
+
+Open PowerShell and run:
+
+powershell -ExecutionPolicy Bypass -File "$env:PUBLIC\Desktop\Finish Gaming Profile Setup.ps1"
+
+This disables notification/recent-item surfaces for the Gaming profile, creates Steam Big Picture shortcuts, and starts Steam in Big Picture mode.
+
+5. Finish Steam setup
+
+- Open Steam inside the Gaming Windows user.
+- Sign into the Steam account intended for TV sessions.
+- Go to Steam > Settings > Remote Play.
+- Enable Remote Play.
+- Leave Steam running, preferably in Big Picture mode.
+
+6. Pair Apple TV Steam Link
+
+- On Apple TV, install/open Steam Link.
+- Make sure Apple TV and this PC are on the same home network.
+- Pair the controller to Apple TV through Settings > Remotes and Devices > Bluetooth.
+- In Steam Link, select this PC.
+- Enter the PIN shown on Apple TV into Steam on the PC.
+- Start playing.
+
+If the pairing prompt does not appear automatically:
+
+Steam > Settings > Remote Play > Pair Steam Link
+
+7. Credential cleanup
+
+- The intended 1Password item name is: Gaming Setup
+- Keep the Gaming Windows account password stored there.
+- The 1Password item rename may need to be completed manually in the 1Password desktop app.
+- After Windows Hello works, make sure the password stored in 1Password matches the current/final Windows password for the Gaming user.
+
+8. Session safety
+
+- Use Gaming for friends / TV sessions.
+- Keep the main Windows account locked.
+- Do not sign into work apps, password managers, browser profiles, or cloud drives in Gaming unless explicitly needed.
+- Do not install untrusted mods, launchers, trainers, browser extensions, or USB storage tools.

@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "llm-manifest.schema.json",
+  "title": "LLM Manifest",
+  "description": "Machine-first manifest for handoff bundles — LLM_MANIFEST.json",
+  "type": "object",
+  "required": [
+    "bundle_version",
+    "bundle_id",
+    "created_at",
+    "created_by",
+    "recipient",
+    "scope",
+    "reporting_philosophy",
+    "required_prompts",
+    "reporting_expectations",
+    "changelog_status",
+    "runs",
+    "open_questions_count",
+    "open_questions_file",
+    "entry_points"
+  ],
+  "properties": {
+    "bundle_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$",
+      "description": "Semantic version of the bundle format"
+    },
+    "bundle_id": {
+      "type": "string",
+      "description": "Unique bundle directory name"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC timestamp"
+    },
+    "created_by": {
+      "type": "string",
+      "description": "Tool or skill that created the bundle"
+    },
+    "recipient": {
+      "type": "string"
+    },
+    "scope": {
+      "type": "string"
+    },
+    "reporting_philosophy": {
+      "type": "string",
+      "description": "Must state observational approach"
+    },
+    "required_prompts": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "reporting_expectations": {
+      "type": "object",
+      "required": ["labels_allowed", "labels_forbidden"],
+      "properties": {
+        "labels_allowed": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "labels_forbidden": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "changelog_status": {
+      "type": "string",
+      "enum": ["PRESENT", "ABSENT"]
+    },
+    "canonical_changelog_path": {
+      "type": "string"
+    },
+    "changelog_note": {
+      "type": "string"
+    },
+    "stakeholder_gate": {
+      "type": "object",
+      "required": ["triggered"],
+      "properties": {
+        "triggered": { "type": "boolean" },
+        "items_total": { "type": "integer", "minimum": 0 },
+        "items_answered": { "type": "integer", "minimum": 0 },
+        "items_categorized_issue": { "type": "integer", "minimum": 0 },
+        "items_categorized_note": { "type": "integer", "minimum": 0 },
+        "answers_file": { "type": "string" }
+      }
+    },
+    "runs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["form_id", "testcase", "run_id", "env"],
+        "properties": {
+          "form_id": { "type": "string" },
+          "testcase": { "type": "string" },
+          "run_id": { "type": "string" },
+          "env": { "type": "string" },
+          "crm_table": { "type": "string" },
+          "form_type": { "type": "string" },
+          "t_score": { "type": ["string", "null"] },
+          "lead_type_in_payload": { "type": ["string", "null"] },
+          "key_issues": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "open_questions_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "open_questions_file": {
+      "type": "string"
+    },
+    "entry_points": {
+      "type": "object",
+      "required": ["start_here", "questions", "full_index", "machine_index"],
+      "properties": {
+        "start_here": { "type": "string" },
+        "questions": { "type": "string" },
+        "full_index": { "type": "string" },
+        "machine_index": { "type": "string" }
+      }
+    }
+  }
+}

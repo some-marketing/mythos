@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Mythos Canonical System Spec",
+  "type": "object",
+  "required": ["version", "project", "policy", "frameworks", "execution_modes", "operations", "safety_rules", "agents", "orchestration_policy"],
+  "properties": {
+    "version": { "type": "string" },
+    "project": {
+      "type": "object",
+      "required": ["name", "description"],
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "source_of_truth": { "type": "string" }
+      }
+    },
+    "frameworks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "manifest", "guardrails"],
+        "properties": {
+          "id": { "type": "string" },
+          "manifest": { "type": "string" },
+          "guardrails": { "type": "string" }
+        }
+      }
+    },
+    "agents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "purpose"],
+        "properties": {
+          "id": { "type": "string" },
+          "purpose": { "type": "string" }
+        }
+      }
+    },
+    "orchestration_policy": {
+      "type": "object",
+      "required": ["completion_auditing", "max_reopen_cycles", "audit_exemptions", "evidence_required"],
+      "properties": {
+        "completion_auditing": { "type": "string" },
+        "max_reopen_cycles": { "type": "integer", "minimum": 1 },
+        "audit_exemptions": { "type": "array", "items": { "type": "string" } },
+        "evidence_required": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

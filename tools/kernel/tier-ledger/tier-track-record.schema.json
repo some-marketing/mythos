@@ -1,0 +1,113 @@
+{
+  "schema": "TierTrackRecordSchema/1.1",
+  "id": "tier-track-record-schema",
+  "status": "active",
+  "authority": "kernel-class",
+  "description": "Frozen PROCEDURE and evidence schema for the tier track-record ledger (tier-enforcement-implementation slice 3, steps tier-s3a-ledger-schema-and-perimeter and tier-s3b-promotion-demotion-emitters; convene 20260611T130035Z conditions 7 + 10). The procedure, evidence schema, and reviewer-distinctness invariant are FROZEN now; the N/M/window threshold VALUES are provisional and operator-ratified after a calibration window — never permanent law before data exists.",
+  "provenance": {
+    "operator_ratified": "2026-06-11 (Ratification Record, _dev/concepts/tier-differentiated-operational-enforcement.md)",
+    "convene_receipt": "_dev/reports/analysis/convene-runs/20260611T130035Z-tier-differentiated-enforcement-ratification/",
+    "plan": "_dev/reports/analysis/task-plans/tier-enforcement-implementation__plan.json",
+    "plan_steps": ["tier-s3a-ledger-schema-and-perimeter", "tier-s3b-promotion-demotion-emitters"]
+  },
+  "ledger": {
+    "path_convention": "_dev/reports/analysis/tier-track-record/<model-key>.json (model-key = producer model id sanitized to [A-Za-z0-9._-])",
+    "governed_perimeter": "The ledger directory and _dev/state/session-tier/** sit INSIDE the mutation-plan-gate governed-path perimeter (process-tier-rule.yaml add_registry.adds.mutation-plan-gate.paths; convene condition 7). The writer verifies this at write time and records governed_perimeter_verified in the ledger header.",
+    "file_schema": "TierTrackRecord/1.0",
+    "file_shape": {
+      "schema": "TierTrackRecord/1.0",
+      "model_key": "sanitized producer model id (filename key)",
+      "model_id": "producer model id as recorded in durable artifacts",
+      "governed_perimeter_verified": "boolean — canonical rule perimeter covered the ledger path at last write",
+      "entries": "array of entry objects (shape below), append-only"
+    },
+    "entry_shape": {
+      "entry_id": "deterministic id: sha1 over plan_artifact + distinct_review.artifact + distinct_review.at + work_unit (idempotent appends)",
+      "task_id": "plan/task id the coordinated run executed",
+      "plan_artifact": "repo-relative path to the task plan JSON (must exist on disk at derivation time)",
+      "scope_class": "one of scope_classes below, derived mechanically from the plan",
+      "producer": {
+        "actor_id": "producing coordinator actor id from durable artifacts (session-tier stamp model > task-outcome produced_by_actor_id > plan produced_by_actor_id)",
+        "model": "producer model string when a session-tier stamp is available, else null",
+        "session_id": "producing session id when known, else null",
+        "stamp_artifact": "repo-relative path to the session-tier stamp used, else null"
+      },
+      "changed_files": "declared coverage from the plan (bounded_plan.steps[].files_touched + scope_identity.owned_artifacts)",
+      "evidence_refs": "repo-relative paths of every durable artifact the entry was derived from",
+      "distinct_review": {
+        "reviewer_actor": "distinct_reviews[].actor from the plan-task-review-state marker",
+        "reviewer_harness": "distinct_reviews[].harness",
+        "artifact": "distinct_reviews[].artifact — must exist on disk for a grade-bearing entry",
+        "verdict": "distinct_reviews[].verdict verbatim",
+        "at": "distinct_reviews[].at"
+      },
+      "work_unit": "slice/step id(s) or commit hash being graded — required for grade-bearing entries (schema 1.1 additive)",
+      "review_artifact": "repo-relative path to the review artifact that covers this work unit — required for grade-bearing entries (schema 1.1 additive)",
+      "review_at": "ISO timestamp of the review that covers this work unit — must be AFTER work_unit_completed_at for a grade-bearing entry (schema 1.1 additive)",
+      "work_unit_completed_at": "ISO timestamp of when the work unit (slice/step/commit) was completed — derived from derived_at of the entry or the output artifact; stale-pre-execution rejection compares review_at against this (schema 1.1 additive)",
+      "binding_basis": "how coverage was established: 'artifact-path-match' | 'artifact-content-match' | 'work-unit-declared' | 'no-binding' — GRADE-BEARING WHITELIST (W3): only 'artifact-path-match' and 'artifact-content-match' may produce a grade-bearing entry; 'work-unit-declared' is recordable but is NEVER grade-bearing (yields ungraded + rejection_reason 'binding-too-weak-declared-only'); 'no-binding' triggers stale-pre-execution or no-work-unit-binding rejection (schema 1.1 additive; W3 categorical whitelist 20260611T)",
+      "rejection_reason": "present only when a grade-bearing entry was downgraded to ungraded by the binding enforcement: 'stale-pre-execution-review' | 'no-work-unit-binding' | 'binding-too-weak-declared-only' | null (schema 1.1 additive; W3 adds 'binding-too-weak-declared-only')",
+      "grade": "clean | failed | ungraded — derived ONLY from the distinct reviewer's durable verdict via verdict_classification; the appender exposes no input that sets a grade",
+      "grade_basis": "verdict-classification | reviewer-identity-unresolved | no-distinct-review | stale-pre-execution-review | no-work-unit-binding | binding-too-weak-declared-only",
+      "graded_by": "reviewer_actor for grade-bearing entries; null for ungraded",
+      "source_artifacts": "every file read to derive the entry",
+      "derived_at": "ISO timestamp of derivation",
+      "derived_by": "invoking actor id (informational only — never a grade source)"
+    },
+    "scope_classes": {
+      "values": ["system-kernel", "system-other", "framework", "client-delivery"],
+      "derivation": "mechanical, from the plan: client_code set -> client-delivery; else any coverage entry under instructions/canonical/**, tools/kernel/**, or .claude/** -> system-kernel; else any coverage entry under frameworks/** -> framework; else system-other"
+    },
+    "verdict_classification": {
+      "description": "Grades pass through from the distinct reviewer's recorded verdict; they never originate in the appender. Verdicts are classified against these enumerated lists after lowercasing/trimming; anything unlisted is ungraded — no fuzzy matching, no grade laundering.",
+      "clean_verdicts": [
+        "approve",
+        "approved",
+        "approve-for-operator-stamp",
+        "approve-with-conditions",
+        "no-blocker",
+        "no-blockers",
+        "pass",
+        "clean",
+        "review-clean"
+      ],
+      "failed_verdicts": [
+        "blocker",
+        "blockers-found",
+        "reject",
+        "rejected",
+        "fail",
+        "failed",
+        "changes-required"
+      ],
+      "unlisted": "ungraded"
+    },
+    "reviewer_distinctness_invariant": {
+      "description": "Producer-can't-self-validate, enforced mechanically in the writer (convene condition 7): a grade-bearing entry is written only when the reviewing actor is DISTINCT INTELLIGENCE from the producing actor. Same-model actors are parallel contexts, not distinct intelligence (dispatch-routing-rule), so distinctness is checked at model-family granularity.",
+      "mechanism": "actorSignature() extracts a model-family token (fable | opus | sonnet | haiku | gpt | gemini | claude | operator) from each actor string; the write is REJECTED when the families match, when either family is unresolvable, or when the normalized actor strings are equal. Fail-closed: an unresolvable reviewer identity can never produce a grade.",
+      "write_rule": "Grade-bearing entries (clean | failed) are written only by deriving from a distinct reviewer's durable artifacts (plan-task-review-state distinct_reviews + the review artifact on disk) or by an out-of-band higher-tier process editing under operator authority. The producing coordinator never writes its own grade."
+    },
+    "work_unit_binding_invariant": {
+      "description": "Schema 1.1 additive invariant (W2 remediation, amendment 20260611T152855Z; W3 categorical whitelist 20260611T). Reviewer identity is necessary but insufficient for a grade-bearing entry: the review must demonstrably cover the graded work unit. A grade-bearing entry REQUIRES a distinct review whose artifact demonstrably covers the work unit (mechanical check: review artifact path contains a work_unit token, or the review artifact's on-disk content references a commit/slice/evidence file declared as the work unit). Reviews timestamped before the work unit's completion are REJECTED as stale-pre-execution — the entry is written as ungraded with rejection_reason 'stale-pre-execution-review', never silently graded. Fail-closed: no binding established → entry written as ungraded with rejection_reason 'no-work-unit-binding'.",
+      "grade_bearing_basis_whitelist": "CATEGORICAL (W3): only binding_basis ∈ { 'artifact-path-match', 'artifact-content-match' } may produce a grade-bearing (clean|failed) entry. 'work-unit-declared' is a recordable basis value (the review post-dates completion and a work_unit was declared) but it is NEVER grade-bearing — such entries are written ungraded with rejection_reason 'binding-too-weak-declared-only'. Staleness and binding are separate gates; passing timestamp order does not prove review scope.",
+      "mechanism": "deriveWorkUnitBinding(review, workUnit, workUnitCompletedAt) in the writer: (1) no workUnit declared → binding_basis='no-binding', rejection_reason='no-work-unit-binding' (checked first, unconditional); (2) stale-pre-execution check — review.at < workUnitCompletedAt → binding_basis='no-binding', rejection_reason='stale-pre-execution-review'; (3) path-match check — review.artifact path contains a workUnit token → binding_basis='artifact-path-match'; (4) content-match check — review artifact on-disk content contains a workUnit token → binding_basis='artifact-content-match'; (5) workUnit declared, review post-dates completedAt, path/content checks fail → binding_basis='work-unit-declared', rejection_reason='binding-too-weak-declared-only' (NEVER grade-bearing, W3 categorical).",
+      "write_rule": "A grade-bearing entry is rejected (downgraded to ungraded + rejection_reason) when: (a) stale-pre-execution (review.at < work_unit_completed_at), (b) no-work-unit-binding (work_unit is absent and grade is clean|failed — caller must declare a work_unit for grade-bearing entries), or (c) binding-too-weak-declared-only (work_unit declared and review post-dates completion but review artifact path/content does not demonstrably cover the work unit — W3 categorical gate). Ungraded entries may omit work_unit and binding_basis."
+    }
+  },
+  "graduation": {
+    "procedure_frozen": true,
+    "procedure": {
+      "promotion": "When a model accumulates promotion_n CONSECUTIVE clean distinct-review outcomes within one scope_class, emit-candidacy.cjs emits a promotion candidacy artifact — an operator-gated PROPOSAL to relax specific adds for that model+scope_class. Ratification happens only by the operator editing instructions/canonical/process-tier-rule.yaml with provenance (operator_ratified + convene receipt). The witness is up-lineage: a tier is promoted by the tier above it plus the operator, never by itself.",
+      "demotion": "When a model accumulates demotion_m FAILED distinct-review outcomes within window_days inside one scope_class, emit-candidacy.cjs emits a demotion candidacy artifact the same way. The failure classifier is owned by the distinct reviewer (verdict_classification over reviewer-recorded verdicts), never the producer.",
+      "candidacy_artifacts": "_dev/reports/analysis/tier-track-record/candidacies/<type>__<model-key>__<scope-class>__<dedupe>.json (TierGraduationCandidacy/1.0) — inside the governed perimeter. Deduped by evidence set; re-runs never duplicate.",
+      "never_auto_applied": "No ledger machinery ever mutates process-tier-rule.yaml or any canonical surface. Candidacies are Decision-shaped proposals: candidacy artifact + (optional, flag-gated) Dart 'Decision Needed' task assigned to the operator."
+    },
+    "thresholds": {
+      "provisional": true,
+      "promotion_n": 5,
+      "demotion_m": 2,
+      "window_days": 30,
+      "note": "PROVISIONAL starting values (convene condition 10 / G10) — recorded so promotion criteria are not retrofitted to flatter early results, but explicitly NOT law: operator ratifies final values after a calibration window of real ledger data. Changing them is an edit to this frozen schema file (itself inside the tools/kernel/** governed perimeter)."
+    }
+  }
+}

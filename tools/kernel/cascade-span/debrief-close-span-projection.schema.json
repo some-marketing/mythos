@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mythos.local/schemas/debrief-close-span-projection/1.0.json",
+  "title": "DebriefCloseSpanProjection/1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "span_schema_version",
+    "event_class",
+    "node_actor",
+    "logical_session_id",
+    "scope_identity",
+    "work_unit",
+    "lineage_root",
+    "parent_span_id",
+    "trace_id",
+    "layer_depth",
+    "logical_call_site",
+    "action_id",
+    "outcome",
+    "enforced",
+    "tombstone"
+  ],
+  "properties": {
+    "schema_id": { "const": "DebriefCloseSpanProjection/1.0" },
+    "span_schema_version": { "const": "1.0" },
+    "event_class": { "const": "debrief-close-decision" },
+    "node_actor": { "type": "string", "minLength": 1 },
+    "logical_session_id": { "type": "string", "minLength": 1 },
+    "scope_identity": { "type": ["string", "null"] },
+    "work_unit": { "type": ["string", "null"] },
+    "lineage_root": { "type": ["string", "null"] },
+    "parent_span_id": { "type": ["string", "null"] },
+    "trace_id": { "type": "string", "minLength": 1 },
+    "layer_depth": { "type": "integer", "minimum": 0 },
+    "logical_call_site": { "const": "debrief_before_closeout" },
+    "action_id": { "type": "string", "minLength": 1 },
+    "outcome": { "type": "string", "enum": ["allow", "deny", "tombstone"] },
+    "enforced": { "type": "boolean" },
+    "tombstone": { "type": "boolean" }
+  }
+}

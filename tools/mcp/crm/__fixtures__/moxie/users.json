@@ -1,0 +1,57 @@
+{
+  "_note": "Field shapes confirmed against a live read-only Moxie probe on 2026-07-08 (action/users/list → bare JSON array; 1 item live). All VALUES here are entirely synthetic. No real user data appears in this file. Items live under `data`; the real Moxie endpoint returns them as a bare array. See _dev/reports/analysis/moxie-live-probe-findings__20260708.md.",
+  "data": [
+    {
+      "accountId": null,
+      "userType": "OWNER",
+      "user": {
+        "userId": 70001,
+        "firstName": "Sample",
+        "lastName": "Owner",
+        "email": "user@example.com",
+        "phone": null,
+        "phoneVerified": false,
+        "uuid": "00000000-0000-4000-8000-000000000001",
+        "profilePicture": null,
+        "uploadedPicture": false,
+        "pricingVersion": 2,
+        "userAccounts": [
+          {
+            "account": {
+              "accountId": 90001,
+              "accountName": "example workspace",
+              "accountLogo": null,
+              "accountLogoDark": null,
+              "subscriptionState": "ACTIVE",
+              "subscriptionType": "PAID",
+              "subscriptionProvider": "WEB",
+              "pod": {
+                "podId": "pod00",
+                "podUrl": "https://pod00.example.test/"
+              },
+              "sampleMode": false,
+              "pricingVersion": 2,
+              "trialEndsAt": "2024-01-08T00:00:00.000Z",
+              "created": null,
+              "free": false,
+              "starter": false,
+              "ltd": false,
+              "inTrial": false,
+              "paid": true,
+              "restricted": false,
+              "disabled": false
+            },
+            "userType": "OWNER",
+            "projectAccess": null,
+            "clientAccess": null,
+            "portalFeatures": null,
+            "featureAccess": null,
+            "clientFeatureMap": null
+          }
+        ]
+      },
+      "projectAccess": null,
+      "featureAccess": null
+    }
+  ]
+}

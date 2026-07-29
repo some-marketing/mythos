@@ -1,0 +1,66 @@
+{
+  "tool": "notify",
+  "_comment": "Twilio SMS/voice notification credentials, resolved through tools/lib/resolve-credential.cjs. Every field is individually optional here (twilio-creds.js decides which combination is usable) since Twilio accepts either an Account SID + Auth Token pair OR an API Key SID + Secret pair.",
+  "fields": {
+    "TWILIO_ACCOUNT_SID": {
+      "envVar": "TWILIO_ACCOUNT_SID",
+      "keychainService": "mythos-twilio-account-sid",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "mythos-twilio-api",
+      "opField": ["Account SID", "account sid"],
+      "required": false,
+      "description": "Twilio Account SID (AC... prefix). Preferred auth pair with Auth Token; can also be discovered at runtime from an API Key pair."
+    },
+    "TWILIO_AUTH_TOKEN": {
+      "envVar": "TWILIO_AUTH_TOKEN",
+      "keychainService": "mythos-twilio-auth-token",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "mythos-twilio-api",
+      "opField": ["Auth Token", "auth token"],
+      "required": false,
+      "description": "Twilio Auth Token, paired with Account SID."
+    },
+    "TWILIO_API_KEY_SID": {
+      "envVar": "TWILIO_API_KEY_SID",
+      "keychainService": "mythos-twilio-api-key-sid",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "mythos-twilio-api",
+      "opField": ["API Key SID", "api key sid", "SID"],
+      "required": false,
+      "description": "Twilio API Key SID (SK... prefix) -- alternative auth to Account SID + Auth Token."
+    },
+    "TWILIO_API_KEY_SECRET": {
+      "envVar": "TWILIO_API_KEY_SECRET",
+      "keychainService": "mythos-twilio-api-key-secret",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "mythos-twilio-api",
+      "opField": ["API Key Secret", "api key secret", "credential", "secret"],
+      "required": false,
+      "description": "Twilio API Key Secret, paired with TWILIO_API_KEY_SID."
+    },
+    "TWILIO_FROM_NUMBER": {
+      "envVar": "TWILIO_FROM_NUMBER",
+      "keychainService": "mythos-twilio-from-number",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "mythos-twilio-api",
+      "opField": ["Phone Number", "From Number", "phone number"],
+      "required": false,
+      "description": "Twilio phone number you own (E.164). If unset, tools auto-discover a capable owned number at runtime."
+    },
+    "TWILIO_OPERATOR_PHONE": {
+      "envVar": "TWILIO_OPERATOR_PHONE",
+      "keychainService": "mythos-twilio-operator-phone",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "mythos-twilio-api",
+      "opField": ["Operator Phone", "operator phone"],
+      "required": false,
+      "description": "Your own personal phone number (E.164) -- the notification destination. Never hardcode this; always resolve it."
+    }
+  }
+}

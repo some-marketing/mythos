@@ -1,0 +1,16 @@
+{
+  "environments": {
+    "A": {
+      "email_template": "test.a.{{TESTCASE_ID}}@example.com",
+      "tokens": {}
+    },
+    "B": {
+      "email_template": "test.b.{{TESTCASE_ID}}@example.com",
+      "tokens": {}
+    },
+    "C": {
+      "email_template": "test.c.{{TESTCASE_ID}}@example.com",
+      "tokens": {}
+    }
+  }
+}

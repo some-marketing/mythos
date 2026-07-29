@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mythos.local/schemas/motivation/homeostasis.schema.json",
+  "title": "MotivationHomeostasisLedger",
+  "description": "Read-only homeostatic motivation ledger for the human-system-analogue governor (S1). Holds mechanically-derived 'pressures' read from durable artifacts. This ledger is descriptive only: it records drive signals but NEVER itself authorizes execution. Interpretive-assessment pressures may NEVER drive auto-execution; only artifact_countable pressures may, and even then only via later gated steps not present in the S1-S2 slice.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "schema_version",
+    "generated_at",
+    "pressures",
+    "uncategorized_signal_count",
+    "decay"
+  ],
+  "properties": {
+    "schema": {
+      "description": "Stable schema identifier for this ledger artifact. Lets consumers detect the artifact kind without inferring from filename.",
+      "type": "string",
+      "const": "MotivationHomeostasisLedger/1.0"
+    },
+    "schema_version": {
+      "description": "Semantic version of the ledger schema. Bump on any breaking field change.",
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "generated_at": {
+      "description": "ISO 8601 UTC timestamp at which the scanner produced this ledger snapshot.",
+      "type": "string",
+      "format": "date-time"
+    },
+    "uncategorized_signal_count": {
+      "description": "Count of durable signals/artifacts the scanner observed but could NOT categorize into any known pressure. Catch-all (grounding check #11): a non-zero value means the ledger's coverage is narrow, so a small/healthy-looking pressure list must not be read as a healthy system. Must be reported even when zero.",
+      "type": "integer",
+      "minimum": 0
+    },
+    "decay": {
+      "description": "Decay parameters governing how mechanical pressures fall over time when their underlying tension is not refreshed. Descriptive record of the params used for this snapshot; the ledger does not itself apply decay to live state.",
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["model", "half_life_days"],
+      "properties": {
+        "model": {
+          "description": "Decay model identifier (e.g. 'exponential' or 'linear'). Names the rise/fall rule used to age pressures.",
+          "type": "string"
+        },
+        "half_life_days": {
+          "description": "Days after which an unrefreshed pressure's age-driven component is halved (for exponential) or the linear window. Tunable; recorded for provenance.",
+          "type": "number",
+          "minimum": 0
+        },
+        "notes": {
+          "description": "Optional free-text note describing how decay was applied or why params were chosen.",
+          "type": "string"
+        }
+      }
+    },
+    "pressures": {
+      "description": "List of mechanically-derived pressure entries. Each entry is a single drive signal computed from durable artifacts. Order is not significant.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/pressure"
+      }
+    }
+  },
+  "$defs": {
+    "pressure": {
+      "description": "A single homeostatic pressure: a named tension with a computed drive magnitude, its raw component readings, and its execution-eligibility class.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "pressure_class",
+        "inputs",
+        "computed_pressure",
+        "keep_open",
+        "raw_components",
+        "last_updated"
+      ],
+      "properties": {
+        "id": {
+          "description": "Stable machine identifier for the pressure (e.g. 'open_loops', 'stale_signals'). Used by downstream gated steps to key on a pressure without parsing its label.",
+          "type": "string",
+          "minLength": 1
+        },
+        "label": {
+          "description": "Human-readable name of the pressure for the scan report.",
+          "type": "string",
+          "minLength": 1
+        },
+        "pressure_class": {
+          "description": "Execution-eligibility class. 'artifact_countable' pressures are derived from objectively countable artifacts (e.g. number of incomplete plans) and MAY (only via later gated steps, not this slice) feed auto-execution. 'interpretive_assessment' pressures rest on a judgement call (e.g. coverage gaps, curiosity, risk debt) and may NEVER drive auto-execution; they are surfaced as evidence only. This split is the machine-readable enforcement of kernel-crystallization 5.6.",
+          "type": "string",
+          "enum": ["artifact_countable", "interpretive_assessment"]
+        },
+        "inputs": {
+          "description": "The normalized scalar inputs that feed the computed_pressure for this entry. These are the mechanical rise/fall drivers.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "severity",
+            "age",
+            "recurrence",
+            "authority_weight",
+            "recent_progress"
+          ],
+          "properties": {
+            "severity": {
+              "description": "How acute the tension is (0..1). Higher raises pressure.",
+              "type": "number"
+            },
+            "age": {
+              "description": "How long the tension has gone unaddressed, normalized to a 0..1 scale via the decay params. Higher raises pressure.",
+              "type": "number"
+            },
+            "recurrence": {
+              "description": "How often this tension has recurred (0..1). Higher raises pressure.",
+              "type": "number"
+            },
+            "authority_weight": {
+              "description": "Weight reflecting the authority of the source asserting the tension (0..1). Operator-sourced tensions weigh more than self-derived ones. Higher raises pressure.",
+              "type": "number"
+            },
+            "recent_progress": {
+              "description": "Evidence of recent forward motion on this tension (0..1). Acts as the falling counter-force: higher recent_progress LOWERS computed_pressure.",
+              "type": "number"
+            }
+          }
+        },
+        "computed_pressure": {
+          "description": "The resolved drive magnitude for this pressure after combining inputs and decay. NOTE: when keep_open is true this value is forced to 0 to suppress the drive signal. A label is never stored without this number and without raw_components (no armor-mode/label-only output).",
+          "type": "number"
+        },
+        "keep_open": {
+          "description": "Operator-suppressible flag (grounding ADJ #3). When true, this is an intentionally-held-open tension (a contradiction the operator is deliberately keeping live), and the drive signal is suppressed/zeroed so the homeostatic loop does not push to 'resolve' it. Defaults to false; only the operator should set it true.",
+          "type": "boolean",
+          "default": false
+        },
+        "raw_components": {
+          "description": "The individual readings behind this pressure, preserved verbatim (grounding ADJ #2 / anti-armor-mode). NEVER store only a resolved label: the underlying counts, source paths, ages, and any pre-suppression magnitude must be inspectable so a reviewer can re-derive the computed_pressure.",
+          "type": "object",
+          "additionalProperties": true,
+          "required": ["source_kind", "observed_count"],
+          "properties": {
+            "source_kind": {
+              "description": "What durable surface this pressure was derived from (e.g. 'task-plans', 'signals', 'debriefs', 'tests', 'validation-reports').",
+              "type": "string"
+            },
+            "observed_count": {
+              "description": "The raw count of items that produced this pressure (e.g. number of incomplete plans, number of stale live signals).",
+              "type": "integer",
+              "minimum": 0
+            },
+            "sample_refs": {
+              "description": "A bounded sample of artifact paths/ids contributing to this pressure, for reviewer re-derivation. Not necessarily exhaustive.",
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "pre_suppression_pressure": {
+              "description": "The computed pressure magnitude BEFORE keep_open suppression was applied. Preserved so suppression is auditable rather than hidden.",
+              "type": "number"
+            },
+            "notes": {
+              "description": "Optional derivation notes (formula used, edge cases, partial-read failures encountered for this pressure).",
+              "type": "string"
+            }
+          }
+        },
+        "last_updated": {
+          "description": "ISO 8601 UTC timestamp at which this pressure entry was last recomputed.",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}

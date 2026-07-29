@@ -1,0 +1,262 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Mythos Framework Manifest",
+  "type": "object",
+  "required": [
+    "service_category",
+    "framework_name",
+    "version",
+    "description",
+    "prompt_count",
+    "input_contract",
+    "output_contract",
+    "execution_modes",
+    "mcp_requirements",
+    "prompt_chain"
+  ],
+  "properties": {
+    "service_category": { "type": "string", "minLength": 1 },
+    "framework_name": { "type": "string", "minLength": 1 },
+    "version": { "type": "string", "minLength": 1 },
+    "description": { "type": "string", "minLength": 1 },
+    "prompt_count": { "type": "integer", "minimum": 0 },
+    "input_contract": {
+      "type": "object",
+      "required": ["required", "optional"],
+      "properties": {
+        "required": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/inputItem" }
+        },
+        "optional": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/inputItem" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "output_contract": {
+      "type": "object",
+      "required": ["directories", "artifacts"],
+      "properties": {
+        "directories": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "artifacts": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "output_contract_v2": {
+      "type": "object",
+      "required": ["directories", "artifacts", "bundle_types"],
+      "properties": {
+        "directories": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/typedDirectory" }
+        },
+        "artifacts": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/typedArtifact" }
+        },
+        "bundle_types": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/bundleType" }
+        },
+        "schemas": {
+          "type": "array",
+          "description": "Optional registry of stage/artifact JSON schemas for output validation.",
+          "items": {
+            "type": "object",
+            "required": ["name", "path"],
+            "properties": {
+              "name": { "type": "string" },
+              "path": { "type": "string" },
+              "description": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "execution_modes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": [
+          "FINDINGS_ONLY",
+          "RUN_ONLY",
+          "REVIEW_ONLY",
+          "PATCH_ALLOWED",
+          "COORDINATOR",
+          "REPO_HYGIENE"
+        ]
+      }
+    },
+    "mcp_requirements": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "type": "string" },
+          {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+              "name": { "type": "string" },
+              "path": { "type": "string" },
+              "purpose": { "type": "string" }
+            },
+            "additionalProperties": false
+          },
+          {
+            "$ref": "#/$defs/mcpRequirementV1"
+          }
+        ]
+      }
+    },
+    "prompt_authority": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/promptAuthorityV1" }
+    },
+    "prompt_chain": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "minItems": 1,
+        "items": { "type": "string" }
+      }
+    },
+    "guide_count": { "type": "integer", "minimum": 0 },
+    "guide_variants": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    },
+    "skills_path": { "type": "string" },
+    "commands_path": { "type": "string" },
+    "agents_path": { "type": "string" },
+    "harness_paths": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/harnessPathSet" }
+    },
+    "skills": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "commands": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "agents": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "inputItem": {
+      "type": "object",
+      "required": ["name", "description"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "description": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "typedDirectory": {
+      "type": "object",
+      "required": ["path", "required", "description"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "required": { "type": "boolean" },
+        "description": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "typedArtifact": {
+      "type": "object",
+      "required": ["name", "path_pattern", "required"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "path_pattern": { "type": "string", "minLength": 1 },
+        "required": { "type": "boolean" },
+        "schema": { "type": "string", "description": "Optional path to a JSON schema validating this artifact." }
+      },
+      "additionalProperties": false
+    },
+    "bundleType": {
+      "type": "object",
+      "required": ["type_id", "path_pattern", "required_files"],
+      "properties": {
+        "type_id": { "type": "string", "minLength": 1 },
+        "path_pattern": { "type": "string", "minLength": 1 },
+        "required_files": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "required_file_patterns": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "required_directories": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "file_schemas": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "description": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "harnessPathSet": {
+      "type": "object",
+      "properties": {
+        "skills": { "type": "string" },
+        "commands": { "type": "string" },
+        "agents": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "mcpRequirementV1": {
+      "type": "object",
+      "required": ["schema", "name", "required", "degraded_allowed"],
+      "properties": {
+        "schema": { "const": "McpRequirement/1.0" },
+        "name": { "type": "string", "minLength": 1 },
+        "required": { "type": "boolean" },
+        "degraded_allowed": { "type": "boolean" },
+        "purpose": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "promptAuthorityV1": {
+      "type": "object",
+      "required": ["schema", "prompt_id", "mode", "effects"],
+      "properties": {
+        "schema": { "const": "PromptAuthority/1.0" },
+        "prompt_id": { "type": "string", "minLength": 1 },
+        "mode": { "enum": ["FINDINGS_ONLY", "RUN_ONLY", "REVIEW_ONLY", "PATCH_ALLOWED", "COORDINATOR", "REPO_HYGIENE"] },
+        "effects": {
+          "type": "object",
+          "required": ["read", "write", "execute", "dispatch"],
+          "properties": {
+            "read": { "type": "boolean" }, "write": { "type": "boolean" },
+            "execute": { "type": "boolean" }, "dispatch": { "type": "boolean" },
+            "write_scope": { "enum": ["reports_only", "scoped", "delegated"] }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

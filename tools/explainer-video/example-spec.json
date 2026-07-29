@@ -1,0 +1,31 @@
+{
+  "video_id": "one-loop-iteration",
+  "fps": 30,
+  "beats": [
+    {
+      "id": "b1-title",
+      "narration": "Here's how one item moves through a tiered gate system, start to finish.",
+      "caption": "One loop, start to finish"
+    },
+    {
+      "id": "b2-orient",
+      "narration": "Two tokens sit at the bottom tier, waiting to be evaluated.",
+      "caption": "Two tokens, tier zero"
+    },
+    {
+      "id": "b3-cascade-grade",
+      "narration": "Each token is graded against the tier's criteria before it can advance.",
+      "caption": "Grading before advancement"
+    },
+    {
+      "id": "b4-layers-gate",
+      "narration": "Token B clears the gate and rises to the next tier, while token A stays put and slides through unchanged.",
+      "caption": "The gate opens for one, not the other"
+    },
+    {
+      "id": "b5-close",
+      "narration": "That's the whole loop — grade, gate, advance, repeat.",
+      "caption": "Grade. Gate. Advance. Repeat."
+    }
+  ]
+}

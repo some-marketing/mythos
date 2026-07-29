@@ -1,0 +1,183 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "mythos/task-outcome/1.0",
+  "title": "Mythos Task Outcome",
+  "description": "Canonical task-outcome artifact recording execution results and distinct-intelligence validation provenance. Bound to reports/analysis/task-outcomes/<task-id>.json.",
+  "type": "object",
+  "required": [
+    "task_id",
+    "outcome_delta",
+    "produced_by_actor_id",
+    "produced_by_actor_type",
+    "produced_by_harness_id",
+    "produced_at"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "description": "Task identifier matching the source task-plan"
+    },
+    "outcome_delta": {
+      "type": "object",
+      "required": [
+        "completed",
+        "divergences",
+        "gates_triggered",
+        "corrections_made",
+        "should_harden_framework"
+      ],
+      "properties": {
+        "completed": {
+          "type": "boolean",
+          "description": "Whether the task completed successfully"
+        },
+        "divergences": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Where execution diverged from the plan"
+        },
+        "gates_triggered": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Which gates fired during execution"
+        },
+        "corrections_made": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Mid-execution corrections applied"
+        },
+        "should_harden_framework": {
+          "type": "boolean",
+          "description": "Whether the outcome suggests the framework should be hardened"
+        },
+        "hardening_notes": {
+          "type": "string",
+          "description": "Specific hardening recommendations based on outcome"
+        }
+      }
+    },
+    "completion_evidence": {
+      "type": "object",
+      "description": "Durable evidence for all four completion criteria",
+      "properties": {
+        "all_steps_done": {
+          "type": "boolean",
+          "description": "Whether all plan steps have been executed"
+        },
+        "verification_passed": {
+          "type": "boolean",
+          "description": "Whether verification ran and passed"
+        },
+        "no_open_blockers": {
+          "type": "boolean",
+          "description": "Whether all blockers are resolved"
+        },
+        "operator_acceptance_received": {
+          "type": "boolean",
+          "description": "Whether operator acceptance has been recorded"
+        }
+      },
+      "required": [
+        "all_steps_done",
+        "verification_passed",
+        "no_open_blockers",
+        "operator_acceptance_received"
+      ]
+    },
+    "produced_by_actor_id": {
+      "type": "string",
+      "description": "Actor ID that produced this outcome"
+    },
+    "produced_by_actor_type": {
+      "type": "string",
+      "enum": [
+        "human",
+        "intelligence",
+        "hybrid"
+      ],
+      "description": "Type of the producing actor"
+    },
+    "produced_by_harness_id": {
+      "type": "string",
+      "description": "Harness ID of the producing actor"
+    },
+    "produced_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the outcome was produced"
+    },
+    "validated_by_actor_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Actor ID that validated this outcome for acceptance. Required for acceptance-grade completion when producer is intelligence."
+    },
+    "validated_by_actor_type": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "human",
+        "intelligence",
+        "hybrid",
+        null
+      ],
+      "description": "Type of the validating actor"
+    },
+    "validated_by_harness_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Harness ID of the validating actor. Must differ from produced_by_harness_id for distinct-intelligence validation."
+    },
+    "validated_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "description": "When validation occurred"
+    },
+    "validation_artifact": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Path to the durable validation artifact"
+    },
+    "validation_method": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "How validation was performed (e.g., codex-bridge, verify-local, operator-review)"
+    },
+    "validation_confidence": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "confirmed",
+        "probable",
+        "uncertain",
+        null
+      ],
+      "description": "Confidence level of the validation"
+    }
+  },
+  "$defs": {
+    "distinct_intelligence_rule": {
+      "description": "When produced_by_actor_type is 'intelligence', acceptance-grade validation requires validated_by_actor_id != produced_by_actor_id AND validated_by_harness_id != produced_by_harness_id. Human review is supplemental only."
+    }
+  }
+}

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>ca.somemarketing.smos.framework-flywheel</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/env</string>
+        <string>node</string>
+        <string>/Users/admin/dev/SM_OS-recovered/tools/launchd/run-framework-flywheel.cjs</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/admin/dev/SM_OS-recovered</string>
+
+    <!-- Every 2 hours: scan improve-plans + captures, raise the single live
+         framework-flywheel signal when apply-side work is due. Bounded single
+         pass, then exit. Closure comes from doing the work (post-improve
+         receipts / CAPTURE_META transitions), not from the signal aging out.
+         Kill switch: _dev/state/framework-flywheel/disabled -->
+    <key>StartInterval</key>
+    <integer>7200</integer>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/admin/dev/SM_OS-recovered/_dev/state/framework-flywheel/launchd.stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/admin/dev/SM_OS-recovered/_dev/state/framework-flywheel/launchd.stderr.log</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>HOME</key>
+        <string>/Users/admin</string>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+    </dict>
+</dict>
+</plist>

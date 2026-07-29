@@ -1,0 +1,25 @@
+{
+  "_comment": "Operator-configured encoder preference for tools/image-optimize (S0). Vendor-agnostic: the optimizer walks 'encoder_preference' top-to-bottom and uses the first adapter whose is_available() is true. Override the order without editing code via the IMAGE_OPTIMIZE_ENCODER_ORDER env var (comma-separated adapter ids, highest priority first), or point at a different config with --config <path>. No vendor is hard-coded in the engine; this list is data.",
+  "schema": "ImageOptimizeConfig/1.0",
+  "encoder_preference": [
+    "cwebp",
+    "sharp",
+    "avifenc",
+    "pngquant",
+    "imagemagick"
+  ],
+  "policy": {
+    "_comment": "S1 format/sizing policy. Operator-configurable; CLI flags (--tier, --quality, --also-avif, --allowlist) and per-call opts override these. Tiers carry a max_width (never-upscale resize cap) and a max_bytes (post-encode hard-fail cap). A derivative over its tier's max_bytes FAILS the policy gate (CLI exit 2) unless allowlisted-with-reason.",
+    "quality": 80,
+    "tiers": {
+      "hero": { "max_width": 1920, "max_bytes": 256000 },
+      "content": { "max_width": 1280, "max_bytes": 102400 },
+      "thumb": { "max_width": 640, "max_bytes": 51200 }
+    }
+  },
+  "_notes": {
+    "encoder_preference": "Default order. cwebp first (purpose-built WebP encoder, present locally at 1.6.0); sharp second (node module, no external binary). avifenc/pngquant/imagemagick are adapters that report unavailable on machines where the binary is absent — they never crash the run, they just get skipped. S0 only exercises the WebP-producing adapters (cwebp, sharp); the S1 policy engine uses sharp for resize+encode.",
+    "env_override": "IMAGE_OPTIMIZE_ENCODER_ORDER=sharp,cwebp node tools/image-optimize/cli.cjs ...",
+    "policy": "S1: max_bytes defaults hero 250KB / content 100KB / thumb 50KB (KiB-based: 256000/102400/51200). max_width never upscales — a source narrower than the cap keeps its width. AVIF is off by default (--also-avif); it is always an additional derivative, never the sole asset."
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "tool": "mcp/google-ads",
+  "fields": {
+    "GOOGLE_ADS_DEVELOPER_TOKEN": {
+      "envVar": "GOOGLE_ADS_DEVELOPER_TOKEN",
+      "keychainService": "mythos-google-ads-developer-token",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "Google Ads API",
+      "opField": "developer token",
+      "description": "Google Ads API developer token."
+    },
+    "GOOGLE_ADS_CLIENT_ID": {
+      "envVar": "GOOGLE_ADS_CLIENT_ID",
+      "keychainService": "mythos-google-ads-client-id",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "Google Ads API",
+      "opField": "client id",
+      "description": "OAuth client id for the Google Ads API."
+    },
+    "GOOGLE_ADS_CLIENT_SECRET": {
+      "envVar": "GOOGLE_ADS_CLIENT_SECRET",
+      "keychainService": "mythos-google-ads-client-secret",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "Google Ads API",
+      "opField": "client secret",
+      "description": "OAuth client secret for the Google Ads API."
+    },
+    "GOOGLE_ADS_REFRESH_TOKEN": {
+      "envVar": "GOOGLE_ADS_REFRESH_TOKEN",
+      "keychainService": "mythos-google-ads-refresh-token",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "Google Ads API",
+      "opField": "refresh token",
+      "description": "OAuth refresh token for the Google Ads API."
+    },
+    "GOOGLE_ADS_CUSTOMER_ID": {
+      "envVar": "GOOGLE_ADS_CUSTOMER_ID",
+      "required": false,
+      "description": "Target Google Ads customer id (no dashes). Not a secret; passed at call-time."
+    },
+    "GOOGLE_ADS_LOGIN_CUSTOMER_ID": {
+      "envVar": "GOOGLE_ADS_LOGIN_CUSTOMER_ID",
+      "required": false,
+      "description": "MCC/manager customer id (no dashes), if applicable. Not a secret."
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "subject_id": "subject-example",
+  "attributes": {},
+  "version": "1.0.0",
+  "provenance_chain": [
+    {
+      "version": "1.0.0",
+      "who": "example-author",
+      "why": "genesis: blank example record, no pre-loaded content",
+      "when": "2026-01-01T00:00:00Z"
+    }
+  ],
+  "content_hash": "c95d327560931e6a6e91576e5e578e0d8d5aac5cff800aa61fff60dde71520a9"
+}

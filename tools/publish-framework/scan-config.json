@@ -1,0 +1,6 @@
+{
+  "_comment": "Copy to scan-config.json and fill in. Any personal name or private host you list here is flagged as 'needs-human' by publish-framework, so it can never slip into a published framework. Structural secrets (API keys, op:// refs, absolute home paths) are detected automatically without this file. binary_allowlist holds globs for known-safe binary files (e.g. images) that should NOT block; anything binary and not allowlisted is BLOCKED for human review. scan-config.json is git-ignored and never exported.",
+  "personal_names": [],
+  "private_hosts": [],
+  "binary_allowlist": []
+}

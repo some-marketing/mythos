@@ -1,0 +1,30 @@
+{
+  "tool": "mcp/crm",
+  "fields": {
+    "MOXIE_API_KEY": {
+      "envVar": "MOXIE_API_KEY",
+      "keychainService": "mythos-moxie-api-key",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "mythos-moxie-api-credentials",
+      "opField": [
+        "MOXIE_API_KEY",
+        "credential"
+      ],
+      "description": "Moxie workspace API key."
+    },
+    "MOXIE_BASE_URL": {
+      "envVar": "MOXIE_BASE_URL",
+      "keychainService": "mythos-moxie-base-url",
+      "keychainAccount": "mythos",
+      "opVault": "Automation",
+      "opItem": "mythos-moxie-api-credentials",
+      "opField": [
+        "MOXIE_BASE_URL",
+        "base url",
+        "hostname"
+      ],
+      "description": "Per-workspace Moxie base URL (e.g. podNN.withmoxie.dev/api/public/)."
+    }
+  }
+}

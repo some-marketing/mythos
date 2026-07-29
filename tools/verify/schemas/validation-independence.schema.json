@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "validation-independence.schema.json",
+  "title": "Validation Independence Record",
+  "description": "Schema for recording which independence dimensions were satisfied during validation",
+  "type": "object",
+  "properties": {
+    "trust_tier": {
+      "type": "string",
+      "enum": ["instruction_only", "report_write_scoped", "patch_scoped", "external_service_touching", "meta_modifying"],
+      "description": "The trust tier of the validated work"
+    },
+    "independence_required": {
+      "type": "boolean",
+      "description": "Whether independent validation was required at this tier"
+    },
+    "dimensions_satisfied": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "dimension": {
+            "type": "string",
+            "enum": ["actor_role", "harness", "evidence_path", "evaluation_objective"]
+          },
+          "producer_value": {
+            "type": "string",
+            "description": "The producer's value for this dimension"
+          },
+          "validator_value": {
+            "type": "string",
+            "description": "The validator's value for this dimension"
+          }
+        },
+        "required": ["dimension", "producer_value", "validator_value"]
+      },
+      "description": "Independence dimensions that were genuinely different between producer and validator"
+    },
+    "anti_theater_check": {
+      "type": "boolean",
+      "description": "Confirms that the validator examined evidence artifacts directly, not just the producer's narrative"
+    }
+  },
+  "required": ["trust_tier", "independence_required"]
+}

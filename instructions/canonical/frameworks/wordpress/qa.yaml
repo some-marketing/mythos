@@ -1,0 +1,11 @@
+{
+  "id": "wordpress/qa",
+  "manifest_path": "frameworks/wordpress/qa/manifest.json",
+  "description": "Playwright-based site functionality testing with multi-environment execution",
+  "inputs": ["testcase.json", "identity.json", "locator_map.json", "EXPECTED_OUTCOMES.md"],
+  "outputs": ["runs/", "reports/", "dev_handoff/"],
+  "modes": ["FINDINGS_ONLY", "RUN_ONLY", "REVIEW_ONLY", "PATCH_ALLOWED", "COORDINATOR", "REPO_HYGIENE"],
+  "operations": ["qa:intake", "qa:parallel-run", "qa:compile-dev-bundle"],
+  "agent_profiles": ["qa agents"],
+  "guardrail_overrides": ["Playwright evidence immutability", "observational reporting strictness"]
+}

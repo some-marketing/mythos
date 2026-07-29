@@ -1,0 +1,6 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema","$id":"framework-closure-receipt.schema.json","title":"FrameworkClosureReceipt/1.0","type":"object",
+  "required":["schema","run_id","plan_sha256","state","structural_status","semantic_status","operator_acceptance","missing_nodes","authority"],
+  "properties":{"schema":{"const":"FrameworkClosureReceipt/1.0"},"run_id":{"type":"string","minLength":1},"plan_sha256":{"pattern":"^[a-f0-9]{64}$"},"state":{"enum":["blocked","failed","completed_observed","review_required"]},"structural_status":{"enum":["pass","fail","unverified"]},"semantic_status":{"enum":["not_evaluated","review_required","accepted_by_independent_reviewer"]},"operator_acceptance":{"enum":["not_evaluated","accepted","rejected"]},"missing_nodes":{"type":"array","items":{"type":"string"},"uniqueItems":true},"authority":{"const":"observational_only"}},
+  "allOf":[{"if":{"properties":{"state":{"const":"completed_observed"}}},"then":{"properties":{"semantic_status":{"not":{"const":"not_evaluated"}}}}}],"additionalProperties":false
+}

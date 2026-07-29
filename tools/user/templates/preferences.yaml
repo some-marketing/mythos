@@ -1,0 +1,35 @@
+# Mirror preferences — a small, enumerated set of structured preferences read at the
+# start of every session. Unlike identity.md and principles.md, this file has a fixed
+# schema: only the keys listed below are recognized. An unknown or malformed key is
+# skipped with a warning that names the key only, never its value — it never blocks a
+# session from starting.
+#
+# Every key is optional. Delete or leave blank anything you don't want to set.
+
+# What you'd like a session to call you.
+display_name:
+
+# Your pronouns, if you want them used.
+pronouns:
+
+# A short description of the tone you want — e.g. "direct", "casual", "formal".
+tone:
+
+# How much detail you generally want in responses — e.g. "terse", "normal", "verbose".
+verbosity:
+
+# Commands you reach for often, as a list — helps a session know what you're likely to
+# want without you having to ask for it by name every time.
+preferred_commands: []
+
+# Grimoires (frameworks) you use often, as a list of service/name pairs.
+preferred_frameworks: []
+
+# Your locale, e.g. "en-US".
+locale:
+
+# Your timezone, e.g. "America/Denver".
+timezone:
+
+# A preferred color scheme for anything that renders one — e.g. "dark", "light".
+color_scheme:

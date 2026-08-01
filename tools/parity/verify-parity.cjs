@@ -54,6 +54,12 @@ function gitTracked(root) {
   return result.stdout.split('\0').filter(Boolean).sort();
 }
 
+function isMemoryFamilyPath(relative) {
+  return String(relative).split(/[\\/]/).some(segment => (
+    /^(?:mythos-memories|sm_os-memories)$/i.test(segment)
+  ));
+}
+
 function main() {
   const args = process.argv.slice(2);
   const root = path.resolve(option(args, '--root') || path.join(__dirname, '..', '..'));
@@ -138,6 +144,7 @@ function main() {
   if (tracked) {
     for (const relative of tracked) {
       if (matches(relative, baseline.prohibited_paths || [])) findings.push(`prohibited tracked path: ${relative}`);
+      if (isMemoryFamilyPath(relative)) findings.push(`prohibited tracked memory path: ${relative}`);
     }
   }
 

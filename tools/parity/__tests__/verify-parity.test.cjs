@@ -64,7 +64,7 @@ function fixture() {
       graph_nodes: 4,
       graph_edges: 0,
     },
-    runtime_exclusions: ['parity/reconciliation-ledger.json', 'private-denylist.json'],
+    runtime_exclusions: ['.git/**', 'parity/reconciliation-ledger.json', 'private-denylist.json'],
     prohibited_paths: ['clients/**'],
     prohibited_content_regexes: ['/Users' + '/'],
     prohibited_token_hashes: [privateMarkerHash],
@@ -76,6 +76,8 @@ function fixture() {
     security_evidence_artifacts: ['parity/reconciliation-ledger.json'],
   }));
   fs.writeFileSync(path.join(root, 'parity/reconciliation-ledger.json'), '{"rows":[]}\n');
+  assert.equal(spawnSync('git', ['init', root], { encoding: 'utf8' }).status, 0);
+  assert.equal(spawnSync('git', ['-C', root, 'add', '.'], { encoding: 'utf8' }).status, 0);
   return root;
 }
 
@@ -180,4 +182,26 @@ test('wiring graph excludes linked-worktree .git control files', () => {
   const graph = JSON.parse(fs.readFileSync(path.join(root, 'parity', 'wiring-graph.json'), 'utf8'));
   assert.equal(graph.nodes.some(node => node.path === '.git'), false);
   fs.rmSync(root, { recursive: true, force: true });
+});
+
+test('fails closed when a memory-family path is force-tracked with any casing', () => {
+  const root = fixture();
+  const memoryPath = path.join(root, 'nested', 'MyThOs-MeMoRiEs', 'private.md');
+  fs.mkdirSync(path.dirname(memoryPath), { recursive: true });
+  fs.writeFileSync(memoryPath, 'private fixture\n');
+  assert.equal(spawnSync('git', ['-C', root, 'add', '-f', 'nested/MyThOs-MeMoRiEs/private.md'], { encoding: 'utf8' }).status, 0);
+  const result = run(root);
+  assert.equal(result.status, 1);
+  assert.match(result.stdout, /prohibited tracked memory path: nested\/MyThOs-MeMoRiEs\/private\.md/);
+  fs.rmSync(root, { recursive: true, force: true });
+});
+
+test('repository ignore policy protects exact canonical and legacy memory roots on case-sensitive Git', () => {
+  const repositoryRoot = path.resolve(__dirname, '..', '..', '..');
+  for (const protectedPath of ['Mythos-memories/private.md', 'sm_os-memories/private.md']) {
+    const result = spawnSync('git', ['-C', repositoryRoot, '-c', 'core.ignoreCase=false', 'check-ignore', '--no-index', '-q', '--', protectedPath]);
+    assert.equal(result.status, 0, `${protectedPath} must be ignored`);
+  }
+  const lookalike = spawnSync('git', ['-C', repositoryRoot, '-c', 'core.ignoreCase=false', 'check-ignore', '--no-index', '-q', '--', 'mythos-memories/private.md']);
+  assert.equal(lookalike.status, 1, 'lowercase lookalike must stay visible to Git and blocked by the gate');
 });

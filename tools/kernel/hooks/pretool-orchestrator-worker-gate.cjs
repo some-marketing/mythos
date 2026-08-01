@@ -66,7 +66,6 @@ const ORCHESTRATION_GLOBS = [
   /\b_dev[/\\]state[/\\]session-boundary[/\\]/,
   /\b_dev[/\\]state[/\\]orchestrator-worker-gate[/\\]/,
   /\b_dev[/\\]handoffs?[/\\]/,
-  /\bmythos-memories[/\\]/i,
   // Legacy path retained so in-flight SM_OS sessions remain writable.
   /\bsm_os-memories[/\\]/,
   /(?:^|[/\\])(?:plan|debrief|synthesis|handoff|next-session|cross-session|session-boundary|HANDOFF|DEBRIEF)[-._]/i,
@@ -173,9 +172,21 @@ const TRIVIAL_BASH_ALLOW_PATTERNS = [
 
 // -- Helpers --------------------------------------------------------------------
 
-function isOrchestrationPath(filePath) {
+function isCanonicalMemoryPath(filePath, projectDir = resolveProjectDir(), pathImpl = require('path')) {
   const fp = String(filePath || '');
-  return ORCHESTRATION_GLOBS.some((re) => re.test(fp));
+  if (!fp) return false;
+  const projectRoot = pathImpl.resolve(projectDir);
+  const candidate = pathImpl.isAbsolute(fp)
+    ? pathImpl.resolve(fp)
+    : pathImpl.resolve(projectRoot, fp);
+  const memoryRoot = pathImpl.join(projectRoot, 'Mythos-memories');
+  return candidate.startsWith(memoryRoot + pathImpl.sep);
+}
+
+function isOrchestrationPath(filePath, projectDir, pathImpl) {
+  const fp = String(filePath || '');
+  return isCanonicalMemoryPath(fp, projectDir, pathImpl)
+    || ORCHESTRATION_GLOBS.some((re) => re.test(fp));
 }
 
 function classifyBash(command) {
@@ -207,7 +218,7 @@ function classifyBash(command) {
   return 'trivial_read';
 }
 
-function classifyTool(tool, toolInput) {
+function classifyTool(tool, toolInput, projectDir, pathImpl) {
   const t = String(tool || '').toLowerCase();
   const input = toolInput && typeof toolInput === 'object' ? toolInput : {};
 
@@ -228,10 +239,10 @@ function classifyTool(tool, toolInput) {
   // Write / Edit / MultiEdit: depends on target path
   if (t === 'write' || t === 'edit' || t === 'multiedit') {
     const fp = String(input.file_path || '');
-    if (isOrchestrationPath(fp)) return 'orchestration_write';
+    if (isOrchestrationPath(fp, projectDir, pathImpl)) return 'orchestration_write';
     // MultiEdit may have edits array
     if (t === 'multiedit' && Array.isArray(input.edits)) {
-      if (input.edits.every((e) => isOrchestrationPath(e && e.file_path))) {
+      if (input.edits.every((e) => isOrchestrationPath(e && e.file_path, projectDir, pathImpl))) {
         return 'orchestration_write';
       }
     }
@@ -382,7 +393,7 @@ function _main(options, _injected) {
   const enforcing = ['1', 'true', 'yes', 'on'].includes(enforcingRaw);
 
   // -- Classify the requested tool ---------------------------------------------
-  const toolClass = classifyTool(toolToken, toolInput);
+  const toolClass = classifyTool(toolToken, toolInput, projectDir, path);
 
   // -- Delegation event: record + allow ----------------------------------------
   if (toolClass === 'delegation') {
@@ -442,6 +453,7 @@ module.exports = {
   TRIVIAL_BASH_ALLOW_PATTERNS,
   classifyBash,
   classifyTool,
+  isCanonicalMemoryPath,
   isOrchestrationPath,
   main,
 };

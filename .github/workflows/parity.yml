@@ -21,3 +21,5 @@ jobs:
       - run: npm ci
       - run: npm run verify:parity
       - run: node --test tools/parity/__tests__/verify-parity.test.cjs tools/parity/__tests__/reconciliation-ledger.test.cjs
+      - run: node tools/kernel/hooks/__tests__/pretool-orchestrator-worker-gate.test.cjs
+      - run: node tools/signals/lib/__tests__/review-task-plan-narrative.test.cjs

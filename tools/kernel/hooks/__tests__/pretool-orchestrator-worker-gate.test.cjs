@@ -314,6 +314,26 @@ check('Edit to Mythos-memories/ -> orchestration_write -> allow', () => {
   assert.strictEqual(result.class, 'orchestration_write');
 });
 
+check('absolute Edit to root Mythos-memories/ -> orchestration_write -> allow', () => {
+  const sb = makeSandbox();
+  const result = runGate(sb, 'Edit', { file_path: path.join(sb.root, 'Mythos-memories', 'memory', 'MEMORY.md') }, { enforcing: true });
+  assert.strictEqual(result.status, 0);
+  assert.strictEqual(result.class, 'orchestration_write');
+});
+
+for (const unsafePath of [
+  'mythos-memories/memory/MEMORY.md',
+  'MYTHOS-MEMORIES/memory/MEMORY.md',
+  'clients/example/Mythos-memories/memory/MEMORY.md',
+]) {
+  check(`Edit to non-canonical memory lookalike ${unsafePath} -> blocked`, () => {
+    const sb = makeSandbox();
+    const result = runGate(sb, 'Edit', { file_path: unsafePath }, { enforcing: true });
+    assert.strictEqual(result.status, 2);
+    assert.strictEqual(result.class, 'mutation');
+  });
+}
+
 // Agent / Task -> delegation -> always allowed
 check('Agent tool -> delegation -> allow', () => {
   const sb = makeSandbox();
@@ -533,6 +553,14 @@ check('_dev/handoffs/handoff.md -> orchestration', () => {
 
 check('Mythos-memories/memory/MEMORY.md -> orchestration', () => {
   assert.ok(gate.isOrchestrationPath('Mythos-memories/memory/MEMORY.md'));
+});
+
+check('canonical memory classification is root-bound and case-sensitive', () => {
+  const projectRoot = path.join(path.sep, 'tmp', 'mythos-project');
+  assert.ok(gate.isOrchestrationPath('Mythos-memories/memory/MEMORY.md', projectRoot, path));
+  assert.ok(gate.isOrchestrationPath(path.join(projectRoot, 'Mythos-memories', 'memory', 'MEMORY.md'), projectRoot, path));
+  assert.ok(!gate.isOrchestrationPath('mythos-memories/memory/MEMORY.md', projectRoot, path));
+  assert.ok(!gate.isOrchestrationPath('clients/example/Mythos-memories/memory/MEMORY.md', projectRoot, path));
 });
 
 check('src/feature.ts -> NOT orchestration', () => {

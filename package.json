@@ -114,7 +114,7 @@
     "workspace:harness": "node tools/workspace/generate-harness.js --all",
     "workspace:harness:dry-run": "node tools/workspace/generate-harness.js --all --dry-run",
     "workspace:harness:framework": "node tools/workspace/generate-harness.js --framework",
-    "test": "npm run verify:all && npm run verify:parity && node --test tools/parity/__tests__/verify-parity.test.cjs tools/parity/__tests__/reconciliation-ledger.test.cjs",
+    "test": "npm run verify:all && npm run verify:parity && node --test tools/parity/__tests__/verify-parity.test.cjs tools/parity/__tests__/reconciliation-ledger.test.cjs && node tools/kernel/hooks/__tests__/pretool-orchestrator-worker-gate.test.cjs && node tools/signals/lib/__tests__/review-task-plan-narrative.test.cjs",
     "verify:agent": "node tools/verify/verify-agent.cjs",
     "verify:agent:all": "node tools/verify/verify-agent.cjs --all",
     "verify:command": "node tools/verify/verify-command.cjs",

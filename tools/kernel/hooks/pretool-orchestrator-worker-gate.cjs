@@ -29,6 +29,10 @@
 //
 // FAIL-OPEN: any exception, malformed stdin, unknown tool, or missing state ->
 //   allow (exit 0). A broken gate can never brick a session.
+//   Privileged memory-path classification is intentionally narrower: an
+//   existing symlink or ambiguous filesystem component is classified as an
+//   ordinary mutation. This protects the repository/export membrane while
+//   leaving the outer hook's unexpected-exception behavior fail-open.
 //
 // SUBAGENT EXEMPTION: if CLAUDE_SUBAGENT_ID is set -> always allow.
 //   Workers are supposed to do the work.
@@ -185,8 +189,9 @@ function hasSymlinkComponent(rootPath, candidatePath, pathImpl, fsImpl) {
     try {
       if (fsImpl.lstatSync(component).isSymbolicLink()) return true;
     } catch (err) {
-      // A missing component cannot currently redirect the write. Any other
-      // filesystem ambiguity fails closed for this privileged classification.
+      // A missing component cannot currently redirect this synchronous check.
+      // Any other ambiguity fails closed for privileged classification. The
+      // eventual tool write is separate, so this is not an atomic TOCTOU guard.
       if (err && err.code === 'ENOENT') return false;
       return true;
     }

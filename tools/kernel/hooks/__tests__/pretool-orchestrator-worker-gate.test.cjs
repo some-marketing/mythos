@@ -592,6 +592,29 @@ check('canonical memory classification rejects symlink components', () => {
   );
 });
 
+check('canonical memory classification rejects a symlinked memory root', () => {
+  const sb = makeSandbox();
+  fs.mkdirSync(path.join(sb.root, 'tracked'), { recursive: true });
+  fs.symlinkSync(path.join(sb.root, 'tracked'), path.join(sb.root, 'Mythos-memories'), 'dir');
+  assert.strictEqual(
+    gate.isCanonicalMemoryPath('Mythos-memories/output.md', sb.root, path, fs),
+    false
+  );
+});
+
+check('canonical memory classification rejects a symlinked target file', () => {
+  const sb = makeSandbox();
+  const memoryRoot = path.join(sb.root, 'Mythos-memories');
+  const trackedFile = path.join(sb.root, 'tracked.md');
+  fs.mkdirSync(memoryRoot, { recursive: true });
+  fs.writeFileSync(trackedFile, 'tracked');
+  fs.symlinkSync(trackedFile, path.join(memoryRoot, 'output.md'), 'file');
+  assert.strictEqual(
+    gate.isCanonicalMemoryPath('Mythos-memories/output.md', sb.root, path, fs),
+    false
+  );
+});
+
 check('src/feature.ts -> NOT orchestration', () => {
   assert.ok(!gate.isOrchestrationPath('src/feature.ts'));
 });

@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "107352986ab61a9929e92f2ffd5fa5b98253ad5fa2217370a17f3fbe8b9d4f32",
+    "expected_tree_sha256": "99decfaf339f337cd768846c354d2939227265baa0f2f35a988aba9338dc25f0",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -6037,7 +6037,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "05cbffb6314037eca811fe3a4f2e3eb9d289f3003de8bef24bc3e53a5d8c620c",
+        "sha256": "f1b3dff2d311cb85310e5f010511e5e806a9b70d39c497098baa400791dab9ac",
         "mode": 420
       },
       {
@@ -8772,7 +8772,7 @@
       },
       {
         "path": "tools/kernel/hooks/__tests__/pretool-orchestrator-worker-gate.test.cjs",
-        "sha256": "df7f50c9b7e173f452c8b91e06a00d4efb38c95faa441209198e13ebd8bd5581",
+        "sha256": "5d12cdb644564562fe760fe1bb320f083cf381008d5937d7d722f01b5d918592",
         "mode": 420
       },
       {
@@ -8907,7 +8907,7 @@
       },
       {
         "path": "tools/kernel/hooks/pretool-orchestrator-worker-gate.cjs",
-        "sha256": "3e1687fe91825e61268f04c4196c126a43e99b635cd1fd027000e1e9e92ba42a",
+        "sha256": "9bea04b54a11d357b8ecbd0dded0532babf9f18c5ea9065958274185627bcc2d",
         "mode": 420
       },
       {
@@ -13439,7 +13439,7 @@
     "package_script_count": 203,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "05cbffb6314037eca811fe3a4f2e3eb9d289f3003de8bef24bc3e53a5d8c620c",
+    "graph_sha256": "f1b3dff2d311cb85310e5f010511e5e806a9b70d39c497098baa400791dab9ac",
     "graph_nodes": 3748,
     "graph_edges": 2672
   },

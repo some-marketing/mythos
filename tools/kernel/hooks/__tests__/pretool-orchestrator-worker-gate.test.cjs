@@ -355,6 +355,23 @@ check('generic handoff filename cannot re-allow a rejected memory symlink', () =
   assert.strictEqual(result.class, 'mutation');
 });
 
+check('Edit through a hard-linked memory target -> blocked', () => {
+  const sb = makeSandbox();
+  const memoryRoot = path.join(sb.root, 'Mythos-memories');
+  const trackedTarget = path.join(sb.root, 'tracked.md');
+  fs.mkdirSync(memoryRoot, { recursive: true });
+  fs.writeFileSync(trackedTarget, 'tracked');
+  fs.linkSync(trackedTarget, path.join(memoryRoot, 'memory.md'));
+  const result = runGate(
+    sb,
+    'Edit',
+    { file_path: 'Mythos-memories/memory.md' },
+    { enforcing: true }
+  );
+  assert.strictEqual(result.status, 2, 'hard-linked target must be blocked');
+  assert.strictEqual(result.class, 'mutation');
+});
+
 for (const unsafePath of [
   'mythos-memories/memory/MEMORY.md',
   'MYTHOS-MEMORIES/memory/MEMORY.md',

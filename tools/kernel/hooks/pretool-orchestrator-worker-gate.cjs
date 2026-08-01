@@ -30,9 +30,10 @@
 // FAIL-OPEN: any exception, malformed stdin, unknown tool, or missing state ->
 //   allow (exit 0). A broken gate can never brick a session.
 //   Privileged memory-path classification is intentionally narrower: an
-//   existing symlink or ambiguous filesystem component is classified as an
-//   ordinary mutation. This protects the repository/export membrane while
-//   leaving the outer hook's unexpected-exception behavior fail-open.
+//   existing symlink, multiply linked regular file, or ambiguous filesystem
+//   component is classified as an ordinary mutation. This protects the
+//   repository/export membrane while leaving the outer hook's unexpected-
+//   exception behavior fail-open.
 //
 // SUBAGENT EXEMPTION: if CLAUDE_SUBAGENT_ID is set -> always allow.
 //   Workers are supposed to do the work.
@@ -176,7 +177,7 @@ const TRIVIAL_BASH_ALLOW_PATTERNS = [
 
 // -- Helpers --------------------------------------------------------------------
 
-function hasSymlinkComponent(rootPath, candidatePath, pathImpl, fsImpl) {
+function hasUnsafeLinkComponent(rootPath, candidatePath, pathImpl, fsImpl) {
   const relative = pathImpl.relative(rootPath, candidatePath);
   const components = [rootPath];
   let current = rootPath;
@@ -187,7 +188,12 @@ function hasSymlinkComponent(rootPath, candidatePath, pathImpl, fsImpl) {
 
   for (const component of components) {
     try {
-      if (fsImpl.lstatSync(component).isSymbolicLink()) return true;
+      const stat = fsImpl.lstatSync(component);
+      if (stat.isSymbolicLink()) return true;
+      // A regular file with multiple directory entries may be a hard link to
+      // a tracked file. Editing either name mutates the shared inode, so such
+      // a target cannot receive privileged memory-write classification.
+      if (stat.isFile() && stat.nlink > 1) return true;
     } catch (err) {
       // A missing component cannot currently redirect this synchronous check.
       // Any other ambiguity fails closed for privileged classification. The
@@ -229,7 +235,7 @@ function isCanonicalMemoryPath(
   return Boolean(
     resolved
     && resolved.candidate.startsWith(resolved.memoryRoot + pathImpl.sep)
-    && !hasSymlinkComponent(resolved.memoryRoot, resolved.candidate, pathImpl, fsImpl)
+    && !hasUnsafeLinkComponent(resolved.memoryRoot, resolved.candidate, pathImpl, fsImpl)
   );
 }
 

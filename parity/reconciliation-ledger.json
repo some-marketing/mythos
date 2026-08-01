@@ -3,7 +3,7 @@
   "source_commit": "81fba121535d2ed74f2878efa4fec364eed9d7b9",
   "source_export_commit": "81fba121535d2ed74f2878efa4fec364eed9d7b9",
   "target_base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-  "target_current_commit": "905e6e517779902aec59a9cacd385bb4b6d27778",
+  "target_current_commit": "1cbf597623ae066d74442936b50fdd639c4702bd",
   "operator_ratification": "approved",
   "semantic_mapping": {
     "commands": {
@@ -73,7 +73,7 @@
     },
     "target_current": {
       "files": 2671,
-      "digest": "f95502031ae59ff8f7b4d7dd72a5a31eb414360455a890bdc67beefa96d1ecaf",
+      "digest": "c491ba2017786d778ea1d002e1a873244d93577c92ee0bde9a22a61dcde02bcd",
       "path_keys_sha256": "f6339e8ba76de8e782f98019781fb61c7770906f918a297580e0bf4fcb8df11c"
     }
   },
@@ -3495,15 +3495,17 @@
       "disposition": "export-identical"
     },
     {
-      "row_id": "0d262911fad6af494261adfcefbc43d0281dc89c7eb51e07d9af95825dbb43c0",
+      "row_id": "23fa4e1c23a1065c9fd83838c820254992709713ba2f8ea960c4f2cdd05f9d57",
       "coverage_key": "5648322b9e24fc6ddb2a5a039cdc1b863e3bb25f4c5863cb9d57455d44793457",
       "row_kind": "source-export",
       "path": ".github/workflows/parity.yml",
       "source_export_sha256": "ba94d68564139cb2d1fbd7c45cfe0fac08e596f98c8aa73d966ace2fa77c135e",
       "source_export_mode": 420,
-      "target_current_sha256": "ba94d68564139cb2d1fbd7c45cfe0fac08e596f98c8aa73d966ace2fa77c135e",
+      "target_current_sha256": "8b0c4104697a0903e28088524a822dcd982275798e1aab94b8f831936b19b01a",
       "target_current_mode": 420,
-      "disposition": "export-identical"
+      "disposition": "target-owned",
+      "behavior_equivalence_evidence": "p4-parity",
+      "overlay_authority": "target-ci-and-ignore-policy"
     },
     {
       "row_id": "16f25f9038c6d658a3563590f37638c7076a91b2fd2eaf45cc80ee860b0f473d",
@@ -14980,7 +14982,7 @@
       "disposition": "export-identical"
     },
     {
-      "row_id": "0c2127536cedd77ad1950de8271b7917f9669011d3deba92ffa02acc520484bb",
+      "row_id": "a41d602d52382356b415d1d7277d99ad0fc7db200a4a7e17fcf298968fabbacf",
       "coverage_key": "7ae45ad102eab3b6d7e7896acd08c427a9b25b346470d7bc6507b6481575d519",
       "row_kind": "source-export",
       "path": "package.json",
@@ -14988,20 +14990,22 @@
       "source_export_mode": 420,
       "target_base_sha256": "d05e79e7262c95e48f69faf8260ec9fa425181932bffc0101ffb41fa43e23004",
       "target_base_mode": 420,
-      "target_current_sha256": "8ebb0ad0a6a4dbac01b628c2a8cac631f5a383d426e64571c9320fe970a622ce",
+      "target_current_sha256": "aba48eeac50ef1a8871b586b96f6c4a22c2a105296ab642aa6c6c975120ad69a",
       "target_current_mode": 420,
-      "disposition": "export-identical"
+      "disposition": "merge-upstream",
+      "behavior_equivalence_evidence": "p4-parity"
     },
     {
-      "row_id": "17c72da3d1f2c1effcbdb11509b3e1ff7fed68c1531ac3ec6e40fc5fb809f973",
+      "row_id": "91e56837cc51907432380e2fcf26467f19b0eedeb329010163d690c496a2dc36",
       "coverage_key": "b1738a509c85869810254c484b6bd6036e8b2a9ca13afea8feabc213bfbbacb4",
       "row_kind": "source-export",
       "path": "parity/README.md",
       "source_export_sha256": "40aafa2929786548ab629fd55dd7a345a5868065f71220b1c95290412abde36b",
       "source_export_mode": 420,
-      "target_current_sha256": "40aafa2929786548ab629fd55dd7a345a5868065f71220b1c95290412abde36b",
+      "target_current_sha256": "a58821cea4fcb571e47b914ca9c1dc11fc9ea322c9a3f5ba6c3632c949f1abf1",
       "target_current_mode": 420,
-      "disposition": "export-identical"
+      "disposition": "merge-upstream",
+      "behavior_equivalence_evidence": "p4-parity"
     },
     {
       "row_id": "2fdf63d95a7ab14ed445dda30768ebc544a9bd812692d684303f61bd7fe95068",
@@ -15054,7 +15058,7 @@
       "path": "parity/wiring-graph.json",
       "source_export_sha256": "0f39d8e006aa4edaa5986bf9a15ec8591575139cba2a138a4f27bd13e41206b5",
       "source_export_mode": 420,
-      "target_current_sha256": "d7ba92c81505b288a73cb38e65e8990d9907415c611f0c85b5f6bef99f6294e1",
+      "target_current_sha256": "1aec6cc66b3cc60357ab5f853e6dfafddc11b39e7c98b3efdb17cb7d4c38995b",
       "target_current_mode": 420,
       "disposition": "export-adapted",
       "behavior_equivalence_evidence": "p4-parity",

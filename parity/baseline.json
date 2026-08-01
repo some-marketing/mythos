@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "6475ec2d127fec90c7853cc502f5234546e11940c6cecc697c16ef0fb849f17c",
+    "expected_tree_sha256": "93bd3335ca2a4b583f6f5b45732b9710f8c7f0e23848d97e65215faf8faf379c",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -1482,7 +1482,7 @@
       },
       {
         "path": ".github/workflows/parity.yml",
-        "sha256": "ba94d68564139cb2d1fbd7c45cfe0fac08e596f98c8aa73d966ace2fa77c135e",
+        "sha256": "8b0c4104697a0903e28088524a822dcd982275798e1aab94b8f831936b19b01a",
         "mode": 420
       },
       {
@@ -6007,12 +6007,12 @@
       },
       {
         "path": "package.json",
-        "sha256": "8ebb0ad0a6a4dbac01b628c2a8cac631f5a383d426e64571c9320fe970a622ce",
+        "sha256": "aba48eeac50ef1a8871b586b96f6c4a22c2a105296ab642aa6c6c975120ad69a",
         "mode": 420
       },
       {
         "path": "parity/README.md",
-        "sha256": "40aafa2929786548ab629fd55dd7a345a5868065f71220b1c95290412abde36b",
+        "sha256": "a58821cea4fcb571e47b914ca9c1dc11fc9ea322c9a3f5ba6c3632c949f1abf1",
         "mode": 420
       },
       {
@@ -6037,7 +6037,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "d7ba92c81505b288a73cb38e65e8990d9907415c611f0c85b5f6bef99f6294e1",
+        "sha256": "1aec6cc66b3cc60357ab5f853e6dfafddc11b39e7c98b3efdb17cb7d4c38995b",
         "mode": 420
       },
       {
@@ -13434,9 +13434,9 @@
     "package_script_count": 203,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "d7ba92c81505b288a73cb38e65e8990d9907415c611f0c85b5f6bef99f6294e1",
+    "graph_sha256": "1aec6cc66b3cc60357ab5f853e6dfafddc11b39e7c98b3efdb17cb7d4c38995b",
     "graph_nodes": 3747,
-    "graph_edges": 2669
+    "graph_edges": 2668
   },
   "runtime_exclusions": [
     ".git/**",

@@ -1,0 +1,23 @@
+{
+  "id": "ingest-walkthrough",
+  "description": "Convert a screen-recording walkthrough into a numbered procedure + Playwright skeleton",
+  "mode": "REVIEW_ONLY",
+  "objective": "Run tools/walkthrough-ingest/ingest.js against a screen recording to produce a structured procedure, inputs/outputs summary, and Playwright automation skeleton.",
+  "process": [
+    "Resolve arguments: accept a literal path, glob, or 'latest' (most recent recording in ~/Documents/Screenshots).",
+    "Stage the file via find/cp if direct access is restricted.",
+    "Extract frames via ffmpeg (default 1 fps).",
+    "Dispatch staged video to Gemini for analysis (paragraph summary, numbered procedure with timestamps, inputs/outputs, Playwright skeleton).",
+    "Write artifacts to _dev/reports/analysis/walkthrough__<slug>__<date>.{md,json}."
+  ],
+  "success_criteria": [
+    "Markdown artifact path is surfaced",
+    "Frame directory in /tmp is named for follow-up questions",
+    "Recommended next move (build script, file task, attach to plan) is provided"
+  ],
+  "boundaries": [
+    "REVIEW_ONLY — does not execute the produced procedure",
+    "Does not write to external surfaces (Dart, Slack)",
+    "Fall back to manual frame inspection if Gemini CLI is unavailable"
+  ]
+}

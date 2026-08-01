@@ -106,8 +106,8 @@ check('cat .env → env-file-read block', () => {
   assertBlockMessage(bash('cat .env'), 'env-file-read', '.env');
 });
 
-check('cat /Users/admin/dev/app/.env.local → env-file-read block', () => {
-  assertBlockMessage(bash('cat /Users/admin/dev/app/.env.local'), 'env-file-read', '.env.local');
+check('cat ${HOME}/dev/app/.env.local → env-file-read block', () => {
+  assertBlockMessage(bash('cat ${HOME}/dev/app/.env.local'), 'env-file-read', '.env.local');
 });
 
 check('grep API_KEY .env → env-file-read block', () => {
@@ -194,7 +194,7 @@ check('Write tool targeting .env → env-file-write block', () => {
 });
 
 check('Write tool targeting nested /app/.env.staging → block', () => {
-  assertBlockMessage(run('write', { file_path: '/Users/admin/dev/app/.env.staging', content: 'X' }), 'env-file-write', '.env.staging');
+  assertBlockMessage(run('write', { file_path: '${HOME}/dev/app/.env.staging', content: 'X' }), 'env-file-write', '.env.staging');
 });
 
 check('Edit tool targeting .env.local → env-file-write block', () => {

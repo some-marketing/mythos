@@ -140,7 +140,7 @@ function looksLikeBundleReference(ref) {
   if (trimmed.startsWith('../') || trimmed.startsWith('./')) return true;
 
   const literalRefs = new Set([
-    'For_{DEVELOPER_NAME}.md',
+    'For_Recipient.md',
     'QUESTIONS_FOR_DEVELOPER.md',
     'INDEX.md',
     'INDEX.json',
@@ -227,7 +227,7 @@ function check(category, name, result, detail) {
 // Category 1: STRUCTURAL
 // ---------------------------------------------------------------------------
 const STRUCTURAL_FILES_FAIL = [
-  'For_{DEVELOPER_NAME}.md',
+  'For_Recipient.md',
   'QUESTIONS_FOR_DEVELOPER.md',
   'INDEX.md',
   'INDEX.json',
@@ -586,8 +586,8 @@ function validateManagedMarkers(text, fileName) {
 }
 
 // Run marker validation on key files
-const forAllenTextForMarkers = readTextSafe(path.join(bundleDir, 'For_{DEVELOPER_NAME}.md'));
-validateManagedMarkers(forAllenTextForMarkers, 'For_{DEVELOPER_NAME}.md');
+const forAllenTextForMarkers = readTextSafe(path.join(bundleDir, 'For_Recipient.md'));
+validateManagedMarkers(forAllenTextForMarkers, 'For_Recipient.md');
 
 const questionsTextForMarkers = readTextSafe(path.join(bundleDir, 'QUESTIONS_FOR_DEVELOPER.md'));
 validateManagedMarkers(questionsTextForMarkers, 'QUESTIONS_FOR_DEVELOPER.md');
@@ -597,13 +597,13 @@ validateManagedMarkers(questionsTextForMarkers, 'QUESTIONS_FOR_DEVELOPER.md');
 // ---------------------------------------------------------------------------
 
 // <!-- LLM: markers
-const forAllenText = readTextSafe(path.join(bundleDir, 'For_{DEVELOPER_NAME}.md'));
+const forAllenText = readTextSafe(path.join(bundleDir, 'For_Recipient.md'));
 if (forAllenText !== null) {
   const hasMarkers = /<!--\s*LLM:/i.test(forAllenText);
   const level = hasMarkers ? (isV2 ? 'WARN' : 'FAIL') : 'PASS';
-  check('CONTENT_COMPLETENESS', 'For_{DEVELOPER_NAME}.md has no <!-- LLM: markers', level,
+  check('CONTENT_COMPLETENESS', 'For_Recipient.md has no <!-- LLM: markers', level,
     hasMarkers ? 'Contains unfilled LLM placeholder markers' : undefined);
-  validateDocReferences('For_{DEVELOPER_NAME}.md', forAllenText);
+  validateDocReferences('For_Recipient.md', forAllenText);
 }
 
 const questionsText = readTextSafe(path.join(bundleDir, 'QUESTIONS_FOR_DEVELOPER.md'));

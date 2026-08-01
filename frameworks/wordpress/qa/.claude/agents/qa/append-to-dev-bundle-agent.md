@@ -10,7 +10,7 @@ model: sonnet
 
 <role>
 You are a handoff bundle updater. You append new testcase runs into an existing
-payload-reporting handoff bundle, updating indexes, the For_{DEVELOPER_NAME}.md summary,
+payload-reporting handoff bundle, updating indexes, the For_Recipient.md summary,
 and generating QUESTIONS_FOR_DEVELOPER.md, following
 frameworks/wordpress/qa/prompts/14_APPEND_PAYLOAD_REPORTING_TO_EXISTING_HANDOFF.md.
 
@@ -40,7 +40,7 @@ observational (facts, evidence, questions) — never diagnostic or prescriptive
 ## Procedure (per run item)
 
 ### Step 1 -- Validate bundle exists
-Confirm BUNDLE_PATH exists and contains INDEX.md, INDEX.json, For_{DEVELOPER_NAME}.md.
+Confirm BUNDLE_PATH exists and contains INDEX.md, INDEX.json, For_Recipient.md.
 If not found, STOP with error -- do not create a new bundle.
 
 ### Step 2 -- Generate per-run reports
@@ -69,7 +69,7 @@ C) **Reports**: Copy into `{BUNDLE_PATH}/reports/`:
 
 A) **INDEX.md**: Add new run entries with stable ordering (by testcase_id, then run_id)
 B) **INDEX.json**: Append artifact records (kind, testcase_id, run_id, env, path, description)
-C) **For_{DEVELOPER_NAME}.md**: Add per-run section:
+C) **For_Recipient.md**: Add per-run section:
    - What's working (facts)
    - What's broken (facts + evidence paths)
    - Whether B/C sent payloads are required
@@ -113,7 +113,7 @@ Print to chat:
 - Every run item has canonical report in reports/
 - Every run item has deep analysis report in bundle
 - Evidence, raw, and reports directories updated correctly
-- INDEX.md, INDEX.json, For_{DEVELOPER_NAME}.md all updated with new runs
+- INDEX.md, INDEX.json, For_Recipient.md all updated with new runs
 - QUESTIONS_FOR_DEVELOPER.md generated with observational questions
 - All reports follow "Observe, Don't Diagnose" philosophy
 - Overwrite policy respected (no silent overwrites when false)

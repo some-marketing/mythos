@@ -129,7 +129,7 @@ Bundle (new):
   - llm/prompts/16_CHANGELOG_CAPTURE_FROM_DEV.md, llm/prompts/13_...md — prompt copies
   - AGENTS.md, CLAUDE.md, .cursorrules, LLM_MANIFEST.json — bundle-root copies
   - INDEX.md, INDEX.json — artifact indexes
-  - For_{DEVELOPER_NAME}.md — lean observational summary
+  - For_Recipient.md — lean observational summary
   - QUESTIONS_FOR_DEVELOPER.md — structured developer interview
   - reports/ — canonical payload reports + deep analysis reports
   - raw/ — verbatim inputs (payloads, exports, changelog, derived key lists, stakeholder_answers.md)
@@ -209,13 +209,13 @@ Confirm all paths. Ask: "Proceed with analysis?"
 
 2. Record changelog_status:
    - PRESENT: Changelog file found and valid → include in bundle at `raw/dev_changelog.md`
-   - ABSENT: No LATEST.txt or referenced file missing → note in For_{DEVELOPER_NAME}.md
+   - ABSENT: No LATEST.txt or referenced file missing → note in For_Recipient.md
 
 3. **Do NOT prompt user for changelog content here.**
    - Changelog creation is the responsibility of `/framework:changelog-capture` (run during parallel-run post-fix)
    - This skill only LOOKS UP existing changelogs, never creates them
 
-4. If changelog is ABSENT, add to For_{DEVELOPER_NAME}.md:
+4. If changelog is ABSENT, add to For_Recipient.md:
    ```
    **Changelog Status:** Not available at bundle creation time.
    If fixes were made, run `/framework:changelog-capture` to document changes.
@@ -353,7 +353,7 @@ RESPONSE OPTIONS:
 **Fallback (user explicitly invokes skip):**
 Only if user explicitly says "skip", "can't answer", or "proceed without":
 - Create stakeholder_answers.md with all items as UNKNOWN
-- Note in For_{DEVELOPER_NAME}.md: "Stakeholder gate skipped — all questions marked UNKNOWN"
+- Note in For_Recipient.md: "Stakeholder gate skipped — all questions marked UNKNOWN"
 - Proceed to Step 8
 </step>
 
@@ -366,7 +366,7 @@ Assemble (see Outputs for full list):
 0b. Bundle-root copies (AGENTS.md, CLAUDE.md, .cursorrules, LLM_MANIFEST.json)
 1. INDEX.md — per-run summary with key report/file links
 2. INDEX.json — stable-order artifact records
-3. For_{DEVELOPER_NAME}.md — lean observational summary, top "Open first" bullets
+3. For_Recipient.md — lean observational summary, top "Open first" bullets
 4. QUESTIONS_FOR_DEVELOPER.md — structured developer interview template
 5. reports/ — canonical payload reports + deep analysis reports
 6. raw/ — verbatim inputs (payloads, exports, changelog, stakeholder_answers.md)
@@ -374,7 +374,7 @@ Assemble (see Outputs for full list):
 </step>
 
 <step number="9" name="Finalize" type="AUTO">
-Ensure INDEX.md, INDEX.json, For_{DEVELOPER_NAME}.md summarize ALL included runs with stable ordering.
+Ensure INDEX.md, INDEX.json, For_Recipient.md summarize ALL included runs with stable ordering.
 Verify all evidence paths are valid. Print bundle path and summary.
 </step>
 
@@ -464,7 +464,7 @@ anomaly detection benefit from opus-level reasoning.
 | Stakeholder unavailable for gate | Use § F fallback: mark discrepancies UNKNOWN, list as questions |
 | Runset has no B/C envs | Note in report; analyze A only; flag if CRM has B/C rows |
 | Multiple CRM rows match single email | Pick by closest timestamp; document selection criteria |
-| Changelog not available and codebase changed | Note in For_{DEVELOPER_NAME}.md; bundle harness instructs dev to generate post-fix |
+| Changelog not available and codebase changed | Note in For_Recipient.md; bundle harness instructs dev to generate post-fix |
 | Report contains prescriptive content | MUST REWRITE: replace "Root Cause" → "Observation" + "HYPOTHESIS", replace "Recommendations" → "Open Questions", remove code/solutions/priorities |
 </failure_modes>
 

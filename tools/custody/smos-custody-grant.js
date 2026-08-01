@@ -8,7 +8,7 @@ const fs = require('fs');
 const pathMod = require('path');
 const crypto = require('crypto');
 
-const REPO_ROOT = process.env.CLAUDE_PROJECT_DIR || '/Users/admin/dev/Mythos-recovered';
+const REPO_ROOT = process.env.CLAUDE_PROJECT_DIR || '{MYTHOS_ROOT}';
 const GRANTS_DIR = pathMod.join(REPO_ROOT, '_dev', 'state', 'git-custody-gate', 'grants');
 
 function grantHash(repoRelPath, toSession) {

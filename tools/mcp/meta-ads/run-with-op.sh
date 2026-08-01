@@ -8,7 +8,7 @@
 #   tools/mcp/meta-ads/run-with-op.sh node tools/mcp/meta-ads/preflight.js
 #
 # Item/vault/field selection (env-overridable; current SM defaults preserved):
-#   METAOP_ITEM         1Password item name. Default: "example-meta-ads API Credential" (Automation vault; Employee-vault mythos-meta-ads-mcp token went stale 2026-07-15).
+#   METAOP_ITEM         1Password item name. Default: "example-meta-ads API Credential" (Automation vault; {VAULT}-vault mythos-meta-ads-mcp token went stale 2026-07-15).
 #   METAOP_VAULT        1Password vault name. Default: Automation.
 #   METAOP_FIELD_TOKEN  Field on the item containing the access token.
 #                        Default: META_ACCESS_TOKEN.
@@ -18,7 +18,7 @@
 #                        Optional field overrides; defaults match the env-var name.
 #
 # For Example Group's BM lane (patron-alpha, patron-beta, patron-gamma — all under one Meta App):
-#   METAOP_ITEM="example-meta-ads API Credential" METAOP_VAULT="Employee" \
+#   METAOP_ITEM="example-meta-ads API Credential" METAOP_VAULT="{VAULT}" \
 #   METAOP_FIELD_TOKEN="credential" \
 #     tools/mcp/meta-ads/run-with-op.sh node tools/mcp/meta-ads/preflight.js
 #   Ad account ID is supplied per-call from clients/<CLIENT>/projects/meta-app-integration/project.json,

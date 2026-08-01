@@ -20,3 +20,11 @@
     - **non_goals**: Unrelated framework changes or scope expansion
     - **validation_results**: Output of `npm run instructions:validate` and the re-audit from step 9 (full stdout/stderr, not just pass/fail)
 11. **[GATE: blockers found] Reopen** — If the completion audit returns blocker-level findings, fix only the specific unmet items and re-run (maximum 2 reopen cycles). If blockers persist, escalate to user.
+
+## Post-Workflow Hooks
+
+12. **[AUTO] Run lifecycle hooks** — Execute the `post-improve` hook chain:
+    ```
+    npm run lifecycle:hooks -- --profile post-improve --framework-id <service/framework>
+    ```
+    This runs deterministic tail work: manifest sync, validation, framework verification, system verification, and next-actions artifact generation. If any hook fails, report the failure and stop. Do not silently skip hook failures.

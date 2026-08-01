@@ -38,7 +38,7 @@ Desired outcome:
 - lessons reconciliation is treated as an operational loop, not a reminder
 - meta-framework validation is advanced from plan to evidence where feasible
 - autonomy/maturity work is left in an explicit truthful state
-- any distinct-family-reviewer-dependent feedback loop is reported and managed truthfully
+- any Codex-dependent feedback loop is reported and managed truthfully
 - the sequence ends with one standard closeout bundle
 - the next command after the pass is concrete and durable
 
@@ -110,7 +110,7 @@ Read these files first:
 - `_dev/LESSONS_RECONCILIATION_LOOP_IMPLEMENTATION_PLAN.md`
 - `_dev/COMMAND_ADHERENCE_AND_VALIDATION_HARDENING_IMPLEMENTATION_PLAN.md`
 - `frameworks/meta/execution-normalization/manifest.json`
-- your project's distinct-family-reviewer bridge helper, if one exists
+- `tools/signals/lib/codex-bridge.js`
 - `tools/autonomy/complete-task.cjs`
 
 Goal:
@@ -126,12 +126,12 @@ Required execution pattern:
    - one for planning/signal truth inventory
    - one for lessons/meta-framework/autonomy inventory
 4. Synthesize findings in the main thread.
-5. Keep the main thread thin: it frames the slice, issues bounded instructions, performs extra checks, and synthesizes what to communicate to the user and to the distinct-family reviewer.
+5. Keep the main thread thin: it frames the slice, issues bounded instructions, performs extra checks, and synthesizes what to communicate to the user and to Codex.
 6. Implement exactly one bounded first slice through bounded workers or subagents with declared ownership.
 7. Validate that slice with an independent read-only validator, not with the same worker that made the change.
-8. If the first slice requires distinct-family review or cross-actor feedback, dispatch the review to your distinct-family reviewer and record the handoff note under `_dev/reports/signals/` before claiming auto-run active.
+8. If the first slice requires Codex review or cross-actor feedback, publish the live signal, generate the Codex bridge prompt with `npm run signals:codex-bridge`, and start the managed 5-minute listener with `npm run signals:watch:codex:start` before claiming auto-run active.
 9. If the first slice stabilizes the repo state, continue to the next bounded slice.
-10. Before lessons reconciliation or final closeout, close out the distinct-family reviewer handoff unless another still-live reviewer-targeted scope explicitly requires it.
+10. Before lessons reconciliation or final closeout, stop the managed Codex listener with `npm run signals:watch:codex:stop` unless another still-live Codex-targeted scope explicitly requires it.
 11. Launch one read-only completion-auditor-style subagent before closeout.
 
 Acceptance criteria:
@@ -139,7 +139,7 @@ Acceptance criteria:
 2. Live signals and planning artifacts agree on the current active or completed queues.
 3. Lessons reconciliation has an explicit trigger and durable output expectation.
 4. The meta-framework/autonomy surfaces are either advanced with evidence or explicitly left blocked with concrete prerequisites.
-5. Any distinct-family reviewer feedback loop is left in a truthful state: handoff prepared, auto-run active, or feedback received.
+5. Any Codex feedback loop is left in a truthful state: handoff prepared, auto-run active, or feedback received.
 6. Rolling lessons capture happened during work (session-learnings artifact updated).
 7. Debrief artifacts (improve-plan, replicate-plan) exist before ready_for_clear.
 8. The final report names the exact next command.
@@ -150,15 +150,15 @@ Constraints:
 - do not let the main thread become the primary deep-work surface when the slice can be partitioned safely
 - do not let the same worker both implement and independently validate the slice
 - do not claim automation exists where only planning exists
-- do not claim the distinct-family reviewer listener loop is live merely because a handoff note and bridge prompt exist
-- do not leave a managed distinct-family reviewer listener running after final closeout unless another live reviewer-targeted queue still depends on it
+- do not claim the Codex listener loop is live merely because a signal and bridge prompt exist
+- do not leave the managed Codex listener running after final closeout unless another live Codex-targeted queue still depends on it
 - preserve historical artifacts; fix the current truth surfaces rather than rewriting history
 
 Final response must include:
 - changed files
 - which loop-closure slices were completed
 - validations run
-- distinct-family reviewer handoff/listener state if applicable
+- Codex handoff/listener state if applicable
 - remaining blockers or deferred items
 - exact next command
 
@@ -185,7 +185,7 @@ Read:
 - `_dev/reports/analysis/plan-pipeline.md`
 - inspect `_dev/reports/signals/` and `_dev/reports/signals/closed/`
 - `tools/signals/lib/pipeline-loop.js`
-- your project's distinct-family-reviewer bridge helper, if one exists
+- `tools/signals/lib/codex-bridge.js`
 
 Return exactly these sections:
 
@@ -259,7 +259,7 @@ Task:
 - align the planning artifacts with the actual current live/closed signal state
 - preserve exact next-command truth
 - remove or correct claims that are now stale
-- if the current-state artifacts imply an active distinct-family reviewer listener, make sure that claim is backed by a real listener-status artifact or remove the claim
+- if the current-state artifacts imply an active Codex listener, make sure that claim is backed by a real listener-status artifact or remove the claim
 - if watcher logic is the source of drift, fix the smallest truthful code path and add a narrow test
 
 Constraints:
@@ -351,7 +351,7 @@ Acceptance criteria:
 3. The lessons loop has an explicit recurring trigger and a durable output contract.
 4. The meta-framework/autonomy surfaces are truthful about what is implemented versus blocked.
 5. Any watcher or signal code changes are covered by narrow validation or tests.
-6. Any claimed distinct-family reviewer listener state is backed by the real listener lifecycle artifact or explicitly marked as only handoff prepared.
+6. Any claimed Codex listener state is backed by the real listener lifecycle artifact or explicitly marked as only handoff prepared.
 
 Required output:
 - Findings

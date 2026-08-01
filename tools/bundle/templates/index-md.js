@@ -29,7 +29,7 @@ export function indexMdTemplate(bundleId, createdAt, scope, runs) {
   lines.push('## Start Here');
   lines.push('');
   lines.push('1. `LLM_MANIFEST.json` — Machine-readable manifest (read first)');
-  lines.push('2. `For_{DEVELOPER_NAME}.md` — Observation summary for developer');
+  lines.push('2. `For_Recipient.md` — Observation summary for developer');
   lines.push('3. `QUESTIONS_FOR_DEVELOPER.md` — Items needing developer input');
   lines.push('4. `SUMMARY.json` — Structured findings, questions, known issues');
   lines.push('');

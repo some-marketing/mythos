@@ -1,0 +1,42 @@
+{
+  "id": "system-surface",
+  "version": "0.1.0",
+  "description": "Canonical protected-surface and admission-proof contract for system-scoped task-plan execution.",
+  "protected_paths": [
+    ".claude/**",
+    "instructions/**",
+    "tools/planning/**",
+    "tools/signals/**",
+    "tools/verify/**",
+    "frameworks/*/*/manifest.json",
+    "frameworks/*/*/guardrails.md",
+    "_dev/research/{OPERATOR_NAME}-philosophy/**"
+  ],
+  "task_plan_admission": {
+    "contract_id": "kernel-admission-gate/v0",
+    "legacy_rollout_rule": "System-scoped task plans without grounding.admission_contract remain legacy-exempt in v0. They continue under approval-only rules until they are re-authored onto the new admission contract.",
+    "required_fields": [
+      "grounding.admission_contract",
+      "grounding.protected_surface_contract",
+      "grounding.kernel.artifact",
+      "grounding.kernel.verified_at",
+      "grounding.kernel.max_age_seconds",
+      "grounding.philosophy.artifact",
+      "grounding.philosophy.operator_acknowledged",
+      "grounding.non_repair_policy"
+    ],
+    "kernel_proof": {
+      "verdict": "PASS",
+      "gate_decision_proceed": true,
+      "project_binding_field": "project_root",
+      "default_max_age_seconds": 86400
+    },
+    "grounding_artifact": {
+      "operator_acknowledged_required": true
+    },
+    "non_repair_policy": {
+      "allowed_values": ["block"],
+      "rule": "Missing or stale proof is a blocked state. The authority gate may not fabricate or repair proof artifacts."
+    }
+  }
+}

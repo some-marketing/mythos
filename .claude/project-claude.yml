@@ -1,0 +1,464 @@
+# Mythos Project Manifest
+# Machine-readable definition of all required Claude assets
+
+project:
+  name: Mythos
+  version: 1.0.0
+  description: LLM Operating System for agency framework execution
+
+required_skills:
+  system:
+    - path: .claude/skills/audio-output/SKILL.md
+      name: audio-output
+    - path: .claude/skills/bp-r/SKILL.md
+      name: bp-r
+    - path: .claude/skills/bridge-dispatch-on-acceptance-claims/SKILL.md
+      name: bridge-dispatch-on-acceptance-claims
+    - path: .claude/skills/canonical-path-authority-gate/SKILL.md
+      name: canonical-path-authority-gate
+    - path: .claude/skills/clean-house/SKILL.md
+      name: clean-house
+    - path: .claude/skills/council-of-owls/SKILL.md
+      name: council-of-owls
+    - path: .claude/skills/cowork-orchestrator-bridge/SKILL.md
+      name: cowork-orchestrator-bridge
+    - path: .claude/skills/deliberate/SKILL.md
+      name: deliberate
+    - path: .claude/skills/discord-access/SKILL.md
+      name: discord-access
+    - path: .claude/skills/discord-configure/SKILL.md
+      name: discord-configure
+    - path: .claude/skills/dl/SKILL.md
+      name: dl
+    - path: .claude/skills/dlx/SKILL.md
+      name: dlx
+    - path: .claude/skills/evidence-loop/SKILL.md
+      name: evidence-loop
+    - path: .claude/skills/execute-framework/SKILL.md
+      name: execute-framework
+    - path: .claude/skills/extract-skill/SKILL.md
+      name: extract-skill
+    - path: .claude/skills/fable5-calibrate/SKILL.md
+      name: fable5-calibrate
+    - path: .claude/skills/fable5-rederive/SKILL.md
+      name: fable5-rederive
+    - path: .claude/skills/github-auth/SKILL.md
+      name: github-auth
+    - path: .claude/skills/google-ads-mcp/SKILL.md
+      name: google-ads-mcp
+    - path: .claude/skills/lint-attributions/SKILL.md
+      name: lint-attributions
+    - path: .claude/skills/manage-clients/SKILL.md
+      name: manage-clients
+    - path: .claude/skills/manage-frameworks/SKILL.md
+      name: manage-frameworks
+    - path: .claude/skills/migrate-credential-to-1password/SKILL.md
+      name: migrate-credential-to-1password
+    - path: .claude/skills/mythos-architecture-contract/SKILL.md
+      name: mythos-architecture-contract
+    - path: .claude/skills/mythos-failure-archaeology/SKILL.md
+      name: mythos-failure-archaeology
+    - path: .claude/skills/mythos-operating-mechanics/SKILL.md
+      name: mythos-operating-mechanics
+    - path: .claude/skills/mythos-remember/SKILL.md
+      name: mythos-remember
+    - path: .claude/skills/new-export-target/SKILL.md
+      name: new-export-target
+    - path: .claude/skills/oa/SKILL.md
+      name: oa
+    - path: .claude/skills/oc/SKILL.md
+      name: oc
+    - path: .claude/skills/orchestrate/SKILL.md
+      name: orchestrate
+    - path: .claude/skills/orchestrate-loop/SKILL.md
+      name: orchestrate-loop
+    - path: .claude/skills/owl/SKILL.md
+      name: owl
+    - path: .claude/skills/plan-task/SKILL.md
+      name: plan-task
+    - path: .claude/skills/prompt-refinement/SKILL.md
+      name: prompt-refinement
+    - path: .claude/skills/propose-skill-capture/SKILL.md
+      name: propose-skill-capture
+    - path: .claude/skills/ship-workstream/SKILL.md
+      name: ship-workstream
+    - path: .claude/skills/state-reconciliation-preamble/SKILL.md
+      name: state-reconciliation-preamble
+    - path: .claude/skills/store-credential/SKILL.md
+      name: store-credential
+  frameworks:
+    - path: frameworks/deliverables/presentation-review/.claude/skills/presentation-review/
+      name: presentation-review
+    - path: frameworks/deliverables/scope-verification/.claude/skills/scope-verification/
+      name: scope-verification
+    - path: frameworks/deliverables/version-reconciliation/.claude/skills/version-reconciliation/
+      name: version-reconciliation
+    - path: frameworks/meta/dreaming-system/.claude/skills/dreaming-system/
+      name: dreaming-system
+    - path: frameworks/paid-media/ad-creative/.claude/skills/ad-creative/
+      name: ad-creative
+    - path: frameworks/paid-media/campaign-management/.claude/skills/campaign-management/
+      name: campaign-management
+    - path: frameworks/paid-media/google-ads-search-campaign-build/.claude/skills/google-ads-search-campaign-build/
+      name: google-ads-search-campaign-build
+    - path: frameworks/paid-media/meta-creative-iteration/.claude/skills/meta-creative-iteration/
+      name: meta-creative-iteration
+    - path: frameworks/project-management/dart-collaboration/.claude/skills/dart-collaboration/
+      name: dart-collaboration
+    - path: frameworks/project-management/feedback-to-tasks/.claude/skills/feedback-to-tasks/
+      name: feedback-to-tasks
+    - path: frameworks/wordpress/analytics-tracking/.claude/skills/analytics-tracking/
+      name: analytics-tracking
+    - path: frameworks/wordpress/content-editing/.claude/skills/content-editing/
+      name: content-editing
+    - path: frameworks/wordpress/design-mockup-validation/.claude/skills/design-mockup-validation/
+      name: design-mockup-validation
+    - path: frameworks/wordpress/design-research/.claude/skills/design-research/
+      name: design-research (6 skills)
+    - path: frameworks/wordpress/documentation/.claude/skills/documentation/
+      name: documentation
+    - path: frameworks/wordpress/livecanvas-rebuild/.claude/skills/livecanvas-rebuild/
+      name: livecanvas-rebuild
+    - path: frameworks/wordpress/page-cro/.claude/skills/page-cro/
+      name: page-cro
+    - path: frameworks/wordpress/qa/.claude/skills/qa/
+      name: qa (18 skills)
+    - path: frameworks/wordpress/seo-audit/.claude/skills/seo-audit/
+      name: seo-audit
+    - path: frameworks/wordpress/seo-validation/.claude/skills/seo-validation/
+      name: seo-validation
+
+required_commands:
+  system:
+    - path: .claude/commands/accept-contract.md
+    - path: .claude/commands/ad-copy-dev.md
+    - path: .claude/commands/advance-pipeline.md
+    - path: .claude/commands/aider-self-help.md
+    - path: .claude/commands/amend-plan.md
+    - path: .claude/commands/appraise-grimoire.md
+    - path: .claude/commands/arc-blocked.md
+    - path: .claude/commands/arc-complete.md
+    - path: .claude/commands/arc-rest.md
+    - path: .claude/commands/arc-status.md
+    - path: .claude/commands/aside.md
+    - path: .claude/commands/assemble-prompt-system.md
+    - path: .claude/commands/attune-codex.md
+    - path: .claude/commands/attune.md
+    - path: .claude/commands/audit-framework.md
+    - path: .claude/commands/augur.md
+    - path: .claude/commands/aura.md
+    - path: .claude/commands/author-prompt-system.md
+    - path: .claude/commands/awaken-essence.md
+    - path: .claude/commands/blueprint.md
+    - path: .claude/commands/bookshelf.md
+    - path: .claude/commands/boot.md
+    - path: .claude/commands/bridge-speakers.md
+    - path: .claude/commands/cadence.md
+    - path: .claude/commands/campaign.md
+    - path: .claude/commands/candidate-status.md
+    - path: .claude/commands/capture-status.md
+    - path: .claude/commands/capture-task.md
+    - path: .claude/commands/cast-grimoire.md
+    - path: .claude/commands/cast.md
+    - path: .claude/commands/charter-quest.md
+    - path: .claude/commands/chron.md
+    - path: .claude/commands/chronicle.md
+    - path: .claude/commands/claim-intake.md
+    - path: .claude/commands/claim-spoils.md
+    - path: .claude/commands/clean-house.md
+    - path: .claude/commands/codex-self-help.md
+    - path: .claude/commands/commune.md
+    - path: .claude/commands/concept-dispatch.md
+    - path: .claude/commands/concept-init.md
+    - path: .claude/commands/concept-promote.md
+    - path: .claude/commands/conclave.md
+    - path: .claude/commands/consult-oracle.md
+    - path: .claude/commands/context-check.md
+    - path: .claude/commands/continue-self-help.md
+    - path: .claude/commands/contract-ledger.md
+    - path: .claude/commands/convene-gate-status.md
+    - path: .claude/commands/convene-review.md
+    - path: .claude/commands/convene.md
+    - path: .claude/commands/council-of-owls.md
+    - path: .claude/commands/council.md
+    - path: .claude/commands/create-plan.md
+    - path: .claude/commands/cross-session.md
+    - path: .claude/commands/crush-self-help.md
+    - path: .claude/commands/cultivate.md
+    - path: .claude/commands/cursor-self-help.md
+    - path: .claude/commands/debrief-run.md
+    - path: .claude/commands/deliberate.md
+    - path: .claude/commands/discord-access.md
+    - path: .claude/commands/discord-configure.md
+    - path: .claude/commands/dispatch-bridge.md
+    - path: .claude/commands/dispatch-trifecta.md
+    - path: .claude/commands/dl.md
+    - path: .claude/commands/draft-contract.md
+    - path: .claude/commands/el.md
+    - path: .claude/commands/embark.md
+    - path: .claude/commands/empower-grimoire.md
+    - path: .claude/commands/end-session.md
+    - path: .claude/commands/enroll-patron.md
+    - path: .claude/commands/enshrine-grimoire.md
+    - path: .claude/commands/evidence-loop.md
+    - path: .claude/commands/execute-plan.md
+    - path: .claude/commands/extract-skill.md
+    - path: .claude/commands/feat.md
+    - path: .claude/commands/follow-signal.md
+    - path: .claude/commands/forge-grimoire.md
+    - path: .claude/commands/framework-phase.md
+    - path: .claude/commands/framework-run.md
+    - path: .claude/commands/framework-status.md
+    - path: .claude/commands/fw-deliverables-presentation-review.md
+    - path: .claude/commands/fw-deliverables-scope-verification.md
+    - path: .claude/commands/fw-deliverables-version-reconciliation.md
+    - path: .claude/commands/fw-media-video-editing.md
+    - path: .claude/commands/fw-meta-execution-normalization.md
+    - path: .claude/commands/fw-paid-media-ad-creative.md
+    - path: .claude/commands/fw-paid-media-campaign-management.md
+    - path: .claude/commands/fw-project-management-dart-collaboration.md
+    - path: .claude/commands/fw-project-management-feedback-to-tasks.md
+    - path: .claude/commands/fw-wordpress-analytics-tracking.md
+    - path: .claude/commands/fw-wordpress-content-editing.md
+    - path: .claude/commands/fw-wordpress-design-mockup-validation.md
+    - path: .claude/commands/fw-wordpress-design-research.md
+    - path: .claude/commands/fw-wordpress-documentation.md
+    - path: .claude/commands/fw-wordpress-page-cro.md
+    - path: .claude/commands/fw-wordpress-qa.md
+    - path: .claude/commands/fw-wordpress-seo-audit.md
+    - path: .claude/commands/fw-wordpress-seo-validation.md
+    - path: .claude/commands/gauntlet.md
+    - path: .claude/commands/gemini-self-help.md
+    - path: .claude/commands/generate-harness.md
+    - path: .claude/commands/gm.md
+    - path: .claude/commands/goose-self-help.md
+    - path: .claude/commands/ground-in-philosophy.md
+    - path: .claude/commands/guild-ledger.md
+    - path: .claude/commands/guildmaster-loop.md
+    - path: .claude/commands/help-me-route.md
+    - path: .claude/commands/hermes-self-help.md
+    - path: .claude/commands/identify.md
+    - path: .claude/commands/improve-framework.md
+    - path: .claude/commands/ingest-walkthrough.md
+    - path: .claude/commands/initiate-status.md
+    - path: .claude/commands/inscribe-lore.md
+    - path: .claude/commands/invoke.md
+    - path: .claude/commands/kilocode-self-help.md
+    - path: .claude/commands/level-up.md
+    - path: .claude/commands/lint-attributions.md
+    - path: .claude/commands/list-frameworks.md
+    - path: .claude/commands/loot.md
+    - path: .claude/commands/motivation-scan.md
+    - path: .claude/commands/mythos-status.md
+    - path: .claude/commands/new-client.md
+    - path: .claude/commands/new-export-target.md
+    - path: .claude/commands/new-framework.md
+    - path: .claude/commands/new-project.md
+    - path: .claude/commands/new-session.md
+    - path: .claude/commands/next-session.md
+    - path: .claude/commands/next-step.md
+    - path: .claude/commands/normalize-capture.md
+    - path: .claude/commands/normalize-signals.md
+    - path: .claude/commands/oa.md
+    - path: .claude/commands/oc.md
+    - path: .claude/commands/open-contract.md
+    - path: .claude/commands/opencode-self-help.md
+    - path: .claude/commands/orchestrate-loop.md
+    - path: .claude/commands/orchestrate.md
+    - path: .claude/commands/owl.md
+    - path: .claude/commands/pi-self-help.md
+    - path: .claude/commands/plan-active-workstreams.md
+    - path: .claude/commands/plan-pipeline.md
+    - path: .claude/commands/plan-quest.md
+    - path: .claude/commands/plan-task.md
+    - path: .claude/commands/plans.md
+    - path: .claude/commands/post-contract.md
+    - path: .claude/commands/project-status.md
+    - path: .claude/commands/promote-framework.md
+    - path: .claude/commands/prompt-refine.md
+    - path: .claude/commands/publish-framework.md
+    - path: .claude/commands/rank-up.md
+    - path: .claude/commands/reconcile-lessons.md
+    - path: .claude/commands/reconcile-task-outcomes.md
+    - path: .claude/commands/reference-compare.md
+    - path: .claude/commands/refine-spoils.md
+    - path: .claude/commands/rehearse-grimoire.md
+    - path: .claude/commands/repair-plan.md
+    - path: .claude/commands/replay-framework.md
+    - path: .claude/commands/review-active-workstreams.md
+    - path: .claude/commands/review-dispatch.md
+    - path: .claude/commands/review-progress.md
+    - path: .claude/commands/review-source-material.md
+    - path: .claude/commands/review-task-plan.md
+    - path: .claude/commands/route.md
+    - path: .claude/commands/run-framework.md
+    - path: .claude/commands/run-plan.md
+    - path: .claude/commands/save-throw.md
+    - path: .claude/commands/scaffold-framework.md
+    - path: .claude/commands/scribe-grimoire.md
+    - path: .claude/commands/scry.md
+    - path: .claude/commands/self-help.md
+    - path: .claude/commands/ship-workstream.md
+    - path: .claude/commands/shutdown.md
+    - path: .claude/commands/site.md
+    - path: .claude/commands/spellbook.md
+    - path: .claude/commands/spoils-ledger.md
+    - path: .claude/commands/sync-manifest.md
+    - path: .claude/commands/synthesize-concept.md
+    - path: .claude/commands/synthesize-debrief.md
+    - path: .claude/commands/system-status.md
+    - path: .claude/commands/systemize-behavior.md
+    - path: .claude/commands/telemetry-status.md
+    - path: .claude/commands/triage-client-board.md
+    - path: .claude/commands/trial-quest.md
+    - path: .claude/commands/validate-all-frameworks.md
+    - path: .claude/commands/whats-next.md
+    - path: .claude/commands/write-handoff.md
+  frameworks:
+    - path: frameworks/deliverables/presentation-review/.claude/commands/presentation-review/
+      note: 6 commands
+    - path: frameworks/deliverables/scope-verification/.claude/commands/scope-verification/
+      note: 2 commands
+    - path: frameworks/deliverables/version-reconciliation/.claude/commands/version-reconciliation/
+      note: 2 commands
+    - path: frameworks/meta/dreaming-system/.claude/commands/dreaming-system/
+      note: 1 command
+    - path: frameworks/paid-media/ad-creative/.claude/commands/ad-creative/
+      note: 7 commands
+    - path: frameworks/paid-media/campaign-management/.claude/commands/campaign-management/
+      note: 6 commands
+    - path: frameworks/paid-media/google-ads-search-campaign-build/.claude/commands/google-ads-search-campaign-build/
+      note: 8 commands
+    - path: frameworks/paid-media/meta-creative-iteration/.claude/commands/meta-creative-iteration/
+      note: 11 commands
+    - path: frameworks/project-management/dart-collaboration/.claude/commands/dart-collaboration/
+      note: 2 commands
+    - path: frameworks/project-management/feedback-to-tasks/.claude/commands/feedback-to-tasks/
+      note: 5 commands
+    - path: frameworks/wordpress/analytics-tracking/.claude/commands/analytics-tracking/
+      note: 6 commands
+    - path: frameworks/wordpress/content-editing/.claude/commands/content-editing/
+      note: 8 commands
+    - path: frameworks/wordpress/design-mockup-validation/.claude/commands/design-mockup-validation/
+      note: 5 commands
+    - path: frameworks/wordpress/design-research/.claude/commands/design-research/
+      note: 15 commands
+    - path: frameworks/wordpress/documentation/.claude/commands/documentation/
+      note: 6 commands
+    - path: frameworks/wordpress/livecanvas-rebuild/.claude/commands/livecanvas-rebuild/
+      note: 7 commands
+    - path: frameworks/wordpress/page-cro/.claude/commands/page-cro/
+      note: 6 commands
+    - path: frameworks/wordpress/qa/.claude/commands/qa/
+      note: 17 commands
+    - path: frameworks/wordpress/seo-audit/.claude/commands/seo-audit/
+      note: 7 commands
+    - path: frameworks/wordpress/seo-validation/.claude/commands/seo-validation/
+      note: 8 commands
+
+required_subagents:
+  system:
+    - path: .claude/agents/aside.md
+      name: aside
+    - path: .claude/agents/capture-normalizer.md
+      name: capture-normalizer
+    - path: .claude/agents/completion-auditor.md
+      name: completion-auditor
+    - path: .claude/agents/compliance-reviewer.md
+      name: compliance-reviewer
+    - path: .claude/agents/extract-skill-agent.md
+      name: extract-skill-agent
+    - path: .claude/agents/framework-auditor.md
+      name: framework-auditor
+    - path: .claude/agents/framework-executor.md
+      name: framework-executor
+    - path: .claude/agents/lifecycle-auditor.md
+      name: lifecycle-auditor
+    - path: .claude/agents/new-export-target-agent.md
+      name: new-export-target-agent
+    - path: .claude/agents/output-reviewer.md
+      name: output-reviewer
+    - path: .claude/agents/philosophy-grounding.md
+      name: philosophy-grounding
+    - path: .claude/agents/research-fetcher.md
+      name: research-fetcher
+    - path: .claude/agents/reusable-template-extractor.md
+      name: reusable-template-extractor
+    - path: .claude/agents/signal-normalizer.md
+      name: signal-normalizer
+    - path: .claude/agents/stakeholder-voice-linter.md
+      name: stakeholder-voice-linter
+  frameworks:
+    - path: frameworks/deliverables/presentation-review/.claude/agents/presentation-review/
+      note: 5 agents
+    - path: frameworks/deliverables/scope-verification/.claude/agents/scope-verification/
+      note: 2 agents
+    - path: frameworks/deliverables/version-reconciliation/.claude/agents/version-reconciliation/
+      note: 2 agents
+    - path: frameworks/meta/dreaming-system/.claude/agents/dreaming-system/
+      note: 1 agent
+    - path: frameworks/paid-media/ad-creative/.claude/agents/ad-creative/
+      note: 5 agents
+    - path: frameworks/paid-media/campaign-management/.claude/agents/campaign-management/
+      note: 4 agents
+    - path: frameworks/paid-media/google-ads-search-campaign-build/.claude/agents/google-ads-search-campaign-build/
+      note: 6 agents
+    - path: frameworks/paid-media/meta-creative-iteration/.claude/agents/meta-creative-iteration/
+      note: 11 agents
+    - path: frameworks/project-management/dart-collaboration/.claude/agents/dart-collaboration/
+      note: 1 agent
+    - path: frameworks/project-management/feedback-to-tasks/.claude/agents/feedback-to-tasks/
+      note: 4 agents
+    - path: frameworks/wordpress/analytics-tracking/.claude/agents/analytics-tracking/
+      note: 4 agents
+    - path: frameworks/wordpress/content-editing/.claude/agents/content-editing/
+      note: 6 agents
+    - path: frameworks/wordpress/design-mockup-validation/.claude/agents/design-mockup-validation/
+      note: 4 agents
+    - path: frameworks/wordpress/design-research/.claude/agents/design-research/
+      note: 9 agents
+    - path: frameworks/wordpress/documentation/.claude/agents/documentation/
+      note: 2 agents
+    - path: frameworks/wordpress/livecanvas-rebuild/.claude/agents/livecanvas-rebuild/
+      note: 5 agents
+    - path: frameworks/wordpress/page-cro/.claude/agents/page-cro/
+      note: 4 agents
+    - path: frameworks/wordpress/qa/.claude/agents/qa/
+      note: 17 agents
+    - path: frameworks/wordpress/seo-audit/.claude/agents/seo-audit/
+      note: 5 agents
+    - path: frameworks/wordpress/seo-validation/.claude/agents/seo-validation/
+      note: 6 agents
+
+required_guardrails:
+  - path: .claude/guardrails.md
+    sections:
+      - execution_modes
+      - observational_reporting
+      - evidence_standards
+      - file_modification_rules
+      - data_safety
+      - subagent_orchestration
+      - mode_checklists
+  - path: frameworks/deliverables/presentation-review/guardrails.md
+  - path: frameworks/deliverables/scope-verification/guardrails.md
+  - path: frameworks/deliverables/version-reconciliation/guardrails.md
+  - path: frameworks/media/video-editing/guardrails.md
+  - path: frameworks/meta/dreaming-system/guardrails.md
+  - path: frameworks/meta/execution-normalization/guardrails.md
+  - path: frameworks/paid-media/ad-creative/guardrails.md
+  - path: frameworks/paid-media/campaign-management/guardrails.md
+  - path: frameworks/paid-media/google-ads-search-campaign-build/guardrails.md
+  - path: frameworks/paid-media/meta-creative-iteration/guardrails.md
+  - path: frameworks/project-management/dart-collaboration/guardrails.md
+  - path: frameworks/project-management/feedback-to-tasks/guardrails.md
+  - path: frameworks/wordpress/analytics-tracking/guardrails.md
+  - path: frameworks/wordpress/content-editing/guardrails.md
+  - path: frameworks/wordpress/design-mockup-validation/guardrails.md
+  - path: frameworks/wordpress/design-research/guardrails.md
+  - path: frameworks/wordpress/documentation/guardrails.md
+  - path: frameworks/wordpress/livecanvas-rebuild/guardrails.md
+  - path: frameworks/wordpress/page-cro/guardrails.md
+  - path: frameworks/wordpress/qa/guardrails.md
+  - path: frameworks/wordpress/seo-audit/guardrails.md
+  - path: frameworks/wordpress/seo-validation/guardrails.md

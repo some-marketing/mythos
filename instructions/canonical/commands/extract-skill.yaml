@@ -1,0 +1,33 @@
+{
+  "id": "extract-skill",
+  "description": "Extract reusable skill from conversation workflow",
+  "mode": "PATCH_ALLOWED",
+  "objective": "Analyze the current conversation to identify a repeatable workflow, then generate the full Mythos artifact set (SKILL.md, command, agent, verification script, manifest updates) by invoking the extract-skill skill.",
+  "process": [
+    "If arguments contain a skill name, use it as the suggested name for the new skill.",
+    "Load and follow the extract-skill skill workflow: .claude/skills/extract-skill/SKILL.md, executing the full automated workflow from step 1 through step 11.",
+    "Analyze the conversation to identify the repeatable workflow pattern, inputs, outputs, and decision points.",
+    "Present the extracted workflow to the user for confirmation before generating artifacts.",
+    "Generate all required artifacts: SKILL.md, command file, agent definition, and optional verification script.",
+    "Run node tools/verify/verify-skill.cjs to validate the generated artifacts.",
+    "Update the manifest with new skill, command, and agent entries.",
+    "Run npm run manifest:sync to ensure manifest consistency."
+  ],
+  "success_criteria": [
+    "Workflow extracted accurately from conversation context",
+    "All artifacts generated (SKILL.md, command, agent, optional verification script)",
+    "Artifacts pass node tools/verify/verify-skill.cjs validation",
+    "Manifest updated with new entries",
+    "User confirmed workflow before generation"
+  ],
+  "handoff": {
+    "skill_created": "sync-manifest",
+    "validation_failures": "review-progress"
+  },
+  "artifacts": [
+    ".claude/skills/{skill-name}/SKILL.md",
+    ".claude/commands/{skill-name}.md",
+    ".claude/agents/{skill-name}-agent.md",
+    "tools/verify/verify-{skill-name}.cjs (optional)"
+  ]
+}

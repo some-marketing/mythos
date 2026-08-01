@@ -22,7 +22,7 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 VAULT="$REPO_ROOT/Mythos-memories"
 # Harness auto-memory store (outside the repo, in ~/.claude). Override with SMOS_MEMORY_DIR.
-MEMORY_DIR="${SMOS_MEMORY_DIR:-$HOME/.claude/projects/-Users-admin-dev-mythos-recovered/memory}"
+MEMORY_DIR="${SMOS_MEMORY_DIR:-$HOME/.claude/projects/{PROJECT_SLUG}/memory}"
 DRY_RUN=""
 
 if [ "${1:-}" = "--dry-run" ]; then

@@ -1,0 +1,50 @@
+{
+  "id": "end-session",
+  "description": "Programmatically inventory end-session closeout evidence and emit an EndSessionCloseout/1.0 readiness index",
+  "mode": "PATCH_ALLOWED",
+  "objective": "Provide one deterministic closeout command that records important artifacts, actor-specific pending actions, verifier status, and clear-readiness basis before context clear.",
+  "scope_resolution": {
+    "default": "Exactly one explicit selector is required",
+    "arguments": {
+      "--system": "Inventory system-level closeout evidence without sweeping client trees",
+      "--client CODE": "Inventory client-scoped closeout evidence without writing client-specific data into frameworks",
+      "--scope <workstream>": "Inventory one workstream by stable scope key"
+    }
+  },
+  "process": [
+    "Require exactly one selector: --system, --client CODE, or --scope <workstream>.",
+    "Inventory existing reports, debriefs, handoffs, task plans, amendments, ready-for-review or blocked signals, verifier outputs, and maintenance outputs for the selected scope.",
+    "Run tools/verify/verify-artifact-completeness.cjs for the selected scope and store the verifier result as evidence.",
+    "Record observations, unknowns, interpretations, unverified_signals, readiness_basis, and actor-specific pending actions as separate fields.",
+    "Keep maintenance closeout output as hygiene evidence only; never treat maintenance closeout as the full end-session authority.",
+    "Emit paired outputs at _dev/reports/analysis/end-session-closeout__<scope-key>__<timestamp>__index.json and .md plus a scoped evidence directory.",
+    "Set ready_for_clear true only when verifiers return PASS, no live unconsumed signals remain, no actor-specific pending actions remain, no scoped naming drift is detected, and no handoff collision risk is detected."
+  ],
+  "success_criteria": [
+    "Only one scope selector is provided",
+    "Artifact completeness verifier returns PASS for the selected scope",
+    "EndSessionCloseout/1.0 index.json and index.md are emitted",
+    "ready_for_clear is derived from evidence, not model confidence",
+    "No live unconsumed signals remain for the scope",
+    "Scope directory exists under _dev/reports/analysis/end-session-closeout__<scope-key>/"
+  ],
+  "readiness_rules": [
+    "ready_for_clear defaults false by construction and is derived from evidence, not model confidence.",
+    "Verifier FAIL, WARN, UNKNOWN, or non-zero status blocks ready_for_clear.",
+    "Any live unconsumed signal blocks ready_for_clear, including signals already marked ready_for_clear.",
+    "Human, Codex agent, Claude agent, or external reviewer pending actions block ready_for_clear unless later evidence marks them non-blocking.",
+    "Legacy closeout/debrief naming drift is inventoried through compatibility reads and blocks durable clear-readiness until normalized.",
+    "Singleton or mixed next-session handoff collision risk blocks ready_for_clear.",
+    "Maintenance closeout output cannot satisfy full EndSessionCloseout/1.0 readiness by itself."
+  ],
+  "trust_tier": {
+    "tier": "Tier 3 conscious infrastructure",
+    "rationale": "End-session closeout controls clear-readiness and next-session continuity. It must remain deliberate, artifact-heavy, and gated even though artifact collection is deterministic.",
+    "promotion_gate": "Treat EndSessionCloseout/1.0 as probationary until targeted fixture replays or several successful scoped closeout runs demonstrate stable behavior."
+  },
+  "artifacts": [
+    "_dev/reports/analysis/end-session-closeout__<scope-key>__<timestamp>__index.json",
+    "_dev/reports/analysis/end-session-closeout__<scope-key>__<timestamp>__index.md",
+    "_dev/reports/analysis/end-session-closeout__<scope-key>__<timestamp>/"
+  ]
+}

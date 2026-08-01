@@ -1,0 +1,146 @@
+# Trust Tier Law v0.2.0
+#
+# Canonical trust tier definitions for Mythos skill contracts.
+# Derived from instructions/canonical/guardrails.md, system.yaml execution modes,
+# and subagent autonomy policy.
+# Prior art: v0.1.0 from concept branch (tier stubs with short descriptions).
+
+version: 0.2.0
+source: instructions/canonical/guardrails.md
+
+# ─── Tier Definitions ─────────────────────────────────────────────────────────
+
+tiers:
+  instruction_only:
+    level: 1
+    description: >
+      Procedural guidance only. No file writes, no shell execution,
+      no external side effects. The skill produces output in response
+      text or conversation only.
+    allowed_modes:
+      - FINDINGS_ONLY
+    evidence_required: false
+    user_gating: never
+    examples:
+      - Exploratory analysis of existing artifacts
+      - Live browser observation (FINDINGS_ONLY)
+      - Pre-implementation investigation
+
+  report_write_scoped:
+    level: 2
+    description: >
+      May write bounded reports, summaries, changelogs, or analysis
+      artifacts. Writes are limited to designated report and analysis
+      output paths. No source code, config, or framework modifications.
+    allowed_modes:
+      - RUN_ONLY
+      - REVIEW_ONLY
+      - REPO_HYGIENE
+    evidence_required: true
+    user_gating: never
+    examples:
+      - Developer handoff bundle compilation
+      - Payload analysis reports
+      - Cross-run anomaly indexes
+      - Changelog capture
+      - Documentation updates
+
+  patch_scoped:
+    level: 3
+    description: >
+      May apply minimal targeted file changes within a declared scope.
+      Every write must cite the finding it addresses. No refactors,
+      no drive-by fixes, no unrelated changes.
+    allowed_modes:
+      - PATCH_ALLOWED
+    evidence_required: true
+    user_gating: at_gate_boundaries
+    examples:
+      - Locator map corrections after browser walkthrough
+      - Testcase identity updates
+      - Framework improvement based on execution feedback
+      - Intake scaffolding for new testcases
+
+  external_service_touching:
+    level: 4
+    description: >
+      May call real external services, APIs, or touch real client data
+      surfaces. This tier requires explicit user confirmation before
+      execution begins. Evidence must include service response data.
+    allowed_modes:
+      - PATCH_ALLOWED
+      - COORDINATOR
+    evidence_required: true
+    user_gating: always_before_execution
+    examples:
+      - CRM API integration testing
+      - External MCP tool invocation
+      - Dart task creation or updates
+      - Browser automation against live sites
+
+  meta_modifying:
+    level: 5
+    description: >
+      May change system instructions, skill definitions, framework
+      definitions, or other operating context. This is the highest
+      trust tier and represents irreversible or structurally significant
+      changes. Requires explicit user gating.
+    allowed_modes:
+      - PATCH_ALLOWED
+      - COORDINATOR
+    evidence_required: true
+    user_gating: always_before_execution
+    examples:
+      - Framework promotion into Mythos
+      - Canonical instruction updates
+      - Skill surface modifications
+      - System configuration changes
+
+# ─── Laws ────────────────────────────────────────────────────────────────────
+
+laws:
+  - id: no_casual_activation
+    text: >
+      Higher trust tiers must not auto-activate casually. The tier
+      declared in the skill contract determines what is permitted.
+
+  - id: runtime_final_authority
+    text: >
+      Code-owned runtime controls remain the final authority for
+      enforcement. Contract declarations inform but do not override
+      runtime guards.
+
+  - id: framework_restriction_only
+    text: >
+      Framework-local policy may further restrict a tier (require
+      additional evidence, add gating) but may not weaken the
+      canonical tier requirements.
+
+  - id: evidence_scales_with_tier
+    text: >
+      Evidence requirements increase with trust tier. instruction_only
+      requires no evidence; meta_modifying requires full evidence
+      including changed files, test results, and acceptance criteria.
+
+  - id: user_gating_is_non_negotiable
+    text: >
+      When user_gating is "always_before_execution", the skill must
+      not proceed without explicit user confirmation. This cannot be
+      bypassed by the skill, subagent, or orchestrator.
+
+  - id: validation_independence_scales
+    text: >
+      Validation independence requirements scale with trust tier.
+      instruction_only and report_write_scoped do not require independent
+      validation. patch_scoped requires at least one independence dimension.
+      external_service_touching requires at least two. meta_modifying
+      requires distinct-intelligence validation (different actor AND
+      different harness). See evidence.yaml validation_independence for
+      the full tier-requirement matrix.
+
+  - id: capture_resistance
+    text: >
+      No single actor may both produce and finalize acceptance-grade
+      outcomes. Operator gates cannot be permanently delegated to AI.
+      Succession scope must be bounded and recorded. These rules
+      prevent single-actor capture of the governance surface.

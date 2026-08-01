@@ -81,7 +81,7 @@ test('publication rejects local publish URLs', () => {
   fs.writeFileSync(diagramPath, 'operator draft');
   assert.throws(() => writePlanDiagramPublication(root, {
     taskId: 'demo-plan',
-    publishUrl: '/Users/admin/dev/Mythos-recovered/_dev/reports/analysis/visual-plans/demo.drawio'
+    publishUrl: '{MYTHOS_ROOT}/_dev/reports/analysis/visual-plans/demo.drawio'
   }), /local-path-not-allowed/);
   assert.equal(fs.readFileSync(diagramPath, 'utf8'), 'operator draft');
 });

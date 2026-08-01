@@ -1,0 +1,191 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Stage 5 — Meta Push Payload",
+  "description": "State-machine artifact for the Stage 5 Meta push. The `state` field is load-bearing: it makes the draft → approved → applied (or rejected) lifecycle explicit so the coordinator-applies pattern does not inherit hidden state from a subagent transcript. Subagents draft (state=draft); the operator approves or rejects (state=approved|rejected); the coordinator applies the approved payload via the Meta MCP write surface (state=applied). Every transition is recorded in `state_transitions` with actor + evidence for audit.",
+  "type": "object",
+  "required": [
+    "state",
+    "state_transitions",
+    "framework_id",
+    "iteration_id",
+    "client_code",
+    "ad_account_id",
+    "variants",
+    "compliance_preflight_result"
+  ],
+  "properties": {
+    "state": {
+      "type": "string",
+      "enum": ["draft", "approved", "applied", "rejected"],
+      "description": "Explicit lifecycle state. draft = subagent-authored, not operator-reviewed. approved = operator-approved, not yet pushed. applied = coordinator pushed via Meta MCP write surface. rejected = operator declined; override_reason required."
+    },
+    "state_transitions": {
+      "type": "array",
+      "description": "Audit trail of state changes. Append-only.",
+      "items": {
+        "type": "object",
+        "required": ["from", "to", "timestamp", "actor", "evidence"],
+        "properties": {
+          "from": {
+            "type": ["string", "null"],
+            "enum": ["draft", "approved", "applied", "rejected", null],
+            "description": "Prior state. null for the initial draft creation."
+          },
+          "to": {
+            "type": "string",
+            "enum": ["draft", "approved", "applied", "rejected"]
+          },
+          "timestamp": { "type": "string", "format": "date-time" },
+          "actor": {
+            "type": "string",
+            "description": "Named actor responsible for the transition (e.g. 'subagent:stage5-drafter', 'human:operator', 'coordinator:claude-main')."
+          },
+          "evidence": {
+            "type": "string",
+            "description": "Pointer or short note grounding the transition (signal id, approval message, Meta API response id, override reason)."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "framework_id": {
+      "type": "string",
+      "description": "e.g., 'paid-media/meta-creative-iteration'."
+    },
+    "iteration_id": {
+      "type": "string",
+      "description": "Identifier linking this payload to its iteration cycle artifacts."
+    },
+    "client_code": { "type": "string" },
+    "ad_account_id": {
+      "type": "string",
+      "description": "Meta ad account id; sourced from clients/<CODE>/projects/meta-app-integration/project.json."
+    },
+    "variants": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "variant_id",
+          "headline",
+          "primary_text",
+          "cta",
+          "creative_asset_ref",
+          "framework_tag"
+        ],
+        "properties": {
+          "variant_id": { "type": "string" },
+          "headline": { "type": "string" },
+          "primary_text": { "type": "string" },
+          "cta": { "type": "string" },
+          "creative_asset_ref": {
+            "type": "string",
+            "description": "Reference to the Delesign-delivered asset (path or asset id)."
+          },
+          "framework_tag": {
+            "type": "string",
+            "description": "Framework tag carried into Meta ad name for Stage 6 attribution."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "compliance_preflight_result": {
+      "type": "object",
+      "required": ["passes", "verdict", "rules_consulted", "blockers"],
+      "properties": {
+        "passes": { "type": "boolean" },
+        "verdict": {
+          "type": "string",
+          "enum": ["pass", "warn", "block"]
+        },
+        "rules_consulted": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "blockers": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Empty when verdict=pass."
+        }
+      },
+      "additionalProperties": false
+    },
+    "operator_approval": {
+      "type": "object",
+      "description": "Present only when state in {approved, applied, rejected}.",
+      "required": ["approved_at", "approved_by", "approval_method"],
+      "properties": {
+        "approved_at": { "type": "string", "format": "date-time" },
+        "approved_by": { "type": "string" },
+        "approval_method": {
+          "type": "string",
+          "enum": ["chat-confirm", "signal-ack", "manual-edit", "override"]
+        },
+        "override_reason": {
+          "type": "string",
+          "description": "Required when approval_method=override OR when state=rejected."
+        }
+      },
+      "additionalProperties": false
+    },
+    "apply_result": {
+      "type": "object",
+      "description": "Present only when state=applied.",
+      "required": ["applied_at", "ad_ids_created"],
+      "properties": {
+        "applied_at": { "type": "string", "format": "date-time" },
+        "ad_ids_created": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "ad_set_id": { "type": "string" },
+        "campaign_id": { "type": "string" },
+        "errors": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": { "properties": { "state": { "const": "draft" } } },
+      "then": {
+        "not": {
+          "anyOf": [
+            { "required": ["operator_approval"] },
+            { "required": ["apply_result"] }
+          ]
+        }
+      }
+    },
+    {
+      "if": { "properties": { "state": { "const": "approved" } } },
+      "then": {
+        "required": ["operator_approval"],
+        "not": { "required": ["apply_result"] }
+      }
+    },
+    {
+      "if": { "properties": { "state": { "const": "applied" } } },
+      "then": {
+        "required": ["operator_approval", "apply_result"]
+      }
+    },
+    {
+      "if": { "properties": { "state": { "const": "rejected" } } },
+      "then": {
+        "required": ["operator_approval"],
+        "properties": {
+          "operator_approval": {
+            "required": ["override_reason"]
+          }
+        }
+      }
+    }
+  ]
+}

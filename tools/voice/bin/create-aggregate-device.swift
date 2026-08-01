@@ -1,6 +1,6 @@
 // create-aggregate-device.swift
 //
-// SM_OS voice calm-room — Core Audio aggregate output device CLI.
+// Mythos voice calm-room — Core Audio aggregate output device CLI.
 //
 // Creates a macOS aggregate output device that fans a single audio stream to
 // multiple physical output devices (e.g. two Bluetooth speakers) and exposes a
@@ -161,7 +161,7 @@ func slugify(_ s: String) -> String {
 }
 
 func deterministicUID(forName name: String) -> String {
-    return "com.sm-os.voice.aggregate.\(slugify(name))"
+    return "com.mythos.voice.aggregate.\(slugify(name))"
 }
 
 // MARK: - Find / destroy aggregate by name
@@ -327,7 +327,7 @@ func runDestroy(name: String) -> Int32 {
 
 func usage() -> String {
     return """
-    create-aggregate-device — SM_OS Core Audio aggregate output device CLI
+    create-aggregate-device — Mythos Core Audio aggregate output device CLI
 
     Usage:
       create-aggregate-device --list
@@ -341,7 +341,7 @@ func usage() -> String {
         and the aggregate is created with only the connected ones.
       - If an aggregate with the requested name already exists, it is destroyed
         and recreated (idempotent).
-      - The aggregate UID is deterministic: com.sm-os.voice.aggregate.<slug>
+      - The aggregate UID is deterministic: com.mythos.voice.aggregate.<slug>
     """
 }
 

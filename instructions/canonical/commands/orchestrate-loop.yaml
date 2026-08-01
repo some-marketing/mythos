@@ -1,0 +1,168 @@
+{
+  "id": "orchestrate-loop",
+  "description": "Run a general review-driven orchestration loop with explicit actor roles, evidence gates, Codex finding classification, and debrief closeout",
+  "mode": "COORDINATOR",
+  "objective": "Provide a reusable control loop for multi-actor Mythos work. The loop resolves the target, identifies the current state, chooses an execution shape, delegates or routes through native commands, collects evidence, classifies review findings, and emits the exact next action without collapsing coordinator, worker, reviewer, and human operator roles.",
+  "scope_resolution": {
+    "default": "Resolve the argument as a task plan, prompt plan id, signal scope, signal path, review artifact path, or active workstream scope before choosing a route",
+    "arguments": {
+      "<task-id>": "Resolve through the shared task-plan resolver used by /run-plan and /orchestrate",
+      "<prompt-plan-id>": "Resolve through _dev/prompts/prompt-plan-registry.json, preserving child task plans as leaf authority",
+      "<signal-scope>": "Resolve the latest live HandoffSignal/1.0 for the scope, then route through /follow-signal if it is executable",
+      "<path>": "Inspect the artifact type directly: task plan, prompt plan, signal, review artifact, debrief, or unsupported artifact",
+      "active-workstreams": "Use /review-active-workstreams and /normalize-signals as the truth surface before choosing a next workstream"
+    }
+  },
+  "process": [
+    "Resolve the target artifact before any execution. Prefer explicit paths, then signal scope, then prompt-plan registry id, then task-plan resolver. If more than one target matches, stop and report the ambiguity; do not guess.",
+    "Load current loop context: governing plan or signal, latest amendments, latest review artifact for the same scope, latest debrief for the same scope, and operator-continuity state when present.",
+    "Normalize the target into the recursive task kernel before choosing a route: Current State (what is true now), Question / Work (the one central question or work-unit), and Desired State (what should be true after resolution). The middle question is the work.",
+    "Apply fractalization before delegation: if there is exactly one safe next step, execute or route it inside the current authority scope; if a safe binary choice appears, default to yes; if three choices include a do-both option, treat do-both as the single effective answer; if more than three steps or questions appear at one level, split into child tasks under the same desired state or sibling tasks when desired states differ.",
+    "Resolve questions at the lowest possible level. Bubble up only questions that require the human operator's judgment, explicit approval, budget/scope/timeline commitment, client-facing risk acceptance, destructive or irreversible action, credential access, or resolution of same-rank authority conflict.",
+    "Name task custody explicitly before delegation, closeout, or scoped commit: workstream scope, session id or run id when available, working directory, project/client/framework/system surface, custody_hierarchy, owned artifacts, and known out-of-scope dirty surfaces. When a task plan exists, prefer mechanically generated plan.scope_identity from tools/planning/lib/task-custody.js. Parallel workflows are normal; global dirty worktree state is context, not ownership.",
+    "Name actor roles explicitly: human operator, coordinator agent, worker agent or bridge actor if any, Codex agent if in the review lane, and any other distinct actor. If the same session is coordinator, it must not silently become the worker after delegation has been selected. The coordinator is not the default worker.",
+    "Classify the loop state as one of: ready_to_start, in_progress, mechanical_reconcile_needed, mechanical_reconcile_failed, ready_for_review_mechanically_verified, ready_for_review, review_returned, review_iteration_ceiling_reached, evidence_missing, plan_diverged, blocked, ready_for_clear, cycle_complete.",
+    "Honor the repo-managed orchestrator-worker PreTool gate as reflex-tier evidence for role-boundary drift. When `tools/kernel/hooks/pretool-orchestrator-worker-gate.cjs` warns in observe-only mode, route direct coordinator mutation or analysis through the correct native command or bounded worker lane. When `MYTHOS_ORCHESTRATOR_GATE=1` blocks, do not bypass it. Subagents are exempt because they are already worker lanes.",
+    "Track review-iteration count per review scope. When a single review scope (e.g., <task-id>-impl-review) accumulates N or more passes without NO_FINDINGS / clean verdict, classify the loop as review_iteration_ceiling_reached and route to /amend-plan for scope tightening OR to an operator-gate for evidence-vs-further-iteration decision. Default N=4; per-risk-tier override: low=3, medium=4, high=5. Evidence: this slice's Codex S11 iterated 6 times without escalation.",
+    "Check for a registered mechanical reconciler for the resolved target or artifact type before spending another bridge or LLM turn. If one exists, run it or route to it first. Treat its output as evidence, not judgment. If it reports missing evidence or contract drift, classify the loop as evidence_missing, mechanical_reconcile_failed, or blocked and route to the exact repair or evidence command. If it passes, attach its artifact to the review or closeout packet and continue to the declared review lane.",
+    "Choose the execution shape using the orchestrate-loop Claude skill decision tree: single-threaded, coordinator plus bounded worker, coordinator plus Codex review bridge, coordinator plus worker plus Codex review bridge, or blocked/operator gate.",
+    "Route through native commands before custom behavior: /run-plan for executable plan artifacts, /execute-plan for compatible prompt plans, /follow-signal for live signal authority, /amend-plan for plan divergence, /dispatch-bridge for cross-actor handoff, /review-progress for findings-first review, /debrief-run for closeout, and /normalize-signals for signal hygiene.",
+    "When work is delegated, require a bounded worker contract that names workstream scope, session/run id, working surface, owned artifacts, write surfaces, forbidden surfaces, execution mode, expected evidence, tests or smoke commands, return fields, and closeout ownership when the workflow is expected to end with debrief, next-session, cleanup, or scoped commit. The coordinator validates returned artifacts and does not treat worker summaries as completion evidence.",
+    "Preserve task custody. Custody cascades downward to child tasks/delegations and upward to project/client/system rollups. Rollups may aggregate child_scopes, but they must not claim child artifacts unless explicitly listed in owned_artifacts. If two live workflows share artifact prefixes or signals, stop in needs_context or route to /normalize-signals before delegating. Closeout and scoped commits must include only artifacts tied to the current workstream scope unless the coordinator records an explicit cross-scope reason.",
+    "Preserve closeout ownership. If a delegated worker or bridge worker did the substantive work, debrief, reconcile-lessons, next-session, cleanup, and scoped closeout commit stay in that delegated lane by default. If the coordinator did the substantive work directly, the coordinator owns debrief and closeout. Closeout must restate scope identity and explicit exclusions before any scoped commit. Do not ask the human operator before obvious closeout steps inside an already-authorized loop unless a destructive, external, ambiguous, or judgment-only gate appears.",
+    "Use Codex as logical-core review when there are multiple viable routes, consequential assumptions, or disagreement with the coordinator's read. Do not convene extra actors by ceremony.",
+    "When Codex review or another independent review returns, classify findings by severity and type before choosing the next action. Severity classes: CRITICAL, MAJOR, MINOR, INFO, NO_FINDINGS. Finding types: source_defect, evidence_missing, plan_divergence, stale_context, authority_boundary, schema_or_contract_drift, test_gap, scope_mismatch, unsafe_or_destructive_risk, blocked_external_dependency.",
+    "Apply the review decision tree. CRITICAL or MAJOR source_defect, authority_boundary, schema_or_contract_drift, unsafe_or_destructive_risk, or scope_mismatch keeps the current stage blocked and routes to /amend-plan when assumptions or gates changed, then dispatches bounded repair work. Evidence_missing collects evidence and re-reviews without source repair unless source behavior is also implicated. Plan_divergence or stale_context routes to /amend-plan or /review-task-plan before implementation continues. MINOR findings close only when acceptance criteria and review lane say they are nonblocking; otherwise record follow-up tasks or bounded repair. INFO or NO_FINDINGS may close after evidence and debrief are complete.",
+    "Never advance a downstream stage while unresolved or undeferred CRITICAL or MAJOR blockers remain on the current stage. A deferral must be durable: amendment, debrief, task record, or signal with explicit blocker and next command.",
+    "Collect evidence before closeout: changed files, commands run, test outputs, smoke outputs, review artifacts, and validation state. If evidence is missing, classify the loop as evidence_missing rather than complete.",
+    "Before declaring completion, run the independent review lane required by the governing plan or actual risk. For acceptance-grade system work, the producer cannot self-validate.",
+    "Run /debrief-run for meaningful multi-step work before clearing the loop. If /debrief-run cannot resolve the target, write a truthful blocked or manual-debrief state with the exact missing resolver support.",
+    "Write or update the appropriate HandoffSignal/1.0 state: ready-for-review, blocked, ready-for-clear, or cycle-complete. Include review and test evidence paths, not just narrative claims.",
+    "Return a concise status to the human operator: resolved target, loop state, actor roles, review classification, evidence collected, blockers, and exact next command."
+  ],
+  "decision_tree": {
+    "mechanical_reconciliation": [
+      {
+        "condition": "resolved Question / Work has one safe next step and no safety, authority, or human-judgment gate",
+        "state": "ready_to_start",
+        "next": "execute or route the single next step through the native command that owns it"
+      },
+      {
+        "condition": "resolved Question / Work contains more than three peer steps or questions",
+        "state": "plan_diverged",
+        "next": "create child tasks when the desired state is shared, split sibling tasks when desired states differ, then reclassify each child through the task kernel"
+      },
+      {
+        "condition": "registered mechanical reconciler exists and has not been run for the current target/evidence set",
+        "state": "mechanical_reconcile_needed",
+        "next": "run the target-specific reconciler, emit mechanical-reconcile artifacts, then reclassify"
+      },
+      {
+        "condition": "mechanical reconciler reports missing evidence, stale contract text, unsafe temporary grants, commit-scope drift, or signal validation claims not backed by command output",
+        "state": "mechanical_reconcile_failed",
+        "next": "fix the concrete drift or collect the missing evidence before dispatching broad LLM review"
+      },
+      {
+        "condition": "mechanical reconciler passes and declared review lane is still required",
+        "state": "ready_for_review_mechanically_verified",
+        "next": "dispatch the declared review lane with the reconciler artifact attached"
+      }
+    ],
+    "codex_review": [
+      {
+        "condition": "CRITICAL or MAJOR finding with source_defect, authority_boundary, schema_or_contract_drift, unsafe_or_destructive_risk, or scope_mismatch",
+        "state": "blocked",
+        "next": "/amend-plan <target> when plan assumptions changed, then dispatch bounded worker repair, then re-run tests and Codex review"
+      },
+      {
+        "condition": "evidence_missing without source defect",
+        "state": "evidence_missing",
+        "next": "collect the missing evidence, attach it to the review signal, and re-dispatch review"
+      },
+      {
+        "condition": "plan_divergence or stale_context",
+        "state": "plan_diverged",
+        "next": "/amend-plan <target> or /review-task-plan <target>; do not continue implementation from stale assumptions"
+      },
+      {
+        "condition": "MINOR findings only",
+        "state": "ready_for_clear or blocked depending on acceptance criteria",
+        "next": "record nonblocking follow-ups or dispatch bounded repair if the findings touch acceptance criteria"
+      },
+      {
+        "condition": "INFO only or no findings",
+        "state": "ready_for_clear",
+        "next": "/debrief-run <target>, close signal, then emit the next authorized stage command"
+      },
+      {
+        "condition": "review iteration count for this scope reaches N (default 4; low=3, medium=4, high=5) without NO_FINDINGS / clean verdict",
+        "state": "review_iteration_ceiling_reached",
+        "next": "/amend-plan <target> to tighten scope OR operator-gate for evidence-vs-further-iteration decision; do not silently dispatch pass N+1"
+      }
+    ]
+  },
+  "role_boundaries": [
+    "The coordinator coordinates, resolves targets, writes or routes authority artifacts, validates evidence, integrates returned work, and reports status. The coordinator is not the default worker.",
+    "A worker implements bounded edits or runs bounded execution inside declared write and execution surfaces.",
+    "The Codex agent reviews, audits, or critiques through a distinct review lane. Codex findings are control input, not chat commentary.",
+    "The human operator resolves judgment gates, destructive gates, external authority decisions, and same-rank governance conflicts.",
+    "The orchestrator-worker PreTool gate is a hook-level boundary reminder and optional block. It does not replace worker contracts, evidence, review, or debrief closure.",
+    "If the coordinator decides a worker owns source edits, the coordinator does not drift into direct source editing unless the worker blocks and the boundary is explicitly re-opened.",
+    "If a worker or bridge worker did the substantive work, that lane owns the closeout tail by default: debrief, reconcile-lessons, next-session, cleanup, and scoped closeout commit. If the coordinator did the substantive work directly, the coordinator owns that closeout."
+  ],
+  "scope_identity": [
+    "workstream_scope: task id, signal scope, plan id, or explicit workstream name",
+    "session_or_run_id: current session id, execution id, signal timestamp, or unknown with reason",
+    "working_surface: repo root plus client/project/framework/system surface",
+    "custody_hierarchy: mechanically generated task -> project -> client -> system cascade when plan context exists",
+    "owned_artifacts: exact plan, amendment, signal, debrief, handoff, review, and generated artifacts in scope",
+    "forbidden_artifacts: dirty or parallel-workflow surfaces that must not be touched",
+    "parallel_workflows_rule: do not summarize global repo state as current-loop ownership; parallel dirty files are context, not scope"
+  ],
+  "success_criteria": [
+    "Target resolved or ambiguity reported before execution",
+    "Scope identity named before delegation, closeout, or scoped commit",
+    "Current loop state classified explicitly",
+    "Actor roles named without ambiguous role terms",
+    "Execution shape chosen before delegation or review dispatch",
+    "Native commands used for authority, plan divergence, bridge dispatch, review, signal following, debrief, and signal hygiene where applicable",
+    "Every routed work unit is normalized as Current State, one Question / Work, and Desired State before recursion, delegation, or operator escalation",
+    "More than three peer steps or questions at one level triggers child/sibling fractalization instead of a long flat task body",
+    "Only questions requiring human judgment or protected approval gates bubble up to the human operator",
+    "Codex or independent review findings classified by severity and type before next action",
+    "Known deterministic checks are executed by registered tools before LLM review or worker dispatch. LLM turns are reserved for judgment, review classification, exception handling, and operator-facing synthesis",
+    "CRITICAL and MAJOR findings block downstream stage advancement unless durably deferred",
+    "Evidence gaps route to evidence collection rather than source repair by default",
+    "Coordinator/worker/reviewer boundaries preserved",
+    "Closeout owner is explicit before debrief/next-session/cleanup begins",
+    "Meaningful loops end with debrief evidence and a truthful HandoffSignal/1.0 state",
+    "Final output includes the exact next command"
+  ],
+  "handoff": {
+    "ready_to_start_task_plan": "/run-plan <target> or /orchestrate <target> if execution-shape selection is still needed",
+    "live_signal": "/follow-signal <signal-scope|--file path> --execute",
+    "plan_diverged": "/amend-plan <target>",
+    "review_needed": "/dispatch-bridge --target codex --task \"<review task>\" --command \"/review-progress <scope>\"",
+    "major_or_critical_findings": "dispatch bounded worker repair, then tests, then Codex re-review",
+    "evidence_missing": "run missing tests or smoke cases, attach evidence, then re-dispatch review",
+    "mechanical_reconcile_needed": "run the target-specific reconciler, then reclassify",
+    "mechanical_reconcile_failed": "do not dispatch broad review; fix the concrete missing evidence or drift first",
+    "ready_for_review_mechanically_verified": "dispatch the declared review lane with the mechanical reconciler artifact attached",
+    "ready_for_clear": "/debrief-run <target>, then close or emit next stage command",
+    "signal_surface_messy": "/normalize-signals <scope>"
+  },
+  "artifacts": [
+    "instructions/canonical/commands/orchestrate-loop.yaml",
+    ".claude/commands/orchestrate-loop.md",
+    ".claude/skills/orchestrate-loop/SKILL.md",
+    "_dev/reports/signals/*.json",
+    "_dev/reports/analysis/task-plans/*__amendment__*.json",
+    "_dev/reports/analysis/run-debrief__*",
+    "_dev/reports/analysis/review-progress__*",
+    "_dev/reports/analysis/mechanical-reconcile__<scope>__<timestamp>.json",
+    "_dev/reports/analysis/mechanical-reconcile__<scope>__<timestamp>.md",
+    "instructions/canonical/mechanical-reconcilers.yaml",
+    "_dev/reports/analysis/codex-last-message__*",
+    "_dev/reports/analysis/claude-last-message__*"
+  ]
+}

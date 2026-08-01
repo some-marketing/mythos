@@ -10,7 +10,7 @@ export function agentsMd() {
 
 ## Session Bootstrap
 1. Read \`LLM_MANIFEST.json\` (this directory or parent)
-2. Read \`For_{DEVELOPER_NAME}.md\` for observation summary
+2. Read \`For_Recipient.md\` for observation summary
 3. Read \`QUESTIONS_FOR_DEVELOPER.md\` for items needing input
 
 ## Post-Fix Workflow

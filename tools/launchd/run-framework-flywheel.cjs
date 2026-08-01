@@ -20,7 +20,7 @@ const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
 
-const REPO_ROOT = '/Users/admin/dev/Mythos-recovered';
+const REPO_ROOT = path.resolve(__dirname, '..', '..');
 const STATE_DIR = path.join(REPO_ROOT, '_dev', 'state', 'framework-flywheel');
 const RUNS_LOG = path.join(STATE_DIR, 'runs.jsonl');
 const KILL_SWITCH = path.join(STATE_DIR, 'disabled');

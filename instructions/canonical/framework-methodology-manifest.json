@@ -1,0 +1,316 @@
+{
+  "version": "1.0.0",
+  "description": "Advisory registry of reusable Mythos methodology records. Records help planning find workflow similarities across frameworks. They are not execution authority, routing authority, or promotion authority.",
+  "records": [
+    {
+      "id": "intake-and-scope",
+      "kind": "workflow_phase",
+      "title": "Intake And Scope",
+      "summary": "Capture task purpose, target surface, constraints, acceptance criteria, and scope boundaries before planning or execution.",
+      "similarity_tags": {
+        "domain": ["cross-framework"],
+        "workflow_shape": ["intake-and-scope"],
+        "evidence_shape": ["artifact-citation", "operator-approval"],
+        "risk_shape": ["read-only"],
+        "artifact_shape": ["plan-json", "markdown-report"],
+        "reuse_role": ["workflow-phase", "planning-pattern"]
+      },
+      "source_refs": [
+        {
+          "path": ".claude/skills/plan-task/SKILL.md",
+          "label": "plan-task capture-context step"
+        },
+        {
+          "path": "frameworks/wordpress/content-editing/prompts/00_INTAKE_AND_SCOPE.md",
+          "label": "content-editing intake prompt"
+        },
+        {
+          "path": "frameworks/wordpress/seo-audit/prompts/01_INTAKE_AND_SCOPE.md",
+          "label": "seo-audit intake prompt"
+        }
+      ],
+      "evidence_refs": [],
+      "reuse_constraints": [
+        "Preserve explicit scope_type and storage_root decisions in task plans.",
+        "Do not treat intake similarity as proof that a framework covers execution."
+      ],
+      "lifecycle_state": "proposed"
+    },
+    {
+      "id": "prior-art-lookup",
+      "kind": "workflow_phase",
+      "title": "Prior Art Lookup",
+      "summary": "Search existing frameworks, captures, external skills, and related work before designing a new framework or process.",
+      "similarity_tags": {
+        "domain": ["cross-framework", "meta"],
+        "workflow_shape": ["prior-art-lookup"],
+        "evidence_shape": ["artifact-citation"],
+        "risk_shape": ["read-only"],
+        "artifact_shape": ["manifest-json", "markdown-report"],
+        "reuse_role": ["planning-pattern", "workflow-phase"]
+      },
+      "source_refs": [
+        {
+          "path": "instructions/canonical/commands/new-framework.yaml",
+          "label": "new-framework prior-art lookup"
+        },
+        {
+          "path": "instructions/canonical/commands/scaffold-framework.yaml",
+          "label": "scaffold-framework prior-art lookup"
+        }
+      ],
+      "evidence_refs": [],
+      "reuse_constraints": [
+        "Internal prior art should be checked before external distillation.",
+        "Record whether the result is distilled, composed, or authored from scratch."
+      ],
+      "lifecycle_state": "proposed"
+    },
+    {
+      "id": "capture-before-change",
+      "kind": "workflow_phase",
+      "title": "Capture Before Change",
+      "summary": "Collect pre-change evidence, surface mappings, and baselines before bounded mutation.",
+      "similarity_tags": {
+        "domain": ["wordpress", "cross-framework"],
+        "workflow_shape": ["capture-before-change", "compare-expected-actual"],
+        "evidence_shape": ["screenshot-evidence", "json-artifact", "before-after-diff"],
+        "risk_shape": ["authenticated-admin", "production-facing", "client-data-sensitive"],
+        "artifact_shape": ["json-artifact", "validation-artifact"],
+        "reuse_role": ["workflow-phase", "validation-gate"]
+      },
+      "source_refs": [
+        {
+          "path": "frameworks/wordpress/content-editing/prompts/01_ADMIN_RECON_AND_PRE_EDIT_CAPTURE.md",
+          "label": "content-editing pre-edit capture"
+        },
+        {
+          "path": "frameworks/wordpress/content-editing/manifest.json",
+          "label": "content-editing capture output contract"
+        }
+      ],
+      "evidence_refs": [],
+      "reuse_constraints": [
+        "Requires access and permission boundaries to be resolved before mutation.",
+        "Captured evidence may be client-scoped and must not be copied into frameworks."
+      ],
+      "lifecycle_state": "proposed"
+    },
+    {
+      "id": "navigate-observe-assert-report",
+      "kind": "workflow_phase",
+      "title": "Navigate Observe Assert Report",
+      "summary": "Use browser or source inspection to observe behavior, compare against expectations, and report evidence-backed findings.",
+      "similarity_tags": {
+        "domain": ["wordpress", "deliverables", "cross-framework"],
+        "workflow_shape": ["navigate-observe-assert-report", "compare-expected-actual"],
+        "evidence_shape": ["browser-run", "screenshot-evidence", "markdown-report", "artifact-citation"],
+        "risk_shape": ["read-only", "production-facing"],
+        "artifact_shape": ["markdown-report", "validation-artifact"],
+        "reuse_role": ["workflow-phase", "validation-gate"]
+      },
+      "source_refs": [
+        {
+          "path": "frameworks/wordpress/qa/prompts/05_MCP_WALKTHROUGH_FINDINGS_ONLY.md",
+          "label": "qa findings-only walkthrough"
+        },
+        {
+          "path": "frameworks/deliverables/scope-verification/prompts/01_ANALYZE.md",
+          "label": "scope verification analysis"
+        },
+        {
+          "path": "frameworks/wordpress/seo-audit/prompts/02_TECHNICAL_AUDIT.md",
+          "label": "seo technical audit"
+        }
+      ],
+      "evidence_refs": [],
+      "reuse_constraints": [
+        "Report observations separately from hypotheses.",
+        "Do not treat browser inspection as permission to patch production."
+      ],
+      "lifecycle_state": "proposed"
+    },
+    {
+      "id": "artifact-contract-definition",
+      "kind": "artifact_contract",
+      "title": "Artifact Contract Definition",
+      "summary": "Define input/output artifacts, schemas, bundle contents, and compatibility expectations before execution depends on them.",
+      "similarity_tags": {
+        "domain": ["meta", "cross-framework"],
+        "workflow_shape": ["artifact-contract-definition"],
+        "evidence_shape": ["schema-validation", "json-artifact", "artifact-citation"],
+        "risk_shape": ["repo-local"],
+        "artifact_shape": ["schema-file", "manifest-json", "validation-artifact"],
+        "reuse_role": ["artifact-contract", "validation-gate"]
+      },
+      "source_refs": [
+        {
+          "path": "frameworks/meta/execution-normalization/prompts/01_ARTIFACT_CONTRACT_DEFINITION.md",
+          "label": "execution-normalization artifact contract prompt"
+        },
+        {
+          "path": "instructions/canonical/contracts/composition.yaml",
+          "label": "composition artifact compatibility contract"
+        }
+      ],
+      "evidence_refs": [],
+      "reuse_constraints": [
+        "Schema changes to shared artifacts require compatibility review.",
+        "Do not use contract metadata to override task-plan authority."
+      ],
+      "lifecycle_state": "proposed"
+    },
+    {
+      "id": "review-gate",
+      "kind": "validation_gate",
+      "title": "Review Gate",
+      "summary": "Pause for human, local, or distinct-intelligence review before accepting a consequential output or proceeding to mutation.",
+      "similarity_tags": {
+        "domain": ["cross-framework"],
+        "workflow_shape": ["review-gate"],
+        "evidence_shape": ["operator-approval", "distinct-review", "artifact-citation"],
+        "risk_shape": ["read-only", "repo-local", "production-facing"],
+        "artifact_shape": ["markdown-report", "validation-artifact"],
+        "reuse_role": ["validation-gate", "review-pattern"]
+      },
+      "source_refs": [
+        {
+          "path": ".claude/skills/plan-task/SKILL.md",
+          "label": "plan-task review and two-pass system-level review guidance"
+        },
+        {
+          "path": "instructions/canonical/guardrails.md",
+          "label": "operator interaction loop and secondary review trigger"
+        },
+        {
+          "path": "frameworks/wordpress/content-editing/prompts/04_REVIEW_AND_APPROVAL_GATE.md",
+          "label": "content-editing approval gate"
+        }
+      ],
+      "evidence_refs": [],
+      "reuse_constraints": [
+        "Similarity can suggest a review gate but cannot decide the review lane.",
+        "Operator gates must stay explicit in the task plan."
+      ],
+      "lifecycle_state": "proposed"
+    },
+    {
+      "id": "handoff-bundle",
+      "kind": "handoff_pattern",
+      "title": "Handoff Bundle",
+      "summary": "Package findings, indexes, summaries, raw evidence, and next actions into a durable handoff surface for another actor.",
+      "similarity_tags": {
+        "domain": ["wordpress", "deliverables", "cross-framework"],
+        "workflow_shape": ["handoff-bundle"],
+        "evidence_shape": ["json-artifact", "markdown-report", "artifact-citation"],
+        "risk_shape": ["report-write", "client-data-sensitive"],
+        "artifact_shape": ["bundle", "handoff-packet"],
+        "reuse_role": ["handoff-pattern", "workflow-phase"]
+      },
+      "source_refs": [
+        {
+          "path": "frameworks/wordpress/qa/prompts/12_DEV_PACKET_GENERATOR.md",
+          "label": "qa developer packet generator"
+        },
+        {
+          "path": "frameworks/wordpress/content-editing/prompts/05_PUBLISH_OR_FREEZE_AND_HANDOFF.md",
+          "label": "content-editing handoff prompt"
+        },
+        {
+          "path": "instructions/canonical/commands/next-session.yaml",
+          "label": "next-session handoff command"
+        }
+      ],
+      "evidence_refs": [],
+      "reuse_constraints": [
+        "Do not leak client-specific data into reusable framework records.",
+        "Handoff bundles are evidence surfaces, not lifecycle truth by themselves."
+      ],
+      "lifecycle_state": "proposed"
+    },
+    {
+      "id": "distinct-review-gate",
+      "kind": "review_pattern",
+      "title": "Distinct Review Gate",
+      "summary": "Pair consequential AI-produced work with validation by a distinct actor or harness before acceptance-grade claims.",
+      "similarity_tags": {
+        "domain": ["meta", "cross-framework"],
+        "workflow_shape": ["distinct-review-gate", "review-gate"],
+        "evidence_shape": ["distinct-review", "validation-artifact"],
+        "risk_shape": ["repo-local", "production-facing"],
+        "artifact_shape": ["validation-artifact", "markdown-report"],
+        "reuse_role": ["review-pattern", "validation-gate"]
+      },
+      "source_refs": [
+        {
+          "path": "instructions/canonical/system.yaml",
+          "label": "distinct intelligence validation policy"
+        }
+      ],
+      "evidence_refs": [
+        "_dev/reports/analysis/run-debrief__managed-bridge-parity-skill-and-hooks.replicate-plan.json"
+      ],
+      "reuse_constraints": [
+        "Do not substitute same-harness subagents for distinct-intelligence validation on acceptance-grade work.",
+        "Review must have a concrete falsification target."
+      ],
+      "lifecycle_state": "proposed"
+    },
+    {
+      "id": "calibrate-then-tighten",
+      "kind": "prompt_block",
+      "title": "Calibrate Then Tighten",
+      "summary": "Draft for completeness first, then apply format constraints while preserving a tightening log.",
+      "similarity_tags": {
+        "domain": ["deliverables", "cross-framework"],
+        "workflow_shape": ["calibrate-then-tighten"],
+        "evidence_shape": ["markdown-report", "operator-approval"],
+        "risk_shape": ["report-write"],
+        "artifact_shape": ["shared-block", "markdown-report"],
+        "reuse_role": ["prompt-block"]
+      },
+      "source_refs": [
+        {
+          "path": "frameworks/_shared/blocks/calibrate-then-tighten.md",
+          "label": "shared calibrate then tighten block"
+        }
+      ],
+      "evidence_refs": [],
+      "reuse_constraints": [
+        "Use when premature formatting would hide missing content.",
+        "Do not use as a substitute for source verification."
+      ],
+      "lifecycle_state": "current"
+    },
+    {
+      "id": "replicate-pattern-capture",
+      "kind": "planning_pattern",
+      "title": "Replicate Pattern Capture",
+      "summary": "Capture proven workflow patterns from debriefs as advisory replication candidates with evidence and risk notes.",
+      "similarity_tags": {
+        "domain": ["meta", "cross-framework"],
+        "workflow_shape": ["replicate-pattern-capture"],
+        "evidence_shape": ["artifact-citation", "markdown-report", "json-artifact"],
+        "risk_shape": ["report-write", "repo-local"],
+        "artifact_shape": ["json-artifact", "markdown-report"],
+        "reuse_role": ["planning-pattern", "review-pattern"]
+      },
+      "source_refs": [
+        {
+          "path": "instructions/canonical/commands/debrief-run.yaml",
+          "label": "debrief replicate-plan output contract"
+        },
+        {
+          "path": "instructions/canonical/commands/reconcile-lessons.yaml",
+          "label": "lessons reconciliation pattern conversion"
+        }
+      ],
+      "evidence_refs": [],
+      "reuse_constraints": [
+        "Replicate items are advisory until promoted by a separate bounded task.",
+        "AI-produced evidence requires distinct-intelligence validation before framework hardening."
+      ],
+      "lifecycle_state": "proposed"
+    }
+  ]
+}

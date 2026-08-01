@@ -1,0 +1,975 @@
+{
+  "schema": "MythosHostActivation/2.0",
+  "secret_free": true,
+  "plan_sha256": "8f41456212d69153acd5c5ad101edf567398a235940103fe8cee58b1754743da",
+  "operator_approval": "pending",
+  "approval_manifest_sha256": null,
+  "activation_status": "planned",
+  "local_binding_policy": "boolean capability presence only; values and credentials remain in ignored local configuration",
+  "entries": [
+    {
+      "id": "git-hooks",
+      "kind": "git-hooks",
+      "selection": "selected",
+      "not_applicable_reason": null,
+      "binding": null,
+      "prerequisites": [
+        "git",
+        ".githooks/pre-push"
+      ],
+      "backup": [
+        {
+          "op": "backup-git-config",
+          "args": [
+            "core.hooksPath"
+          ]
+        }
+      ],
+      "preflight": [
+        {
+          "op": "assert-file",
+          "args": [
+            ".githooks/pre-push"
+          ]
+        },
+        {
+          "op": "run",
+          "args": [
+            "npm",
+            "run",
+            "verify:parity"
+          ]
+        }
+      ],
+      "install": [
+        {
+          "op": "git-config-set",
+          "args": [
+            "core.hooksPath",
+            ".githooks"
+          ]
+        }
+      ],
+      "kickstart": [],
+      "healthcheck": [
+        {
+          "op": "git-config-equals",
+          "args": [
+            "core.hooksPath",
+            ".githooks"
+          ]
+        }
+      ],
+      "rollback": [
+        {
+          "op": "restore-git-config",
+          "args": [
+            "core.hooksPath"
+          ]
+        }
+      ],
+      "receipt": "_dev/state/host-activation/receipts/git-hooks.json"
+    },
+    {
+      "id": "claude-project-hooks",
+      "kind": "project-hooks",
+      "selection": "selected",
+      "not_applicable_reason": null,
+      "binding": null,
+      "prerequisites": [
+        "node",
+        ".claude/settings.json",
+        "hook-event:PostToolUse",
+        "hook-event:PreToolUse",
+        "hook-event:SessionEnd",
+        "hook-event:SessionStart",
+        "hook-event:Stop",
+        "hook-event:SubagentStop",
+        "hook-event:UserPromptSubmit"
+      ],
+      "backup": [
+        {
+          "op": "backup-file",
+          "args": [
+            ".claude/settings.json"
+          ]
+        }
+      ],
+      "preflight": [
+        {
+          "op": "validate-project-hooks",
+          "args": [
+            "PostToolUse",
+            "PreToolUse",
+            "SessionEnd",
+            "SessionStart",
+            "Stop",
+            "SubagentStop",
+            "UserPromptSubmit"
+          ]
+        }
+      ],
+      "install": [
+        {
+          "op": "no-op",
+          "args": [
+            "repository-local hooks require no host copy"
+          ]
+        }
+      ],
+      "kickstart": [],
+      "healthcheck": [
+        {
+          "op": "validate-project-hooks",
+          "args": [
+            "PostToolUse",
+            "PreToolUse",
+            "SessionEnd",
+            "SessionStart",
+            "Stop",
+            "SubagentStop",
+            "UserPromptSubmit"
+          ]
+        }
+      ],
+      "rollback": [
+        {
+          "op": "restore-file",
+          "args": [
+            ".claude/settings.json"
+          ]
+        }
+      ],
+      "receipt": "_dev/state/host-activation/receipts/claude-project-hooks.json"
+    },
+    {
+      "id": "launchd-delesign-poll",
+      "kind": "launchd",
+      "selection": "not_applicable",
+      "not_applicable_reason": "local binding \"delesign\" is absent",
+      "binding": "delesign",
+      "prerequisites": [
+        "node",
+        "launchctl",
+        "plutil",
+        "tools/launchd/run-delesign-poll.cjs"
+      ],
+      "backup": [
+        {
+          "op": "backup-launchd-plist",
+          "args": [
+            "delesign-poll"
+          ]
+        }
+      ],
+      "preflight": [
+        {
+          "op": "run",
+          "args": [
+            "tools/launchd/install.sh",
+            "delesign-poll",
+            "--dry-run"
+          ]
+        }
+      ],
+      "install": [
+        {
+          "op": "run",
+          "args": [
+            "tools/launchd/install.sh",
+            "delesign-poll"
+          ]
+        }
+      ],
+      "kickstart": [
+        {
+          "op": "launchctl-kickstart",
+          "args": [
+            "org.mythos.portable.delesign-poll"
+          ]
+        }
+      ],
+      "healthcheck": [
+        {
+          "op": "launchctl-print",
+          "args": [
+            "org.mythos.portable.delesign-poll"
+          ]
+        }
+      ],
+      "rollback": [
+        {
+          "op": "rollback-launchd",
+          "args": [
+            "delesign-poll"
+          ]
+        }
+      ],
+      "receipt": "_dev/state/host-activation/receipts/launchd-delesign-poll.json"
+    },
+    {
+      "id": "launchd-framework-flywheel",
+      "kind": "launchd",
+      "selection": "selected",
+      "not_applicable_reason": null,
+      "binding": null,
+      "prerequisites": [
+        "node",
+        "launchctl",
+        "plutil",
+        "tools/launchd/run-framework-flywheel.cjs"
+      ],
+      "backup": [
+        {
+          "op": "backup-launchd-plist",
+          "args": [
+            "framework-flywheel"
+          ]
+        }
+      ],
+      "preflight": [
+        {
+          "op": "run",
+          "args": [
+            "tools/launchd/install.sh",
+            "framework-flywheel",
+            "--dry-run"
+          ]
+        }
+      ],
+      "install": [
+        {
+          "op": "run",
+          "args": [
+            "tools/launchd/install.sh",
+            "framework-flywheel"
+          ]
+        }
+      ],
+      "kickstart": [
+        {
+          "op": "launchctl-kickstart",
+          "args": [
+            "org.mythos.portable.framework-flywheel"
+          ]
+        }
+      ],
+      "healthcheck": [
+        {
+          "op": "launchctl-print",
+          "args": [
+            "org.mythos.portable.framework-flywheel"
+          ]
+        }
+      ],
+      "rollback": [
+        {
+          "op": "rollback-launchd",
+          "args": [
+            "framework-flywheel"
+          ]
+        }
+      ],
+      "receipt": "_dev/state/host-activation/receipts/launchd-framework-flywheel.json"
+    },
+    {
+      "id": "launchd-hygiene-sweep",
+      "kind": "launchd",
+      "selection": "selected",
+      "not_applicable_reason": null,
+      "binding": null,
+      "prerequisites": [
+        "node",
+        "launchctl",
+        "plutil",
+        "tools/launchd/run-hygiene-sweep.cjs"
+      ],
+      "backup": [
+        {
+          "op": "backup-launchd-plist",
+          "args": [
+            "hygiene-sweep"
+          ]
+        }
+      ],
+      "preflight": [
+        {
+          "op": "run",
+          "args": [
+            "tools/launchd/install.sh",
+            "hygiene-sweep",
+            "--dry-run"
+          ]
+        }
+      ],
+      "install": [
+        {
+          "op": "run",
+          "args": [
+            "tools/launchd/install.sh",
+            "hygiene-sweep"
+          ]
+        }
+      ],
+      "kickstart": [
+        {
+          "op": "launchctl-kickstart",
+          "args": [
+            "org.mythos.portable.hygiene-sweep"
+          ]
+        }
+      ],
+      "healthcheck": [
+        {
+          "op": "launchctl-print",
+          "args": [
+            "org.mythos.portable.hygiene-sweep"
+          ]
+        }
+      ],
+      "rollback": [
+        {
+          "op": "rollback-launchd",
+          "args": [
+            "hygiene-sweep"
+          ]
+        }
+      ],
+      "receipt": "_dev/state/host-activation/receipts/launchd-hygiene-sweep.json"
+    },
+    {
+      "id": "launchd-harness-capability-crawler",
+      "kind": "launchd",
+      "selection": "selected",
+      "not_applicable_reason": null,
+      "binding": null,
+      "prerequisites": [
+        "node",
+        "launchctl",
+        "plutil",
+        "tools/launchd/run-harness-capability-crawler.cjs"
+      ],
+      "backup": [
+        {
+          "op": "backup-launchd-plist",
+          "args": [
+            "harness-capability-crawler"
+          ]
+        }
+      ],
+      "preflight": [
+        {
+          "op": "run",
+          "args": [
+            "tools/launchd/install.sh",
+            "harness-capability-crawler",
+            "--dry-run"
+          ]
+        }
+      ],
+      "install": [
+        {
+          "op": "run",
+          "args": [
+            "tools/launchd/install.sh",
+            "harness-capability-crawler"
+          ]
+        }
+      ],
+      "kickstart": [
+        {
+          "op": "launchctl-kickstart",
+          "args": [
+            "org.mythos.portable.harness-capability-crawler"
+          ]
+        }
+      ],
+      "healthcheck": [
+        {
+          "op": "launchctl-print",
+          "args": [
+            "org.mythos.portable.harness-capability-crawler"
+          ]
+        }
+      ],
+      "rollback": [
+        {
+          "op": "rollback-launchd",
+          "args": [
+            "harness-capability-crawler"
+          ]
+        }
+      ],
+      "receipt": "_dev/state/host-activation/receipts/launchd-harness-capability-crawler.json"
+    },
+    {
+      "id": "launchd-harness-sync-crawler",
+      "kind": "launchd",
+      "selection": "selected",
+      "not_applicable_reason": null,
+      "binding": null,
+      "prerequisites": [
+        "node",
+        "launchctl",
+        "plutil",
+        "tools/launchd/run-harness-sync-crawler.cjs"
+      ],
+      "backup": [
+        {
+          "op": "backup-launchd-plist",
+          "args": [
+            "harness-sync-crawler"
+          ]
+        }
+      ],
+      "preflight": [
+        {
+          "op": "run",
+          "args": [
+            "tools/launchd/install.sh",
+            "harness-sync-crawler",
+            "--dry-run"
+          ]
+        }
+      ],
+      "install": [
+        {
+          "op": "run",
+          "args": [
+            "tools/launchd/install.sh",
+            "harness-sync-crawler"
+          ]
+        }
+      ],
+      "kickstart": [
+        {
+          "op": "launchctl-kickstart",
+          "args": [
+            "org.mythos.portable.harness-sync-crawler"
+          ]
+        }
+      ],
+      "healthcheck": [
+        {
+          "op": "launchctl-print",
+          "args": [
+            "org.mythos.portable.harness-sync-crawler"
+          ]
+        }
+      ],
+      "rollback": [
+        {
+          "op": "rollback-launchd",
+          "args": [
+            "harness-sync-crawler"
+          ]
+        }
+      ],
+      "receipt": "_dev/state/host-activation/receipts/launchd-harness-sync-crawler.json"
+    },
+    {
+      "id": "launchd-lessons-reconcile",
+      "kind": "launchd",
+      "selection": "selected",
+      "not_applicable_reason": null,
+      "binding": null,
+      "prerequisites": [
+        "node",
+        "launchctl",
+        "plutil",
+        "tools/launchd/run-lessons-reconcile-check.cjs"
+      ],
+      "backup": [
+        {
+          "op": "backup-launchd-plist",
+          "args": [
+            "lessons-reconcile"
+          ]
+        }
+      ],
+      "preflight": [
+        {
+          "op": "run",
+          "args": [
+            "tools/launchd/install.sh",
+            "lessons-reconcile",
+            "--dry-run"
+          ]
+        }
+      ],
+      "install": [
+        {
+          "op": "run",
+          "args": [
+            "tools/launchd/install.sh",
+            "lessons-reconcile"
+          ]
+        }
+      ],
+      "kickstart": [
+        {
+          "op": "launchctl-kickstart",
+          "args": [
+            "org.mythos.portable.lessons-reconcile"
+          ]
+        }
+      ],
+      "healthcheck": [
+        {
+          "op": "launchctl-print",
+          "args": [
+            "org.mythos.portable.lessons-reconcile"
+          ]
+        }
+      ],
+      "rollback": [
+        {
+          "op": "rollback-launchd",
+          "args": [
+            "lessons-reconcile"
+          ]
+        }
+      ],
+      "receipt": "_dev/state/host-activation/receipts/launchd-lessons-reconcile.json"
+    },
+    {
+      "id": "launchd-cowork-bridge",
+      "kind": "launchd",
+      "selection": "selected",
+      "not_applicable_reason": null,
+      "binding": null,
+      "prerequisites": [
+        "node",
+        "launchctl",
+        "plutil",
+        "tools/signals/desktop-cowork-consumer.sh"
+      ],
+      "backup": [
+        {
+          "op": "backup-launchd-plist",
+          "args": [
+            "cowork-bridge"
+          ]
+        }
+      ],
+      "preflight": [
+        {
+          "op": "run",
+          "args": [
+            "tools/launchd/install.sh",
+            "cowork-bridge",
+            "--dry-run"
+          ]
+        }
+      ],
+      "install": [
+        {
+          "op": "run",
+          "args": [
+            "tools/launchd/install.sh",
+            "cowork-bridge"
+          ]
+        }
+      ],
+      "kickstart": [
+        {
+          "op": "launchctl-kickstart",
+          "args": [
+            "org.mythos.portable.cowork-bridge"
+          ]
+        }
+      ],
+      "healthcheck": [
+        {
+          "op": "launchctl-print",
+          "args": [
+            "org.mythos.portable.cowork-bridge"
+          ]
+        }
+      ],
+      "rollback": [
+        {
+          "op": "rollback-launchd",
+          "args": [
+            "cowork-bridge"
+          ]
+        }
+      ],
+      "receipt": "_dev/state/host-activation/receipts/launchd-cowork-bridge.json"
+    },
+    {
+      "id": "mcp-delesign",
+      "kind": "mcp-registration",
+      "selection": "not_applicable",
+      "not_applicable_reason": "local binding \"delesign\" is absent",
+      "binding": "delesign",
+      "prerequisites": [
+        "node",
+        "codex",
+        "tools/mcp/delesign/server.js",
+        "tools/mcp/delesign/creds.config.json"
+      ],
+      "backup": [
+        {
+          "op": "backup-codex-mcp",
+          "args": [
+            "mythos-delesign"
+          ]
+        }
+      ],
+      "preflight": [
+        {
+          "op": "mcp-preflight",
+          "args": [
+            "delesign"
+          ]
+        }
+      ],
+      "install": [
+        {
+          "op": "codex-mcp-add",
+          "args": [
+            "mythos-delesign",
+            "tools/mcp/delesign/server.js"
+          ]
+        }
+      ],
+      "kickstart": [],
+      "healthcheck": [
+        {
+          "op": "codex-mcp-get",
+          "args": [
+            "mythos-delesign"
+          ]
+        }
+      ],
+      "rollback": [
+        {
+          "op": "restore-codex-mcp",
+          "args": [
+            "mythos-delesign"
+          ]
+        }
+      ],
+      "receipt": "_dev/state/host-activation/receipts/mcp-delesign.json"
+    },
+    {
+      "id": "mcp-google-ads",
+      "kind": "mcp-registration",
+      "selection": "not_applicable",
+      "not_applicable_reason": "local binding \"google-ads\" is absent",
+      "binding": "google-ads",
+      "prerequisites": [
+        "node",
+        "codex",
+        "tools/mcp/google-ads/server.js",
+        "tools/mcp/google-ads/creds.config.json"
+      ],
+      "backup": [
+        {
+          "op": "backup-codex-mcp",
+          "args": [
+            "mythos-google-ads"
+          ]
+        }
+      ],
+      "preflight": [
+        {
+          "op": "mcp-preflight",
+          "args": [
+            "google-ads"
+          ]
+        }
+      ],
+      "install": [
+        {
+          "op": "codex-mcp-add",
+          "args": [
+            "mythos-google-ads",
+            "tools/mcp/google-ads/server.js"
+          ]
+        }
+      ],
+      "kickstart": [],
+      "healthcheck": [
+        {
+          "op": "codex-mcp-get",
+          "args": [
+            "mythos-google-ads"
+          ]
+        }
+      ],
+      "rollback": [
+        {
+          "op": "restore-codex-mcp",
+          "args": [
+            "mythos-google-ads"
+          ]
+        }
+      ],
+      "receipt": "_dev/state/host-activation/receipts/mcp-google-ads.json"
+    },
+    {
+      "id": "mcp-meta-ads",
+      "kind": "mcp-registration",
+      "selection": "not_applicable",
+      "not_applicable_reason": "local binding \"meta-ads\" is absent",
+      "binding": "meta-ads",
+      "prerequisites": [
+        "node",
+        "codex",
+        "tools/mcp/meta-ads/server.js",
+        "tools/mcp/meta-ads/creds.config.json"
+      ],
+      "backup": [
+        {
+          "op": "backup-codex-mcp",
+          "args": [
+            "mythos-meta-ads"
+          ]
+        }
+      ],
+      "preflight": [
+        {
+          "op": "mcp-preflight",
+          "args": [
+            "meta-ads"
+          ]
+        }
+      ],
+      "install": [
+        {
+          "op": "codex-mcp-add",
+          "args": [
+            "mythos-meta-ads",
+            "tools/mcp/meta-ads/server.js"
+          ]
+        }
+      ],
+      "kickstart": [],
+      "healthcheck": [
+        {
+          "op": "codex-mcp-get",
+          "args": [
+            "mythos-meta-ads"
+          ]
+        }
+      ],
+      "rollback": [
+        {
+          "op": "restore-codex-mcp",
+          "args": [
+            "mythos-meta-ads"
+          ]
+        }
+      ],
+      "receipt": "_dev/state/host-activation/receipts/mcp-meta-ads.json"
+    },
+    {
+      "id": "adapter-crm",
+      "kind": "credentialed-adapter",
+      "selection": "not_applicable",
+      "not_applicable_reason": "local binding \"crm\" is absent",
+      "binding": "crm",
+      "prerequisites": [
+        "node",
+        "tools/mcp/crm/creds.config.json"
+      ],
+      "backup": [
+        {
+          "op": "no-op",
+          "args": [
+            "binding configuration remains local and is never copied"
+          ]
+        }
+      ],
+      "preflight": [
+        {
+          "op": "adapter-preflight",
+          "args": [
+            "crm"
+          ]
+        }
+      ],
+      "install": [
+        {
+          "op": "no-op",
+          "args": [
+            "adapter is repository-local"
+          ]
+        }
+      ],
+      "kickstart": [],
+      "healthcheck": [
+        {
+          "op": "adapter-preflight",
+          "args": [
+            "crm"
+          ]
+        }
+      ],
+      "rollback": [
+        {
+          "op": "no-op",
+          "args": [
+            "no host mutation"
+          ]
+        }
+      ],
+      "receipt": "_dev/state/host-activation/receipts/adapter-crm.json"
+    },
+    {
+      "id": "adapter-sheets",
+      "kind": "credentialed-adapter",
+      "selection": "not_applicable",
+      "not_applicable_reason": "local binding \"sheets\" is absent",
+      "binding": "sheets",
+      "prerequisites": [
+        "node",
+        "tools/mcp/sheets/creds.config.json"
+      ],
+      "backup": [
+        {
+          "op": "no-op",
+          "args": [
+            "binding configuration remains local and is never copied"
+          ]
+        }
+      ],
+      "preflight": [
+        {
+          "op": "adapter-preflight",
+          "args": [
+            "sheets"
+          ]
+        }
+      ],
+      "install": [
+        {
+          "op": "no-op",
+          "args": [
+            "adapter is repository-local"
+          ]
+        }
+      ],
+      "kickstart": [],
+      "healthcheck": [
+        {
+          "op": "adapter-preflight",
+          "args": [
+            "sheets"
+          ]
+        }
+      ],
+      "rollback": [
+        {
+          "op": "no-op",
+          "args": [
+            "no host mutation"
+          ]
+        }
+      ],
+      "receipt": "_dev/state/host-activation/receipts/adapter-sheets.json"
+    },
+    {
+      "id": "adapter-youtube",
+      "kind": "credentialed-adapter",
+      "selection": "not_applicable",
+      "not_applicable_reason": "local binding \"youtube\" is absent",
+      "binding": "youtube",
+      "prerequisites": [
+        "node",
+        "tools/mcp/youtube/creds.config.json"
+      ],
+      "backup": [
+        {
+          "op": "no-op",
+          "args": [
+            "binding configuration remains local and is never copied"
+          ]
+        }
+      ],
+      "preflight": [
+        {
+          "op": "adapter-preflight",
+          "args": [
+            "youtube"
+          ]
+        }
+      ],
+      "install": [
+        {
+          "op": "no-op",
+          "args": [
+            "adapter is repository-local"
+          ]
+        }
+      ],
+      "kickstart": [],
+      "healthcheck": [
+        {
+          "op": "adapter-preflight",
+          "args": [
+            "youtube"
+          ]
+        }
+      ],
+      "rollback": [
+        {
+          "op": "no-op",
+          "args": [
+            "no host mutation"
+          ]
+        }
+      ],
+      "receipt": "_dev/state/host-activation/receipts/adapter-youtube.json"
+    },
+    {
+      "id": "macos-tcc-helper",
+      "kind": "operator-gated-tcc",
+      "selection": "not_applicable",
+      "not_applicable_reason": "local binding \"macos-tcc-helper\" is absent",
+      "binding": "macos-tcc-helper",
+      "prerequisites": [
+        "macOS",
+        "operator-present"
+      ],
+      "backup": [
+        {
+          "op": "record-tcc-state",
+          "args": []
+        }
+      ],
+      "preflight": [
+        {
+          "op": "tcc-preflight",
+          "args": []
+        }
+      ],
+      "install": [
+        {
+          "op": "operator-gate",
+          "args": [
+            "complete visible macOS permission prompts"
+          ]
+        }
+      ],
+      "kickstart": [],
+      "healthcheck": [
+        {
+          "op": "tcc-preflight",
+          "args": []
+        }
+      ],
+      "rollback": [
+        {
+          "op": "operator-gate",
+          "args": [
+            "revoke only permissions granted by this activation"
+          ]
+        }
+      ],
+      "receipt": "_dev/state/host-activation/receipts/macos-tcc-helper.json"
+    }
+  ]
+}

@@ -43,6 +43,16 @@ all. This is a convenience this tool adds for itself (mints once via
 use); it is not part of `tools/lib/resolve-credential.cjs`'s contract and no
 other tool needs to replicate it.
 
+Named profiles keep account credentials isolated. A profile such as
+`somemarketing` resolves profile-specific environment variables, Keychain
+service, 1Password item, and local fallback file. It never writes the default
+profile:
+
+- Environment prefix: `GDRIVE_PROFILE_SOMEMARKETING_*`
+- Keychain service: `mythos-google-drive-somemarketing`
+- 1Password item: `Mythos Google Drive (somemarketing)`
+- Local fallback: `.oauth-creds.somemarketing.json`
+
 ## One-time setup (operator)
 
 1. **Google Cloud Console** (signed in as the Google account this automation
@@ -67,6 +77,17 @@ other tool needs to replicate it.
    `.oauth-creds.json` otherwise -- either way it is durable and never
    printed to the console.
 
+   For a named account/profile, use the downloaded OAuth client JSON directly:
+   ```bash
+   node authorize.js --profile somemarketing \
+     --client-json /path/to/downloaded-oauth-client.json
+   ```
+   The named flow prefers the profile-specific 1Password item and falls back
+   only to its profile-specific gitignored file; it does not overwrite
+   `.oauth-creds.json` or the default `Mythos Google Drive` item. Run
+   `node authorize.js --help` to inspect options without resolving any
+   credentials.
+
 **Reusing an existing OAuth client:** because the resolver is multi-source,
 you can authorize with any Google OAuth client you already have (same
 Google account/project) by passing its id/secret via the env vars above --
@@ -76,7 +97,7 @@ code change.
 ## Verify
 
 ```bash
-node authorize.js --client-json /path/to/downloaded-oauth-client.json
+node authorize.js --profile somemarketing --client-json /path/to/downloaded-oauth-client.json
 # ...then, once a credential is resolvable:
 node share.js --file <any-drive-file-or-folder-id> --list
 ```
@@ -142,7 +163,8 @@ script.
 
 ## Security
 
-- `.oauth-creds.json` is gitignored; it holds the client secret + refresh
-  token. Prefer the Keychain/1Password sources above for shared machines.
+- `.oauth-creds.json` and `.oauth-creds.<profile>.json` are gitignored; they
+  hold the client secret + refresh token. Prefer the Keychain/1Password
+  sources above for shared machines.
 - Scope is full `drive` (needed to set permissions). The token only acts as
   whichever Google account completed `authorize.js`.

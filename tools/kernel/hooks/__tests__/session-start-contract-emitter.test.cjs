@@ -32,7 +32,7 @@ function makeMemoryDir() {
     [
       '---',
       'name: google-ads-customer-ids',
-      'description: "{CLIENT_CODE}=8560375238 etc"',
+      'description: "client={ADS_CUSTOMER_ID} etc"',
       'metadata:',
       '  type: reference',
       '---',

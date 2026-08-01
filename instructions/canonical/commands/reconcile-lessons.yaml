@@ -1,0 +1,108 @@
+{
+  "id": "reconcile-lessons",
+  "description": "Reconcile session learnings and review findings into a durable lessons artifact",
+  "mode": "REVIEW_ONLY",
+  "objective": "Scan session learnings and review artifacts for repeated findings, classify each lesson, and write a durable reconciliation artifact. When repeated patterns are found, recommend bounded hardening tasks, coordination signals, or plan updates. When no findings exist, write the artifact with a no-new-findings note.",
+  "scope_resolution": {
+    "default": "Use current date or most recent session-learnings file date",
+    "arguments": {
+      "<date>": "Reconcile lessons for the specified date",
+      "latest": "Reconcile lessons using the most recent session-learnings file"
+    }
+  },
+  "process": [
+    "Resolve the target date from arguments: if empty or 'latest', use the current date or the most recent session-learnings file date; if a date string, use that date.",
+    "Scan for session learnings: glob _dev/reports/analysis/session-learnings__*.md and read the file matching the target date or the most recent one.",
+    "Scan for review artifacts: glob _dev/reports/analysis/advance-pipeline__*.md, _dev/reports/analysis/review-progress__*.md, and _dev/reports/analysis/*.expectation-failures.json; read all matching files.",
+    "Extract findings and patterns: from session learnings, extract each numbered observation and its system implication; from review artifacts, extract each finding and severity; from expectation-failure JSONs, extract each failure entry.",
+    "Identify repeated patterns: group findings that share the same root cause, affected system area, or recommended fix; count frequency across distinct artifact sources.",
+    "Classify each pattern: already-hardened (addressed by existing guardrails, commands, validation, or code), actionable (can be addressed now with a bounded task), deferred (valid but depends on unstarted work or pending decisions), no-action (observation that does not require system changes).",
+    "For each actionable finding, recommend exactly one of: a bounded hardening task (what to change and where), a task-map update (add to an existing implementation plan), or a coordination signal (emit for cross-actor handoff).",
+    "When lessons indicate repo truth was materially changed by a now-validated slice, note whether the slice should be pushed to remote immediately so the control plane does not drift between local and remote state.",
+    "Before promoting any lesson to durable law or framework hardening, verify that AI-produced evidence has distinct-intelligence validation (different actor_id AND different harness_id when both are type=intelligence). Block promotion if the validation is self-sourced (same actor or same harness produced and validated).",
+    "Write the markdown artifact to _dev/reports/analysis/lessons-reconciliation__<date>.md with reconciliation timestamp, files scanned, findings table, and one-line summary.",
+    "Write the expectation-failures JSON to _dev/reports/analysis/lessons-reconciliation__<date>.expectation-failures.json with the output contract schema.",
+    "Report to the user: findings count, actionable items, and one-line summary."
+  ],
+  "review_rules": [
+    "This command is REVIEW_ONLY. It writes analysis artifacts only.",
+    "Do not implement fixes. Recommend them with bounded scope.",
+    "Do not build a generic learning engine or priority ranking system.",
+    "Do not replace or modify existing review artifacts.",
+    "When a pattern is already-hardened, cite the specific guardrail, command, or validation that addresses it.",
+    "When no findings exist, still write both artifacts with the no-new-findings note.",
+    "Frequency counts should reflect distinct artifact sources, not word-count repetition.",
+    "Treat 'validated slice should now be pushed' as a legitimate bounded recommendation when local-only drift is becoming a risk.",
+    "Lesson entries produced by intelligence require distinct-intelligence validation before framework hardening. Self-sourced validation (same actor_id or same harness_id for both producer and validator) does not satisfy this requirement."
+  ],
+  "driver": {
+    "type": "launchd",
+    "ref": "ca.somemarketing.smos.lessons-reconcile",
+    "runner": "tools/launchd/run-lessons-reconcile-check.cjs",
+    "emitter": "tools/lessons/check-reconciliation-due.cjs"
+  },
+  "cadence_triggers": {
+    "interval": "Every 3-5 substantive turns in a long multi-actor session",
+    "after_blocked_fix_close": true,
+    "after_stage_closeout": true,
+    "after_session_learnings_produced": true,
+    "referenced_by": "review-progress",
+    "bridge_signal": {
+      "signal_scope": "lessons-reconciliation",
+      "recommended_next_actor": "codex",
+      "recommended_next_command": "/reconcile-lessons <oldest-uncovered-date>",
+      "emitted_when": [
+        "3 or more automated run notes have accumulated across learnings dates not yet covered by a same-date reconciliation artifact (per-date coverage: a reconciliation artifact covers only its own date's files; the signal targets the oldest uncovered date)",
+        "a blocked -> fix -> close cycle just resolved successfully"
+      ],
+      "execution": {
+        "mode": "patch-allowed",
+        "workload": "review",
+        "write_surface": "the two lessons-reconciliation__<date> artifacts only",
+        "note": "REVIEW_ONLY semantics unchanged; the distinct-intelligence gate before durable-law/framework promotion applies regardless of executing actor"
+      }
+    }
+  },
+  "output_contract": {
+    "markdown_artifact": "_dev/reports/analysis/lessons-reconciliation__<date>.md",
+    "json_artifact": "_dev/reports/analysis/lessons-reconciliation__<date>.expectation-failures.json",
+    "json_schema": {
+      "reconciled_at": "ISO-8601 timestamp",
+      "session_learnings_scanned": "array of file paths",
+      "review_artifacts_scanned": "array of file paths",
+      "findings": {
+        "type": "array",
+        "items": {
+          "id": "pattern identifier",
+          "pattern": "description of the recurring pattern",
+          "frequency": "count of distinct artifact sources",
+          "status": "already-hardened | actionable | deferred | no-action",
+          "recommended_action": "description or null"
+        }
+      },
+      "summary": "one-line result string"
+    }
+  },
+  "success_criteria": [
+    "Session learnings and review artifacts scanned",
+    "Each lesson classified with evidence for the classification",
+    "Markdown reconciliation artifact written",
+    "Expectation-failures JSON written even when empty",
+    "Actionable items have bounded specific recommendations",
+    "User receives a concise summary"
+  ],
+  "pattern_conversion_requirement": {
+    "rule": "Must convert repeated framework-local patterns into one bounded hardening task, plan update, or queued follow-on rather than leaving them as narrative only. Narrative-only reconciliation output is insufficient — every actionable pattern must produce exactly one of: a bounded hardening task (what to change and where), a task-plan update (add to an existing implementation plan), or a queued follow-on signal (emit for cross-actor handoff or future session pickup).",
+    "enforcement": "If a pattern is classified as 'actionable' but its recommended_action is narrative-only (e.g., 'consider improving X' without a specific target file, change, and gate), the reconciliation is incomplete. Reclassify as 'deferred' with an explicit rationale or sharpen the recommendation."
+  },
+  "handoff": {
+    "actionable_command_improvements": "Edit the relevant command .md and canonical spec",
+    "actionable_validation_gaps": "Add tests or verification checks",
+    "actionable_guardrail_drift": "assemble-prompt-system",
+    "no_actionable_findings": "No follow-on needed"
+  },
+  "artifacts": [
+    "_dev/reports/analysis/lessons-reconciliation__<date>.md",
+    "_dev/reports/analysis/lessons-reconciliation__<date>.expectation-failures.json"
+  ]
+}

@@ -12,7 +12,7 @@ Execute a framework's prompt chain against a client project: collect required in
 </objective>
 
 <quick_start>
-1. Run `/run-framework wordpress/qa /path/to/<CLIENT>_workspace/projects/wordpress__qa__contact-form`
+1. Run `/run-framework <service/framework> <WORKSPACE>/projects/<service>__<framework>__<slug>`
 2. The skill reads the framework manifest and collects required inputs
 3. Each prompt executes in order with its declared execution mode enforced
 4. Gate conditions pause for user input; auto steps run autonomously
@@ -42,6 +42,7 @@ Execute a framework's prompt chain against a client project: collect required in
 | Condition | Action |
 |-----------|--------|
 | Missing manifest.json | STOP. Report missing file path. Do not proceed without valid manifest. |
+| Missing guardrails.md | STOP. Report missing guardrails file path. Do not proceed without guardrails. |
 | Prompt chain failure | Log which prompt failed and its inputs. Halt execution and report to user. |
 | Guardrail violation | STOP immediately. Report the violated constraint and execution mode. |
 </failure_modes>

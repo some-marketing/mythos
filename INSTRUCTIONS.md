@@ -3,7 +3,7 @@
 > AUTO-GENERATED FILE. Edit canonical source in `instructions/canonical/*` and regenerate.
 
 ## Project
-Mythos: An adventurer's guild for AI coding agents — reusable, guardrailed grimoires (workflow frameworks) for real work
+Mythos: LLM operating system for reusable client-work frameworks
 
 ## Routing
 - Load framework manifest: `frameworks/{service}/{framework}/manifest.json`
@@ -12,11 +12,13 @@ Mythos: An adventurer's guild for AI coding agents — reusable, guardrailed gri
 
 ## Safety Rules
 - Never expose PII, credentials, API keys, or .env values
+- Never treat private local substrates as default frontier-model context; route private surface access through substrate-specific allowance, query bounds, redaction, and receipt rules in instructions/canonical/private-surface-introspection-rule.yaml
+- Disclose the model/mind for every subagent and bridge dispatch at dispatch time, and tier the dispatched mind to the work altitude per instructions/canonical/dispatch-routing-rule.yaml; same-model Claude subagents are parallel contexts, not distinct intelligence
 - Never write client-specific data into frameworks
 - Never skip declared execution mode constraints
 - Never run destructive operations without explicit confirmation
 - Use observational reporting: observations and hypotheses, not diagnoses
-- Contribution workflow: always work on a feature branch and open a pull request — never commit or push directly to `main`
+- When a role term such as operator, user, agent, or reviewer could refer to more than one actor, name the actor explicitly (for example: human, Codex agent, Claude agent). If the intended actor is ambiguous, ask instead of assuming.
 
 ## The Core (doctrine)
 
@@ -91,36 +93,89 @@ Mythos could otherwise quietly stop deserving the trust it asks for.
 | REPO_HYGIENE | docs_cleanup | false | Navigation and cleanup only |
 
 ## Operations
-- `capture-task` (PATCH_ALLOWED): claim-spoils — Import successful ad-hoc work into a normalized spoils bundle
-- `normalize-capture` (PATCH_ALLOWED): refine-spoils — Validate and normalize a spoils bundle
-- `capture-status` (REVIEW_ONLY): spoils-ledger — Report spoils readiness and missing fields
-- `scaffold-framework` (PATCH_ALLOWED): scribe-grimoire — Scaffold a grimoire candidate from spoils
-- `candidate-status` (REVIEW_ONLY): initiate-status — Report grimoire candidate maturity and blockers
-- `replay-framework` (PATCH_ALLOWED): rehearse-grimoire — Run replay-readiness checks for a grimoire candidate
-- `promote-framework` (PATCH_ALLOWED): rank-up — Promote a validated grimoire candidate into the guild
-- `publish-framework` (PATCH_ALLOWED): enshrine-grimoire — Scan, sanitize, and export a grimoire to the public repo in one guided motion
-- `new-framework` (PATCH_ALLOWED): forge-grimoire — Forge a new grimoire from intake or example
-- `audit-framework` (REVIEW_ONLY): appraise-grimoire — Validate a grimoire's structure and references
-- `improve-framework` (PATCH_ALLOWED): empower-grimoire — Empower a grimoire based on run outputs
-- `list-frameworks` (REVIEW_ONLY): bookshelf — List registered grimoires
-- `new-client` (PATCH_ALLOWED): enroll-patron — Register a new patron entry
-- `new-project` (PATCH_ALLOWED): open-contract — Open a contract linking a patron to a grimoire
-- `project-status` (REVIEW_ONLY): contract-ledger — Report contract progression
-- `run-framework` (COORDINATOR): cast-grimoire — Cast a grimoire's prompt chain against a patron contract
-- `system-status` (REVIEW_ONLY): guild-ledger — Global guild inventory and health summary
-- `extract-skill` (PATCH_ALLOWED): awaken-essence — Awaken a reusable essence from a conversation workflow
-- `sync-manifest` (PATCH_ALLOWED): attune-codex — Attune the project-claude.yml codex with assets on disk
-- `orchestrate-loop` (COORDINATOR): guildmaster-loop — Drive the general review-driven orchestration loop: resolve targets, route work, preserve coordinator/worker/reviewer boundaries, and close through evidence and debrief
-- `deliberate` (COORDINATOR): commune — Reason solo, gather multi-familiar counsel, synthesize, then route through the orchestration loop
-- `convene-review` (COORDINATOR): conclave — Convene multiple distinct minds for adversarial review when a single trial isn't enough
-- `blueprint` (COORDINATOR): charter-quest — Take a rough request from intent to a bounded, review-gated quest charter: deliberate, initialize a durable concept artifact, then route to plan-quest
-- `concept-init` (PATCH_ALLOWED): inscribe-lore — Create a new concept artifact, sized to scope
-- `plan-task` (REVIEW_ONLY): plan-quest — Draft a bounded quest charter for a task, grounded against existing grimoires
-- `review-task-plan` (REVIEW_ONLY): trial-quest — Put a generated quest charter through independent review before it runs
-- `run-plan` (COORDINATOR): embark — Resolve an approved quest charter and route it to the correct execution pathway
-- `evidence-loop` (COORDINATOR): gauntlet — Run the high-rigor review profile: adversarial review by a distinct mind, a third-mind context check, and a research disposition for every finding
-- `route` (REVIEW_ONLY): site — Resolve and recommend the correct command for a stated goal
-- `debrief-run` (REVIEW_ONLY): chronicle — Run end-of-session debrief producing improve and replicate notes
+- `advance-pipeline` (COORDINATOR): Legacy alias for execute-plan master
+- `execute-plan` (COORDINATOR): Execute the next incomplete stage from a compatible prompt plan
+- `review-progress` (REVIEW_ONLY): Run a findings-first review of progress or pipeline output
+- `author-prompt-system` (PATCH_ALLOWED): Author or update prompt packs and the master run order from _dev research and proposed flows
+- `assemble-prompt-system` (PATCH_ALLOWED): Reconcile prompt packs, run prompts, manifest, and the master run order
+- `plan-pipeline` (REVIEW_ONLY): Choose the next eligible stage or infrastructure track before execution
+- `plan-active-workstreams` (REVIEW_ONLY): Plan the current bounded follow-on queues after the master pipeline is complete
+- `create-plan` (REVIEW_ONLY): Operator-friendly alias for plan-task
+- `amend-plan` (REVIEW_ONLY): Amend an existing task plan when execution reality diverges materially from plan assumptions
+- `review-active-workstreams` (REVIEW_ONLY): Review the current bounded active workstreams after master-pipeline completion
+- `capture-task` (PATCH_ALLOWED): Import successful work into a normalized capture bundle
+- `normalize-capture` (PATCH_ALLOWED): Validate and normalize a capture bundle
+- `capture-status` (REVIEW_ONLY): Report capture readiness and missing fields
+- `scaffold-framework` (PATCH_ALLOWED): Scaffold a framework candidate from captures
+- `generate-harness` (PATCH_ALLOWED): Generate .claude/ harness trees for unharnessed frameworks
+- `candidate-status` (REVIEW_ONLY): Report framework candidate maturity and blockers
+- `replay-framework` (PATCH_ALLOWED): Run replay-readiness checks for a framework candidate
+- `promote-framework` (PATCH_ALLOWED): Promote a validated framework candidate into Mythos
+- `new-framework` (PATCH_ALLOWED): Create framework from intake or example
+- `audit-framework` (REVIEW_ONLY): Validate framework structure and references
+- `improve-framework` (PATCH_ALLOWED): Improve framework based on run outputs
+- `list-frameworks` (REVIEW_ONLY): List registered frameworks
+- `new-client` (PATCH_ALLOWED): Create new client entry
+- `new-project` (PATCH_ALLOWED): Create project linked to framework
+- `project-status` (REVIEW_ONLY): Report project progression
+- `triage-client-board` (REVIEW_ONLY): Triage client-board intake into pickup-ready work, planning work, and clarification work
+- `run-framework` (COORDINATOR): Execute framework prompt chain
+- `mythos-status` (REVIEW_ONLY): Global inventory and health summary
+- `next-step` (REVIEW_ONLY): Resolve the deterministic next recommended Mythos command from current repo state
+- `cadence` (REVIEW_ONLY): Render the current cadence slice across active Mythos domains
+- `follow-signal` (COORDINATOR): Follow the exact next action authorized by a live signal or approved task plan
+- `extract-skill` (PATCH_ALLOWED): Extract reusable skill from conversation workflow
+- `sync-manifest` (PATCH_ALLOWED): Sync project-claude.yml with assets on disk
+- `validate-all-frameworks` (REVIEW_ONLY): Validate all registered frameworks in parallel
+- `review-source-material` (REVIEW_ONLY): Evaluate a source document against the source-status ladder and minimum source-document contract
+- `reconcile-lessons` (REVIEW_ONLY): Reconcile session learnings and review findings into a durable lessons artifact
+- `debrief-run` (REVIEW_ONLY): Run end-of-session debrief producing improve and replicate plans
+- `normalize-signals` (COORDINATOR): Normalize the live signal surface by closing stale, consumed, or duplicate signals
+- `ad-copy-dev` (COORDINATOR): Build ad copy through the reusable ad-copy development workflow
+- `plan-task` (REVIEW_ONLY): Create a bounded task plan with explicit gates, review lane, and expected outcomes
+- `systemize-behavior` (REVIEW_ONLY): Advisory detector for repeated corrections and repeat-task descriptions
+- `claim-intake` (REVIEW_ONLY): Claim a client-board intake item for planning or execution
+- `clean-house` (REPO_HYGIENE): Repo-hygiene cleanup for navigation, grouping, and stale analysis surfaces
+- `concept-dispatch` (PATCH_ALLOWED): Dispatch a concept for bounded synthesis or review work
+- `concept-init` (PATCH_ALLOWED): Initialize a concept artifact with the canonical metadata contract
+- `concept-promote` (PATCH_ALLOWED): Promote a concept artifact into its next durable system surface
+- `next-session` (PATCH_ALLOWED): Write a canonical next-session handoff artifact capturing outcomes, blockers, and the exact pickup command
+- `orchestrate` (COORDINATOR): Fresh-session handoff wrapper that resolves a plan and routes it through the orchestrate skill
+- `orchestrate-loop` (COORDINATOR): Run a general review-driven orchestration loop with actor boundaries, Codex finding classification, and debrief closeout
+- `owl` (COORDINATOR): Human-friendly alias for orchestrate-loop: Observe, Weigh, Loop
+- `oa` (COORDINATOR): Shortest operator alias for Owl Audit: review-first orchestration through orchestrate-loop
+- `council-of-owls` (COORDINATOR): Human-friendly shorthand for consult-then-route work: convene the council when warranted, then loop through owl/orchestrate-loop
+- `oc` (COORDINATOR): Shortest operator alias for council-of-owls: Owl Council
+- `dispatch-bridge` (COORDINATOR): Dispatch a task to a distinct actor for cross-verification or specialized analysis
+- `dispatch-trifecta` (COORDINATOR): Orchestrate a parallel consultation with Codex, Claude, and Gemini to produce a synthetic community consensus
+- `review-dispatch` (REVIEW_ONLY): Review dispatch outputs and handoff integrity before proceeding
+- `review-task-plan` (REVIEW_ONLY): Review a generated task plan before execution
+- `run-plan` (COORDINATOR): Route a plan-like artifact to the correct execution workflow
+- `synthesize-concept` (PATCH_ALLOWED): Synthesize durable concept output from bounded concept inputs
+- `whats-next` (REVIEW_ONLY): Daily boot sequence — surface what is done, blocked, and executable across all clients
+- `write-handoff` (PATCH_ALLOWED): [DEPRECATED — use next-session] Write a next-session handoff artifact for a client or system workstream
+- `convene` (COORDINATOR): Convene the three-lobe kernel on a task
+- `convene-gate-status` (REVIEW_ONLY): Report whether the convene gate is enabled and what it protects
+- `bridge-speakers` (RUN_ONLY): Bridge multiple audio output devices
+- `aside` (PATCH_ALLOWED): Route a side-thought from in-flight conversation into the right Mythos surface
+- `fw-deliverables-presentation-review` (COORDINATOR): Run Presentation Review — Cross-reference audit of client presentations against project plan documents, screenshots, and errata
+- `fw-deliverables-scope-verification` (COORDINATOR): Run Scope Verification — Verifies scope/proposal documents against source data by exact categorization, counting, and discrepancy detection
+- `fw-deliverables-version-reconciliation` (COORDINATOR): Run Version Reconciliation — Structured diff and contradiction detection between two versions of a deliverable, supporting cross-format comparison
+- `fw-meta-execution-normalization` (COORDINATOR): Run Execution Normalization — Tool-agnostic pipeline for normalizing framework execution models with progressive code offloading
+- `fw-paid-media-ad-creative` (COORDINATOR): Run Ad Creative — Generate, iterate, and scale ad creative across paid advertising platforms with structured testing plans
+- `fw-paid-media-campaign-management` (COORDINATOR): Run Campaign Management — End-to-end paid advertising campaign management
+- `fw-project-management-dart-collaboration` (COORDINATOR): Run Dart Collaboration — Abstract task creation and collaboration framework using Dart as human frontend and git workspace repos as backend
+- `fw-project-management-feedback-to-tasks` (COORDINATOR): Run Feedback To Tasks — Compiles stakeholder feedback from PM tools into provenance-cited task lists
+- `fw-wordpress-analytics-tracking` (COORDINATOR): Run Analytics Tracking — Analytics implementation framework for WordPress sites
+- `fw-wordpress-content-editing` (COORDINATOR): Run Content Editing — Scoped WordPress admin content editing with visual and functional verification
+- `fw-wordpress-design-mockup-validation` (COORDINATOR): Run Design Mockup Validation — Cross-AI design mockup validation with iterative generation and review
+- `fw-wordpress-design-research` (COORDINATOR): Run Design Research — Pre-build design research and competitive site analysis
+- `fw-wordpress-documentation` (COORDINATOR): Run Documentation — Client-facing WordPress admin documentation via MCP browser walkthroughs with Notion output
+- `fw-wordpress-page-cro` (COORDINATOR): Run Page Cro — Multi-phase conversion rate optimization audit for marketing pages
+- `fw-wordpress-qa` (COORDINATOR): Run Qa — Playwright-based site functionality testing with CRM integration validation
+- `fw-wordpress-seo-audit` (COORDINATOR): Run Seo Audit — Multi-phase SEO audit for WordPress sites
+- `fw-wordpress-seo-validation` (COORDINATOR): Run Seo Validation — Playwright-based pre-launch SEO validation crawl for WordPress sites
+- `fw-media-video-editing` (COORDINATOR): Run Video Editing — Conversation-driven video editing: transcribe, cut, color grade, burn subtitles, self-evaluate
 
 ## Agents
 - `framework-auditor`: Read-only structure and policy validation
@@ -128,6 +183,9 @@ Mythos could otherwise quietly stop deserving the trust it asks for.
 - `output-reviewer`: Output quality validation
 - `completion-auditor`: Evidence-based completion verification against acceptance criteria
 - `extract-skill-agent`: Conversation workflow analysis and skill artifact generation
+- `lifecycle-auditor`: Lifecycle hook execution verification and drift detection
+- `capture-normalizer`: Lightweight capture bundle normalization for parallel batch processing
+- `signal-normalizer`: Bounded signal-surface maintenance: closing stale, consumed, or duplicate coordination signals
 
 ## Orchestration Policy
 - Completion auditing: required_for_substantial_changes
@@ -141,137 +199,36 @@ Mythos could otherwise quietly stop deserving the trust it asks for.
 | deliverables/presentation-review | 8 | FINDINGS_ONLY, REVIEW_ONLY | none |
 | deliverables/scope-verification | 2 | FINDINGS_ONLY, PATCH_ALLOWED | playwright |
 | deliverables/version-reconciliation | 2 | FINDINGS_ONLY, PATCH_ALLOWED | none |
-| media/video-editing | 6 | FINDINGS_ONLY, PATCH_ALLOWED, REVIEW_ONLY | none |
-| meta/dreaming-system | 7 | FINDINGS_ONLY, REVIEW_ONLY, PATCH_ALLOWED, RUN_ONLY | none |
 | meta/execution-normalization | 11 | REVIEW_ONLY, RUN_ONLY, PATCH_ALLOWED, COORDINATOR | none |
 | project-management/dart-collaboration | 2 | REVIEW_ONLY, PATCH_ALLOWED | none |
 | project-management/feedback-to-tasks | 5 | FINDINGS_ONLY, RUN_ONLY, PATCH_ALLOWED | dart, notion |
-| wordpress/analytics-tracking | 4 | FINDINGS_ONLY, RUN_ONLY, PATCH_ALLOWED | playwright |
-| wordpress/content-editing | 6 | FINDINGS_ONLY, RUN_ONLY, REVIEW_ONLY, PATCH_ALLOWED, COORDINATOR | playwright |
 | wordpress/design-mockup-validation | 3 | RUN_ONLY, REVIEW_ONLY, PATCH_ALLOWED | playwright |
 | wordpress/design-research | 3 | FINDINGS_ONLY, PATCH_ALLOWED | playwright |
 | wordpress/documentation | 4 | FINDINGS_ONLY, PATCH_ALLOWED, REVIEW_ONLY | playwright, notion |
-| wordpress/page-cro | 4 | FINDINGS_ONLY, REVIEW_ONLY | playwright |
 | wordpress/qa | 16 | FINDINGS_ONLY, RUN_ONLY, REVIEW_ONLY, PATCH_ALLOWED, COORDINATOR, REPO_HYGIENE | playwright |
-| wordpress/seo-audit | 5 | FINDINGS_ONLY, RUN_ONLY, REVIEW_ONLY | playwright |
 | wordpress/seo-validation | 6 | FINDINGS_ONLY, RUN_ONLY, REVIEW_ONLY | none |
+| wordpress/analytics-tracking | 4 | FINDINGS_ONLY, RUN_ONLY, PATCH_ALLOWED | playwright |
+| paid-media/ad-creative | 5 | FINDINGS_ONLY, REVIEW_ONLY | none |
+| paid-media/campaign-management | 4 | FINDINGS_ONLY, REVIEW_ONLY, PATCH_ALLOWED | none |
+| wordpress/content-editing | 6 | FINDINGS_ONLY, RUN_ONLY, REVIEW_ONLY, PATCH_ALLOWED, COORDINATOR | playwright |
+| wordpress/page-cro | 4 | FINDINGS_ONLY, REVIEW_ONLY | playwright |
+| wordpress/seo-audit | 5 | FINDINGS_ONLY, RUN_ONLY, REVIEW_ONLY | playwright |
+| paid-media/google-ads-search-campaign-build | 6 | FINDINGS_ONLY, REVIEW_ONLY, PATCH_ALLOWED, RUN_ONLY | google-ads |
+| paid-media/meta-creative-iteration | 9 | FINDINGS_ONLY, REVIEW_ONLY, PATCH_ALLOWED | meta-ads, delesign, claude-in-chrome |
+| wordpress/livecanvas-rebuild | 5 | FINDINGS_ONLY, PATCH_ALLOWED | playwright |
+| media/video-editing | 6 | FINDINGS_ONLY, PATCH_ALLOWED, REVIEW_ONLY | none |
+| meta/dreaming-system | 7 | FINDINGS_ONLY, REVIEW_ONLY, PATCH_ALLOWED, RUN_ONLY | none |
 
 ## Command Aliases
 
 Command names are mechanical aliases. The typed alias is provenance; authority, state, errors, evidence, and closeout belong to the resolved generic command.
 
-- `/guild-ledger` (`/system-status`) [primary]; authority: `/system-status`
-- `/guildmaster-loop` (`/orchestrate-loop`) [primary]; authority: `/orchestrate-loop`
-- `/commune` (`/deliberate`) [primary]; authority: `/deliberate`
-- `/conclave` (`/convene-review`) [primary]; authority: `/convene-review`
-- `/charter-quest` (`/blueprint`) [primary]; authority: `/blueprint`
-- `/inscribe-lore` (`/concept-init`) [primary]; authority: `/concept-init`
-- `/plan-quest` (`/plan-task`) [primary]; authority: `/plan-task`
-- `/trial-quest` (`/review-task-plan`) [primary]; authority: `/review-task-plan`
-- `/embark` (`/run-plan`) [primary]; authority: `/run-plan`
-- `/gauntlet` (`/evidence-loop`) [primary]; authority: `/evidence-loop`
-- `/site` (`/route`) [primary]; authority: `/route`
-- `/chronicle` (`/debrief-run`) [primary]; authority: `/debrief-run`
-- `/cast-grimoire` (`/run-framework`) [primary]; authority: `/run-framework`
-- `/bookshelf` (`/list-frameworks`) [primary]; authority: `/list-frameworks`
-- `/forge-grimoire` (`/new-framework`) [primary]; authority: `/new-framework`
-- `/scribe-grimoire` (`/scaffold-framework`) [primary]; authority: `/scaffold-framework`
-- `/appraise-grimoire` (`/audit-framework`) [primary]; authority: `/audit-framework`
-- `/empower-grimoire` (`/improve-framework`) [primary]; authority: `/improve-framework`
-- `/rank-up` (`/promote-framework`) [primary]; authority: `/promote-framework`
-- `/enshrine-grimoire` (`/publish-framework`) [primary]; authority: `/publish-framework`
-- `/rehearse-grimoire` (`/replay-framework`) [primary]; authority: `/replay-framework`
-- `/initiate-status` (`/candidate-status`) [primary]; authority: `/candidate-status`
-- `/attune-codex` (`/sync-manifest`) [primary]; authority: `/sync-manifest`
-- `/claim-spoils` (`/capture-task`) [primary]; authority: `/capture-task`
-- `/refine-spoils` (`/normalize-capture`) [primary]; authority: `/normalize-capture`
-- `/spoils-ledger` (`/capture-status`) [primary]; authority: `/capture-status`
-- `/awaken-essence` (`/extract-skill`) [primary]; authority: `/extract-skill`
-- `/enroll-patron` (`/new-client`) [primary]; authority: `/new-client`
-- `/open-contract` (`/new-project`) [primary]; authority: `/new-project`
-- `/contract-ledger` (`/project-status`) [primary]; authority: `/project-status`
-- `/scry` (`/system-status`) [primary]; authority: `/system-status`
-- `/gm` (`/orchestrate-loop`) [primary]; authority: `/orchestrate-loop`
-- `/cast` (`/run-framework`) [primary]; authority: `/run-framework`
-- `/chron` (`/debrief-run`) [primary]; authority: `/debrief-run`
-- `/attune` (`/sync-manifest`) [primary]; authority: `/sync-manifest`
-- `/aura` -> `/system-status` [cross-alias]; authority: `/system-status`
-- `/post-contract` -> `/blueprint` [cross-alias]; authority: `/blueprint`
-- `/draft-contract` -> `/plan-task` [cross-alias]; authority: `/plan-task`
-- `/save-throw` -> `/review-task-plan` [cross-alias]; authority: `/review-task-plan`
-- `/accept-contract` -> `/run-plan` [cross-alias]; authority: `/run-plan`
-- `/augur` -> `/route` [cross-alias]; authority: `/route`
-- `/consult-oracle` -> `/route` [cross-alias]; authority: `/route`
-- `/invoke` -> `/run-framework` [cross-alias]; authority: `/run-framework`
-- `/spellbook` -> `/list-frameworks` [cross-alias]; authority: `/list-frameworks`
-- `/identify` -> `/audit-framework` [cross-alias]; authority: `/audit-framework`
-- `/cultivate` -> `/improve-framework` [cross-alias]; authority: `/improve-framework`
-- `/level-up` -> `/promote-framework` [cross-alias]; authority: `/promote-framework`
-- `/loot` -> `/capture-task` [cross-alias]; authority: `/capture-task`
-- `/feat` -> `/extract-skill` [cross-alias]; authority: `/extract-skill`
-- `/campaign` -> `/new-project` [cross-alias]; authority: `/new-project`
-- `/owl` -> `/orchestrate-loop` [compatibility]; authority: `/orchestrate-loop`
-- `/oa` -> `/orchestrate-loop` [compatibility]; authority: `/orchestrate-loop`
-- `/dl` -> `/deliberate` [compatibility]; authority: `/deliberate`
-- `/oc` -> `/convene-review` [compatibility]; authority: `/convene-review`
-- `/council` -> `/convene-review` [compatibility]; authority: `/convene-review`
-
-### Framework aliases
-
-- `presentation-review` (`deliverables/presentation-review`) [primary]; authority: `deliverables/presentation-review`
-- `scope-verification` (`deliverables/scope-verification`) [primary]; authority: `deliverables/scope-verification`
-- `version-reconciliation` (`deliverables/version-reconciliation`) [primary]; authority: `deliverables/version-reconciliation`
-- `video-editing` (`media/video-editing`) [primary]; authority: `media/video-editing`
-- `dreaming-system` (`meta/dreaming-system`) [primary]; authority: `meta/dreaming-system`
-- `execution-normalization` (`meta/execution-normalization`) [primary]; authority: `meta/execution-normalization`
-- `dart-collaboration` (`project-management/dart-collaboration`) [primary]; authority: `project-management/dart-collaboration`
-- `feedback-to-tasks` (`project-management/feedback-to-tasks`) [primary]; authority: `project-management/feedback-to-tasks`
-- `analytics-tracking` (`wordpress/analytics-tracking`) [primary]; authority: `wordpress/analytics-tracking`
-- `content-editing` (`wordpress/content-editing`) [primary]; authority: `wordpress/content-editing`
-- `design-mockup-validation` (`wordpress/design-mockup-validation`) [primary]; authority: `wordpress/design-mockup-validation`
-- `design-research` (`wordpress/design-research`) [primary]; authority: `wordpress/design-research`
-- `documentation` (`wordpress/documentation`) [primary]; authority: `wordpress/documentation`
-- `page-cro` (`wordpress/page-cro`) [primary]; authority: `wordpress/page-cro`
-- `qa` (`wordpress/qa`) [primary]; authority: `wordpress/qa`
-- `seo-audit` (`wordpress/seo-audit`) [primary]; authority: `wordpress/seo-audit`
-- `seo-validation` (`wordpress/seo-validation`) [primary]; authority: `wordpress/seo-validation`
-
-### Skill aliases
-
-- `manage-grimoires` (`manage-frameworks`) [primary]; authority: `manage-frameworks`
-- `manage-patrons` (`manage-clients`) [primary]; authority: `manage-clients`
-- `execute-grimoire` (`execute-framework`) [primary]; authority: `execute-framework`
-- `extract-essence` (`extract-skill`) [primary]; authority: `extract-skill`
-
-### Tool aliases
-
-- `generate` (`instructions:generate`) [primary]; authority: `instructions:generate`
-- `generate-preview` (`instructions:generate:preview`) [primary]; authority: `instructions:generate:preview`
-- `validate` (`instructions:validate`) [primary]; authority: `instructions:validate`
-- `validate-skip-claude` (`instructions:validate:skip-claude`) [primary]; authority: `instructions:validate:skip-claude`
-- `check` (`instructions:check`) [primary]; authority: `instructions:check`
-- `scaffold-workspace` (`workspace:scaffold`) [primary]; authority: `workspace:scaffold`
-- `scaffold-project` (`workspace:project`) [primary]; authority: `workspace:project`
-- `validate-workspace` (`workspace:validate`) [primary]; authority: `workspace:validate`
-- `capture` (`workspace:capture`) [primary]; authority: `workspace:capture`
-- `normalize-capture` (`workspace:capture:normalize`) [primary]; authority: `workspace:capture:normalize`
-- `capture-status` (`workspace:capture:status`) [primary]; authority: `workspace:capture:status`
-- `scaffold-candidate` (`workspace:candidate:scaffold`) [primary]; authority: `workspace:candidate:scaffold`
-- `candidate-status` (`workspace:candidate:status`) [primary]; authority: `workspace:candidate:status`
-- `replay-candidate` (`workspace:candidate:replay`) [primary]; authority: `workspace:candidate:replay`
-- `promote-candidate` (`workspace:candidate:promote`) [primary]; authority: `workspace:candidate:promote`
-- `validate-output` (`workspace:output:validate`) [primary]; authority: `workspace:output:validate`
-- `init-run` (`workspace:run:init`) [primary]; authority: `workspace:run:init`
-- `finalize-run` (`workspace:run:finalize`) [primary]; authority: `workspace:run:finalize`
-- `validate-manifest` (`manifest:validate`) [primary]; authority: `manifest:validate`
-- `verify-system` (`verify`) [primary]; authority: `verify`
-- `verify-framework` (`verify:framework`) [primary]; authority: `verify:framework`
-- `verify-skill` (`verify:skill`) [primary]; authority: `verify:skill`
-- `verify-guardrails` (`verify:guardrails`) [primary]; authority: `verify:guardrails`
-- `verify-run-evidence` (`verify:run-evidence`) [primary]; authority: `verify:run-evidence`
-- `verify-site-audit` (`verify:site-audit`) [primary]; authority: `verify:site-audit`
-- `verify-report-claims` (`verify:report-claims`) [primary]; authority: `verify:report-claims`
-- `sync-manifest` (`manifest:sync`) [primary]; authority: `manifest:sync`
-- `check-manifest` (`manifest:check`) [primary]; authority: `manifest:check`
-- `research` (`research:perplexity`) [primary]; authority: `research:perplexity`
-- `first-run` (`setup`) [primary]; authority: `setup`
+- `/0` -> `/undefined` [compatibility]; authority: `/undefined`
+- `/1` -> `/undefined` [compatibility]; authority: `/undefined`
+- `/2` -> `/undefined` [compatibility]; authority: `/undefined`
+- `/3` -> `/undefined` [compatibility]; authority: `/undefined`
+- `/4` -> `/undefined` [compatibility]; authority: `/undefined`
+- `/5` -> `/undefined` [compatibility]; authority: `/undefined`
+- `/6` -> `/undefined` [compatibility]; authority: `/undefined`
+- `/7` -> `/undefined` [compatibility]; authority: `/undefined`
+- `/8` -> `/undefined` [compatibility]; authority: `/undefined`

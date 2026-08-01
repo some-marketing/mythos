@@ -10,7 +10,7 @@
 #
 # Defaults (env-overridable):
 #   DELESIGNOP_ITEM   1Password item name. Default: Delesign
-#   DELESIGNOP_VAULT  1Password vault name. Default: Employee
+#   DELESIGNOP_VAULT  1Password vault name. Default: {VAULT}
 #   DELESIGNOP_FIELD  Field on the item containing the bearer token. Default: credential
 #
 # Auth: requires `op` (1Password CLI) signed in. If the session has expired,
@@ -20,7 +20,7 @@
 set -euo pipefail
 
 ITEM="${DELESIGNOP_ITEM:-Delesign}"
-VAULT="${DELESIGNOP_VAULT:-Employee}"
+VAULT="${DELESIGNOP_VAULT:-{VAULT}}"
 FIELD="${DELESIGNOP_FIELD:-credential}"
 
 DELESIGN_API_TOKEN="$(op read "op://${VAULT}/${ITEM}/${FIELD}")"

@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Stage 4 — Delesign Brief Submission",
+  "type": "object",
+  "required": ["timestamp", "briefs"],
+  "properties": {
+    "timestamp": { "type": "string", "format": "date-time" },
+    "briefs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["framework_id", "hypothesis_id", "delesign_payload", "mockup_paths", "mode_used"],
+        "properties": {
+          "framework_id": { "type": "string" },
+          "hypothesis_id": { "type": "string" },
+          "delesign_payload": {
+            "type": "object",
+            "required": ["title", "category", "description", "dimension"],
+            "properties": {
+              "title": { "type": "string" },
+              "category": { "type": "string" },
+              "description": { "type": "string" },
+              "dimension": { "type": "string" },
+              "target_audience": { "type": "string" },
+              "timeframe": { "type": "string" },
+              "inspiration": { "type": "string" }
+            },
+            "additionalProperties": false
+          },
+          "mockup_paths": { "type": "array", "items": { "type": "string" } },
+          "mode_used": { "type": "string", "enum": ["api", "chrome-mcp-fallback"] },
+          "submit_timestamp": { "type": "string", "format": "date-time" },
+          "delesign_project_id": { "type": ["string", "null"] }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

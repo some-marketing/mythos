@@ -63,7 +63,7 @@ Create NEW directory:
 Contents:
 1. `INDEX.md` -- run list with links to key reports and raw files
 2. `INDEX.json` -- LLM retrieval index (kind, testcase_id, run_id, env, path, description)
-3. `For_{DEVELOPER_NAME}.md` -- lean summary (<10 min read): working, broken, causes, questions, evidence paths
+3. `For_Recipient.md` -- lean summary (<10 min read): working, broken, causes, questions, evidence paths
 4. `reports/` -- canonical payload reports + deep analysis reports
 5. `raw/` -- expected payloads, actual payloads, CRM/WPForms CSVs (verbatim copies)
 6. `evidence/` -- full runset directories per run (all envs + retries)
@@ -78,7 +78,7 @@ After all per-run reports, create `{bundle_path}/QUESTIONS_FOR_DEVELOPER.md`:
 
 ### Phase 5 -- Loop
 Process all run items sequentially. After all runs:
-- Ensure INDEX.md, INDEX.json, For_{DEVELOPER_NAME}.md, and QUESTIONS_FOR_DEVELOPER.md cover ALL included runs
+- Ensure INDEX.md, INDEX.json, For_Recipient.md, and QUESTIONS_FOR_DEVELOPER.md cover ALL included runs
 - Ensure stable ordering throughout
 </workflow>
 
@@ -107,11 +107,11 @@ Print to chat:
 <success_criteria>
 - Every run item has a canonical payload report in reports/
 - Every run item has a deep analysis report in the bundle
-- Bundle contains INDEX.md, INDEX.json, For_{DEVELOPER_NAME}.md, QUESTIONS_FOR_DEVELOPER.md
+- Bundle contains INDEX.md, INDEX.json, For_Recipient.md, QUESTIONS_FOR_DEVELOPER.md
 - QUESTIONS_FOR_DEVELOPER.md generated with observational questions (not diagnostic)
 - All reports follow "Observe, Don't Diagnose" philosophy
 - Bundle raw/ contains verbatim copies of all inputs
 - Bundle evidence/ contains full runset directories
 - No raw artifacts modified -- only copied
-- For_{DEVELOPER_NAME}.md is scannable in under 10 minutes
+- For_Recipient.md is scannable in under 10 minutes
 </success_criteria>

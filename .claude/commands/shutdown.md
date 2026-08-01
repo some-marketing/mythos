@@ -1,0 +1,27 @@
+---
+description: Run the canonical end-of-session shutdown sequence — normalize signals, clean house, debrief run, write next-session handoff
+mode: COORDINATOR
+---
+
+<objective>
+Run the canonical Mythos end-of-session shutdown cascade so a session ends in a clean, durable, resumable state. Wraps four existing commands in a fixed order, preserving each command's own boundaries and outputs. Symmetric to /new-session. Mechanical execution delegates to `tools/commands/handlers/shutdown.cjs` (via tools/commands/smos-command-runner.cjs). The process array below remains the authoritative specification, the permanent manual bypass, and the strict baseline for mechanical drift-detection.
+</objective>
+
+<process>
+- Resolve scope from $ARGUMENTS: --client CODE runs cascade for that client, --system runs for system scope, --skip <step> skips a named step. Valid step names: normalize-signals, clean-house, debrief-run, next-session. If ambiguous, infer from active workstream or recent git activity. Ask operator only if still unclear.
+- Step 1 — /normalize-signals: Close stale, consumed, or duplicate live signals. Capture the report (closed count, remaining live count, flagged anomalies) for the handoff.
+- Step 2 — /clean-house: Group dirty files by workstream, propose scoped commits, remove stale artifacts. Surface the proposed commit plan to the operator — clean-house has its own approval gate; do not bypass it. On approval, execute scoped commits. On rejection/deferral, capture deferred files in handoff under BLOCKED.
+- Step 3 — /debrief-run: Distill session learnings into durable improve and replicate plans. If a pursued goal is incomplete or context compaction/handoff is imminent, run it as a goal-continuity checkpoint that records completed work, evidence, open gates, forbidden repeat actions, and the exact next pickup command. If the session has no significant learnings worth distilling, produce a brief no-change-needed report rather than fabricating lessons.
+- Step 4 — /next-session: Write the canonical next-session handoff artifact at the correct scope path. The handoff incorporates completed work, blockers, active plan states, ready-to-execute next moves, context notes, and one exact recommended next command. Marker emission (mechanical): after the NextSessionSkeleton is built, the deterministic runner writes a per-scope SessionBoundary/1.0 marker (via tools/sessions/lib/boundary-markers.cjs) so /new-session can consume exactly what shutdown collected. FAIL-CLOSED: if the skeleton did not ground both handoff_path and recommended_next_command, no marker is written and the close packet surfaces a loud blocking item rather than skipping silently.
+- Step 4b — /disk-quota-guard: Run node tools/hygiene/disk-quota-guard.cjs --apply to compress and rotate turn logs older than 3 days directly to cold external storage, restore absolute local symbolic links for unbroken indexing, and dispatch a secure backup to your cloud VPS asynchronously in the background. If the external drive is not mounted, the script will output a warning-only alert and fail-safe without blocking shutdown.
+- Step 5 — Sync locally configured redundancy remotes: run tools/hygiene/sync-private-remotes.sh from the repo root. Remote names come only from the ignored local `MYTHOS_REDUNDANCY_REMOTES` binding and their URLs remain in local git configuration. An absent/unreachable remote is a WARN — continue and note in handoff. A push rejection exits 1 and halts the cascade — divergence requires human resolution; never force-push.
+- Report a concise three-line summary: which steps ran/were skipped/failed, the handoff artifact path and recommended next command, and any unresolved items.
+</process>
+
+<success_criteria>
+- All four steps complete in order, OR the cascade halts at a named step with a clear reason reported to the operator
+- Working tree is clean (or only contains operator-deferred files that are named in the handoff)
+- Live signals are normalized — no stale-and-consumed signals remain orphaned
+- A debrief artifact exists at the canonical location with non-placeholder content (or a brief no-change-needed report); for any pursued incomplete goal, the debrief or handoff includes a goal-continuity checkpoint
+- A next-session handoff artifact exists at the correct scope path with all required level-2 headings populated and one exact recommended next command
+</success_criteria>

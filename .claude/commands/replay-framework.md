@@ -1,16 +1,29 @@
 ---
-description: Plain-id alias for /rehearse-grimoire
-allowed-tools: [Read, Write, Edit, Glob, Grep, Bash]
+description: Run replay-readiness checks for a framework candidate
+mode: PATCH_ALLOWED
 ---
 
 <objective>
-Run `/rehearse-grimoire`. `replay-framework` is the plain-software id; the full command body lives under the mythic name.
+Execute replay-readiness checks for one or more candidate replay cases, verify the candidate can be exercised without hidden dependencies on original source material, and update the candidate summary with results.
 </objective>
 
 <process>
-1. Follow `.claude/commands/rehearse-grimoire.md`.
+- Parse arguments for <candidate-root> and optional replay case selector (--case <case-id|all>). Default to 'all' if no case is specified.
+- Validate replay cases: for each selected case, ensure case.json exists and contains ready inputs with sufficient substance for replay.
+- Run replay-readiness checks: verify the candidate can be exercised independently -- check that all prompt chain references resolve, input schemas are satisfied, no hardcoded paths to original source material exist, and template variables are properly parameterized.
+- Record run outputs: for each executed case, write run.json (execution metadata), execution_log.jsonl (step-by-step log), and summary.md under replay_runs/<case-id>/.
+- Refresh candidate summary: update candidate.json with new replay counts, per-case pass/fail status, and overall promotion readiness assessment.
 </process>
 
 <success_criteria>
-- `/replay-framework` resolves to the same behavior as `/rehearse-grimoire`
+- All selected replay cases validated for input readiness
+- Replay-readiness checks executed for each case
+- Run outputs written to replay_runs/ for each executed case
+- Candidate summary (candidate.json) updated with current replay counts and readiness
 </success_criteria>
+
+<handoff>
+all_cases_pass: candidate-status <candidate-root> or promote-framework <candidate-root>
+cases_fail: Fix failing cases and re-run replay-framework
+check_status: candidate-status <candidate-root>
+</handoff>

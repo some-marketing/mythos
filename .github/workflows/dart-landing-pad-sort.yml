@@ -1,0 +1,36 @@
+name: Dart Landing Pad Sorter
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/5 * * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dart-landing-pad-sorter
+  cancel-in-progress: false
+
+jobs:
+  sort-landing-pad:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Verify Dart identity
+        env:
+          DART_TOKEN: ${{ secrets.SMOS_DART_TOKEN }}
+        run: npm run dart:identity:check:json
+
+      - name: Sort Landing Pad
+        env:
+          DART_TOKEN: ${{ secrets.SMOS_DART_TOKEN }}
+        run: npm run dart:landing-pad:sort -- --limit 100 --json

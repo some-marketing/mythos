@@ -1,0 +1,48 @@
+{
+  "id": "oa",
+  "description": "Shortest operator alias for Owl Audit: review-first orchestration through orchestrate-loop",
+  "mode": "COORDINATOR",
+  "objective": "Provide a two-letter operator shorthand for audit-first orchestration without creating a separate review or execution contract. OA means Owl Audit: observe the target, classify current state, surface risks or evidence gaps, and route the next valid move through canonical `/orchestrate-loop`.",
+  "scope_resolution": {
+    "default": "Alias to orchestrate-loop with a review-first/audit posture and the same target grammar and authority rules",
+    "arguments": {
+      "<task-id>": "Pass through to /orchestrate-loop target resolution with audit-first posture",
+      "<prompt-plan-id>": "Pass through to /orchestrate-loop target resolution with audit-first posture",
+      "<signal-scope>": "Pass through to /orchestrate-loop target resolution with audit-first posture",
+      "<path>": "Pass through to /orchestrate-loop target resolution with audit-first posture",
+      "active-workstreams": "Pass through to /orchestrate-loop active-workstreams handling with audit-first posture"
+    }
+  },
+  "process": [
+    "Treat oa as a human-memory wrapper around `/orchestrate-loop`, not an independent workflow definition.",
+    "Resolve the alias mechanically through `instructions/canonical/command-aliases.yaml`; keep the typed alias as provenance only.",
+    "Use the OA memory cue only as operator-facing shorthand: Owl Audit means review current state, evidence, risks, and next valid route before execution.",
+    "Preserve all `/orchestrate-loop` authority, state names, actor boundaries, fractalization rules, evidence requirements, review classification, and debrief/closeout behavior.",
+    "Do not introduce oa-specific permissions, artifact contracts, review lanes, actors, or closeout paths."
+  ],
+  "routing_rules": [
+    "Canonical audit and orchestration behavior remains owned by `/orchestrate-loop`.",
+    "Use `/oa` when the operator wants the shortest shorthand for review-first orchestration.",
+    "Use `/owl` when general orchestration is intended without an audit-first cue.",
+    "Use `/orchestrate-loop` in formal specs, tests, and cross-actor handoffs when the canonical command name improves clarity.",
+    "Never interpret oa as permission to bypass human-operator gates, destructive confirmations, external publication gates, credential gates, budget/scope commitments, or same-rank authority conflicts."
+  ],
+  "success_criteria": [
+    "Operators can invoke oa with the same target shapes accepted by orchestrate-loop",
+    "The invocation resolves to the same behavior and evidence expectations as orchestrate-loop",
+    "Generated command surfaces list oa as a coordinator alias",
+    "No duplicate audit, review, orchestration, or closeout contract is introduced"
+  ],
+  "handoff": {
+    "canonical_route": "orchestrate-loop <target>",
+    "operator_shorthand": "oa <target>",
+    "formal_cross_actor_handoff": "orchestrate-loop <target>"
+  },
+  "artifacts": [
+    "instructions/canonical/commands/oa.yaml",
+    "instructions/canonical/command-aliases.yaml",
+    "instructions/canonical/commands/orchestrate-loop.yaml",
+    ".claude/commands/oa.md",
+    ".claude/commands/orchestrate-loop.md"
+  ]
+}

@@ -8,7 +8,7 @@
 # shell history. The file path — not the secret — is what appears in node's argv.
 #
 # Picking logic: among *.json in --dir, keep those whose project_id == --project;
-# if `op` can read the existing "{CLIENT_NAME}" item, skip the client_id it already
+# if `op` can read an existing YouTube OAuth item, skip the client_id it already
 # uses (so Sheets gets its own OAuth client); otherwise pick the first by name.
 # Override with --file to force a specific one.
 #
@@ -16,7 +16,7 @@
 #   tools/credentials/setup-google-oauth-creds.sh [options]
 # Options:
 #   --dir DIR        secrets dir         (default: "$HOME/Downloads/Client Secrets")
-#   --project PROJ   GCP project to match(default: gen-lang-client-0554386600)
+#   --project PROJ   GCP project to match (or MYTHOS_GOOGLE_OAUTH_PROJECT)
 #   --file PATH      force a specific file (skips auto-pick)
 #   --name NAME      Keychain prefix     (default: mythos-google-oauth-client)
 #   --op-item ITEM   1Password title     (default: mythos-google-oauth-client)
@@ -35,13 +35,13 @@
 
 set -euo pipefail
 
-DIR="$HOME/Downloads/Client Secrets"
-PROJECT="gen-lang-client-0554386600"
+DIR="${MYTHOS_CLIENT_SECRETS_DIR:-$HOME/Downloads/Client Secrets}"
+PROJECT="${MYTHOS_GOOGLE_OAUTH_PROJECT:-}"
 FILE=""
 NAME="mythos-google-oauth-client"
 OP_ITEM="mythos-google-oauth-client"
 VAULT="Automation"
-ACCOUNT="Mythos"
+ACCOUNT="mythos"
 DO_KEYCHAIN=1
 DO_OP=1
 DRY=0
@@ -63,6 +63,10 @@ while [[ $# -gt 0 ]]; do
 done
 
 command -v node >/dev/null 2>&1 || { echo "ERROR: node not found on PATH" >&2; exit 1; }
+if [[ -z "$FILE" && -z "$PROJECT" ]]; then
+  echo "ERROR: --project or MYTHOS_GOOGLE_OAUTH_PROJECT is required when --file is not supplied" >&2
+  exit 1
+fi
 
 # Read a single non-secret-or-secret field on-device (file path in argv, not the value).
 field() {

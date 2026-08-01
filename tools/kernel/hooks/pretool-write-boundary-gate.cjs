@@ -61,7 +61,7 @@ const fsMod = require('fs');
 function resolveProjectDir() {
   return (
     process.env.CLAUDE_PROJECT_DIR ||
-    '/Users/admin/dev/Mythos-recovered'
+    '{MYTHOS_ROOT}'
   );
 }
 
@@ -235,7 +235,7 @@ function getAllowlist() {
   return [
     // Primary and alias Mythos roots
     pathMod.resolve(projectDir),
-    pathMod.resolve('/Users/admin/dev/Mythos-recovered'),
+    pathMod.resolve('{MYTHOS_ROOT}'),
     // Tmp
     pathMod.resolve('/tmp'),
     pathMod.resolve('/private/tmp'),
@@ -249,10 +249,10 @@ function getAllowlist() {
 // Kept for fail-safe coverage when git resolution is unavailable.
 function getDenylist() {
   return [
-    '/Users/admin/Documents/GitHub/{CLIENT_CODE}-rebuild',
+    '${HOME}/Documents/GitHub/{CLIENT_CODE}-rebuild',
     expandHome('~/Downloads/wp-content'),
     '/private/tmp/{CLIENT_CODE}-rebuild',
-    '/Users/admin/Documents/GitHub',
+    '${HOME}/Documents/GitHub',
   ].map((p) => pathMod.resolve(p));
 }
 

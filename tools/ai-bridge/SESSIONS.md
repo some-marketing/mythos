@@ -7,7 +7,7 @@
 
 Always invoke these scripts with an **absolute path** (or from the repo root). Running
 `node tools/ai-bridge/<script>.js` from a different cwd (e.g. `~`) fails with
-`Cannot find module '/Users/admin/tools/...'` — that is Node resolving the *entry
+`Cannot find module '${HOME}/tools/...'` — that is Node resolving the *entry
 script path* against `process.cwd()`, not a bug in the script's internal requires
 (all internal `require()`s already resolve via the file's own directory, and all
 storage paths are built from `os.homedir()`, not cwd). All scripts in this directory
@@ -38,7 +38,7 @@ are now executable (`chmod +x`), so `~/dev/Mythos-recovered/tools/ai-bridge/<scr
 ## Google Ads / Google account (browser, used by GAds UI-automation scripts)
 
 - One-time (semi-automated) login: `node tools/mcp/google-ads/scripts/automated-login.js`
-  — reads username/password from 1Password (`op item get sbeowdhb...`), opens a headed
+  — reads username/password from a locally configured 1Password item reference, opens a headed
   Chrome window, and pauses up to 2 minutes for the operator to clear any MFA challenge.
 - Session file: `~/.Mythos/browser_profiles/google-ads/storage_state.json`
 - Consumers: `tools/mcp/google-ads/scripts/finish-optimization.js`,
@@ -106,8 +106,8 @@ are now executable (`chmod +x`), so `~/dev/Mythos-recovered/tools/ai-bridge/<scr
 ## Verifying a session script loads correctly from any directory
 
 ```
-cd /tmp && node /Users/admin/dev/Mythos-recovered/tools/ai-bridge/perplexity-browser.js --help
-cd /tmp && node /Users/admin/dev/Mythos-recovered/tools/ai-bridge/gemini-browser.js --help
+cd /tmp && node {MYTHOS_ROOT}/tools/ai-bridge/perplexity-browser.js --help
+cd /tmp && node {MYTHOS_ROOT}/tools/ai-bridge/gemini-browser.js --help
 ```
 
 Both print usage and exit 0 — confirms `require()` resolution and the storage-state

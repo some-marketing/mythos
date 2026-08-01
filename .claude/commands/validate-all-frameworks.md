@@ -1,0 +1,29 @@
+---
+description: Validate all registered frameworks in parallel
+mode: REVIEW_ONLY
+---
+
+<objective>
+Validate every registered framework's structure, prompt chain, guardrails, and Claude assets by spawning parallel framework-auditor subagents, then produce a consolidated pass/fail table.
+</objective>
+
+<process>
+- Read instructions/canonical/system.yaml and extract the frameworks[] array.
+- For each framework entry, spawn a framework-auditor subagent with mode: auto, passing the framework id and manifest path. Each subagent follows the audit-framework workflow (.claude/skills/manage-frameworks/workflows/audit-framework.md). All subagents run in parallel up to the total framework count.
+- Collect results from all subagents.
+- Present a consolidated table with columns: Framework, Status (PASS/FAIL), Blockers count, Warnings count.
+- For any framework with Status = FAIL, list the specific blockers below the table.
+</process>
+
+<success_criteria>
+- All registered frameworks audited in parallel
+- Consolidated pass/fail table produced
+- Specific blockers listed for any failing framework
+- No file writes performed (entire operation is read-only)
+</success_criteria>
+
+<handoff>
+all_pass: mythos-status
+failures_found: audit-framework <service/framework>
+manifest_drift: sync-manifest
+</handoff>

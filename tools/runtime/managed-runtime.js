@@ -7,7 +7,8 @@ const { spawnSync } = require('child_process');
 const { runCodexHook, isGitCommitCommand, emit: emitCoordinationHook } = require('./hook-emulation');
 const { resolveAuthority, formatDecision } = require('../signals/lib/follow-signal');
 
-const RUNTIME_AUTHORITY_ID = 'smos-managed-runtime';
+const RUNTIME_AUTHORITY_ID = 'mythos-managed-runtime';
+const RUNTIME_AUTHORITY_ALIASES = Object.freeze(['smos-managed-runtime']);
 const SESSION_SCHEMA = 'CodexManagedSession/1.0';
 const GROUNDED_TARGET_TTL_MS = 24 * 60 * 60 * 1000;
 
@@ -669,6 +670,7 @@ function runManagedSignal(projectRoot, state, opts = {}) {
 module.exports = {
   GROUNDED_TARGET_TTL_MS,
   RUNTIME_AUTHORITY_ID,
+  RUNTIME_AUTHORITY_ALIASES,
   SESSION_SCHEMA,
   acknowledgeGrounding,
   closeManagedSession,

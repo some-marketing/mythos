@@ -288,7 +288,7 @@ function validateDecisionTree(plan, steps, projectRoot, errors, warnings) {
 // Phrases that indicate a named verification was deferred, skipped, or left undone.
 // If these co-occur with a high-confidence trust tier or a confirmed validation field,
 // the plan is making a load-bearing claim from unfinished evidence and should be flagged.
-// Origin: IMP-2026-04-13-02 from run-debrief__2026-04-13__sdas-gtm-staging-form-flow-validation.
+// Origin: IMP-2026-04-13-02 from run-debrief__2026-04-13__{CLIENT_CODE}-gtm-staging-form-flow-validation.
 const UNVERIFIED_PHRASE_PATTERNS = [
   /\bdid not run\b/i,
   /\bhave not run\b/i,

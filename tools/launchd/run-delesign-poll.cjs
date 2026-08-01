@@ -11,12 +11,11 @@ const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
 
-const REPO_ROOT = '/Users/admin/dev/Mythos-recovered';
+const REPO_ROOT = path.resolve(__dirname, '..', '..');
 const STATE_DIR = path.join(REPO_ROOT, '_dev', 'state', 'delesign-poll');
 const RUNS_DIR = path.join(STATE_DIR, 'launchd-runs');
 
 process.env.PATH = ['/opt/homebrew/bin', '/usr/local/bin', '/usr/bin', '/bin'].join(':');
-process.env.HOME = process.env.HOME || '/Users/admin';
 process.env.LC_ALL = process.env.LC_ALL || 'en_CA.UTF-8';
 
 fs.mkdirSync(RUNS_DIR, { recursive: true });

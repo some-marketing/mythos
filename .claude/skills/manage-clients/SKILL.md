@@ -1,8 +1,10 @@
 ---
 name: manage-clients
 description: >
-  Manages agency clients and projects. Client registry lives in Mythos under `clients/`.
-  Client work is recommended to live in external per-client workspace repos.
+  Manages agency clients and projects. Use when registering new agency clients, scaffolding
+  client projects, or managing the client registry. Client registry lives in Mythos under
+  `clients/`. Client work lives in `clients/{CODE}/` for private operations, or in external
+  workspace repos for public distribution.
 version: 1.0.0
 ---
 
@@ -10,15 +12,16 @@ version: 1.0.0
 <objective>
 Manage agency clients and their projects:
 - Register new clients in the Mythos registry (`clients/{CODE}/client.json`)
-- Scaffold project directories linked to specific frameworks (legacy Mythos projects or external workspaces)
+- Scaffold project directories linked to specific frameworks (inside `clients/{CODE}/` for private operations, or in external workspace repos)
 - Check project status
 </objective>
 
 <quick_start>
 1. To register a client: `/new-client CLIENTC "Client C"`
-2. Recommended: create a workspace repo via `npm run workspace:scaffold` (from the learning-language-models repo)
-3. To create a project (legacy Mythos): `/new-project CLIENTC wordpress/qa contact-form`
-4. To check status (legacy Mythos): `/project-status CLIENTC/wordpress__qa__contact-form`
+2. To create a project: `/new-project CLIENTC wordpress/qa contact-form`
+Steps 3-4 apply to external workspace repos only (not private clients/ ops):
+3. For external workspaces: `npm run workspace:scaffold` then `npm run workspace:project`
+4. To check status: `/project-status CLIENTC/wordpress__qa__contact-form`
 </quick_start>
 
 <commands>
@@ -41,5 +44,6 @@ Manage agency clients and their projects:
 - Project directory follows naming convention: `{service}__{framework}__{slug}`
 - Project directory contains project.json linked to the correct framework
 - Client code is unique and does not conflict with existing clients
+- External workspace project directory follows `{service}__{framework}__{slug}` naming convention when applicable
 </success_criteria>
 </skill>

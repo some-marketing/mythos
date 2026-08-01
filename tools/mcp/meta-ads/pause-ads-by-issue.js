@@ -10,10 +10,10 @@
 //
 // Usage:
 //   # preview (no writes):
-//   META_AD_ACCOUNT_ID=10151393423266343 \
+//   META_AD_ACCOUNT_ID="$META_AD_ACCOUNT_ID" \
 //     tools/mcp/meta-ads/run-with-op.sh node tools/mcp/meta-ads/pause-ads-by-issue.js --issue "Event Has Ended"
 //   # apply:
-//   META_AD_ACCOUNT_ID=10151393423266343 \
+//   META_AD_ACCOUNT_ID="$META_AD_ACCOUNT_ID" \
 //     tools/mcp/meta-ads/run-with-op.sh node tools/mcp/meta-ads/pause-ads-by-issue.js --issue "Event Has Ended" --apply
 
 const { buildUrl, requestJson } = require('../shared/http');

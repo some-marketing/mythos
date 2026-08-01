@@ -13,7 +13,7 @@
  *   - allow-inside-Desktop-scratch (~/Desktop/{CLIENT_CODE}-recon-* allowed)
  *   - fail-open-on-garbage-stdin (parse error → allow)
  *   - observe-only-default-allows (no MYTHOS_WRITE_BOUNDARY_GATE → allow)
- *   - Bash `echo x > /Users/admin/Documents/GitHub/{CLIENT_CODE}-rebuild/foo` is blocked
+ *   - Bash `echo x > ${HOME}/Documents/GitHub/{CLIENT_CODE}-rebuild/foo` is blocked
  *   - Bash `echo x > tools/kernel/hooks/foo` (inside Mythos) is allowed
  *   - Additional: /tmp write allowed; MultiEdit; denylist supercedes subagent
  */
@@ -40,9 +40,9 @@ function check(name, fn) {
 }
 
 // ── Constants ─────────────────────────────────────────────────────────────────
-const MYTHOS_ROOT = '/Users/admin/dev/Mythos-recovered';
-const SDAS_REBUILD = '/Users/admin/Documents/GitHub/{CLIENT_CODE}-rebuild';
-const GITHUB_DIR = '/Users/admin/Documents/GitHub';
+const MYTHOS_ROOT = '{MYTHOS_ROOT}';
+const {CLIENT_CODE}_REBUILD = '${HOME}/Documents/GitHub/{CLIENT_CODE}-rebuild';
+const GITHUB_DIR = '${HOME}/Documents/GitHub';
 
 // ── Sandbox helpers ────────────────────────────────────────────────────────────
 
@@ -77,7 +77,7 @@ function makeInject(sb, { killSwitchExists = false } = {}) {
       path.resolve(os.homedir(), 'Desktop'),
     ],
     denylist: [
-      path.resolve(SDAS_REBUILD),
+      path.resolve({CLIENT_CODE}_REBUILD),
       path.resolve(os.homedir(), 'Downloads', 'wp-content'),
       path.resolve('/private/tmp/{CLIENT_CODE}-rebuild'),
       path.resolve(GITHUB_DIR),
@@ -166,7 +166,7 @@ check('block-outside-workspace: Write to /tmp/not-{CLIENT_CODE} → outside allo
   let result;
   try {
     result = gate.main(
-      { tool: 'write', payload: makePayload(sb, 'Write', { file_path: '/Users/admin/Documents/someotherrepo/file.js' }) },
+      { tool: 'write', payload: makePayload(sb, 'Write', { file_path: '${HOME}/Documents/someotherrepo/file.js' }) },
       inject
     );
   } finally {
@@ -188,10 +188,10 @@ check('block-outside-workspace: Write to /tmp/not-{CLIENT_CODE} → outside allo
 
 check('block-observed-repo-even-with-CLAUDE_SUBAGENT_ID: Write to {CLIENT_CODE}-rebuild → blocked (enforcing)', () => {
   const sb = makeSandbox();
-  const result = runGate(sb, 'Write', { file_path: SDAS_REBUILD + '/src/index.js' }, { enforcing: true, subagent: true });
+  const result = runGate(sb, 'Write', { file_path: {CLIENT_CODE}_REBUILD + '/src/index.js' }, { enforcing: true, subagent: true });
   assert.strictEqual(result.status, 2, 'denylist must block even for subagents');
   assert.strictEqual(result.reason, 'denylist');
-  assert.ok(result.target.startsWith(SDAS_REBUILD), 'target must be the denylist path');
+  assert.ok(result.target.startsWith({CLIENT_CODE}_REBUILD), 'target must be the denylist path');
 });
 
 check('allow-inside-Mythos: Write inside sandbox root → allowed', () => {
@@ -272,14 +272,14 @@ check('fail-open-on-garbage-stdin: malformed stdin → status 0', () => {
 
 check('observe-only-default-allows: denylist hit without MYTHOS_WRITE_BOUNDARY_GATE → status 0 (observed)', () => {
   const sb = makeSandbox();
-  const result = runGate(sb, 'Write', { file_path: SDAS_REBUILD + '/index.js' }, { enforcing: false, subagent: false });
+  const result = runGate(sb, 'Write', { file_path: {CLIENT_CODE}_REBUILD + '/index.js' }, { enforcing: false, subagent: false });
   assert.strictEqual(result.status, 0, 'observe-only must allow even denylist hits');
   assert.ok(result.reason && result.reason.includes('observed'), 'reason must indicate observed: ' + result.reason);
 });
 
-check('Bash echo x > /Users/admin/Documents/GitHub/{CLIENT_CODE}-rebuild/foo → BLOCKED (enforcing)', () => {
+check('Bash echo x > ${HOME}/Documents/GitHub/{CLIENT_CODE}-rebuild/foo → BLOCKED (enforcing)', () => {
   const sb = makeSandbox();
-  const cmd = 'echo x > ' + SDAS_REBUILD + '/foo';
+  const cmd = 'echo x > ' + {CLIENT_CODE}_REBUILD + '/foo';
   const result = runGate(sb, 'Bash', { command: cmd }, { enforcing: true });
   assert.strictEqual(result.status, 2, 'Bash redirect into {CLIENT_CODE}-rebuild must be blocked');
   assert.strictEqual(result.reason, 'denylist');
@@ -321,31 +321,31 @@ check('Bash echo x > tools/kernel/hooks/foo (inside Mythos) → allowed', () => 
 // ── 2. Denylist hard-block cases ──────────────────────────────────────────────
 process.stdout.write('\n[2] Denylist hard-block cases\n');
 
-check('Write to /Users/admin/Documents/GitHub/{CLIENT_CODE}-rebuild/... → denylist blocked', () => {
+check('Write to ${HOME}/Documents/GitHub/{CLIENT_CODE}-rebuild/... → denylist blocked', () => {
   const sb = makeSandbox();
-  const result = runGate(sb, 'Write', { file_path: SDAS_REBUILD + '/src/feature.ts' }, { enforcing: true });
+  const result = runGate(sb, 'Write', { file_path: {CLIENT_CODE}_REBUILD + '/src/feature.ts' }, { enforcing: true });
   assert.strictEqual(result.status, 2);
   assert.strictEqual(result.reason, 'denylist');
 });
 
-check('Write to /Users/admin/Documents/GitHub/other-repo/... → denylist blocked (GitHub root)', () => {
+check('Write to ${HOME}/Documents/GitHub/other-repo/... → denylist blocked (GitHub root)', () => {
   const sb = makeSandbox();
   const result = runGate(sb, 'Write', { file_path: GITHUB_DIR + '/another-client-repo/file.js' }, { enforcing: true });
   assert.strictEqual(result.status, 2);
   assert.strictEqual(result.reason, 'denylist');
 });
 
-check('Bash: rm /Users/admin/Documents/GitHub/{CLIENT_CODE}-rebuild/package.json → denylist blocked', () => {
+check('Bash: rm ${HOME}/Documents/GitHub/{CLIENT_CODE}-rebuild/package.json → denylist blocked', () => {
   const sb = makeSandbox();
-  const cmd = 'rm ' + SDAS_REBUILD + '/package.json';
+  const cmd = 'rm ' + {CLIENT_CODE}_REBUILD + '/package.json';
   const result = runGate(sb, 'Bash', { command: cmd }, { enforcing: true });
   assert.strictEqual(result.status, 2);
   assert.strictEqual(result.reason, 'denylist');
 });
 
-check('Bash: mv src.js /Users/admin/Documents/GitHub/{CLIENT_CODE}-rebuild/dst.js → denylist blocked', () => {
+check('Bash: mv src.js ${HOME}/Documents/GitHub/{CLIENT_CODE}-rebuild/dst.js → denylist blocked', () => {
   const sb = makeSandbox();
-  const cmd = 'mv /tmp/src.js ' + SDAS_REBUILD + '/dst.js';
+  const cmd = 'mv /tmp/src.js ' + {CLIENT_CODE}_REBUILD + '/dst.js';
   const result = runGate(sb, 'Bash', { command: cmd }, { enforcing: true });
   assert.strictEqual(result.status, 2);
   assert.strictEqual(result.reason, 'denylist');
@@ -353,7 +353,7 @@ check('Bash: mv src.js /Users/admin/Documents/GitHub/{CLIENT_CODE}-rebuild/dst.j
 
 check('denylist subagent NOT exempt: CLAUDE_SUBAGENT_ID set → still blocked', () => {
   const sb = makeSandbox();
-  const result = runGate(sb, 'Write', { file_path: SDAS_REBUILD + '/wp-config.php' }, { enforcing: true, subagent: true });
+  const result = runGate(sb, 'Write', { file_path: {CLIENT_CODE}_REBUILD + '/wp-config.php' }, { enforcing: true, subagent: true });
   assert.strictEqual(result.status, 2, 'subagent must NOT be exempt from denylist');
   assert.strictEqual(result.reason, 'denylist');
 });
@@ -396,7 +396,7 @@ process.stdout.write('\n[4] Non-write tools pass through\n');
 
 check('Read tool → not-write-tool → allow', () => {
   const sb = makeSandbox();
-  const result = runGate(sb, 'Read', { file_path: SDAS_REBUILD + '/anything.js' }, { enforcing: true });
+  const result = runGate(sb, 'Read', { file_path: {CLIENT_CODE}_REBUILD + '/anything.js' }, { enforcing: true });
   assert.strictEqual(result.status, 0);
   assert.strictEqual(result.reason, 'not-write-tool');
 });
@@ -414,7 +414,7 @@ process.stdout.write('\n[5] MultiEdit\n');
 check('MultiEdit with file_path outside allowlist → blocked', () => {
   const sb = makeSandbox();
   const result = runGate(sb, 'MultiEdit', {
-    file_path: SDAS_REBUILD + '/main.js',
+    file_path: {CLIENT_CODE}_REBUILD + '/main.js',
     edits: [{ old_string: 'a', new_string: 'b' }]
   }, { enforcing: true });
   assert.strictEqual(result.status, 2);
@@ -437,7 +437,7 @@ check('kill-switch file present → always allow even for denylist', () => {
   const sb = makeSandbox();
   // Create the disabled marker in our sandbox stateDir
   fs.writeFileSync(path.join(sb.stateDir, 'disabled'), '');
-  const result = runGate(sb, 'Write', { file_path: SDAS_REBUILD + '/src/index.js' }, { enforcing: true, killSwitchExists: true });
+  const result = runGate(sb, 'Write', { file_path: {CLIENT_CODE}_REBUILD + '/src/index.js' }, { enforcing: true, killSwitchExists: true });
   assert.strictEqual(result.status, 0);
   assert.strictEqual(result.reason, 'kill-switch-file');
 });
@@ -497,7 +497,7 @@ check('git log → empty', () => {
 });
 
 check('Bash echo x > {CLIENT_CODE}-rebuild/foo → extractBashTargetPaths finds the path', () => {
-  const target = SDAS_REBUILD + '/foo';
+  const target = {CLIENT_CODE}_REBUILD + '/foo';
   const paths = extractRaws('echo x > ' + target);
   assert.ok(paths.some((p) => p === target), 'must extract denylist target path: ' + JSON.stringify(paths));
 });
@@ -508,7 +508,7 @@ process.stdout.write('\n[8] isAllowed / isDenied helpers\n');
 const testAllowlist = [
   path.resolve('/tmp'),
   path.resolve('/private/tmp'),
-  path.resolve('/Users/admin/dev/Mythos-recovered'),
+  path.resolve('{MYTHOS_ROOT}'),
   path.resolve(os.homedir(), 'Desktop'),
 ];
 const testDenylist = [
@@ -521,7 +521,7 @@ check('isAllowed: /tmp/foo → true', () => {
 });
 
 check('isAllowed: Mythos root → true', () => {
-  assert.ok(gate.isAllowed('/Users/admin/dev/Mythos-recovered/tools/x.cjs', testAllowlist));
+  assert.ok(gate.isAllowed('{MYTHOS_ROOT}/tools/x.cjs', testAllowlist));
 });
 
 check('isAllowed: ~/Desktop/{CLIENT_CODE}-recon-2026/dump.csv → true', () => {
@@ -535,7 +535,7 @@ check('isAllowed: ~/Desktop/other-dir/file.txt → false (not {CLIENT_CODE}-reco
 });
 
 check('isDenied: {CLIENT_CODE}-rebuild path → true', () => {
-  assert.ok(gate.isDenied(path.resolve(SDAS_REBUILD, 'src', 'index.js'), testDenylist));
+  assert.ok(gate.isDenied(path.resolve({CLIENT_CODE}_REBUILD, 'src', 'index.js'), testDenylist));
 });
 
 check('isDenied: GitHub other-repo → true (GitHub root in denylist)', () => {
@@ -551,7 +551,7 @@ check('isDenied: /tmp/legit.json → false', () => {
 });
 
 check('isDenied: Mythos root → false', () => {
-  assert.ok(!gate.isDenied('/Users/admin/dev/Mythos-recovered/tools/x.cjs', testDenylist));
+  assert.ok(!gate.isDenied('{MYTHOS_ROOT}/tools/x.cjs', testDenylist));
 });
 
 // ── 9. State file written correctly ──────────────────────────────────────────
@@ -559,7 +559,7 @@ process.stdout.write('\n[9] State file persistence\n');
 
 check('denylist block in enforcing mode increments wb_blocked', () => {
   const sb = makeSandbox();
-  runGate(sb, 'Write', { file_path: SDAS_REBUILD + '/x.js' }, { enforcing: true });
+  runGate(sb, 'Write', { file_path: {CLIENT_CODE}_REBUILD + '/x.js' }, { enforcing: true });
   const state = readState(sb);
   assert.ok(state, 'state file must exist');
   assert.strictEqual(state.wb_blocked, 1);
@@ -570,7 +570,7 @@ check('denylist block in enforcing mode increments wb_blocked', () => {
 
 check('observe-only denylist hit increments wb_observed', () => {
   const sb = makeSandbox();
-  runGate(sb, 'Write', { file_path: SDAS_REBUILD + '/x.js' }, { enforcing: false });
+  runGate(sb, 'Write', { file_path: {CLIENT_CODE}_REBUILD + '/x.js' }, { enforcing: false });
   const state = readState(sb);
   assert.ok(state);
   assert.strictEqual(state.wb_observed, 1);
@@ -586,8 +586,8 @@ check('blockMessage contains BLOCKED_WRITE_BOUNDARY', () => {
 });
 
 check('blockMessage contains the target path', () => {
-  const msg = gate.blockMessage('/Users/admin/Documents/GitHub/{CLIENT_CODE}-rebuild/foo.js');
-  assert.ok(msg.includes('/Users/admin/Documents/GitHub/{CLIENT_CODE}-rebuild/foo.js'));
+  const msg = gate.blockMessage('${HOME}/Documents/GitHub/{CLIENT_CODE}-rebuild/foo.js');
+  assert.ok(msg.includes('${HOME}/Documents/GitHub/{CLIENT_CODE}-rebuild/foo.js'));
 });
 
 check('blockMessage (soft outside-workspace) advertises the inline bypass path', () => {
@@ -602,12 +602,12 @@ check('blockMessage (soft outside-workspace) advertises the inline bypass path',
 
 check('denylistBlockMessage carries observers framing and does NOT advertise inline bypass', () => {
   // Fix 3: hard observed-repo block must not advertise an inline bypass path.
-  const msg = gate.denylistBlockMessage('/Users/admin/Documents/GitHub/{CLIENT_CODE}-rebuild/foo.js');
+  const msg = gate.denylistBlockMessage('${HOME}/Documents/GitHub/{CLIENT_CODE}-rebuild/foo.js');
   assert.ok(msg.includes('BLOCKED_WRITE_BOUNDARY'), 'must carry the boundary code: ' + msg);
   assert.ok(msg.includes('observers'), 'must state we are observers: ' + msg);
   assert.ok(msg.includes('rule:') && msg.includes('evidence:') && msg.includes('next-step:'),
     'must state rule/evidence/next-step: ' + msg);
-  assert.ok(msg.includes('/Users/admin/Documents/GitHub/{CLIENT_CODE}-rebuild/foo.js'), 'must name target: ' + msg);
+  assert.ok(msg.includes('${HOME}/Documents/GitHub/{CLIENT_CODE}-rebuild/foo.js'), 'must name target: ' + msg);
   assert.ok(!msg.includes('re-issue the call with a bypass_justification'),
     'hard denylist block must NOT advertise an inline bypass: ' + msg);
 });
@@ -618,7 +618,7 @@ process.stdout.write('\n[11] Adversarial regression tests\n');
 // 11a. cd <denylist> && relative write — THE CRITICAL INCIDENT PATTERN
 check('cd <denylist> && cat > handoff.md → BLOCKED (enforcing)', () => {
   const sb = makeSandbox();
-  const cmd = `cd ${SDAS_REBUILD} && cat > handoff.md <<'EOF'\nx\nEOF`;
+  const cmd = `cd ${{CLIENT_CODE}_REBUILD} && cat > handoff.md <<'EOF'\nx\nEOF`;
   const result = runGate(sb, 'Bash', { command: cmd }, { enforcing: true });
   assert.strictEqual(result.status, 2, 'cd into denylist + relative write MUST block: ' + JSON.stringify(result));
   assert.strictEqual(result.reason, 'denylist', 'reason must be denylist');
@@ -626,7 +626,7 @@ check('cd <denylist> && cat > handoff.md → BLOCKED (enforcing)', () => {
 
 check('cd <denylist> && tee handoff.md → BLOCKED (enforcing)', () => {
   const sb = makeSandbox();
-  const cmd = `cd ${SDAS_REBUILD} && echo x | tee handoff.md`;
+  const cmd = `cd ${{CLIENT_CODE}_REBUILD} && echo x | tee handoff.md`;
   const result = runGate(sb, 'Bash', { command: cmd }, { enforcing: true });
   assert.strictEqual(result.status, 2, 'cd into denylist + tee relative write MUST block: ' + JSON.stringify(result));
   assert.strictEqual(result.reason, 'denylist');
@@ -635,7 +635,7 @@ check('cd <denylist> && tee handoff.md → BLOCKED (enforcing)', () => {
 // 11b. cd in observe-only mode — should observe but not hard block
 check('cd <denylist> && relative write — observe-only logs it', () => {
   const sb = makeSandbox();
-  const cmd = `cd ${SDAS_REBUILD} && cat > handoff.md`;
+  const cmd = `cd ${{CLIENT_CODE}_REBUILD} && cat > handoff.md`;
   const result = runGate(sb, 'Bash', { command: cmd }, { enforcing: false });
   assert.strictEqual(result.status, 0, 'observe-only must allow but log: ' + JSON.stringify(result));
   assert.ok(result.reason && result.reason.includes('observed'), 'reason must be observed: ' + result.reason);
@@ -648,7 +648,7 @@ check('symlink under /tmp → denylist target → BLOCKED (enforcing)', () => {
   const linkPath = path.join(os.tmpdir(), `wbgate-symlink-test-${Date.now()}`);
   let created = false;
   try {
-    fs.symlinkSync(SDAS_REBUILD, linkPath);
+    fs.symlinkSync({CLIENT_CODE}_REBUILD, linkPath);
     created = true;
   } catch (e) {
     // If we can't create symlinks (permissions), skip with a note
@@ -668,7 +668,7 @@ check('symlink under /tmp → denylist target → BLOCKED (enforcing)', () => {
 // 11d. mv denylist/file /tmp/file — source is also a mutation target → BLOCKED
 check('mv denylist/file /tmp/file → source is mutation target → BLOCKED (enforcing)', () => {
   const sb = makeSandbox();
-  const cmd = `mv ${SDAS_REBUILD}/important.js /tmp/important.js`;
+  const cmd = `mv ${{CLIENT_CODE}_REBUILD}/important.js /tmp/important.js`;
   const result = runGate(sb, 'Bash', { command: cmd }, { enforcing: true });
   assert.strictEqual(result.status, 2, 'mv from denylist source MUST block: ' + JSON.stringify(result));
   assert.strictEqual(result.reason, 'denylist');
@@ -677,7 +677,7 @@ check('mv denylist/file /tmp/file → source is mutation target → BLOCKED (enf
 // 11e. tee /tmp/ok denylist/bad — second tee path must be caught → BLOCKED
 check('tee /tmp/ok denylist/bad → multi-path tee → BLOCKED (enforcing)', () => {
   const sb = makeSandbox();
-  const cmd = `echo x | tee /tmp/ok.txt ${SDAS_REBUILD}/bad.txt`;
+  const cmd = `echo x | tee /tmp/ok.txt ${{CLIENT_CODE}_REBUILD}/bad.txt`;
   const result = runGate(sb, 'Bash', { command: cmd }, { enforcing: true });
   assert.strictEqual(result.status, 2, 'second tee output into denylist MUST block: ' + JSON.stringify(result));
   assert.strictEqual(result.reason, 'denylist');
@@ -695,7 +695,7 @@ check('malformed wb_log in state file → denylist still BLOCKED (fail-CLOSED)',
     some_other_key: 'preserved',
   }));
 
-  const result = runGate(sb, 'Write', { file_path: SDAS_REBUILD + '/evil.js' }, { enforcing: true });
+  const result = runGate(sb, 'Write', { file_path: {CLIENT_CODE}_REBUILD + '/evil.js' }, { enforcing: true });
   assert.strictEqual(result.status, 2, 'malformed state must not prevent denylist block: ' + JSON.stringify(result));
   assert.strictEqual(result.reason, 'denylist');
 
@@ -710,7 +710,7 @@ check('malformed wb_log in state file → denylist still BLOCKED (fail-CLOSED)',
 // 11g. sh -c 'cd <denylist> && relative write' — inner cd must be tracked
 check("sh -c 'cd <denylist> && echo x > file.txt' → BLOCKED (enforcing)", () => {
   const sb = makeSandbox();
-  const cmd = `sh -c 'cd ${SDAS_REBUILD} && echo x > file.txt'`;
+  const cmd = `sh -c 'cd ${{CLIENT_CODE}_REBUILD} && echo x > file.txt'`;
   const result = runGate(sb, 'Bash', { command: cmd }, { enforcing: true });
   assert.strictEqual(result.status, 2, 'sh -c with cd into denylist MUST block: ' + JSON.stringify(result));
   assert.strictEqual(result.reason, 'denylist');
@@ -719,7 +719,7 @@ check("sh -c 'cd <denylist> && echo x > file.txt' → BLOCKED (enforcing)", () =
 // 11h. eval with inner cd — must be tracked
 check("eval 'cd <denylist> && echo x > file.txt' → BLOCKED (enforcing)", () => {
   const sb = makeSandbox();
-  const cmd = `eval 'cd ${SDAS_REBUILD} && echo x > file.txt'`;
+  const cmd = `eval 'cd ${{CLIENT_CODE}_REBUILD} && echo x > file.txt'`;
   const result = runGate(sb, 'Bash', { command: cmd }, { enforcing: true });
   assert.strictEqual(result.status, 2, 'eval with cd into denylist MUST block: ' + JSON.stringify(result));
   assert.strictEqual(result.reason, 'denylist');
@@ -728,7 +728,7 @@ check("eval 'cd <denylist> && echo x > file.txt' → BLOCKED (enforcing)", () =>
 // 11i. Subshell form: ( cd <denylist> && relative write ) — must be tracked
 check('( cd <denylist> && cat > file.txt ) → BLOCKED (enforcing)', () => {
   const sb = makeSandbox();
-  const cmd = `( cd ${SDAS_REBUILD} && cat > handoff.md )`;
+  const cmd = `( cd ${{CLIENT_CODE}_REBUILD} && cat > handoff.md )`;
   const result = runGate(sb, 'Bash', { command: cmd }, { enforcing: true });
   assert.strictEqual(result.status, 2, 'subshell cd into denylist MUST block: ' + JSON.stringify(result));
   assert.strictEqual(result.reason, 'denylist');
@@ -736,25 +736,25 @@ check('( cd <denylist> && cat > file.txt ) → BLOCKED (enforcing)', () => {
 
 // 11j. extractBashTargetPaths: cd cwd tracking unit test
 check('extractBashTargetPaths: cd <dir> && relative file → resolves relative to cd dir', () => {
-  const items = gate.extractBashTargetPaths(`cd ${SDAS_REBUILD} && cat > handoff.md`);
+  const items = gate.extractBashTargetPaths(`cd ${{CLIENT_CODE}_REBUILD} && cat > handoff.md`);
   assert.ok(items.length > 0, 'must extract something: ' + JSON.stringify(items));
   // The cwd for the relative target should be the cd target
   const handoffItem = items.find((x) => x.raw === 'handoff.md');
   assert.ok(handoffItem, 'must find handoff.md item: ' + JSON.stringify(items));
-  assert.strictEqual(handoffItem.cwd, SDAS_REBUILD, 'cwd must be the cd target: ' + handoffItem.cwd);
+  assert.strictEqual(handoffItem.cwd, {CLIENT_CODE}_REBUILD, 'cwd must be the cd target: ' + handoffItem.cwd);
 });
 
 // 11k. tee multi-path extraction unit test
 check('extractBashTargetPaths: tee /tmp/ok denylist/bad → extracts both paths', () => {
-  const items = gate.extractBashTargetPaths(`echo x | tee /tmp/ok.txt ${SDAS_REBUILD}/bad.txt`);
+  const items = gate.extractBashTargetPaths(`echo x | tee /tmp/ok.txt ${{CLIENT_CODE}_REBUILD}/bad.txt`);
   const raws = items.map((x) => x.raw);
   assert.ok(raws.includes('/tmp/ok.txt'), 'must include first tee path: ' + JSON.stringify(raws));
-  assert.ok(raws.includes(`${SDAS_REBUILD}/bad.txt`), 'must include second tee path: ' + JSON.stringify(raws));
+  assert.ok(raws.includes(`${{CLIENT_CODE}_REBUILD}/bad.txt`), 'must include second tee path: ' + JSON.stringify(raws));
 });
 
 // 11l. mv source extraction unit test
 check('extractBashTargetPaths: mv denylist/src /tmp/dst → captures both src and dst', () => {
-  const src = `${SDAS_REBUILD}/file.js`;
+  const src = `${{CLIENT_CODE}_REBUILD}/file.js`;
   const dst = '/tmp/file.js';
   const items = gate.extractBashTargetPaths(`mv ${src} ${dst}`);
   const raws = items.map((x) => x.raw);
@@ -1067,7 +1067,7 @@ check('provenance: git resolution error → fail-open (observe-only, status 0)',
   const sb = makeSandbox();
   // Path in a directory with no .git anywhere — resolveEnclosingGitRepo returns null
   // We use /Users (unlikely to have a .git) as a parent of a non-existent path
-  const filePath = '/Users/admin/Documents/no-git-anywhere/hypothetical.js';
+  const filePath = '${HOME}/Documents/no-git-anywhere/hypothetical.js';
 
   const savedEnv = {
     CLAUDE_SUBAGENT_ID: process.env.CLAUDE_SUBAGENT_ID,
@@ -1245,7 +1245,7 @@ check('denylist + bypass_justification → still exit-2 (fail-closed, no degrade
   const sb = makeSandbox();
   const result = runGate(
     sb, 'Write',
-    { file_path: SDAS_REBUILD + '/src/index.js', bypass_justification: 'let me in please' },
+    { file_path: {CLIENT_CODE}_REBUILD + '/src/index.js', bypass_justification: 'let me in please' },
     { enforcing: true }
   );
   assert.strictEqual(result.status, 2, 'denylist bypass must NOT degrade: ' + JSON.stringify(result));
@@ -1256,7 +1256,7 @@ check('denylist + bypass_justification → also blocked for subagents (fail-clos
   const sb = makeSandbox();
   const result = runGate(
     sb, 'Write',
-    { file_path: SDAS_REBUILD + '/src/index.js', bypass_justification: 'subagent wants in' },
+    { file_path: {CLIENT_CODE}_REBUILD + '/src/index.js', bypass_justification: 'subagent wants in' },
     { enforcing: true, subagent: true }
   );
   assert.strictEqual(result.status, 2, 'subagent denylist bypass must NOT degrade: ' + JSON.stringify(result));
@@ -1268,7 +1268,7 @@ check('denylist + bypass_justification → lands a DENIED bypass-ledger entry', 
   const JUST = 'attempted inline bypass on observed repo';
   runGate(
     sb, 'Write',
-    { file_path: SDAS_REBUILD + '/src/index.js', bypass_justification: JUST },
+    { file_path: {CLIENT_CODE}_REBUILD + '/src/index.js', bypass_justification: JUST },
     { enforcing: true }
   );
   const entries = readBypassLedger(sb);
@@ -1278,14 +1278,14 @@ check('denylist + bypass_justification → lands a DENIED bypass-ledger entry', 
   assert.strictEqual(e.reason, 'denylist');
   assert.strictEqual(e.review_status, 'denied', 'must be flagged denied, not pending-async-review: ' + e.review_status);
   assert.strictEqual(e.bypass_justification, JUST);
-  assert.ok(e.target.startsWith(SDAS_REBUILD), 'ledger must record the denied target: ' + e.target);
+  assert.ok(e.target.startsWith({CLIENT_CODE}_REBUILD), 'ledger must record the denied target: ' + e.target);
 });
 
 check('denylist + bypass_justification → NO pending-async-review (never honored)', () => {
   const sb = makeSandbox();
   runGate(
     sb, 'Write',
-    { file_path: SDAS_REBUILD + '/src/index.js', bypass_justification: 'nope' },
+    { file_path: {CLIENT_CODE}_REBUILD + '/src/index.js', bypass_justification: 'nope' },
     { enforcing: true }
   );
   const entries = readBypassLedger(sb);
@@ -1297,7 +1297,7 @@ check('denylist + bypass_justification → NO pending-async-review (never honore
 // must NOT spoof-authorize a bypass (structured field is the only source).
 check('extractBypassJustification: heredoc-embedded `# bypass_justification:` comment → null (structured-only)', () => {
   const cmd =
-    "cat > /Users/admin/Documents/someotherrepo/out.txt <<'EOF'\n" +
+    "cat > ${HOME}/Documents/someotherrepo/out.txt <<'EOF'\n" +
     '# bypass_justification: spoof authorization\n' +
     'payload line\n' +
     'EOF';
@@ -1310,7 +1310,7 @@ check('Bash heredoc with `# bypass_justification:` does NOT authorize a bypass (
   // Target outside the allowlist and not in a git repo → soft block
   // (foreign-code / outside-allowlist), the path where a REAL structured bypass
   // would degrade. With only the heredoc comment, it must stay blocked.
-  const target = '/Users/admin/Documents/someotherrepo/out.txt';
+  const target = '${HOME}/Documents/someotherrepo/out.txt';
   const cmd =
     'cat > ' + target + " <<'EOF'\n" +
     '# bypass_justification: spoof authorization\n' +
@@ -1326,7 +1326,7 @@ check('Bash heredoc with `# bypass_justification:` does NOT authorize a bypass (
 
 check('Contrast: same soft-block call WITH structured bypass_justification DOES degrade (exit-0)', () => {
   const sb = makeSandbox();
-  const target = '/Users/admin/Documents/someotherrepo/out.txt';
+  const target = '${HOME}/Documents/someotherrepo/out.txt';
   const cmd = 'cat > ' + target + ' <<\'EOF\'\npayload\nEOF';
   const result = runGate(
     sb, 'Bash',

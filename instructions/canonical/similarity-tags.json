@@ -1,0 +1,97 @@
+{
+  "version": "1.1.0",
+  "description": "Controlled vocabulary for advisory similarity metadata used by Mythos planning. Tags suggest reusable workflow shape; they do not decide execution mode, trust tier, review lane, or promotion. v1.1.0 additively extends the `domain` axis with kernel tags and introduces a new `kernel_surface` axis for the Retrieval lobe.",
+  "axes": {
+    "domain": [
+      "deliverables",
+      "meta",
+      "paid-media",
+      "project-management",
+      "wordpress",
+      "cross-framework",
+      "kernel",
+      "kernel-archival"
+    ],
+    "kernel_surface": [
+      "doctrine",
+      "control-loop",
+      "retrieval",
+      "convene",
+      "debrief",
+      "lesson",
+      "stall",
+      "collision",
+      "provenance",
+      "reflex",
+      "omega",
+      "now",
+      "alpha"
+    ],
+    "workflow_shape": [
+      "intake-and-scope",
+      "prior-art-lookup",
+      "capture-before-change",
+      "navigate-observe-assert-report",
+      "compare-expected-actual",
+      "artifact-contract-definition",
+      "review-gate",
+      "handoff-bundle",
+      "iterate-until-pass",
+      "publish-or-freeze",
+      "replicate-pattern-capture",
+      "distinct-review-gate",
+      "calibrate-then-tighten"
+    ],
+    "evidence_shape": [
+      "artifact-citation",
+      "browser-run",
+      "before-after-diff",
+      "json-artifact",
+      "markdown-report",
+      "operator-approval",
+      "schema-validation",
+      "screenshot-evidence",
+      "validation-artifact",
+      "distinct-review"
+    ],
+    "risk_shape": [
+      "read-only",
+      "report-write",
+      "repo-local",
+      "authenticated-admin",
+      "external-account",
+      "production-facing",
+      "client-data-sensitive",
+      "destructive-potential"
+    ],
+    "artifact_shape": [
+      "plan-json",
+      "manifest-json",
+      "prompt-file",
+      "schema-file",
+      "markdown-report",
+      "bundle",
+      "handoff-packet",
+      "json-artifact",
+      "validation-artifact",
+      "shared-block"
+    ],
+    "reuse_role": [
+      "full-framework",
+      "workflow-phase",
+      "prompt-block",
+      "validation-gate",
+      "artifact-contract",
+      "handoff-pattern",
+      "review-pattern",
+      "planning-pattern"
+    ],
+    "lifecycle_state": [
+      "current",
+      "proposed",
+      "probationary",
+      "demoted",
+      "closed"
+    ]
+  }
+}

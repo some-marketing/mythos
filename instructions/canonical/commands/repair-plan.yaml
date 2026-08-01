@@ -1,0 +1,182 @@
+{
+  "id": "repair-plan",
+  "description": "Repair defective plan artifacts via atomic paired JSON+MD authority-field mutation with full provenance",
+  "mode": "PATCH_ALLOWED",
+  "mode_authority_scope": "PATCH_ALLOWED authorizes write to the paired base-plan JSON and its markdown sibling for the enumerated authority-field set below, plus creation of a sibling repair manifest (JSON+MD) and a review-before-run state marker. No other files in the plan's storage root may be written by this command. Writes to _dev/ state marker are scoped to _dev/state/plan-task-review-state/{task-id}.json (or client-scoped equivalent).",
+  "objective": "Repair defective plan artifacts (paired JSON+MD authority) with full provenance via a sibling repair manifest. Distinct from /amend-plan (overlay-only). Mutates base plan authority atomically; paired JSON+MD discipline enforced by managed runtime.",
+  "authority_boundary": {
+    "what_repair_is": "Immutable authority-field mutation on the base plan JSON and its paired markdown. Paired JSON+MD are mutated atomically — both surfaces together or neither — with a sibling repair manifest recording pre/post hashes, touched fields, actor, and review_reference.",
+    "what_repair_is_not": [
+      "Overlay-only future-assumption changes → route to /amend-plan",
+      "Scope expansion beyond current bounded plan → route to /plan-task <new-bounded-task>",
+      "Decision reversal without evidence → route to a new plan or to /amend-plan with explicit repair semantics",
+      "Any change that does not touch the enumerated authority-field set → route to /amend-plan"
+    ],
+    "immutable_authority_fields_json": [
+      "task_summary",
+      "scope_type",
+      "non_goals",
+      "authority_separation",
+      "governance_decision",
+      "scope_identity.workstream_scope",
+      "scope_identity.session_or_run_id",
+      "scope_identity.working_surface",
+      "scope_identity.custody_hierarchy",
+      "scope_identity.custody_hierarchy.system_id",
+      "scope_identity.custody_hierarchy.client_code",
+      "scope_identity.custody_hierarchy.project_id",
+      "scope_identity.custody_hierarchy.task_id",
+      "scope_identity.custody_hierarchy.parent_scope",
+      "scope_identity.custody_hierarchy.child_scopes",
+      "scope_identity.owned_artifacts",
+      "scope_identity.forbidden_artifacts",
+      "validation_confidence",
+      "bounded_plan.steps[].description",
+      "bounded_plan.required_gates",
+      "bounded_plan.expected_outcomes",
+      "bounded_plan.risk_notes",
+      "routing_expectations.risk_tier",
+      "routing_expectations.review_lane",
+      "routing_expectations.review_lane_rationale",
+      "routing_expectations.escalation_triggers",
+      "exact_next_command"
+    ],
+    "immutable_authority_fields_md": "MD handoff sections mirroring JSON authority — Task Summary, Scope, Scope Identity, Non-goals, Authority Separation, Governance Decision, Validation Confidence, Bounded Plan / Steps / Required Gates / Expected Outcomes / Risk Notes, Routing Expectations (risk tier, review lane, rationale, escalation triggers), Exact Next Command. Any MD section whose meaning mirrors a JSON authority field is also authority and must be repaired in the same atomic transaction.",
+    "governing_amendment_coverage_contract": "When active governing amendments in the chain name specific authority-field rewrites as clearance conditions, /repair-plan requires the caller to either apply ALL named rewrites, or pass proposedChanges.governing_amendment_coverage = { amendment_ids: string[], uncovered_authority_paths: string[], declared_omissions: [{ field, reason, operator_gate_ref }] } with a ratified operator gate for every uncovered path. Unresolved uncovered paths fail with error code 'governing-amendment-coverage-violation'. Absent coverage object soft-warns '[warn] governing-amendment-coverage not declared; future enforcement pending migration' (backward-compatible until caller migration).",
+    "paired_content_propagation_contract": "When fields_touched_json includes bounded_plan.required_gates and/or bounded_plan.expected_outcomes, the staged MD MUST contain a plural-form '## Required gates' and/or '## Expected outcomes' section whose numbered-list items equal the corresponding JSON array values IN ORDER (ordinal content parity: item N's trimmed text must equal bounded_plan.<field>[N] trimmed, not merely the same count). Missing section, count mismatch, or any ordinal content mismatch fails with error code 'paired-content-propagation-violation'; managed runtime atomically rolls BOTH the base plan JSON and MD back to pre-repair bytes before returning. The canonical MD heading form is PLURAL ('## Required gates', '## Expected outcomes'); singular legacy forms are treated as drift and must be renamed in the staged MD."
+  },
+  "scope_resolution": {
+    "default": "Resolve the argument as a task-plan id or path via the shared resolver",
+    "arguments": {
+      "<task-id>": "Resolve via resolveTaskPlanPaths() from tools/planning/lib/resolve-task-plan.js; system root _dev/reports/analysis/task-plans/ and client roots clients/*/plans/ searched; ambiguity blocks",
+      "<path>": "Use the specified path directly; resolver still normalizes companion paths"
+    }
+  },
+  "arguments": {
+    "required": ["<task-id-or-path>"],
+    "optional": {
+      "--review-reference <path>": "Path to the /review-task-plan artifact that surfaced the defect. REQUIRED at manifest-write time; may be passed at dispatch or prompted by managed runtime.",
+      "--reason <string>": "Structured reason citing the defect class and evidence; recorded verbatim in the repair manifest."
+    }
+  },
+  "process": [
+    "Resolve plan artifacts using resolveTaskPlanPaths($ARGUMENTS); obtain { json_path, md_path, storage_root, scope }.",
+    "Read plan.scope_identity (TaskCustody/1.0) when present. Repair manifests must copy or restate the custody identity and add the repair JSON/MD paths plus state marker path to owned_artifacts. If scope_identity itself is the defective surface, regenerate it mechanically with tools/planning/lib/task-custody.js rather than freehand-authoring.",
+    "Verify the proposed change touches at least one field from authority_boundary.immutable_authority_fields_json or its MD mirror. If not, refuse and route to /amend-plan.",
+    "Compute pre_repair_hashes = { json: sha256(json_path bytes), md: sha256(md_path bytes) }.",
+    "Enforce governing-amendment authority coverage per governing_amendment_coverage_contract: refuse with 'governing-amendment-coverage-violation' when uncovered_authority_paths[] contains entries lacking a matching declared_omissions[] with operator_gate_ref. Absence of the coverage object soft-warns only.",
+    "Apply the paired mutation atomically: stage edits to both JSON and MD in memory; write both or neither. On any write failure, roll back both surfaces.",
+    "Compute post_repair_hashes = { json: sha256(json_path bytes), md: sha256(md_path bytes) } after atomic write.",
+    "Enforce paired_content_propagation_contract for bounded_plan.required_gates and bounded_plan.expected_outcomes: MD plural-form sections must carry numbered items that equal the corresponding JSON array values IN ORDER (ordinal content parity, not count-only). Missing section, count mismatch, or any ordinal content mismatch fails with 'paired-content-propagation-violation' and rolls BOTH base JSON and MD back to their pre-repair bytes before returning.",
+    "Invoke tools/planning/validate-task-plan.js against the repaired JSON (10s timeout). On exit 0 remove any <plan-json>.warning sidecar; on non-zero exit rewrite the sidecar with current validator output. On missing validator or spawn error, record validator_status.ok=null and continue. Record validator_status { ok, exit_code?, ran_at, output_summary?, error? } in the PlanRepair/1.0 manifest.",
+    "Write sibling repair manifest JSON at <storage_root>/<task-id>__repair__<TIMESTAMP>.json and paired MD at <storage_root>/<task-id>__repair__<TIMESTAMP>.md per artifact_schema.plan_repair_manifest. Manifest MUST include review_reference, fields_touched_json, fields_touched_md, pre/post hashes, author_actor, produced_by_harness_id, schema_version='PlanRepair/1.0', validator_status.",
+    "Write review-before-run state marker at _dev/state/plan-task-review-state/<task-id>.json (or client-scoped equivalent) with post_repair.review_status='pending', post_repair.repair_id, post_repair.timestamp, post_repair.review_reference.",
+    "Emit exact_next_command: '/review-task-plan <task-id>'.",
+    "Idempotency: on re-invocation against an already-repaired-pending-review plan, report already-pending-review with the existing repair_id, and refuse to re-repair without a new review_reference that post-dates the pending marker."
+  ],
+  "success_criteria": [
+    "Plan JSON and MD resolved via shared resolver",
+    "Proposed change verified to touch at least one immutable authority field",
+    "Pre-repair hashes computed before any write",
+    "Paired JSON+MD mutation committed atomically (both surfaces or neither)",
+    "Post-repair hashes computed after atomic write",
+    "Sibling repair manifest JSON+MD written with complete PlanRepair/1.0 fields including review_reference",
+    "Review-before-run state marker written with post_repair.review_status='pending'",
+    "Exact next command '/review-task-plan <task-id>' emitted",
+    "Idempotent on re-invocation against already-pending-review plan",
+    "No other files touched; no commits made; no implementation work attempted"
+  ],
+  "review_rules": {
+    "self_approval_prohibited": "/repair-plan is never self-approving. REVIEW_ONLY does not apply to this command — it is PATCH_ALLOWED — but every repair MUST pass /review-task-plan against the repaired artifact before /run-plan is permitted to resume. The review-before-run state marker enforces this: /run-plan reads post_repair.review_status and refuses if it is not 'approved'.",
+    "review_round_required": "A repair that mutates authority without a review_reference pointing at a prior /review-task-plan artifact is refused at manifest-write time."
+  },
+  "handoff": {
+    "next_command": "/review-task-plan <task-id>",
+    "repair_manifest_json": "<storage_root>/<task-id>__repair__<TIMESTAMP>.json",
+    "repair_manifest_md": "<storage_root>/<task-id>__repair__<TIMESTAMP>.md",
+    "state_marker": "_dev/state/plan-task-review-state/<task-id>.json"
+  },
+  "shared_resolver_requirement": {
+    "rule": "All task-plan lookups must use resolveTaskPlanPaths() from tools/planning/lib/resolve-task-plan.js. Do not assume _dev-only storage. Amendment lookups use listAmendments(); operator-gate resolution uses resolveOperatorGates().",
+    "exports_used": ["resolveTaskPlanPaths()", "listAmendments()", "resolveOperatorGates()"]
+  },
+  "artifacts": [
+    "<storage_root>/<task-id>__repair__<TIMESTAMP>.json",
+    "<storage_root>/<task-id>__repair__<TIMESTAMP>.md",
+    "_dev/state/plan-task-review-state/<task-id>.json",
+    "Paired base-plan mutations: <storage_root>/<task-id>__plan.json AND <storage_root>/<task-id>__plan.md (atomic)"
+  ],
+  "artifact_schema": {
+    "_schema_location_note": "PlanRepair/1.0 schema lives inline in this artifact_schema block per operator decision 2026-04-21 (operator-gate-schema-location amendment). No standalone schemas/plan-repair.schema.json file exists; this block is the single source of truth. Forward migration: schema_version field on every manifest instance enables downstream bumps (PlanRepair/1.1+) without a file move.",
+    "plan_repair_manifest": {
+      "schema": "PlanRepair/1.0",
+      "repair_id": "string — unique repair identifier",
+      "plan_id": "string — task-id of the plan that was repaired",
+      "plan_paths": {
+        "json": "string — path to the repaired JSON",
+        "md": "string — path to the repaired MD"
+      },
+      "scope_identity": "object — TaskCustody/1.0 copied or restated from the repaired plan, with repair manifest and state-marker artifacts included in owned_artifacts",
+      "timestamp": "ISO 8601 with tz",
+      "review_reference": "string — path to the /review-task-plan artifact that surfaced the defect prompting this repair",
+      "fields_touched_json": ["string — dotted paths of JSON authority fields mutated (e.g. bounded_plan.steps[2].description, routing_expectations.review_lane)"],
+      "fields_touched_md": ["string — MD section names or heading anchors mutated (e.g. 'Routing Expectations', '#exact-next-command')"],
+      "pre_repair_hashes": {
+        "json": "sha256 hex of JSON file bytes before the repair",
+        "md": "sha256 hex of MD file bytes before the repair"
+      },
+      "post_repair_hashes": {
+        "json": "sha256 hex of JSON file bytes after the repair",
+        "md": "sha256 hex of MD file bytes after the repair"
+      },
+      "reason": "string — structured reason citing the defect class and evidence refs",
+      "author_actor": {
+        "actor_id": "string",
+        "actor_type": "intelligence | operator | harness"
+      },
+      "produced_by_harness_id": "string — harness identifier that executed the repair",
+      "schema_version": "string — 'PlanRepair/1.0' (explicit for forward migration per signal-identity dependency)",
+      "validator_status": "object { ok: boolean|null, exit_code?: number, ran_at: string, output_summary?: string, error?: string } — post-atomic-write validator result. ok=true when tools/planning/validate-task-plan.js exited 0 (and any stale .warning sidecar was removed); ok=false when validator exited non-zero (and the .warning sidecar was rewritten with current output); ok=null when the validator script was missing or threw (repair is not failed in this case)."
+    }
+  },
+  "reader_contract": {
+    "run_plan_consumer": "/run-plan MUST read the review-before-run state marker at _dev/state/plan-task-review-state/<task-id>.json at execution entry. If post_repair.review_status !== 'approved', /run-plan refuses with a precise blocker message naming the pending repair_id and pointing at /review-task-plan.",
+    "review_task_plan_consumer": "/review-task-plan MUST read the sibling repair manifest when present for a repaired plan. When rendering review context, it surfaces fields_touched_json, fields_touched_md, review_reference, and the pre/post hash diff so the reviewer can see exactly what the repair changed. On approval or rejection, /review-task-plan writes the A1 two-reference terminal block on the state marker: post_review.decision=<'approved'|'rejected'>, post_review.approval_reference=<path to THIS /review-task-plan artifact>, post_review.decided_at=<ISO 8601 with tz>, and optionally post_review.decided_by_actor_id. It also flips last_event to 'post_review_approved' or 'post_review_rejected' and mirrors the decision into post_repair.review_status. /review-task-plan MUST NOT overwrite post_repair.review_reference — that field is the defect-surfacing provenance set at repair-time by /repair-plan and remains immutable across approval, rejection, and subsequent re-review. Conflating the approval artifact with the defect-surfacing artifact is forbidden; they are two distinct references in the A1 model.",
+    "amend_plan_consumer": "/amend-plan MUST refuse to mutate any immutable authority field enumerated in authority_boundary.immutable_authority_fields_json or its MD mirror. On detection, /amend-plan emits a route-to-/repair-plan diagnostic.",
+    "schema_version_awareness": "All consumers read schema_version from the manifest. Unknown schema versions beyond the consumer's known set produce a soft-fail diagnostic rather than a silent ignore."
+  },
+  "state_marker_schema": {
+    "path": "_dev/state/plan-task-review-state/<task-id>.json (system scope) or clients/<CODE>/state/plan-task-review-state/<task-id>.json (client scope)",
+    "model_note": "A1 two-reference model (ratified 2026-04-21). Two distinct review artifacts are tracked: post_repair.review_reference is the DEFECT-SURFACING provenance review that prompted the repair (REQUIRED non-empty at repair-time); post_review.approval_reference is the LATER /review-task-plan artifact that approved or rejected the repair (REQUIRED when last_event is post_review_approved or post_review_rejected). These are not the same artifact and must not be conflated.",
+    "shape": {
+      "plan_id": "string — task-id",
+      "last_event": "'post_repair' | 'post_review_approved' | 'post_review_rejected' — most recent lifecycle event",
+      "post_repair": {
+        "repair_id": "string — id of the most recent repair",
+        "timestamp": "ISO 8601 with tz — when the repair landed",
+        "review_status": "'pending' | 'approved' | 'rejected' — mirrors the terminal decision once a post_review block exists",
+        "review_reference": "string (REQUIRED non-empty at repair-time) — path to the /review-task-plan artifact that SURFACED the defect and prompted this repair. Provenance, not approval."
+      },
+      "post_review": {
+        "_presence": "OPTIONAL overall; REQUIRED when last_event is 'post_review_approved' or 'post_review_rejected'. Absent when last_event === 'post_repair' (review-before-run gate still pending).",
+        "decision": "'approved' | 'rejected' — must agree with last_event (approved ↔ post_review_approved, rejected ↔ post_review_rejected)",
+        "approval_reference": "string (REQUIRED non-empty when post_review present) — path to the /review-task-plan artifact that produced the approval or rejection. Distinct from post_repair.review_reference.",
+        "decided_at": "ISO 8601 with tz — when the approval/rejection was written",
+        "decided_by_actor_id": "string (optional) — actor that performed the review"
+      }
+    }
+  },
+  "falsification_matrix": {
+    "a": "/repair-plan invoked on a non-defective plan → refuse, route to /amend-plan",
+    "b": "/repair-plan mutates JSON but not MD (or vice versa) → managed runtime atomic paired-write refusal BEFORE any mutation (primary enforcement); advisory post-write hook surfaces .warning for direct-write bypasses on non-/repair-plan paths",
+    "c": "/run-plan invoked against a repaired-pending-review plan → refuse with precise blocker citing repair_id and required /review-task-plan",
+    "d": "/amend-plan invoked to change an immutable authority field → refuse, route to /repair-plan",
+    "e": "Repair manifest missing review_reference → refuse at manifest-write time",
+    "f": "review_reference points at a non-existent artifact or an artifact whose task_id does not match plan_id → refuse",
+    "g": "Repair mutation committed without a sibling repair manifest file: advisory surface — post-write hook emits .warning sidecar for direct-write detection; CONSUMER VALIDATION PATH — downstream readers of a repaired plan SHOULD validate manifest presence before trusting repaired plan bytes (future hardening; not implemented in this slice — see repair-plan-implementation S10+ follow-on).",
+    "h": "Sibling manifest whose per-surface pre/post hashes do not match the actual file bytes on disk: CONSUMER VALIDATION CONTRACT — a downstream hash-verification helper (future `tools/planning/lib/plan-repair-manifest.js` promotion) MUST refuse a plan whose manifest hashes fail verification. Inline assertion exists in tests/planning/repair-plan/falsification.test.js scenario (h); promotion to a shared helper is a follow-on hardening task (not in this slice).",
+    "i": "Single invocation mixing amend overlay + repair authority mutation → refuse, require the caller to split into separate /amend-plan and /repair-plan invocations",
+    "j": "Stale repaired-pending-review state marker — marker says pending but review already ran, OR marker says approved but a newer repair_id landed after the approval timestamp → refuse /run-plan and require state reconciliation"
+  },
+  "authority_separation_from_amend_plan": "/amend-plan and /repair-plan are authority-separated. /amend-plan writes overlay companion artifacts (PlanAmendment/1.0 or 1.1 JSON+MD) beside the plan; the base plan JSON and MD are NEVER mutated by /amend-plan. /repair-plan writes paired JSON+MD base-plan mutations atomically and emits a sibling PlanRepair/1.0 manifest recording what was touched and why. Misrouted invocations are caught at dispatch: /amend-plan refuses immutable-authority writes and routes to /repair-plan; /repair-plan refuses overlay-only changes and routes to /amend-plan. Neither command is self-approving — /repair-plan always requires a downstream /review-task-plan approval before /run-plan may resume."
+}

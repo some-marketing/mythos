@@ -34,7 +34,7 @@ const LEDGER_PATH = path.join(MEMORY_ROOT, '_dev/state/memory-ledger.jsonl');
 const ACTIVE_SESSIONS_DIR = path.join(PROJECT_ROOT, '_dev/state/active-sessions');
 const MEMORY_DIR = path.resolve(
   process.env.HOME,
-  '.claude/projects/-Users-admin-Documents-GitHub-mythos/memory'
+  '.claude/projects/{PROJECT_SLUG}/memory'
 );
 
 const EVENTS = ['create', 'supersede', 'retire', 'reconcile', 'classify'];

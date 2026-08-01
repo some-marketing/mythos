@@ -3,7 +3,7 @@
 //
 // Kernel heartbeat — periodic self-check that writes a pulse record to disk
 // so every session waking up can see when the kernel was last alive and what
-// it saw. Runs via launchd on a schedule (see com.smos.kernel-heartbeat.plist).
+// it saw. Runs via launchd on a schedule (see tools/launchd/services.json).
 //
 // Scope: READ-ONLY. Never writes, rotates, or mutates credentials or any other
 // live state outside its own pulse file and log file. If a lane is broken, the

@@ -1,0 +1,288 @@
+{
+  "service_category": "paid-media",
+  "framework_name": "meta-creative-iteration",
+  "version": "0.2.0",
+  "description": "Algorithm-aware Meta ad creative iteration framework. 9 stage prompts from conversion-signal sanity through framework-class insight readout. Internalizes Meta's 2024-2025 platform shifts (GEM, Andromeda, Sequence Learning) per the hardened concept at _dev/concepts/algo-aware-meta-creative-iteration-framework/concept.md. Composes with tools/mcp/meta-ads/ (compliance + write surface), tools/mcp/delesign/ (brief surface, with Chrome-MCP fallback while vendor 500 blocks API submit), and the Big Book of Static Ad Frameworks parsed at tools/notion/parse-ad-frameworks.js. Meta-only in v1.",
+  "prompt_count": 9,
+  "input_contract": {
+    "required": [
+      {
+        "name": "client_project_path",
+        "description": "Path to the target clients/<CLIENT>/projects/meta-app-integration/project.json. The framework reads ad_account_id and compliance_posture from that file. The framework knows nothing client-specific by itself."
+      },
+      {
+        "name": "campaign_goal",
+        "description": "Business goal driving this iteration cycle (e.g., drive financing applications, increase service-bay bookings)."
+      }
+    ],
+    "optional": [
+      {
+        "name": "prior_iteration_artifact",
+        "description": "Path to a prior iteration bundle for refresh-cycle continuity (winners, losers, lessons). Feeds Stage 1 and Stage 7."
+      },
+      {
+        "name": "budget_window",
+        "description": "Daily/weekly/monthly budget the iteration is sized against. Influences Stage 5a sample-size minimums."
+      },
+      {
+        "name": "delesign_mode_override",
+        "description": "Force 'api' or 'chrome-mcp-fallback' for Stage 4. Default is auto-detect based on Delesign API health."
+      }
+    ]
+  },
+  "output_contract": {
+    "directories": [
+      "outputs/meta-creative-iteration/"
+    ],
+    "artifacts": [
+      "outputs/meta-creative-iteration/00-conversion-signal-sanity.json",
+      "outputs/meta-creative-iteration/01-message-hypothesis.json",
+      "outputs/meta-creative-iteration/02-framework-mix.json",
+      "outputs/meta-creative-iteration/03-mockups/",
+      "outputs/meta-creative-iteration/04-delesign-briefs.json",
+      "outputs/meta-creative-iteration/05-meta-push-payloads.json",
+      "outputs/meta-creative-iteration/05a-preregistration.json",
+      "outputs/meta-creative-iteration/06-readout.json",
+      "outputs/meta-creative-iteration/06-readout-narrative.json",
+      "outputs/meta-creative-iteration/07-refresh-decisions.json",
+      "outputs/meta-creative-iteration/iteration-bundle.json"
+    ]
+  },
+  "output_contract_v2": {
+    "directories": [
+      {
+        "path": "outputs/meta-creative-iteration/",
+        "required": true,
+        "description": "All artifacts for one iteration cycle of the framework, scoped to the chosen client project."
+      }
+    ],
+    "artifacts": [
+      {
+        "name": "00-conversion-signal-sanity.json",
+        "path_pattern": "outputs/meta-creative-iteration/00-conversion-signal-sanity.json",
+        "required": true
+      },
+      {
+        "name": "01-message-hypothesis.json",
+        "path_pattern": "outputs/meta-creative-iteration/01-message-hypothesis.json",
+        "required": true
+      },
+      {
+        "name": "02-framework-mix.json",
+        "path_pattern": "outputs/meta-creative-iteration/02-framework-mix.json",
+        "required": true
+      },
+      {
+        "name": "04-delesign-briefs.json",
+        "path_pattern": "outputs/meta-creative-iteration/04-delesign-briefs.json",
+        "required": true
+      },
+      {
+        "name": "05-meta-push-payloads.json",
+        "path_pattern": "outputs/meta-creative-iteration/05-meta-push-payloads.json",
+        "required": true,
+        "schema": "schemas/stage5-meta-push-payload.schema.json"
+      },
+      {
+        "name": "05a-preregistration.json",
+        "path_pattern": "outputs/meta-creative-iteration/05a-preregistration.json",
+        "required": true,
+        "schema": "schemas/stage5a-preregistration.schema.json"
+      },
+      {
+        "name": "iteration-bundle.json",
+        "path_pattern": "outputs/meta-creative-iteration/iteration-bundle.json",
+        "required": true
+      }
+    ],
+    "schemas": [
+      {
+        "name": "stage0-conversion-signal",
+        "path": "schemas/stage0-conversion-signal.schema.json"
+      },
+      {
+        "name": "stage1-message-hypothesis",
+        "path": "schemas/stage1-message-hypothesis.schema.json"
+      },
+      {
+        "name": "stage2-framework-mix",
+        "path": "schemas/stage2-framework-mix.schema.json"
+      },
+      {
+        "name": "stage4-delesign-brief",
+        "path": "schemas/stage4-delesign-brief.schema.json"
+      },
+      {
+        "name": "stage5-meta-push-payload",
+        "path": "schemas/stage5-meta-push-payload.schema.json",
+        "description": "State-machine schema for the Stage 5 Meta push artifact (draft|approved|applied|rejected)."
+      },
+      {
+        "name": "stage5a-preregistration",
+        "path": "schemas/stage5a-preregistration.schema.json"
+      },
+      {
+        "name": "stage6-readout",
+        "path": "schemas/stage6-readout.schema.json"
+      },
+      {
+        "name": "stage6-readout-narrative",
+        "path": "schemas/stage6-readout-narrative.schema.json",
+        "description": "Companion narrative envelope authored by the Stage 6 subagent around the helper-classified verdict. Does not mutate 06-readout.json."
+      }
+    ],
+    "bundle_types": []
+  },
+  "execution_modes": [
+    "FINDINGS_ONLY",
+    "REVIEW_ONLY",
+    "PATCH_ALLOWED"
+  ],
+  "mcp_requirements": [
+    {
+      "name": "meta-ads",
+      "path": "tools/mcp/meta-ads/",
+      "purpose": "Stage 0 (conversion signal evidence via meta_export_insights), Stage 5 (push tagged ads), Stage 6 (insights pull). Compliance preflight gates every Stage 5 push.",
+      "tools": [
+        {
+          "file": "compliance-preflight.js",
+          "role": "Stage 5 compliance gate — special-ad-category, AI-disclosure, testimonial, targeting checks"
+        },
+        {
+          "file": "copy-compliance-gate.js",
+          "role": "Stage 5 copy-text gate — char limits, banned content, superlative budget, fully parameterized (no client defaults). Extracted from {CLIENT_CODE} apply-multivariant-copy.js 2026-06-10."
+        },
+        {
+          "file": "distill-adset-build-spec.js",
+          "role": "Stage 5 pre-build recon — GET-only ad-set distiller; reads in-set proof ads and emits a build spec (optimization_type, rules, positions, DOF). Fixture-first; live flag optional."
+        },
+        {
+          "file": "placement-ad-builder.js",
+          "role": "Stage 5 creative builder — placement-customized creatives for image ({CLIENT_CODE} June 48 statics) and video. Mandatory creative_type param. Batch-manifest input schema for N-ad bundles. Encodes live-learned laws 1772103/1885878/3858504/2061044."
+        },
+        {
+          "file": "readback-verifier.js",
+          "role": "Stage 5 post-create verification — format-agnostic readback for image and video PLACEMENT creatives: status, link, CTA, url_tags, rules, DOF."
+        },
+        {
+          "file": "activate-ads.js",
+          "role": "Stage 5 activation gate — distinct operator-gated tool; explicit ad-ID allowlist only; protected_ad_ids fence; no-args = list-only."
+        }
+      ]
+    },
+    {
+      "name": "delesign",
+      "path": "tools/mcp/delesign/",
+      "purpose": "Stage 4 brief submission (API mode). Falls back to claude-in-chrome MCP form-fill while vendor 500 persists."
+    },
+    {
+      "name": "claude-in-chrome",
+      "path": "external",
+      "purpose": "Stage 4 fallback form-fill against go.delesign.com when API submit is unhealthy. Operator clicks Submit."
+    }
+  ],
+  "prompt_chain": {
+    "stage_0": [
+      "00_CONVERSION_SIGNAL_SANITY"
+    ],
+    "stage_1": [
+      "01_MESSAGE_HYPOTHESIS"
+    ],
+    "stage_2": [
+      "02_FRAMEWORK_MIX_AND_DIVERSITY_AUDIT"
+    ],
+    "stage_3": [
+      "03_MOCKUP_GENERATION"
+    ],
+    "stage_4": [
+      "04_DELESIGN_BRIEF_AND_BUNDLE"
+    ],
+    "stage_5": [
+      "05_META_PUSH_TAGGED_BY_FRAMEWORK"
+    ],
+    "stage_5a": [
+      "05A_PREREGISTRATION"
+    ],
+    "stage_6": [
+      "06_INSIGHTS_READOUT"
+    ],
+    "stage_7": [
+      "07_REFRESH_TRIGGER_EVALUATION"
+    ]
+  },
+  "skills": [
+    "meta-creative-iteration/SKILL.md"
+  ],
+  "commands": [
+    "run",
+    "status",
+    "conversion-signal-sanity",
+    "message-hypothesis",
+    "framework-mix-and-diversity-audit",
+    "mockup-generation",
+    "delesign-brief-and-bundle",
+    "05a-preregistration",
+    "meta-push-tagged-by-framework",
+    "insights-readout",
+    "refresh-trigger-evaluation"
+  ],
+  "agents": [
+    "conversion-signal-sanity-agent",
+    "message-hypothesis-agent",
+    "framework-mix-and-diversity-audit-agent",
+    "mockup-generation-agent",
+    "delesign-brief-and-bundle-agent",
+    "05a-preregistration-agent",
+    "meta-push-tagged-by-framework-agent",
+    "insights-readout-agent",
+    "refresh-trigger-evaluation-agent"
+  ],
+  "framework_runtime_gates": {
+    "stage_0_signal_sanity": {
+      "rule": "Stage 0 blocks all forward motion until conversion-signal sanity is validated against the destination page.",
+      "evidence_required": "operator confirmation OR meta_export_insights showing events firing within last 7 days at the conversion event named in client project compliance posture",
+      "enforced_by": "helpers/stage0-conversion-signal-validator.js"
+    },
+    "stage_2_diversity_audit": {
+      "rule": "Framework mix must pass model-visible diversity audit (>=3 distinct dimensions among offer angle, proof type, format, visual composition, landing intent, funnel stage) before proceeding to Stage 3.",
+      "enforced_by": "helpers/stage2-diversity-audit.js"
+    },
+    "stage_5a_preregistration": {
+      "rule": "Stage 6 readout refuses to fire without a valid Stage 5a preregistration artifact locking primary metric, attribution window, conversion event, sample-size minimum, learning-phase handling, and stopping rules.",
+      "enforced_by": "helpers/stage5a-preregistration-writer.js + helpers/stage6-readout-helper.js"
+    },
+    "stage_5_compliance_preflight": {
+      "rule": "Every Stage 5 push fires tools/mcp/meta-ads/compliance-preflight.js (special-ad/AI-disclosure gate) AND tools/mcp/meta-ads/copy-compliance-gate.js (text-field gate). Compliance posture flows from clients/<CLIENT>/projects/meta-app-integration/project.json (already populated for {CLIENT_CODE} Credit, {CLIENT_CODE}/{CLIENT_CODE} standard automotive). copy-compliance-gate is fully parameterized — caller supplies copy-block config explicitly (no client defaults in the shared module).",
+      "enforced_by": "tools/mcp/meta-ads/compliance-preflight.js + tools/mcp/meta-ads/copy-compliance-gate.js"
+    },
+    "stage_5_placement_build": {
+      "rule": "Stage 5 placement-customized creative builds use placement-ad-builder.js with mandatory creative_type ('image'|'video'). Build-plan/preview mode requires zero network. Live execution requires run-with-op.sh. Activation is a separate gate (activate-ads.js), never folded into the builder.",
+      "enforced_by": "tools/mcp/meta-ads/placement-ad-builder.js + tools/mcp/meta-ads/activate-ads.js",
+      "live_learned_laws": [
+        "1772103: instagram_user_id required when IG positions present",
+        "1885878: max ONE descriptions[] asset on PLACEMENT creatives",
+        "3858504: never standard_enhancements with advantage_plus_creative umbrella",
+        "2061044: prefer OPT_OUT umbrella + enumerated member opt-ins over bare OPT_IN umbrella"
+      ]
+    }
+  },
+  "concept_anchor": {
+    "concept_path": "_dev/concepts/algo-aware-meta-creative-iteration-framework/concept.md",
+    "convene_record": "_dev/reports/analysis/convene-runs/20260501T160738Z-algo-aware-meta-creative-iteration/synthesis.md",
+    "memory_rule": "feedback_algo_aware_meta_creative_iteration",
+    "claim_register": "Diverse, well-instrumented creative supply is a higher-probability strategy worth testing against the Andromeda-era retrieval pool. The framework does NOT claim Meta rewards the Big Book taxonomy or any specific advertiser-side structure."
+  },
+  "deferred_enhancements": [
+    "Holdout/control logic for Stage 7 winner-loser recycling (per Codex review).",
+    "Multimodal metadata provisioning (alt-text, OCR-friendly text overlays for GEM signal) (per Gemini review).",
+    "Drift review for platform updates / seasonality (per Codex review).",
+    "Cross-platform extension (Google, TikTok, etc.) — Meta-only in v1.",
+    "Auto-launching campaigns without operator approval — every Stage 4 submit and every Stage 5 push remain operator-gated."
+  ],
+  "patterns": [
+    "meta-creative-iteration",
+    "ad-creative-iteration",
+    "creative-testing-plan",
+    "paid-social-performance-analysis"
+  ]
+}

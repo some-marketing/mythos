@@ -15,7 +15,7 @@ This bundle contains payload analysis for ${scope}. The developer ({DEVELOPER_NA
 
 ## Start Here
 1. Read \`LLM_MANIFEST.json\` for bundle metadata
-2. Read \`For_{DEVELOPER_NAME}.md\` for the observation summary
+2. Read \`For_Recipient.md\` for the observation summary
 3. Read \`QUESTIONS_FOR_DEVELOPER.md\` for items needing developer input
 
 ## Key Rules

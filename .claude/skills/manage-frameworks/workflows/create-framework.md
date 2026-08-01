@@ -3,7 +3,13 @@
 ## Steps
 
 1. **[USER] Intake** — Collect framework purpose, service category, and scope
-2. **[AUTO] Research** — Scan existing frameworks for patterns to reuse
+2. **[AUTO] Prior-art lookup** — Before designing, check three sources in order:
+   a. Scan `frameworks/` for existing frameworks with overlapping scope or reusable patterns
+   b. Read `_dev/research/external-skills/marketingskills-classification.md` for external skills matching the target domain
+   c. If a match exists, read the source SKILL.md and `references/` under `_dev/research/external-skills/marketingskills/skills/<name>/`
+   d. Decide: **distill** from external skill, **compose** from existing patterns, or **author from scratch**
+   e. Record the decision and rationale in the framework's manifest.json (`distilled_from` or `related_external_skills` field)
+3. **[AUTO] Research** — Scan existing frameworks for prompt chain designs and schema conventions to reuse
 3. **[AUTO] Design prompt chain** — Define the sequence of prompts needed
 4. **[AUTO] Create canonical spec** — Add `instructions/canonical/frameworks/{service}/{name}.yaml`
 5. **[AUTO] Create directory** — Scaffold `frameworks/{service}/{name}/` from template
@@ -27,6 +33,14 @@
     - **non_goals**: Client-specific customization (framework must remain generic)
     - **validation_results**: Output of `npm run instructions:validate`, `npm run manifest:check`, and `npm run manifest:validate` from step 13 (full stdout/stderr, not just pass/fail)
 15. **[GATE: blockers found] Reopen** — If the completion audit returns blocker-level findings, fix only the specific unmet items and re-run (maximum 2 reopen cycles). If blockers persist, escalate to user.
+
+## Post-Workflow Hooks
+
+16. **[AUTO] Run lifecycle hooks** — Execute the `post-new` hook chain:
+    ```
+    npm run lifecycle:hooks -- --profile post-new --framework-id <service/framework>
+    ```
+    This runs deterministic tail work: instruction regeneration, manifest sync, validation, framework verification, system verification, and next-actions artifact generation. If any hook fails, report the failure and stop. Do not silently skip hook failures.
 
 ## References
 - Framework anatomy: `references/framework-anatomy.md`

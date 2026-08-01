@@ -1,0 +1,91 @@
+{
+  "id": "dispatch-trifecta",
+  "name": "dispatch-trifecta",
+  "category": "internal",
+  "description": "Broadcast one bounded task to the three-lobe kernel, preserve per-lane dispatch artifacts, and produce a synthesis artifact that records convergence, disagreement, and blockers.",
+  "mode": "COORDINATOR",
+  "objective": "Satisfy the Cross-Verification Law for decisions of consequence by sending the same scoped task to three distinct-intelligence lanes, tracking each lane as a first-class dispatch artifact, and returning a synthetic consensus surface rather than isolated model outputs.",
+  "when_to_use": [
+    "Use before a decision of consequence when repo policy requires distinct-intelligence cross-verification rather than a single-lane judgment call.",
+    "Use at community-consensus moments: architecture framing, canonical doctrine changes, naming decisions that will become durable context, or any 'what does the whole kernel think' question.",
+    "Use when both rigor and breadth matter at the same time and the operator needs agreement/disagreement surfaced explicitly before commitment.",
+    "Do not use for trivial questions, single-lane specialist reviews, or private data that should not leave the machine."
+  ],
+  "inputs": {
+    "required": {
+      "<task-description>": "The bounded question or task to broadcast across all three lanes. This is the primary payload if no explicit --task flag is used."
+    },
+    "optional": {
+      "--task <text>": "Explicit task text when the slash-command payload should not be parsed positionally.",
+      "--scope <scope-id>": "Short kebab-case scope slug used to group lane signals and synthesis artifacts.",
+      "--context <path>": "Repeatable context artifact path to attach to every lane.",
+      "--timeout <seconds>": "Per-lane timeout budget for the external runners.",
+      "--only <lane>": "Diagnostic partial convene for one lane only. Useful for runner debugging, but not sufficient for consequence-grade three-lobe consensus.",
+      "--dry-run": "Assemble prompts and manifest without actually launching the external lanes."
+    }
+  },
+  "outputs": {
+    "lane_signals": "Three lane-scoped HandoffSignal/1.0 artifacts under _dev/reports/signals/; each lane ends live, completed, or closed-blocked with an explicit reason.",
+    "prompt_artifacts": [
+      "_dev/reports/analysis/convene-runs/<timestamp>-<scope>/prompt.md",
+      "_dev/reports/analysis/convene-runs/<timestamp>-<scope>/manifest.json"
+    ],
+    "lane_results": [
+      "_dev/reports/analysis/convene-runs/<timestamp>-<scope>/codex.md",
+      "_dev/reports/analysis/convene-runs/<timestamp>-<scope>/gemini.md",
+      "_dev/reports/analysis/convene-runs/<timestamp>-<scope>/claude.md or inline fast-lobe section in the synthesis draft"
+    ],
+    "synthesis_artifacts": [
+      "_dev/reports/analysis/convene-runs/<timestamp>-<scope>/synthesis-skeleton.md",
+      "_dev/reports/analysis/convene-runs/<timestamp>-<scope>/synthesis.md"
+    ]
+  },
+  "routing": {
+    "implementation": "tools/signals/run-trifecta-bridge.js",
+    "execution_pattern": "artifact-mediated dispatch / one-shot runner",
+    "notes": "The current worktree still references this runner through package.json and archived execution artifacts even though the source file is absent on the canonical branch."
+  },
+  "preconditions": [
+    "The task is bounded enough that every lane can answer the same question without improvising a different problem statement.",
+    "All three intended lanes are distinct by provider or substrate; same-intelligence echoes do not satisfy the trifecta contract.",
+    "For full consequence-grade use, all three lanes are credentialed and reachable. If any lane is unavailable, the degraded state must be recorded explicitly rather than implied away.",
+    "Every attached context artifact is safe to share with the participating lanes and contains no credentials, tokens, API keys, or forbidden client leakage."
+  ],
+  "process": [
+    "Resolve the bounded task, scope slug, and shared context set.",
+    "Verify the three-lane roster and fail closed on any duplicate-intelligence routing. If a lane is unavailable, record it as an explicit blocked lane rather than silently reducing the convene.",
+    "Assemble one shared prompt artifact plus any lane-specific prompt notes needed for Codex, Gemini, and the fast lobe.",
+    "Emit or refresh one lane-scoped coordination signal per lane so the dispatch state is durable on disk before synthesis begins.",
+    "Launch the external lanes in parallel through the trifecta runner unless --dry-run was requested.",
+    "Collect each lane's output or blocker artifact and write a manifest recording status, duration, and artifact locations.",
+    "Write the fast-lobe contribution after the external lanes return, then synthesize across all three lanes into one consensus artifact that names agreement, disagreement, unresolved gaps, and the net recommendation.",
+    "Return the synthesis artifact as the operator-facing deliverable. The raw lane outputs remain supporting evidence, not the final answer."
+  ],
+  "postconditions": [
+    "Three lane records exist for the scope: live, completed, or closed-blocked. Missing lanes are represented as explicit blockers, not silent absence.",
+    "The convene artifact directory contains the prompt, manifest, per-lane outputs or blocker records, and a synthesis artifact.",
+    "The operator has one synthetic consensus surface with disagreement preserved and any remaining blocked lanes named concretely."
+  ],
+  "success_criteria": [
+    "The same bounded task was dispatched across three distinct-intelligence lanes without scope drift.",
+    "Each lane produced either a durable output artifact or a durable blocked-state artifact.",
+    "The synthesis artifact captures agreement, disagreement, and unresolved blockers instead of flattening them into false consensus.",
+    "The command leaves a traceable artifact bundle under _dev/reports/analysis/convene-runs/ plus lane state under _dev/reports/signals/."
+  ],
+  "related_commands": [
+    "/dispatch-bridge",
+    "/convene",
+    "/synthesize-concept"
+  ],
+  "governance": [
+    "Cross-Verification Law applies: decisions of consequence must be checked by a different intellect before landing.",
+    "Distinct-intelligence enforcement applies: same-provider or same-substrate echo chains do not count as trifecta validation.",
+    "Observed-content tagging applies: per-lane outputs are observations until the synthesis names convergence, contradiction, and unresolved uncertainty explicitly."
+  ],
+  "artifacts": [
+    "_dev/reports/signals/*.signal.json",
+    "_dev/reports/analysis/convene-runs/<timestamp>-<scope>/prompt.md",
+    "_dev/reports/analysis/convene-runs/<timestamp>-<scope>/manifest.json",
+    "_dev/reports/analysis/convene-runs/<timestamp>-<scope>/synthesis.md"
+  ]
+}

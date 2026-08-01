@@ -1,0 +1,300 @@
+{
+  "schema": "HarnessCapabilityPolicy/1.0",
+  "authority": "canonical-observation-before-propagation",
+  "purpose": "Classify which harness capability gaps can be observed mechanically and which require review before propagation.",
+  "sources_of_truth": {
+    "commands": "instructions/canonical/commands/*.yaml",
+    "aliases": "instructions/canonical/command-aliases.yaml",
+    "adapter_capabilities": "instructions/adapters/*.yaml",
+    "generated_surfaces": "tools/instructions/lib/engine.js",
+    "package_scripts": "package.json",
+    "tool_entrypoints": "tools/**"
+  },
+  "rules": {
+    "command_surfaces": {
+      "auto_apply": false,
+      "safe_mechanical_repair": "node tools/instructions/harness-sync-crawler.js --apply --include-claude",
+      "notes": "Command instruction surfaces are machine-owned only when rendered by tools/instructions/lib/engine.js. Use the sync crawler for those mechanical repairs."
+    },
+    "adapter_capabilities": {
+      "auto_apply": false,
+      "review_required": true,
+      "notes": "Adapter capability support is semantic. A missing or emulated capability must be reviewed before adding or changing declarations."
+    },
+    "package_scripts": {
+      "auto_apply": false,
+      "review_required": true,
+      "notes": "Scripts can expose host-level behavior. The crawler may suggest additions but must not create or edit scripts automatically."
+    },
+    "tool_entrypoints": {
+      "auto_apply": false,
+      "review_required": true,
+      "notes": "Tool entrypoints encode execution behavior. Missing parity is a work item, not an automatic propagation target."
+    },
+    "semantic_behavior": {
+      "auto_apply": false,
+      "review_required": true,
+      "notes": "Features, fixes, and workflow behavior must not be translated across harnesses without an explicit review lane."
+    }
+  },
+  "package_script_classification": [
+    {
+      "match_prefix": "test",
+      "class": "verification_private",
+      "propagation": "do_not_canonicalize_by_default",
+      "notes": "Test scripts are developer verification affordances unless promoted into an operator command."
+    },
+    {
+      "match_prefix": "verify",
+      "class": "verification_private",
+      "propagation": "do_not_canonicalize_by_default",
+      "notes": "Verification scripts may back acceptance criteria without becoming slash commands."
+    },
+    {
+      "match_prefix": "instructions",
+      "class": "harness_maintenance",
+      "propagation": "document_or_wrap_when_operator_facing",
+      "notes": "Instruction generation and validation are harness maintenance mechanics."
+    },
+    {
+      "match_prefix": "harness",
+      "class": "harness_maintenance",
+      "propagation": "document_or_wrap_when_operator_facing",
+      "notes": "Harness crawlers and launchd controls are maintenance affordances."
+    },
+    {
+      "match_prefix": "codex",
+      "class": "harness_runtime_support",
+      "propagation": "adapter_or_runtime_documentation",
+      "notes": "Codex runtime scripts support a harness rather than defining a general operator command."
+    },
+    {
+      "match_prefix": "signals",
+      "class": "coordination_infrastructure",
+      "propagation": "canonicalize_only_public_operator_routes",
+      "notes": "Signal scripts include both canonical commands and lower-level bridge/watch internals."
+    },
+    {
+      "match_prefix": "dart",
+      "class": "integration_infrastructure",
+      "propagation": "canonicalize_only_public_operator_routes",
+      "notes": "Dart scripts support integration workflows; many are implementation details."
+    },
+    {
+      "match_prefix": "mcp",
+      "class": "service_runtime",
+      "propagation": "keep_private_unless_framework_requires_operator_route",
+      "notes": "MCP server/preflight scripts are service runtime mechanics."
+    },
+    {
+      "match_prefix": "ai",
+      "class": "bridge_pipeline_tooling",
+      "propagation": "review_for_framework_or_bridge_command",
+      "notes": "AI bridge scripts may become framework internals or public bridge commands."
+    },
+    {
+      "match_prefix": "workspace",
+      "class": "framework_tooling_candidate",
+      "propagation": "review_for_canonical_command_or_private_utility",
+      "notes": "Workspace scripts are likely candidates for canonical operator commands or framework internals."
+    },
+    {
+      "match_prefix": "maintenance",
+      "class": "maintenance_tooling",
+      "propagation": "review_for_canonical_command_or_autonomic_service",
+      "notes": "Maintenance scripts may be operator commands or scheduled/autonomic services."
+    },
+    {
+      "match_prefix": "artifacts",
+      "class": "artifact_lifecycle_tooling",
+      "propagation": "review_for_canonical_command_or_private_utility",
+      "notes": "Artifact lifecycle scripts support archive, cleanup, and status workflows."
+    },
+    {
+      "match_prefix": "autonomy",
+      "class": "autonomy_tooling",
+      "propagation": "review_for_canonical_command_or_private_utility",
+      "notes": "Autonomy scripts operate task-completion state and should be reviewed before operator exposure."
+    },
+    {
+      "match_prefix": "bundle",
+      "class": "handoff_bundle_tooling",
+      "propagation": "review_for_canonical_command_or_private_utility",
+      "notes": "Bundle scripts generate and validate handoff bundles."
+    },
+    {
+      "match_prefix": "cadence",
+      "class": "operator_cadence_tooling",
+      "propagation": "review_for_canonical_command_or_private_utility",
+      "notes": "Cadence scripts may be operator-facing status/check-in routes."
+    },
+    {
+      "match_prefix": "channels",
+      "class": "channel_integration_tooling",
+      "propagation": "review_for_canonical_command_or_integration_utility",
+      "notes": "Channel scripts support contact, text, and ingestion surfaces."
+    },
+    {
+      "match_prefix": "component",
+      "class": "planning_retrieval_tooling",
+      "propagation": "review_for_canonical_command_or_private_utility",
+      "notes": "Component index, tag, and match scripts support planning/retrieval surfaces rather than public command promotion by default."
+    },
+    {
+      "match_prefix": "context",
+      "class": "context_continuity_tooling",
+      "propagation": "review_for_canonical_command_or_private_utility",
+      "notes": "Context-budget and repo-awareness scripts support actor/session continuity mechanics."
+    },
+    {
+      "match_prefix": "discord",
+      "class": "channel_integration_tooling",
+      "propagation": "review_for_canonical_command_or_integration_utility",
+      "notes": "Discord drain/trace scripts support channel integration and signal handling."
+    },
+    {
+      "match_prefix": "fleet",
+      "class": "fleet_runtime_tooling",
+      "propagation": "operator_gate_required",
+      "notes": "Fleet scripts can alter multi-node or host-level runtime behavior."
+    },
+    {
+      "match_exact": "flywheel:check",
+      "class": "framework_lifecycle_tooling",
+      "propagation": "review_for_canonical_command_or_private_utility",
+      "notes": "Framework flywheel checks inspect lifecycle readiness without becoming standalone operator commands by default."
+    },
+    {
+      "match_exact": "flywheel:check:emit",
+      "class": "framework_lifecycle_tooling",
+      "propagation": "review_for_canonical_command_or_private_utility",
+      "notes": "Framework flywheel signal emission remains framework lifecycle tooling unless a reviewed route exposes it."
+    },
+    {
+      "match_exact": "flywheel:launchd:install",
+      "class": "host_service_control",
+      "propagation": "operator_gate_required",
+      "notes": "Installing the framework flywheel launchd job changes host service state and stays operator-gated."
+    },
+    {
+      "match_exact": "flywheel:launchd:run",
+      "class": "host_service_control",
+      "propagation": "operator_gate_required",
+      "notes": "Running the framework flywheel launchd job touches host service state and stays operator-gated."
+    },
+    {
+      "match_exact": "flywheel:launchd:status",
+      "class": "host_service_control",
+      "propagation": "operator_gate_required",
+      "notes": "Framework flywheel launchd status is host service-control tooling, not command promotion work."
+    },
+    {
+      "match_prefix": "hygiene",
+      "class": "repo_hygiene_tooling",
+      "propagation": "review_for_canonical_command_or_private_utility",
+      "notes": "Repo hygiene scripts may mutate git state and require explicit review before operator promotion."
+    },
+    {
+      "match_prefix": "lessons",
+      "class": "learning_memory_tooling",
+      "propagation": "review_for_canonical_command_or_private_utility",
+      "notes": "Lessons scripts support learning capture and memory surfaces."
+    },
+    {
+      "match_prefix": "lifecycle",
+      "class": "framework_lifecycle_tooling",
+      "propagation": "review_for_canonical_command_or_private_utility",
+      "notes": "Lifecycle scripts support framework hook and lifecycle checks."
+    },
+    {
+      "match_prefix": "manifest",
+      "class": "manifest_validation_tooling",
+      "propagation": "do_not_canonicalize_by_default",
+      "notes": "Manifest scripts are validation mechanics unless promoted into a public command."
+    },
+    {
+      "match_prefix": "lint",
+      "class": "manifest_validation_tooling",
+      "propagation": "do_not_canonicalize_by_default",
+      "notes": "Lint scripts validate instruction, trigger, process-tier, or telemetry metadata and are not command surfaces by default."
+    },
+    {
+      "match_prefix": "news",
+      "class": "watcher_service_tooling",
+      "propagation": "review_for_autonomic_service_or_private_utility",
+      "notes": "News watcher scripts are scheduled or watch-loop service mechanics."
+    },
+    {
+      "match_prefix": "next-step",
+      "class": "operator_navigation_candidate",
+      "propagation": "review_for_canonical_command",
+      "notes": "The next-step script may be operator-facing navigation and should be reviewed for canonical promotion."
+    },
+    {
+      "match_prefix": "pipeline",
+      "class": "coordination_infrastructure",
+      "propagation": "canonicalize_only_public_operator_routes",
+      "notes": "Pipeline loop scripts support coordination infrastructure."
+    },
+    {
+      "match_exact": "perplexity",
+      "class": "external_research_tooling",
+      "propagation": "review_for_canonical_command_or_private_utility",
+      "notes": "The Perplexity wrapper shells to an external research tool and should stay explicit rather than become a default command surface."
+    },
+    {
+      "match_prefix": "plans",
+      "class": "planning_visibility_tooling",
+      "propagation": "review_for_canonical_command_or_private_utility",
+      "notes": "Plan dashboard, document, and visual-diagram scripts support plan visibility and correction workflows."
+    },
+    {
+      "match_prefix": "preflight",
+      "class": "preflight_validation_tooling",
+      "propagation": "review_for_canonical_command_or_private_utility",
+      "notes": "Preflight scripts inspect host or runtime readiness."
+    },
+    {
+      "match_prefix": "session",
+      "class": "session_runtime_tooling",
+      "propagation": "review_for_canonical_command_or_private_utility",
+      "notes": "Session scripts support current runtime/session state."
+    },
+    {
+      "match_prefix": "sessions",
+      "class": "context_continuity_tooling",
+      "propagation": "review_for_canonical_command_or_private_utility",
+      "notes": "Plural sessions scripts generate durable continuity surfaces across session boundaries."
+    },
+    {
+      "match_prefix": "smos",
+      "class": "command_runtime_support",
+      "propagation": "adapter_or_runtime_documentation",
+      "notes": "Mythos command runner scripts support command execution surfaces."
+    },
+    {
+      "match_exact": "voice:smoke",
+      "class": "channel_integration_tooling",
+      "propagation": "review_for_canonical_command_or_integration_utility",
+      "notes": "Voice smoke checks validate the Discord voice channel integration without promoting a public operator command."
+    },
+    {
+      "match_exact": "voice:call",
+      "class": "operator_voice_tooling",
+      "propagation": "operator_gate_required",
+      "notes": "Calling the human operator is an explicit operator-gated action."
+    },
+    {
+      "match_prefix": "kernel",
+      "class": "autonomic_service_control",
+      "propagation": "operator_gate_required",
+      "notes": "Kernel heartbeat scripts touch host-level service state and require operator-visible gates."
+    },
+    {
+      "match_prefix": "launchd",
+      "class": "host_service_control",
+      "propagation": "operator_gate_required",
+      "notes": "Launchd controls alter host service state and should not be auto-propagated."
+    }
+  ]
+}

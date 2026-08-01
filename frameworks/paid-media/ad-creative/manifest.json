@@ -1,0 +1,180 @@
+{
+  "service_category": "paid-media",
+  "framework_name": "ad-creative",
+  "version": "0.4.1",
+  "description": "Generate, iterate, and scale ad creative — headlines, descriptions, primary text, full ad variations, and Meta video briefs — across paid advertising platforms with structured testing plans",
+  "prompt_count": 5,
+  "input_contract": {
+    "required": [
+      {
+        "name": "platform",
+        "description": "Advertising platform to create ads for (e.g., Meta, Google Ads, LinkedIn)"
+      },
+      {
+        "name": "campaign_objective",
+        "description": "Primary campaign objective (e.g., conversions, awareness, traffic)"
+      },
+      {
+        "name": "target_audience",
+        "description": "Target audience demographics, interests, and behaviors"
+      },
+      {
+        "name": "product_description",
+        "description": "Description of the product or service being advertised"
+      }
+    ],
+    "optional": [
+      {
+        "name": "brand_voice",
+        "description": "Brand voice and tone guidelines for ad copy"
+      },
+      {
+        "name": "existing_ads",
+        "description": "Current ad creative for reference and iteration"
+      },
+      {
+        "name": "landing_page_urls",
+        "description": "Landing page URLs the ads will drive traffic to"
+      },
+      {
+        "name": "competitor_ads",
+        "description": "Competitor ad examples for differentiation analysis"
+      },
+      {
+        "name": "character_limits",
+        "description": "Platform-specific character limits for ad fields"
+      },
+      {
+        "name": "visual_guidelines",
+        "description": "Visual brand guidelines and image requirements"
+      }
+    ]
+  },
+  "output_contract": {
+    "directories": [
+      "outputs/ad-creative/"
+    ],
+    "artifacts": [
+      "outputs/ad-creative/intake-and-brand-context.md",
+      "outputs/ad-creative/confirmed-terms-ledger.json",
+      "outputs/ad-creative/headline-variations.md",
+      "outputs/ad-creative/full-ad-variations.md",
+      "outputs/ad-creative/creative-testing-plan.md",
+      "outputs/ad-creative/meta-video-brief.md"
+    ]
+  },
+  "output_contract_v2": {
+    "directories": [
+      {
+        "path": "outputs/ad-creative/",
+        "required": true,
+        "description": "All ad creative deliverables and testing plans"
+      }
+    ],
+    "artifacts": [
+      {
+        "name": "intake-and-brand-context.md",
+        "path_pattern": "outputs/ad-creative/intake-and-brand-context.md",
+        "required": true
+      },
+      {
+        "name": "confirmed-terms-ledger.json",
+        "path_pattern": "outputs/ad-creative/confirmed-terms-ledger.json",
+        "required": true
+      },
+      {
+        "name": "headline-variations.md",
+        "path_pattern": "outputs/ad-creative/headline-variations.md",
+        "required": true
+      },
+      {
+        "name": "full-ad-variations.md",
+        "path_pattern": "outputs/ad-creative/full-ad-variations.md",
+        "required": true
+      },
+      {
+        "name": "creative-testing-plan.md",
+        "path_pattern": "outputs/ad-creative/creative-testing-plan.md",
+        "required": true
+      },
+      {
+        "name": "meta-video-brief.md",
+        "path_pattern": "outputs/ad-creative/meta-video-brief.md",
+        "required": false
+      }
+    ],
+    "bundle_types": []
+  },
+  "execution_modes": [
+    "FINDINGS_ONLY",
+    "REVIEW_ONLY"
+  ],
+  "mcp_requirements": [],
+  "prompt_chain": {
+    "intake": [
+      "01_INTAKE_AND_BRAND_CONTEXT"
+    ],
+    "generation": [
+      "02_HEADLINE_GENERATION"
+    ],
+    "variations": [
+      "03_FULL_AD_VARIATIONS"
+    ],
+    "testing": [
+      "04_CREATIVE_TESTING_PLAN"
+    ],
+    "video_brief": [
+      "05_META_VIDEO_BRIEF"
+    ]
+  },
+  "skills": [
+    "ad-creative/SKILL.md"
+  ],
+  "commands": [
+    "run",
+    "status",
+    "intake-and-brand-context",
+    "headline-generation",
+    "full-ad-variations",
+    "creative-testing-plan",
+    "meta-video-brief"
+  ],
+  "agents": [
+    "intake-and-brand-context-agent",
+    "headline-generation-agent",
+    "full-ad-variations-agent",
+    "creative-testing-plan-agent",
+    "meta-video-brief-agent"
+  ],
+  "distilled_from": {
+    "source": "coreyhaines31/marketingskills",
+    "skill": "ad-creative",
+    "version": "1.1.0",
+    "license": "MIT",
+    "classification": "framework-candidate",
+    "classification_date": "2026-03-31"
+  },
+  "changelog": [
+    {
+      "version": "0.4.1",
+      "date": "2026-07-06",
+      "change": "F1 convene-graded fix pass (SOUND-WITH-FIXES → applied 5 converged must-fixes). helpers/confirmed-terms-preflight.js: (1) replaced raw .includes() substring anchor matching with word-boundary matching (anchorRegex + escapeRegex) that also handles offer-symbol tokens ($500, 20%, $5,000) — closes the false-negative substring-collision bug (a dropped 'free' no longer satisfied by 'freelance'); (2) malformed/empty ledger now hard-fails (malformed-ledger / empty-ledger) instead of silently passing, waivable via --allow-empty-ledger; (3) a confirmed+must-appear term with no anchors now hard-fails (confirmed-term-unanchored) instead of only warning. guardrails.md Amendment B: narrowed the scope claim to the actually-wired executable path (prompt 03), marked prompt 02 note-only and prompt 05 not-yet-wired with TODOs; corrected the LIMITATIONS false-positive/false-negative labeling per the Gemini grade. Added fixture tests (helpers/__tests__/confirmed-terms-preflight.test.js, 12 cases, all passing). Helper stays advisory (verdict = evidence, not a hard gate)."
+    },
+    {
+      "version": "0.4.0",
+      "date": "2026-07-06",
+      "change": "F1 Confirmed-Terms Binding Preflight (guardrails.md Amendment B): provenance-tagged confirmed-terms ledger captured at intake (prompt 01) written to outputs/ad-creative/confirmed-terms-ledger.json; pre-authoring integrity + pending-fact gate and post-assembly omission diff in prompt 03; headline binding note in prompt 02; advisory helper helpers/confirmed-terms-preflight.js (confirmed-label integrity, omission diff, pending-load-bearing checks). Fixes the class of bug where copy was authored against a 'confirmed terms' doc that silently dropped a confirmed element and carried an uncited 'confirmed' fact. Advisory-default disposition (evidence, not a hard gate), consistent with Amendment A."
+    },
+    {
+      "version": "0.3.0",
+      "date": "2026-06-19",
+      "change": "Human-voice overhaul (ad-creative-human-voice convene): exemplar-required brand voice w/ archetype fallback, pre-write message-architecture gate, one-message-per-ad + compliance carve-out, volume discipline, advisory severity-tiered copy-voice-lint, named read-aloud gate, local-register primer. Files: guardrails.md, prompts/01, assets/voice-archetypes.md, helpers/copy-voice-lint.js."
+    }
+  ],
+  "patterns": [
+    "ad-creative-iteration",
+    "message-variant-generation",
+    "creative-testing-plan",
+    "paid-media-copy-review"
+  ]
+}

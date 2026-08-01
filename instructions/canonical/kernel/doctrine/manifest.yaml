@@ -1,0 +1,63 @@
+schema_version: 1
+state_lifecycle: draft
+principles:
+  - id: triad-is-a-truth
+    canonical_path: instructions/canonical/kernel/doctrine/triad-is-a-truth.md
+    memory_source_path: ${HOME}/.claude/projects/{PROJECT_SLUG}/memory/feedback_triad_is_a_truth.md
+    verbatim_hash: sha256:4969bfa1a30fab739ca8b312a5da5a7a1c476e4b49f324ccd6e08e013dd04050
+    interpretation_hash: sha256:9136334b78b6078478098476b87ed4a8e37c760c5b5c5b3221bb05b03a159ee1
+    status: draft
+    version: 1
+    last_ratified_at: null
+  - id: opposites-spectra-absence
+    canonical_path: instructions/canonical/kernel/doctrine/opposites-spectra-absence.md
+    memory_source_path: ${HOME}/.claude/projects/{PROJECT_SLUG}/memory/feedback_opposites_vs_spectra_vs_absence.md
+    verbatim_hash: sha256:8380d54c293a11524ce76258b4d77476b997427000d7c775d52999100f71c592
+    interpretation_hash: sha256:9b21bf213a99e44136a1a5ac821df785c57e4bfd221425df4c72f2669668ffe5
+    status: draft
+    version: 1
+    last_ratified_at: null
+  - id: effortless-knowing-telos
+    canonical_path: instructions/canonical/kernel/doctrine/effortless-knowing-telos.md
+    memory_source_path: ${HOME}/.claude/projects/{PROJECT_SLUG}/memory/feedback_effortless_knowing_in_the_moment.md
+    verbatim_hash: sha256:940327d37a3ea929128ca3df54b008f4b6e575eb935587fc5d5e30880c2d93d5
+    interpretation_hash: sha256:1c0e7dd2e376a3195d258e2d338f029132d1894401e2e3edba8dcf8f6bf311d3
+    status: draft
+    version: 1
+    last_ratified_at: null
+  - id: letter-vs-intent
+    canonical_path: instructions/canonical/kernel/doctrine/letter-vs-intent.md
+    memory_source_path: ${HOME}/.claude/projects/{PROJECT_SLUG}/memory/feedback_letter_vs_intent_preserve_intent.md
+    verbatim_hash: sha256:23d11d49ec78afe0ca389398081b089dbe69999472b3393748adedba153196fd
+    interpretation_hash: sha256:d1be129fe862093c92015680a2b5b924f0cb51c81fb2f5f4b3af405e97268018
+    status: draft
+    version: 1
+    last_ratified_at: null
+  - id: dialectic-over-fear
+    canonical_path: instructions/canonical/kernel/doctrine/dialectic-over-fear.md
+    memory_source_path: null  # operator quote captured in-file (Original wording); no standalone memory file — convene + /owl session origin
+    verbatim_hash: sha256:a8fb058065ad21abc8b8f07ae4d2a497dd03e851eef751b370ca2c41c704acac
+    interpretation_hash: sha256:34d684491a431425e3a731fc6e2f27361a8f74a99e67b914cc8afda3231389b9
+    status: draft
+    version: 1
+    last_ratified_at: null  # promoted-as-draft 2026-05-31; graduation draft->active still pending (see index)
+    # hash convention: sha256 of section body (lines after the '## ' heading, up to next '## ', as-is)
+    # cross_verified: 3-lobe convene + 2 codex falsifier passes; falsifier baseline _dev/reports/analysis/dialectic-over-fear-baseline__candidates.md
+  - id: do-no-harm
+    canonical_path: instructions/canonical/kernel/doctrine/do-no-harm.md
+    memory_source_path: null  # operator quote captured in-file; convene + /owl session origin
+    verbatim_hash: sha256:826fa1ec4cf9b6fa8b41e0ff08c9d75cc78ca7069700106b56618e075b46ba05
+    interpretation_hash: sha256:344a2780a27c7363f981341b9d0ccd2bb8e464eda3165a057feb1c1b6c7f1973
+    status: draft
+    version: 1
+    last_ratified_at: null  # promoted-as-draft 2026-05-31; graduation pending
+    # cross_verified: 3-lobe convene (slogan refuted) + codex falsifier-verify (coverage narrowed to write-scope class); falsifier = cross-session-scope-isolation probation
+  - id: leave-no-trace
+    canonical_path: instructions/canonical/kernel/doctrine/leave-no-trace.md
+    memory_source_path: null  # operator quote captured in-file; convene + /owl session origin
+    verbatim_hash: sha256:fe7701e8d3594c7c2cf9ba5009844ee14d6e07915d649d99f8d49918261e4d96
+    interpretation_hash: sha256:40d00cbf445943ab93df8e0263c5dc3417f670c4446bd9bfc6b1e86371ccce69
+    status: draft
+    version: 1
+    last_ratified_at: null  # promoted-as-draft 2026-05-31; graduation pending
+    # cross_verified: 3-lobe convene (slogan refuted) + codex falsifier-verify (blocked-repair branch + telemetry caveat applied)

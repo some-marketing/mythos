@@ -42,8 +42,8 @@ const PROJECT_ROOT =
 function memoryDirCandidates() {
   const home = process.env.HOME || '';
   const slugs = [
-    '-Users-admin-dev-mythos-recovered',
-    '-Users-admin-Documents-GitHub-mythos'
+    '{PROJECT_SLUG}',
+    '{PROJECT_SLUG}'
   ];
   const out = [];
   if (process.env.MYTHOS_MEMORY_DIR) out.push(process.env.MYTHOS_MEMORY_DIR);

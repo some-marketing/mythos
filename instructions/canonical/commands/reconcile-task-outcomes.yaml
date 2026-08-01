@@ -1,0 +1,22 @@
+{
+  "id": "reconcile-task-outcomes",
+  "description": "Reconcile missing task-outcome artifacts via 3-phase audit→batch→verify with operator gate",
+  "mode": "REVIEW_ONLY",
+  "objective": "Restore plan-outcome coverage when outcome_coverage rule warns. Audit missing outcomes, stage them for review, and apply only upon explicit operator acceptance.",
+  "process": [
+    "Phase 1 — Audit: Run node tools/planning/reconcile-task-outcomes.js to list plans missing outcomes and stage proposed outcomes with evidence trails.",
+    "Phase 2 — Batch: Generate reconciliation report. Present staged outcomes to operator for accept/reject/defer decisions. Invoke tools/planning/capture-outcome-delta.js for accepted plans.",
+    "Phase 3 — Verify: Re-run audit and verify-system to confirm coverage improvements and report final status."
+  ],
+  "success_criteria": [
+    "Audit completes without writing to canonical outcomes",
+    "Batch only writes outcomes explicitly accepted by operator",
+    "Final report shows updated coverage ratio and any remaining staged items",
+    "All canonical writes use capture-outcome-delta.js to preserve provenance"
+  ],
+  "boundaries": [
+    "Audit is read-only",
+    "Reconciler heuristics are not authoritative; operator acceptance required",
+    "Phase 2 requires --execute flag"
+  ]
+}

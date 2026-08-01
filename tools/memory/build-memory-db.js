@@ -37,7 +37,7 @@ const POCKET_MEMORY_DIR = path.join(
   os.homedir(),
   '.claude',
   'projects',
-  '-Users-admin-dev-mythos-recovered',
+  '{PROJECT_SLUG}',
   'memory'
 );
 const KERNEL_ENTRIES_DIR = path.join(REPO_ROOT, '_dev', 'state', 'kernel-memory', 'entries');

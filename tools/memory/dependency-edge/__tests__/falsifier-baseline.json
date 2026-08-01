@@ -37,7 +37,7 @@
       "target": { "kind": "span_id", "id": "20260531T071527Z-dialectic-over-fear" },
       "relationship": "grounds_span",
       "keystone_status": "detected",
-      "evidence": "_dev/reports/analysis/convene-runs/20260531T071527Z-dialectic-over-fear/manifest.json context_files array lists '/Users/admin/.claude/projects/.../memory/feedback_context-purity-is-correctness.md' — this memory was injected as grounding context for the convene dispatch.",
+      "evidence": "_dev/reports/analysis/convene-runs/20260531T071527Z-dialectic-over-fear/manifest.json context_files array lists '${HOME}/.claude/projects/.../memory/feedback_context-purity-is-correctness.md' — this memory was injected as grounding context for the convene dispatch.",
       "witness_state": "witnessed"
     },
     {
@@ -87,11 +87,11 @@
     },
     {
       "edge_id": "fb-010",
-      "source": { "kind": "memory_key", "id": "reference_sdas-tracking-hub-meta-capi-prior-form-identity" },
-      "target": { "kind": "lesson_id", "id": "run-debrief__sdas-tracking-hub-meta-capi-prior-form-identity__20260616" },
+      "source": { "kind": "memory_key", "id": "reference_{CLIENT_CODE}-tracking-hub-meta-capi-prior-form-identity" },
+      "target": { "kind": "lesson_id", "id": "run-debrief__{CLIENT_CODE}-tracking-hub-meta-capi-prior-form-identity__20260616" },
       "relationship": "anchors_lesson",
       "keystone_status": "classification_uncertain",
-      "evidence": "run-debrief__sdas-tracking-hub-meta-capi-prior-form-identity__20260616.md line 23 references Mythos-memories/memory/reference_sdas-tracking-hub-meta-capi-prior-form-identity.md, but that memory file is NOT present in the current Mythos-memories/memory/ dir — plausible debrief->memory dependency but cannot confirm the memory is live/load-bearing now (may be archived or never landed).",
+      "evidence": "run-debrief__{CLIENT_CODE}-tracking-hub-meta-capi-prior-form-identity__20260616.md line 23 references Mythos-memories/memory/reference_{CLIENT_CODE}-tracking-hub-meta-capi-prior-form-identity.md, but that memory file is NOT present in the current Mythos-memories/memory/ dir — plausible debrief->memory dependency but cannot confirm the memory is live/load-bearing now (may be archived or never landed).",
       "witness_state": "inferred"
     },
     {

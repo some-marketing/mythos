@@ -1,0 +1,125 @@
+{
+  "service_category": "wordpress",
+  "framework_name": "livecanvas-rebuild",
+  "version": "0.1.0",
+  "status": "candidate",
+  "description": "Rebuild a bloated WordPress site (typically TheGem / WPBakery / Elementor / heavy multipurpose theme) into a lean LiveCanvas + Bootstrap stack while preserving all load-bearing commerce, content, and integration data. Built from the LMF Props ({CLIENT_CODE}.com) reference run.",
+  "prompt_count": 5,
+  "input_contract": {
+    "required": [
+      {
+        "name": "client.json",
+        "description": "Mythos client registry record"
+      },
+      {
+        "name": "intake.json",
+        "description": "Site URL, admin credentials reference (1Password item title), goals (preserve / sell / soft-relaunch / showcase / modernize), and constraints"
+      }
+    ],
+    "optional": [
+      {
+        "name": "1password_item",
+        "description": "1P item title resolving to wp-admin user/pass; never inlined"
+      },
+      {
+        "name": "host_caching_notes.md",
+        "description": "Operator notes from host (e.g., 1-Click Web Apps) on server-level caching"
+      }
+    ]
+  },
+  "output_contract": {
+    "directories": [
+      "captures/",
+      "outputs/",
+      "rebuild/"
+    ],
+    "artifacts": [
+      "captures/homepage-recon.json",
+      "captures/plugins-inventory.md",
+      "captures/site-audit.jsonl",
+      "captures/site-audit-summary.json",
+      "captures/per-page-findings.md",
+      "captures/probe-*.md",
+      "outputs/current-site-analysis.md",
+      "outputs/migration-readiness.md",
+      "outputs/rebuild-plan.md"
+    ]
+  },
+  "execution_modes": [
+    "FINDINGS_ONLY",
+    "PATCH_ALLOWED"
+  ],
+  "image_optimization": {
+    "_comment": "Mythos image-optimization standard (tools/image-optimize/) framework gate, slice S4. Declares the obligation; it is RECOMMENDED, not required — promotion recommended->required happens ONLY in slice S5 after measured evidence on real creative against the live VPS quota (LEARNING_AND_AUTOMATION_DOCTRINE). status: 'recommended' means the staging_promotion / cutover deploy paths SHOULD run `node tools/image-optimize/cli.cjs optimize-tiered` locally + the shared preflight (tools/image-optimize/preflight.cjs) in WARN mode before building any upload manifest, but a finding does not yet hard-block the deploy.",
+    "standard": "tools/image-optimize/",
+    "status": "recommended",
+    "preflight": "tools/image-optimize/preflight.cjs",
+    "preflight_mode": "warn",
+    "caps": {
+      "_comment": "Optional per-framework byte-cap (max_bytes) override of the tools/image-optimize/config.json policy.tiers defaults, in BYTES. These match the config.json defaults (hero 256000 / content 102400 / thumb 51200). The preflight reads this block via --framework-manifest and feeds it to resolveTiers() as a tiers override. Omit a tier to inherit the config default for that tier. Per-tier max_width is NOT overridden here (build-time resize concern, not deploy-verify concern).",
+      "hero": 256000,
+      "content": 102400,
+      "thumb": 51200
+    },
+    "caps_provenance": "_dev/reports/analysis/convene-runs/20260617T151028Z-image-optimization-standard/synthesis.md",
+    "effective_from": "2026-06-17",
+    "caps_provenance_note": "Caps are the kernel-grade convene-synthesis best-practice defaults (tiered 250KB hero / 100KB content / 50KB thumb), NOT yet validated on this operator's live pipeline. Slice S5 will REPOINT caps_provenance + effective_from at the measured-evidence promotion artifact and promote status recommended->required."
+  },
+  "mcp_requirements": [
+    "playwright"
+  ],
+  "prompt_chain": {
+    "audit": [
+      "01_AUDIT"
+    ],
+    "decide": [
+      "02_DECISION"
+    ],
+    "local_rebuild": [
+      "03_LOCAL_REBUILD"
+    ],
+    "staging_promotion": [
+      "04_STAGING_PROMOTION"
+    ],
+    "cutover": [
+      "05_CUTOVER"
+    ]
+  },
+  "skills_path": ".claude/skills/livecanvas-rebuild/",
+  "commands_path": ".claude/commands/livecanvas-rebuild/",
+  "agents_path": ".claude/agents/livecanvas-rebuild/",
+  "reference_runs": [
+    {
+      "client_code": "{CLIENT_CODE}",
+      "project_slug": "current-site-analysis",
+      "project_path": "clients/{CLIENT_CODE}/projects/wordpress__design-research__current-site-analysis/",
+      "stage_completed": "audit + decide",
+      "started": "2026-05-06"
+    }
+  ],
+  "skills": [
+    "livecanvas-rebuild/SKILL.md"
+  ],
+  "commands": [
+    "run",
+    "status",
+    "audit",
+    "decision",
+    "local-rebuild",
+    "staging-promotion",
+    "cutover"
+  ],
+  "agents": [
+    "audit-agent",
+    "decision-agent",
+    "local-rebuild-agent",
+    "staging-promotion-agent",
+    "cutover-agent"
+  ],
+  "patterns": [
+    "wordpress-page-rebuild",
+    "livecanvas-block-editing",
+    "visual-design-implementation",
+    "browser-render-validation"
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "schema": "MythosLaunchdServices/1.0",
+  "services": [
+    {
+      "id": "delesign-poll",
+      "runner": "tools/launchd/run-delesign-poll.cjs",
+      "interval_seconds": 900,
+      "binding": "delesign"
+    },
+    {
+      "id": "framework-flywheel",
+      "runner": "tools/launchd/run-framework-flywheel.cjs",
+      "interval_seconds": 1800,
+      "binding": null
+    },
+    {
+      "id": "hygiene-sweep",
+      "runner": "tools/launchd/run-hygiene-sweep.cjs",
+      "interval_seconds": 3600,
+      "binding": null
+    },
+    {
+      "id": "harness-capability-crawler",
+      "runner": "tools/launchd/run-harness-capability-crawler.cjs",
+      "interval_seconds": 86400,
+      "binding": null
+    },
+    {
+      "id": "harness-sync-crawler",
+      "runner": "tools/launchd/run-harness-sync-crawler.cjs",
+      "interval_seconds": 86400,
+      "binding": null
+    },
+    {
+      "id": "lessons-reconcile",
+      "runner": "tools/launchd/run-lessons-reconcile-check.cjs",
+      "interval_seconds": 3600,
+      "binding": null
+    },
+    {
+      "id": "cowork-bridge",
+      "runner": "tools/signals/desktop-cowork-consumer.sh",
+      "interpreter": "bash",
+      "watch_path": "_dev/reports/signals/cowork-out",
+      "binding": null
+    }
+  ]
+}

@@ -27,7 +27,7 @@ Desired outcome:
 - the repo starts from current planning, current signals, and current lessons
 - exactly one bounded implementation slice is chosen truthfully
 - the bounded slice uses the right child workflow instead of improvising
-- if a distinct-family reviewer's review is part of the slice, the handoff lifecycle is handled truthfully
+- if Codex review is part of the slice, the managed listener lifecycle is handled truthfully
 - validation and completion audit happen before closeout
 - the sequence ends with one standard closeout bundle
 - the final handoff names the exact next command
@@ -50,7 +50,7 @@ What was missing was a true master prompt pack artifact that:
 ## Multi-Agent Functionality
 
 - Stay in the main thread for kickoff, synthesis, bounded-slice selection, validation review, and final closeout.
-- Keep the main thread thin: it frames the slice, issues bounded instructions, performs extra checks, and synthesizes what to communicate to the user and to the distinct-family reviewer.
+- Keep the main thread thin: it frames the slice, issues bounded instructions, performs extra checks, and synthesizes what to communicate to the user and to Codex.
 - Read-only subagents are allowed only for inventory prompts.
 - Write-owning workers are allowed only for the chosen bounded slice, with a disjoint file scope.
 - Independent validation must be read-only and must not be owned by the same worker that implemented the slice.
@@ -72,7 +72,7 @@ All bounded slices must follow the seven-step orchestration pattern defined in `
 3. **Verify** — independent read-only validation (mandatory, not advisory)
 4. **Fix** — if verification finds failures, attempt fix cycle (max 2)
 5. **Lessons Capture** — rolling capture during work (~3 substantive turns), plus event triggers on blocker/transition/correction/surprise. Append to session-learnings artifact.
-6. **Distinct Review** — publish a handoff note for a distinct-family reviewer under `_dev/reports/signals/`, generate the review prompt, and dispatch it (mandatory)
+6. **Codex Review** — publish HandoffSignal/1.0, generate bridge prompt, start managed listener (mandatory)
 7. **Gate** — check criteria, update status, debrief before closeout
 
 Debrief is mandatory before `ready_for_clear` for any meaningful run. The debrief produces an improve-plan (0-3 items) and replicate-plan (0-3 items). "No lesson" is a valid output.
@@ -117,15 +117,15 @@ Required execution pattern:
 5. Choose exactly one bounded implementation slice.
 6. Keep the main thread as coordinator only. The detailed research, implementation, and validation work should happen in bounded subagents or workers before the main thread advances.
 7. Execute that slice through the operational loop-closure pack.
-8. If the slice will rely on feedback from a distinct-family reviewer, dispatch the review to that reviewer and record the handoff note under `_dev/reports/signals/` before reporting any auto-run status.
+8. If the slice will rely on Codex feedback, start the managed 5-minute listener with `npm run signals:watch:codex:start` before reporting any auto-run status.
 9. Validate with an independent read-only validator, not with the same worker that made the change.
-10. If the slice's distinct-family review handoff is no longer needed by another live scope, close it out before lessons/final closeout.
+10. If the slice started the managed Codex listener and no other live Codex-targeted scope still depends on it, stop it with `npm run signals:watch:codex:stop` before lessons/final closeout.
 11. Launch one read-only completion-auditor-style subagent before final closeout.
 
 Acceptance criteria:
 1. The chosen slice is justified by current repo truth.
 2. The work uses the operational loop-closure pack instead of inventing a new flow.
-3. Any distinct-family reviewer handoff is reported truthfully as handoff prepared, auto-run active, or feedback received.
+3. Any Codex handoff is reported truthfully as handoff prepared, auto-run active, or feedback received.
 4. Validation and completion audit both run.
 5. The final report names the exact next command.
 ```
@@ -217,20 +217,20 @@ Constraints:
 - do not reopen the old 15-stage pipeline
 - do not create a new queue or initiative unless the current repo truth requires it
 - do not claim automation or validation exists when it is still conceptual
-- do not claim a distinct-family reviewer listener is active unless it was actually launched and the status artifact supports it
-- do not leave a managed distinct-family reviewer listener running past final closeout unless another still-live reviewer-targeted queue needs it
+- do not claim the Codex listener is active unless `npm run signals:watch:codex:start` was actually launched and the status artifact supports it
+- do not leave the managed Codex listener running past final closeout unless another still-live Codex-targeted queue needs it
 
 Final response must include:
 - chosen slice
 - prompts used from `claude-prompt-pack-operational-loop-closure.md`
 - changed files
 - validations run
-- distinct-family reviewer handoff state if applicable
+- Codex handoff state if applicable
 - exact next command
 
 Seven-step enforcement:
 - rolling lessons capture must happen during the slice (~3 substantive turns + event triggers)
-- distinct-family review handoff note and prompt are mandatory after the slice
+- Codex review signal and bridge prompt are mandatory after the slice
 - debrief must run before closeout: produce improve-plan.json (0-3 items) and replicate-plan.json (0-3 items)
 - block ready_for_clear until debrief artifacts exist for meaningful runs
 

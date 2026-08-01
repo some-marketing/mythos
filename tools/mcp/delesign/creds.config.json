@@ -5,7 +5,7 @@
       "envVar": "DELESIGN_API_TOKEN",
       "keychainService": "mythos-delesign-api-token",
       "keychainAccount": "mythos",
-      "opVault": "Employee",
+      "opVault": "{VAULT}",
       "opItem": "Delesign",
       "opField": "credential",
       "description": "Delesign API token."

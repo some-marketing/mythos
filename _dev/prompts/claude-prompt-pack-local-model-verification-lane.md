@@ -237,7 +237,7 @@ Return exactly these sections:
 Findings
 - what hardware/runtime assumptions are already established
 - what runtime surfaces are plausible (Ollama, MLX/MLX-LM, other)
-- what storage assumption should be used for `/Volumes/file_storage`
+- what storage assumption should be used for the locally bound `MYTHOS_STORAGE_ROOT`
 
 Planning implications
 - realistic model size bands

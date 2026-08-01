@@ -50,7 +50,8 @@ Mythos provides five operator-facing commands for prompt-system and pipeline wor
 | `/author-prompt-system` | PATCH_ALLOWED | Create new prompt-system assets from `_dev` research, audits, and proposed flows. Convert intent into concrete prompt packs and master-run-order entries. | Never reconcile existing assets (that is `/assemble-prompt-system`). Never invent prompt packs without cited source material. |
 | `/assemble-prompt-system` | PATCH_ALLOWED | Reconcile existing prompt-system assets for coherence. Ensure manifest, master run order, and prompt packs reference each other correctly. | Never invent new prompt packs (that is `/author-prompt-system`). Never execute pipeline stages. |
 | `/plan-pipeline` | REVIEW_ONLY | Decide the next eligible stage or track. Write a planning artifact with a recommended next command and model. | Never execute the stage. Planning only. Never modify prompt-system assets. |
-| `/advance-pipeline` | COORDINATOR | Execute exactly one stage using the build-verify-gate pattern. Update stage status on completion. | Never skip verification. Never merge multiple stages into one task. Never proceed past human gates. |
+| `/execute-plan` | COORDINATOR | Execute exactly one stage from a compatible prompt plan using the build-verify-gate pattern. Update the plan status surface on completion. | Never skip verification. Never merge multiple stages into one task. Never proceed past human gates. |
+| `/advance-pipeline` | COORDINATOR | Legacy alias for the canonical master workflow. | Prefer `/execute-plan master` for new usage. |
 
 ### Typical Operator Flow
 
@@ -67,7 +68,8 @@ Mythos provides five operator-facing commands for prompt-system and pipeline wor
 /plan-pipeline            Decide what to execute next
        |
        v
-/advance-pipeline         Execute the next stage
+/execute-plan master     Execute the next stage in the canonical master workflow
+/advance-pipeline        Legacy alias for the canonical master workflow
        |
        v
 /review-progress          Verify the result independently

@@ -1,0 +1,21 @@
+---
+description: Goose self-reference command: inspect the local public Goose archive before answering Goose tooling questions
+mode: REVIEW_ONLY
+---
+
+<objective>
+Inspect ${HOME}/Documents/GitHub/reference_archives/goose__block as local public reference material for Goose behavior and harness patterns.
+</objective>
+
+<process>
+- Verify the Goose archive exists.
+- Use targeted read-only searches and file reads.
+- Separate archive observations from Mythos policy and operator boundaries.
+- Report uncertainty instead of treating public source as complete product truth.
+</process>
+
+<success_criteria>
+- Archive path verified
+- Relevant files or missing evidence named
+- No files modified
+</success_criteria>

@@ -3,12 +3,10 @@
 #
 # Usage: ./tools/hygiene/sync-private-remotes.sh
 #
-# Pushes the current branch to:
-#   vps          ubuntu@{VPS_HOST}:git/Mythos.git
-#   localmirror  /Volumes/general_storage/Backups/Mythos-recovered.git
+# Pushes the current branch only to remote names listed in the ignored local
+# MYTHOS_REDUNDANCY_REMOTES binding. Remote URLs stay in local git config.
 #
 # Policy (operator decision 2026-06-10):
-#   - GitHub origin is RETIRED for the canonical branch; never pushes there.
 #   - Each remote is attempted independently; an absent/unreachable remote is a
 #     WARN + continue (exit 0) — a missing drive or lost network must not block
 #     the shutdown sequence.
@@ -16,17 +14,9 @@
 #     signals a divergence that requires human resolution; force-push is never
 #     performed by this script.
 #
-# Local-only path exclusion (operator incident, 2026-07-17): this script
-# previously pushed EVERY commit on the branch, with no awareness that some
-# project content (ant-hive-world) carries a standing "never push to vps/
-# localmirror" rule. A routine /shutdown run pushed 3 ant-hive-world commits
-# to both remotes before anyone noticed; both remotes had to be force-reset
-# back to the last safe commit as remediation. This script now refuses to
-# push a remote AT ALL when any not-yet-pushed commit touches an excluded
-# path -- a WARN + skip (not an ERROR), since this is an expected, recurring
-# state while local-only work is in progress, not a failure. Add more
-# excluded path prefixes to EXCLUDED_PATH_PATTERNS as needed; keep each
-# pattern anchored (no trailing '*' needed, git pathspec handles the prefix).
+# Local-only path exclusions come from the ignored local
+# MYTHOS_LOCAL_ONLY_PATHS comma-separated binding. The script refuses to push
+# when an unpushed commit touches a configured prefix.
 #
 # Integrates into the /shutdown sequence as the last mechanical step.
 
@@ -35,9 +25,10 @@ set -uo pipefail
 REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 BRANCH="$(git -C "$REPO_ROOT" symbolic-ref --short HEAD 2>/dev/null)"
 
-EXCLUDED_PATH_PATTERNS=(
-  "tools/ant-hive-world/"
-)
+REDUNDANCY_REMOTES=()
+EXCLUDED_PATH_PATTERNS=()
+IFS=',' read -r -a REDUNDANCY_REMOTES <<< "${MYTHOS_REDUNDANCY_REMOTES:-}"
+IFS=',' read -r -a EXCLUDED_PATH_PATTERNS <<< "${MYTHOS_LOCAL_ONLY_PATHS:-}"
 
 if [ -z "$BRANCH" ]; then
   echo "[sync-private-remotes] ERROR: could not determine current branch (detached HEAD?)" >&2
@@ -45,11 +36,16 @@ if [ -z "$BRANCH" ]; then
 fi
 
 echo "[sync-private-remotes] Branch: $BRANCH"
-echo "[sync-private-remotes] Remotes: vps, localmirror"
-echo "[sync-private-remotes] Excluded local-only paths: ${EXCLUDED_PATH_PATTERNS[*]}"
+echo "[sync-private-remotes] Remotes: ${REDUNDANCY_REMOTES[*]:-(none configured)}"
+echo "[sync-private-remotes] Excluded local-only paths: ${EXCLUDED_PATH_PATTERNS[*]-}"
 echo ""
 
 EXIT_CODE=0
+
+if [ "${#REDUNDANCY_REMOTES[@]}" -eq 0 ] || [ -z "${REDUNDANCY_REMOTES[0]}" ]; then
+  echo "[sync-private-remotes] WARN  MYTHOS_REDUNDANCY_REMOTES is empty; no push performed"
+  exit 0
+fi
 
 # Returns 0 (found) if any commit in remote_tip..HEAD touches an excluded
 # path. remote_tip may be empty (new/unknown remote branch) -- in that case
@@ -57,6 +53,9 @@ EXIT_CODE=0
 # been confirmed pushed.
 find_excluded_commit() {
   local remote_tip="$1"
+  if [ "${#EXCLUDED_PATH_PATTERNS[@]}" -eq 0 ] || [ -z "${EXCLUDED_PATH_PATTERNS[0]}" ]; then
+    return 1
+  fi
   local range
   if [ -n "$remote_tip" ] && git -C "$REPO_ROOT" cat-file -e "$remote_tip" 2>/dev/null; then
     range="$remote_tip..HEAD"
@@ -73,12 +72,9 @@ find_excluded_commit() {
 }
 
 # --- push to one remote ---
-# Arguments: <remote-name> <remote-url-hint> <connectivity-probe>
-# connectivity-probe: a bash expression that exits 0 if the remote is reachable
+# Arguments: <remote-name>
 push_remote() {
   local remote="$1"
-  local hint="$2"
-  local probe_cmd="$3"
 
   # 1. Confirm the remote is registered in this repo
   if ! git -C "$REPO_ROOT" remote get-url "$remote" >/dev/null 2>&1; then
@@ -87,8 +83,8 @@ push_remote() {
   fi
 
   # 2. Reachability probe (cheap; treat failure as absent, not an error)
-  if ! eval "$probe_cmd" >/dev/null 2>&1; then
-    echo "[sync-private-remotes] WARN  $remote ($hint) — not reachable, skipping"
+  if ! git -C "$REPO_ROOT" ls-remote "$remote" HEAD >/dev/null 2>&1; then
+    echo "[sync-private-remotes] WARN  $remote — not reachable, skipping"
     return 0
   fi
 
@@ -118,8 +114,7 @@ push_remote() {
   else
     # Distinguish rejection causes. Check DISK/UNPACKER errors FIRST — a full
     # remote disk also prints "[remote rejected]", and mislabeling it as
-    # divergence sent prior sessions chasing history-conflict phantoms
-    # (storage-retention-findings__vps-memory-archive__20260709.md).
+    # divergence sends operators chasing history-conflict phantoms.
     if echo "$push_out" | grep -qi "unpack failed\|unpacker error\|no space left\|unable to create temporary object\|ENOSPC"; then
       echo "[sync-private-remotes] WARN  $remote — push failed: remote DISK FULL / unpacker error (NOT divergence)" >&2
       echo "[sync-private-remotes]       Free space on the remote target, then re-run. Do NOT resolve as a merge conflict." >&2
@@ -136,15 +131,11 @@ push_remote() {
   fi
 }
 
-# vps: probe with a BatchMode SSH no-op (fails fast on no-network or unknown host)
-push_remote "vps" \
-  "ubuntu@{VPS_HOST}:git/Mythos.git" \
-  "ssh -o BatchMode=yes -o ConnectTimeout=5 ubuntu@{VPS_HOST} true"
-
-# localmirror: probe by testing whether the target directory exists on the filesystem
-push_remote "localmirror" \
-  "/Volumes/general_storage/Backups/Mythos-recovered.git" \
-  "test -d /Volumes/general_storage/Backups/Mythos-recovered.git"
+for remote in "${REDUNDANCY_REMOTES[@]}"; do
+  remote="${remote#"${remote%%[![:space:]]*}"}"
+  remote="${remote%"${remote##*[![:space:]]}"}"
+  [ -n "$remote" ] && push_remote "$remote"
+done
 
 echo ""
 if [ "$EXIT_CODE" -eq 0 ]; then

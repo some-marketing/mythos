@@ -1,0 +1,105 @@
+# Prompt-Plan Housing Laws (Staging)
+#
+# These laws are extracted from the emerging task-plan vs prompt-plan boundary
+# in Mythos planning. They are candidates for canonical promotion, but are
+# still awaiting proof from multiple non-control-plane workstreams.
+#
+# Source:
+# - _dev/concepts/prompt-plan-housing-and-task-plan-promotion.md
+# - _dev/prompts/claude-prompt-pack-control-plane-sequence-housing.md
+# - instructions/canonical/commands/run-plan.yaml
+# - instructions/canonical/commands/execute-plan.yaml
+#
+# Status: Awaiting cross-lane proof before promotion to instructions/canonical/contracts/
+
+version: 0.1.0
+status: staging
+source_lane: planning / orchestration housing pilot
+
+laws:
+  bounded_slice_authority:
+    id: planning.bounded_slice_authority
+    description: >
+      A task plan is the authoritative contract for one bounded slice of work.
+      It owns the slice's implementation scope, gates, expected outcomes, risk
+      tier, review lane, and acceptance truth. Orchestration artifacts may
+      reference the task plan, but may not silently replace it as the source of
+      bounded execution authority.
+    evidence_from_current_lane: >
+      The control-plane housing pilot works only because each stage still points
+      back to a concrete child task plan. When the housing shell is treated as
+      the implementation contract, stage truth becomes ambiguous and leaf
+      acceptance evidence drifts.
+    likely_contract_use:
+      - run-plan routing rules for task-plan execution
+      - review-task-plan checks for omnibus plans that are actually orchestration shells
+      - prompt-plan validation requiring child-plan references
+    cross_lane_proof_needed: >
+      Observe the same pattern in at least one more multi-stage workflow outside
+      the control plane, such as outreach, intake, or framework promotion. The
+      second proof should show that leaf execution truth remains clearer when
+      bounded slices keep their own task plans.
+
+  orchestration_housing_authority:
+    id: planning.orchestration_housing_authority
+    description: >
+      A prompt plan is the authoritative contract for orchestration across
+      bounded slices. It owns stage order, resumability, cross-plan
+      dependencies, stage status, and handoff discipline. It must not claim
+      direct authority over leaf implementation details that belong to child
+      task plans.
+    evidence_from_current_lane: >
+      The control-plane sequence housing plan is useful precisely because it
+      sequences remediation, audit, governance, and implementation without
+      flattening them into one omnibus implementation artifact.
+    likely_contract_use:
+      - execute-plan specialist routing
+      - prompt-plan registry guidance
+      - plan-contract language for housing shells
+    cross_lane_proof_needed: >
+      Observe a second workflow where the operator needs truthful stage status
+      across multiple bounded slices and where a single leaf task plan would be
+      too coarse to preserve review boundaries.
+
+  explicit_promotion_required:
+    id: planning.explicit_promotion_required
+    description: >
+      Promotion from a chained task-plan shape into prompt-plan housing must be
+      explicit. Similarity of shape is not enough. The promotion artifact must
+      name the child slices, the orchestration rationale, and the stage mapping
+      so that no model has to infer whether the artifact changed roles.
+    evidence_from_current_lane: >
+      The current concept note explains the threshold, but the lack of a formal
+      promotion artifact leaves room for narrative conversion and model drift.
+    likely_contract_use:
+      - review-task-plan handoff when a plan is really a housing candidate
+      - create-plan routing for orchestration-heavy requests
+      - future promotion-artifact schema
+    cross_lane_proof_needed: >
+      Observe at least one additional promotion event where the explicit child
+      mapping prevents execution ambiguity or accidental widening.
+
+  no_silent_role_change:
+    id: planning.no_silent_role_change
+    description: >
+      No planning artifact may silently change roles. A task plan may not
+      masquerade as a prompt plan because it is long, and a prompt plan may not
+      masquerade as a leaf implementation contract because it includes prompt
+      text or detailed stage notes.
+    evidence_from_current_lane: >
+      The repo already distinguishes /run-plan from /execute-plan, but the
+      promotion boundary remains easy to blur in prose without an explicit law.
+    likely_contract_use:
+      - run-plan blocked-state rules
+      - plan review checklists
+      - planning guardrails
+    cross_lane_proof_needed: >
+      Cross-lane proof will be stronger once at least one non-control-plane
+      plan is reviewed and either explicitly kept as a leaf task plan or
+      promoted to prompt-plan housing under the same rule.
+
+notes:
+  - >
+    These laws are intentionally staged rather than canonized immediately. The
+    current proof surface is strong enough to justify policy hardening and a
+    pilot, but not yet broad enough to claim full cross-lane universality.

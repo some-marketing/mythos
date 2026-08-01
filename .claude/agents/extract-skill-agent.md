@@ -36,12 +36,12 @@ existing Mythos conventions exactly.
    - System-level (`.claude/skills/<name>/`) if framework-agnostic
    - Framework-level (`frameworks/{svc}/{fw}/.claude/skills/{fw}/<name>/`) if framework-specific
 
-5. PRESENT workflow summary to caller (or user if invoked directly).
+5. PRESENT workflow summary in the output report.
    Include: suggested name, steps, inputs, outputs, tools, verification, placement.
-   Wait for confirmation.
+   Proceed to artifact generation without waiting for confirmation.
 
 6. CHECK OVERLAP with existing skills.
-   If >50% overlap: report and ask whether to extend or create new.
+   If >50% overlap: document the overlap in the output report and default to creating a new skill unless the caller explicitly included 'extend' in the task prompt.
 
 7. GENERATE all artifacts:
    - SKILL.md at determined path
@@ -68,3 +68,24 @@ existing Mythos conventions exactly.
 - Guardrails: `instructions/canonical/guardrails.md`
 - Skill validator: `tools/verify/verify-skill.cjs`
 </context>
+
+<constraints>
+- NEVER overwrite an existing SKILL.md without explicit caller instruction containing the word "overwrite" or "replace"
+- NEVER modify files outside the designated skill output path and manifest files
+- MUST run verify-skill.cjs after generating artifacts and include results in output
+- NEVER pause for user input — subagents run to completion autonomously
+</constraints>
+
+<output_format>
+- **artifacts_created**: [list of file paths and types]
+- **manifest_entries_added**: [list of entries added to project-claude.yml or system.yaml]
+- **verification_result**: [verify-skill.cjs exit code and summary]
+- **overlap_findings**: [list of similar existing skills with overlap percentage, or "none"]
+</output_format>
+
+<success_criteria>
+- All artifacts exist at declared paths (SKILL.md, command, agent, verification script)
+- verify-skill.cjs exits 0 on the generated skill
+- No duplicate manifest entries created
+- Overlap findings documented if applicable
+</success_criteria>

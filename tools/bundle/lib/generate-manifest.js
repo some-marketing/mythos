@@ -90,7 +90,7 @@ export function generateManifest(input, bundleId, createdAt) {
   manifest.open_questions_file = 'QUESTIONS_FOR_DEVELOPER.md';
 
   manifest.entry_points = {
-    start_here: 'For_{DEVELOPER_NAME}.md',
+    start_here: 'For_Recipient.md',
     questions: 'QUESTIONS_FOR_DEVELOPER.md',
     full_index: 'INDEX.md',
     machine_index: 'INDEX.json',

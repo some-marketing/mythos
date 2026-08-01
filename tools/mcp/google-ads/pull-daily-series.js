@@ -6,7 +6,7 @@
 //
 // Usage (from repo root):
 //   node tools/mcp/google-ads/pull-daily-series.js \
-//     --customerId 8560375238 \
+//     --customerId "$GOOGLE_ADS_CUSTOMER_ID" \
 //     [--days 45]              # default: 45
 //     [--out-prefix _dev/reports/analysis/daily-series__YYYYMMDD]
 //

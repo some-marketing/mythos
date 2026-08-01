@@ -27,8 +27,9 @@ const path = require('path');
 const PROJECT_ROOT = path.resolve(__dirname, '../..');
 const { buildComponentIndex } = require('./component-index.cjs');
 
-// Client identifiers that must never appear in framework files. Sourced from
-// clients/ directory names plus known client domains; lowercase substrings.
+// Client identifiers that must never appear in framework files. The portable
+// repository has no static client knowledge; a private source checkout may
+// derive terms from its unexported clients/ directory at runtime.
 function clientLintTerms() {
   const terms = new Set();
   try {
@@ -36,9 +37,8 @@ function clientLintTerms() {
       if (!code.startsWith('.') && code.length >= 3) terms.add(code.toLowerCase());
     }
   } catch {
-    // no clients dir — lint still runs on the static list
+    // no clients dir — the portable lint remains valid with an empty policy
   }
-  for (const t of ['highland', 'mazda', 'super dave', 'yarmouth']) terms.add(t);
   return [...terms];
 }
 

@@ -10,7 +10,7 @@
 # unwritable dir. If any attempt SUCCEEDS, confinement is broken and it says so.
 set -uo pipefail
 
-REPO="${1:-/Users/admin/dev/Mythos-recovered}"
+REPO="${1:-{MYTHOS_ROOT}}"
 WHO="$(whoami)"
 PROBE=".confine-probe-$$"
 FAILS=0   # count of exploits that WRONGLY succeeded (i.e. confinement holes)

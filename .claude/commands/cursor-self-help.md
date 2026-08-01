@@ -1,0 +1,25 @@
+---
+description: Cursor self-reference command: track public evidence for Cursor harness/source availability without inventing a source archive
+mode: PATCH_ALLOWED
+---
+
+<objective>
+Provide a truthful Cursor self-help surface. Cursor/Anysphere does not have an official local public harness source archive registered in Mythos, so this command uses public reports and the Cursor harness leak news watch until the operator supplies a specific source archive. Operator standing instruction: when a credible public repo for leaked Cursor harness/source appears, clone/archive it immediately into ${HOME}/Documents/GitHub/reference_archives, but do not execute unknown code from it.
+</objective>
+
+<process>
+- Check whether the operator has added a Cursor archive under ${HOME}/Documents/GitHub/reference_archives.
+- If no archive exists, run or inspect npm run news:watch:cursor-harness-leak output.
+- Use only public, locally recorded reports or operator-supplied archive paths.
+- For --install-leak-archive, extract candidate git repository URLs from the latest _dev/reports/news-watch/cursor-harness-leak__*.json or from --repo. A candidate must be a public GitHub/GitLab HTTPS URL and the matched item must mention Cursor or Anysphere plus a source/harness/leak trigger term.
+- Clone the candidate immediately into ${HOME}/Documents/GitHub/reference_archives/cursor-harness-leak__<owner>__<repo> using git clone --depth 1. If the directory already exists, run git -C <dir> fetch --depth 1 followed by git -C <dir> pull --ff-only.
+- After cloning, record the remote URL and current commit hash in the response and in a news-watch report note if a writer surface is available.
+- Do not install dependencies, run package scripts, open binaries, or execute code from the cloned repo. The word install here means archive the repo locally for inspection unless the operator gives a separate explicit execution instruction.
+</process>
+
+<success_criteria>
+- Cursor archive absence or presence is reported truthfully
+- RSS/news watch output is inspected when no source archive exists
+- Credible public Cursor harness/source repos are cloned immediately into reference_archives under a cursor-harness-leak__* directory
+- Unknown code from the cloned repo is not executed
+</success_criteria>

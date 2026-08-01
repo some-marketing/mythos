@@ -5,9 +5,9 @@
 // ads actually delivering?" without poking the dashboard.
 //
 // Usage (live reads require a real token; run through run-with-op.sh):
-//   META_AD_ACCOUNT_ID=10151393423266343 \
+//   META_AD_ACCOUNT_ID="$META_AD_ACCOUNT_ID" \
 //     tools/mcp/meta-ads/run-with-op.sh node tools/mcp/meta-ads/account-funding-status.js
-//   tools/mcp/meta-ads/run-with-op.sh node tools/mcp/meta-ads/account-funding-status.js --account 10151393423266343
+//   tools/mcp/meta-ads/run-with-op.sh node tools/mcp/meta-ads/account-funding-status.js --account "$META_AD_ACCOUNT_ID"
 //
 // Pure read (GET only). Emits a human summary to stderr and the raw JSON to
 // stdout so it can be piped/saved.

@@ -259,7 +259,7 @@ framework/
 ### Phase 1: Quick Wins (1-2 hours)
 1. Replace any hardcoded developer names → `{DEVELOPER_NAME}` in prompts 13, 14, 15
 2. Rename `For_*.md` → `For_Developer.md` in bundle structure
-3. Rename `__for_{DEVELOPER_NAME}.md` → `__for_dev.md` suffix
+3. Rename `__recipient.md` → `__for_dev.md` suffix
 
 ### Phase 2: Abstraction (4-6 hours)
 1. Create `09_SHARED_BLOCKS.md` generic version with `{FIELD_NAME}` placeholders

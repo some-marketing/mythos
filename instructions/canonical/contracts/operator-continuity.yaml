@@ -1,0 +1,84 @@
+# Operator Continuity Law v1.0.0
+#
+# Canonical contract for operator availability, delegation scope, and truthful
+# pause/defer behavior in Mythos control-plane work.
+
+version: 1.0.0
+source: instructions/canonical/system.yaml
+
+continuity_artifact:
+  path: _dev/reports/analysis/operator-continuity-state.json
+  schema: tools/autonomy/schemas/operator-continuity.schema.json
+  recording_rule: >
+    When operator state changes execution truth, gate behavior, or delegation
+    scope, the continuity artifact must be refreshed before reporting the slice
+    as paused, deferred, or resumed.
+
+states:
+  - id: available
+    description: Operator is present and responsive.
+    required_behavior:
+      - surface gates and decisions as they arise
+      - execute normally within declared mode constraints
+
+  - id: unavailable
+    description: Operator is not reachable.
+    required_behavior:
+      - pause at the next gate boundary
+      - record paused_gates durably
+      - continue only autonomous safe work that does not consume operator judgment
+    forbidden_behavior:
+      - force_closure
+      - skip_operator_gate
+      - self_approve_destructive
+
+  - id: overloaded
+    description: Operator is present but has declared constrained capacity.
+    required_behavior:
+      - batch lower-priority decisions
+      - present only the highest-priority gate
+      - record deferred gates or queued decisions durably
+    forbidden_behavior:
+      - flood_with_decisions
+      - force_closure
+      - skip_gates
+
+  - id: conflicted
+    description: Operator intent conflicts with governance or evidence.
+    required_behavior:
+      - surface the conflict explicitly with evidence
+      - present options without silently complying or silently resisting
+      - record the conflict state before closing the slice
+
+  - id: succession
+    description: Authority is delegated to another human or to bounded autonomous operation.
+    required_behavior:
+      - record delegation_scope with successor_id and scope_boundary
+      - execute only within the declared delegation scope
+      - pause any action outside the recorded scope
+    forbidden_behavior:
+      - expand_delegation_scope implicitly
+      - treat_successor_as_unlimited
+
+required_record_fields:
+  - operator_state
+  - recorded_at
+  - paused_gates when gate resolution is deferred
+  - delegation_scope when operator_state is succession
+
+capture_resistance:
+  - No single actor (human or AI) may both produce and validate acceptance-grade outcomes
+  - Operator gates cannot be permanently delegated to an AI actor
+  - Succession scope must be explicitly bounded and recorded
+  - Unbounded delegation is equivalent to no governance and is a capture violation
+
+never_self_close:
+  - acceptance-grade outcomes
+  - trust-tier promotions
+  - governance rule changes
+  - delegation scope expansions
+
+command_implications:
+  - /run-plan and /execute-plan must inspect the continuity artifact before resolving operator gates or declaring a stage complete
+  - /review-progress, /amend-plan, and /debrief-run must not recommend force-closure when the continuity artifact shows unavailable, overloaded, conflicted, or out-of-scope succession state
+  - Compatibility aliases such as /advance-pipeline inherit the same continuity obligations through /execute-plan

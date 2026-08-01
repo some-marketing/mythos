@@ -1,0 +1,22 @@
+{
+  "schema": "SkillFiringLog/1.0",
+  "skill": "canonical-path-authority-gate",
+  "status": "provisional",
+  "graduation_threshold": 3,
+  "firings": [
+    {
+      "id": 1,
+      "accepted_at": "2026-05-20T16:20:00Z",
+      "accepted_by": "operator",
+      "scope": "env-path-hardening",
+      "summary": "Skill-guarded path-authority repoint of repo from ${MYTHOS_HOME} (iCloud-damaged) to {MYTHOS_ROOT}. Caught and corrected mkdir-before-validation writer defect (session-end-boundary-log.cjs), repo-root.sh .git-as-file semantics, bash writer branch, paired-artifact root (codex-skills/index.json), and stale signal self-loop.",
+      "evidence": [
+        "_dev/reports/analysis/codex-last-message__20260520T155218Z__env-path-hardening-regrade.md",
+        "_dev/reports/analysis/review-progress__env-path-hardening.md",
+        "_dev/reports/analysis/review-progress__env-path-hardening.expectation-failures.json",
+        "commits: 8dcb288c, 6786ad8e, 42292e18"
+      ],
+      "operator_acceptance_artifact": "_dev/reports/analysis/review-progress__env-path-hardening.expectation-failures.json#open_decisions/op-2"
+    }
+  ]
+}

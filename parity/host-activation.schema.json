@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "MythosHostActivation/2.0",
+  "type": "object",
+  "required": ["schema", "secret_free", "plan_sha256", "operator_approval", "approval_manifest_sha256", "activation_status", "local_binding_policy", "entries"],
+  "properties": {
+    "schema": { "const": "MythosHostActivation/2.0" },
+    "secret_free": { "const": true },
+    "plan_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "operator_approval": { "enum": ["pending", "approved"] },
+    "approval_manifest_sha256": { "type": ["string", "null"] },
+    "activation_status": { "enum": ["planned", "active_verified", "failed_rolled_back"] },
+    "local_binding_policy": { "type": "string", "minLength": 1 },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "selection", "not_applicable_reason", "binding", "prerequisites", "backup", "preflight", "install", "kickstart", "healthcheck", "rollback", "receipt"]
+      }
+    }
+  },
+  "additionalProperties": false
+}

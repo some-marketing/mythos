@@ -9,7 +9,7 @@
 # Companion design doc: _dev/cowork-sessions/dispatch-bridge-cowork-variant.md
 # Companion library:    tools/signals/cowork-orchestrator-bridge.js
 #
-# Invoked by launchd via com.smos.cowork-bridge.plist (WatchPaths trigger).
+# Invoked by the portable org.mythos.portable.cowork-bridge launchd service.
 # May also be invoked manually for debugging:
 #     bash tools/signals/desktop-cowork-consumer.sh
 #     bash tools/signals/desktop-cowork-consumer.sh --packet <path>

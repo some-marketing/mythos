@@ -1,0 +1,181 @@
+{
+  "id": "dispatch-bridge",
+  "name": "dispatch-bridge",
+  "category": "internal",
+  "description": "Create a first-class HandoffSignal/1.0 handoff for a distinct target actor and optionally launch the managed bridge runner immediately.",
+  "mode": "COORDINATOR",
+  "objective": "Provide the canonical actor-bridge dispatch surface: validate a distinct source/target handoff, write the prompt and signal artifacts, close any superseded live signals at the same scope, and optionally invoke the target lane's signal-aware runner so the bridge moves beyond handoff preparation when capability exists.",
+  "when_to_use": [
+    "Use when a Codex agent, Claude agent, OpenCode agent, or operator has determined that the next consequential step should be executed or reviewed by a different actor through the shared HandoffSignal/1.0 surface.",
+    "Use when the exact next command is already known and must be preserved truthfully for the target actor rather than improvised at execution time.",
+    "Use when a plan or post-run controller has selected an actor-bridge review lane and the system must publish the handoff artifacts that /follow-signal or the managed runner will consume.",
+    "Use --run-now when the target lane's managed runner is available and the next step is mechanically determined, safe, and should not rest in handoff_prepared."
+  ],
+  "inputs": {
+    "required": {
+      "--target <actor>": "Target actor id. Supported targets: codex, claude, gemini, opencode, openrouter, remote-ssh:<host-alias>.",
+      "--task <summary>": "Bounded task or review summary to hand off."
+    },
+    "optional": {
+      "--command </slash-command>": "Exact slash command the target actor should run. Usually must begin with '/'. For freeform targets (gemini, openrouter), can be 'freeform' or omitted.",
+      "--source <actor>": "Producing actor id. Defaults to operator.",
+      "--scope <scope>": "Stable signal_scope override. If omitted, derive scope from target + task summary.",
+      "--context <path[,path...]>": "Comma-separated project-root-relative or absolute-in-repo artifact paths to attach as context.",
+      "--run-now": "After writing artifacts, invoke the target lane's signal-aware runner immediately when supported.",
+      "--json": "Emit machine-readable dispatch metadata instead of human-readable text.",
+      "--help": "Show command help."
+    },
+    "derived_defaults": {
+      "signal_scope": "If --scope is omitted, derive a sanitized scope from target + task summary and cap it to the bridge-safe slug length used by the implementation.",
+      "runner_selection": "codex -> tools/signals/run-codex-bridge.js; claude/opencode -> tools/signals/run-actor-bridge.js --actor <target>; gemini -> tools/signals/run-gemini-bridge.js; remote-ssh -> tools/signals/run-remote-ssh-bridge.js --host <host-alias>."
+    }
+  },
+  "outputs": {
+    "signal_artifact": {
+      "path": "_dev/reports/signals/dispatch-bridge__<timestamp>__<scope-safe>.signal.json",
+      "schema": "HandoffSignal/1.0",
+      "fields": [
+        "recommended_next_actor",
+        "recommended_next_command",
+        "signal_scope",
+        "artifacts",
+        "decision_context_artifacts",
+        "next_prompt_stub",
+        "next_step_detail",
+        "task_summary",
+        "local_task_state",
+        "dispatch_runner"
+      ]
+    },
+    "prompt_artifact": {
+      "path": "_dev/reports/analysis/dispatch-bridge-prompt__<scope-safe>.md",
+      "purpose": "Disk-safe prompt body for the target actor, including source actor, target actor, signal scope, exact command, task summary, optional context artifact list, and execution contract."
+    },
+    "analysis_artifacts": {
+      "paths": [
+        "_dev/reports/analysis/dispatch-bridge__<timestamp>__<scope-safe>.json",
+        "_dev/reports/analysis/dispatch-bridge__<timestamp>__<scope-safe>.md"
+      ],
+      "result_contract": [
+        "timestamp",
+        "source",
+        "target",
+        "target_actor_id",
+        "signal_scope",
+        "task_summary",
+        "local_task_state",
+        "dispatch_status",
+        "dispatch_signal_path",
+        "prompt_path",
+        "recommended_next_command",
+        "context_files_referenced",
+        "expected_completion_signal_path",
+        "run_now",
+        "runner",
+        "dispatch_result",
+        "analysis_artifacts"
+      ]
+    },
+    "telemetry_event": {
+      "hook_event": {
+        "source": "dispatch-bridge",
+        "matcher": "BridgeDispatch",
+        "event": "bridge-dispatched",
+        "detail": {
+          "target": "<actor>",
+          "scope": "<scope-safe>",
+          "signal_path": "_dev/reports/signals/dispatch-bridge__<timestamp>__<scope-safe>.signal.json"
+        }
+      },
+      "note": "The dispatch surface emits bridge-dispatched telemetry after building the result. The Codex runner also emits the same event when --run-now reaches executed mode."
+    }
+  },
+  "routing": {
+    "implementation": "tools/signals/dispatch-bridge.js",
+    "library_contract": "Archive implementation imports buildDispatchResult() and SUPPORTED_TARGETS from tools/signals/lib/dispatch-bridge.js and writes the prompt body plus signal/result artifacts from that library contract.",
+    "managed_runners": {
+      "codex": "tools/signals/run-codex-bridge.js",
+      "claude": "tools/signals/run-actor-bridge.js --actor claude",
+      "opencode": "tools/signals/run-actor-bridge.js --actor opencode",
+      "gemini": "tools/signals/run-gemini-bridge.js",
+      "remote-ssh": "tools/signals/run-remote-ssh-bridge.js --host <host-alias>"
+    }
+  },
+  "preconditions": [
+    "Source actor and target actor are both named explicitly and are distinct. The dispatch must fail closed when source == target.",
+    "The target actor is one of the supported target ids in repo truth: codex, claude, gemini, opencode, openrouter, remote-ssh.",
+    "The task summary is non-empty.",
+    "Every context artifact path resolves inside the project root and already exists on disk.",
+    "The target lane is reachable enough for the requested action: artifact-only dispatch requires only repo write access; --run-now also requires that the target lane's managed runner and credentials/auth surface be available."
+  ],
+  "process": [
+    "Normalize source, target, task summary, command, context list, and requested scope; reject unsupported targets, empty inputs, same-source-and-target dispatches, and commands that do not start with '/' (unless target is a freeform target).",
+    "Derive the stable signal scope when --scope is omitted, choose the target runner by actor id, and resolve all context artifacts relative to the project root with outside-root paths blocked.",
+    "Close any prior live signals at the resolved scope before writing the new handoff so the live signal surface stays unique per scope.",
+    "Write the dispatch prompt body to _dev/reports/analysis/dispatch-bridge-prompt__<scope-safe>.md. For freeform targets with omitted commands, normalize the command to 'freeform' in the prompt and signal.",
+    "Create a HandoffSignal/1.0 artifact that names the target actor, exact command, prompt artifact, decision-context artifacts, task summary, local_task_state=pending_bridge, and dispatch runner id.",
+    "Validate the signal structurally before publishing it to _dev/reports/signals/dispatch-bridge__<timestamp>__<scope-safe>.signal.json.",
+    "Write durable JSON and markdown dispatch-result artifacts under _dev/reports/analysis/dispatch-bridge__<timestamp>__<scope-safe>.*.",
+    "When --run-now is present and the target runner exists, invoke the signal-aware runner with --file <signal-name> --json, capture its result as dispatch_result, and update the dispatch_status truthfully.",
+    "Emit bridge-dispatched telemetry with target, scope, and signal_path so bridge launch is visible in the shared hook telemetry stream."
+  ],
+  "postconditions": [
+    "A live HandoffSignal/1.0 exists at the dispatch signal path unless the command failed before publication.",
+    "The prompt artifact and both durable analysis artifacts exist on disk and point at the same signal scope and exact command.",
+    "Superseded live signals for the same scope are closed rather than left active in parallel.",
+    "The target actor can consume the handoff via the live signal surface, and /follow-signal --execute can resolve the exact recommended_next_command from the published signal.",
+    "When --run-now succeeds, the bridge advances beyond bare handoff preparation through the target lane's runner rather than stopping at artifact creation."
+  ],
+  "evidence_contract": {
+    "required": [
+      "dispatch_signal_path",
+      "target_actor_id",
+      "task_summary"
+    ],
+    "optional": [
+      "context_files_referenced"
+    ]
+  },
+  "success_criteria": [
+    "The handoff is represented by a truthful HandoffSignal/1.0 plus a dispatch prompt artifact with no command substitution.",
+    "The dispatch result captures whether the handoff is pending_bridge, pending_manual_runner, or an executed/blocked runner outcome rather than implying success.",
+    "The live signal surface remains unique at the resolved scope because superseded signals are closed first.",
+    "Operator ceremony is not added when dispatch is mechanically determined and safe; --run-now exists to advance the bridge automatically when the runner is available.",
+    "Telemetry and durable artifacts provide enough evidence to audit who dispatched what, to whom, under which scope, and with which exact command."
+  ],
+  "related_commands": {
+    "/dispatch-trifecta": "Higher-order dispatch surface for multi-lane dispatch orchestration when one bridge handoff is not sufficient.",
+    "/follow-signal": "Consume the resulting HandoffSignal/1.0 authority surface and optionally execute the exact recommended next command.",
+    "/run-codex-bridge": "Target-lane runner for Codex when dispatching to the codex actor or when --run-now selects the codex-managed bridge.",
+    "/run-plan": "Primary route that decides whether a slice should close via verify-local, codex-bridge, or operator gate before dispatch is even needed."
+  },
+  "guardrail_references": [
+    {
+      "source": "instructions/canonical/guardrails.md",
+      "section": "Bridge Dispatch And Operator Involvement",
+      "rule": "If a command declares an actor-bridge review lane and the managed runner is available, the producing intelligence must launch the bridge instead of stopping at handoff preparation."
+    },
+    {
+      "source": "instructions/canonical/guardrails.md",
+      "section": "Cross-Verification Law (Mandatory)",
+      "rule": "Decisions of consequence require verification by a different intellect; dispatch-bridge is one canonical way to route that cross-intelligence review."
+    },
+    {
+      "source": "instructions/canonical/guardrails.md",
+      "section": "Signal Timestamp Discipline",
+      "rule": "Coordination signals must use real system-clock timestamps so bridge supersession and completion monotonicity remain valid."
+    },
+    {
+      "source": "instructions/canonical/guardrails.md",
+      "section": "Cost-Effective Intellect Calls",
+      "rule": "Bridge signals must stay tightly scoped, use named focus areas, and avoid redundant dispatches."
+    }
+  ],
+  "artifacts": [
+    "_dev/reports/signals/dispatch-bridge__<timestamp>__<scope-safe>.signal.json",
+    "_dev/reports/analysis/dispatch-bridge-prompt__<scope-safe>.md",
+    "_dev/reports/analysis/dispatch-bridge__<timestamp>__<scope-safe>.json",
+    "_dev/reports/analysis/dispatch-bridge__<timestamp>__<scope-safe>.md"
+  ],
+  "implementation": "tools/signals/dispatch-bridge.js"
+}

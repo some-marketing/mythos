@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Stage 2 — Framework Mix + Diversity Audit",
+  "type": "object",
+  "required": ["timestamp", "hypothesis_id", "mix", "audit"],
+  "properties": {
+    "timestamp": { "type": "string", "format": "date-time" },
+    "hypothesis_id": { "type": "string" },
+    "mix": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["framework_id", "mapped_dimensions", "rationale"],
+        "properties": {
+          "framework_id": { "type": "string" },
+          "mapped_dimensions": {
+            "type": "object",
+            "required": ["offer_angle", "proof_type", "format", "visual_composition", "landing_intent", "funnel_stage"],
+            "properties": {
+              "offer_angle": { "type": "string" },
+              "proof_type": { "type": "string" },
+              "format": { "type": "string" },
+              "visual_composition": { "type": "string" },
+              "landing_intent": { "type": "string" },
+              "funnel_stage": { "type": "string" }
+            }
+          },
+          "rationale": { "type": "string" }
+        }
+      }
+    },
+    "audit": {
+      "type": "object",
+      "required": ["verdict", "distinct_dimensions", "collapsed_dimensions"],
+      "properties": {
+        "verdict": { "type": "string", "enum": ["pass", "fail"] },
+        "distinct_dimensions": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["offer_angle", "proof_type", "format", "visual_composition", "landing_intent", "funnel_stage"] }
+        },
+        "collapsed_dimensions": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["offer_angle", "proof_type", "format", "visual_composition", "landing_intent", "funnel_stage"] }
+        },
+        "replacement_suggestions": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "andromeda_creative_floor": { "type": "object" },
+    "salesperson_distribution_in_mix": { "type": "object" },
+    "deferred_to_future_iterations": { "type": "array", "items": { "type": "string" } },
+    "operator_gate": { "type": "object" },
+    "operator_approval_timestamp": { "type": ["string", "null"], "format": "date-time" }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,34 @@
+name: Dart Event Bridge
+
+on:
+  repository_dispatch:
+    types:
+      - dart_event
+
+permissions:
+  contents: read
+
+jobs:
+  handle-dart-event:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Write Dart event payload
+        env:
+          CLIENT_PAYLOAD: ${{ toJson(github.event.client_payload) }}
+        run: |
+          mkdir -p _dev/state/dart-bridge
+          printf '%s' "$CLIENT_PAYLOAD" > _dev/state/dart-bridge/event.json
+
+      - name: Handle Dart event
+        env:
+          DART_TOKEN: ${{ secrets.SMOS_DART_TOKEN }}
+        run: npm run dart:bridge:handle -- --event-file _dev/state/dart-bridge/event.json --json

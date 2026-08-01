@@ -1,16 +1,29 @@
 ---
-description: Plain-id alias for /enroll-patron
-allowed-tools: [Read, Write, Glob]
+description: Create new client entry
+mode: PATCH_ALLOWED
 ---
 
 <objective>
-Run `/enroll-patron`. `new-client` is the plain-software id; the full command body lives under the mythic name.
+Register a new agency client in Mythos by creating the client directory structure, initializing metadata, and updating the client registry.
 </objective>
 
 <process>
-1. Follow `.claude/commands/enroll-patron.md`.
+- Parse arguments for client code and client name. If either is missing, prompt the user.
+- Validate that the client code does not already exist under clients/.
+- Load the manage-clients skill workflow: .claude/skills/manage-clients/SKILL.md and follow the create-client workflow.
+- Create the client directory at clients/{code}/ with the required metadata file.
+- Register the client in the Mythos client registry.
+- Confirm creation by listing the new directory contents.
 </process>
 
 <success_criteria>
-- `/new-client` resolves to the same behavior as `/enroll-patron`
+- Client directory created at clients/{code}/
+- Client metadata file initialized with name, code, and creation date
+- Client registered in Mythos
+- No duplicate client codes created
 </success_criteria>
+
+<handoff>
+client_created: new-project <client-code> <service/framework> <project-slug>
+client_already_exists: project-status <client-code>
+</handoff>

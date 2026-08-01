@@ -14,7 +14,7 @@ set -uo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd -P)"
 cd "$ROOT" || exit 2
 W="$1"; KIND="${2:-node}"
-OLD="/Users/admin/Documents/GitHub/Mythos"
+OLD="${MYTHOS_LEGACY_ROOT:-}"
 PASS=0; FAIL=0
 ok(){ echo "  PASS  $1"; PASS=$((PASS+1)); }
 no(){ echo "  FAIL  $1"; FAIL=$((FAIL+1)); }
@@ -26,7 +26,8 @@ if [ "$KIND" = node ]; then node -c "$W" 2>/dev/null && ok "syntax" || no "synta
 
 # (2) no banned root patterns for its own repo root
 # strip // and # line-comments before checking, so explanatory prose can name the old pattern
-if sed -E 's://.*$::; s:#.*$::' "$W" | grep -nE "process\.cwd\(\)|CLAUDE_PROJECT_DIR\s*\|\|\s*process\.cwd|/Users/admin/Documents/GitHub/Mythos" >/dev/null 2>&1; then
+if sed -E 's://.*$::; s:#.*$::' "$W" | grep -nE "process\.cwd\(\)|CLAUDE_PROJECT_DIR\s*\|\|\s*process\.cwd" >/dev/null 2>&1 \
+  || { [ -n "$OLD" ] && sed -E 's://.*$::; s:#.*$::' "$W" | grep -nF "$OLD" >/dev/null 2>&1; }; then
   no "still contains a banned root pattern in CODE (cwd / cwd-fallback / hardcoded old abs)"
 else ok "no banned root pattern in code"; fi
 
@@ -42,7 +43,7 @@ else no "does not reference the canonical source"; fi
 # unchanged. When neither can be proven, we explicitly say so rather than
 # silently passing.
 SNAP_OLD_EXISTS=no; SNAP_OLD_MTIME=""
-if [ -e "$OLD" ]; then
+if [ -n "$OLD" ] && [ -e "$OLD" ]; then
   SNAP_OLD_EXISTS=yes
   SNAP_OLD_MTIME="$(stat -f %m "$OLD" 2>/dev/null || stat -c %Y "$OLD" 2>/dev/null || echo "")"
 fi
@@ -73,9 +74,9 @@ fi
 if printf '%s' "$WRONGOUT" | grep -q "\[canonical-root\]"; then ok "wrong-root emits loud canonical marker"; else no "wrong-root did NOT emit canonical marker"; fi
 
 # old path must not have been freshly created OR re-touched by THIS run
-if [ "$SNAP_OLD_EXISTS" = no ] && [ -e "$OLD" ]; then
+if [ -n "$OLD" ] && [ "$SNAP_OLD_EXISTS" = no ] && [ -e "$OLD" ]; then
   no "wrong-root run RECREATED the bare old path"
-elif [ "$SNAP_OLD_EXISTS" = yes ] && [ -e "$OLD" ]; then
+elif [ -n "$OLD" ] && [ "$SNAP_OLD_EXISTS" = yes ] && [ -e "$OLD" ]; then
   NOW_MTIME="$(stat -f %m "$OLD" 2>/dev/null || stat -c %Y "$OLD" 2>/dev/null || echo "")"
   if [ -n "$SNAP_OLD_MTIME" ] && [ -n "$NOW_MTIME" ] && [ "$SNAP_OLD_MTIME" != "$NOW_MTIME" ]; then
     no "wrong-root run RE-TOUCHED the old path (mtime changed $SNAP_OLD_MTIME -> $NOW_MTIME)"

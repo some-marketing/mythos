@@ -8,7 +8,10 @@ async function main() {
   config.dryRun = false; 
   
   const client = createGoogleAdsClient(config);
-  const customerId = '8560375238';
+  const customerId = process.env.GOOGLE_ADS_CUSTOMER_ID;
+  if (!customerId) {
+    throw new Error('GOOGLE_ADS_CUSTOMER_ID is required from ignored local configuration');
+  }
 
   const query = `
     SELECT

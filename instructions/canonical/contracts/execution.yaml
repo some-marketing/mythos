@@ -1,0 +1,236 @@
+# Execution Mode Law v0.2.0
+#
+# Canonical definitions for all 6 Mythos execution modes.
+# Derived from instructions/canonical/guardrails.md and system.yaml.
+# Prior art: v0.1.0 from concept branch (mode stubs only).
+#
+# Each mode defines hard boundaries on what an agent may do.
+# These are not suggestions. Violation of a declared mode is a critical failure.
+
+version: 0.2.0
+source: instructions/canonical/guardrails.md
+
+modes:
+  FINDINGS_ONLY:
+    purpose: Observe and report only
+    can_write: false
+    can_execute: false
+    description: >
+      No file writes. No shell execution. No side effects.
+      Read, analyze, report in response text only.
+    allowed:
+      - Read files and artifacts
+      - Analyze evidence
+      - Generate findings in chat or response text
+      - Reference evidence with file paths and line numbers
+    forbidden:
+      - Write any files to disk
+      - Run shell commands beyond read-only operations
+      - Modify any artifacts, configs, or code
+      - Execute tests or external processes
+    use_when:
+      - Browser walkthroughs and live observation
+      - Locator validation
+      - Exploratory analysis
+      - Pre-implementation investigation
+    preflight_checklist:
+      - Confirmed no file writes planned
+      - Confirmed no shell commands planned beyond read-only operations
+      - Output will be returned in response text only
+
+  RUN_ONLY:
+    purpose: Execute runs without applying fixes
+    can_write: reports_only
+    can_execute: true
+    description: >
+      Execute collection scripts and test runs. Write reports and logs only.
+      Never modify source files, configs, or framework definitions.
+    allowed:
+      - Run test execution scripts and CLI commands
+      - Write run reports, summaries, and logs
+      - Generate evidence artifacts (screenshots, captures)
+      - Read testcase configuration and inputs
+    forbidden:
+      - Modify testcase files (locator maps, identities, configs)
+      - Change source code or runner logic
+      - Fix issues or apply patches
+      - Rerun tests to attempt self-healing
+    use_when:
+      - Parallel test runs across environments
+      - Re-verification runs after developer fixes
+      - Regression testing
+      - Evidence collection runs
+    preflight_checklist:
+      - Confirmed execution targets are read from manifest or project config
+      - Confirmed only reports and logs will be written
+      - Confirmed no source file modifications planned
+
+  REVIEW_ONLY:
+    purpose: Analyze existing outputs
+    can_write: analysis_only
+    can_execute: false
+    description: >
+      Read and analyze existing output artifacts. Write analysis artifacts
+      (summaries, diffs, comparisons) only. No execution of external commands.
+    allowed:
+      - Read all evidence, exports, payloads, and existing artifacts
+      - Write analysis reports, summaries, and comparison documents
+      - Copy raw artifacts verbatim into bundles
+      - Build developer handoff packages from existing data
+    forbidden:
+      - Run tests or execute external commands
+      - Modify source files, configs, or testcase definitions
+      - Rewrite evidence or raw artifacts (copy only)
+      - Execute shell commands beyond file reads
+    use_when:
+      - Payload analysis and deep comparison
+      - Anomaly indexing across runs
+      - Developer packet generation
+      - Bundle compilation from existing evidence
+    preflight_checklist:
+      - Confirmed working from existing output artifacts
+      - Confirmed only analysis artifacts will be written
+      - Confirmed no external commands will be executed
+
+  PATCH_ALLOWED:
+    purpose: Apply minimal targeted changes
+    can_write: scoped
+    can_execute: true
+    description: >
+      Make minimal, scoped changes with explicit justification per change.
+      Every write must cite the finding it addresses.
+      No refactors, no drive-by fixes.
+    allowed:
+      - Edit files directly related to the current task
+      - Update configurations, locator maps, identities
+      - Apply targeted fixes with clear justification
+      - Execute validation after changes
+    forbidden:
+      - Large refactors or restructuring
+      - Unrelated drive-by improvements
+      - Style-only changes
+      - Writing client-specific data into framework files
+      - Changes without cited justification
+    constraints:
+      - Each change must have a clear justification citing a finding or requirement
+      - Changes must be minimal and scoped to the identified issue
+      - Prefer additive changes over destructive ones
+      - Confirm with user before removing content
+    use_when:
+      - Implementing targeted fixes
+      - Updating expectations based on verified changes
+      - Intake scaffolding for new testcases
+      - Framework improvement based on execution feedback
+    preflight_checklist:
+      - Each planned change has a cited justification
+      - Changes are minimal and scoped to the task
+      - No client data will be written to framework files
+
+  COORDINATOR:
+    purpose: Orchestrate delegated work
+    can_write: delegated
+    can_execute: delegated
+    description: >
+      Orchestrate sub-workflows by delegating to subagents. The coordinator
+      itself does not write files or execute commands directly. It delegates
+      and validates.
+    allowed:
+      - Delegate to other prompts, skills, or subagents
+      - Synthesize and validate sub-results
+      - Make gate decisions based on subagent outputs
+      - Report aggregated results
+    forbidden:
+      - Direct file writes (must be delegated)
+      - Direct command execution (must be delegated)
+      - Recursive subagent spawning from subagents
+    constraints:
+      - Each delegated step must have a declared mode
+      - Subagent roles and modes must be identified upfront
+      - Bounded concurrency (max 11 concurrent subagents)
+      - Disjoint write scopes across parallel subagents
+    use_when:
+      - Multi-phase workflow orchestration
+      - Parallel validation across multiple targets
+      - Pipeline stage execution
+      - Multi-environment test coordination
+    preflight_checklist:
+      - Subagent roles and modes identified
+      - Each delegated step has a declared mode
+      - Coordinator will not write files directly
+
+  REPO_HYGIENE:
+    purpose: Navigation and cleanup only
+    can_write: docs_cleanup
+    can_execute: false
+    description: >
+      Update documentation, navigation files, and indexes only.
+      No source code, config, or framework definition changes.
+    allowed:
+      - Move files and create archives
+      - Leave deprecation stubs at old paths
+      - Update references to canonical paths
+      - Create or update documentation files and indexes
+    forbidden:
+      - Modify source code or runner logic
+      - Change test execution code
+      - Alter evidence artifacts
+      - Modify framework definitions or configs
+    use_when:
+      - Navigation cleanup and file reorganization
+      - Deprecation passes
+      - Documentation updates
+      - Index regeneration
+    preflight_checklist:
+      - Only documentation, navigation, and index files will be touched
+      - No source code, configs, or framework definitions will change
+
+# ─── Laws ────────────────────────────────────────────────────────────────────
+
+laws:
+  - id: single_mode_declaration
+    text: >
+      Every contract-bearing skill must declare exactly one primary
+      execution mode. Mixed-mode behavior is not permitted.
+
+  - id: no_silent_widening
+    text: >
+      Framework-local surfaces may narrow mode semantics (add restrictions)
+      but must not silently widen them (remove restrictions).
+
+  - id: runtime_final_authority
+    text: >
+      Runtime invariants remain the final enforcement source. Contract
+      declarations inform but do not override code-level enforcement.
+
+  - id: violation_is_critical
+    text: >
+      Violation of a declared mode is a critical failure. If uncertain
+      whether an action is permitted by the current mode, stop and ask.
+
+  - id: mode_from_plan
+    text: >
+      The active mode is determined by the skill contract, command spec,
+      or orchestrator delegation, not inferred at runtime.
+
+  - id: terms_require_definitions
+    text: >
+      Execution mode gates and routing decisions that reference governance
+      terms (acceptance-grade, trusted, completion, operator, slow-lane,
+      local-first-eligible, repair, blocked, independently-reviewed) must
+      use the machine-checkable definitions from system.yaml
+      governance_definitions. Undefined terms may not gate behavior.
+
+  - id: adapter_contract_compliance
+    text: >
+      Provider-specific adapters may narrow execution mode semantics
+      (add restrictions) but must not silently widen them (remove
+      restrictions). The unified control plane enforces shared routing,
+      validation, evidence, and trust-tier contracts across all adapters.
+
+  - id: repair_actions_are_mode_bound
+    text: >
+      Repair actions (reopen, supersede, retract, correct, repair-note)
+      are permitted only in PATCH_ALLOWED or COORDINATOR modes. Repair
+      actions in FINDINGS_ONLY, RUN_ONLY, REVIEW_ONLY, or REPO_HYGIENE
+      modes are violations. The repair action itself must cite evidence
+      per the repair-semantics reference law.

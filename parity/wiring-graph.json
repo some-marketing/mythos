@@ -16025,7 +16025,7 @@
       "id": "file:tools/parity/__tests__/verify-parity.test.cjs",
       "type": "file",
       "path": "tools/parity/__tests__/verify-parity.test.cjs",
-      "sha256": "ad8edb29b5ce6090f607dc07f1e881ad56102ce362177527dc664a8219d79139",
+      "sha256": "0aa06b0b3de14d494ba55bb5779d57371925b2916418e78f4ac220ededdbf1cb",
       "mode": 420
     },
     {
@@ -16095,7 +16095,7 @@
       "id": "file:tools/parity/verify-parity.cjs",
       "type": "file",
       "path": "tools/parity/verify-parity.cjs",
-      "sha256": "db1c10a521122ca70fad22825345658174f8fd41938ff08a3ead33856663a941",
+      "sha256": "ff8c6b3d9d3e75f1c28a9f964c88673b0e5a2f11d4671c1311c4c44b144ca317",
       "mode": 420
     },
     {
@@ -40902,6 +40902,15 @@
       "specifier": "./lib/dart-api.js"
     },
     {
+      "id": "b033b79b13ba3c90949e9e0f92d5699e4026873122106bafc53f72682837855a",
+      "type": "static-import",
+      "from": "file:tools/parity/verify-parity.cjs",
+      "to": "file:tools/parity/private-memory-policy.cjs",
+      "target": "tools/parity/private-memory-policy.cjs",
+      "required": true,
+      "specifier": "./private-memory-policy.cjs"
+    },
+    {
       "id": "b045deb8e80e726ee5df814e4273e01fb86270ee904e679e618c22097c9ea12f",
       "type": "package-script-target",
       "from": "package-script:verify:all",
@@ -48751,7 +48760,7 @@
   ],
   "counts": {
     "nodes": 3749,
-    "edges": 2676,
+    "edges": 2677,
     "unresolved": 0
   }
 }

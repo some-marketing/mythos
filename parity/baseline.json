@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "cf15ca9a538f392f10ca2e79e88be2fcfdd17e14ac7188b954145b108c721230",
+    "expected_tree_sha256": "1913c373d50f7d035d8371829c3d3925ab7fb603b858c9d6929db3a720f40efa",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -6037,7 +6037,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "3deb7a764b023b7c814c5a5e90e16321d8c2ab07d27ec42f6c2fc7044caf3b51",
+        "sha256": "929b4568d0ae494340e3776224b89e99ad6d26c64223131986815cc17ea531cb",
         "mode": 420
       },
       {
@@ -10542,7 +10542,7 @@
       },
       {
         "path": "tools/parity/__tests__/verify-parity.test.cjs",
-        "sha256": "ad8edb29b5ce6090f607dc07f1e881ad56102ce362177527dc664a8219d79139",
+        "sha256": "0aa06b0b3de14d494ba55bb5779d57371925b2916418e78f4ac220ededdbf1cb",
         "mode": 420
       },
       {
@@ -10592,7 +10592,7 @@
       },
       {
         "path": "tools/parity/verify-parity.cjs",
-        "sha256": "db1c10a521122ca70fad22825345658174f8fd41938ff08a3ead33856663a941",
+        "sha256": "ff8c6b3d9d3e75f1c28a9f964c88673b0e5a2f11d4671c1311c4c44b144ca317",
         "mode": 420
       },
       {
@@ -13444,13 +13444,16 @@
     "package_script_count": 203,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "3deb7a764b023b7c814c5a5e90e16321d8c2ab07d27ec42f6c2fc7044caf3b51",
+    "graph_sha256": "929b4568d0ae494340e3776224b89e99ad6d26c64223131986815cc17ea531cb",
     "graph_nodes": 3749,
-    "graph_edges": 2676
+    "graph_edges": 2677
   },
   "runtime_exclusions": [
     ".git/**",
     "node_modules/**",
+    "Mythos-memories/**",
+    "sm_os-memories/**",
+    "_dev/desktop/work/personal/**",
     ".env",
     ".env.*.local",
     "_dev/archive/**",
@@ -13467,8 +13470,6 @@
     "_dev/tmp/**",
     "_dev/traces/**",
     "_dev/transcripts/**",
-    "Mythos-memories/**",
-    "sm_os-memories/**",
     "parity/reconciliation-ledger.json"
   ],
   "prohibited_paths": [

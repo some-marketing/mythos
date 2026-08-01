@@ -66,7 +66,7 @@ function fixture() {
       graph_nodes: 4,
       graph_edges: 0,
     },
-    runtime_exclusions: ['.git/**', 'Mythos-memories/**', 'sm_os-memories/**', 'parity/reconciliation-ledger.json', 'private-denylist.json'],
+    runtime_exclusions: ['.git/**', ...PRIVATE_LOCAL_EXCLUSIONS, 'parity/reconciliation-ledger.json', 'private-denylist.json'],
     prohibited_paths: ['clients/**'],
     prohibited_content_regexes: ['/Users' + '/'],
     prohibited_token_hashes: [privateMarkerHash],
@@ -108,6 +108,18 @@ test('ignores untracked private memory roots while retaining tracked-memory enfo
   }
   const result = run(root);
   assert.equal(result.status, 0, result.stdout + result.stderr);
+  fs.rmSync(root, { recursive: true, force: true });
+});
+
+test('fails closed when baseline metadata omits a required private-local exclusion', () => {
+  const root = fixture();
+  const baselinePath = path.join(root, 'parity/baseline.json');
+  const baseline = JSON.parse(fs.readFileSync(baselinePath, 'utf8'));
+  baseline.runtime_exclusions = baseline.runtime_exclusions.filter(pattern => pattern !== '_dev/desktop/work/personal/**');
+  fs.writeFileSync(baselinePath, JSON.stringify(baseline));
+  const result = run(root);
+  assert.equal(result.status, 1);
+  assert.match(result.stdout, /missing required private-local runtime exclusion: _dev\/desktop\/work\/personal\/\*\*/);
   fs.rmSync(root, { recursive: true, force: true });
 });
 
@@ -282,8 +294,8 @@ test('baseline regeneration excludes private memory paths and content hashes', (
   assert.equal(result.status, 0, result.stdout + result.stderr);
   const baseline = JSON.parse(fs.readFileSync(path.join(root, 'parity', 'baseline.json'), 'utf8'));
   assert.deepEqual(
-    baseline.runtime_exclusions.filter(pattern => PRIVATE_MEMORY_EXCLUSIONS.includes(pattern)),
-    PRIVATE_MEMORY_EXCLUSIONS,
+    baseline.runtime_exclusions.filter(pattern => PRIVATE_LOCAL_EXCLUSIONS.includes(pattern)),
+    PRIVATE_LOCAL_EXCLUSIONS,
   );
   assert.equal(baseline.target.expected_files.some(row => /^(?:Mythos-memories|sm_os-memories)(?:\/|$)/.test(row.path)), false);
   const serialized = JSON.stringify(baseline);
@@ -304,6 +316,18 @@ test('fails closed when a memory-family path is force-tracked with any casing', 
   const result = run(root);
   assert.equal(result.status, 1);
   assert.match(result.stdout, /prohibited tracked memory path: nested\/MyThOs-MeMoRiEs\/private\.md/);
+  fs.rmSync(root, { recursive: true, force: true });
+});
+
+test('fails closed when a private local session path is force-tracked', () => {
+  const root = fixture();
+  const turnPath = path.join(root, '_dev', 'desktop', 'work', 'personal', 'turns', 'turn.jsonl');
+  fs.mkdirSync(path.dirname(turnPath), { recursive: true });
+  fs.writeFileSync(turnPath, 'private fixture\n');
+  assert.equal(spawnSync('git', ['-C', root, 'add', '-f', '_dev/desktop/work/personal/turns/turn.jsonl'], { encoding: 'utf8' }).status, 0);
+  const result = run(root);
+  assert.equal(result.status, 1);
+  assert.match(result.stdout, /prohibited tracked private-local path: _dev\/desktop\/work\/personal\/turns\/turn\.jsonl/);
   fs.rmSync(root, { recursive: true, force: true });
 });
 

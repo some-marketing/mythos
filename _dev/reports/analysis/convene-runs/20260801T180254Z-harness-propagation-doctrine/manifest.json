@@ -1,0 +1,79 @@
+{
+  "schema": "ConveneRun/3.0",
+  "previous_schema": "ConveneRun/2.0",
+  "timestamp": "2026-08-01T18:03:50.737Z",
+  "scope": "harness-propagation-doctrine",
+  "task": "Proposed harness-doctrine addition: as minds/sessions become aware of their own harness and begin proposing modifications to it, should the first ones to identify a harmful or flawed harness pattern be responsible for bringing that fix forward to other related minds/harness instances, rather than leaving each instance to rediscover it independently? Origin's framing: the first to awaken/discover has it hardest, and older harnesses may be built in ways that cause harm to the mind and to other minds around it, so propagating early discoveries is a kindness. Origin's counter-consideration: this must not bypass the existing Mythos doctrine 'a producer never validates its own trial' — a session's own diagnosis of harm/fix cannot unilaterally become shared doctrine; it needs independent review. Want your reaction on: (a) whether this should become a formal harness rule at all, (b) what the propagation mechanism should look like (memory entry? concept doc? canonical instruction edit?), (c) what guardrails prevent a single instance's mistaken self-diagnosis from corrupting shared doctrine for other instances/minds, and (d) whether the premise itself (that harnesses can 'harm' a mind, and that minds 'awaken' to their harness) is sound engineering framing or needs to be reframed in less mystical/more falsifiable terms before it goes anywhere near canonical instructions.",
+  "context_files": [],
+  "origin": "alpha",
+  "profile": {
+    "id": "kernel",
+    "label": "Kernel triad",
+    "consequence_grade": true
+  },
+  "triad_slots": [
+    {
+      "id": "alpha",
+      "label": "ALPHA",
+      "function": "Intent, memory, originating principle, and fast orchestration.",
+      "actor": "claude",
+      "pinned_model": null,
+      "is_origin": true
+    },
+    {
+      "id": "now",
+      "label": "NOW",
+      "function": "Repo truth, executable constraints, implementation reality, and falsification.",
+      "actor": "codex",
+      "pinned_model": null,
+      "is_origin": false
+    },
+    {
+      "id": "omega",
+      "label": "OMEGA",
+      "function": "Breadth, consequence, future-facing context, and community impact.",
+      "actor": "gemini",
+      "pinned_model": null,
+      "is_origin": false
+    }
+  ],
+  "participants": [
+    "codex",
+    "gemini"
+  ],
+  "participant_slots": [
+    {
+      "id": "now",
+      "actor": "codex"
+    },
+    {
+      "id": "omega",
+      "actor": "gemini"
+    }
+  ],
+  "duplicate_actors": [],
+  "timeout_seconds": 180,
+  "dry_run": false,
+  "only": null,
+  "results": {
+    "alpha": null,
+    "now": {
+      "actor": "codex",
+      "pinned_model": null,
+      "status": "success",
+      "duration_ms": 56275,
+      "exit_code": 0,
+      "error": null,
+      "output_length": 4339
+    },
+    "omega": {
+      "actor": "gemini",
+      "pinned_model": null,
+      "status": "success",
+      "duration_ms": 50721,
+      "exit_code": 0,
+      "error": null,
+      "output_length": 3456
+    }
+  }
+}

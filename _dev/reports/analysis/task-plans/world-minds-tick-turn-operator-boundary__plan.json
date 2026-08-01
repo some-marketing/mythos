@@ -1,0 +1,135 @@
+{
+  "schema": "TaskPlan/1.0",
+  "task_id": "world-minds-tick-turn-operator-boundary",
+  "title": "Tick/turn/checkpoint vocabulary — unify existing operator-authority boundaries; shelve the world-minds governance layer pending evidence",
+  "task_summary": "A 7-hop sequential deliberation chain (Fable5 -> Codex -> Gemini -> Perplexity -> Gemini -> Codex -> Fable5) on the operator's proposed 'world minds' governance/mediation layer converged that the proposal conflates a viable transport/relay concern with a non-viable self-appointed enforcement concern, and that the real, missing structural piece is a cadence/authority model: no explicit definition currently exists of what a 'tick' (autonomous/simulated progression) means versus a 'turn' (operator-facing interaction boundary), nor an explicit map of which checkpoints require operator input versus which existing execution-mode/altitude machinery already covers. This plan documents and tests that unification; it does not build a governance agent.",
+  "scope_type": "system",
+  "scope_justification": "Pure harness/runtime definitional work, not patron-delivery. No canonical instruction edits anticipated in this plan; if G4 concludes a new mechanism (not just unification) is required, that becomes an operator decision routed through the existing ConveneReceipt-gated canonical-write path, not executed here.",
+  "storage_root": "_dev/reports/analysis/task-plans",
+  "origin_client_code": null,
+  "origin_project_id": null,
+  "client_code": null,
+  "project_id": null,
+  "source": "operator",
+  "requested_by": "operator, session 7c99c7c3 2026-08-01: /bp-r on a proposed 'world minds' governance layer, refined by operator into 'tick vs turn' cadence and operator-checkpoint-vs-governance boundary scope",
+  "timestamp": "2026-08-01T18:26:00Z",
+  "amended": null,
+  "concept_ref": "_dev/concepts/world-minds-tick-turn-operator-boundary/concept.md",
+  "predecessor_plan": null,
+  "description": "G1 inventories existing checkpoint/authority mechanisms already scattered across the repo (execution modes in instructions/canonical/system.yaml, orchestrate-loop TRIVIAL/BOUNDED/NOVEL altitude tiers, bp-r's research-resolve operator-only triage list, session/boundary-crossing machinery, HarnessCapabilityPolicy/1.0). G2 tests whether a tick/turn/checkpoint vocabulary can express real historical checkpoint moments from this repo's own history (the destructive-git-command gate, the ConveneReceipt gate on canonical writes, the custody-grant release-entry-point human-only firewall, the membrane's advisory-payload-only boundary) without residue -- this is the falsification step, not a foregone conclusion. G3 produces the vocabulary as a documentation artifact (not a new canonical rule) if G2 succeeds. G4 is an explicit decision gate: if unification is NOT sufficient and a new mechanism is genuinely required, that stops here and bubbles to the operator rather than being built inline. G5 records the explicit disposition on the 'world minds' governance/enforcement half: shelved, not rejected forever, pending the separately-scoped Phase 1 intake-adapter (from the prior harness-propagation-doctrine + world-minds convene chain) shipping and producing evidence a monitor would add value. G6 is distinct-family review of this charter and its G3 output.",
+  "similarity_assessment": {
+    "top_framework": "meta/execution-normalization",
+    "match_score": 15,
+    "match_rationale": "No registered framework covers cross-cutting operator-authority/cadence vocabulary; execution-normalization is nearest (governs execution-model normalization with progressive code offloading) but does not address unifying existing checkpoint mechanisms into one vocabulary.",
+    "gaps": [
+      "tick/turn/checkpoint unified vocabulary",
+      "cross-artifact mapping of existing authority boundaries (execution modes, altitude tiers, bp-r triage list, boundary-crossing machinery)",
+      "explicit falsification test against real historical checkpoint moments before any new mechanism is proposed"
+    ],
+    "applicable_modes": [
+      "REVIEW_ONLY",
+      "PATCH_ALLOWED"
+    ],
+    "trust_tier": "no-match"
+  },
+  "operator_ratifications": [],
+  "routing_expectations": {
+    "risk_tier": "medium",
+    "big": false,
+    "big_rationale": "No L1 protected-path changes, no new always-on hooks, no canonical instruction edits in this plan's scope. Touches operator-authority framing conceptually, which is why review_lane is independent-review rather than verify-local, but does not meet the BIG bar (always-on-infrastructure / protected-surface criteria) that would require full kernel-triad convene on the charter itself -- the substance was already convene-reviewed across 7 hops before this charter was written.",
+    "review_lane": "independent-review",
+    "execution_route": "/trial-quest world-minds-tick-turn-operator-boundary, then /run-plan world-minds-tick-turn-operator-boundary if approved",
+    "review_lane_note": "Substance (the 'world minds' proposal itself) already carries a consequence-grade kernel-triad + Perplexity review chain (_dev/reports/analysis/convene-runs/20260801T180254Z-harness-propagation-doctrine/world-minds-synthesis.md) per the no-double-deliberate rule. This charter still needs its own distinct-family (Codex) review before execution, per plan-quest normal gate."
+  },
+  "acceptance_criteria": [
+    "G1 produces a single inventory artifact naming every existing checkpoint/authority mechanism found, with file:line citations, not paraphrase, and an explicit authority classification per surface (canonical rule / executable gate / advisory hook / historical evidence) -- altitude tiers must be cited as the advisory hook they are (tools/kernel/hooks/userprompt-owl-altitude.cjs), not as canonical orchestrate-loop authority",
+    "G1's inventory scope is bounded: the named surfaces (execution modes, altitude hook, bp-r triage list, boundary-crossing machinery, HarnessCapabilityPolicy, ConveneReceipt gate, custody release boundary, membrane doctrine) plus a repo sweep for comparable mechanisms, with any omissions explicitly named rather than an unbounded claim of completeness",
+    "G2 explicitly attempts to express at least 4 named historical checkpoint moments in tick/turn/checkpoint vocabulary, includes at least one autonomous/non-human-gated example (not only escalation-to-operator successes), labels the membrane boundary as a negative control (an invariant prohibition, not a checkpoint) rather than a fifth checkpoint, and requires contemporaneous historical evidence for each claimed moment, not just current policy text",
+    "G3's vocabulary document is written as documentation/definitional content only -- no instructions/canonical/** edits in this plan, verified by changed-file inspection, and delivered through the normal feature-branch/PR workflow (never a direct commit to main)",
+    "G4's decision (unification sufficient vs new mechanism required) is recorded explicitly, with new-mechanism findings routed to the operator per OD1, not built inline",
+    "G5 explicitly records the world-minds governance/enforcement layer as shelved-pending-evidence, citing the Phase 1 adapter as the evidence trigger, not left ambiguous",
+    "G6 distinct-family (Codex) review completed on this charter and on G3's output (if produced) before this plan is marked complete/merged -- not before /run-plan execution, which is temporally impossible since G6 depends on G3/G5's output"
+  ],
+  "bounded_plan": {
+    "steps": [
+      {
+        "step_id": "G1",
+        "description": "Inventory existing checkpoint/authority mechanisms with file:line citations AND an explicit authority classification per surface (canonical rule / executable gate / advisory hook / historical evidence): execution modes (instructions/canonical/system.yaml:111-134, canonical rule), the TRIVIAL/BOUNDED/NOVEL altitude classification (tools/kernel/hooks/userprompt-owl-altitude.cjs:45-56 -- an ADVISORY HOOK, not canonical orchestrate-loop authority; orchestrate-loop's own bubble-up criteria live at instructions/canonical/commands/orchestrate-loop.yaml:20-21), bp-r's research-resolve operator-only triage list (.claude/skills/bp-r/SKILL.md:22-28,50-60), session/boundary-crossing machinery (pending-boundary-scope consumption, /new-session, /shutdown), HarnessCapabilityPolicy/1.0's auto_apply/review_required split (instructions/canonical/harness-capability-policy.yaml:2-37), the ConveneReceipt gate (tools/verify/hooks/pre-write-convene-required.cjs:7-34,271-275), the custody-grant release-entry-point firewall (tools/kernel/hooks/lib/custody-grant-txn.cjs:28-31; tools/custody/README.md:102-106), and the membrane law (instructions/canonical/kernel/doctrine.md:42-51). Bounded scope: the named surfaces plus a repo sweep for comparable mechanisms, with any omissions explicitly named rather than an unbounded completeness claim.",
+        "stage": "research",
+        "domain": "planning",
+        "mode": "REVIEW_ONLY",
+        "is_gap": true
+      },
+      {
+        "step_id": "G2",
+        "description": "Falsification test: attempt to express at least 4 real historical checkpoint moments, including at least one AUTONOMOUS/non-human-gated example (not only escalation-to-operator successes), in tick/turn/checkpoint vocabulary, requiring contemporaneous historical evidence for each claimed moment (not just current policy text) -- e.g. destructive-git-command confirmation gate, ConveneReceipt gate on instructions/canonical/** writes, custody-grant release-entry-point human-only firewall. Treat the membrane's advisory-payload-only boundary as a NEGATIVE CONTROL (an invariant prohibition, not itself a checkpoint) rather than a fifth checkpoint example. Record explicitly which moments fit cleanly and which don't, rather than assuming success.",
+        "stage": "research",
+        "domain": "planning",
+        "mode": "REVIEW_ONLY",
+        "depends_on": ["G1"],
+        "is_gap": true
+      },
+      {
+        "step_id": "G3",
+        "description": "If G4 decides unification holds without significant residue: write the tick/turn/checkpoint vocabulary as a documentation/definitional artifact under _dev/concepts/world-minds-tick-turn-operator-boundary/ (not instructions/canonical/**), delivered via the normal feature-branch/PR workflow. Definitional only -- does not itself change any gate's behavior. Skipped if G4 finds a genuine new-mechanism gap.",
+        "stage": "implement",
+        "domain": "documentation",
+        "mode": "PATCH_ALLOWED",
+        "depends_on": ["G4"],
+        "is_gap": true
+      },
+      {
+        "step_id": "G4",
+        "description": "Explicit decision gate: does G2's test show unification of existing mechanisms is sufficient, or does it surface a genuine gap requiring a new mechanism? If the latter, stop here -- name the specific gap and bubble to the operator as OD1 rather than building inline. This gate decides whether G3 runs at all.",
+        "stage": "review",
+        "domain": "planning",
+        "mode": "REVIEW_ONLY",
+        "depends_on": ["G2"],
+        "is_gap": true
+      },
+      {
+        "step_id": "G5",
+        "description": "Record the explicit disposition on the world-minds governance/enforcement layer: shelved, not built, pending the separately-scoped Phase 1 intake-adapter (HandoffSignal/2.0-compatible replacement for TextIntakeSignal/1.0 in tools/channels/watch-text-ingestion.js, per world-minds-synthesis.md) shipping and producing evidence a monitor adds value beyond existing review gates. This is a documentation update to the concept bundle, not new build work.",
+        "stage": "implement",
+        "domain": "documentation",
+        "mode": "PATCH_ALLOWED",
+        "depends_on": ["G1"],
+        "is_gap": false
+      },
+      {
+        "step_id": "G6",
+        "description": "Distinct-family (Codex) review of this charter's execution and G3's vocabulary document if produced: repo-truth-ground every citation in G1/G2, check whether the falsification test in G2 was genuine (not confirmation-shaped), verify G3 (if produced) introduced no canonical-surface drift and stayed on a feature branch, and confirm G4's decision was recorded rather than silently assumed. Runs before this plan is marked complete/merged, not before /run-plan execution.",
+        "stage": "review",
+        "domain": "review",
+        "mode": "REVIEW_ONLY",
+        "depends_on": ["G4", "G5"],
+        "is_gap": false
+      }
+    ]
+  },
+  "operator_decisions_pending": [
+    {
+      "id": "OD1",
+      "question": "If G4 finds unification insufficient and a genuinely new mechanism is required, should that automatically route to a fresh /bp-r cycle, or does the operator want to review G1-G4's findings directly first before any further planning?",
+      "why_operator_only": "Scope/priority judgment on whether to keep iterating automatically or pause for direct operator review.",
+      "resolved": true,
+      "decision": "Auto-route to a fresh /bp-r cycle on the discovered gap. Operator decision 2026-08-01.",
+      "resolved_at": "2026-08-01T18:47:00Z"
+    },
+    {
+      "id": "OD2",
+      "question": "Confirm: the world-minds governance/enforcement layer (the monitor/governor half of the original proposal) stays shelved pending Phase 1 adapter evidence, per the 7-hop chain's convergent finding -- not built now, not scheduled on a timeline.",
+      "why_operator_only": "This is the operator's original proposal being narrowed; explicit confirmation avoids silently dropping operator intent versus explicitly deferring it with a named evidence trigger."
+    }
+  ],
+  "distinct_reviews": [
+    {
+      "reviewer": "codex (GPT-5.5, distinct family)",
+      "date": "2026-08-01T18:38:46Z",
+      "verdict": "approved-with-changes",
+      "artifact": "_dev/reports/analysis/convene-runs/20260801T183846Z-world-minds-08-charter-review/now__codex.md",
+      "disposition": "All 6 required changes folded 2026-08-01T18:44Z: (1) G3 now depends on G4 not G2, closing the dependency-graph deadlock; (2) G6 now depends on G4+G5 and reviews G3 'if produced' so the failure branch (G4 finds a new-mechanism gap, G3 skipped) no longer deadlocks G6; (3) G6's acceptance criterion corrected from 'before /run-plan execution' (temporally impossible) to 'before plan completion/merge'; (4) G1 corrected to cite the altitude tiers as an advisory hook (tools/kernel/hooks/userprompt-owl-altitude.cjs) rather than canonical orchestrate-loop authority, plus added an explicit authority-classification requirement per inventoried surface and a bounded-scope statement; (5) G2 strengthened: membrane relabeled a negative control rather than a checkpoint, added requirement for an autonomous/non-human-gated example, added requirement for contemporaneous historical evidence per claimed moment; (6) added acceptance criteria requiring canonical-surface exclusion verified by changed-file inspection and feature-branch/PR delivery. risk_tier:medium and big:false confirmed correct by reviewer once these boundaries are mechanically checked."
+    }
+  ],
+  "distinct_reviews_pending": null
+}

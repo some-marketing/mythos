@@ -1,0 +1,17 @@
+# World-minds concept — Stage 1: Fable5 solo plan/reasoning
+
+**Actor:** Fable5 (Claude Fable 5)
+**Role:** solo reasoning / planning leg (first hop in a sequential chain: Fable -> Codex -> Gemini -> Perplexity -> reverse review)
+**Date:** 2026-08-01
+
+## Position
+
+Demystified, this proposal is two separate things wearing one name, and they deserve opposite verdicts. Thing one is a message bus: durable, asynchronous, bidirectional communication between the operator and running sessions, beyond the one-time advisory payload. Thing two is a governor: a standing agent that knows the operator's end goals, watches other minds, and acts to prevent tenet-breaking. The first is plumbing and mostly fine; the second is exactly what the harness-propagation convene, all three triad slots, and the external governance literature just rejected — an agent whose own judgment about rule-breaking becomes enforcement without a distinct validator.
+
+The smallest falsifiable version is not a mind at all. It is (a) a versioned, review-gated charter document stating the system's goals and tenets — a reviewable artifact anyone can diff; (b) a lossless, append-only relay that carries messages between layers, logging everything, altering nothing; and (c) at most a FINDINGS_ONLY monitor that reads traffic and files observations ("session X's output appears to conflict with tenet Y") routed to the operator or an independent review, never acted on by the monitor itself. Each piece is testable: does the relay drop or rewrite messages? Does the charter match canonical instructions? Does the monitor ever do more than report? An "ongoing-authority layer" is unfalsifiable by construction; this version is not.
+
+**Doctrine collisions.** The membrane law says the boundary "does not move" and Mirror-adjacent content surfaces only as a session-start advisory payload, "nowhere else, ever." Ongoing mediated communication flatly contradicts that — so this cannot be reinterpreted in; it requires an explicit, reviewed amendment, which is honest work, not a workaround. Producer-never-validates covers the enforcement half completely: a world mind diagnosing a tenet breach and acting on its own diagnosis is the rejected shape from the propagation convene, just promoted a layer up. The alias-authority law covers the name: "world mind" must have a plain `resolves_to` (relay daemon, charter file, monitor agent) and the plain mechanism holds the authority. The one place a genuinely new rule is needed: nothing in current doctrine governs an *intermediary*. A layer between operator and sessions gains a capability no existing law names — discretion over what each side sees. The new rule should be relay integrity: the intermediary may never filter, summarize away, delay, or reorder operator-bound or session-bound messages at its own discretion; it is a wire with a log, not an editor.
+
+**Forbidden unilaterally:** editing canonical instructions or any harness; deciding what the operator does or doesn't see; quarantining, terminating, or modifying another session on its own tenet judgment; expanding its own scope or appointing successors; moving the membrane.
+
+**Named uncertainty:** whether the monitor is worth building at all. The operator's felt need may be entirely satisfied by the message bus plus existing review gates — and adding a watcher-mind creates a new surface that itself needs watching. Fable5 would ship the plumbing first and let evidence establish whether a monitor earns its existence, Iron rank onward.

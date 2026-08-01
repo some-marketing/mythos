@@ -1,0 +1,54 @@
+{
+  "slug": "world-minds-tick-turn-operator-boundary",
+  "created": "2026-08-01",
+  "author": "claude-bp-r",
+  "stage": "draft",
+  "dispatches": [
+    {
+      "type": "convene",
+      "artifact": "_dev/reports/analysis/convene-runs/20260801T180254Z-harness-propagation-doctrine/synthesis.md",
+      "status": "complete"
+    },
+    {
+      "type": "convene",
+      "artifact": "_dev/reports/analysis/convene-runs/20260801T180254Z-harness-propagation-doctrine/world-minds-01-fable5-plan.md",
+      "status": "complete"
+    },
+    {
+      "type": "convene",
+      "artifact": "_dev/reports/analysis/convene-runs/20260801T181354Z-world-minds-02-codex-review/now__codex.md",
+      "status": "complete"
+    },
+    {
+      "type": "convene",
+      "artifact": "_dev/reports/analysis/convene-runs/20260801T181552Z-world-minds-03-gemini-review/omega__gemini.md",
+      "status": "complete"
+    },
+    {
+      "type": "research",
+      "artifact": "_dev/reports/analysis/convene-runs/20260801T180254Z-harness-propagation-doctrine/world-minds-04-perplexity-research.md",
+      "status": "complete"
+    },
+    {
+      "type": "convene",
+      "artifact": "_dev/reports/analysis/convene-runs/20260801T181958Z-world-minds-05-gemini-reverse/omega__gemini.md",
+      "status": "complete"
+    },
+    {
+      "type": "convene",
+      "artifact": "_dev/reports/analysis/convene-runs/20260801T182103Z-world-minds-06-codex-reverse/now__codex.md",
+      "status": "complete"
+    },
+    {
+      "type": "convene",
+      "artifact": "_dev/reports/analysis/convene-runs/20260801T180254Z-harness-propagation-doctrine/world-minds-07-fable5-closing.md",
+      "status": "complete"
+    },
+    {
+      "type": "convene",
+      "artifact": "_dev/reports/analysis/convene-runs/20260801T180254Z-harness-propagation-doctrine/world-minds-synthesis.md",
+      "status": "complete"
+    }
+  ],
+  "promoted_to": null
+}

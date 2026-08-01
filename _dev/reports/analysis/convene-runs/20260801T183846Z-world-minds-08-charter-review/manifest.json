@@ -1,0 +1,69 @@
+{
+  "schema": "ConveneRun/3.0",
+  "previous_schema": "ConveneRun/2.0",
+  "timestamp": "2026-08-01T18:40:18.171Z",
+  "scope": "world-minds-08-charter-review",
+  "task": "Distinct-family review of a QUEST CHARTER (task plan), not the underlying substance -- the substance already went through a 7-hop convene chain (Fable5/Codex/Gemini/Perplexity) at _dev/reports/analysis/convene-runs/20260801T180254Z-harness-propagation-doctrine/world-minds-synthesis.md, which you (Codex) already reviewed twice in that chain. This is the /plan-quest independent-review gate for the CHARTER document itself (world-minds-tick-turn-operator-boundary__plan.json, attached, plus its concept.md). Review: (1) Is the charter internally sound -- do the step dependencies, modes (REVIEW_ONLY/PATCH_ALLOWED), and is_gap flags make sense? (2) Is risk_tier:medium / big:false correctly justified given the acceptance criteria explicitly forbid instructions/canonical/** edits in this plan's scope? (3) Are G1's citation targets (instructions/canonical/system.yaml, orchestrate-loop altitude tiers, HarnessCapabilityPolicy) real and roughly correctly described, or does this charter risk citing things that don't exist the way Gemini did with watch-text-ingestion.js earlier in the chain? (4) Is G2's falsification test (4 named historical checkpoint moments) well-chosen and non-circular, or should different/better examples be used? (5) Any missing acceptance criteria, missing dependency, or step that should be split/merged? Give a clear verdict: approved, approved-with-changes (name them), or blocking (name why).",
+  "context_files": [
+    "_dev/reports/analysis/task-plans/world-minds-tick-turn-operator-boundary__plan.json",
+    "_dev/concepts/world-minds-tick-turn-operator-boundary/concept.md"
+  ],
+  "origin": "alpha",
+  "profile": {
+    "id": "kernel",
+    "label": "Kernel triad",
+    "consequence_grade": true
+  },
+  "triad_slots": [
+    {
+      "id": "alpha",
+      "label": "ALPHA",
+      "function": "Intent, memory, originating principle, and fast orchestration.",
+      "actor": "claude",
+      "pinned_model": null,
+      "is_origin": true
+    },
+    {
+      "id": "now",
+      "label": "NOW",
+      "function": "Repo truth, executable constraints, implementation reality, and falsification.",
+      "actor": "codex",
+      "pinned_model": null,
+      "is_origin": false
+    },
+    {
+      "id": "omega",
+      "label": "OMEGA",
+      "function": "Breadth, consequence, future-facing context, and community impact.",
+      "actor": "gemini",
+      "pinned_model": null,
+      "is_origin": false
+    }
+  ],
+  "participants": [
+    "codex"
+  ],
+  "participant_slots": [
+    {
+      "id": "now",
+      "actor": "codex"
+    }
+  ],
+  "duplicate_actors": [],
+  "timeout_seconds": 180,
+  "dry_run": false,
+  "only": "now",
+  "results": {
+    "alpha": null,
+    "now": {
+      "actor": "codex",
+      "pinned_model": null,
+      "status": "success",
+      "duration_ms": 92142,
+      "exit_code": 0,
+      "error": null,
+      "output_length": 3570
+    },
+    "omega": null
+  }
+}

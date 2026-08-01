@@ -11,6 +11,7 @@ const { PRIVATE_MEMORY_EXCLUSIONS } = require('../private-memory-policy.cjs');
 
 const verifier = path.join(__dirname, '..', 'verify-parity.cjs');
 const graphBuilder = path.join(__dirname, '..', 'build-wiring-graph.cjs');
+const baselineBuilder = path.join(__dirname, '..', 'build-baseline.cjs');
 
 function fixture() {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-verify-parity-'));
@@ -216,6 +217,68 @@ test('wiring graph excludes linked-worktree control data and private memory', ()
     assert.equal(serialized.includes(sha256(`${marker}\n`)), false);
   }
   fs.rmSync(root, { recursive: true, force: true });
+});
+
+test('baseline regeneration excludes private memory paths and content hashes', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-baseline-target-'));
+  const sourceRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-baseline-source-'));
+  const configRoot = path.join(sourceRoot, 'tools', 'export-public', 'config');
+  fs.mkdirSync(configRoot, { recursive: true });
+  fs.writeFileSync(path.join(configRoot, 'mythos-export-map.json'), JSON.stringify({ frameworks: {}, units: {} }));
+  fs.writeFileSync(path.join(configRoot, 'denylist-mythos.json'), JSON.stringify({
+    client_codes: [], domains: [], identifiers: [], forbidden: [],
+  }));
+  const privateDenylistPath = path.join(sourceRoot, 'private-denylist.json');
+  fs.writeFileSync(privateDenylistPath, JSON.stringify({
+    client_codes: [], domains: [], identifiers: [], forbidden: [],
+  }));
+  assert.equal(spawnSync('git', ['init', sourceRoot], { encoding: 'utf8' }).status, 0);
+  assert.equal(spawnSync('git', ['-C', sourceRoot, 'add', '.'], { encoding: 'utf8' }).status, 0);
+  const commit = spawnSync('git', [
+    '-C', sourceRoot,
+    '-c', 'user.name=Mythos Test',
+    '-c', 'user.email=mythos-test@example.invalid',
+    'commit', '-m', 'fixture',
+  ], { encoding: 'utf8' });
+  assert.equal(commit.status, 0, commit.stdout + commit.stderr);
+  const sourceCommit = spawnSync('git', ['-C', sourceRoot, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).stdout.trim();
+
+  fs.mkdirSync(path.join(root, 'parity'), { recursive: true });
+  fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify({ scripts: {} }));
+  fs.writeFileSync(path.join(root, 'parity', 'wiring-graph.json'), JSON.stringify({
+    counts: { nodes: 0, edges: 0 },
+  }));
+  const privateMarkers = [];
+  for (const rootName of ['Mythos-memories', 'sm_os-memories']) {
+    const marker = `baseline-private-${rootName}-marker`;
+    const memoryPath = path.join(root, rootName, 'memory', 'MEMORY.md');
+    fs.mkdirSync(path.dirname(memoryPath), { recursive: true });
+    fs.writeFileSync(memoryPath, `${marker}\n`);
+    privateMarkers.push(marker);
+  }
+
+  const result = spawnSync(process.execPath, [
+    baselineBuilder,
+    '--root', root,
+    '--source-root', sourceRoot,
+    '--source-commit', sourceCommit,
+    '--target-base-commit', 'fixture-target-base',
+    '--private-denylist', privateDenylistPath,
+  ], { encoding: 'utf8' });
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+  const baseline = JSON.parse(fs.readFileSync(path.join(root, 'parity', 'baseline.json'), 'utf8'));
+  assert.deepEqual(
+    baseline.runtime_exclusions.filter(pattern => PRIVATE_MEMORY_EXCLUSIONS.includes(pattern)),
+    PRIVATE_MEMORY_EXCLUSIONS,
+  );
+  assert.equal(baseline.target.expected_files.some(row => /^(?:Mythos-memories|sm_os-memories)(?:\/|$)/.test(row.path)), false);
+  const serialized = JSON.stringify(baseline);
+  for (const marker of privateMarkers) {
+    assert.equal(serialized.includes(marker), false);
+    assert.equal(serialized.includes(sha256(`${marker}\n`)), false);
+  }
+  fs.rmSync(root, { recursive: true, force: true });
+  fs.rmSync(sourceRoot, { recursive: true, force: true });
 });
 
 test('fails closed when a memory-family path is force-tracked with any casing', () => {

@@ -3,7 +3,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const { fileSha, posix, sha256, walk } = require('./lib.cjs');
+const { fileSha, matches, posix, sha256, walk } = require('./lib.cjs');
+const { PRIVATE_MEMORY_EXCLUSIONS } = require('./private-memory-policy.cjs');
 
 const SURFACES = ['source_export', 'target_base', 'target_current'];
 const ARTIFACT_EXCLUSIONS = Object.freeze([
@@ -50,6 +51,7 @@ function inventory(root, exclusions) {
   const files = walk(root, relative => (
     relative === '.git'
     || relative.startsWith('.git/')
+    || matches(relative, PRIVATE_MEMORY_EXCLUSIONS)
     || excluded.has(relative)
   )).map(relative => ({
     path: relative,

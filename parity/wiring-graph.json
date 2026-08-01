@@ -16018,7 +16018,7 @@
       "id": "file:tools/parity/__tests__/reconciliation-ledger.test.cjs",
       "type": "file",
       "path": "tools/parity/__tests__/reconciliation-ledger.test.cjs",
-      "sha256": "019886dcb49551979fbf01c6ea18c1555156eaa0a269fecb2144741cb509a408",
+      "sha256": "17c9dc8042168c7b84bb4d25781c0455b4b6159ecd5833fdbfe03c81f450f183",
       "mode": 420
     },
     {
@@ -16067,7 +16067,7 @@
       "id": "file:tools/parity/generate-reconciliation-ledger.cjs",
       "type": "file",
       "path": "tools/parity/generate-reconciliation-ledger.cjs",
-      "sha256": "8edf2a681fbc801da8a50e7599f38bc98c119def6a3516c474d08d5e46707de9",
+      "sha256": "0a8e9b83b129d3dd51d6a38eb8ba061f1aea883fe55a47538d85d32c0e397a66",
       "mode": 420
     },
     {
@@ -45333,6 +45333,15 @@
       "resolution": "tracked"
     },
     {
+      "id": "dfe4f9db9218721674784203ad2f7d10ee44470306dd452095a3e7cba8984bd6",
+      "type": "static-import",
+      "from": "file:tools/parity/generate-reconciliation-ledger.cjs",
+      "to": "file:tools/parity/private-memory-policy.cjs",
+      "target": "tools/parity/private-memory-policy.cjs",
+      "required": true,
+      "specifier": "./private-memory-policy.cjs"
+    },
+    {
       "id": "dff299bdb60afd197cccfb0e05e1743c072087366945b7179fedb1c17297fbbf",
       "type": "static-import",
       "from": "file:tools/planning/lib/plan-review-state.js",
@@ -48742,7 +48751,7 @@
   ],
   "counts": {
     "nodes": 3749,
-    "edges": 2675,
+    "edges": 2676,
     "unresolved": 0
   }
 }

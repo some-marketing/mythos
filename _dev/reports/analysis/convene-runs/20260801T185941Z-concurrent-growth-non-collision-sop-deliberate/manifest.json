@@ -1,0 +1,81 @@
+{
+  "schema": "ConveneRun/3.0",
+  "previous_schema": "ConveneRun/2.0",
+  "timestamp": "2026-08-01T19:00:55.320Z",
+  "scope": "concurrent-growth-non-collision-sop-deliberate",
+  "task": "Council review (charter-quest Stage 1 deliberate, standard /bp-r depth -- not a heavy multi-round chain) of a concept proposing an SOP for concurrent multi-agent/multi-session growth work in this repo (attached: concurrent-growth-non-collision-sop.md). The concept names existing scattered non-collision machinery (session-boundary markers, active-sessions/pending-boundary-scope tracking, plan-run-gate hashing that binds approval to exact bytes, the producer-never-validates-own-trial rule as a non-collision rule for judgment) and 5 open questions the SOP must answer: (1) when does a session need branch/worktree isolation vs when is the shared working directory safe -- currently a judgment call, not a rule; (2) what is the single source of truth for 'who else is active right now'; (3) what is the collision-detection contract for artifact writes across concepts/plans/charters/memory; (4) escalation path when two sessions DO collide -- warn vs hard block; (5) where should this SOP live -- doctrine addition, registered pre-flight check, or documentation. Origin's read: this is primarily an audit-and-name task (inventory existing machinery, test whether it already covers the 5 questions, document what's real) rather than a build task, EXCEPT possibly question 1 (isolation trigger) which may need an actual new rule since it was an ad hoc judgment call this session, not a followable rule. Give your reaction: (a) is the audit-and-name framing right, or does something here genuinely need new mechanism; (b) sharpen or correct the 5 questions; (c) any collision risk in the SOP-drafting process itself worth naming.",
+  "context_files": [
+    "_dev/concepts/concurrent-growth-non-collision-sop.md"
+  ],
+  "origin": "alpha",
+  "profile": {
+    "id": "kernel",
+    "label": "Kernel triad",
+    "consequence_grade": true
+  },
+  "triad_slots": [
+    {
+      "id": "alpha",
+      "label": "ALPHA",
+      "function": "Intent, memory, originating principle, and fast orchestration.",
+      "actor": "claude",
+      "pinned_model": null,
+      "is_origin": true
+    },
+    {
+      "id": "now",
+      "label": "NOW",
+      "function": "Repo truth, executable constraints, implementation reality, and falsification.",
+      "actor": "codex",
+      "pinned_model": null,
+      "is_origin": false
+    },
+    {
+      "id": "omega",
+      "label": "OMEGA",
+      "function": "Breadth, consequence, future-facing context, and community impact.",
+      "actor": "gemini",
+      "pinned_model": null,
+      "is_origin": false
+    }
+  ],
+  "participants": [
+    "codex",
+    "gemini"
+  ],
+  "participant_slots": [
+    {
+      "id": "now",
+      "actor": "codex"
+    },
+    {
+      "id": "omega",
+      "actor": "gemini"
+    }
+  ],
+  "duplicate_actors": [],
+  "timeout_seconds": 180,
+  "dry_run": false,
+  "only": null,
+  "results": {
+    "alpha": null,
+    "now": {
+      "actor": "codex",
+      "pinned_model": null,
+      "status": "success",
+      "duration_ms": 70393,
+      "exit_code": 0,
+      "error": null,
+      "output_length": 4293
+    },
+    "omega": {
+      "actor": "gemini",
+      "pinned_model": null,
+      "status": "success",
+      "duration_ms": 74063,
+      "exit_code": 0,
+      "error": null,
+      "output_length": 4146
+    }
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "schema": "TaskPlan/1.0",
+  "task_id": "concurrent-growth-non-collision-sop",
+  "title": "Concurrent-growth non-collision SOP — audit + decision table (Phase A); pre-write reservation mechanism deferred to a BIG follow-on",
+  "task_summary": "The operator, after watching a full /bp-r delivery chain (world-minds-tick-turn-operator-boundary, PR #4) require ad hoc worktree isolation to avoid disrupting a concurrent session, asked for a standing SOP so the system can keep growing (concepts/plans/charters produced by multiple sessions/actors) without sessions clobbering each other's work. A kernel-triad deliberation (Codex + Gemini) corrected the initial audit-and-name framing: current custody is post-write only (posttool-write-ledger.cjs records after the fact; the git-custody gate intercepts git add/commit, not ordinary artifact writes, and passes unknown custody by default), so a real mechanism gap exists, not just an unnamed pattern. This charter scopes Phase A only: audit existing machinery, document the corrected isolation-trigger rule (write-mode x shared-surface-overlap, not dirty-file count), and specify (not build) the pre-write reservation decision table. Building the actual pre-write reservation hook is named as an explicit, separate, BIG-classified follow-on requiring its own operator gate before touching tools/kernel/hooks/** (L1 protected surface).",
+  "scope_type": "system",
+  "scope_justification": "Phase A is documentation + specification only -- no tools/kernel/hooks/** changes, no instructions/canonical/** changes in this plan. If G4 (see below) or the operator later decides to build the reservation hook, that is out of this plan's scope and requires a fresh BIG-classified charter with kernel-triad convene per the custody-grant-transactional-consumption plan's own precedent (L1 protected surface, always-on infrastructure).",
+  "storage_root": "_dev/reports/analysis/task-plans",
+  "origin_client_code": null,
+  "origin_project_id": null,
+  "client_code": null,
+  "project_id": null,
+  "source": "operator",
+  "requested_by": "operator, session 7c99c7c3 2026-08-01: /aside during world-minds-tick-turn-operator-boundary workstream, classified 'concept' by the aside agent, routed to /bp-r per operator instruction ('if the verdict is concept it should trigger the /bp-r flow')",
+  "timestamp": "2026-08-01T19:02:00Z",
+  "amended": null,
+  "concept_ref": "_dev/concepts/concurrent-growth-non-collision-sop.md",
+  "predecessor_plan": null,
+  "scope_identity": {
+    "owned_artifacts": [
+      "_dev/concepts/concurrent-growth-non-collision-sop.md",
+      "_dev/concepts/concurrent-growth-non-collision-sop/",
+      "_dev/reports/analysis/task-plans/concurrent-growth-non-collision-sop__plan.json",
+      "_dev/reports/analysis/task-plans/concurrent-growth-non-collision-sop__plan.md",
+      "_dev/reports/analysis/convene-runs/20260801T185941Z-concurrent-growth-non-collision-sop-deliberate/",
+      "_dev/reports/analysis/convene-runs/20260801T190259Z-concurrent-growth-sop-charter-review/"
+    ],
+    "preflight_required": "Before any G2/G3/G5 write, confirm no live entry in _dev/state/active-sessions/ has a working_surface overlapping these owned_artifacts paths. If one exists, use an isolated git worktree (EnterWorktree) rather than writing in the shared checkout.",
+    "execution_surface": "feature-branch + PR, never a direct commit to main, per repository contribution policy -- an anti-collision plan that violates this demonstrates the exact defect it describes"
+  },
+  "description": "G1 inventories the real state of every non-collision mechanism named in the concept and the Stage-1 deliberation, with file:line citations: active-session registry (liveness, not custody), boundary markers (scope-clobber, not same-scope concurrent write), the git-custody gate (git add/commit interception, unknown-custody-passes-by-default), the post-write ledger, and plan-run-gate hashing (run_authorization_only, not general collision control). G2 documents the corrected isolation-trigger rule as a decision table: write-mode (PATCH_ALLOWED/COORDINATOR) intersected with shared-surface-overlap requires isolation; FINDINGS_ONLY/REVIEW_ONLY/RUN_ONLY are safe in a shared tree regardless of dirty-file count. G3 documents the full pre-write reservation CONTRACT (declare target set, detect overlapping live claims, acquire exclusive reservation, write atomically, record hash, release/transfer) and the tiered escalation matrix (proven overlap -> hard block; unknown custody -> warn on read/unique-create, fail-closed on mutating an existing artifact; detected actual collision -> stop, preserve both byte versions + hashes, mark needs_context, require operator-selected reconciliation) as a SPECIFICATION, not an implementation. G4 is an explicit decision gate on whether Phase A's documentation is sufficient near-term (relying on existing partial machinery + operator awareness) or whether the reservation hook must be built immediately -- this is an operator call given L1 protected-surface stakes, not something this plan decides unilaterally. G5 records where the SOP resides (draft at instructions/canonical/governance/concurrent-growth-sop.md per Gemini's proposal, but written to _dev/concepts/ first in this plan since instructions/canonical/** is ConveneReceipt-gated -- promotion to canonical is itself a separate gated step). G6 is distinct-family review of G1-G5.",
+  "similarity_assessment": {
+    "top_framework": "meta/execution-normalization",
+    "match_score": 12,
+    "match_rationale": "No registered framework or existing plan covers cross-session artifact-write collision prevention as a general SOP. Related but non-overlapping existing plans: custody-grant-transactional-consumption (fixes one specific PreToolUse/PostToolUse transactionality bug in git-custody grants, not general artifact-write reservation) and context-budget-custody-scoped-dirty-signal (scopes a context-budget proxy signal to session custody, unrelated to write collision).",
+    "gaps": [
+      "pre-write reservation contract specification",
+      "isolation-trigger decision table (write-mode x shared-surface-overlap)",
+      "tiered collision-escalation matrix",
+      "liveness-vs-custody-authority separation documentation"
+    ],
+    "applicable_modes": [
+      "REVIEW_ONLY",
+      "PATCH_ALLOWED"
+    ],
+    "trust_tier": "no-match"
+  },
+  "operator_ratifications": [],
+  "routing_expectations": {
+    "risk_tier": "medium",
+    "big": false,
+    "big_rationale": "Phase A is documentation/specification only -- no L1 protected-path changes (tools/kernel/hooks/**), no always-on infrastructure, no instructions/canonical/** edits. The BIG bar applies to the deferred pre-write-reservation-hook follow-on, explicitly named and NOT executed by this plan. This charter's own deliberate leg already ran as a consequence-grade kernel-triad convene (_dev/reports/analysis/convene-runs/20260801T185941Z-concurrent-growth-non-collision-sop-deliberate/), satisfying the BIG review requirement for the ideas even though the charter itself stays medium/non-BIG in scope.",
+    "review_lane": "independent-review",
+    "execution_route": "/trial-quest concurrent-growth-non-collision-sop, then /run-plan concurrent-growth-non-collision-sop if approved",
+    "review_lane_note": "Deliberate leg already satisfied via kernel-triad convene (Codex + Gemini, both independently corrected the origin framing). Charter itself still needs its own distinct-family (Codex) review before execution, per plan-quest normal gate."
+  },
+  "acceptance_criteria": [
+    "G1 inventory correctly distinguishes liveness (active-session registry) from custody (post-write ledger, git-custody gate) from scope-boundary (boundary markers) from approval-binding (plan-run-gate hashing) -- must NOT collapse these into one mechanism, per Codex's explicit correction",
+    "G2's isolation-trigger decision table uses EFFECTIVE REPOSITORY WRITE-SET x overlapping-working-surface as the trigger (NOT mode-label x overlap -- charter-level review found FINDINGS_ONLY/REVIEW_ONLY/RUN_ONLY all write in practice per named framework prompt citations), explicitly rejecting dirty-file-count as the trigger",
+    "G3's pre-write reservation contract names exact claim-key normalization, prefix-overlap semantics, expiry/heartbeat behavior, atomic acquisition primitive, stale-claim recovery, and rollback -- and explicitly states it makes no mechanically-authoritative or enforcement-complete claim",
+    "G3's escalation matrix states 'preserve both versions' requires capturing the PRE-IMAGE before mutation (capturing after overwrite is stated as impossible/too late)",
+    "G3/G5 -- no tools/kernel/hooks/** file is created or modified by this plan",
+    "G4's decision (build reservation hook now vs defer) is recorded as OD1 with an explicit OWNER and TRIGGER/DATE, not an open-ended 'defer until collision observed' that makes damage the activation criterion",
+    "G4 runs AFTER G6 (independent review precedes the operator decision gate, not after) -- the producer must not establish the adequacy premise the operator is asked to approve",
+    "G5 delivers a usable interim MANUAL preflight/worktree procedure in addition to the future specification -- Phase A is not purely deferred documentation",
+    "G5 records SOP residence and explicitly notes the instructions/canonical/** promotion step is separate and ConveneReceipt-gated",
+    "G6 distinct-family (Codex) review completed before this plan is marked complete/merged",
+    "scope_identity.preflight_required was actually checked before any write in this plan's own execution, and execution occurred on a feature branch via PR, not a direct commit",
+    "No instructions/canonical/** or tools/kernel/hooks/** files are touched anywhere in this plan's execution"
+  ],
+  "bounded_plan": {
+    "steps": [
+      {
+        "step_id": "G1",
+        "description": "Inventory real state of existing non-collision machinery with file:line citations: active-session registry liveness semantics (sessions/lib/active-session-registry.js), post-write custody ledger (tools/kernel/hooks/posttool-write-ledger.cjs), git-custody gate scope (tools/kernel/hooks/pretool-git-custody-gate.cjs -- git add/commit only, unknown-custody-passes-by-default), boundary markers (sessions/lib/boundary-markers.cjs -- scope-clobber only), plan-run-gate hashing (tools/planning/lib/plan-run-gate.js -- run_authorization_only). Explicitly distinguish liveness vs custody vs scope-boundary vs approval-binding as four separate concerns, not one mechanism.",
+        "stage": "research",
+        "domain": "planning",
+        "mode": "REVIEW_ONLY",
+        "is_gap": true
+      },
+      {
+        "step_id": "G2",
+        "description": "Document the CORRECTED isolation-trigger decision table (fixed per charter-level Codex review: 'mode label x overlap' is FALSE in this repo -- FINDINGS_ONLY writes verification_output/ per frameworks/deliverables/scope-verification/prompts/01_ANALYZE.md:4-7, REVIEW_ONLY writes design artifacts per frameworks/meta/execution-normalization/prompts/02_NORMALIZED_EXECUTION_MODEL_DESIGN.md:3-5, RUN_ONLY writes reports per AGENTS.md:85-92). Corrected rule: `effective repository write-set x overlapping working surface`, NOT mode-label x overlap. Mode may seed the write-set estimate, but declared outputs and delegated child writes control. Dirty-file count remains evidence, never the trigger. Test against this session's own retroactive case (world-minds-tick-turn-operator-boundary delivery, PR #4) as validation.",
+        "stage": "implement",
+        "domain": "documentation",
+        "mode": "PATCH_ALLOWED",
+        "depends_on": ["G1"],
+        "is_gap": true
+      },
+      {
+        "step_id": "G3",
+        "description": "Specify (not implement) the pre-write reservation contract and tiered escalation matrix, strengthened per charter-level review: the specification must name exact claim-key normalization, prefix-overlap semantics, expiry/heartbeat behavior, the atomic acquisition primitive, stale-claim recovery, and rollback. 'Preserve both byte versions' on detected collision means capturing the PRE-IMAGE before mutation -- capturing after overwrite is too late and must be stated as impossible without that. Escalation matrix: proven overlap -> hard block; unknown custody -> warn on read/unique-create, fail-closed on mutating existing artifact; detected collision -> stop, preserve pre-image + post-image + hashes, mark needs_context, require operator-selected reconciliation, never silently merge. Written as documentation/specification only -- explicitly states it makes no mechanically-authoritative or enforcement-complete claim.",
+        "stage": "implement",
+        "domain": "documentation",
+        "mode": "PATCH_ALLOWED",
+        "depends_on": ["G1"],
+        "is_gap": true
+      },
+      {
+        "step_id": "G5",
+        "description": "Record SOP residence: staged at _dev/concepts/concurrent-growth-non-collision-sop.md for this plan; note that promotion to instructions/canonical/governance/ (or equivalent) is a separate, explicitly ConveneReceipt-gated step, not performed by this plan. Also deliver an interim MANUAL preflight/worktree procedure (per charter-level review: Phase A builds no kernel mechanism, but must still leave a usable manual procedure, not just a future specification) -- a short checklist: before a PATCH_ALLOWED/COORDINATOR write, check _dev/state/active-sessions/ for overlapping working_surface; if found, use EnterWorktree rather than switching the shared checkout's branch.",
+        "stage": "implement",
+        "domain": "documentation",
+        "mode": "PATCH_ALLOWED",
+        "depends_on": ["G1"],
+        "is_gap": false
+      },
+      {
+        "step_id": "G6",
+        "description": "Distinct-family (Codex) review of G1-G3, G5 output: verify all citations are real and correctly classified, verify no canonical/kernel-hook files were touched, verify the isolation-trigger decision table and escalation matrix are internally consistent and match the Stage-1 deliberation's corrected framing. Runs BEFORE the operator decision gate (G4/OD1) per charter-level review correction: a producer must not effectively establish the adequacy premise presented to the operator by having G4 ask the operator to decide based on producer-authored G2/G3 before independent review has checked them.",
+        "stage": "review",
+        "domain": "review",
+        "mode": "REVIEW_ONLY",
+        "depends_on": ["G2", "G3", "G5"],
+        "is_gap": false
+      },
+      {
+        "step_id": "G4",
+        "description": "Explicit decision gate (runs AFTER G6, per charter-level review correction): given L1 protected-surface stakes (any real reservation mechanism touches tools/kernel/hooks/**), record whether the operator wants the reservation hook built now (as a fresh BIG-classified charter with its own kernel-triad convene) or deferred. OD1 must record a bounded disposition with an OWNER and an explicit TRIGGER/DATE -- not 'defer until an actual collision is observed,' which makes damage the activation criterion. This plan does not build the hook either way -- it only records the decision.",
+        "stage": "review",
+        "domain": "planning",
+        "mode": "REVIEW_ONLY",
+        "depends_on": ["G6"],
+        "is_gap": true
+      }
+    ]
+  },
+  "operator_decisions_pending": [
+    {
+      "id": "OD1",
+      "question": "Per G4: build the pre-write reservation hook now (fresh BIG-classified charter, kernel-triad convene, touches tools/kernel/hooks/**), or defer until an actual collision is observed?",
+      "why_operator_only": "L1 protected-surface, always-on-infrastructure decision -- exactly the kind of judgment/scope call that must bubble up per orchestrate-loop's bubble-up criteria.",
+      "resolved": true,
+      "decision": "Defer. Trigger: build the reservation hook (fresh BIG-classified charter, kernel-triad convene) the first time an actual concurrent-write collision is observed -- an event-triggered activation condition, not open-ended deferral or a calendar date. Recorded in full at _dev/concepts/concurrent-growth-non-collision-sop/g4-decision-gate.md.",
+      "resolved_at": "2026-08-01T19:10:00Z"
+    }
+  ],
+  "distinct_reviews": [
+    {
+      "reviewer": "codex (GPT-5.5, distinct family)",
+      "date": "2026-08-01T19:02:59Z",
+      "verdict": "approved-with-changes",
+      "artifact": "_dev/reports/analysis/convene-runs/20260801T190259Z-concurrent-growth-sop-charter-review/now__codex.md",
+      "disposition": "Charter-level review. 4 required changes folded: G2 trigger corrected to effective-write-set x overlap; scope_identity.owned_artifacts/preflight/execution_surface added; G4 reordered to depend on G6; acceptance criteria strengthened with named reservation-contract fields, pre-image requirement, no-mechanical-authority claim, and owner+trigger/date requirement for OD1."
+    },
+    {
+      "reviewer": "codex (GPT-5.5, distinct family)",
+      "date": "2026-08-01T19:49:42Z",
+      "verdict": "blocking (initial) -> resolved",
+      "artifact": "_dev/reports/analysis/convene-runs/20260801T194942Z-concurrent-growth-sop-g6-review/now__codex.md",
+      "disposition": "Execution-level (G6) review of G1/G2/G3/G5 output. 5 defects found and fixed: (1) G2's worked validation contradicted its own rule -- rewritten as two independent predicates (write-set overlap vs shared-checkout-state disruption) rather than one rule force-fit to both cases; (2) G3's pre-image capture was asserted in the escalation matrix but never actually required as a contract step -- added as mandatory step 7, renumbering subsequent steps; (3) G5's 'non-trivial' was undefined and assumed a path-aware overlap helper that doesn't exist (active-session-registry.js:644-651 does substring matching) -- both fixed with concrete definitions; (4) G3/G2 pre-stated OD1's outcome ('deferred pending an observed collision') before G4 had run -- language corrected to not presuppose the decision; (5) G5 claimed retroactive validation without execution evidence -- softened to 'precedent, not validation'. Citation defect also fixed: hashPlanPair() location corrected from plan-run-gate.js:92-103 to :10-19."
+    }
+  ],
+  "distinct_reviews_pending": null
+}

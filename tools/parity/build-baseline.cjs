@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
 const { fileSha, matches, sha256, treeDigest, walk } = require('./lib.cjs');
+const { PRIVATE_MEMORY_EXCLUSIONS } = require('./private-memory-policy.cjs');
 
 // Exact public self/fixture occurrences of denylist terms. These are hashes of
 // the normalized terms, never the terms themselves. Keep this mapping narrow:
@@ -126,6 +127,7 @@ function main() {
   const runtimeExclusions = [
     '.git/**',
     'node_modules/**',
+    ...PRIVATE_MEMORY_EXCLUSIONS,
     '.env',
     '.env.*.local',
     '_dev/archive/**',

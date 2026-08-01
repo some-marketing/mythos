@@ -7,6 +7,7 @@ const path = require('path');
 const test = require('node:test');
 const { spawnSync } = require('child_process');
 const { fileSha, sha256, treeDigest } = require('../lib.cjs');
+const { PRIVATE_MEMORY_EXCLUSIONS } = require('../private-memory-policy.cjs');
 
 const verifier = path.join(__dirname, '..', 'verify-parity.cjs');
 const graphBuilder = path.join(__dirname, '..', 'build-wiring-graph.cjs');
@@ -181,18 +182,39 @@ test('cannot disable canonical ledger security scanning through baseline metadat
   fs.rmSync(root, { recursive: true, force: true });
 });
 
-test('wiring graph excludes linked-worktree .git control files', () => {
+test('parity generators share exact canonical and legacy private-memory exclusions', () => {
+  assert.deepEqual(PRIVATE_MEMORY_EXCLUSIONS, [
+    'Mythos-memories/**',
+    'sm_os-memories/**',
+  ]);
+});
+
+test('wiring graph excludes linked-worktree control data and private memory', () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-wiring-graph-'));
   fs.mkdirSync(path.join(root, 'parity'), { recursive: true });
   fs.mkdirSync(path.join(root, 'tools'), { recursive: true });
   fs.writeFileSync(path.join(root, '.git'), 'gitdir: /machine-specific/worktree\n');
   fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify({ scripts: {} }));
   fs.writeFileSync(path.join(root, 'tools', 'demo.js'), 'module.exports = true;\n');
+  const privateMarkers = [];
+  for (const rootName of ['Mythos-memories', 'sm_os-memories']) {
+    const marker = `private-${rootName}-marker`;
+    const memoryPath = path.join(root, rootName, 'memory', 'MEMORY.md');
+    fs.mkdirSync(path.dirname(memoryPath), { recursive: true });
+    fs.writeFileSync(memoryPath, `${marker}\n`);
+    privateMarkers.push(marker);
+  }
 
   const result = spawnSync(process.execPath, [graphBuilder, '--root', root], { encoding: 'utf8' });
   assert.equal(result.status, 0, result.stdout + result.stderr);
   const graph = JSON.parse(fs.readFileSync(path.join(root, 'parity', 'wiring-graph.json'), 'utf8'));
   assert.equal(graph.nodes.some(node => node.path === '.git'), false);
+  assert.equal(graph.nodes.some(node => /^(?:Mythos-memories|sm_os-memories)(?:\/|$)/.test(node.path || '')), false);
+  const serialized = JSON.stringify(graph);
+  for (const marker of privateMarkers) {
+    assert.equal(serialized.includes(marker), false);
+    assert.equal(serialized.includes(sha256(`${marker}\n`)), false);
+  }
   fs.rmSync(root, { recursive: true, force: true });
 });
 

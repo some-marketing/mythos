@@ -16025,7 +16025,7 @@
       "id": "file:tools/parity/__tests__/verify-parity.test.cjs",
       "type": "file",
       "path": "tools/parity/__tests__/verify-parity.test.cjs",
-      "sha256": "42b0f1604b3cda57ac7024b9793beab8aeb31bb8a2923f8992bbc01c95e28d2b",
+      "sha256": "d71292a2a44e5de37e9ed73a666b82bb54e2f2c7f63c985318069856defac18c",
       "mode": 420
     },
     {
@@ -16039,7 +16039,7 @@
       "id": "file:tools/parity/build-baseline.cjs",
       "type": "file",
       "path": "tools/parity/build-baseline.cjs",
-      "sha256": "ab013980e885e6710929715aba1a04c011abb631f1a7be8a3a3b5ec138fb8236",
+      "sha256": "187639f69b28e32df8e425a21a91afd3f55d5def71f73a9352d6ee1a10ef6990",
       "mode": 420
     },
     {
@@ -16053,7 +16053,7 @@
       "id": "file:tools/parity/build-wiring-graph.cjs",
       "type": "file",
       "path": "tools/parity/build-wiring-graph.cjs",
-      "sha256": "c666f694e911f3794cd9628ab879200c4b274baef3f52738e5cd4507fcacb3cc",
+      "sha256": "944d6283fdcdaeedf242d54c7e9c22e08ea2aa15a99039cc4a5f35423df39142",
       "mode": 420
     },
     {
@@ -16075,6 +16075,13 @@
       "type": "file",
       "path": "tools/parity/lib.cjs",
       "sha256": "1f4df93f7c7f32d86eb3cf4673148212493a35dd0ad5be06e7e55edcb3674562",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/parity/private-memory-policy.cjs",
+      "type": "file",
+      "path": "tools/parity/private-memory-policy.cjs",
+      "sha256": "b6f0ee281eb0e102bb95f3411856ba259b3e35c9d559a2d71f72d023b8923e87",
       "mode": 420
     },
     {
@@ -25564,6 +25571,15 @@
       "specifier": "../../ai-bridge/lib/plan-audience-framing-lint.cjs"
     },
     {
+      "id": "0c0cc909e5c57f06c0cdb6c34e9b51f72f980235be3e5aaf6fc524a3b398a4f8",
+      "type": "static-import",
+      "from": "file:tools/parity/build-baseline.cjs",
+      "to": "file:tools/parity/private-memory-policy.cjs",
+      "target": "tools/parity/private-memory-policy.cjs",
+      "required": true,
+      "specifier": "./private-memory-policy.cjs"
+    },
+    {
       "id": "0c0fbd6960762eb48398a14609351d2a7c1b9985255af5bba4e2e1bcc3e3e43d",
       "type": "command-definition-file",
       "from": "command-definition:fw-deliverables-version-reconciliation",
@@ -35005,6 +35021,15 @@
       "declared_target": "frameworks/deliverables/presentation-review/schemas/intake.schema.json"
     },
     {
+      "id": "705d914d7b6871c88eca36f830e880005715732b382e685b5e507654e75a504c",
+      "type": "static-import",
+      "from": "file:tools/parity/build-wiring-graph.cjs",
+      "to": "file:tools/parity/private-memory-policy.cjs",
+      "target": "tools/parity/private-memory-policy.cjs",
+      "required": true,
+      "specifier": "./private-memory-policy.cjs"
+    },
+    {
       "id": "706207f55aeb85735f06e686502b9ae910bb77cae0e5c35b504ec77feef83385",
       "type": "static-import",
       "from": "file:.claude/hooks/subagent-telemetry-writer.cjs",
@@ -42875,6 +42900,15 @@
       "specifier": "./lib/adapters/shutterstock.cjs"
     },
     {
+      "id": "c4af636d3a17a0e27747f61d044c9556920b31c6f07981d1e19e38f5a64a2bc7",
+      "type": "static-import",
+      "from": "file:tools/parity/__tests__/verify-parity.test.cjs",
+      "to": "file:tools/parity/private-memory-policy.cjs",
+      "target": "tools/parity/private-memory-policy.cjs",
+      "required": true,
+      "specifier": "../private-memory-policy.cjs"
+    },
+    {
       "id": "c4b25f4e66e0012c32cdcafd79a25a27343ac581df441a1acb17904b75342b6d",
       "type": "static-import",
       "from": "file:tools/signals/watch-landing-pad.js",
@@ -48707,8 +48741,8 @@
     }
   ],
   "counts": {
-    "nodes": 3748,
-    "edges": 2672,
+    "nodes": 3749,
+    "edges": 2675,
     "unresolved": 0
   }
 }

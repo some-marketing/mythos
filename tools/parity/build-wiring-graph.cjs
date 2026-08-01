@@ -3,7 +3,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const { fileSha, sha256, walk } = require('./lib.cjs');
+const { fileSha, matches, sha256, walk } = require('./lib.cjs');
+const { PRIVATE_MEMORY_EXCLUSIONS } = require('./private-memory-policy.cjs');
 
 function option(args, name) {
   const index = args.indexOf(name);
@@ -191,6 +192,7 @@ function main() {
     relative === relativeOutput
     || relative === 'parity/baseline.json'
     || relative === 'parity/reconciliation-ledger.json'
+    || matches(relative, PRIVATE_MEMORY_EXCLUSIONS)
     || relative.startsWith('node_modules/')
     || relative === '.git'
     || relative.startsWith('.git/')

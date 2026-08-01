@@ -8,4 +8,9 @@ const PRIVATE_MEMORY_EXCLUSIONS = Object.freeze([
   'sm_os-memories/**',
 ]);
 
-module.exports = { PRIVATE_MEMORY_EXCLUSIONS };
+const PRIVATE_LOCAL_EXCLUSIONS = Object.freeze([
+  ...PRIVATE_MEMORY_EXCLUSIONS,
+  '_dev/desktop/work/personal/**',
+]);
+
+module.exports = { PRIVATE_LOCAL_EXCLUSIONS, PRIVATE_MEMORY_EXCLUSIONS };

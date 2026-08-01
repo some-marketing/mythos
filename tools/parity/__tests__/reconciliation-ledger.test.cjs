@@ -122,6 +122,9 @@ test('generation and authoritative checking ignore private memory paths and hash
       write(surfaceRoot, `${rootName}/memory/MEMORY.md`, `${marker}\n`);
       privateMarkers.push(marker);
     }
+    const turnMarker = `ledger-private-${path.basename(surfaceRoot)}-local-turn-marker`;
+    write(surfaceRoot, '_dev/desktop/work/personal/turns/turn.jsonl', `${turnMarker}\n`);
+    privateMarkers.push(turnMarker);
   }
 
   const withMemory = generate(input);

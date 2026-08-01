@@ -7,7 +7,7 @@ const path = require('path');
 const test = require('node:test');
 const { spawnSync } = require('child_process');
 const { fileSha, sha256, treeDigest } = require('../lib.cjs');
-const { PRIVATE_MEMORY_EXCLUSIONS } = require('../private-memory-policy.cjs');
+const { PRIVATE_LOCAL_EXCLUSIONS, PRIVATE_MEMORY_EXCLUSIONS } = require('../private-memory-policy.cjs');
 
 const verifier = path.join(__dirname, '..', 'verify-parity.cjs');
 const graphBuilder = path.join(__dirname, '..', 'build-wiring-graph.cjs');
@@ -188,6 +188,10 @@ test('parity generators share exact canonical and legacy private-memory exclusio
     'Mythos-memories/**',
     'sm_os-memories/**',
   ]);
+  assert.deepEqual(PRIVATE_LOCAL_EXCLUSIONS, [
+    ...PRIVATE_MEMORY_EXCLUSIONS,
+    '_dev/desktop/work/personal/**',
+  ]);
 });
 
 test('wiring graph excludes linked-worktree control data and private memory', () => {
@@ -205,6 +209,11 @@ test('wiring graph excludes linked-worktree control data and private memory', ()
     fs.writeFileSync(memoryPath, `${marker}\n`);
     privateMarkers.push(marker);
   }
+  const turnMarker = 'private-local-turn-marker';
+  const turnPath = path.join(root, '_dev', 'desktop', 'work', 'personal', 'turns', 'turn.jsonl');
+  fs.mkdirSync(path.dirname(turnPath), { recursive: true });
+  fs.writeFileSync(turnPath, `${turnMarker}\n`);
+  privateMarkers.push(turnMarker);
 
   const result = spawnSync(process.execPath, [graphBuilder, '--root', root], { encoding: 'utf8' });
   assert.equal(result.status, 0, result.stdout + result.stderr);
@@ -256,6 +265,11 @@ test('baseline regeneration excludes private memory paths and content hashes', (
     fs.writeFileSync(memoryPath, `${marker}\n`);
     privateMarkers.push(marker);
   }
+  const turnMarker = 'baseline-private-local-turn-marker';
+  const turnPath = path.join(root, '_dev', 'desktop', 'work', 'personal', 'turns', 'turn.jsonl');
+  fs.mkdirSync(path.dirname(turnPath), { recursive: true });
+  fs.writeFileSync(turnPath, `${turnMarker}\n`);
+  privateMarkers.push(turnMarker);
 
   const result = spawnSync(process.execPath, [
     baselineBuilder,

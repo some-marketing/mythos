@@ -20,4 +20,4 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run verify:parity
-      - run: npm run verify:parity:ledger
+      - run: node --test tools/parity/__tests__/verify-parity.test.cjs tools/parity/__tests__/reconciliation-ledger.test.cjs

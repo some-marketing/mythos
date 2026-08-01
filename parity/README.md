@@ -15,7 +15,8 @@ target-current directory inventories with `npm run parity:ledger:generate --`.
 The decisions document supplies explicit dispositions for every non-identical
 path. Generation blocks on uncovered paths, duplicate decisions, or decisions
 that name files outside the inventories. Generated ledgers carry a deterministic
-coverage digest; `verify:parity:ledger` rejects deleted or duplicated rows.
+coverage digest. Portable CI runs `verify:parity` plus the parity test suites;
+it does not claim to reproduce the private three-root ledger audit.
 
 Baseline regeneration also requires `--private-denylist <path>` so the shipped
 baseline binds hashes of the authoritative private contamination vocabulary
@@ -28,3 +29,11 @@ private rules without serializing them into the public baseline.
 Version 4 exhaustive ledgers must be checked with `--source-export-root`,
 `--target-base-root`, and `--target-current-root`; verification re-inventories
 all three roots and rejects any path, byte, mode, or inventory-digest drift.
+Run the operator-ratified audit with all three authoritative roots:
+
+```sh
+npm run verify:parity:ledger -- --require-operator \
+  --source-export-root /path/to/source-export \
+  --target-base-root /path/to/target-base \
+  --target-current-root /path/to/target-current
+```

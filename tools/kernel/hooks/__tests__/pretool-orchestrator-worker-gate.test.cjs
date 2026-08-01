@@ -321,6 +321,23 @@ check('absolute Edit to root Mythos-memories/ -> orchestration_write -> allow', 
   assert.strictEqual(result.class, 'orchestration_write');
 });
 
+check('Edit through a Mythos-memories symlink -> blocked', () => {
+  const sb = makeSandbox();
+  const trackedTarget = path.join(sb.root, 'src');
+  const memoryRoot = path.join(sb.root, 'Mythos-memories');
+  fs.mkdirSync(trackedTarget, { recursive: true });
+  fs.mkdirSync(memoryRoot, { recursive: true });
+  fs.symlinkSync(trackedTarget, path.join(memoryRoot, 'tracked-link'), 'dir');
+  const result = runGate(
+    sb,
+    'Edit',
+    { file_path: 'Mythos-memories/tracked-link/output.md' },
+    { enforcing: true }
+  );
+  assert.strictEqual(result.status, 2, 'symlink escape must be blocked');
+  assert.strictEqual(result.class, 'mutation');
+});
+
 for (const unsafePath of [
   'mythos-memories/memory/MEMORY.md',
   'MYTHOS-MEMORIES/memory/MEMORY.md',
@@ -561,6 +578,18 @@ check('canonical memory classification is root-bound and case-sensitive', () => 
   assert.ok(gate.isOrchestrationPath(path.join(projectRoot, 'Mythos-memories', 'memory', 'MEMORY.md'), projectRoot, path));
   assert.ok(!gate.isOrchestrationPath('mythos-memories/memory/MEMORY.md', projectRoot, path));
   assert.ok(!gate.isOrchestrationPath('clients/example/Mythos-memories/memory/MEMORY.md', projectRoot, path));
+});
+
+check('canonical memory classification rejects symlink components', () => {
+  const sb = makeSandbox();
+  const memoryRoot = path.join(sb.root, 'Mythos-memories');
+  fs.mkdirSync(memoryRoot, { recursive: true });
+  fs.mkdirSync(path.join(sb.root, 'tracked'), { recursive: true });
+  fs.symlinkSync(path.join(sb.root, 'tracked'), path.join(memoryRoot, 'escape'), 'dir');
+  assert.strictEqual(
+    gate.isCanonicalMemoryPath('Mythos-memories/escape/output.md', sb.root, path, fs),
+    false
+  );
 });
 
 check('src/feature.ts -> NOT orchestration', () => {

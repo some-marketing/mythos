@@ -172,7 +172,34 @@ const TRIVIAL_BASH_ALLOW_PATTERNS = [
 
 // -- Helpers --------------------------------------------------------------------
 
-function isCanonicalMemoryPath(filePath, projectDir = resolveProjectDir(), pathImpl = require('path')) {
+function hasSymlinkComponent(rootPath, candidatePath, pathImpl, fsImpl) {
+  const relative = pathImpl.relative(rootPath, candidatePath);
+  const components = [rootPath];
+  let current = rootPath;
+  for (const segment of relative.split(pathImpl.sep).filter(Boolean)) {
+    current = pathImpl.join(current, segment);
+    components.push(current);
+  }
+
+  for (const component of components) {
+    try {
+      if (fsImpl.lstatSync(component).isSymbolicLink()) return true;
+    } catch (err) {
+      // A missing component cannot currently redirect the write. Any other
+      // filesystem ambiguity fails closed for this privileged classification.
+      if (err && err.code === 'ENOENT') return false;
+      return true;
+    }
+  }
+  return false;
+}
+
+function isCanonicalMemoryPath(
+  filePath,
+  projectDir = resolveProjectDir(),
+  pathImpl = require('path'),
+  fsImpl = require('fs')
+) {
   const fp = String(filePath || '');
   if (!fp) return false;
   const projectRoot = pathImpl.resolve(projectDir);
@@ -180,12 +207,13 @@ function isCanonicalMemoryPath(filePath, projectDir = resolveProjectDir(), pathI
     ? pathImpl.resolve(fp)
     : pathImpl.resolve(projectRoot, fp);
   const memoryRoot = pathImpl.join(projectRoot, 'Mythos-memories');
-  return candidate.startsWith(memoryRoot + pathImpl.sep);
+  return candidate.startsWith(memoryRoot + pathImpl.sep)
+    && !hasSymlinkComponent(memoryRoot, candidate, pathImpl, fsImpl);
 }
 
-function isOrchestrationPath(filePath, projectDir, pathImpl) {
+function isOrchestrationPath(filePath, projectDir, pathImpl, fsImpl) {
   const fp = String(filePath || '');
-  return isCanonicalMemoryPath(fp, projectDir, pathImpl)
+  return isCanonicalMemoryPath(fp, projectDir, pathImpl, fsImpl)
     || ORCHESTRATION_GLOBS.some((re) => re.test(fp));
 }
 
@@ -218,7 +246,7 @@ function classifyBash(command) {
   return 'trivial_read';
 }
 
-function classifyTool(tool, toolInput, projectDir, pathImpl) {
+function classifyTool(tool, toolInput, projectDir, pathImpl, fsImpl) {
   const t = String(tool || '').toLowerCase();
   const input = toolInput && typeof toolInput === 'object' ? toolInput : {};
 
@@ -239,10 +267,10 @@ function classifyTool(tool, toolInput, projectDir, pathImpl) {
   // Write / Edit / MultiEdit: depends on target path
   if (t === 'write' || t === 'edit' || t === 'multiedit') {
     const fp = String(input.file_path || '');
-    if (isOrchestrationPath(fp, projectDir, pathImpl)) return 'orchestration_write';
+    if (isOrchestrationPath(fp, projectDir, pathImpl, fsImpl)) return 'orchestration_write';
     // MultiEdit may have edits array
     if (t === 'multiedit' && Array.isArray(input.edits)) {
-      if (input.edits.every((e) => isOrchestrationPath(e && e.file_path, projectDir, pathImpl))) {
+      if (input.edits.every((e) => isOrchestrationPath(e && e.file_path, projectDir, pathImpl, fsImpl))) {
         return 'orchestration_write';
       }
     }
@@ -393,7 +421,7 @@ function _main(options, _injected) {
   const enforcing = ['1', 'true', 'yes', 'on'].includes(enforcingRaw);
 
   // -- Classify the requested tool ---------------------------------------------
-  const toolClass = classifyTool(toolToken, toolInput, projectDir, path);
+  const toolClass = classifyTool(toolToken, toolInput, projectDir, path, fs);
 
   // -- Delegation event: record + allow ----------------------------------------
   if (toolClass === 'delegation') {

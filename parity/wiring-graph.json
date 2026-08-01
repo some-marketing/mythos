@@ -13547,7 +13547,7 @@
       "id": "file:tools/kernel/hooks/__tests__/pretool-orchestrator-worker-gate.test.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/__tests__/pretool-orchestrator-worker-gate.test.cjs",
-      "sha256": "0d64145256ac39d1e0ed3e1d440eb9d221a64ef5bd2334405fe8e44112a35266",
+      "sha256": "df7f50c9b7e173f452c8b91e06a00d4efb38c95faa441209198e13ebd8bd5581",
       "mode": 420
     },
     {
@@ -13736,7 +13736,7 @@
       "id": "file:tools/kernel/hooks/pretool-orchestrator-worker-gate.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/pretool-orchestrator-worker-gate.cjs",
-      "sha256": "fb68abb4808d1275ee4fd44fb37e59f5dafb568483383007184750d9bd2895fc",
+      "sha256": "3e1687fe91825e61268f04c4196c126a43e99b635cd1fd027000e1e9e92ba42a",
       "mode": 420
     },
     {

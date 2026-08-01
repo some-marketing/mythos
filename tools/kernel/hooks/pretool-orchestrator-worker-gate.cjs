@@ -225,6 +225,18 @@ function isLexicallyCanonicalMemoryPath(
   return Boolean(resolved && resolved.candidate.startsWith(resolved.memoryRoot + pathImpl.sep));
 }
 
+function isLexicallyMemoryRootPath(
+  filePath,
+  projectDir = resolveProjectDir(),
+  pathImpl = require('path')
+) {
+  const resolved = resolveMemoryPath(filePath, projectDir, pathImpl);
+  if (!resolved) return false;
+  return resolved.candidate.toLowerCase().startsWith(
+    resolved.memoryRoot.toLowerCase() + pathImpl.sep
+  );
+}
+
 function isCanonicalMemoryPath(
   filePath,
   projectDir = resolveProjectDir(),
@@ -241,10 +253,11 @@ function isCanonicalMemoryPath(
 
 function isOrchestrationPath(filePath, projectDir, pathImpl, fsImpl) {
   const fp = String(filePath || '');
-  // A path lexically inside the private memory root must pass every canonical
-  // memory check. Never let generic artifact-name globs re-privilege a path
-  // rejected because of a symlink or filesystem ambiguity.
-  if (isLexicallyCanonicalMemoryPath(fp, projectDir, pathImpl)) {
+  // Any casing of a path lexically inside the private memory root must pass
+  // every exact-canonical memory check. This blocks case-insensitive filesystems
+  // from reaching the canonical directory through a lookalike path and then
+  // regaining privilege through a generic artifact-name glob.
+  if (isLexicallyMemoryRootPath(fp, projectDir, pathImpl)) {
     return isCanonicalMemoryPath(fp, projectDir, pathImpl, fsImpl);
   }
   return ORCHESTRATION_GLOBS.some((re) => re.test(fp));
@@ -516,6 +529,7 @@ module.exports = {
   classifyTool,
   isCanonicalMemoryPath,
   isLexicallyCanonicalMemoryPath,
+  isLexicallyMemoryRootPath,
   isOrchestrationPath,
   main,
 };

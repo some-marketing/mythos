@@ -355,6 +355,23 @@ check('generic handoff filename cannot re-allow a rejected memory symlink', () =
   assert.strictEqual(result.class, 'mutation');
 });
 
+check('alternate memory-root casing cannot re-allow a handoff symlink', () => {
+  const sb = makeSandbox();
+  const trackedTarget = path.join(sb.root, 'src');
+  const memoryRoot = path.join(sb.root, 'Mythos-memories');
+  fs.mkdirSync(trackedTarget, { recursive: true });
+  fs.mkdirSync(memoryRoot, { recursive: true });
+  fs.symlinkSync(trackedTarget, path.join(memoryRoot, 'tracked-link'), 'dir');
+  const result = runGate(
+    sb,
+    'Edit',
+    { file_path: 'mythos-memories/tracked-link/handoff.md' },
+    { enforcing: true }
+  );
+  assert.strictEqual(result.status, 2, 'case variation must not bypass memory containment');
+  assert.strictEqual(result.class, 'mutation');
+});
+
 check('Edit through a hard-linked memory target -> blocked', () => {
   const sb = makeSandbox();
   const memoryRoot = path.join(sb.root, 'Mythos-memories');

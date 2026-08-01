@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "eef54874d034e344f07a2a68dd55b8dd4c228fb515e5f0bb12dc9dff9ff0bb84",
+    "expected_tree_sha256": "8f39a0513515376f7a396b95f51d3c46e6aea50f2d8499fb07179504623c3813",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -6037,7 +6037,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "119d68ed1312e6e9903608e2bad46daf263537d7f7769f882f1eaca8582dcb93",
+        "sha256": "e7d7d23227fff12be4eec9d25bfe3e513e8b1a19f8e0ec734efb8f0050f168e3",
         "mode": 420
       },
       {
@@ -8772,7 +8772,7 @@
       },
       {
         "path": "tools/kernel/hooks/__tests__/pretool-orchestrator-worker-gate.test.cjs",
-        "sha256": "e1a38d7119fadcf63bc6ba06a6e1b16e2d115212b05283dec4c86c5d0cdde404",
+        "sha256": "6777dd168181a04e695d4500ae313b9fb304a04e4135c088d4b531d9c4097d5e",
         "mode": 420
       },
       {
@@ -8907,7 +8907,7 @@
       },
       {
         "path": "tools/kernel/hooks/pretool-orchestrator-worker-gate.cjs",
-        "sha256": "ddf07db6a87882f9faa7f866c6eb38c4f19d8144910634251475541d71d52c4b",
+        "sha256": "e4722b40da75bf49d21a81c6d099b236be9e8c1e99f03c6dfb4e0ebc39b9c516",
         "mode": 420
       },
       {
@@ -10542,7 +10542,7 @@
       },
       {
         "path": "tools/parity/__tests__/verify-parity.test.cjs",
-        "sha256": "b9480626fcff25dc242cd38224440d7f9b6f35f0700ea2cf8f4faee5a1e1a26f",
+        "sha256": "e044027e5b24e56509a5494988c477ead62dd8b8539391252bf8602d7556193a",
         "mode": 420
       },
       {
@@ -13439,7 +13439,7 @@
     "package_script_count": 203,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "119d68ed1312e6e9903608e2bad46daf263537d7f7769f882f1eaca8582dcb93",
+    "graph_sha256": "e7d7d23227fff12be4eec9d25bfe3e513e8b1a19f8e0ec734efb8f0050f168e3",
     "graph_nodes": 3748,
     "graph_edges": 2672
   },
@@ -13462,6 +13462,7 @@
     "_dev/tmp/**",
     "_dev/traces/**",
     "_dev/transcripts/**",
+    "Mythos-memories/**",
     "parity/reconciliation-ledger.json"
   ],
   "prohibited_paths": [

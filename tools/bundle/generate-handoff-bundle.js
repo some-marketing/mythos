@@ -23,13 +23,13 @@ import { writeHarnessFiles } from './lib/generate-harness.js';
 import { generateIndexJson, generateIndexMd } from './lib/generate-indexes.js';
 import { generateManifest } from './lib/generate-manifest.js';
 import { generateSummary } from './lib/generate-summary.js';
-import { forAllenSkeleton } from './templates/for-{DEVELOPER_NAME}-skeleton.js';
+import { recipientSkeleton } from './templates/recipient-skeleton.js';
 import { questionsSkeleton } from './templates/questions-skeleton.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const SCHEMAS_DIR = path.join(__dirname, 'schemas');
-const FOR_{DEVELOPER_NAME}_APPEND_BLOCK = 'BUNDLE_APPEND_MANAGED_BLOCK:FOR_{DEVELOPER_NAME}';
+const RECIPIENT_APPEND_BLOCK = 'BUNDLE_APPEND_MANAGED_BLOCK:FOR_{DEVELOPER_NAME}';
 const QUESTIONS_APPEND_BLOCK = 'BUNDLE_APPEND_MANAGED_BLOCK:QUESTIONS';
 
 // ── Argument parsing ────────────────────────────────────────────────────────
@@ -190,8 +190,8 @@ function runCreate(input, projectRoot) {
 
   // 11. Write skeleton markdown files
   const changelogStatus = input.changelog?.status || 'ABSENT';
-  const forAllen = forAllenSkeleton(bundleId, input.scope, bundleRuns, changelogStatus, createdAt);
-  writeText(path.join(bundleDir, 'For_{DEVELOPER_NAME}.md'), forAllen);
+  const forAllen = recipientSkeleton(bundleId, input.scope, bundleRuns, changelogStatus, createdAt);
+  writeText(path.join(bundleDir, 'For_Recipient.md'), forAllen);
 
   const questions = questionsSkeleton(bundleId, input.runs);
   writeText(path.join(bundleDir, 'QUESTIONS_FOR_DEVELOPER.md'), questions);
@@ -320,7 +320,7 @@ function runAppend(input, projectRoot) {
     scope: updatedScope,
     runs: allIndexRuns,
     summary_documents: {
-      for_{DEVELOPER_NAME}: 'For_{DEVELOPER_NAME}.md',
+      recipient: 'For_Recipient.md',
       questions: 'QUESTIONS_FOR_DEVELOPER.md',
       index_md: 'INDEX.md',
       index_json: 'INDEX.json',
@@ -356,11 +356,11 @@ function runAppend(input, projectRoot) {
 
   // 13. Update content-bearing markdown without clobbering authored sections.
   const changelogStatus = refreshedManifest.changelog_status || input.changelog?.status || 'ABSENT';
-  const existingForAllenText = safeReadText(path.join(bundleDir, 'For_{DEVELOPER_NAME}.md'));
+  const existingRecipientText = safeReadText(path.join(bundleDir, 'For_Recipient.md'));
   writeText(
-    path.join(bundleDir, 'For_{DEVELOPER_NAME}.md'),
-    updateForAllenAfterAppend(
-      existingForAllenText,
+    path.join(bundleDir, 'For_Recipient.md'),
+    updateRecipientAfterAppend(
+      existingRecipientText,
       bundleId,
       updatedScope,
       allRunDescriptors,
@@ -624,8 +624,8 @@ function replaceMetadataLine(text, label, value) {
   return text;
 }
 
-function updateForAllenAfterAppend(existingText, bundleId, scope, runs, changelogStatus, createdAt) {
-  const skeleton = forAllenSkeleton(bundleId, scope, runs, changelogStatus, createdAt);
+function updateRecipientAfterAppend(existingText, bundleId, scope, runs, changelogStatus, createdAt) {
+  const skeleton = recipientSkeleton(bundleId, scope, runs, changelogStatus, createdAt);
 
   // Case 1: No existing text or still a skeleton (LLM markers present) → regenerate
   if (!existingText || hasLlmMarkers(existingText)) {
@@ -652,8 +652,8 @@ function updateForAllenAfterAppend(existingText, bundleId, scope, runs, changelo
   updated = replaceMetadataLine(updated, 'Changelog', changelogStatus);
   updated = upsertManagedBlock(
     updated,
-    FOR_{DEVELOPER_NAME}_APPEND_BLOCK,
-    renderForAllenAppendix(bundleId, scope, runs, changelogStatus, createdAt)
+    RECIPIENT_APPEND_BLOCK,
+    renderRecipientAppendix(bundleId, scope, runs, changelogStatus, createdAt)
   );
   return updated.trimEnd() + '\n';
 }
@@ -696,7 +696,7 @@ function upsertManagedBlock(text, blockName, content) {
   return `${text.trimEnd()}\n\n${block}\n`;
 }
 
-function renderForAllenAppendix(bundleId, scope, runs, changelogStatus, createdAt) {
+function renderRecipientAppendix(bundleId, scope, runs, changelogStatus, createdAt) {
   const lines = [];
   lines.push('## Machine-Managed Bundle Context');
   lines.push('');
@@ -780,7 +780,7 @@ function buildContentManifest(bundleDir, bundleId, ts, runs) {
   markers.push('LLM:CROSS_RUN_PATTERNS', 'LLM:OPEN_QUESTIONS', 'LLM:EVIDENCE_GUIDE');
 
   files.push({
-    path: 'For_{DEVELOPER_NAME}.md',
+    path: 'For_Recipient.md',
     type: 'summary',
     markers,
   });

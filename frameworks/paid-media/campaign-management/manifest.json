@@ -1,0 +1,143 @@
+{
+  "service_category": "paid-media",
+  "framework_name": "campaign-management",
+  "version": "0.1.0",
+  "description": "End-to-end paid advertising campaign management: intake and account audit, campaign structure design, ad copy and creative briefs, and launch plan with measurement framework",
+  "prompt_count": 4,
+  "input_contract": {
+    "required": [
+      {
+        "name": "platform",
+        "description": "Advertising platform for the campaign (e.g., Meta, Google Ads, LinkedIn)"
+      },
+      {
+        "name": "budget",
+        "description": "Campaign budget amount and period (e.g., daily, monthly, lifetime)"
+      },
+      {
+        "name": "target_audience",
+        "description": "Target audience demographics, interests, and behaviors"
+      },
+      {
+        "name": "campaign_objective",
+        "description": "Primary campaign objective (e.g., conversions, awareness, lead generation)"
+      }
+    ],
+    "optional": [
+      {
+        "name": "existing_account",
+        "description": "Existing ad account details for audit and migration"
+      },
+      {
+        "name": "competitor_urls",
+        "description": "Competitor URLs for competitive landscape analysis"
+      },
+      {
+        "name": "landing_page_urls",
+        "description": "Landing page URLs the campaigns will drive traffic to"
+      },
+      {
+        "name": "historical_performance",
+        "description": "Historical campaign performance data for benchmarking"
+      },
+      {
+        "name": "industry",
+        "description": "Industry vertical for benchmark comparisons and best practices"
+      }
+    ]
+  },
+  "output_contract": {
+    "directories": [
+      "outputs/campaign-management/"
+    ],
+    "artifacts": [
+      "outputs/campaign-management/intake-and-audit.md",
+      "outputs/campaign-management/campaign-structure.md",
+      "outputs/campaign-management/ad-copy-and-creative-brief.md",
+      "outputs/campaign-management/launch-plan-and-measurement.md"
+    ]
+  },
+  "output_contract_v2": {
+    "directories": [
+      {
+        "path": "outputs/campaign-management/",
+        "required": true,
+        "description": "All campaign management deliverables and plans"
+      }
+    ],
+    "artifacts": [
+      {
+        "name": "intake-and-audit.md",
+        "path_pattern": "outputs/campaign-management/intake-and-audit.md",
+        "required": true
+      },
+      {
+        "name": "campaign-structure.md",
+        "path_pattern": "outputs/campaign-management/campaign-structure.md",
+        "required": true
+      },
+      {
+        "name": "ad-copy-and-creative-brief.md",
+        "path_pattern": "outputs/campaign-management/ad-copy-and-creative-brief.md",
+        "required": true
+      },
+      {
+        "name": "launch-plan-and-measurement.md",
+        "path_pattern": "outputs/campaign-management/launch-plan-and-measurement.md",
+        "required": true
+      }
+    ],
+    "bundle_types": []
+  },
+  "execution_modes": [
+    "FINDINGS_ONLY",
+    "REVIEW_ONLY",
+    "PATCH_ALLOWED"
+  ],
+  "mcp_requirements": [],
+  "prompt_chain": {
+    "intake": [
+      "01_INTAKE_AND_AUDIT"
+    ],
+    "structure": [
+      "02_CAMPAIGN_STRUCTURE"
+    ],
+    "creative": [
+      "03_AD_COPY_AND_CREATIVE_BRIEF"
+    ],
+    "launch": [
+      "04_LAUNCH_PLAN_AND_MEASUREMENT"
+    ]
+  },
+  "skills": [
+    "campaign-management/SKILL.md"
+  ],
+  "commands": [
+    "run",
+    "status",
+    "intake-and-audit",
+    "campaign-structure",
+    "ad-copy-and-creative-brief",
+    "launch-plan-and-measurement"
+  ],
+  "agents": [
+    "intake-and-audit-agent",
+    "campaign-structure-agent",
+    "ad-copy-and-creative-brief-agent",
+    "launch-plan-and-measurement-agent"
+  ],
+  "distilled_from": {
+    "source": "coreyhaines31/marketingskills",
+    "skill": "paid-ads",
+    "version": "1.1.0",
+    "license": "MIT",
+    "classification": "framework-candidate",
+    "classification_date": "2026-03-31"
+  },
+  "patterns": [
+    "paid-media-campaign-management",
+    "budget-pacing-review",
+    "campaign-optimization-plan",
+    "ad-platform-operations"
+  ]
+}

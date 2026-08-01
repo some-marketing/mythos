@@ -1,0 +1,27 @@
+{
+  "id": "new-client",
+  "description": "Create new client entry",
+  "mode": "PATCH_ALLOWED",
+  "objective": "Register a new agency client in Mythos by creating the client directory structure, initializing metadata, and updating the client registry.",
+  "process": [
+    "Parse arguments for client code and client name. If either is missing, prompt the user.",
+    "Validate that the client code does not already exist under clients/.",
+    "Load the manage-clients skill workflow: .claude/skills/manage-clients/SKILL.md and follow the create-client workflow.",
+    "Create the client directory at clients/{code}/ with the required metadata file.",
+    "Register the client in the Mythos client registry.",
+    "Confirm creation by listing the new directory contents."
+  ],
+  "success_criteria": [
+    "Client directory created at clients/{code}/",
+    "Client metadata file initialized with name, code, and creation date",
+    "Client registered in Mythos",
+    "No duplicate client codes created"
+  ],
+  "handoff": {
+    "client_created": "new-project <client-code> <service/framework> <project-slug>",
+    "client_already_exists": "project-status <client-code>"
+  },
+  "artifacts": [
+    "clients/{code}/client.json"
+  ]
+}

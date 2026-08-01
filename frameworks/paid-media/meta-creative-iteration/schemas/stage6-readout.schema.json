@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Stage 6 — Insights Readout",
+  "type": "object",
+  "required": ["timestamp", "preregistration_path", "modeled_reporting_caveat", "cells"],
+  "properties": {
+    "timestamp": { "type": "string", "format": "date-time" },
+    "preregistration_path": { "type": "string" },
+    "preregistration_valid": { "type": "boolean" },
+    "modeled_reporting_caveat": {
+      "type": "string",
+      "const": "Meta's reporting is increasingly modeled/obfuscated. Framework-class attribution is for our learning, not for claims about the platform's optimization geometry."
+    },
+    "cells": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["framework_id", "observed_metric_value", "sample_size", "attribution_window_status", "state"],
+        "properties": {
+          "framework_id": { "type": "string" },
+          "observed_metric_value": { "type": "number" },
+          "sample_size": { "type": "integer", "minimum": 0 },
+          "attribution_window_status": { "type": "string", "enum": ["open", "closed"] },
+          "state": { "type": "string", "enum": ["decide", "monitor", "do_not_decide_yet"] },
+          "interpretation_note": { "type": "string" },
+          "stopping_rule_triggered": { "type": ["string", "null"] }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

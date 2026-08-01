@@ -35,9 +35,9 @@ export interface CascadeSpanNode {
 
 /** Work/scope lineage. Consumes the owner's live scope/lineage fields. */
 export interface CascadeSpanScope {
-  /** Owner field: scope_identity (env SM_OS_WORKSTREAM_SCOPE). */
+  /** Owner field: scope_identity (env MYTHOS_WORKSTREAM_SCOPE). */
   scope_identity: string | null;
-  /** Bounded work-unit id. Owner field: step_id (env SM_OS_STEP_ID). */
+  /** Bounded work-unit id. Owner field: step_id (env MYTHOS_STEP_ID). */
   work_unit: string | null;
   /** Root of the cascade lineage. Owner field: lineage_root_session_id. */
   lineage_root?: string | null;

@@ -8,7 +8,7 @@
 //
 // Usage:
 //   node tools/mcp/google-ads/l0-diagnostic-pull.js \
-//     --customer-id 8560375238 \
+//     --customer-id "$GOOGLE_ADS_CUSTOMER_ID" \
 //     --out-dir clients/YOUR_CLIENT/shared/google-ads-l0-pull__YYYYMMDD \
 //     [--date-range LAST_30_DAYS]
 //

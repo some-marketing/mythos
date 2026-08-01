@@ -1,0 +1,272 @@
+# Skill Contract Schema v0.2.0
+#
+# Canonical schema for contract-bearing skills and skill-like units in Mythos.
+# Rebuilt from v0.1.0 (concept branch) against current system.yaml, guardrails.md,
+# and proof surfaces (QA, CLIENTA recovery/debug).
+#
+# Prior art: v0.1.0 from concept branch (first-pass normalized contract model).
+# This version adds trust_tier descriptions, promotion_state lifecycle,
+# artifact_contract detail, and inheritance semantics grounded in real usage.
+
+version: 0.2.0
+purpose: >
+  Normalized contract model for skill-like work in Mythos, derived from
+  current repo reality: system.yaml operations, guardrails.md behavioral law,
+  QA proof surface evidence, and CLIENTA gate law reference notes.
+
+# ─── Required Fields ─────────────────────────────────────────────────────────
+
+required:
+  - id
+  - name
+  - description
+  - scope
+  - execution_mode
+  - required_inputs
+  - expected_outputs
+  - behavioral_laws
+  - evidence_requirements
+  - verification
+  - trust_tier
+  - artifact_contract
+
+# ─── Optional Fields ─────────────────────────────────────────────────────────
+
+optional:
+  - framework_id
+  - operation_id
+  - prerequisites
+  - escalation_conditions
+  - recovery_rules
+  - promotion_state
+  - version
+  - examples
+
+# ─── Field Definitions ───────────────────────────────────────────────────────
+
+fields:
+  id:
+    type: string
+    description: >
+      Unique identifier for the skill. Format: {framework_id}:{skill-name}
+      or {operation_id} for system-level operations.
+
+  name:
+    type: string
+    description: Human-readable skill name.
+
+  description:
+    type: string
+    description: >
+      One-paragraph description of what the skill does, when to use it,
+      and what it produces.
+
+  scope:
+    type: string
+    description: >
+      Dotted scope path describing the skill's operational domain.
+      Example: qa.dev-handoff.bundle-compilation
+
+  execution_mode:
+    type: enum
+    description: >
+      The primary execution mode this skill operates under. Exactly one
+      mode must be declared. Mode semantics are defined in execution.yaml.
+    allowed:
+      - FINDINGS_ONLY
+      - RUN_ONLY
+      - REVIEW_ONLY
+      - PATCH_ALLOWED
+      - COORDINATOR
+      - REPO_HYGIENE
+
+  required_inputs:
+    type: list[object]
+    description: >
+      Inputs that must be provided before the skill can execute.
+      Each entry has a name and description.
+
+  expected_outputs:
+    type: list[object]
+    description: >
+      Artifacts the skill is expected to produce on successful completion.
+      Each entry has a name, path_pattern, and description.
+
+  behavioral_laws:
+    type: list[string]
+    description: >
+      References to applicable law files in instructions/canonical/contracts/.
+      At minimum, execution.yaml and reporting.yaml apply to all skills.
+      Framework-local laws may be referenced by relative path.
+
+  evidence_requirements:
+    type: list[string]
+    description: >
+      What evidence must accompany the skill's output. For skills above
+      instruction_only trust tier, this must be non-empty. Examples:
+      changed_files, test_results, acceptance_criteria, screenshots,
+      evidence_paths, run_meta.
+
+  verification:
+    type: object
+    description: >
+      How the skill's output is verified after completion.
+    required_fields:
+      - checks
+      - verifier
+    fields:
+      checks:
+        type: list[string]
+        description: >
+          Named checks to run. Examples: output_exists, schema_valid,
+          observational_compliance, bundle_complete.
+      verifier:
+        type: string
+        description: >
+          Path to the verification script or agent that runs the checks.
+          Example: tools/verify/verify-framework.cjs
+
+  trust_tier:
+    type: enum
+    description: >
+      Declares the level of system trust required for this skill to operate.
+      Tiers are defined in trust-tiers.yaml. Higher tiers require stronger
+      evidence and may require explicit user gating.
+    allowed:
+      - instruction_only
+      - report_write_scoped
+      - patch_scoped
+      - external_service_touching
+      - meta_modifying
+
+  artifact_contract:
+    type: object
+    description: >
+      Declares which artifacts the skill treats as immutable inputs versus
+      mutable outputs. This enforces evidence integrity boundaries.
+    required_fields:
+      - immutable_inputs
+      - mutable_outputs
+    fields:
+      immutable_inputs:
+        type: list[string]
+        description: >
+          Artifact categories the skill must never modify. Examples:
+          evidence captures, logs, network traces, run.meta.json.
+      mutable_outputs:
+        type: list[string]
+        description: >
+          Artifact categories the skill is allowed to create or update.
+          Examples: analysis reports, bundle indexes, changelogs.
+
+  # ─── Optional Field Definitions ──────────────────────────────────────────
+
+  framework_id:
+    type: string
+    required: false
+    description: >
+      The framework this skill belongs to. Format: {service}/{framework}.
+      Example: wordpress/qa. Omit for system-level operations.
+
+  operation_id:
+    type: string
+    required: false
+    description: >
+      The system operation this skill implements or supports.
+      Must match an id from system.yaml operations list when present.
+
+  prerequisites:
+    type: list[string]
+    required: false
+    description: >
+      Skills or conditions that must be satisfied before this skill activates.
+      Defined in composition.yaml.
+
+  escalation_conditions:
+    type: list[string]
+    required: false
+    description: >
+      Conditions under which this skill must hand off to a different skill,
+      agent, or the operator. Examples: stakeholder gate triggered,
+      blocker findings persist after max retries, scope expansion detected.
+
+  recovery_rules:
+    type: list[string]
+    required: false
+    description: >
+      What to do when the skill fails or produces incomplete output.
+      Examples: retry with fresh subagent, escalate to operator, defer.
+
+  promotion_state:
+    type: enum
+    required: false
+    description: >
+      Lifecycle state of this skill contract definition. Skills progress
+      from draft through promotion. Deprecated skills remain readable
+      but should not be activated.
+    allowed:
+      - draft
+      - candidate
+      - promoted
+      - deprecated
+
+  version:
+    type: string
+    required: false
+    description: Semantic version of this specific skill contract.
+
+  examples:
+    type: list[string]
+    required: false
+    description: >
+      Paths to example invocations or reference usage of this skill.
+
+# ─── Inheritance Model ───────────────────────────────────────────────────────
+
+inheritance:
+  description: >
+    Contract fields are resolved through a four-layer inheritance chain.
+    Each layer may narrow constraints from the layer above but must not
+    silently widen them. Runtime code is the final enforcement authority.
+  order:
+    - layer: system_defaults
+      source: instructions/canonical/contracts/
+      description: >
+        Global behavioral laws, execution mode definitions, trust tier
+        definitions, reporting requirements, and evidence standards.
+        These apply to all skills unless explicitly narrowed.
+
+    - layer: framework_narrowing
+      source: frameworks/{service}/{framework}/contracts/
+      description: >
+        Framework-local specializations that add strictness beyond the
+        system defaults. Example: QA adds gate-induced write blocking
+        and bundle append-only rules. Frameworks may not weaken system laws.
+
+    - layer: skill_specialization
+      source: Individual skill contract declaration
+      description: >
+        The specific skill declares its exact execution mode, trust tier,
+        inputs, outputs, and verification. This is the most specific layer.
+
+    - layer: runtime_invariant_enforcement
+      source: Code (verify scripts, signal library, runner CLI)
+      description: >
+        Runtime code enforces invariants that cannot be circumvented by
+        contract declarations alone. Mode enforcement, file write guards,
+        and signal validation happen here. This layer is the final authority.
+
+# ─── Notes ───────────────────────────────────────────────────────────────────
+
+notes:
+  - >
+    This schema makes existing distributed contract assignments legible.
+    It does not replace or override runtime enforcement.
+  - >
+    v0.2.0 changes from v0.1.0: made framework_id and operation_id optional
+    (system operations may not have a framework), added promotion_state
+    lifecycle, enriched trust_tier and artifact_contract descriptions,
+    formalized the four-layer inheritance model with source paths.
+  - >
+    Evidence requirements must be non-empty for all trust tiers above
+    instruction_only. This is enforced by verify-skill-contract.cjs.

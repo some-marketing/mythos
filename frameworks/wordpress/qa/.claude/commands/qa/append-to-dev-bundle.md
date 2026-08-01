@@ -7,7 +7,7 @@ allowed-tools: Task
 <objective>
 Invoke the framework/append-to-dev-bundle skill to append one or more testcase runs into
 an existing payload-reporting handoff bundle, updating bundle indexes and the lean
-For_{DEVELOPER_NAME}.md summary.
+For_Recipient.md summary.
 </objective>
 
 <context>
@@ -56,7 +56,7 @@ Recent testcases/runsets:
    d. Run intake loop for the specified testcase run
    e. Copy raw artifacts into the bundle evidence directory
    f. Generate per-run reports (observational, not diagnostic)
-   g. Update the bundle index, For_{DEVELOPER_NAME}.md summary, and LLM_MANIFEST.json
+   g. Update the bundle index, For_Recipient.md summary, and LLM_MANIFEST.json
       (includes canonical_changelog_path and changelog_status)
    h. Generate QUESTIONS_FOR_DEVELOPER.md (developer interview template)
 </process>
@@ -66,6 +66,6 @@ Recent testcases/runsets:
 - All three required arguments (BUNDLE_PATH, TESTCASE_ID, RUNSET_ID) parsed correctly
 - Existing bundle validated before modification
 - New run data appended without overwriting existing entries
-- Bundle index and For_{DEVELOPER_NAME}.md updated to reflect appended runs
+- Bundle index and For_Recipient.md updated to reflect appended runs
 - QUESTIONS_FOR_DEVELOPER.md generated for developer handoff conversation
 </success_criteria>

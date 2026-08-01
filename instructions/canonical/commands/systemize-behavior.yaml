@@ -1,0 +1,24 @@
+{
+  "id": "systemize-behavior",
+  "description": "Advisory detector for repeated corrections and repeat-task descriptions",
+  "mode": "REVIEW_ONLY",
+  "objective": "Inspect freeform operator text for repeated corrections or recurring task descriptions, classify whether the signal is strong enough to justify a code-worthy substrate candidate, and return an advisory object without executing any downstream route.",
+  "process": [
+    "Parse freeform input text from positionals or --text. Accept optional --json, --slug, and --id flags.",
+    "Run the advisory detector from tools/planning/lib/systemization-detector.js against the supplied text.",
+    "Mark the result as advisory_not_authority=true and preserve the candidate schema fields.",
+    "If evidence is strong enough, suggest the route 'concept-init -> plan-task' as a recommendation only. Do not execute either command.",
+    "Render JSON when --json is supplied; otherwise render a compact human summary with triggers, warnings, and the suggested next route."
+  ],
+  "success_criteria": [
+    "Freeform input text is accepted and classified",
+    "Structured advisory fields are returned",
+    "Outputs clearly state that the result is advisory, not authority",
+    "When appropriate, the next route recommends concept-init and plan-task without executing them"
+  ],
+  "handoff": {
+    "candidate_ready": "concept-init <candidate-slug> then plan-task <bounded-task>",
+    "insufficient_signal": "Collect another occurrence or more complete transcript before promoting to concept work"
+  },
+  "artifacts": []
+}

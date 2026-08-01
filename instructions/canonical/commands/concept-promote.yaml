@@ -1,0 +1,31 @@
+{
+  "id": "concept-promote",
+  "description": "Promote a flat concept to a bundle, or a concept to an Mythos structure",
+  "mode": "PATCH_ALLOWED",
+  "objective": "Promote a concept through its lifecycle: flat file to bundle, or concept to a durable Mythos structure (framework, skill, policy, tool).",
+  "process": [
+    "Parse arguments for concept slug and promotion target flag: --to-bundle, --to-framework, --to-skill, or --to-policy.",
+    "Locate the concept: check _dev/concepts/<slug>.md (flat file) and _dev/concepts/<slug>/concept.md (bundle). If neither exists, report error and stop.",
+    "If --to-bundle: create _dev/concepts/<slug>/ directory, move the flat file to _dev/concepts/<slug>/concept.md, create status.json with stage draft, create empty context/ and dispatch/ directories.",
+    "If --to-framework: read the concept, verify it has a clear framework scope, feed it as intake to the capture pipeline via /capture-task, update status.json with promoted_to path.",
+    "If --to-skill: read the concept, verify it describes a repeatable workflow, feed it as intake to /extract-skill, update status.json with promoted_to path.",
+    "If --to-policy: read the concept, identify the policy rules it encodes, present proposed additions to .claude/guardrails.md or instructions/canonical/ for user confirmation before writing, update status.json with promoted_to reference.",
+    "If no flag provided, ask the user which promotion path is appropriate."
+  ],
+  "success_criteria": [
+    "Concept located and promotion path validated",
+    "Flat-to-bundle: directory created, file moved, status.json initialized",
+    "To Mythos structure: appropriate pipeline invoked with concept as intake",
+    "status.json updated with promoted_to reference"
+  ],
+  "handoff": {
+    "promoted_to_bundle": "/concept-dispatch <slug>",
+    "promoted_to_framework": "/capture-task or /scaffold-framework",
+    "promoted_to_skill": "/extract-skill",
+    "promoted_to_policy": "Operator reviews guardrail changes"
+  },
+  "artifacts": [
+    "_dev/concepts/<slug>/concept.md",
+    "_dev/concepts/<slug>/status.json"
+  ]
+}

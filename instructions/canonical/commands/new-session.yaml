@@ -1,0 +1,28 @@
+{
+  "id": "new-session",
+  "description": "Open a session — auto-commit, clean-house if dirty, then daily briefing + kernel read",
+  "mode": "REPO_HYGIENE",
+  "objective": "The canonical session-open entry point. Composes /boot and /clean-house so the operator gets a clean working tree AND a kernel-level read in one command. Symmetric to /shutdown (which closes a session); /new-session opens one. Mechanical execution delegates to `tools/commands/handlers/new-session.cjs` (via tools/commands/smos-command-runner.cjs). The process array below remains the authoritative specification, the permanent manual bypass, and the strict baseline for mechanical drift-detection.",
+  "process": [
+    "Step 1 — auto-commit (from /boot): Run node tools/hygiene/auto-commit.js --auto --foreground via Bash. Exit 0 = success (clean, all committed, OR skipped due to branch gate). Exit 2 = partial (ungrouped files skipped). Both acceptable, continue. Exit 1 = failure — stop and report. In addition, run node tools/hygiene/disk-quota-guard.cjs --check to verify host available disk space remains above 15 GB, failing-safe to warning-only mode.",
+    "Step 2 — dirty-tree gate: Run git status --short | wc -l and capture the count. If count == 0: skip to step 4. If count > 0 (auto-commit was skipped due to branch gate, or left ungrouped files behind): proceed to step 3.",
+    "Step 3 — /clean-house (only if dirty): Invoke /clean-house per its canonical process, which includes mandatory custody scoping before any commit proposal. The dirty-tree inventory must be scoped to this session's own custody (write-ledger _dev/state/active-sessions/<session_id>/write_log.json ∪ the active plan's scope_identity.owned_artifacts). Files outside that custody set are surfaced as out_of_custody_dirty and MUST NOT be proposed for commit — per orchestrate-loop invariant 'global dirty worktree state is context, not ownership'. The git-custody gate (tools/hooks/pretool-git-custody-gate.cjs) is the mechanical backstop. Full process: inventory → custody-scoped grouping → propose commit plan (own files only, foreign files listed as context) → operator approval → execute scoped commits. Do NOT bypass the approval gate. On deferral: capture deferred files and surface them in the kernel read (step 5) under BLOCKED.",
+    "Step 3b — resume-boundary context load (only when the operator chooses a pending boundary scope): Run node tools/sessions/consume-boundary.cjs <scope>. Treat the emitted <RESUMED_SESSION_HANDOFF ...> packet as the Current State seed for that resumed scope. The consumer loads only the selected scope's handoff content with bounded full/excerpt behavior; it does not consume or inject other pending scopes. If the packet reports HANDOFF_MISSING or HANDOFF_STALE, surface that warning before following the recommended next command.",
+    "Step 4 — system status + active work (from /boot): Run npm run status via Bash and surface next recommended command, system health, maintenance conditions, live signals, and planning staleness. Invoke the /whats-next process exactly as defined in that command. Do not reimplement. The composed /boot step owns repo-awareness and plan-visibility cache invalidation (see boot.yaml step 1b). Cache refresh (boot.yaml 1b, mechanical): the deterministic runner first runs `npm run context:repo-awareness` to rebuild the repo-awareness surface, then `npm run plans:dashboard` ONLY when repo-awareness reports stale plan visibility. Dead-session reaper (mechanical, advisory): the runner also runs a report-only scan (tools/sessions/boot-dead-session-reaper.cjs) that surfaces pending boundary scopes which are crash-stub orphans or whose referenced plan already shows completion evidence (plan-task-review-state at an approved/stamped/complete grade), each with resume-or-tombstone options and evidence links. It NEVER auto-consumes or tombstones — tombstoning is an operator action with a receipt.",
+    "Step 5 — kernel read (from /boot): Produce three sections in what/why/reasons format, 1–3 lines each. LOAD-BEARING RIGHT NOW: what, why, reasons. BLOCKED ON YOU (operator): what, why, reasons (include any deferred clean-house files from step 3). HIGHEST-LEVERAGE NEXT MOVE: what, why, reasons. If any section is genuinely empty, say so in one line — don't pad."
+  ],
+  "success_criteria": [
+    "Auto-commit runs first; clean-house runs only if the tree is dirty after auto-commit",
+    "After clean-house (or skip), system status, active work, and kernel read all present in one output",
+    "Kernel read reflects post-commit truth, not pre-clean-house noise",
+    "Operator does not need to run /boot, /clean-house, /whats-next, or /mythos-status afterward",
+    "Symmetric to /shutdown: opens what shutdown closed"
+  ],
+  "boundaries": [
+    "This is an orchestrator. /boot and /clean-house keep their own boundaries and approval gates; /new-session does not bypass them.",
+    "Does NOT execute task plans — read-only after the commit steps.",
+    "Does NOT push to remote.",
+    "Does NOT make decisions for the operator — surfaces options.",
+    "If clean-house halts on operator rejection, surface deferred files in the kernel read but continue to status + kernel read; do not abort the briefing."
+  ]
+}

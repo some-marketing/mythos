@@ -9,7 +9,7 @@
 //
 // Usage (from repo root):
 //   node tools/mcp/google-ads/pull-change-events.js \
-//     --customerId 8560375238 \
+//     --customerId "$GOOGLE_ADS_CUSTOMER_ID" \
 //     [--days 30]              # default: 30; API hard max = 30 days (START_DATE_TOO_OLD)
 //     [--out _dev/reports/analysis/change-events__YYYYMMDD.json]
 //

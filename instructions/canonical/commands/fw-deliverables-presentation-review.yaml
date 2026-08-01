@@ -1,0 +1,22 @@
+{
+  "id": "fw-deliverables-presentation-review",
+  "description": "Run Presentation Review \u2014 Cross-reference audit of client presentations against project plan documents, screenshots, and errata",
+  "mode": "COORDINATOR",
+  "objective": "Execute the Presentation Review framework against a client project. Routes into the per-framework harness at frameworks/deliverables/presentation-review/.claude/.",
+  "process": [
+    "Read authoritative process from .claude/commands/fw-deliverables-presentation-review.md and frameworks/deliverables/presentation-review/manifest.json.",
+    "Verify project path and framework link.",
+    "Verify MCP availability per framework manifest.",
+    "Execute via /run-framework deliverables/presentation-review <project-path>.",
+    "Validate outputs against manifest output contract."
+  ],
+  "success_criteria": [
+    "Framework prompt chain executed in correct order",
+    "Output artifacts match manifest output contract"
+  ],
+  "source_of_truth": {
+    "claude_command": ".claude/commands/fw-deliverables-presentation-review.md",
+    "framework_manifest": "frameworks/deliverables/presentation-review/manifest.json",
+    "canonical_spec_note": "This canonical spec is the thin routing layer. The Claude command (.claude/commands/) and framework manifest carry the full argument contract, prompt chain, phase table, and operational detail."
+  }
+}

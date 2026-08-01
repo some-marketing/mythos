@@ -1,0 +1,85 @@
+{
+  "schema": "HarnessPlanOutputContract/1.0",
+  "purpose": "Classify plan-like output from each harness before Mythos treats it as runnable planning authority.",
+  "authority": {
+    "canonical_source": "TaskPlan/1.0 JSON validated by tools/planning/task-intake.schema.json plus methodology routing validation",
+    "paired_operator_surface": "Task plan Markdown paired to the canonical JSON",
+    "non_authority_warning": "[NON-AUTHORITY PREVIEW - UNSAFE FOR RUN-PLAN]",
+    "rule": "HTML, Markdown-only, draw.io, mxfile, prose, and harness-native plan documents are previews until translated into canonical TaskPlan/1.0 JSON and explicitly accepted."
+  },
+  "categories": [
+    {
+      "id": "native_canonical_writer",
+      "description": "Harness can directly produce canonical TaskPlan/1.0 JSON and paired Markdown."
+    },
+    {
+      "id": "repo_tool_mediated_writer",
+      "description": "Harness can call Mythos planning tools that produce canonical TaskPlan/1.0 artifacts."
+    },
+    {
+      "id": "adapter_mediated_translator",
+      "description": "Harness output can be translated by a reviewed adapter, but conversion must not write into active task-plan roots without operator confirmation or cross-lobe verification."
+    },
+    {
+      "id": "review_only",
+      "description": "Harness can critique or preview plans but cannot create runnable planning authority."
+    },
+    {
+      "id": "unsupported",
+      "description": "Harness has no trusted plan-output route."
+    },
+    {
+      "id": "unknown",
+      "description": "Harness plan-output capability has not been inventoried."
+    }
+  ],
+  "statuses": [
+    {
+      "id": "canonical",
+      "runnable": true,
+      "operator_message": "Canonical TaskPlan/1.0 JSON passed schema and methodology validation."
+    },
+    {
+      "id": "repair_needed",
+      "runnable": false,
+      "operator_message": "Plan-like JSON exists, but it must be repaired before /run-plan."
+    },
+    {
+      "id": "adapter_needed",
+      "runnable": false,
+      "operator_message": "Plan-like output requires a reviewed adapter before it can become TaskPlan/1.0 authority."
+    },
+    {
+      "id": "preview_only",
+      "runnable": false,
+      "operator_message": "This output may help humans review the work, but it is not runnable planning authority."
+    },
+    {
+      "id": "unsupported",
+      "runnable": false,
+      "operator_message": "This harness output is not currently accepted as a plan source."
+    },
+    {
+      "id": "invalid",
+      "runnable": false,
+      "operator_message": "The candidate artifact could not be parsed or inspected safely."
+    }
+  ],
+  "required_canonical_checks": [
+    "JSON parses successfully",
+    "schema equals TaskPlan/1.0",
+    "tools/planning/task-intake.schema.json validation passes",
+    "tools/planning/lib/validate-task-plan.js methodology validation passes",
+    "paired Markdown path exists when provided by the plan workflow"
+  ],
+  "operator_gates": [
+    "Adapter-mediated conversions must not write into _dev/reports/analysis/task-plans without explicit operator confirmation or cross-lobe verification.",
+    "Preview artifacts must display the non-authority warning before being surfaced as visual or readable plans.",
+    "Runnable authority remains gated by /review-task-plan and /run-plan."
+  ],
+  "harness_inventory": {
+    "plan_output_path_field": "plan_output_path",
+    "contract_path": "instructions/canonical/harness-plan-output-contract.yaml",
+    "rule": "Harness capability dashboards should surface this path on plan_support rows so the operator can see which contract governs plan output."
+  }
+}

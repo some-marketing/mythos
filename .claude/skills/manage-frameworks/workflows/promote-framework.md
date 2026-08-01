@@ -4,7 +4,7 @@
 
 1. **[AUTO] Read candidate metadata** — Load `candidate.json` and compute promotion readiness from current files.
 2. **[AUTO] Enforce promotion gates** — Stop if replay, evidence count, or sanitization checks fail.
-3. **[AUTO] Copy framework assets** — Copy `proposed_framework/` into `learning-language-models/frameworks/{service}/{framework}/`.
+3. **[AUTO] Copy framework assets** — Copy `proposed_framework/` into `Mythos/frameworks/{service}/{framework}/`.
 4. **[AUTO] Register canonically** — Update `instructions/canonical/system.yaml` and the framework spec file under `instructions/canonical/frameworks/{service}/`.
 5. **[AUTO] Regenerate managed instructions** — Run `npm run instructions:generate`.
 6. **[AUTO] Sync manifest** — Run `npm run manifest:sync` to register the promoted framework in `.claude/project-claude.yml`.
@@ -20,8 +20,19 @@
    - **validation_results**: Output of `npm run instructions:validate`, `npm run manifest:check`, and `npm run manifest:validate` from step 7 (full stdout/stderr, not just pass/fail)
 10. **[GATE: blockers found] Reopen** — If the completion audit returns blocker-level findings, fix only the specific unmet items and re-run (maximum 2 reopen cycles). If blockers persist, escalate to user.
 
+## Post-Workflow Hooks
+
+11. **[AUTO] Run lifecycle hooks** — Execute the `post-promote` hook chain:
+    ```
+    npm run lifecycle:hooks -- --profile post-promote --framework-id <service/framework> --candidate-root <candidate-root>
+    ```
+    This runs deterministic post-promotion tail work: instruction regeneration, manifest sync, validation, framework verification, system verification, and next-actions artifact generation. If any hook fails, report the failure and stop. Do not silently skip hook failures.
+
+    IMPORTANT: Promotion itself is explicit and user-initiated (steps 1-8). These hooks are post-promotion cleanup only. They never auto-promote anything.
+
 ## Output
 
 - New framework under `frameworks/`
 - Updated canonical registration
 - Regenerated harness instruction files
+- Lifecycle hook artifacts in `_dev/reports/lifecycle/`

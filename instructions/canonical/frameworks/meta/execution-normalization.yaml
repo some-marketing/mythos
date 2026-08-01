@@ -1,0 +1,11 @@
+{
+  "id": "meta/execution-normalization",
+  "manifest_path": "frameworks/meta/execution-normalization/manifest.json",
+  "description": "Tool-agnostic pipeline for normalizing framework execution models with progressive code offloading",
+  "inputs": ["framework_id", "source_formats"],
+  "outputs": ["docs/ARTIFACT_CONTRACT.md", "docs/NORMALIZED_EXECUTION_MODEL.md"],
+  "modes": ["REVIEW_ONLY", "RUN_ONLY", "PATCH_ALLOWED", "COORDINATOR"],
+  "operations": ["execution-normalization:contract-definition", "execution-normalization:design", "execution-normalization:compilation", "execution-normalization:implementation", "execution-normalization:verification", "execution-normalization:reporting", "execution-normalization:distribution"],
+  "agent_profiles": [],
+  "guardrail_overrides": ["Progressive code offloading", "Parity verification required"]
+}

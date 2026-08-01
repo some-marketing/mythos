@@ -3,7 +3,7 @@ name: append-to-dev-bundle
 description: >
   Appends one or more testcase runs to an existing payload-reporting developer
   handoff bundle, updating bundle indexes (INDEX.md, INDEX.json) and the
-  For_{DEVELOPER_NAME}.md summary. Used when a bundle already exists and new runs need
+  For_Recipient.md summary. Used when a bundle already exists and new runs need
   to be added without creating a fresh bundle.
 ---
 
@@ -52,7 +52,7 @@ frameworks/wordpress/qa/prompts/14_APPEND_PAYLOAD_REPORTING_TO_EXISTING_HANDOFF.
 4. [AUTO] Generate per-run canonical payload reports and deep analysis
 5. [GATE: discrepancies found] Present questions to user in chat. **STOP and wait for user response before proceeding.**
 6. [AUTO] Append artifacts, evidence, and raw inputs into existing bundle
-7. [AUTO] Update bundle indexes (INDEX.md, INDEX.json, For_{DEVELOPER_NAME}.md)
+7. [AUTO] Update bundle indexes (INDEX.md, INDEX.json, For_Recipient.md)
 8. [USER] Report bundle path, new report paths, follow-ups. **STOP and wait for user response before proceeding.**
 Key deliverable: Updated DEV_HANDOFF bundle with appended runs and refreshed indexes.
 </quick_start>
@@ -110,7 +110,7 @@ Stakeholder answers (if gate triggered):
 Updated in existing bundle:
 - llm/LLM_MANIFEST.json (updated with new runs, changelog fields)
 - INDEX.md (appended), INDEX.json (appended)
-- For_{DEVELOPER_NAME}.md (new per-run sections added)
+- For_Recipient.md (new per-run sections added)
 - QUESTIONS_FOR_DEVELOPER.md (updated)
 - reports/ (new reports), raw/ (new inputs, dev_changelog.md)
 - evidence/{testcase_id}/{run_id}/ (full runset directories)
@@ -152,7 +152,7 @@ Same delegation table as Prompt 13:
 3. If YES: validate, copy to canonical location + bundle raw/.
 4. If NO: check LATEST.txt; if current, reuse. Otherwise ask if codebase changed.
    - "yes"/"unknown" → collect via Prompt 16.
-   - "no" → proceed without; note in For_{DEVELOPER_NAME}.md.
+   - "no" → proceed without; note in For_Recipient.md.
 5. Confirm changelog status.
 
 **STOP and wait for user response before proceeding.**
@@ -199,7 +199,7 @@ Proceed to step 3.
 **Fallback (user explicitly unavailable):**
 Only if user explicitly says "skip" or "can't answer now":
 - Mark all items as UNKNOWN
-- Note in For_{DEVELOPER_NAME}.md that gate was skipped
+- Note in For_Recipient.md that gate was skipped
 </step>
 
 <step number="3" name="Append artifacts into bundle" type="AUTO">
@@ -213,7 +213,7 @@ Merge new run data into existing bundle-level files:
 0. llm/LLM_MANIFEST.json — update runs[], reporting_expectations, changelog fields
 1. INDEX.md — add new runs with stable ordering (by testcase_id, then run_id)
 2. INDEX.json — append artifact records with stable ordering
-3. For_{DEVELOPER_NAME}.md — add per-run sections; top points to llm/LLM_MANIFEST.json and raw/dev_changelog.md
+3. For_Recipient.md — add per-run sections; top points to llm/LLM_MANIFEST.json and raw/dev_changelog.md
 4. QUESTIONS_FOR_DEVELOPER.md — update with new observations and questions
 </step>
 
@@ -305,7 +305,7 @@ may explain the API rejection. Evidence: `raw/error_logs.txt` line 17.
 <acceptance_criteria>
 - Each appended run has a canonical payload report and deep analysis report
 - Bundle INDEX.md and INDEX.json include all old + new runs in stable order
-- For_{DEVELOPER_NAME}.md updated with per-run sections for appended runs
+- For_Recipient.md updated with per-run sections for appended runs
 - QUESTIONS_FOR_DEVELOPER.md updated with new observations
 - Stakeholder gate was executed if discrepancies were identified
 - llm/LLM_MANIFEST.json reflects updated run list and changelog status

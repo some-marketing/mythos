@@ -54,7 +54,7 @@ const STATE_ROOT = path.join(PROJECT_ROOT, '_dev', 'state');
 const PULSE_PATH = path.join(STATE_ROOT, 'kernel-heartbeat.json');
 const KILL_SWITCH = path.join(STATE_ROOT, 'heartbeat-consumer', 'disabled');
 
-// The heartbeat runs on launchd every 600s (com.smos.kernel-heartbeat.plist).
+// The heartbeat runs on launchd every 600s (see tools/launchd/services.json).
 // A pulse older than 2x that cadence is considered stale.
 const EXPECTED_CADENCE_MS = 600 * 1000;
 const STALE_PULSE_MS = 2 * EXPECTED_CADENCE_MS;

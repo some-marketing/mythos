@@ -1,16 +1,37 @@
 ---
-description: Plain-id alias for /contract-ledger
-allowed-tools: [Read, Glob, Grep]
+description: Report project progression
+mode: REVIEW_ONLY
 ---
 
 <objective>
-Run `/contract-ledger`. `project-status` is the plain-software id; the full command body lives under the mythic name.
+Check the status of a client project by scanning its directory structure, metadata, lifecycle evidence, pipeline state, and artifact health to produce a comprehensive progression report.
 </objective>
 
 <process>
-1. Follow `.claude/commands/contract-ledger.md`.
+- Parse arguments: if the argument looks like a path to a directory containing project.json, treat it as an external workspace project root. Otherwise parse client-code/project-name and resolve to clients/{code}/projects/{project-name}/.
+- Read the project's project.json and scan its directory structure under the resolved project root.
+- Check intake/ for required input completeness.
+- Check outputs/ for execution output presence.
+- Check reports/ for review report presence.
+- Check for handoff and revision tracking: look for handoffs/ or _handoffs/ directories with delivery bundles, and revision markers (revisions/, feedback/, or versioned output directories).
+- Check lifecycle hook evidence: look for run summaries in _dev/reports/lifecycle/ that match this project's framework, note the most recent hook run status (PASS / BLOCKED), and report next-actions recommendations if they exist.
+- Check Gemini pipeline state if applicable: look for evidence of ai:pipeline, ai:preview, or ai:package runs in outputs and report whether deliverables have been packaged for handoff.
+- Check artifact retention state: note if _dev/reports/ surfaces have grown, count retry turn artifacts in _handoffs/, and report whether artifact cleanup is recommended.
+- Report current status with all evidence: Phase (intake | executing | review | handoff | complete), Lifecycle governance (hooks ran / not ran / drifted), Pipeline state (not started | in-progress | packaged), Revision cycle (initial | revision-N), Artifact health (clean | cleanup recommended).
 </process>
 
 <success_criteria>
-- `/project-status` resolves to the same behavior as `/contract-ledger`
+- Project status accurately determined from directory contents
+- Missing inputs or outputs clearly identified
+- Current phase reported to user
+- Lifecycle hook evidence surfaced when available
+- Handoff and revision state reported when present
+- Pipeline state reported when evidence exists
+- Artifact retention state surfaced when surfaces exceed policy
 </success_criteria>
+
+<handoff>
+intake_incomplete: run-framework <service/framework> <project-root> (intake workflow)
+ready_for_execution: run-framework <service/framework> <project-root>
+review_needed: review-progress <project-root>
+</handoff>

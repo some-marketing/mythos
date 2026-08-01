@@ -15,7 +15,7 @@
 //                         LOUDLY (boundary UNENFORCED) and report visible count.
 //   D  code references  — repo `op://` refs for class-1 secrets point at
 //                         op://Automation/...; flag any still on a personal
-//                         vault (Employee|Work Info|Personal|Private).
+//                         vault ({VAULT}|{VAULT}|Personal|Private).
 //
 // Usage:
 //   node tools/security/vault-hygiene/check-vault-boundary.js
@@ -168,7 +168,7 @@ function checkCodeReferences(manifest, grepFn) {
   const liveLines = [];
   const historicalLines = [];
   let fail = false;
-  const personalVaults = manifest.personal_vaults || ['Employee', 'Work Info', 'Personal', 'Private'];
+  const personalVaults = manifest.personal_vaults || ["{VAULT}", '{VAULT}', 'Personal', 'Private'];
 
   // Every class-1 item that is expected to live in Automation.
   const class1 = [

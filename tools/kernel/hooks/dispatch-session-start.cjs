@@ -43,7 +43,7 @@ function seedCascadeRoot(payload) {
       const stateDir = path.join(root, '_dev', 'state', 'cascade-trace');
       fs.mkdirSync(stateDir, { recursive: true });
       const lines = Object.entries(rootEnv)
-        .filter(([k]) => k.startsWith('SM_OS_'))
+        .filter(([k]) => k.startsWith('MYTHOS_'))
         .map(([k, v]) => `export ${k}='${String(v).replace(/'/g, `'\\''`)}'`);
       fs.writeFileSync(path.join(stateDir, 'root-env.sh'), lines.join('\n') + '\n');
     }

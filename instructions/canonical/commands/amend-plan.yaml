@@ -1,0 +1,120 @@
+{
+  "id": "amend-plan",
+  "description": "Amend an existing task plan when execution reality diverges materially from plan assumptions",
+  "mode": "REVIEW_ONLY",
+  "objective": "Load an existing task plan, compare it against new execution facts, record changed assumptions and superseded elements, re-evaluate risk tier and review lane, and produce a durable amendment artifact. This is REVIEW_ONLY — amend the plan record, do not execute implementation work.",
+  "scope_resolution": {
+    "default": "Resolve the argument as a task-plan id or path",
+    "arguments": {
+      "<task-id>": "Resolve task-plan via the shared resolver (tools/planning/lib/resolve-task-plan.js) which searches system root (_dev/reports/analysis/task-plans/) and all client roots (clients/*/plans/) with ambiguity blocking",
+      "<path>": "Use the specified path directly"
+    }
+  },
+  "process": [
+    "Resolve the plan artifacts using the shared task-plan resolver with $ARGUMENTS.",
+    "Load the plan JSON and markdown. These are the baseline.",
+    "Identify the execution facts that triggered the amendment. Execution facts are concrete changes observed during or after execution: completed steps that changed outputs, blocked steps with new blockers, dependency changes, split or reordered steps, new risk information, review lane changes, or gate failures.",
+    "Compare the baseline plan against the execution facts. For each material divergence, classify it as one of: assumption_changed (a plan assumption is no longer true), step_blocked (a step cannot proceed as planned), step_split (a step must be split into multiple), step_reordered (dependency order changed), output_changed (declared outputs differ from what was produced or is now needed), gate_changed (a required gate was added, removed, or modified), risk_changed (risk tier or review lane needs updating), scope_exceeded (the change is too large for amendment).",
+    "Apply the amendment threshold: small tactical steering within an already-bounded slice does NOT require amendment. Amendment is required only when the change affects dependencies, declared outputs, gates, trust tier, review lane, or acceptance criteria.",
+    "If any divergence is classified as scope_exceeded, stop and recommend /plan-task <new-bounded-task> instead of amending. Explain why the change exceeds amendment scope.",
+    "For each non-exceeded divergence, record: the original plan element, the new execution fact, the classification, and the recommended plan update.",
+    "Re-evaluate risk tier and review lane based on the amended plan state. If the amendment introduces higher risk, escalate the review lane.",
+    "Write the amendment artifacts: a markdown summary and a JSON artifact with structured divergences.",
+    "The original plan JSON and markdown are NOT mutated. The amendment artifact is a companion that records what changed and why. The original plan remains the historical baseline.",
+    "Emit one truthful exact next command based on the amended state."
+  ],
+  "amendment_threshold": {
+    "requires_amendment": [
+      "A step's dependencies changed (new dependency added, existing dependency removed or reordered)",
+      "A step's declared outputs changed (new output added, declared output removed or renamed)",
+      "A required gate was added, removed, or materially modified",
+      "The trust tier or review lane changed based on execution evidence",
+      "Acceptance criteria changed based on execution evidence",
+      "A step was blocked by a condition not anticipated in the original plan",
+      "A step must be split into multiple steps based on execution complexity",
+      "Step execution order must change based on discovered dependencies"
+    ],
+    "does_not_require_amendment": [
+      "Small tactical steering within an already-bounded slice (e.g., choosing a different implementation approach for the same declared outputs)",
+      "Adding a test file not listed in outputs (additive, does not change declared outputs)",
+      "Minor wording changes to step descriptions that do not change scope or acceptance criteria",
+      "Choosing a different review model within the same review lane (e.g., deepseek-r1 vs qwen2.5-coder for verify-local)",
+      "Fixing a bug discovered during execution that does not change the step's scope or outputs"
+    ]
+  },
+  "divergence_types": [
+    "assumption_changed",
+    "step_blocked",
+    "step_split",
+    "step_reordered",
+    "output_changed",
+    "gate_changed",
+    "risk_changed",
+    "scope_exceeded"
+  ],
+  "success_criteria": [
+    "Plan artifacts loaded and baseline established",
+    "Execution facts identified and compared against baseline",
+    "Each material divergence classified with evidence",
+    "Amendment threshold applied — small tactical changes excluded",
+    "Risk tier and review lane re-evaluated",
+    "Amendment artifacts written as companions to the original plan (original not mutated)",
+    "One truthful exact next command emitted",
+    "No implementation work attempted"
+  ],
+  "handoff": {
+    "amended_plan_executable": "/run-plan <task-id>",
+    "amended_plan_needs_review": "/review-task-plan <task-id>",
+    "scope_exceeded": "/plan-task <new-bounded-task>",
+    "repo_truth_unclear": "/review-progress <scope>"
+  },
+  "shared_resolver_requirement": {
+    "rule": "All task-plan lookups must use resolveTaskPlanPaths() from tools/planning/lib/resolve-task-plan.js. Do not assume _dev-only storage.",
+    "exports_used": ["resolveTaskPlanPaths()", "listAmendments()"]
+  },
+  "operator_guidance_phase_1": true,
+  "operator_guidance_contract": {
+    "rule": "This command must end with conditional next-step options (each with condition, command, why), plus a concrete request for operator input that would improve or harden the system."
+  },
+  "multi_agent_contract": {
+    "rule": "Amendment artifacts use structured JSON with machine-readable divergence types, not prose-only summaries. Any agent can read the amendment JSON to determine whether the plan's assumptions still hold for a given step.",
+    "consumer_pattern": "Before executing step N, check whether an amendment artifact exists for the plan. If it does, read the divergences array and skip or re-route any steps that are marked blocked, split, or reordered."
+  },
+  "artifacts": [
+    "<storage_root>/<task-id>__amendment__<timestamp>.json",
+    "<storage_root>/<task-id>__amendment__<timestamp>.md"
+  ],
+  "artifact_schema": {
+    "amendment_json": {
+      "schema": "PlanAmendment/1.0",
+      "plan_id": "string — the task plan being amended",
+      "plan_path": "string — path to the original plan JSON",
+      "amendment_id": "string — unique amendment identifier",
+      "timestamp": "ISO 8601",
+      "amended_by_actor_id": "string",
+      "amended_by_harness_id": "string",
+      "trigger": "string — what triggered the amendment (execution observation, review finding, operator direction)",
+      "divergences": [
+        {
+          "id": "string — unique divergence identifier",
+          "type": "assumption_changed | step_blocked | step_split | step_reordered | output_changed | gate_changed | risk_changed | scope_exceeded",
+          "step_id": "string or null — which plan step is affected",
+          "original": "string — what the plan originally stated",
+          "observed": "string — what was actually observed or is now true",
+          "evidence_refs": ["string — file paths supporting this divergence"],
+          "recommended_action": "string — what should change in the plan"
+        }
+      ],
+      "risk_reassessment": {
+        "original_risk_tier": "string",
+        "amended_risk_tier": "string",
+        "original_review_lane": "string",
+        "amended_review_lane": "string",
+        "rationale": "string"
+      },
+      "plan_still_executable": "boolean — whether the amended plan can proceed via /run-plan",
+      "next_command": "string — exact next command",
+      "supersedes_prior_amendment": "string or null — amendment_id of a prior amendment this one supersedes"
+    }
+  }
+}

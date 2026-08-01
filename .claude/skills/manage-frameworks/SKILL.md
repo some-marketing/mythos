@@ -33,7 +33,7 @@ Manage the full lifecycle of Mythos frameworks: capture successful work, normali
 | `/capture-status` | capture-status | Report capture readiness and missing fields |
 | `/audit-framework` | audit-framework | Validate framework structure and completeness |
 | `/improve-framework` | improve-framework | Improve framework based on execution outputs |
-| `/list-frameworks` | list | Scan and list all registered frameworks |
+| `/list-frameworks` | (inline) | Scan and list all registered frameworks (handled by `.claude/commands/list-frameworks.md`) |
 | `/scaffold-framework` | scaffold-framework | Generate a framework candidate from normalized captures |
 | `/candidate-status` | candidate-status | Show replay summary, readiness, and promotion blockers |
 | `/replay-framework` | replay-framework | Run replay-readiness checks for a framework candidate |

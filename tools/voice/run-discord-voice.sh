@@ -6,7 +6,7 @@
 #
 # Token resolution (in order of priority):
 #   1. DISCORD_BOT_TOKEN env var (already set)
-#   2. 1Password: op://Work Info/DISCORD_BOT_TOKEN/credential
+#   2. 1Password: op://{VAULT}/DISCORD_BOT_TOKEN/credential
 #   3. macOS Keychain: mythos-discord-bot-token / Mythos
 #
 # Usage (normally invoked by .mcp.json):
@@ -28,7 +28,7 @@ fi
 
 # ── resolve Discord token ──────────────────────────────────────────────────
 
-OP_VAULT="${DISCORD_OP_VAULT:-Work Info}"
+OP_VAULT="${DISCORD_OP_VAULT:-{VAULT}}"
 OP_ITEM="${DISCORD_OP_ITEM:-DISCORD_BOT_TOKEN}"
 OP_FIELD="${DISCORD_OP_FIELD:-credential}"
 KC_SERVICE="${DISCORD_KC_SERVICE:-mythos-discord-bot-token}"

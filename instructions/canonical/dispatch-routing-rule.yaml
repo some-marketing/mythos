@@ -1,0 +1,87 @@
+{
+  "schema": "DispatchRoutingRule/1.0",
+  "id": "dispatch-routing-rule",
+  "status": "active",
+  "authority": "kernel-class",
+  "mode": "advisory",
+  "description": "Model/mind disclosure and altitude-tiered routing for every subagent and bridge dispatch, across all registered harnesses.",
+  "objective": "Make every dispatch decision explicit and economical: name the mind being dispatched, match the model tier to the work altitude, and route across the full registered harness set rather than defaulting to same-model Claude subagents. Structural substrate for the operator-ratified routing rules of 2026-06-10; supersedes harness memory feedback_disclose-model-per-dispatch.md as the durable artifact.",
+  "summary": "Disclose the model at dispatch time; tier models by work altitude; route across harnesses with the question: cheapest mind this lane's verification can hold accountable?",
+  "provenance": {
+    "operator_ratified": "2026-06-10",
+    "memory_source": "feedback_disclose-model-per-dispatch.md (harness memory; advisory — this canonical artifact is the durable authority per the Actor Continuity Contract)"
+  },
+  "rules": [
+    {
+      "id": "disclose-model-per-dispatch",
+      "text": "Disclose the model/mind for EVERY subagent and bridge dispatch at dispatch time (for example: 'haiku — mechanical', 'codex GPT-5.5 — distinct review'). Same-model Claude subagents are parallel contexts, NOT distinct intelligence; never present one as cross-verification."
+    },
+    {
+      "id": "tier-models-by-work-altitude",
+      "text": "Tier the dispatched model to the work altitude per the altitude_tier_table: mechanical/extraction/recon work goes to Haiku-class or local models; bounded light judgment goes to Sonnet-class; genuine reasoning, creative work, synthesis, or mutations requiring IN-FLIGHT judgment go to frontier-class. REFINED 2026-06-10 (operator-ratified): touching live systems is NOT itself frontier-grade — the cut is whether the lane may make consequential choices MID-mutation. Pre-staged, operator-decided, mechanically-verifiable mutations (tested script + pinned IDs + read-back) tier DOWN to small models, and per the hardening gradient should terminate as plain tool invocations with no LLM at all. Lower the tier when the output is artifact-verifiable; raise it when the lane's judgment IS the deliverable."
+    },
+    {
+      "id": "route-across-harnesses",
+      "text": "Route across harnesses, not just Claude subagents. The registered actor set is defined by tools/signals/lib/target-command-policy.cjs. Mechanical lanes should consider LOCAL coding agents; credential-adjacent work prefers opencode-local (bytes stay on-device). The routing question at every dispatch: cheapest mind this lane's verification can hold accountable?"
+    }
+  ],
+  "altitude_tier_table": [
+    {
+      "altitude": "mechanical / extraction / recon",
+      "tier": "haiku",
+      "alternates": "local coding agent via opencode-local (Ollama-backed)",
+      "adjustment": "artifact-verifiable output keeps this lane low"
+    },
+    {
+      "altitude": "bounded light judgment",
+      "tier": "sonnet",
+      "alternates": "opencode-local larger models when verification is mechanical",
+      "adjustment": "lower to haiku/local when output is artifact-verifiable"
+    },
+    {
+      "altitude": "genuine reasoning / creative / synthesis / live-mutation",
+      "tier": "frontier",
+      "alternates": "frontier Claude, codex GPT-5.5, or other registered frontier harness",
+      "adjustment": "mandatory when the lane's judgment IS the deliverable"
+    }
+  ],
+  "harness_registry": {
+    "authority": "tools/signals/lib/target-command-policy.cjs",
+    "managed_command_targets": ["codex", "claude", "opencode", "opencode-local"],
+    "freeform_prompt_targets": ["gemini", "openrouter", "remote-ssh"],
+    "model_notes": {
+      "codex": "GPT-5.5",
+      "opencode-local": "Ollama-backed local; available local models include qwen2.5-coder:14b, deepseek-r1:14b, qwen3:4b, gemma4:31b; preferred lane for credential-adjacent work"
+    },
+    "additional_dispatchable_harnesses": [
+      {
+        "id": "pi",
+        "dispatch_shape": "skill-surface, managed-command-shaped in practice: .pi/skills/mythos mirrors the Mythos skill set and .pi/extensions carries bridge/spawner extensions (claude-bridge.ts, pi-subagent-spawner.ts). NOT yet registered in target-command-policy.cjs.",
+        "model": "multi-provider; pi-mono / @earendil-works/pi-coding-agent sets the model per invocation (see instructions/canonical/commands/pi-self-help.yaml for the local source archive route)"
+      },
+      {
+        "id": "hermes",
+        "dispatch_shape": "freeform prompt via the Hermes agent CLI; .hermes/skills/mythos is ported from .claude/skills by tools/port-skills-to-hermes.cjs. NOT yet registered in target-command-policy.cjs.",
+        "model": "OpenRouter-backed, configurable per run; observed anthropic/claude-sonnet-4 on 2026-06-06 (_dev/concepts/simulation-observer-memory-flow/dispatch/hermes-sonnet-review__20260606.md). See instructions/canonical/commands/hermes-self-help.yaml for the local source archive route."
+      }
+    ]
+  },
+  "enforcement": {
+    "mode": "advisory",
+    "surfaces": [
+      "tools/kernel/hooks/userprompt-owl-altitude.cjs (UserPromptSubmit advisory framing carries a compact dispatch-routing reminder)",
+      ".claude/skills/orchestrate/SKILL.md <dispatch_model_routing>",
+      ".claude/skills/orchestrate-loop/SKILL.md <actor_roles> dispatch-routing bullets",
+      "instructions/canonical/system.yaml safety_rules (rendered into all generated harness previews)"
+    ],
+    "validator_gap": "pi and hermes are dispatch-capable in practice but are NOT listed in tools/signals/lib/target-command-policy.cjs (managed: codex, claude, opencode, opencode-local; freeform: gemini, openrouter, remote-ssh). This artifact records the gap and does NOT widen the validator; registering pi/hermes as bridge targets is a separate, operator-gated change to target-command-policy.cjs and its tests.",
+    "non_authority_note": "This rule is advisory framing for dispatch decisions. It does not create a new permission model or actor role; routing authority remains with the coordinator under /orchestrate-loop and existing gates."
+  },
+  "artifacts": [
+    "instructions/canonical/dispatch-routing-rule.yaml",
+    "tools/signals/lib/target-command-policy.cjs",
+    "tools/kernel/hooks/userprompt-owl-altitude.cjs",
+    ".claude/skills/orchestrate/SKILL.md",
+    ".claude/skills/orchestrate-loop/SKILL.md"
+  ]
+}

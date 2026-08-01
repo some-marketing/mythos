@@ -40,7 +40,7 @@ const { URL } = require('url');
 const OP_ITEM    = 'EE CP - <your-site-nickname>';
 // OP_VAULT is intentionally NOT used in op item get calls — the item is resolved
 // by name across all vaults the authenticated session can see (it lives in "Personal",
-// not "Employee"). Passing --vault would cause the lookup to fail on any session that
+// not "{VAULT}"). Passing --vault would cause the lookup to fail on any session that
 // can't see the named vault, including service-account tokens scoped to other vaults.
 const OP_TIMEOUT = 20000; // ms
 

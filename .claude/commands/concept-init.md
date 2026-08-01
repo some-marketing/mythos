@@ -1,16 +1,29 @@
 ---
-description: Plain-id alias for /inscribe-lore
-allowed-tools: [Read, Write, Edit, Glob, Grep]
+description: Create a new concept — flat file or bundle depending on scope
+mode: PATCH_ALLOWED
 ---
 
 <objective>
-Run `/inscribe-lore`. `concept-init` is the plain-software id; the full command body lives under the mythic name.
+Create a new concept file or concept bundle in _dev/concepts/. Follows the hybrid policy: flat by default, bundle when cross-model dispatch or accumulated context is needed.
 </objective>
 
 <process>
-1. Follow `.claude/commands/inscribe-lore.md`.
+- Parse arguments for concept slug (required, kebab-case) and flags: --bundle (create as subdirectory with full bundle structure), --dispatch-gpt (implies --bundle, also creates a GPT dispatch prompt).
+- If flat (default, no flags): create _dev/concepts/<slug>.md with standard frontmatter including title, identified date, context, and sections for Problem, Decision, Rationale, Next Steps.
+- If --bundle or --dispatch-gpt: create _dev/concepts/<slug>/concept.md with the same frontmatter, create status.json with slug, created date, author, stage draft, empty dispatches, null promoted_to. Create empty context/ and dispatch/ directories.
+- If --dispatch-gpt: create _dev/concepts/<slug>/dispatch/gpt-prompt.md using the standard GPT prompt template. Update status.json stage to dispatched and add a dispatch entry. Commit and push to remote.
+- Report what was created and the next step.
 </process>
 
 <success_criteria>
-- `/concept-init` resolves to the same behavior as `/inscribe-lore`
+- Concept file or bundle created at the correct path
+- If bundle: status.json, context/, and dispatch/ directories exist
+- If dispatch-gpt: prompt file created, committed, and pushed to remote
+- No existing concept overwritten without confirmation
 </success_criteria>
+
+<handoff>
+concept_created_flat: Accumulate context or /concept-promote <slug> --to-bundle
+concept_created_bundle: /concept-dispatch <slug> --model <target>
+dispatch_gpt: Paste prompt into target model or wait for PR
+</handoff>

@@ -66,7 +66,7 @@ const fsMod = require('fs');
 function resolveProjectDir() {
   return (
     process.env.CLAUDE_PROJECT_DIR ||
-    '/Users/admin/dev/Mythos-recovered'
+    '{MYTHOS_ROOT}'
   );
 }
 

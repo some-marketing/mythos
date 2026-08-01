@@ -8,7 +8,7 @@ This tool resolves its own credentials at runtime through
    ```
    tools/boot/keychain-store.sh mythos-delesign-api-token mythos
    ```
-3. **1Password** — `op read op://Employee/Delesign/credential`, resolved via
+3. **1Password** — `op read op://{VAULT}/Delesign/credential`, resolved via
    a service-account token (`OP_SERVICE_ACCOUNT_TOKEN` env var, or a
    Keychain item named `mythos-1p-automation-token`/`mythos`).
 4. **Env file fallback** — `.env.local` or `.env` at the repo root, or

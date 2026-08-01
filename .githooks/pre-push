@@ -1,0 +1,254 @@
+#!/usr/bin/env bash
+# Continuity Gate — pre-push hook
+#
+# Purpose
+#   Convert "recurrent silent loss" of canonical history into "audited opt-in
+#   migration". Two failure modes are blocked by default:
+#
+#     1. Orphan-root push:
+#        Pushing a branch whose tip has no merge-base with the remote tip of
+#        the same ref. This is the shape of a force-push that abandons all
+#        prior history (the failure mode that produced the post-orphan-history
+#        reconciliation workstream).
+#
+#     2. Canonical-divergent force-push:
+#        A non-fast-forward push that changes blob content of canonical
+#        surfaces (instructions/canonical/, tools/kernel/, tools/retrieval/,
+#        tools/signals/lib/, tools/auto-bridge/, tools/memory/,
+#        frameworks/*/manifest.json, frameworks/*/guardrails.md).
+#
+# Override
+#   A ratified Migration Signal at
+#   _dev/reports/signals/migration-signal__*.json that:
+#     - matches schema _dev/reports/signals/migration-signal.schema.json
+#     - has ratification.signed = true
+#     - has not expired (expires_at is in the future)
+#     - sets the matching allow_* flag (allow_orphan_root or
+#       allow_canonical_divergent_force_push) to true
+#   bypasses the corresponding rejection.
+#
+# Activation
+#   Inert until the operator runs:
+#     git config core.hooksPath .githooks
+#
+# Bypass
+#   `git push --no-verify` skips this hook. NEVER use --no-verify without
+#   explicit operator decision recorded out-of-band.
+#
+# Exit codes: 0 on PASS, 1 on BLOCK.
+
+set -u
+
+npm run verify:parity || {
+  echo "CONTINUITY GATE: BLOCKED — portable parity verification failed" >&2
+  exit 1
+}
+
+REMOTE="$1"
+URL="$2"
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+SCHEMA="$REPO_ROOT/_dev/reports/signals/migration-signal.schema.json"
+SIGNAL_GLOB="$REPO_ROOT/_dev/reports/signals/migration-signal__*.json"
+
+# Canonical surfaces — diffs in these paths during a non-FF push trigger the
+# canonical-divergent gate.
+CANONICAL_PATHS=(
+  "instructions/canonical/"
+  "tools/kernel/"
+  "tools/retrieval/"
+  "tools/signals/lib/"
+  "tools/auto-bridge/"
+  "tools/memory/"
+)
+# Pattern matches for frameworks manifests/guardrails handled inline below.
+
+block() {
+  echo "CONTINUITY GATE: BLOCKED" >&2
+  echo "  reason: $1" >&2
+  echo "" >&2
+  echo "  To proceed, author and ratify a Migration Signal:" >&2
+  echo "    schema: _dev/reports/signals/migration-signal.schema.json" >&2
+  echo "    path:   _dev/reports/signals/migration-signal__<slug>.json" >&2
+  echo "    set:    ratification.signed = true" >&2
+  echo "    set:    $2 = true" >&2
+  echo "" >&2
+  echo "  See .githooks/README.md for the full contract." >&2
+  exit 1
+}
+
+pass() {
+  echo "CONTINUITY GATE: PASSED"
+  exit 0
+}
+
+# Read each ref being pushed: <local_ref> <local_sha> <remote_ref> <remote_sha>
+# stdin per githooks(5).
+have_input=0
+exit_code=0
+zero="0000000000000000000000000000000000000000"
+
+# Detect available JSON parser. Prefer jq, then python3. If neither is
+# available, we cannot validate the schema-required fields of a Migration
+# Signal, so we MUST fail closed (refuse to honor any signal). The operator
+# should install jq or python3 to use the override.
+JSON_TOOL=""
+if command -v jq >/dev/null 2>&1; then
+  JSON_TOOL="jq"
+elif command -v python3 >/dev/null 2>&1; then
+  JSON_TOOL="python3"
+fi
+
+# Validate a single Migration Signal file against the full schema-required
+# field set. Returns 0 only if every required field is present, non-empty,
+# correctly typed, and ratification.signed=true with the requested allow_*
+# flag = true and expires_at in the future.
+#
+# $1 = path to candidate signal file
+# $2 = "allow_orphan_root" | "allow_canonical_divergent_force_push"
+validate_migration_signal() {
+  local f="$1"
+  local flag="$2"
+
+  if [ "$JSON_TOOL" = "jq" ]; then
+    jq -e --arg flag "$flag" --arg now "$(date -u +%s)" '
+      (.schema_id == "MigrationSignal/1.0")
+      and ((.timestamp // "") | type == "string" and length > 0)
+      and ((.source // "") | type == "string" and length > 0)
+      and ((.reason // "") | type == "string" and length >= 16)
+      and (.old_paths | type == "array")
+      and (.new_paths | type == "array" and length > 0)
+      and (.path_mapping | type == "array" and length > 0
+           and all(.[]; (.old // "") != "" and (.new // "") != "" and (.reason // "") != ""))
+      and (.ratification | type == "object")
+      and ((.ratification.operator // "") | type == "string" and length > 0)
+      and ((.ratification.commit // "") | test("^[0-9a-f]{7,40}$"))
+      and (.ratification.signed == true)
+      and (.[$flag] == true)
+      and ((.expires_at // "") | type == "string" and length > 0)
+      and ((.expires_at | fromdateiso8601) > ($now | tonumber))
+    ' "$f" >/dev/null 2>&1
+    return $?
+  elif [ "$JSON_TOOL" = "python3" ]; then
+    python3 - "$f" "$flag" <<'PY' >/dev/null 2>&1
+import sys, json, re, datetime
+path, flag = sys.argv[1], sys.argv[2]
+try:
+    with open(path) as fh:
+        j = json.load(fh)
+except Exception:
+    sys.exit(1)
+def ok():
+    if j.get("schema_id") != "MigrationSignal/1.0": return False
+    for k in ("timestamp","source","reason","expires_at"):
+        v = j.get(k)
+        if not isinstance(v, str) or not v: return False
+    if len(j.get("reason","")) < 16: return False
+    if not isinstance(j.get("old_paths"), list): return False
+    np = j.get("new_paths")
+    if not isinstance(np, list) or len(np) == 0: return False
+    pm = j.get("path_mapping")
+    if not isinstance(pm, list) or len(pm) == 0: return False
+    for m in pm:
+        if not isinstance(m, dict): return False
+        for k in ("old","new","reason"):
+            v = m.get(k)
+            if not isinstance(v, str) or not v: return False
+    r = j.get("ratification")
+    if not isinstance(r, dict): return False
+    if not isinstance(r.get("operator"), str) or not r.get("operator"): return False
+    if not re.match(r"^[0-9a-f]{7,40}$", str(r.get("commit",""))): return False
+    if r.get("signed") is not True: return False
+    if j.get(flag) is not True: return False
+    try:
+        ts = j["expires_at"].replace("Z","+00:00")
+        exp = datetime.datetime.fromisoformat(ts).timestamp()
+    except Exception:
+        return False
+    now = float(__import__("time").time())
+    if exp <= now: return False
+    return True
+sys.exit(0 if ok() else 1)
+PY
+    return $?
+  else
+    # Fail closed: no JSON tool available.
+    return 1
+  fi
+}
+
+# Find a ratified, unexpired, schema-complete Migration Signal that allows a
+# given mode.
+# $1 = "allow_orphan_root" | "allow_canonical_divergent_force_push"
+find_ratified_signal() {
+  local flag="$1"
+  if [ -z "$JSON_TOOL" ]; then
+    echo "CONTINUITY GATE: refusing to honor Migration Signal — neither jq nor python3 is available. Install one to use the override." >&2
+    return 1
+  fi
+  shopt -s nullglob
+  for f in $SIGNAL_GLOB; do
+    [ -f "$f" ] || continue
+    if validate_migration_signal "$f" "$flag"; then
+      echo "$f"
+      return 0
+    fi
+  done
+  return 1
+}
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+  have_input=1
+  # Deletes pass through.
+  if [ "$local_sha" = "$zero" ]; then
+    continue
+  fi
+
+  # New branch (no remote_sha): require merge-base check against origin/HEAD
+  # of the *target* ref's branch only when remote_sha is present. For brand
+  # new refs we don't enforce orphan check (no prior remote state to abandon).
+  if [ "$remote_sha" != "$zero" ]; then
+    # Orphan-root detection: no merge-base between local and remote tip.
+    if ! git merge-base "$local_sha" "$remote_sha" >/dev/null 2>&1; then
+      sig="$(find_ratified_signal allow_orphan_root || true)"
+      if [ -z "${sig:-}" ]; then
+        block "orphan-root push to $remote_ref (no merge-base with remote $remote_sha)" "allow_orphan_root"
+      else
+        echo "CONTINUITY GATE: orphan-root override accepted via $sig" >&2
+      fi
+    fi
+
+    # Non-fast-forward (force-push) detection.
+    # Fast-forward = remote_sha is ancestor of local_sha.
+    if ! git merge-base --is-ancestor "$remote_sha" "$local_sha" 2>/dev/null; then
+      # Non-FF. Check if any canonical paths differ between remote_sha and local_sha.
+      changed=""
+      for p in "${CANONICAL_PATHS[@]}"; do
+        if git diff --name-only "$remote_sha" "$local_sha" -- "$p" 2>/dev/null | grep -q .; then
+          changed="$changed $p"
+        fi
+      done
+      # Frameworks manifest/guardrails patterns
+      if git diff --name-only "$remote_sha" "$local_sha" 2>/dev/null \
+          | grep -E '^frameworks/[^/]+/[^/]+/(manifest\.json|guardrails\.md)$' \
+          | grep -q .; then
+        changed="$changed frameworks/*/manifest.json|guardrails.md"
+      fi
+      if [ -n "$changed" ]; then
+        sig="$(find_ratified_signal allow_canonical_divergent_force_push || true)"
+        if [ -z "${sig:-}" ]; then
+          block "canonical-divergent force-push to $remote_ref (paths:$changed)" "allow_canonical_divergent_force_push"
+        else
+          echo "CONTINUITY GATE: canonical-divergent override accepted via $sig" >&2
+        fi
+      fi
+    fi
+  fi
+done
+
+if [ "$have_input" -eq 0 ]; then
+  # No refs piped in (manual invocation / dry-run). Pass.
+  pass
+fi
+
+pass

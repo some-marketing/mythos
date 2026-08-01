@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
 
-const REPO_ROOT = '/Users/admin/dev/Mythos-recovered';
+const REPO_ROOT = path.resolve(__dirname, '..', '..');
 const STATE_DIR = path.join(REPO_ROOT, '_dev', 'state', 'harness-capability-crawler');
 const LATEST_REPORT = path.join(REPO_ROOT, '_dev', 'reports', 'analysis', 'harness-capability-crawler__launchd-latest.json');
 const NEXT_ACTIONS_REPORT = path.join(REPO_ROOT, '_dev', 'reports', 'analysis', 'harness-capability-next-actions.json');
@@ -71,7 +71,7 @@ function writeRunRecord(record, stateDir = STATE_DIR) {
 
 function run(opts = {}) {
   process.env.PATH = ['/opt/homebrew/bin', '/usr/local/bin', '/usr/bin', '/bin'].join(':');
-  process.env.HOME = process.env.HOME || '/Users/admin';
+  process.env.HOME = process.env.HOME || '${HOME}';
   process.env.LC_ALL = process.env.LC_ALL || 'en_CA.UTF-8';
 
   const startedAt = stamp();

@@ -7,6 +7,8 @@ config/*.local.json
 *.local.json
 clients/*/
 !clients/_template/
+parity/host-bindings.local.json
+parity/activation-receipts/
 *.local
 .DS_Store
 
@@ -17,3 +19,32 @@ clients/*/
 # here. These patterns are a safety net in case one is copied in by mistake.
 .mythos/
 mirror/
+/Mythos-memories/
+
+# Bare top-level reports/ (distinct from _dev/reports/) — local-only surface.
+/reports/
+
+# Per-turn session debug logs — mechanical, disposable, not repo history.
+parity/host-bindings.local.json
+parity/host-activation.candidate.json
+_dev/state/host-activation/
+_dev/state/**
+_dev/desktop/work/personal/turns/
+
+# Lineage-preservation scratch and local caches. These guard NEWLY-UNTRACKED
+# files only — content already tracked in history or in the index is unaffected
+# by a .gitignore entry. Cleanup of tracked oversized history (git rm --cached,
+# any index-removal pass, and history policy) is a separate follow-up.
+.cache/
+SM_OS-lineage-preservation-*/
+sm_os-memories/
+_handoffs/
+.playwright-mcp/
+.claude/projects/
+.claude/session-env/
+.claude/todos/
+.claude/transcripts/
+.claude/worktrees/
+**/automation/auth/
+_dev/reports/analysis/declared-trigger-lint__*.md
+_dev/reports/signals/verify-*.signal.json

@@ -1,0 +1,145 @@
+# Reporting Law v0.2.0
+#
+# Canonical observational reporting requirements for all Mythos output.
+# Derived from instructions/canonical/guardrails.md and QA guardrails.md proof surface.
+# Prior art: v0.1.0 from concept branch (label lists only).
+
+version: 0.2.0
+source: instructions/canonical/guardrails.md
+
+# ─── Core Principles ─────────────────────────────────────────────────────────
+
+principles:
+  - id: observation_not_diagnosis
+    text: >
+      State observations, not diagnoses. Say "the login form submits but the
+      page returns a 422 response" not "the login form is broken."
+
+  - id: separate_observation_from_hypothesis
+    text: >
+      Present what was observed first, then offer possible explanations as
+      hypotheses. Never merge the two into a single statement.
+
+  - id: never_prescribe_root_cause
+    text: >
+      Use "this may indicate," "one possible explanation is," or "consistent
+      with" -- never "this is caused by."
+
+  - id: cite_evidence_for_every_claim
+    text: >
+      Every observation must reference a file path, URL, log line,
+      screenshot, or test output. No unsupported claims.
+
+  - id: no_implementation_prescription
+    text: >
+      Do not suggest code implementations, SQL queries, algorithms,
+      or architecture decisions. Do not estimate fix times.
+
+  - id: evidence_over_narrative
+    text: >
+      When a report's observations contradict prior narrative claims
+      or doctrine-based expectations, the report must present the
+      evidence-based observation, not the narrative. Evidence dominance
+      applies to reporting as defined in the governance precedence model.
+
+# ─── Required Labels ─────────────────────────────────────────────────────────
+
+required_labels:
+  - label: "Observation:"
+    usage: >
+      Factual description of what was seen, with evidence citation.
+      Every report must use this label for factual findings.
+
+  - label: "HYPOTHESIS:"
+    usage: >
+      Labeled interpretation, explicitly marked as non-definitive,
+      with supporting evidence path citation.
+
+  - label: "Cross-Source Pattern:"
+    usage: >
+      Factual comparison across multiple data sources: runs,
+      environments, artifacts. QA variant: "Cross-Run Pattern:".
+
+  - label: "Open Questions for Review:"
+    usage: >
+      Questions that require domain expertise or additional context to answer.
+      QA variant: "Open Questions for Developer Context:".
+
+  - label: "Evidence Locations:"
+    usage: >
+      File paths and line numbers supporting the observation.
+
+# ─── Forbidden Labels and Patterns ───────────────────────────────────────────
+
+forbidden_labels:
+  - forbidden: "Root Cause:"
+    replace_with: "Observation: + HYPOTHESIS:"
+    reason: Implies definitive diagnosis without sufficient context
+
+  - forbidden: "Diagnosis:"
+    replace_with: "Observation: + HYPOTHESIS:"
+    reason: Same as Root Cause -- implies definitive knowledge
+
+  - forbidden: "Recommendation:"
+    replace_with: "Open Questions for Review:"
+    reason: Prescribes action rather than surfacing questions
+
+  - forbidden: "Action Required:"
+    replace_with: "Open Questions for Review:"
+    reason: Prescribes action beyond the agent's authority
+
+  - forbidden: "Fix:"
+    replace_with: "Observation:"
+    reason: Describes what to do rather than what was observed
+
+  - forbidden: "Confidence Level:"
+    replace_with: Remove entirely
+    reason: Let evidence speak for itself; confidence labels add false precision
+
+  - forbidden: "Priority labels (P0, P1, P2)"
+    replace_with: "Severity classification (CRITICAL, MAJOR, MINOR, INFO)"
+    reason: Priority assignment is the domain expert's prerogative
+
+  - forbidden: "Time estimates"
+    replace_with: Remove entirely
+    reason: Resolution time estimates are unreliable without full context
+
+  - forbidden: "Code snippets"
+    replace_with: Remove entirely
+    reason: Implementation is the developer's domain
+
+  - forbidden: "Implementation suggestions"
+    replace_with: Remove entirely
+    reason: Architecture and implementation decisions require full context
+
+# ─── Evidence Citation Format ─────────────────────────────────────────────────
+
+citation_format:
+  file_references: "path/to/file:line_number"
+  test_results: "run_id, test_name, exact pass/fail output"
+  screenshots: "output path linked to the step that produced them"
+  log_entries: "timestamp and source context"
+  comparisons: "both sides (before/after, expected/actual) with source citations"
+  unavailable: >
+    If evidence is unavailable, state "unable to verify -- [reason]"
+    rather than guessing.
+
+# ─── Uncertainty Labels ───────────────────────────────────────────────────────
+
+uncertainty_labels:
+  - label: FACT
+    meaning: Directly observed in evidence
+  - label: HYPOTHESIS
+    meaning: Interpretation based on evidence
+  - label: UNKNOWN
+    meaning: Cannot be determined from available evidence
+
+# ─── Framework Extension Rules ────────────────────────────────────────────────
+
+extension_rules:
+  - Framework-local guardrails may add stricter reporting rules
+  - QA is the first proof surface for this law family
+  - Frameworks may add domain-specific forbidden patterns (e.g., QA forbids "Recommendations for [Name]:")
+  - Frameworks must not weaken the canonical forbidden labels list
+  - Reports that reference governance terms (completion, blocked, repair, independently-reviewed) must use these terms consistently with their machine-checkable definitions in system.yaml governance_definitions
+  - Repair actions (reopen, supersede, retract, correct, repair-note) must follow the repair-semantics reference law. All repair evidence must be cited with the same rigor as original reporting evidence.

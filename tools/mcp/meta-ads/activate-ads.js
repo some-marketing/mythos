@@ -108,7 +108,7 @@ if (require.main === module) {
       '  node activate-ads.js --config path/to/config.json --all        # activate all in allowlist',
       '',
       'LIVE run (requires run-with-op.sh):',
-      '  METAOP_ITEM="example-meta-ads API Credential" METAOP_VAULT="Employee" METAOP_FIELD_TOKEN="credential" \\',
+      '  METAOP_ITEM="example-meta-ads API Credential" METAOP_VAULT="{VAULT}" METAOP_FIELD_TOKEN="credential" \\',
       '    tools/mcp/meta-ads/run-with-op.sh node tools/mcp/meta-ads/activate-ads.js --config ... <adId> ...',
       '',
       'Config schema:',

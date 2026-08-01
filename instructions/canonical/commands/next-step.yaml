@@ -1,0 +1,36 @@
+{
+  "id": "next-step",
+  "description": "Resolve the deterministic next recommended Mythos command from current repo state",
+  "mode": "REVIEW_ONLY",
+  "objective": "Read current durable repo state and print the next recommended Mythos command, the reason for that recommendation, and the state signals used to decide. This is a narrow deterministic resolver, not a work executor.",
+  "process": [
+    "Run `npm run next-step` for the human-readable view, or `npm run next-step -- --json` when structured output is needed.",
+    "Read the command, reason, source, blocked_by list, and context fields from the output.",
+    "Report the next command and why it was selected.",
+    "If blocked_by is non-empty, name the blocker instead of treating the command as executable.",
+    "If the result conflicts with a newer live HandoffSignal, approved task plan, or explicit operator instruction, surface the conflict rather than resolving it silently."
+  ],
+  "success_criteria": [
+    "The output names a next command or explicitly reports that no command is available",
+    "The reason and source are included",
+    "Blocked state is visible when present",
+    "No task is executed by this command",
+    "Structured JSON is available for callers that need machine-readable routing"
+  ],
+  "boundaries": [
+    "Does NOT execute the recommended command",
+    "Does NOT mutate repo state",
+    "Does NOT override live signals, approved plans, or explicit operator instructions",
+    "Does NOT replace /whats-next; this is a narrow resolver while /whats-next is the broader daily briefing"
+  ],
+  "implementation": "tools/signals/next-step.js",
+  "package_scripts": [
+    "next-step"
+  ],
+  "handoff": {
+    "human_readable": "npm run next-step",
+    "structured": "npm run next-step -- --json",
+    "broader_briefing": "/whats-next",
+    "status_dashboard": "/mythos-status"
+  }
+}

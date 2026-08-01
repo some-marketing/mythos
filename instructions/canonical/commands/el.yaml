@@ -1,0 +1,41 @@
+{
+  "id": "el",
+  "description": "Shortest operator alias for Evidence Loop: distinct-family review, context checking, research disposition, and iterative re-entry",
+  "mode": "COORDINATOR",
+  "objective": "Provide a two-letter operator shorthand for `/evidence-loop` without creating a separate workflow, authority surface, or lifecycle state.",
+  "scope_resolution": {
+    "default": "Pass the complete target or work request through to /evidence-loop",
+    "arguments": {
+      "<target-or-work>": "The same target grammar and work scope accepted by /evidence-loop"
+    }
+  },
+  "process": [
+    "Treat el as a human-memory wrapper around `/evidence-loop`, not an independent workflow definition.",
+    "Resolve the alias mechanically through `instructions/canonical/command-aliases.yaml`; keep the typed alias as provenance only.",
+    "Preserve every Evidence Loop activation rule, actor boundary, finding-ledger requirement, privacy disposition, iteration ceiling, and closeout rule.",
+    "Preserve `/orchestrate-loop` as the sole lifecycle controller.",
+    "Do not introduce el-specific permissions, artifacts, review lanes, actors, state names, or closeout paths."
+  ],
+  "routing_rules": [
+    "Use `/el` when the human operator wants the shortest invocation.",
+    "Use `/evidence-loop` in formal specifications, tests, and cross-actor handoffs when the canonical profile name improves clarity.",
+    "Never interpret el as permission to bypass privacy, credential, destructive-action, external-publication, budget, or human-operator gates."
+  ],
+  "success_criteria": [
+    "The alias accepts the same target shapes as evidence-loop",
+    "The alias resolves mechanically to evidence-loop on generated and managed command surfaces",
+    "No duplicate orchestration or evidence contract is introduced"
+  ],
+  "handoff": {
+    "operator_shorthand": "el <target-or-work>",
+    "canonical_profile": "evidence-loop <target-or-work>",
+    "lifecycle_controller": "orchestrate-loop <target-or-work>"
+  },
+  "artifacts": [
+    "instructions/canonical/commands/el.yaml",
+    "instructions/canonical/command-aliases.yaml",
+    "instructions/canonical/commands/evidence-loop.yaml",
+    ".claude/commands/el.md",
+    ".pi/skills/mythos/el/SKILL.md"
+  ]
+}

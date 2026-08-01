@@ -3,16 +3,16 @@
 Reports the current status of a project.
 
 Supports:
-- Legacy Mythos projects under `clients/{CLIENT_CODE}/{PROJECT_NAME}/`
-- Workspace projects by absolute/relative `PROJECT_ROOT` path
+- Private operations projects under `clients/{CLIENT_CODE}/projects/{PROJECT_NAME}/`
+- External workspace projects by absolute/relative `PROJECT_ROOT` path
 
 ## Workflow
 
 <step number="1" name="collect-inputs" type="USER">
 [USER] Collect required inputs:
 - Either:
-  - PROJECT_ROOT: Path to the project root (recommended for workspace projects), or
-  - CLIENT_CODE + PROJECT_NAME (legacy Mythos)
+  - PROJECT_ROOT: Path to the project root (for external workspace projects), or
+  - CLIENT_CODE + PROJECT_NAME (for private operations)
 
 Ask: "Which client project do you want to check status for?"
 
@@ -24,15 +24,15 @@ Ask: "Which client project do you want to check status for?"
 - If PROJECT_ROOT provided:
   - Check `<PROJECT_ROOT>/project.json` exists
   - If not found, report error and stop
-- Else (legacy):
-  - Check `clients/{CLIENT_CODE}/{PROJECT_NAME}/` exists
-  - Check `clients/{CLIENT_CODE}/{PROJECT_NAME}/project.json` exists
-  - If not found, report error with available projects for the client
+- Else (private operations):
+  - Check `clients/{CLIENT_CODE}/projects/{PROJECT_NAME}/` exists
+  - Check `clients/{CLIENT_CODE}/projects/{PROJECT_NAME}/project.json` exists
+  - If not found, report error with available projects for the client (scan `clients/{CLIENT_CODE}/projects/`)
 </step>
 
 <step number="3" name="read-metadata" type="AUTO">
 [AUTO] Read project metadata:
-- Read `<PROJECT_ROOT>/project.json` (or legacy path)
+- Read `<PROJECT_ROOT>/project.json` (or private operations path under `clients/`)
 - Extract: framework reference, creation date, status, last execution
 - If CLIENT_CODE is known and `clients/{CLIENT_CODE}/client.json` exists, read it for client context
 </step>

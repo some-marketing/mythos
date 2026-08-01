@@ -31,7 +31,7 @@
     "summary_documents": {
       "type": "object",
       "properties": {
-        "for_{DEVELOPER_NAME}": { "type": "string" },
+        "recipient": { "type": "string" },
         "questions": { "type": "string" },
         "index_md": { "type": "string" },
         "index_json": { "type": "string" }

@@ -212,21 +212,21 @@ Conversation analysis sources:
     - Update `frameworks/{svc}/{fw}/manifest.json` to reference new skill, command, agent
   </step>
 
-  <step id="9a" name="sync-project-manifest" type="AUTO">
+  <step id="10" name="sync-project-manifest" type="AUTO">
     [AUTO] Sync project manifest — Run `npm run manifest:sync` to update `.claude/project-claude.yml` with the new skill, command, and agent.
   </step>
 
-  <step id="10" name="verify" type="AUTO">
+  <step id="11" name="verify" type="AUTO">
     [AUTO] Run verification:
 
-    10a. Check all generated file paths exist
-    10b. Run `node tools/verify/verify-skill.cjs <path-to-SKILL.md>`
-    10c. Run `npm run manifest:check` to confirm manifest is in sync
-    10d. Validate no duplicate entries in manifests
-    10e. If verification script was generated, run it (expect either PASS or expected failures if no test data exists yet)
+    11a. Check all generated file paths exist
+    11b. Run `node tools/verify/verify-skill.cjs <path-to-SKILL.md>`
+    11c. Run `npm run manifest:check` to confirm manifest is in sync
+    11d. Validate no duplicate entries in manifests
+    11e. If verification script was generated, run it (expect either PASS or expected failures if no test data exists yet)
   </step>
 
-  <step id="11" name="present-results" type="USER">
+  <step id="12" name="present-results" type="USER">
     [USER] Present all generated artifacts:
 
     "Skill extraction complete. Created:

@@ -12,7 +12,7 @@
 ## Project Root Resolution
 
 This workflow is compatible with both:
-- **Workspace projects (recommended):** `<WORKSPACE_ROOT>/projects/{service}__{framework}__{slug}/`
-- **Legacy Mythos projects:** `learning-language-models/clients/{code}/{service}__{framework}__{slug}/`
+- **Private operations projects:** `Mythos/clients/{code}/{service}__{framework}__{slug}/`
+- **External workspace projects:** `<WORKSPACE_ROOT>/projects/{service}__{framework}__{slug}/`
 
 The executor must treat `<PROJECT_ROOT>` as the authoritative output base.

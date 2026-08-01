@@ -261,7 +261,7 @@ async function runInference(hostConfig, prompt, modelOverride = '') {
 }
 
 function writeCompletionSignal(projectRoot, originalSignal, responseText, hostAlias, model) {
-  const { createHandoffSignal, validateHandoffSignal } = require('../../verify/lib/signal.cjs');
+  const { createHandoffSignal, validateHandoffSignal } = require('../verify/lib/signal.cjs');
   const { getSignalIdentity } = require('./lib/signal-identity');
 
   const scope = originalSignal.signal_scope || originalSignal.workflow_scope || 'remote-ssh-completion';

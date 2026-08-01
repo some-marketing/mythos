@@ -49,8 +49,10 @@ REPO_REF_PATTERNS = [
     r"mythos-meta-ads-mcp",
     r"{CLIENT_CODE}-metaads",
     r"Service Account Auth Token",
-    r"Sam.s Memories",
 ]
+
+LOCAL_PRIVATE_MARKERS = [value.strip() for value in os.getenv("MYTHOS_PRIVATE_CREDENTIAL_MARKERS", "").split(",") if value.strip()]
+REPO_REF_PATTERNS.extend(re.escape(value) for value in LOCAL_PRIVATE_MARKERS)
 
 
 def is_credit_shaped(s: str) -> bool:

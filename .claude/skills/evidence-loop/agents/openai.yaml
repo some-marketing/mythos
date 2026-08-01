@@ -1,0 +1,4 @@
+interface:
+  display_name: "Evidence Loop"
+  short_description: "Run research-resolved distinct-family workflow loops"
+  default_prompt: "Use $evidence-loop to run this work through distinct review, context checking, finding research, and evidence-based re-entry into orchestrate-loop."

@@ -50,7 +50,7 @@ export function generateIndexJson(bundleId, createdAt, scope, runs, extra = {}) 
     scope,
     runs: runEntries,
     summary_documents: {
-      for_{DEVELOPER_NAME}: 'For_{DEVELOPER_NAME}.md',
+      recipient: 'For_Recipient.md',
       questions: 'QUESTIONS_FOR_DEVELOPER.md',
       index_md: 'INDEX.md',
       index_json: 'INDEX.json',

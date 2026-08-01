@@ -1,0 +1,27 @@
+---
+description: Compare a NEW artifact against a KNOWN-GOOD reference artifact, score parity on N dimensions, produce verdict + specific gaps + readiness assessment
+mode: REVIEW_ONLY
+---
+
+<objective>
+Compare a NEW artifact against a KNOWN-GOOD reference to score parity, produce a categorical verdict, and enumerate gaps with mitigation effort.
+</objective>
+
+<process>
+- Load skill at .claude/skills/research/reference-compare/SKILL.md and follow automated_workflow.
+- Parse arguments for --new, --reference, --scope, --dimensions, --name, --project.
+- Verify hard preconditions: --new and --reference paths must exist; --scope must be 'system' or known client code.
+- Read both artifacts fully (use pages parameter for large PDFs).
+- Determine dimensions from flags or heuristic table.
+- Score parity dimension-by-dimension with file+section citations.
+- Produce verdict (SUFFICIENT / SUFFICIENT-WITH-NOTES / GAPS-TO-BACKFILL).
+- Enumerate specific gaps with mitigation effort and blocking/optional flags.
+- Write assessment to scoped path (system or client-specific).
+</process>
+
+<success_criteria>
+- Verdict is exactly one of: SUFFICIENT / SUFFICIENT-WITH-NOTES / GAPS-TO-BACKFILL
+- Each gap has mitigation, effort, and blocking flag
+- Output written to correct scoped path or returned inline as fallback
+- No mutation of input artifacts
+</success_criteria>

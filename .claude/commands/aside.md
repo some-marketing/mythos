@@ -1,0 +1,24 @@
+---
+description: Route a side-thought from in-flight conversation into the right Mythos surface (concept doc, task plan, or both) with provenance.
+mode: PATCH_ALLOWED
+---
+
+<objective>
+Capture an operator-dropped side-thought during an in-flight workstream into a durable Mythos surface (concept doc, task plan, or both), preserving provenance.
+</objective>
+
+<process>
+- 1. Parse arguments for aside text and routing flags (--concept, --task, --both).
+- 2. Capture parent-conversation context (workstream name, conversation ID).
+- 3. Spawn the aside subagent via the Task tool with a structured payload (aside_text, parent_conversation_id, parent_workstream, force).
+- 4. Subagent classifies, routes, and writes artifacts.
+- 5. Surface the agent's 4-line response to the operator without additional commentary.
+- 6. If contradictions exist, surface only the contradiction line.
+</process>
+
+<success_criteria>
+- Durable artifact (concept doc or task plan) created
+- Provenance fields populated correctly
+- Aside text preserved verbatim
+- Minimum disruption to main-thread attention
+</success_criteria>

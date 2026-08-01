@@ -1,0 +1,106 @@
+{
+  "version": "1.1.0",
+  "description": "Mythos command taxonomy — organizes all operator-facing entrypoints by intent category. Covers slash commands (/cmd) and npm scripts (npm run X).",
+  "categories": {
+    "status": {
+      "label": "Status — What's happening?",
+      "primary": "npm-status",
+      "commands": [
+        { "id": "npm-status", "invocation": "npm run status", "role": "primary", "note": "Consolidated system status: queue, health, signals, next command" },
+        { "id": "npm-commands", "invocation": "npm run commands", "role": "primary", "note": "Command reference organized by intent category" },
+        { "id": "mythos-status", "role": "normal", "note": "Slash command equivalent of npm run status" },
+        { "id": "project-status", "role": "normal", "note": "Check a specific client project's status" },
+        { "id": "list-frameworks", "role": "normal", "note": "List all registered frameworks with status" },
+        { "id": "candidate-status", "role": "normal", "note": "Report framework candidate maturity and promotion blockers" },
+        { "id": "capture-status", "role": "normal", "note": "Report capture bundle readiness" }
+      ]
+    },
+    "plan": {
+      "label": "Plan — What should happen next?",
+      "primary": "npm-next-step",
+      "commands": [
+        { "id": "npm-next-step", "invocation": "npm run next-step", "role": "primary", "note": "Deterministic next-step resolution from repo state" },
+        { "id": "create-plan", "role": "normal", "note": "Operator-friendly alias for creating a bounded task plan" },
+        { "id": "plan-task", "role": "normal", "note": "Plan a new task by comparing to hardened frameworks" },
+        { "id": "plan-active-workstreams", "role": "normal", "note": "Plan bounded follow-on queues after pipeline completion" },
+        { "id": "plan-pipeline", "role": "normal", "note": "Choose the next eligible pipeline stage" },
+        { "id": "review-task-plan", "role": "normal", "note": "Review a generated task plan before execution" }
+      ]
+    },
+    "run": {
+      "label": "Run — Execute something",
+      "primary": "run-plan",
+      "commands": [
+        { "id": "follow-signal", "role": "primary", "note": "Autonomy gate: resolve one valid signal or task-plan authority before continuing" },
+        { "id": "owl", "role": "primary", "note": "Human shorthand for /orchestrate-loop: Observe, Weigh, Loop to the right actor" },
+        { "id": "oa", "role": "primary", "note": "Shortest shorthand for Owl Audit: review-first orchestration through /orchestrate-loop" },
+        { "id": "council-of-owls", "role": "primary", "note": "Human shorthand for consult-then-route: /convene when warranted, then /owl" },
+        { "id": "oc", "role": "primary", "note": "Shortest shorthand for /council-of-owls: Owl Council" },
+        { "id": "run-plan", "role": "primary", "note": "Route any plan to the correct executor (task plans + prompt plans)" },
+        { "id": "run-framework", "role": "primary", "note": "Execute a framework's prompt chain against a client project" },
+        { "id": "ad-copy-dev", "role": "normal", "note": "Develop ad copy for Meta campaigns" },
+        { "id": "claim-intake", "role": "normal", "note": "Claim a client-board intake item and advance into planning" },
+        { "id": "triage-client-board", "role": "normal", "note": "Triage a client Dart board into actionable work" }
+      ]
+    },
+    "review": {
+      "label": "Review — Assess and verify",
+      "primary": "review-progress",
+      "commands": [
+        { "id": "review-progress", "role": "primary", "note": "Findings-first review of repo progress or workstreams" },
+        { "id": "review-active-workstreams", "role": "normal", "note": "Review bounded active workstreams for queue truth" },
+        { "id": "review-source-material", "role": "normal", "note": "Evaluate source documents against quality ladder" },
+        { "id": "audit-framework", "role": "normal", "note": "Validate a framework's structure and guardrails" },
+        { "id": "validate-all-frameworks", "role": "normal", "note": "Validate all registered frameworks in parallel" }
+      ]
+    },
+    "maintain": {
+      "label": "Maintain — System health and lifecycle",
+      "primary": "npm-maintenance-status",
+      "commands": [
+        { "id": "npm-maintenance-status", "invocation": "npm run maintenance:status", "role": "primary", "note": "Preview maintenance conditions and clearance state" },
+        { "id": "sync-manifest", "role": "normal", "note": "Sync project-claude.yml with assets on disk" },
+        { "id": "normalize-signals", "role": "normal", "note": "Close stale, consumed, or duplicate signals" },
+        { "id": "reconcile-lessons", "role": "normal", "note": "Reconcile session learnings into durable lessons" },
+        { "id": "debrief-run", "role": "normal", "note": "End-of-session debrief producing improve and replicate plans" },
+        { "id": "extract-skill", "role": "normal", "note": "Extract a reusable skill from the current workflow" },
+        { "id": "capture-task", "role": "normal", "note": "Import successful work into a normalized capture bundle" },
+        { "id": "normalize-capture", "role": "normal", "note": "Validate and normalize a capture bundle" }
+      ]
+    },
+    "internal": {
+      "label": "Internal — Specialist and framework lifecycle",
+      "primary": null,
+      "commands": [
+        { "id": "execute-plan", "role": "specialist", "note": "Prompt-plan executor with full orchestration (use /run-plan instead)" },
+        { "id": "advance-pipeline", "role": "legacy", "note": "Legacy alias → /execute-plan master (use /run-plan instead)" },
+        { "id": "new-framework", "role": "specialist", "note": "Create a new framework from scratch" },
+        { "id": "improve-framework", "role": "specialist", "note": "Improve a framework from execution feedback" },
+        { "id": "promote-framework", "role": "specialist", "note": "Promote a validated framework candidate" },
+        { "id": "scaffold-framework", "role": "specialist", "note": "Scaffold a framework candidate from captures" },
+        { "id": "replay-framework", "role": "specialist", "note": "Run replay-readiness checks" },
+        { "id": "new-client", "role": "specialist", "note": "Register a new agency client" },
+        { "id": "new-project", "role": "specialist", "note": "Create a new project for a client" },
+        { "id": "concept-init", "role": "specialist", "note": "Create a new concept" },
+        { "id": "concept-dispatch", "role": "specialist", "note": "Dispatch a concept for external model review" },
+        { "id": "concept-promote", "role": "specialist", "note": "Promote a concept to Mythos structure" },
+        { "id": "synthesize-concept", "role": "specialist", "note": "Synthesize model responses into a unified position" },
+        { "id": "review-dispatch", "role": "specialist", "note": "Review an incoming model response" },
+        { "id": "assemble-prompt-system", "role": "specialist", "note": "Reconcile prompt packs and master run order" },
+        { "id": "author-prompt-system", "role": "specialist", "note": "Author prompt packs from research and audits" }
+      ]
+    }
+  },
+  "operator_quick_start": [
+    "What's the system state? → npm run status",
+    "What should I do next? → npm run next-step",
+    "Browse commands by intent → npm run commands",
+    "Create a bounded task plan → /create-plan <description>",
+    "I have a new task → /plan-task <description>",
+    "Continue from one live authority surface → /follow-signal <signal-scope|--file path>",
+    "Run an approved plan → /run-plan <plan-id|task-id|path>",
+    "Run a specific framework → /run-framework <service/framework> <project-root>",
+    "Review progress → /review-progress",
+    "Check maintenance health → npm run maintenance:status"
+  ]
+}

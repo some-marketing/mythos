@@ -1,0 +1,117 @@
+# {CLIENT_CODE}-Derived Gate Laws (Staging)
+#
+# These laws were identified from the {CLIENT_CODE} recovery/debug evidence package.
+# They are candidates for canonical promotion but currently have proof from
+# only one lane ({CLIENT_CODE} content-editing/Breakdance recovery).
+#
+# Source: _dev/reports/analysis/meta-framework-skill-ingestion/12_REFERENCE_NOTES__{CLIENT_CODE}-gate-laws-and-checker-patterns.md
+#
+# Status: Awaiting cross-lane proof before promotion to instructions/canonical/contracts/
+
+version: 0.1.0
+status: staging
+source_lane: {CLIENT_CODE} recovery/debug evidence package
+
+laws:
+  expectation_freeze:
+    id: {CLIENT_CODE}.expectation_freeze
+    description: >
+      Before mutation begins, expected outcomes should be frozen in a durable
+      artifact. This prevents acceptance criteria from drifting during execution,
+      gives later verification a stable comparison target, and reduces post-hoc
+      justification when outcomes are ambiguous.
+    evidence_from_{CLIENT_CODE}: >
+      The {CLIENT_CODE} recovery package required frozen expected outcomes before any
+      content editing began. Without this, verification had no stable baseline
+      to compare against.
+    likely_contract_use:
+      - Expected-outcomes artifact requirement in write-capable skills
+      - Acceptance-baseline reference in checker contracts
+    cross_lane_proof_needed: >
+      Observe this pattern in a second proof surface. QA's EXPECTED_OUTCOMES.md
+      is a partial match (it freezes expectations before test runs), but the
+      {CLIENT_CODE} version applies to content mutation, not just test execution.
+      A second write-capable framework that freezes expectations before mutation
+      would provide sufficient cross-lane evidence.
+
+  pilot_before_rollout:
+    id: {CLIENT_CODE}.pilot_before_rollout
+    description: >
+      For risky or repeating content changes, one representative pilot should
+      pass before broader rollout. This catches structural issues before
+      multiplying mistakes, reduces scope of recovery when hidden dependencies
+      exist, and aligns with bounded proof-before-promotion philosophy.
+    evidence_from_{CLIENT_CODE}: >
+      The {CLIENT_CODE} content-editing recovery required pilot changes on a single
+      representative page before applying changes across multiple pages.
+      Without this, errors multiplied across all target pages.
+    likely_contract_use:
+      - Rollout-stage gating in write-capable skills
+      - Representative pilot requirement before batch operations
+    cross_lane_proof_needed: >
+      Observe this pattern in a second proof surface. Any framework that
+      performs batch operations (multi-file changes, multi-page updates,
+      multi-environment deployments) and adopts pilot-first discipline
+      would provide cross-lane evidence. QA's parallel-run skill runs
+      all environments simultaneously rather than piloting one first,
+      so it does not currently satisfy this.
+
+  separate_verification_pass:
+    id: {CLIENT_CODE}.separate_verification_pass
+    description: >
+      Mutation and verification should be distinct passes when confidence
+      matters. This prevents self-certification bias inside the same execution
+      step, makes verification artifacts more trustworthy, and forces explicit
+      evidence collection after mutation.
+    evidence_from_{CLIENT_CODE}: >
+      The {CLIENT_CODE} recovery package required a separate verification pass after
+      content changes were applied, rather than relying on the editing agent's
+      self-report of success.
+    likely_contract_use:
+      - Checker contract field distinguishing mutation pass from verification pass
+      - Mandatory independent verification requirement for write-capable skills
+    cross_lane_proof_needed: >
+      This law has partial cross-lane support already. The canonical guardrails
+      mandate independent verification (Multi-Step Orchestration Policy), and
+      QA's iterate-until-pass loop separates fix and rerun. The {CLIENT_CODE} evidence
+      strengthens the case but is not yet formally linked. Promotion could
+      proceed when one more framework explicitly adopts this as a contract field
+      rather than just following it as practice.
+
+  visual_acceptance:
+    id: {CLIENT_CODE}.visual_acceptance
+    description: >
+      When layout or presentation is materially affected, visual acceptance
+      must be a blocking gate rather than a soft note. Technical success and
+      visual correctness are not equivalent. Editor state can still diverge
+      from frontend presentation.
+    evidence_from_{CLIENT_CODE}: >
+      The {CLIENT_CODE} Breakdance content-editing work demonstrated that technically
+      successful content changes could still produce visually broken layouts.
+      Visual acceptance was required as a blocking gate before the lane could
+      be marked complete.
+    likely_contract_use:
+      - visual_acceptance_required field in skill contracts
+      - Section-level or page-level visual evidence requirement
+      - Blocking gate that prevents completion without visual confirmation
+    cross_lane_proof_needed: >
+      Observe this pattern in a second proof surface. Any framework that
+      produces visible output (design mockups, landing pages, documentation
+      with screenshots) and requires visual confirmation before completion
+      would provide cross-lane evidence. The design-mockup-validation
+      framework is a strong candidate but needs execution evidence.
+
+# ─── Notes ───────────────────────────────────────────────────────────────────
+
+notes:
+  - >
+    The source reference file also identifies two additional candidate laws
+    (Layer Attribution and Bounded Mutation Surface) that are not included
+    here because they are more closely tied to {CLIENT_CODE}-specific domain concepts
+    and less clearly cross-framework reusable at this stage.
+  - >
+    Checker patterns (dual-state verification, blocking visual review,
+    recovery/debug synthesis artifact, framework-boundary honesty) from the
+    source file are implementation patterns rather than declarative laws.
+    They may inform future verification scripts but do not belong in the
+    contract law layer.

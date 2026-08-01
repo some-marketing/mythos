@@ -1,0 +1,49 @@
+{
+  "id": "normalize-signals",
+  "description": "Normalize the live signal surface by closing stale, consumed, or duplicate signals",
+  "mode": "COORDINATOR",
+  "objective": "Audit the live signal surface for staleness, duplicates, and broken artifact references, then close signals that should not remain live, and verify the resulting surface is clean.",
+  "scope_resolution": {
+    "default": "Normalize the entire live signal surface",
+    "arguments": {
+      "all": "Normalize the entire live signal surface",
+      "<signal_scope>": "Normalize only signals matching the specified scope"
+    }
+  },
+  "process": [
+    "Parse arguments for scope filter (all or a specific signal_scope).",
+    "Phase 1 — Audit: spawn a read-only subagent to scan _dev/reports/signals/ for all JSON files, classify each by schema type, and check live HandoffSignal/1.0 files for supersession, duplicate signal_scope conflicts, broken artifact references, ready-for-clear status, and missing next-step guidance.",
+    "Phase 2 — Normalize: if the audit found closable signals or conflicts, spawn the signal-normalizer agent to close signals via node tools/signals/close-signal.js --file <name> --execute, then validate remaining live signals. Skip this phase if Phase 1 found no issues.",
+    "Phase 3 — Verify: spawn a read-only subagent to re-scan the live signal surface and confirm no duplicate signal_scope conflicts, no superseded signals, and all remaining live signals have valid artifact references. Report pass/fail.",
+    "Write durable artifacts: _dev/reports/analysis/normalize-signals__<timestamp>.md (full normalization report with before/after state) and _dev/reports/analysis/normalize-signals__<timestamp>.expectation-failures.json (structured findings, empty failures array when clean).",
+    "Report to the user: signals closed count, remaining live signal count, whether the surface is clean, and any unresolvable issues."
+  ],
+  "phase_rules": [
+    "Phase 1 (audit) is always required.",
+    "Phase 2 (normalize) is skipped if Phase 1 found no closable signals and no conflicts.",
+    "Phase 3 (verify) is always required when Phase 2 ran.",
+    "If Phase 3 finds remaining issues, do NOT re-run Phase 2. Report the issues and recommend manual review."
+  ],
+  "scope_rules": [
+    "Normalizes HandoffSignal/1.0 surface only.",
+    "VerificationSignal/1.0 files are counted and reported but not closed.",
+    "VerificationSignal staleness cleanup is out of scope for this command.",
+    "L8 closure-requires-evidence (convene 20260610T175230Z): closing a signal whose recommended command is artifact-contracted requires the artifacts existing, a durable deferral record (close-signal --defer), or an obligation-preserving successor (--reason superseded|duplicate --successor <name>). Erasure is not a substitute for execution; close-signal.js and closeout-maintenance enforce this mechanically."
+  ],
+  "success_criteria": [
+    "Live signal surface audited for staleness, duplicates, supersession, and broken artifacts",
+    "Closable signals closed via close-signal.js",
+    "Remaining live signals validated for artifact truth and next-step guidance",
+    "Durable normalization artifact written (markdown and JSON)",
+    "Independent verification confirms surface cleanliness after normalization"
+  ],
+  "handoff": {
+    "surface_clean": "use the exact command from plan-active-workstreams.next-step.json",
+    "unresolvable_conflicts": "review-active-workstreams",
+    "all_workstream_signals_closed": "plan-active-workstreams"
+  },
+  "artifacts": [
+    "_dev/reports/analysis/normalize-signals__<timestamp>.md",
+    "_dev/reports/analysis/normalize-signals__<timestamp>.expectation-failures.json"
+  ]
+}

@@ -1,6 +1,6 @@
 # {{FRAMEWORK_NAME}} Guardrails
 
-Framework-specific execution constraints. Extends system guardrails at `learning-language-models/.claude/guardrails.md`.
+Framework-specific execution constraints. Extends system guardrails at `Mythos/.claude/guardrails.md`.
 
 ---
 

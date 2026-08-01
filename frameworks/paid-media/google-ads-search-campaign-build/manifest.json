@@ -1,0 +1,191 @@
+{
+  "framework_id": "paid-media/google-ads-search-campaign-build",
+  "service_category": "paid-media",
+  "framework_name": "google-ads-search-campaign-build",
+  "version": "0.1.0-discovery",
+  "description": "Build a new Google Ads Search campaign end-to-end: evidence intake, account structure, bidding and budget, keyword and match-type plan, RSA and assets, and measurement and launch — produced as a preview-approve-push bundle.",
+  "prompt_count": 6,
+  "input_contract": {
+    "required": [
+      {
+        "name": "customer_id",
+        "description": "Google Ads customer ID (under the MCC) the new Search campaign will be built in"
+      },
+      {
+        "name": "budget",
+        "description": "Campaign budget amount and period (daily/monthly)"
+      },
+      {
+        "name": "target_geo_and_audience",
+        "description": "Geographic targeting and audience definition for the campaign"
+      },
+      {
+        "name": "campaign_objective",
+        "description": "Primary objective and the conversion action(s) optimization should target"
+      },
+      {
+        "name": "landing_page_urls",
+        "description": "Landing page URL(s) the campaign will drive traffic to"
+      }
+    ],
+    "optional": [
+      {
+        "name": "existing_account",
+        "description": "Existing account/campaign context for structure and negative-keyword reuse"
+      },
+      {
+        "name": "competitor_urls",
+        "description": "Competitor URLs for keyword and ad-copy competitive analysis"
+      },
+      {
+        "name": "historical_performance",
+        "description": "Prior search-term/keyword performance for benchmarking and bid seeding"
+      },
+      {
+        "name": "industry",
+        "description": "Industry vertical for benchmark CPCs and match-type strategy"
+      }
+    ]
+  },
+  "output_contract": {
+    "directories": [
+      "outputs/google-ads-search-campaign-build/"
+    ],
+    "artifacts": [
+      "outputs/google-ads-search-campaign-build/intake-and-evidence.md",
+      "outputs/google-ads-search-campaign-build/account-structure-design.md",
+      "outputs/google-ads-search-campaign-build/bidding-and-budget-plan.md",
+      "outputs/google-ads-search-campaign-build/keywords-and-match-types.md",
+      "outputs/google-ads-search-campaign-build/rsa-and-assets.md",
+      "outputs/google-ads-search-campaign-build/measurement-and-launch.md"
+    ]
+  },
+  "mcp_requirements": [
+    "google-ads"
+  ],
+  "prompt_chain": {
+    "intake": [
+      "01_intake-and-evidence"
+    ],
+    "structure": [
+      "02_account-structure-design"
+    ],
+    "plan": [
+      "03_bidding-and-budget-plan",
+      "04_keywords-and-match-types",
+      "05_rsa-and-assets"
+    ],
+    "launch": [
+      "06_measurement-and-launch"
+    ]
+  },
+  "domain": "paid-media",
+  "platform": "google-ads",
+  "maturity": {
+    "tier": "discovery",
+    "tiers_defined": [
+      "discovery",
+      "stable",
+      "hardened"
+    ],
+    "tier_meaning": {
+      "discovery": "First 3 runs; requires operator present + Codex preview review + post-push readback match; no autonomous execution allowed",
+      "stable": "Operator-ratified after 3 successful discovery runs; allows Claude-executed preview→approve→push→readback cycles without operator present on every run, but every push still requires explicit per-change operator approval artifact",
+      "hardened": "Reserved for future graduation; criteria not yet defined"
+    },
+    "current_runs_completed": 0,
+    "current_runs_required_for_promotion": 3,
+    "promotion_criteria": {
+      "runs_required": 3,
+      "operator_present_required_per_run": true,
+      "codex_preview_review_required_per_run": true,
+      "post_push_readback_must_match_approved_preview": true,
+      "no_remediation_required_runs": "all 3 must complete without rollback/fix-forward — any remediation-requiring run does not count toward promotion",
+      "operator_ratification_artifact_path_template": "_dev/research/paid-media-google-ads-search-campaign-build-maturity-graduation-<timestamp>.md"
+    },
+    "run_log_artifact_path_template": "_dev/reports/analysis/google-ads-search-run-log__<run_id>__<timestamp>.md"
+  },
+  "compositional_parent": "paid-media/campaign-management",
+  "v1_scope": [
+    "Search",
+    "measurement",
+    "launch"
+  ],
+  "non_goals": [
+    "PMax",
+    "Shopping",
+    "YouTube",
+    "Scripts"
+  ],
+  "execution_modes": [
+    "FINDINGS_ONLY",
+    "REVIEW_ONLY",
+    "PATCH_ALLOWED",
+    "RUN_ONLY"
+  ],
+  "review_lane_default": "operator-gate",
+  "risk_tier_default": "high",
+  "required_mcps": [
+    "google-ads"
+  ],
+  "prompts": [
+    {
+      "step": "01",
+      "file": "prompts/01_intake-and-evidence.md",
+      "execution_mode": "FINDINGS_ONLY"
+    },
+    {
+      "step": "02",
+      "file": "prompts/02_account-structure-design.md",
+      "execution_mode": "FINDINGS_ONLY"
+    },
+    {
+      "step": "03",
+      "file": "prompts/03_bidding-and-budget-plan.md",
+      "execution_mode": "REVIEW_ONLY"
+    },
+    {
+      "step": "04",
+      "file": "prompts/04_keywords-and-match-types.md",
+      "execution_mode": "REVIEW_ONLY"
+    },
+    {
+      "step": "05",
+      "file": "prompts/05_rsa-and-assets.md",
+      "execution_mode": "PATCH_ALLOWED"
+    },
+    {
+      "step": "06",
+      "file": "prompts/06_measurement-and-launch.md",
+      "execution_mode": "RUN_ONLY"
+    }
+  ],
+  "attribution_note": "Prompt-chain principles are distilled in our own words from Ed Leake's God Tier Ads library (${HOME}/Documents/1. some marketing/Resources/God Tier Ads/). Option b: principles + citations, no verbatim.",
+  "skills": [
+    "google-ads-search-campaign-build/SKILL.md"
+  ],
+  "commands": [
+    "run",
+    "status",
+    "intake-and-evidence",
+    "account-structure-design",
+    "bidding-and-budget-plan",
+    "keywords-and-match-types",
+    "rsa-and-assets",
+    "measurement-and-launch"
+  ],
+  "agents": [
+    "intake-and-evidence-agent",
+    "account-structure-design-agent",
+    "bidding-and-budget-plan-agent",
+    "keywords-and-match-types-agent",
+    "rsa-and-assets-agent",
+    "measurement-and-launch-agent"
+  ],
+  "patterns": [
+    "google-ads-campaign-build",
+    "keyword-adgroup-structure",
+    "search-ad-copy-generation",
+    "paid-media-launch-prep"
+  ]
+}

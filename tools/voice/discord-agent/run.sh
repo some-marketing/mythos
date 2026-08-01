@@ -56,7 +56,7 @@ if [[ -f "${VOICE_DIR}/.env" ]]; then
 fi
 
 OP_ITEM="${DISCORD_OP_ITEM:-DISCORD_BOT_TOKEN}"
-OP_VAULT="${DISCORD_OP_VAULT:-Work Info}"
+OP_VAULT="${DISCORD_OP_VAULT:-{VAULT}}"
 OP_FIELD="${DISCORD_OP_FIELD:-credential}"
 KC_SERVICE="${DISCORD_KC_SERVICE:-mythos-discord-bot-token}"
 KC_ACCOUNT="${DISCORD_KC_ACCOUNT:-Mythos}"

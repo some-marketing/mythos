@@ -46,7 +46,7 @@ Create `README.md` at repo root with:
   - `framework/docs/REPO_CONVENTIONS.md`
   - `framework/docs/REPORTING_PIPELINE.md`
   - `playwright_phased_runner/README.md`
-  - `For_{DEVELOPER_NAME}.md`
+  - `For_Recipient.md`
 - A “canonical vs generated output” note (1 paragraph)
 
 ---

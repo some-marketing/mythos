@@ -1,0 +1,136 @@
+# Repair Semantics Law v1.0.0
+#
+# Defines explicit reversal and repair lifecycle actions so repair means
+# more than moral aspiration. Reference law from governance-hardening G6.
+
+version: 1.0.0
+source: instructions/canonical/system.yaml
+
+law: >
+  Repair requires first-class reversal semantics. Reopen, supersede,
+  retract, correct, and repair-note actions must exist as bounded
+  lifecycle actions rather than ad hoc narrative exceptions.
+
+# ─── Repair Actions ──────────────────────────────────────────────────────────
+
+repair_actions:
+  - action: reopen
+    description: >
+      Reverse a completion decision when new evidence shows the outcome
+      was incorrect or incomplete. The original outcome artifact is
+      preserved; a new lifecycle entry records the reopen.
+    preconditions:
+      - New evidence exists that contradicts the completion decision
+      - The reopening actor cites the specific evidence
+    effects:
+      - outcome_delta.completed reverts to false
+      - A reopen entry is appended to the outcome lifecycle log
+      - Downstream work that inherited the completion is flagged for review
+    evidence_required:
+      - Path to the contradicting evidence
+      - Explanation of what the original completion missed
+    max_cycles: 2
+    escalation: >
+      If an outcome is reopened twice, escalate to the operator rather
+      than reopening a third time.
+
+  - action: supersede
+    description: >
+      Replace a prior outcome with a newer, more complete outcome.
+      The prior outcome is not deleted — it is marked superseded with
+      a pointer to the replacement.
+    preconditions:
+      - The replacement outcome exists and is at least as complete
+      - The superseding actor explains why the replacement is better
+    effects:
+      - Prior outcome gains superseded_by pointer
+      - New outcome references the prior as supersedes
+      - Downstream consumers are notified of the replacement
+    evidence_required:
+      - Path to the replacement outcome
+      - Comparison showing the replacement is more complete or correct
+
+  - action: retract
+    description: >
+      Withdraw an outcome that should not have been published. Retraction
+      is a strong action — it means the original was wrong, not just
+      incomplete.
+    preconditions:
+      - The retraction is justified by evidence of material error
+      - The retracting actor is authorized (operator or distinct validator)
+    effects:
+      - Outcome gains retracted flag with reason and evidence
+      - Downstream work that depended on the retracted outcome is blocked
+      - A retraction notice is recorded in the lifecycle log
+    evidence_required:
+      - Specific evidence of the material error
+      - Impact assessment on downstream work
+
+  - action: correct
+    description: >
+      Apply a bounded correction to a specific field or claim in an
+      existing outcome without reopening or retracting the whole outcome.
+    preconditions:
+      - The correction is bounded to specific fields
+      - The original outcome is otherwise valid
+    effects:
+      - A correction entry is appended to the outcome lifecycle log
+      - The corrected fields are updated with correction metadata
+      - The outcome retains its completion status
+    evidence_required:
+      - The specific field(s) being corrected
+      - The old and new values
+      - Evidence supporting the correction
+
+  - action: repair-note
+    description: >
+      Attach a non-modifying note to an outcome acknowledging a known
+      limitation, edge case, or future risk without changing the outcome
+      itself.
+    preconditions:
+      - The note does not change the outcome's completion or validity
+    effects:
+      - A repair-note entry is appended to the outcome lifecycle log
+      - The note is visible to future consumers of the outcome
+    evidence_required:
+      - Description of the limitation or risk
+      - Why a full correction is not warranted
+
+# ─── Reversal Evidence Requirements ─────────────────────────────────────────
+
+reversal_evidence:
+  description: >
+    All repair actions require evidence. Reversals without evidence are
+    narrative exceptions, not system-recognized repairs.
+  rules:
+    - Every repair action must cite the specific evidence that justifies it
+    - Evidence must reference durable artifacts, not conversation state
+    - The repair action's evidence is itself immutable after recording
+    - Repair actions are auditable — the lifecycle log preserves the full chain
+
+# ─── Laws ────────────────────────────────────────────────────────────────────
+
+laws:
+  - id: repair_is_lifecycle
+    text: >
+      Repair actions are first-class lifecycle events, not informal
+      narrative corrections. Every repair is recorded in the outcome's
+      lifecycle log with evidence and actor metadata.
+
+  - id: no_silent_reversal
+    text: >
+      Reversals must be explicit and recorded. Silently changing an
+      outcome's completion status, evidence, or conclusions without
+      a repair action entry is a governance violation.
+
+  - id: evidence_integrity_preserved
+    text: >
+      Repair actions preserve the original evidence and outcome.
+      Corrections append; they do not overwrite. The original state
+      remains auditable.
+
+  - id: max_reopen_escalation
+    text: >
+      An outcome that has been reopened twice must escalate to the
+      operator. This prevents infinite reopen loops while preserving
+      the ability to correct genuine errors.

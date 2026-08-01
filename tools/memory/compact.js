@@ -64,7 +64,7 @@ function parseArgs(argv) {
 }
 
 // Default memory dir mirrors the Claude Code project-dir encoding:
-// `/Users/admin/dev/Mythos-recovered` -> `-Users-admin-dev-mythos-recovered`
+// `{MYTHOS_ROOT}` -> `{PROJECT_SLUG}`
 function defaultMemoryDir() {
   const enc = process.cwd().replace(/[/_]/g, '-');
   return path.join(os.homedir(), '.claude', 'projects', enc, 'memory');

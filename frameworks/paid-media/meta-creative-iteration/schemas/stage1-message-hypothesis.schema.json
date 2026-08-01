@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Stage 1 — Message Hypothesis",
+  "type": "object",
+  "required": ["timestamp", "campaign_goal", "candidates", "chosen_index"],
+  "properties": {
+    "timestamp": { "type": "string", "format": "date-time" },
+    "campaign_goal": { "type": "string" },
+    "candidates": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "oneOf": [
+          {
+            "required": ["hypothesis", "audience_segment", "falsification_criteria", "compliance_check", "landing_page_congruence"]
+          },
+          {
+            "required": ["hypothesis_id", "hypothesis", "status"],
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": ["deprecated", "deferred", "secondary-variant"]
+              }
+            }
+          }
+        ],
+        "properties": {
+          "hypothesis_id": { "type": "string" },
+          "hypothesis": { "type": "string" },
+          "status": { "type": "string" },
+          "audience_segment": { "type": "string" },
+          "audience_emotional_substrate": { "type": "string" },
+          "falsification_criteria": { "type": "string" },
+          "compliance_check": {
+            "type": "object",
+            "required": ["passes", "rules_consulted"],
+            "properties": {
+              "passes": { "type": "boolean" },
+              "rules_consulted": { "type": "array", "items": { "type": "string" } },
+              "approved_lexicon": { "type": "array", "items": { "type": "string" } },
+              "banned_lexicon": { "type": "array", "items": { "type": "string" } },
+              "brand_voice_alignment": { "type": "string" }
+            }
+          },
+          "landing_page_congruence": {
+            "type": "string",
+            "enum": ["pass", "block", "needs-fix"]
+          },
+          "landing_page_notes": { "type": "string" }
+        }
+      }
+    },
+    "chosen_index": { "type": "integer", "minimum": 0 },
+    "substrate_anchors": { "type": "object" },
+    "chosen_index_status": { "type": "string" },
+    "recommendation_rationale": { "type": "string" },
+    "andromeda_era_implications": { "type": "string" },
+    "operator_open_questions": { "type": "array", "items": { "type": "string" } },
+    "operator_resolved": { "type": "object" },
+    "operator_approval_timestamp": { "type": ["string", "null"], "format": "date-time" }
+  },
+  "additionalProperties": false
+}

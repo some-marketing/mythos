@@ -3,57 +3,57 @@
   "purpose": "Scope your automation identity to ONLY the `Automation` 1Password vault. Class-1 automation credentials belong in Automation (safe for a scoped bot). Class-2 trust anchors must stay operator-only and NEVER enter Automation (a bot that can read them could forge its own authorization).",
   "OPERATOR_MUST_VERIFY": "Entries below are illustrative placeholders. Replace them with entries DERIVED FROM `op://` REFERENCES FOUND IN YOUR OWN CODEBASE, then VERIFY every title/vault against your live 1Password BEFORE running `move-to-automation.js --apply`. Item titles are the join key for `op item move`; a wrong title is a silent no-op or a wrong move.",
   "destination_vault": "Automation",
-  "personal_vaults": ["Employee", "Work Info", "Personal", "Private"],
+  "personal_vaults": ["Personal"],
 
   "class1_move": [
     {
       "title": "Example GitHub PAT",
-      "current_vault": "Employee",
+      "current_vault": "Personal",
       "field": "credential",
-      "op_ref": "op://Employee/Example GitHub PAT/credential",
+      "op_ref": "op://Personal/Example GitHub PAT/credential",
       "seen_in": "tools/example-integration/README.md",
       "action": "move"
     },
     {
       "title": "EXAMPLE_BOT_TOKEN",
-      "current_vault": "Work Info",
+      "current_vault": "Personal",
       "field": "credential",
-      "op_ref": "op://Work Info/EXAMPLE_BOT_TOKEN/credential",
+      "op_ref": "op://Personal/EXAMPLE_BOT_TOKEN/credential",
       "seen_in": "tools/example-bot/*, tools/example-bot/run.sh",
       "action": "move"
     },
     {
       "title": "example-cloud-storage-oauth",
-      "current_vault": "Work Info",
+      "current_vault": "Personal",
       "field": "(multiple)",
-      "op_ref": "op://Work Info/example-cloud-storage-oauth",
+      "op_ref": "op://Personal/example-cloud-storage-oauth",
       "seen_in": "tools/example-cloud-storage/config.js, tools/example-cloud-storage/SETUP.md",
       "action": "move"
     },
     {
       "title": "example-vps-password",
-      "current_vault": "Employee",
+      "current_vault": "Personal",
       "field": "password",
-      "op_ref": "op://Employee/example-vps-password/password",
+      "op_ref": "op://Personal/example-vps-password/password",
       "seen_in": "tools/example-vps/README.md",
       "action": "move"
     },
     {
       "title": "example-third-party-api-key",
-      "current_vault": "Employee",
+      "current_vault": "Personal",
       "field": "credential",
-      "op_ref": "op://Employee/example-third-party-api-key/credential",
+      "op_ref": "op://Personal/example-third-party-api-key/credential",
       "seen_in": "tools/example-integration/README.md",
       "action": "consolidate",
       "consolidate": true,
       "duplicate_of": "Example Third Party API",
-      "duplicate_note": "A distinct item `Example Third Party API` ALREADY EXISTS in Automation (op://Automation/Example Third Party API/credential). DO NOT blind-move this duplicate. Operator must decide: consolidate onto the existing Automation item and delete the Employee duplicate, OR confirm they are genuinely different keys. The mover SKIPS this entry."
+      "duplicate_note": "A distinct item `Example Third Party API` ALREADY EXISTS in Automation (op://Automation/Example Third Party API/credential). DO NOT blind-move this duplicate. Operator must decide whether to consolidate or keep separate items."
     },
     {
       "title": "example-bootstrap-passphrase",
       "current_vault": "Personal",
       "field": "password",
-      "op_ref": "op://Personal/example-bootstrap-passphrase/password",
+      "op_ref": "${MYTHOS_BOOTSTRAP_PASSPHRASE_REF}",
       "seen_in": "tools/example-bootstrap/RUNBOOK.md",
       "action": "hold",
       "needs_classification": true,
@@ -72,8 +72,8 @@
   "class2_anchors_never_move": [
     {
       "title": "example-governance-unlock",
-      "current_vault": "Employee",
-      "op_ref": "op://Employee/example-governance-unlock",
+      "current_vault": "Personal",
+      "op_ref": "op://Personal/example-governance-unlock",
       "reason": "Governance unlock / approval-mint anchor. If the automation identity could read this, it could self-issue governance approvals. MUST stay operator-only and MUST NOT be in Automation.",
       "assert": "absent_from_automation"
     },

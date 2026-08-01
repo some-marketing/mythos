@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "MythosParityBaseline/2.0",
+  "type": "object",
+  "required": ["schema", "source", "target", "wiring", "runtime_exclusions", "prohibited_paths"],
+  "properties": {
+    "schema": { "const": "MythosParityBaseline/2.0" },
+    "source": {
+      "type": "object",
+      "required": ["commit", "export_commit", "export_map_sha256", "denylist_sha256", "units"]
+    },
+    "target": {
+      "type": "object",
+      "required": ["base_commit", "expected_tree_sha256", "expected_files", "overlays"]
+    },
+    "wiring": { "type": "object" },
+    "runtime_exclusions": { "type": "array", "items": { "type": "string" } },
+    "prohibited_paths": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

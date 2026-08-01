@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Stage 0 — Conversion Signal Sanity",
+  "type": "object",
+  "required": ["timestamp", "ad_account_id", "ad_account_id_source", "expected_conversion_event", "evidence_source", "events_observed_last_7d", "verdict"],
+  "properties": {
+    "timestamp": { "type": "string", "format": "date-time" },
+    "ad_account_id": { "type": "string" },
+    "ad_account_id_source": { "type": "string", "const": "client_project.json" },
+    "expected_conversion_event": { "type": "string" },
+    "destination_page_url": { "type": "string" },
+    "evidence_source": { "type": "string", "enum": ["meta_export_insights", "operator_screenshot", "operator_attestation"] },
+    "events_observed_last_7d": { "type": "integer", "minimum": 0 },
+    "verdict": { "type": "string", "enum": ["pass", "block", "needs-operator-confirmation"] },
+    "missing_or_broken": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Named on block — pixel install, CAPI bridge, custom event creation, etc."
+    },
+    "minimal_fix_proposed": { "type": "string" },
+    "operator_override_reason": { "type": ["string", "null"] }
+  },
+  "additionalProperties": false
+}

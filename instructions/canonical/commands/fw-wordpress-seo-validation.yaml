@@ -1,0 +1,22 @@
+{
+  "id": "fw-wordpress-seo-validation",
+  "description": "Run Seo Validation \u2014 Playwright-based pre-launch SEO validation crawl for WordPress sites",
+  "mode": "COORDINATOR",
+  "objective": "Execute the Seo Validation framework against a client project. Routes into the per-framework harness at frameworks/wordpress/seo-validation/.claude/.",
+  "process": [
+    "Read authoritative process from .claude/commands/fw-wordpress-seo-validation.md and frameworks/wordpress/seo-validation/manifest.json.",
+    "Verify project path and framework link.",
+    "Verify MCP availability per framework manifest.",
+    "Execute via /run-framework wordpress/seo-validation <project-path>.",
+    "Validate outputs against manifest output contract."
+  ],
+  "success_criteria": [
+    "Framework prompt chain executed in correct order",
+    "Output artifacts match manifest output contract"
+  ],
+  "source_of_truth": {
+    "claude_command": ".claude/commands/fw-wordpress-seo-validation.md",
+    "framework_manifest": "frameworks/wordpress/seo-validation/manifest.json",
+    "canonical_spec_note": "This canonical spec is the thin routing layer. The Claude command (.claude/commands/) and framework manifest carry the full argument contract, prompt chain, phase table, and operational detail."
+  }
+}

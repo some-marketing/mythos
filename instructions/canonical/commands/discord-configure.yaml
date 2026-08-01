@@ -1,0 +1,26 @@
+{
+  "id": "discord-configure",
+  "description": "Check the Mythos Discord channel setup and review access policy",
+  "mode": "REVIEW_ONLY",
+  "objective": "Report the complete status of the Mythos Discord bridge: bot token presence, upstream server, MCP registration, and access policy state. Never reveals secret values. Never mutates access state.",
+  "process": [
+    "Check bot token presence via 1Password (op read op://{VAULT}/DISCORD_BOT_TOKEN/credential) and macOS Keychain (security find-generic-password -a Mythos -s mythos-discord-bot-token). Report present/absent only — never print the token value.",
+    "Check upstream Discord MCP server at ~/.claude/plugins/marketplaces/claude-plugins-official/external_plugins/discord/server.ts. Report present/absent.",
+    "Check MCP registration in .mcp.json for a 'discord' entry pointing at tools/mcp/discord/run-with-token.sh. Confirm it is registered last so a broken build cannot block earlier servers at boot.",
+    "Check access state at ~/.claude/channels/discord/access.json. Missing file = defaults: dmPolicy pairing, empty allowlist. Report: dm policy and meaning, allowed users (count and list), pending pairings (count with codes), configured guild channels (count).",
+    "If bun is not on PATH, report it as absent — it is required to run the Discord channel server.",
+    "End with a concrete next step based on state: token absent → provisioning instructions; token present + server present + policy pairing → Ready; token present + someone allowed → Ready with N user(s) allowed."
+  ],
+  "success_criteria": [
+    "All five checks (token, server, MCP registration, access state, bun) are reported",
+    "No secret values appear in output",
+    "Next step is concrete and actionable",
+    "Report uses Observation: and HYPOTHESIS: labels, never Root Cause: or Diagnosis:"
+  ],
+  "boundaries": [
+    "Does NOT mutate access state — read-only",
+    "Does NOT reveal secret values (token bytes, credential fields)",
+    "Does NOT start or stop the Discord server",
+    "Does NOT create the bot application — that is a separate provisioning step"
+  ]
+}

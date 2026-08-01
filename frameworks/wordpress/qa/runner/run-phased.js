@@ -1897,21 +1897,21 @@ function countCookiesFile(p){
 // dimension alongside submit.success (network listener) and tracking.success
 // (dataLayer assertion). Additive — does NOT flip submit.success even on fail.
 //
-// Gated by env var SDAS_QA_ENTRY_VERIFY=1. WP application-password creds via
-// SDAS_WP_APP_USER + SDAS_WP_APP_PASS (resolved one level up by the wrapper —
+// Gated by env var {CLIENT_CODE}_QA_ENTRY_VERIFY=1. WP application-password creds via
+// {CLIENT_CODE}_WP_APP_USER + {CLIENT_CODE}_WP_APP_PASS (resolved one level up by the wrapper —
 // this runner is non-interactive and will not invoke `op` directly).
 //
 // Privacy: extracts only entry_id + queried_at + status. Does NOT persist the
 // raw response body (which contains the full submitted PII payload).
 async function verifyEntryViaRest({ siteBaseUrl, formId, email, runStartTs }){
-  const verifyEnabled = String(process.env.SDAS_QA_ENTRY_VERIFY || "").trim() === "1";
+  const verifyEnabled = String(process.env.{CLIENT_CODE}_QA_ENTRY_VERIFY || "").trim() === "1";
   if (!verifyEnabled) {
-    return { status: "skipped", reason: "SDAS_QA_ENTRY_VERIFY not set", queried_at: nowISO() };
+    return { status: "skipped", reason: "{CLIENT_CODE}_QA_ENTRY_VERIFY not set", queried_at: nowISO() };
   }
-  const wpUser = process.env.SDAS_WP_APP_USER;
-  const wpPass = process.env.SDAS_WP_APP_PASS;
+  const wpUser = process.env.{CLIENT_CODE}_WP_APP_USER;
+  const wpPass = process.env.{CLIENT_CODE}_WP_APP_PASS;
   if (!wpUser || !wpPass) {
-    return { status: "skipped", reason: "no credentials (SDAS_WP_APP_USER/SDAS_WP_APP_PASS unset)", queried_at: nowISO() };
+    return { status: "skipped", reason: "no credentials ({CLIENT_CODE}_WP_APP_USER/{CLIENT_CODE}_WP_APP_PASS unset)", queried_at: nowISO() };
   }
   if (!siteBaseUrl) {
     return { status: "skipped", reason: "no siteBaseUrl available", queried_at: nowISO() };
@@ -2713,7 +2713,7 @@ async function main(){
 
     browser=await browserType.launch(launchOptions);
     // wpqa-runner-truth-gate reCAPTCHA bypass: matching wpcodebox snippet must validate the same secret.
-    const qaBypassSecret = process.env.SDAS_QA_BYPASS_SECRET || null;
+    const qaBypassSecret = process.env.{CLIENT_CODE}_QA_BYPASS_SECRET || null;
     const extraHTTPHeaders = qaBypassSecret ? { 'X-{CLIENT_CODE}-QA-Bypass': qaBypassSecret } : undefined;
     const contextOptions={ignoreHTTPSErrors:true, viewport:{width:1280,height:720}};
     if(storageStateIn) contextOptions.storageState = String(storageStateIn);
@@ -3410,7 +3410,7 @@ async function main(){
 
   // wpqa-runner-truth-gate F1 (2026-04-29): independent third-dimension REST
   // verification that an entry actually landed. Additive: does NOT flip
-  // submit.success even on fail. Gated by SDAS_QA_ENTRY_VERIFY=1 + WP creds.
+  // submit.success even on fail. Gated by {CLIENT_CODE}_QA_ENTRY_VERIFY=1 + WP creds.
   try {
     const verifyFormId = (locatorMap?.form?.id != null && String(locatorMap.form.id) !== "")
       ? String(locatorMap.form.id)

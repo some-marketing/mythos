@@ -4,22 +4,129 @@
   "target_remote": "https://github.com/YOUR-ORG/YOUR-PUBLIC-REPO.git",
   "target_branch": "main",
   "notes": "Private-by-default: a unit absent from this map is never exported. File classes: export (copied with denylist stripping), exclude (never shipped), mock (replaced from mocks/<unit-with-__>/). Stale refreshes rebuild the target dir wholesale — no diff-merge. Framework units get manifest validation; tool/doc units set validate: none.",
-  "frameworks": {
-    "example-category/example-framework": {
-      "source": "frameworks/example-category/example-framework",
-      "target": "frameworks/example-category/example-framework",
+  "frameworks": {},
+  "units": {
+    "client-storage": {
+      "source": "tools/client-storage",
+      "target": "tools/client-storage",
+      "validate": "none",
       "files": {
         "export": [
-          "**"
+          "backfill-metadata.js",
+          "capability-probe.js",
+          "classify.js",
+          "lib.js",
+          "migrate.js",
+          "preflight.js",
+          "reconcile-pii.js",
+          "reconcile-retained.js",
+          "resolve.js",
+          "retire-local.js",
+          "snapshot-source.js",
+          "verify-migration.js",
+          "verify-remote.js",
+          "__tests__/capability-probe.test.js",
+          "__tests__/classify.test.js",
+          "__tests__/graph-quota.test.js",
+          "__tests__/migrate-semantic-contract.test.js",
+          "__tests__/reconcile-pii.test.js",
+          "__tests__/reconcile-retained.test.js",
+          "__tests__/remote-retirement.test.js",
+          "__tests__/safety.test.js"
         ],
         "exclude": [
-          "tests/*client-fixture*"
+          "config/**",
+          "private/**",
+          "runtime/**",
+          "state/**",
+          "evidence/**",
+          "reports/**",
+          ".env*",
+          "*.local.*"
         ],
-        "mock": {
-          "config/settings.json": "settings.example.json"
-        }
+        "mock": {}
+      }
+    },
+    "google-drive-authorization": {
+      "source": "tools/google-drive",
+      "target": "tools/google-drive",
+      "validate": "none",
+      "files": {
+        "export": [
+          ".gitignore",
+          "SETUP.md",
+          "authorize.js",
+          "authorize.test.js",
+          "client.js",
+          "config.js",
+          "creds.config.json",
+          "env.example"
+        ],
+        "exclude": [
+          "create-doc-from-template.js",
+          "organize-deliverables.js",
+          "publish-folder.js",
+          "rename-folder.js",
+          "replace-reel.js",
+          "share.js",
+          "upload-assets.js",
+          "__tests__/**",
+          "config/**",
+          "private/**",
+          "runtime/**",
+          "state/**",
+          ".oauth-creds*.json",
+          ".env*",
+          "*.local.*"
+        ],
+        "mock": {}
+      }
+    },
+    "storage-runtime-support": {
+      "source": "tools/lib",
+      "target": "tools/lib",
+      "validate": "none",
+      "files": {
+        "export": [
+          "canonical-root.cjs",
+          "resolve-credential.cjs"
+        ],
+        "exclude": [
+          "README.md",
+          "SETUP.md.template",
+          "creds.config.schema.json",
+          "generate-env-example.cjs",
+          "repo-root.sh",
+          "config/**",
+          "private/**",
+          "runtime/**",
+          "state/**",
+          "evidence/**",
+          ".env*",
+          "*.local.*"
+        ],
+        "mock": {}
+      }
+    },
+    "microsoft-graph-storage-runtime": {
+      "source": "tools/ms-graph",
+      "target": "tools/ms-graph",
+      "validate": "none",
+      "files": {
+        "export": [
+          "client.js"
+        ],
+        "exclude": [
+          "config/**",
+          "private/**",
+          "runtime/**",
+          "state/**",
+          "evidence/**",
+          ".env*",
+          "*.local.*"
+        ],
+        "mock": {}
       }
     }
-  },
-  "units": {}
+  }
 }

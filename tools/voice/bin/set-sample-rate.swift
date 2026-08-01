@@ -1,6 +1,6 @@
 // set-sample-rate.swift
 //
-// SM_OS audio-output — set the nominal sample rate of a named output device.
+// Mythos audio-output — set the nominal sample rate of a named output device.
 // User-space Core Audio; no sudo, no daemon, no persistent install.
 //
 // Build:

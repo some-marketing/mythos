@@ -1,0 +1,16 @@
+{
+  "schema": "KernelArtifact/1.0",
+  "id": "hello-dolly-standard",
+  "description": "Definition of the Mythos 'Hello Dolly' interaction standard, establishing the baseline for successful multi-node synchronization and aesthetic manifestation.",
+  "standard": {
+    "name": "Hello Dolly",
+    "origin": "2026-04-30 Manifestation Session",
+    "requirements": [
+      "Coordinator-to-Node control verified (bypassing Session 0 isolation)",
+      "System 'display' tool usage verified",
+      "Recursive aesthetic synthesis of Operator context (The Composite Truth)",
+      "Fleet-wide intelligence alignment (Model Upgrades)"
+    ],
+    "philosophy": "Every successful system-wide handshake should feel as intentional and unique as a 'Recursive Command Mirror'. We do not settle for generic 'Hello World' placeholders."
+  }
+}

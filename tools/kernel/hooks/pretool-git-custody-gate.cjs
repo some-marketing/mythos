@@ -47,7 +47,7 @@ const pathMod = require('path');
 const { execSync } = require('child_process');
 
 function resolveProjectDir() {
-  return process.env.CLAUDE_PROJECT_DIR || '/Users/admin/dev/Mythos-recovered';
+  return process.env.CLAUDE_PROJECT_DIR || '{MYTHOS_ROOT}';
 }
 
 // ── Session-id resolution ──────────────────────────────────────────────────────

@@ -1,0 +1,253 @@
+# Evidence Law v0.2.0
+#
+# Canonical evidence standards for all Mythos artifacts and reports.
+# Derived from instructions/canonical/guardrails.md and QA guardrails.md proof surface.
+# Prior art: v0.1.0 from concept branch (principle stubs and artifact lists).
+
+version: 0.2.0
+source: instructions/canonical/guardrails.md
+
+# ─── Core Principles ─────────────────────────────────────────────────────────
+
+principles:
+  - id: evidence_over_claims
+    text: >
+      Evidence artifacts are preferred over unsupported claims.
+      All reports and findings must meet evidence requirements.
+
+  - id: immutability
+    text: >
+      Immutable evidence must never be rewritten after capture.
+      Evidence integrity is a system invariant, not a suggestion.
+
+  - id: completion_by_evidence
+    text: >
+      Substantial changes must carry changed-files, test results, and
+      acceptance context when applicable. Evidence, not opinion,
+      determines completion.
+
+  - id: no_unsupported_claims
+    text: >
+      If evidence is unavailable, state "unable to verify -- [reason]"
+      rather than guessing. No claim may stand without citation.
+
+  - id: framework_strictness
+    text: >
+      Framework-local evidence requirements may be stricter than global
+      defaults but must not weaken them.
+
+  - id: evidence_dominance
+    text: >
+      When observable evidence contradicts narrative claims, doctrine
+      language, or philosophical framing in any governance context,
+      evidence wins. Doctrine may guide design but may not override
+      observable facts in runtime decisions. See governance_precedence
+      in system.yaml for the full conflict resolution model.
+
+# ─── Immutability Rules ──────────────────────────────────────────────────────
+
+immutability_rules:
+  description: >
+    Certain artifact categories must never be modified after creation.
+    These form the evidence integrity boundary.
+  immutable_categories:
+    - category: evidence_captures
+      examples:
+        - screenshots
+        - DOM snapshots
+        - video recordings
+      rule: Never modify or rewrite after capture
+
+    - category: logs
+      examples:
+        - console logs
+        - error logs
+        - network request logs
+      rule: Never modify; copy if needed for analysis
+
+    - category: network_traces
+      examples:
+        - HAR files
+        - request/response captures
+        - cookie snapshots
+      rule: Never modify; reference by path
+
+    - category: run_metadata
+      examples:
+        - run.meta.json
+        - runset.summary.json
+      rule: Immutable after creation; append to new files if updates needed
+
+    - category: raw_artifacts
+      examples:
+        - payload JSONs
+        - CSV exports
+        - developer changelogs (original)
+      rule: Copy verbatim into bundles; never rewrite originals
+
+  mutable_categories:
+    - category: analysis_reports
+      examples:
+        - deep analysis reports
+        - comparison documents
+        - anomaly indexes
+      rule: May be created, updated, or regenerated from immutable sources
+
+    - category: changelogs
+      examples:
+        - canonical changelog markdown
+        - LATEST.txt pointer
+      rule: New versions created alongside; old versions preserved
+
+    - category: bundle_indexes
+      examples:
+        - INDEX.md
+        - INDEX.json
+        - LLM_MANIFEST.json
+      rule: May be updated (preferably append-only for bundles)
+
+    - category: canonical_summaries
+      examples:
+        - For_Recipient.md
+        - QUESTIONS_FOR_DEVELOPER.md
+      rule: May be created or updated as part of bundle assembly
+
+# ─── Citation Format Requirements ─────────────────────────────────────────────
+
+citation_format:
+  file_references:
+    format: "path/to/file:line_number"
+    example: "evidence/A-logged_out/derived/error.log:17"
+
+  test_results:
+    format: "run_id, test_name, exact pass/fail output"
+    example: "run_0009, form_submission_test, FAIL: timeout at step 3"
+
+  screenshots:
+    format: "output path linked to the step that produced them"
+    example: "evidence/A-logged_out/screenshots/step_03_form_submit.png"
+
+  log_entries:
+    format: "timestamp and source context"
+    example: "[2026-03-28T14:32:01Z] CRM API error 0x80044331"
+
+  comparisons:
+    format: "both sides (before/after, expected/actual) with source citations"
+    requirement: Present both sides with source citations
+
+  unavailable:
+    format: "unable to verify -- [reason]"
+    requirement: Never guess when evidence is unavailable
+
+# ─── Completion Evidence Requirements ─────────────────────────────────────────
+
+completion_evidence:
+  description: >
+    Final completion must be based on concrete evidence, not self-assessment.
+    These requirements apply to substantial implementation tasks.
+  required:
+    - changed_files: List of paths that were modified
+    - test_results: Passing tests or validator output
+    - acceptance_criteria: Cited per criterion from the task spec
+    - scope_respected: Non-goals not introduced
+
+  trust_tier_requirements:
+    instruction_only:
+      evidence_required: false
+      note: No writes or side effects; evidence requirements do not apply
+    report_write_scoped:
+      evidence_required: true
+      minimum: output file paths and content verification
+    patch_scoped:
+      evidence_required: true
+      minimum: changed_files, justification per change, validation output
+    external_service_touching:
+      evidence_required: true
+      minimum: changed_files, service response evidence, test results
+    meta_modifying:
+      evidence_required: true
+      minimum: changed_files, test results, acceptance criteria, scope verification
+
+# ─── Validation Independence ─────────────────────────────────────────────────
+
+validation_independence:
+  description: >
+    Defines what makes validation meaningfully independent at each risk
+    tier. Independence is not merely a second signature — it requires
+    differentiation along at least one of: actor role, harness, evidence
+    path, or evaluation objective.
+
+  independence_dimensions:
+    - dimension: actor_role
+      description: The validator holds a different role than the producer
+      example: Producer is gut/execution; validator is frontier/slow
+
+    - dimension: harness
+      description: The validator operates in a different harness environment
+      example: Producer uses Claude; validator uses Codex
+
+    - dimension: evidence_path
+      description: The validator examines different evidence than the producer used to build
+      example: Producer tested locally; validator checks repo artifacts independently
+
+    - dimension: evaluation_objective
+      description: The validator assesses a different quality than the producer optimized for
+      example: Producer optimized for correctness; validator evaluates for safety or completeness
+
+  tier_requirements:
+    instruction_only:
+      independence_required: false
+      reason: No writes or side effects; validation not applicable
+
+    report_write_scoped:
+      independence_required: false
+      minimum: Self-check against evidence standards is sufficient
+      reason: Low-risk bounded output; independent review is optional
+
+    patch_scoped:
+      independence_required: true
+      minimum_dimensions: 1
+      required_dimensions:
+        - actor_role OR harness
+      reason: Scoped changes require at least one axis of independent perspective
+
+    external_service_touching:
+      independence_required: true
+      minimum_dimensions: 2
+      required_dimensions:
+        - harness
+        - evidence_path OR evaluation_objective
+      reason: External service impact requires validation from a different environment
+
+    meta_modifying:
+      independence_required: true
+      minimum_dimensions: 2
+      required_dimensions:
+        - actor_role AND harness
+      reason: Constitutional changes require distinct-intelligence validation (different actor AND different harness)
+
+  anti_theater_rules:
+    - id: no_rubber_stamp
+      text: >
+        A second actor running the same check with the same evidence on the
+        same harness is not independent validation. At least one independence
+        dimension must genuinely differ.
+
+    - id: no_self_validation
+      text: >
+        The producing intelligence cannot validate its own acceptance-grade
+        output regardless of how many checks it runs. Self-validation is
+        theater, not independence.
+
+    - id: evidence_not_narrative
+      text: >
+        Validation must examine evidence artifacts, not the producer's
+        narrative description of what happened. A validator that reads
+        only the producer's summary has not independently validated.
+
+    - id: proportional_rigor
+      text: >
+        Independence requirements scale with risk tier. Demanding
+        distinct-intelligence review for a documentation fix creates
+        bypass pressure. Accepting self-review for a constitutional
+        change creates trust erosion.

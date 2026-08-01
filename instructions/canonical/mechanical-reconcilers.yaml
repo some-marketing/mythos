@@ -1,0 +1,74 @@
+{
+  "schema": "SMOSMechanicalReconcilerRegistry/1.0",
+  "description": "Deterministic evidence collectors that orchestrate-loop should check before spending additional LLM or bridge turns. Reconcilers report evidence and next commands; they do not own judgment or mutation authority.",
+  "reconcilers": [
+    {
+      "id": "maintenance-spider-ledger",
+      "command": "npm run maintenance:spiders",
+      "mode": "RUN_ONLY",
+      "authority": "report-only",
+      "targets": [
+        "maintenance",
+        "command-surface",
+        "task-plan-owned-artifacts",
+        "verification-signals",
+        "topology"
+      ],
+      "output_pattern": "_dev/reports/analysis/spider-ledger__*.{json,md}",
+      "loop_states": [
+        "mechanical_reconcile_needed",
+        "evidence_missing",
+        "mechanical_reconcile_failed"
+      ],
+      "notes": "Runs deterministic spider detectors as a ledger/fleet. Do not treat spider output as council judgment; route findings through review or owl/council only when judgment is actually needed."
+    },
+    {
+      "id": "session-lifecycle-shutdown-runner",
+      "command": "node tools/commands/smos-command-runner.cjs \"/shutdown\"",
+      "mode": "RUN_ONLY",
+      "authority": "report-only",
+      "targets": [
+        "session-lifecycle",
+        "session-boundary"
+      ],
+      "output_pattern": "_dev/reports/lifecycle/session-close-packets/*.json",
+      "loop_states": [
+        "mechanical_reconcile_needed",
+        "evidence_missing"
+      ],
+      "notes": "Report-only SessionClosePacket emitter; judgment (debrief, handoff prose, clean-house approval, signal anomalies) stays with the invoking mind; the canonical YAML spec is the permanent manual bypass."
+    },
+    {
+      "id": "session-lifecycle-new-session-runner",
+      "command": "node tools/commands/smos-command-runner.cjs \"/new-session\"",
+      "mode": "RUN_ONLY",
+      "authority": "report-only",
+      "targets": [
+        "session-lifecycle",
+        "session-boundary"
+      ],
+      "output_pattern": "_dev/reports/lifecycle/session-open-packets/*.json",
+      "loop_states": [
+        "mechanical_reconcile_needed",
+        "evidence_missing"
+      ],
+      "notes": "Report-only SessionOpenPacket emitter; clean-house custody grouping and the kernel read stay judgment-owned; the canonical YAML spec is the permanent manual bypass."
+    },
+    {
+      "id": "session-lifecycle-spec-drift",
+      "command": "node tools/commands/lifecycle-spec-drift.cjs",
+      "mode": "RUN_ONLY",
+      "authority": "report-only",
+      "targets": [
+        "command-surface",
+        "session-lifecycle"
+      ],
+      "output_pattern": "stdout (ALL TARGETS CLEAN | ONE OR MORE TARGETS DRIFTED)",
+      "loop_states": [
+        "mechanical_reconcile_needed",
+        "evidence_missing"
+      ],
+      "notes": "Divergence between a runner's declared sequence and its canonical YAML process array is a first-class anomaly; this check is BLOCKING at runner execution even though this registry entry is evidence-only."
+    }
+  ]
+}

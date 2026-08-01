@@ -1,0 +1,165 @@
+# Composition Law v0.2.0
+#
+# Canonical rules for how skills compose: prerequisites, follow-on skills,
+# gates, escalation handoff, and artifact compatibility.
+# Derived from instructions/canonical/guardrails.md multi-step orchestration policy,
+# gate discipline, and QA proof surface workflow patterns.
+# Prior art: v0.1.0 from concept branch (field descriptions only).
+
+version: 0.2.0
+source: instructions/canonical/guardrails.md
+
+# ─── Composition Fields ──────────────────────────────────────────────────────
+
+composition:
+  prerequisites:
+    description: >
+      Skills or operations that must exist or complete before a skill
+      can activate. Prerequisites are checked at invocation time.
+    rules:
+      - Prerequisites come from the plan or skill contract, not from assumptions
+      - Missing prerequisites block activation; they do not silently resolve
+      - Dynamic prerequisite detection is preferred over hardcoded lists
+
+  allowable_follow_on:
+    description: >
+      Valid next skills or operations after the current skill completes.
+      This is advisory, not enforcing -- the operator may choose differently.
+    rules:
+      - Follow-on recommendations should be context-specific
+      - The skill should present options rather than auto-activating follow-ons
+      - RUN_ONLY results should suggest REVIEW_ONLY or PATCH_ALLOWED next steps
+
+  gates:
+    description: >
+      Conditions that block downstream writes or progression until resolved.
+      Gates are the primary coordination mechanism between skills and the operator.
+    rules:
+      - When a gate triggers, downstream writes touching that subject are blocked
+      - Human gates must be respected; never skip or simulate human gates
+      - Deferral conditions are real; never assume deferred conditions are met
+      - Gate resolution must be recorded durably, not held in conversation only
+
+  escalation_handoff:
+    description: >
+      Conditions under which work must be handed to a different skill,
+      agent, or runtime lane.
+    rules:
+      - Escalation conditions must be declared in the skill contract
+      - Scope expansion beyond the declared task always triggers escalation
+      - Blocker findings that persist after max retry cycles trigger escalation
+      - The escalation target (operator, different agent, different skill) must be named
+
+  artifact_compatibility:
+    description: >
+      Expected artifact shapes required for safe handoff between skills.
+      Skills that consume each other's outputs must agree on artifact format.
+    rules:
+      - Producer and consumer skills must agree on artifact paths and formats
+      - Bundle structures (like DEV_HANDOFF bundles) define their own compatibility contract
+      - New artifacts should not silently break existing consumers
+      - Schema changes to shared artifacts require version bumps
+
+# ─── Gate Discipline ──────────────────────────────────────────────────────────
+
+gate_discipline:
+  description: >
+    Gates check exit criteria defined in the plan, not hardcoded assumptions.
+    This section codifies the gate rules from the canonical guardrails.
+
+  laws:
+    - id: exit_criteria_from_plan
+      text: >
+        Each stage's completion conditions are defined in its plan document,
+        not baked into the executing command.
+
+    - id: human_gates_respected
+      text: >
+        If a stage requires human input, real-world usage, or operator
+        decision, stop and surface the gate. Never skip or simulate.
+
+    - id: deferral_conditions_real
+      text: >
+        If a stage's preconditions depend on decisions or priorities the
+        operator has not expressed, defer and report. Never assume met.
+
+    - id: dynamic_stage_detection
+      text: >
+        Read the plan fresh at invocation time. Do not hardcode stage
+        numbers, counts, or completion tables that go stale.
+
+    - id: gate_write_blocking
+      text: >
+        When a gate step triggers (condition TRUE), no files containing
+        the gate's subject matter may be written until the gate resolves.
+        This prevents bypassing stakeholder interviews and approval gates.
+
+    - id: operator_continuity_gates
+      text: >
+        When the operator is unavailable, overloaded, or in succession
+        state, gates that require operator judgment must pause rather
+        than auto-resolve. The system must record the pause state
+        durably and resume when the operator state changes. Forcing
+        closure during operator unavailability is a governance violation.
+
+# ─── Execution Primitive ──────────────────────────────────────────────────────
+
+execution_primitive:
+  description: >
+    The proven execution sequence for multi-step work. This is a system
+    primitive, not a framework-specific pattern.
+  steps:
+    - read_plan: Parse stages, acceptance criteria, prompt pack or task references
+    - check_completion: Verify each stage's exit criteria against actual repo state
+    - build: Implement the stage's work
+    - verify_independently: Confirm completion through independent verification
+    - fix_if_needed: Address specific failures and re-verify
+    - gate_check: Confirm exit criteria met, check next stage's preconditions
+    - advance_or_stop: Proceed, report human gate, or report deferral condition
+
+  mandatory_independent_verification:
+    description: >
+      Independent verification is MANDATORY for every stage. Build agents
+      self-report success on incomplete work. A stage is NOT complete until
+      an independent verification step confirms it against repo evidence.
+    rules:
+      - Verification checks acceptance criteria against repo evidence, not build claims
+      - Verification is performed by a separate agent, invocation, or read-only check
+      - Never by the same agent that performed the build
+
+# ─── Ordering Principles ──────────────────────────────────────────────────────
+
+ordering_principles:
+  description: >
+    When multiple stages or tracks are available, these principles determine
+    execution order.
+  rules:
+    - Governance before optimization
+    - Control plane before recovery logic
+    - Harness stabilization before abstraction
+    - Anti-sprawl controls before registration and broader rollout
+    - Recovery logic only after failure modes are understood through real usage
+    - Registration last -- consequence of stability, not a forcing function
+
+# ─── Adapter And Local-First Composition ─────────────────────────────────────
+
+adapter_composition:
+  description: >
+    Composition rules for adapter-based architecture. Skills compose
+    through shared contracts, not through a single forced harness.
+  rules:
+    - Shared contracts (routing, validation, evidence, reporting, trust-tier, execution-mode) are mandatory for all adapters
+    - Adapter-specific affordances (tool availability, model capabilities) may extend but not weaken shared contracts
+    - Local-first routing is the default; non-local routing requires documented justification, not apology
+    - Composition across adapters uses the shared contract surface; adapter-specific state does not cross adapter boundaries
+
+# ─── Notes ───────────────────────────────────────────────────────────────────
+
+notes:
+  - >
+    Keep composition rules minimal and grounded in real workflow patterns.
+    Do not model idealized future graphs that have no proof surface.
+  - >
+    v0.2.0 changes from v0.1.0: added gate discipline section from guardrails,
+    added execution primitive from multi-step orchestration policy, added
+    ordering principles, formalized gate write-blocking rule from QA evidence.

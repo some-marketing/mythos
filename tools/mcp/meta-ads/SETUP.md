@@ -80,17 +80,17 @@ The original "Step 1" path above assumes one ad account in env. **Example Group 
 
 ### How credentials flow
 
-- 1Password item: **`Example Group BM Meta App`** in the **Employee** vault (same vault as the legacy SM `mythos-meta-ads-mcp` item).
+- 1Password item: **`Example Group BM Meta App`** in the vault named by local `MYTHOS_PERSONAL_VAULT`.
 - Item fields (no ad account IDs on the item): `META_ACCESS_TOKEN`, `META_APP_ID`, `META_APP_SECRET`. Optional: `META_API_VERSION`, `META_GRAPH_BASE_URL`.
 - Ad account IDs live in `clients/<CLIENT>/projects/meta-app-integration/project.json` under `meta_integration.ad_account_id`. Adding a new dealership is a one-file change with no Meta-side, 1Password-side, or MCP code change.
 
 ### Run the wrapper for the Example Group BM lane
 
-`run-with-op.sh` is parameterized via `METAOP_ITEM` and `METAOP_VAULT` (defaults preserve the legacy SM lane):
+`run-with-op.sh` is parameterized via `METAOP_ITEM` and `METAOP_VAULT`; bind real values only in ignored local configuration:
 
 ```bash
 METAOP_ITEM="Example Group BM Meta App" \
-METAOP_VAULT="Employee" \
+METAOP_VAULT="${MYTHOS_PERSONAL_VAULT:?set MYTHOS_PERSONAL_VAULT}" \
   tools/mcp/meta-ads/run-with-op.sh node tools/mcp/meta-ads/preflight.js
 ```
 

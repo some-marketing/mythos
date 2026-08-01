@@ -39,7 +39,7 @@ const SIGNALS_DIR = path.join(PROJECT_ROOT, '_dev/reports/signals');
 const HINTS_DIR = path.join(PROJECT_ROOT, '_dev/state/contextual-hints');
 const MEMORY_DIR = path.resolve(
   process.env.HOME,
-  '.claude/projects/-Users-admin-Documents-GitHub-mythos/memory'
+  '.claude/projects/{PROJECT_SLUG}/memory'
 );
 
 const HIT_HISTORY_KEEP = 200;        // last-N hits per session for dedupe

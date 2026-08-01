@@ -286,7 +286,7 @@ async function executeManifest(manifest, client, token, opts = {}) {
     throw Object.assign(new Error('Manifest validation failed'), { validation });
   }
 
-  const { buildUrl, requestJson } = require('./../../shared/http');
+  const { buildUrl, requestJson } = require('../shared/http');
   const API = `https://graph.facebook.com/${manifest.api_version || 'v21.0'}/`;
 
   async function graphPost(pathname, body) {

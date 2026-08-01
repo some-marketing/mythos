@@ -1,0 +1,238 @@
+name: continuity-gate
+
+# Server-side mirror of .githooks/pre-push.
+#
+# Blocks pushes / PRs that:
+#   1. introduce an orphan root (no merge-base with origin/main); OR
+#   2. force-rewrite canonical surfaces against origin/main
+#      without a ratified Migration Signal in the pushed commits.
+#
+# A ratified Migration Signal is a file matching
+#   _dev/reports/signals/migration-signal__*.json
+# that:
+#   - validates against _dev/reports/signals/migration-signal.schema.json
+#   - has ratification.signed === true
+#   - has expires_at in the future
+#   - has the matching allow_* flag set true
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  continuity-gate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout (full history)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Determine base ref
+        id: baseref
+        shell: bash
+        run: |
+          set -u
+          zero="0000000000000000000000000000000000000000"
+          # Initialize before event-branch dispatch so PR path doesn't trip set -u
+          # (Phase 4''' fix per Codex review of cumulative Phase 4 — PR events
+          # don't enter the push branch where this variable was previously
+          # initialized only).
+          orphan_root_new_branch="false"
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            # PR event: compare to the actual PR base branch.
+            base="origin/${{ github.base_ref }}"
+          else
+            # Push event: compare against the actual remote tip BEFORE the push
+            # (github.event.before). This catches force-push rewrites on a
+            # branch that remains a descendant of main but diverges from the
+            # prior remote tip — exactly the orphan-root / canonical-divergent
+            # shape the gate exists to catch.
+            before="${{ github.event.before }}"
+            orphan_root_new_branch="false"
+            if [ -n "$before" ] && [ "$before" != "$zero" ]; then
+              base="$before"
+            else
+              # New branch (before == all-zeros) or unknown: fall back to the
+              # merge-base with origin/main so we still anchor against the
+              # canonical line.
+              if git rev-parse --verify origin/main >/dev/null 2>&1 \
+                  && mb="$(git merge-base "${{ github.sha }}" origin/main 2>/dev/null)" \
+                  && [ -n "$mb" ]; then
+                base="$mb"
+              else
+                # No common ancestor with main: this is the orphan-root push of
+                # a brand-new branch. The gate MUST treat this as the blockable
+                # case (modulo a ratified allow_orphan_root signal). We anchor
+                # against origin/main so the gate has a real ref to compare to,
+                # and we set a flag so the gate step can route through the
+                # orphan-root branch even when merge-base is empty.
+                if git rev-parse --verify origin/main >/dev/null 2>&1; then
+                  base="origin/main"
+                  orphan_root_new_branch="true"
+                else
+                  # No origin/main at all (initial bootstrap): nothing to compare.
+                  base=""
+                fi
+              fi
+            fi
+          fi
+          echo "base=$base" >> "$GITHUB_OUTPUT"
+          echo "orphan_root_new_branch=$orphan_root_new_branch" >> "$GITHUB_OUTPUT"
+
+      - name: Run Continuity Gate
+        shell: bash
+        env:
+          ORPHAN_ROOT_NEW_BRANCH: ${{ steps.baseref.outputs.orphan_root_new_branch }}
+        run: |
+          set -u
+          BASE="${{ steps.baseref.outputs.base }}"
+          HEAD="${{ github.sha }}"
+          REPO_ROOT="$(git rev-parse --show-toplevel)"
+          SCHEMA="$REPO_ROOT/_dev/reports/signals/migration-signal.schema.json"
+
+          echo "Continuity Gate"
+          echo "  base: $BASE"
+          echo "  head: $HEAD"
+          echo "  orphan_root_new_branch: ${ORPHAN_ROOT_NEW_BRANCH:-false}"
+
+          # Skip only if base is unset AND this is not the orphan-root new-branch
+          # case. The orphan-root new-branch case sets BASE=origin/main so we
+          # still have something to compare to; if BASE is truly empty we have
+          # no canonical line at all (very first push to an empty repo).
+          zero="0000000000000000000000000000000000000000"
+          if [ -z "$BASE" ] || [ "$BASE" = "$zero" ]; then
+            echo "CONTINUITY GATE: PASSED (no base to compare against)"
+            exit 0
+          fi
+
+          # Resolve base SHA (tolerate detached refs).
+          if ! git rev-parse --verify "$BASE" >/dev/null 2>&1; then
+            echo "CONTINUITY GATE: PASSED (base $BASE not resolvable in CI checkout)"
+            exit 0
+          fi
+          BASE_SHA="$(git rev-parse "$BASE")"
+
+          # ------------------------------------------------------------------
+          # Migration Signal validator — full schema enforcement.
+          # Mirrors .githooks/pre-push validate_migration_signal.
+          # CI runs Node.js, so we use a Node script. A signal is honored only
+          # if every schema-required field is present, correctly typed, and
+          # ratification.signed === true with the requested allow_* flag === true
+          # and expires_at parses to a date in the future.
+          # ------------------------------------------------------------------
+          cat > /tmp/validate-migration-signal.mjs <<'NODE'
+          import fs from 'node:fs';
+          const [,, path, flag] = process.argv;
+          function fail(msg) { console.error(`reject ${path}: ${msg}`); process.exit(1); }
+          let j;
+          try { j = JSON.parse(fs.readFileSync(path, 'utf8')); }
+          catch (e) { fail(`unreadable JSON: ${e.message}`); }
+          const isNonEmptyString = v => typeof v === 'string' && v.length > 0;
+          if (j.schema_id !== 'MigrationSignal/1.0') fail('schema_id must be "MigrationSignal/1.0"');
+          for (const k of ['timestamp','source','expires_at']) {
+            if (!isNonEmptyString(j[k])) fail(`${k} must be a non-empty string`);
+          }
+          if (!isNonEmptyString(j.reason) || j.reason.length < 16) fail('reason must be a string of length >= 16');
+          if (!Array.isArray(j.old_paths)) fail('old_paths must be an array');
+          if (!Array.isArray(j.new_paths) || j.new_paths.length === 0) fail('new_paths must be a non-empty array');
+          if (!Array.isArray(j.path_mapping) || j.path_mapping.length === 0) fail('path_mapping must be a non-empty array');
+          for (const m of j.path_mapping) {
+            if (!m || typeof m !== 'object') fail('path_mapping entries must be objects');
+            for (const k of ['old','new','reason']) {
+              if (!isNonEmptyString(m[k])) fail(`path_mapping entry must have non-empty ${k}`);
+            }
+          }
+          const r = j.ratification;
+          if (!r || typeof r !== 'object') fail('ratification must be an object');
+          if (!isNonEmptyString(r.operator)) fail('ratification.operator must be a non-empty string');
+          if (typeof r.commit !== 'string' || !/^[0-9a-f]{7,40}$/.test(r.commit)) fail('ratification.commit must match /^[0-9a-f]{7,40}$/');
+          if (r.signed !== true) fail('ratification.signed must be === true');
+          if (j[flag] !== true) fail(`${flag} must be === true`);
+          const expEpoch = Math.floor(new Date(j.expires_at).getTime() / 1000);
+          if (!Number.isFinite(expEpoch) || expEpoch <= 0) fail('expires_at must parse as a date');
+          const nowEpoch = Math.floor(Date.now() / 1000);
+          if (expEpoch <= nowEpoch) fail('expires_at must be in the future');
+          process.exit(0);
+          NODE
+
+          find_ratified_signal() {
+            local flag="$1"
+            shopt -s nullglob
+            for f in "$REPO_ROOT"/_dev/reports/signals/migration-signal__*.json; do
+              [ -f "$f" ] || continue
+              if node /tmp/validate-migration-signal.mjs "$f" "$flag" >/dev/null 2>&1; then
+                echo "$f"
+                return 0
+              fi
+            done
+            return 1
+          }
+
+          fail() {
+            echo "CONTINUITY GATE: BLOCKED"
+            echo "  reason: $1"
+            echo "  override: ratify a Migration Signal at _dev/reports/signals/migration-signal__*.json with $2 = true"
+            echo "  schema:   _dev/reports/signals/migration-signal.schema.json"
+            echo "  see:      .githooks/README.md"
+            exit 1
+          }
+
+          # 1. Orphan-root check (covers two cases):
+          #    a. Push event with a real "before" SHA but no merge-base with HEAD
+          #       (force-push that abandoned shared history).
+          #    b. New-branch push (before == all-zeros) where the branch has no
+          #       merge-base with origin/main — true orphan-root push, the
+          #       exact case the gate exists to block. Determined by the
+          #       baseref step setting orphan_root_new_branch=true.
+          if [ "${ORPHAN_ROOT_NEW_BRANCH:-false}" = "true" ] \
+              || ! git merge-base "$HEAD" "$BASE_SHA" >/dev/null 2>&1; then
+            sig="$(find_ratified_signal allow_orphan_root || true)"
+            if [ -z "${sig:-}" ]; then
+              fail "orphan-root vs $BASE (no merge-base with $BASE_SHA)" "allow_orphan_root"
+            fi
+            echo "Continuity Gate: orphan-root override accepted via $sig"
+          fi
+
+          # 2. Non-fast-forward + canonical divergence check.
+          if ! git merge-base --is-ancestor "$BASE_SHA" "$HEAD" 2>/dev/null; then
+            CANONICAL_PATHS=(
+              "instructions/canonical/"
+              "tools/kernel/"
+              "tools/retrieval/"
+              "tools/signals/lib/"
+              "tools/auto-bridge/"
+              "tools/memory/"
+            )
+            changed=""
+            for p in "${CANONICAL_PATHS[@]}"; do
+              if git diff --name-only "$BASE_SHA" "$HEAD" -- "$p" 2>/dev/null | grep -q .; then
+                changed="$changed $p"
+              fi
+            done
+            if git diff --name-only "$BASE_SHA" "$HEAD" 2>/dev/null \
+                | grep -E '^frameworks/[^/]+/[^/]+/(manifest\.json|guardrails\.md)$' \
+                | grep -q .; then
+              changed="$changed frameworks/*/manifest.json|guardrails.md"
+            fi
+            if [ -n "$changed" ]; then
+              sig="$(find_ratified_signal allow_canonical_divergent_force_push || true)"
+              if [ -z "${sig:-}" ]; then
+                fail "canonical-divergent non-FF push (paths:$changed)" "allow_canonical_divergent_force_push"
+              fi
+              echo "Continuity Gate: canonical-divergent override accepted via $sig"
+            fi
+          fi
+
+          echo "CONTINUITY GATE: PASSED"

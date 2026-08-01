@@ -1,0 +1,12 @@
+{
+  "schema": "MythosHostBindings/1.0",
+  "bindings": {
+    "crm": false,
+    "delesign": false,
+    "google-ads": false,
+    "macos-tcc-helper": false,
+    "meta-ads": false,
+    "sheets": false,
+    "youtube": false
+  }
+}

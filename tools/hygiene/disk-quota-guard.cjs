@@ -14,17 +14,18 @@ const os = require('os');
 const { execFileSync, execSync, spawn } = require('child_process');
 
 const DEFAULT_MIN_FREE_GB = 15;
-// Cold storage moved to general_storage 2026-07-09: file_storage's APFS container
-// shares 1.5TB with a Time Machine volume (832G) and runs 100% full, ENOSPC on
-// write. general_storage is a separate empty 500GB partition on the same drive.
-const COLD_STORAGE_MOUNT = '/Volumes/general_storage';
-const COLD_STORAGE_ARCHIVE_DIR = path.join(COLD_STORAGE_MOUNT, 'SM_OS_archive');
+// Host-specific storage belongs in ignored local configuration. The portable
+// fallback stays under the current user's home and does not assume a mount.
+const COLD_STORAGE_MOUNT = process.env.MYTHOS_COLD_STORAGE_ROOT
+  || path.join(os.homedir(), '.mythos', 'cold-storage');
+const COLD_STORAGE_ARCHIVE_DIR = path.join(COLD_STORAGE_MOUNT, 'mythos-archive');
 const COLD_STORAGE_TURNS_DIR = path.join(COLD_STORAGE_ARCHIVE_DIR, 'turns');
 const COLD_STORAGE_BACKUP_DIR = path.join(COLD_STORAGE_ARCHIVE_DIR, 'backups');
 const DEFAULT_LOCAL_BACKUP_KEEP = 7;
 const DEFAULT_REMOTE_BACKUP_KEEP = 4;
 
-const LOCAL_WORKSPACE_DIR = '/Users/admin/dev/Mythos-recovered';
+const LOCAL_WORKSPACE_DIR = process.env.MYTHOS_HOME
+  || path.resolve(__dirname, '..', '..');
 const LOCAL_TURNS_DIR = path.join(LOCAL_WORKSPACE_DIR, '_dev/desktop/work/personal/turns');
 
 function getPositiveIntegerEnv(name, defaultValue) {
@@ -379,8 +380,17 @@ function compressAndRotateLogs() {
  * @param {number} remoteKeep Number of newest remote archives to retain
  */
 function backgroundCloudSync(archivePath, remoteKeep) {
-  const remoteHost = 'ubuntu@{VPS_HOST}';
-  const remoteDirectory = '~/memory-archive/macbook/';
+  const remoteHost = process.env.MYTHOS_ARCHIVE_REMOTE_HOST || '';
+  const remoteDirectory = process.env.MYTHOS_ARCHIVE_REMOTE_DIR || '';
+  if (!remoteHost || !remoteDirectory) {
+    console.warn('[DiskQuotaGuard] Remote archive binding absent; cloud sync skipped.');
+    return;
+  }
+  if (!/^[A-Za-z0-9_.@-]+$/.test(remoteHost)
+      || !/^[A-Za-z0-9_./~-]+$/.test(remoteDirectory)) {
+    console.warn('[DiskQuotaGuard] Remote archive binding is invalid; cloud sync skipped.');
+    return;
+  }
   const remoteVPS = `${remoteHost}:${remoteDirectory}`;
   console.log(`[DiskQuotaGuard] Dispatching backup archive to VPS (${remoteVPS}) in the background...`);
 

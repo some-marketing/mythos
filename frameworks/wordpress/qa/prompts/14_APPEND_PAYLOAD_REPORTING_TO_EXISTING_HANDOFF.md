@@ -7,7 +7,7 @@
 
 ## Goal
 
-Append one or more testcase runs into an **existing** payload-reporting handoff bundle, updating bundle indexes and the lean `For_{DEVELOPER_NAME}.md` summary.
+Append one or more testcase runs into an **existing** payload-reporting handoff bundle, updating bundle indexes and the lean `For_Recipient.md` summary.
 
 Use this prompt when you already have a bundle at `playwright_phased_runner/dev_handoff/DEV_HANDOFF__{DEVELOPER_NAME_LOWER}__payload_reporting__.../` and want to add more runs without creating a new bundle.
 
@@ -34,7 +34,7 @@ Updated bundle files:
 - `{bundle}/llm/LLM_MANIFEST.json` (updated)
 - `{bundle}/INDEX.md`, `{bundle}/INDEX.json` (appended)
 - `{bundle}/SUMMARY.json` (updated)
-- `{bundle}/For_{DEVELOPER_NAME}.md` (updated with new run sections)
+- `{bundle}/For_Recipient.md` (updated with new run sections)
 - `{bundle}/QUESTIONS_FOR_DEVELOPER.md` (updated)
 - `{bundle}/reports/` (new reports added)
 - `{bundle}/raw/` (new inputs added; dev_changelog.md if newly collected)
@@ -102,7 +102,7 @@ Same delegation table as Prompt 13:
 3. **If YES**: validate, copy to canonical location + bundle `raw/dev_changelog.md`; set `CHANGELOG_AVAILABLE = true`.
 4. **If NO**: check `playwright_phased_runner/changelogs/LATEST.txt`; if current, reuse and set `CHANGELOG_AVAILABLE = true`. Otherwise ask if codebase changed.
    - "yes"/"unknown" → collect via `framework/prompts/16_CHANGELOG_CAPTURE_FROM_DEV.md`; set `CHANGELOG_AVAILABLE = true`.
-   - "no" → set `CHANGELOG_AVAILABLE = false`; note in `For_{DEVELOPER_NAME}.md`.
+   - "no" → set `CHANGELOG_AVAILABLE = false`; note in `For_Recipient.md`.
 5. Confirm changelog status.
 
 #### B) Expectation Update (if changelog available)
@@ -163,7 +163,7 @@ Update/merge:
 0. `llm/LLM_MANIFEST.json` — update runs[], reporting_expectations, changelog fields
 1. `INDEX.md` — add new runs with stable ordering (by testcase_id, then run_id)
 2. `INDEX.json` — append artifact records with stable ordering
-3. `For_{DEVELOPER_NAME}.md` — add per-run sections; ensure top points to `llm/LLM_MANIFEST.json`, `SUMMARY.json`, and `raw/dev_changelog.md`
+3. `For_Recipient.md` — add per-run sections; ensure top points to `llm/LLM_MANIFEST.json`, `SUMMARY.json`, and `raw/dev_changelog.md`
 4. `QUESTIONS_FOR_DEVELOPER.md` — update with new observations and questions (authoritative list)
 5. `SUMMARY.json` — update runs[], key_findings[], open_questions[], known_issues[], evidence_paths; keep it small and valid JSON
 
@@ -179,7 +179,7 @@ Update/merge:
 - [ ] New runs have canonical payload reports in `playwright_phased_runner/reports/`
 - [ ] Bundle indexes (INDEX.md, INDEX.json) include all runs (old + new) with stable ordering
 - [ ] SUMMARY.json updated and consistent with QUESTIONS_FOR_DEVELOPER.md
-- [ ] For_{DEVELOPER_NAME}.md updated with new run sections
+- [ ] For_Recipient.md updated with new run sections
 - [ ] No existing run folders overwritten (unless overwrite=true)
 - [ ] Bundle structural files present (LLM_MANIFEST.json, harness files, prompts)
 - [ ] Observational reporting philosophy followed
@@ -203,4 +203,4 @@ Update/merge:
 | Bundle missing structural files | Add them (copy from repo or llm/ equivalents) |
 | Changelog has changes but testcase paths invalid | Ask user for correct testcase paths; do not guess |
 | User declines all expectation updates | Proceed with original expectations; note in report that updates were declined |
-| Expectation Updater subagent fails | Fall back to manual: list proposed changes in For_{DEVELOPER_NAME}.md for manual update |
+| Expectation Updater subagent fails | Fall back to manual: list proposed changes in For_Recipient.md for manual update |

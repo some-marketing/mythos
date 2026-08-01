@@ -99,10 +99,7 @@ session-start trial-balance hook.
 | File | Role |
 |---|---|
 | `append-ledger-entry.js` | Validated appender for `_dev/state/memory-ledger.jsonl`. The canonical writer composes over this. |
-| `memory-vault.js` | Multi-source resolver: env override → local plaintext shadow → 1Password vault. Read path for Cowork/sandbox sessions that cannot reach `op`. |
-| `remember-via-vault.sh` | Dual-write helper: writes a memory file AND posts it to 1Password "Sam's Memories". On-device only. |
-| `remember-via-vault.dr.sh` | Disaster-recovery variant of the above, parked. Master-password fallback path; not the default. |
-| `vault-bootstrap.sh` | One-time setup for the AI-private 1Password account. |
+| `portable-remember.cjs` | Dry-run-first, local-only private-state writer. Refuses repository destinations and requires explicit acknowledgement before writing. |
 | `migrate-orchestrator-memory.sh` | Migration script (in flight). |
 | `contextual-sweep.js` + `contextual-inject*.cjs` | Tier-0 contextual hint surface (separate concern from canonical memory). |
 | `install-sweeper.sh` | Installs the contextual sweep launchd plist. |
@@ -120,7 +117,7 @@ canonical (source of truth)
         │
 cache / projection (regenerable)
    ~/.claude/projects/<cwd-key>/memory/           <- Claude harness pocket
-   1Password "Sam's Memories" vault               <- private substrate participant
+   1Password "{PRIVATE_MEMORY_VAULT}" vault               <- private substrate participant
 ```
 
 When a harness writes, the cache write must not return success to the caller

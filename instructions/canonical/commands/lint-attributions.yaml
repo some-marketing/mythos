@@ -1,0 +1,22 @@
+{
+  "id": "lint-attributions",
+  "description": "Detect fabricated testimonial-shaped quotes with named-source attributions in generated content",
+  "mode": "REVIEW_ONLY",
+  "objective": "Run the fabricated-attributions linter to detect and optionally fix suspect attributions in generated or authored content.",
+  "process": [
+    "Resolve arguments as file path, directory, or glob.",
+    "Invoke node tools/lint/fabricated-attributions.cjs $ARGUMENTS.",
+    "Surface findings including file path, line number, quote text, suspect attribution, detection pattern, and recommended fix.",
+    "Recommend replacement with placeholders, lorem ipsum, or real evidence from project intake.",
+    "If --fix is passed and findings are purely fabricated, auto-replace with placeholders."
+  ],
+  "success_criteria": [
+    "All suspect attributions are identified with citations",
+    "Concrete fixes are recommended or applied if --fix was used",
+    "Project testimonials references are checked for real evidence"
+  ],
+  "boundaries": [
+    "REVIEW_ONLY by default",
+    "Auto-fix restricted to unambiguous fabrication"
+  ]
+}

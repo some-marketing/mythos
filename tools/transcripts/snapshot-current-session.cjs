@@ -43,7 +43,7 @@ function findSessionJsonl(payload) {
     return payload.transcript_path;
   }
   // Fall back: most recently modified JSONL under this project's claude session dir
-  const projectsDir = '/Users/admin/.claude/projects/-Users-admin-Documents-GitHub-mythos';
+  const projectsDir = '${HOME}/.claude/projects/{PROJECT_SLUG}';
   if (!fs.existsSync(projectsDir)) return null;
   const candidates = fs.readdirSync(projectsDir)
     .filter(f => f.endsWith('.jsonl'))

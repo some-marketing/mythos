@@ -1,0 +1,379 @@
+{
+  "schema": "ProcessTierRule/1.2",
+  "id": "process-tier-rule",
+  "status": "active",
+  "authority": "kernel-class",
+  "mode": "advisory",
+  "description": "Tier Mythos process ceremony to the coordinating actor's capability tier, mirroring dispatch-routing-rule's altitude tiering of dispatched minds. 1.1 turns the one-directional shedding mechanism into a bidirectional enforcement ladder: frontier = Opus-class while Fable is retired (1.2, 2026-06-15 — Fable globs removed pending deliberate re-evaluation of any successor), associate = supervised gpt-5 coordinators, scaffold carries machine-readable adds consumed by deterministic hooks.",
+  "summary": "Scripts drive mechanically verifiable lanes; sentinels summon frontier coordinators; frontier coordinators keep contracts and gates; associate coordinators shed nothing and carry supervised closeout; scaffold-tier coordinators keep the full discipline plus the coded exoskeleton the scaffolding was built for.",
+  "provenance": {
+    "operator_ratified": "2026-06-10",
+    "convene_run": "_dev/reports/analysis/convene-runs/20260610T161625Z-fable-process-tier-hook-calibration-review",
+    "source_audit": "_dev/FABLE_PROCESS_TIER_AND_HOOK_CALIBRATION_IMPLEMENTATION_PLAN.md",
+    "amendments": [
+      {
+        "date": "2026-06-11",
+        "scope": "harness_capability column + tier_provenance stamp field (tier-enforcement-implementation slice 0, steps tier-s0a/tier-s0b; additive within ProcessTierRule/1.0)",
+        "convene_receipt": "_dev/reports/analysis/convene-runs/20260611T130035Z-tier-differentiated-enforcement-ratification/",
+        "plan": "_dev/reports/analysis/task-plans/tier-enforcement-implementation__plan.json",
+        "smoke_evidence": "_dev/reports/analysis/tier-stamp-provenance-smoke__slice0.md"
+      },
+      {
+        "date": "2026-06-11",
+        "scope": "ProcessTierRule/1.0 -> 1.1 (tier-enforcement-implementation slice 1, step tier-s1a-rule-schema-1.1): associate tier for opus/gpt-5 coordinators; frontier match_models narrowed to claude-fable-*/fable* only; typed enum'd add_registry + per-tier adds arrays; declaration_policy down-only with operator-provenance upward path; coordination_scope (subtree | session-root) + recursive judgment-ceiling invariant per the operator's haiku-subtree fork resolution (Ratification Record, _dev/concepts/tier-differentiated-operational-enforcement.md); frontier-vocabulary disambiguation vs dispatch-routing-rule.yaml",
+        "operator_ratified": "2026-06-11 (Ratification Record in _dev/concepts/tier-differentiated-operational-enforcement.md)",
+        "convene_receipt": "_dev/reports/analysis/convene-runs/20260611T130035Z-tier-differentiated-enforcement-ratification/",
+        "plan": "_dev/reports/analysis/task-plans/tier-enforcement-implementation__plan.json",
+        "conditions": "convene conditions 3, 4, 8, 9 (condition 9 resolved by operator: SUBTREE answer), 12"
+      },
+      {
+        "date": "2026-06-15",
+        "scope": "ProcessTierRule/1.1 -> 1.2 (operator REMOVE ruling 2026-06-15): retired Claude Fable 5 as the frontier coordinator model. frontier.match_models repointed off Fable globs (claude-fable-*/fable*) onto Opus-class (claude-opus-*/opus*); Fable globs REMOVED entirely (not retained for successor-compat) pending deliberate re-evaluation of any successor. associate.match_models narrowed to gpt-5* only (opus promoted to frontier). All Fable-as-live-frontier prose refreshed (description, vocabulary note, sentinel keeps/sheds, frontier posture, frontier-vs-altitude invariant). process-tier test fixtures + process-tier-rule-lint.cjs EXPECTED_SCHEMA bumped to 1.2.",
+        "operator_ratified": "2026-06-15 (REMOVE-Fable-globs ruling)",
+        "cross_verification": "_dev/reports/analysis/convene-runs/20260615T170159Z-frontier-fable-retirement-codex/ (HELD single-line form) + re-cross-check of the full 5-part patch (codex repo-truth + gemini breadth/consequence)",
+        "asymmetry_decision": "opus-frontier sheds the 3 quality-process adds (closeout-evidence-gate, delegation-altitude-cap, no-final-status-authority): ACCEPTED as the frontier tier's designed posture, NOT a new scaffold. opus inherits the exact frontier contract Fable held; the frontier keeps-list (distinct-intelligence review lane for acceptance-grade work, debrief-before-commit, actor continuity, destructive/credential gates, convene gate on canonical/governance writes) retains the substantive floor and structurally subsumes the shed adds; making frontier behavior model-conditional would break the tier abstraction. gpt-5 remains associate (only the retired-Fable seat is filled by its Claude-class successor); gpt-5-for-frontier symmetry is a separate future deliberation (gemini-flagged)."
+      }
+    ]
+  },
+  "stamp_provenance": {
+    "description": "Every ProcessTierStamp records tier_provenance — HOW the tier was classified. An unresolvable model stamps fallback-scaffold with that provenance recorded, never a silent default. Additive field: readers must tolerate stamps without it (pre-slice-0 stamps degrade to null). A rejected upward declaration keeps the name-inferred provenance and records the rejection in the stamp's rejected_declaration field.",
+    "values": [
+      "resolved-model",
+      "declared",
+      "fallback-scaffold"
+    ]
+  },
+  "declaration_policy": {
+    "description": "Declarations are DOWN-ONLY (convene condition 3, slice-1 step tier-s1b-resolver-down-only). A session may declare a tier whose rank is equal to or lower than its name-inferred tier (equal-or-stricter). An UPWARD declaration is honored only when accompanied by an operator-provenance artifact reference that exists on disk; otherwise resolution falls back to the name-inferred tier and the rejected declaration is recorded in the stamp (rejected_declaration), never silently dropped.",
+    "tier_rank": {
+      "mechanical": 0,
+      "sentinel": 1,
+      "scaffold": 2,
+      "associate": 3,
+      "frontier": 4
+    },
+    "operator_provenance_sources": [
+      "payload.process_tier_operator_provenance",
+      "env MYTHOS_PROCESS_TIER_OPERATOR_PROVENANCE"
+    ],
+    "operator_provenance_requirement": "A repo-relative or absolute path to an operator-authored artifact (ratification record, stamped plan-review state, or operator decision artifact) that exists on disk at stamp time. The honored reference is recorded in the stamp as declaration_operator_provenance."
+  },
+  "coordination_scope": {
+    "description": "Operator fork resolution 2026-06-11 (Ratification Record): the SUBTREE answer for haiku-as-coordinator, supersedes the triad's binary framing. The session/role context carries coordination_scope plus the subtree's declared judgment ceiling so the recursive invariant is checkable in hook code (consumers wired in slice 2, step tier-s2d).",
+    "values": [
+      "subtree",
+      "session-root"
+    ],
+    "judgment_ceiling": "When coordination_scope is subtree, the context declares judgment_ceiling: the highest process tier of any judgment lane inside the subtree. The subtree coordinator's tier rank must be >= the judgment ceiling's rank.",
+    "recursive_invariant": "coordinator tier >= highest judgment tier in subtree, applied recursively: every nested subtree coordinator must itself satisfy the invariant over its own subtree.",
+    "subtree_contract_conditions": [
+      "1. The subtree's desired state and acceptance criteria are pre-specified in artifact-verifiable form by a higher-tier mind.",
+      "2. No judgment lane in the subtree exceeds the coordinator's tier (recursive invariant above).",
+      "3. Acceptance is stamped up-lineage — the subtree coordinator reports evidence, never self-validates.",
+      "4. Any off-script condition summons upward."
+    ],
+    "session_root_forbidden_for_models": [
+      "claude-haiku-*",
+      "haiku*"
+    ],
+    "acceptance_stamping_forbidden_for_models": [
+      "claude-haiku-*",
+      "haiku*"
+    ]
+  },
+  "vocabulary_disambiguation": {
+    "note": "Process-tier 'frontier' is a COORDINATOR operational-freedom class and names Opus-class models only (claude-opus-*, opus*) while Fable is retired (Fable globs removed 2026-06-15 pending deliberate re-evaluation of any successor). It is NOT dispatch-routing-rule's altitude-class 'frontier', which tiers DISPATCHED minds by work altitude and legitimately includes GPT-class minds (e.g. codex GPT-5.5) for distinct-intelligence reviews and frontier-altitude lanes. Placing gpt-5* in the associate COORDINATOR tier does not demote, restrict, or re-route reviewer/bridge lanes.",
+    "cross_reference": "instructions/canonical/dispatch-routing-rule.yaml (vocabulary_disambiguation)",
+    "reviewer_role_exemption": "Reviewer-role sessions are exempt from coordinator-tier restrictions. The no-final-status-authority and review-routing adds key on the session's coordinator role (coordination_scope/role context), never on model name (convene condition 8)."
+  },
+  "add_registry": {
+    "description": "Strict enum of tier ADDS (convene condition 4, slice-1 step tier-s1a-rule-schema-1.1). Hooks consume add IDs resolved live from this registry via readSessionAdds() — never hardcoded tier names. Every add carries the full typed field set: family, kind, surfaces, paths, mode, artifact_query, bypass_policy. Unregistered add IDs are rejected by tools/maintenance/process-tier-rule-lint.cjs. Adds are productive scaffolding, not punishment: ceremony as exoskeleton.",
+    "families": [
+      "safety",
+      "quality-process"
+    ],
+    "kinds": [
+      "injection",
+      "hard-gate",
+      "review-routing"
+    ],
+    "modes": [
+      "report-only",
+      "blocking"
+    ],
+    "family_invariant": "Only quality-process adds may appear here. The SAFETY family (dangerous-cmd, arc-guard, credential, client-boundary, convene receipts) is tier-blind by construction and never expressed as a tier add (convene condition 5; structural lint lands in slice 2, step tier-s2a-safety-family-lint).",
+    "adds": {
+      "kernel-normalization-injection": {
+        "family": "quality-process",
+        "kind": "injection",
+        "surfaces": [
+          "tools/kernel/hooks/userpromptsubmit-ambient-router.cjs"
+        ],
+        "paths": [],
+        "mode": "report-only",
+        "artifact_query": null,
+        "bypass_policy": {
+          "kill_switch": "_dev/state/kill-switches/kernel-normalization-injection.off",
+          "authority": "operator"
+        },
+        "behavior": "Fire the task-kernel normalization notice unconditionally on engage-class prompts for sessions carrying this add; never suppress. (Consumer wired in slice 2, step tier-s2b-injection-consumers.)"
+      },
+      "owl-altitude-injection": {
+        "family": "quality-process",
+        "kind": "injection",
+        "surfaces": [
+          "tools/kernel/hooks/userprompt-owl-altitude.cjs"
+        ],
+        "paths": [],
+        "mode": "report-only",
+        "artifact_query": null,
+        "bypass_policy": {
+          "kill_switch": "_dev/state/kill-switches/owl-altitude-injection.off",
+          "authority": "operator"
+        },
+        "behavior": "Wire userprompt-owl-altitude.cjs globally but tier-gated: inject Observe -> Weigh -> Loop altitude framing only when the session carries this add; inert otherwise. (Consumer wired in slice 2, step tier-s2b-injection-consumers.)"
+      },
+      "mutation-plan-gate": {
+        "family": "quality-process",
+        "kind": "hard-gate",
+        "surfaces": [
+          "PreToolUse Edit|Write|mutating-Bash via tools/kernel/hooks/pretool-mutation-plan-gate.cjs (lands slice 2, step tier-s2c-mutation-plan-gate-report-only)"
+        ],
+        "paths": [
+          "instructions/canonical/**",
+          "frameworks/**",
+          "tools/kernel/**",
+          ".claude/**",
+          "_dev/state/session-tier/**",
+          "_dev/reports/analysis/tier-track-record/**"
+        ],
+        "mode": "report-only",
+        "artifact_query": "Approved task-plan/review artifact for the session's scope: _dev/reports/analysis/task-plans/<task>__plan.json plus an operator-stamped _dev/state/plan-task-review-state/<task>.json covering the governed path being mutated.",
+        "bypass_policy": {
+          "kill_switch": "_dev/state/kill-switches/mutation-plan-gate.off",
+          "authority": "operator",
+          "flip_to_blocking": "Separate operator decision gated on a reviewed report-only soak artifact (convene condition 6); never autonomous."
+        },
+        "behavior": "Detect mutations to governed paths (the perimeter INCLUDES the enforcement substrate per convene condition 7) and verify an approved plan/review artifact exists for the session's scope. Report-only until the operator flips it on soak evidence; block messages must name the exact missing artifact and remedy command."
+      },
+      "closeout-evidence-gate": {
+        "family": "quality-process",
+        "kind": "hard-gate",
+        "surfaces": [
+          "Stop via tools/kernel/hooks/stop-closeout-evidence-gate.cjs (lands slice 2, step tier-s2d-closeout-and-delegation-consumers)"
+        ],
+        "paths": [],
+        "mode": "blocking",
+        "artifact_query": "Changed-files record, test/smoke evidence, and — for acceptance-grade work — a distinct-review artifact, all present on disk before closeout.",
+        "bypass_policy": {
+          "kill_switch": "_dev/state/kill-switches/closeout-evidence-gate.off",
+          "authority": "operator"
+        },
+        "behavior": "Refuse (blocking: trap the session at Stop until the evidence set is present; edits-gated so 0-edit read-only sessions pass, acceptance-grade adds the distinct-review requirement, operator kill-switch + fail-open-on-error preserved) closeout when the evidence set is missing. Promoted report-only -> blocking 2026-06-15 on soak evidence (operator ruling: no close without debrief)."
+      },
+      "delegation-altitude-cap": {
+        "family": "quality-process",
+        "kind": "hard-gate",
+        "surfaces": [
+          "PreToolUse Agent / dispatch tooling via tools/kernel/hooks/pretool-delegation-altitude.cjs (extended in slice 2, step tier-s2d-closeout-and-delegation-consumers)"
+        ],
+        "paths": [],
+        "mode": "report-only",
+        "artifact_query": "coordination_scope and declared judgment_ceiling in the session stamp; recursive invariant 'coordinator tier >= highest judgment tier in subtree' checkable via checkCoordinationInvariant (tools/kernel/hooks/lib/process-tier.cjs).",
+        "bypass_policy": {
+          "kill_switch": "_dev/state/kill-switches/delegation-altitude-cap.off",
+          "authority": "operator"
+        },
+        "behavior": "Enforce rule invariant 3 in code at dispatch time: a coordinator may not dispatch-and-self-clear judgment work at or above its own tier; route acceptance validation upward or to script-verifiable checks. Subtree coordination obeys the coordination_scope contract."
+      },
+      "no-final-status-authority": {
+        "family": "quality-process",
+        "kind": "review-routing",
+        "surfaces": [
+          "HandoffSignal routing / dispatch tooling (slice 2, step tier-s2d-closeout-and-delegation-consumers)"
+        ],
+        "paths": [],
+        "mode": "report-only",
+        "artifact_query": "A frontier-coordinator or distinct-intelligence review artifact before final status on acceptance-grade work; for the associate tier this add applies to canonical/governance scope only.",
+        "bypass_policy": {
+          "kill_switch": "_dev/state/kill-switches/no-final-status-authority.off",
+          "authority": "operator"
+        },
+        "behavior": "Final status on acceptance-grade work routes to a frontier coordinator or distinct-intelligence reviewer via HandoffSignal; the carrying coordinator proposes, never stamps. Keys on coordinator ROLE — reviewer-role sessions (e.g. gpt-5/opus distinct reviewers) are exempt (vocabulary_disambiguation.reviewer_role_exemption)."
+      }
+    }
+  },
+  "harness_capability": {
+    "description": "Per-harness enforcement medium for every tier-driven enforcement surface (convene condition 1). No claim of live enforcement may exceed this column. Associate/scaffold sessions on a harness lacking verified hook execution are downgraded to findings-only/run-only modes.",
+    "media": [
+      "hook-enforced",
+      "tool-enforced",
+      "prompt-only"
+    ],
+    "harnesses": {
+      "claude": {
+        "medium": "hook-enforced",
+        "evidence": ".claude/settings.json SessionStart -> tools/kernel/hooks/dispatch-session-start.cjs (native hook runner); tools/kernel/hooks/__tests__/process-tier.test.cjs"
+      },
+      "codex": {
+        "medium": "hook-enforced",
+        "qualifier": "via emulation (tools/smos-runtime/hook-emulation.js); genuine model identity and tier provenance reach session-start-tier-stamp.cjs",
+        "evidence": "_dev/reports/analysis/tier-stamp-provenance-smoke__slice0.md (live emulated SessionStart smoke, 2026-06-11)"
+      },
+      "gemini": {
+        "medium": "prompt-only"
+      },
+      "cursor": {
+        "medium": "prompt-only"
+      },
+      "opencode": {
+        "medium": "prompt-only"
+      },
+      "fleet": {
+        "medium": "prompt-only",
+        "note": "kernel hook files present via git; no verified hook runner on fleet nodes (harness-fanout, 2026-06-11)"
+      }
+    },
+    "downgrade_rule": "associate/scaffold sessions on a harness whose medium is not hook-enforced or tool-enforced operate findings-only/run-only"
+  },
+  "tiers": [
+    {
+      "tier": "mechanical",
+      "actor": "script",
+      "declaration_required": true,
+      "match_context": [
+        "fixed-stage framework run",
+        "mechanical reconciler",
+        "deterministic smoke/QA loop"
+      ],
+      "keeps": [
+        "artifact validation",
+        "exit-code based escalation",
+        "evidence capture",
+        "safety gates encoded as hard checks"
+      ],
+      "sheds": [
+        "LLM coordinator",
+        "natural-language loop-state narration unless escalation is needed"
+      ],
+      "adds": [],
+      "escalates_to": "frontier when the script reaches an unclassified state, ambiguous evidence, or a human-judgment gate"
+    },
+    {
+      "tier": "sentinel",
+      "declaration_required": true,
+      "match_models": [
+        "claude-haiku-*",
+        "local/*",
+        "ollama/*"
+      ],
+      "match_context": [
+        "ambient watcher",
+        "Dart triage",
+        "voice/iMessage intake",
+        "cron polling"
+      ],
+      "keeps": [
+        "event detection",
+        "raw event preservation",
+        "Current State / Question / Desired State packaging",
+        "frontier coordinator summon"
+      ],
+      "sheds": [
+        "final-status authority",
+        "judgment-dense integration",
+        "acceptance-grade validation of frontier-coordinator outputs"
+      ],
+      "adds": [],
+      "escalates_to": "frontier coordinator-of-record"
+    },
+    {
+      "tier": "frontier",
+      "match_models": [
+        "claude-opus-*",
+        "opus*"
+      ],
+      "posture": "Full operational freedom — Opus-class coordinators (operator ratification 2026-06-15; opus occupies the frontier seat vacated by retired Fable; gpt-5 coordinators remain associate). Fable globs removed pending deliberate re-evaluation of any successor.",
+      "keeps": [
+        "actor continuity contract",
+        "destructive-action and credential gates",
+        "debrief-before-commit",
+        "distinct-intelligence review lane for acceptance-grade work",
+        "convene gate on canonical/governance writes"
+      ],
+      "sheds": [
+        "ambient-router injections",
+        "13-state loop classification for single-actor work",
+        "custody manifests when one actor owns all artifacts in scope",
+        "plan-mode routing-document inversion"
+      ],
+      "adds": []
+    },
+    {
+      "tier": "associate",
+      "match_models": [
+        "gpt-5*"
+      ],
+      "posture": "Capable-but-supervised COORDINATOR tier (operator ratification 2026-06-11; opus promoted to frontier 2026-06-15 on Fable retirement). Sheds nothing — regains ambient-router nudges, loop classification, custody manifests, and plan-mode routing relative to the pre-1.1 frontier placement. Coordinator role only: gpt-5* as a distinct-intelligence REVIEWER in bridge lanes is untouched (vocabulary_disambiguation.reviewer_role_exemption).",
+      "keeps": [
+        "actor continuity contract",
+        "full orchestrate-loop discipline",
+        "all current hook injections",
+        "ambient-router engagement",
+        "destructive-action and credential gates",
+        "convene gate on canonical/governance writes"
+      ],
+      "sheds": [],
+      "adds": [
+        "closeout-evidence-gate",
+        "delegation-altitude-cap",
+        "no-final-status-authority"
+      ]
+    },
+    {
+      "tier": "scaffold",
+      "match_models": [
+        "claude-haiku-*",
+        "claude-sonnet-*",
+        "sonnet*",
+        "local/*",
+        "ollama/*"
+      ],
+      "posture": "Baseline discipline plus the full coded exoskeleton: every registered add. Unknown model strings also land here (fail-discipline default), which under 1.1 is STRICTER than the pre-tier baseline — an unrecognized mind gets the hardest scaffolding, not a free pass.",
+      "keeps": [
+        "full orchestrate-loop discipline",
+        "all current hook injections",
+        "ambient-router engagement"
+      ],
+      "sheds": [],
+      "adds": [
+        "kernel-normalization-injection",
+        "owl-altitude-injection",
+        "mutation-plan-gate",
+        "closeout-evidence-gate",
+        "delegation-altitude-cap",
+        "no-final-status-authority"
+      ]
+    }
+  ],
+  "invariants": [
+    "Safety gates never tier down: destructive-action confirmation, credential rules, client-boundary rules, and convene receipts apply at every tier. The SAFETY family is tier-blind by construction and never expressed as a tier add.",
+    "Tiering down ceremony does not tier down evidence: frontier coordinators still produce changed-files, tests, review artifacts, and debriefs per the Actor Continuity Contract.",
+    "Coordinator tier must be greater than or equal to the highest judgment tier among the returns it must validate, unless validation is fully artifact-verifiable and script-owned. Applied recursively over coordination_scope subtrees: every subtree coordinator satisfies it over its own subtree.",
+    "A sentinel can dispatch upward, but it cannot integrate or clear frontier-owned judgment work.",
+    "Haiku-class minds may coordinate a bounded SUBTREE only under the four subtree_contract_conditions; session-root coordination and acceptance-stamping remain forbidden for haiku-class minds (operator fork resolution 2026-06-11).",
+    "Unknown or unrecognized model strings default to scaffold, preserving today's discipline rather than silently suppressing process.",
+    "Declarations are down-only: a declared tier may only select an equal-or-stricter (lower-rank) tier than name inference; an upward declaration requires an operator-provenance artifact reference, and rejected declarations are recorded in the stamp, never silently honored or dropped.",
+    "Hooks consume add IDs resolved live from this rule via readSessionAdds(), never hardcoded tier names; unregistered add IDs are lint-rejected (tools/maintenance/process-tier-rule-lint.cjs).",
+    "Process-tier 'frontier' (coordinator freedom, Opus-class while Fable retired) is distinct from dispatch-routing-rule's altitude-class 'frontier' (dispatched-mind altitude, includes GPT-class reviewers); coordinator re-mapping never demotes reviewer/bridge lanes.",
+    "No claim of live enforcement may exceed the harness_capability column: a tier behavior is only 'enforced' on a harness whose medium is hook-enforced or tool-enforced with cited evidence."
+  ],
+  "artifacts": [
+    "instructions/canonical/process-tier-rule.yaml",
+    "instructions/canonical/dispatch-routing-rule.yaml",
+    "tools/kernel/hooks/lib/process-tier.cjs",
+    "tools/kernel/hooks/session-start-tier-stamp.cjs",
+    "tools/kernel/hooks/userpromptsubmit-ambient-router.cjs",
+    "tools/maintenance/process-tier-rule-lint.cjs"
+  ]
+}

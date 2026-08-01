@@ -36,7 +36,7 @@ This document consolidates all safety rules, execution modes, and constraints fo
 ### What TO do:
 - Describe what you observe: "Slide 5 lists 6 locations with checkmarks"
 - Describe what you expected: "Expected: 5 CLIENTB locations per scope doc Section 4"
-- Cite evidence with file paths: "Scope doc states '$23,500 CAD' at `ECH_Project_Scope:line 412`"
+- Cite evidence with file paths: "Scope doc states '$23,500 CAD' at `{CLIENT_CODE}_Project_Scope:line 412`"
 - Quantify discrepancies: "Slide states '19 years'; scope doc says 'practising since 1999' = 27 years"
 - Posit hypotheses (labeled): "HYPOTHESIS: The extra checkmark item may be a section heading misread as a location entry"
 - Compare sources: "Presentation uses Zocdoc 2024 data; Gemini prompt suggested BrightLocal healthcare data"
@@ -110,8 +110,8 @@ This framework is strictly read-only with respect to all inputs. The audit proce
 ### Citation Format
 - Every factual claim must be backed by an evidence path
 - Format: `[description] at \`filename:line\`` or `[description] on slide N`
-- Example: "Price '$23,500 CAD' at `ECH_Website_Rebuild_Proposal.md:line 87`"
-- Example: "Performance score '34/100' on slide 6, verified in `Screenshots/ECH__pagespeed-34-performance.png`"
+- Example: "Price '$23,500 CAD' at `{CLIENT_CODE}_Website_Rebuild_Proposal.md:line 87`"
+- Example: "Performance score '34/100' on slide 6, verified in `Screenshots/{CLIENT_CODE}__pagespeed-34-performance.png`"
 
 ### Screenshot Verification
 - Screenshots must be visually verified using the Read tool (multimodal)

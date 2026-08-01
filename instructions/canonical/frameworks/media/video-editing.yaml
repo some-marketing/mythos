@@ -1,11 +1,21 @@
 {
   "id": "media/video-editing",
   "manifest_path": "frameworks/media/video-editing/manifest.json",
-  "description": "Conversation-driven video editing with transcription, edit decision lists, subtitle burn-in, rendering, and self-evaluation",
-  "inputs": ["videos_dir", "ELEVENLABS_API_KEY"],
-  "outputs": ["edit/takes_packed.md", "edit/edl.json", "edit/master.srt", "edit/preview.mp4", "edit/final.mp4", "edit/project.md"],
+  "description": "Conversation-driven video editing: transcribe, cut, color grade, burn subtitles, self-evaluate — for talking heads, montages, tutorials, interviews",
+  "inputs": ["videos_dir", "api_key"],
+  "outputs": ["<videos_dir>/edit/final.mp4", "<videos_dir>/edit/project.md", "<videos_dir>/edit/edl.json"],
   "modes": ["FINDINGS_ONLY", "PATCH_ALLOWED", "REVIEW_ONLY"],
   "operations": ["video-editing:run", "video-editing:status"],
-  "agent_profiles": ["video-editing-agent"],
-  "guardrail_overrides": ["Never log API keys", "Preserve source footage", "Render outputs only into the edit directory"]
+  "agent_profiles": ["video-editing unified agent"],
+  "guardrail_overrides": [
+    "12 hard production rules (non-negotiable ffmpeg correctness)",
+    "Strategy confirmation gate (operator must approve before cuts)",
+    "Self-eval cap (max 3 passes before flagging to operator)",
+    "Output isolation (all writes to <videos_dir>/edit/, never framework dir)"
+  ],
+  "distilled_from": {
+    "source": "browser-use/video-use",
+    "license": "MIT",
+    "commit_sha": "cf12ac35143caa48db76efa35b1cb439582333bb"
+  }
 }

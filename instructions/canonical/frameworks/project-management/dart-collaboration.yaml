@@ -1,0 +1,11 @@
+{
+  "id": "project-management/dart-collaboration",
+  "manifest_path": "frameworks/project-management/dart-collaboration/manifest.json",
+  "description": "Abstract task creation and collaboration framework using Dart as human frontend and git workspace repos as LLM-consumable backend",
+  "inputs": ["Dart workspace access (REST API canonical; MCP optional)", "Workspace repo"],
+  "outputs": ["tasks/index.json", "Dart tasks via REST API"],
+  "modes": ["REVIEW_ONLY", "PATCH_ALLOWED"],
+  "operations": ["dart-collaboration:task-creation", "dart-collaboration:sync-index"],
+  "agent_profiles": [],
+  "guardrail_overrides": ["Three-layer model", "Column movement rules", "Board routing"]
+}

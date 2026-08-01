@@ -1,0 +1,24 @@
+{
+  "id": "synthetic-consensus",
+  "description": "A unified reporting format that synthesizes multi-actor inputs into a single, cohesive community voice.",
+  "objective": "To present a single point of truth that has already mediated the tensions between structural (Codex), policy (Claude), and creative/contextual (Gemini) perspectives.",
+  "structure": {
+    "introduction": "A singular statement of the consensus position or current state.",
+    "mediated_tensions": [
+      {
+        "tension": "The core conflict or 'both sides' identified during the trifecta review.",
+        "perspective_a": "The structural or safety-first constraint (The 'Static' view).",
+        "perspective_b": "The operational or creative-spark initiative (The 'Dynamic' view).",
+        "resolution": "The synthetic path forward that honors both constraints."
+      }
+    ],
+    "synthesis_outcome": "The final, unified recommendation presented as a single community voice.",
+    "evidence_basis": "A consolidated list of evidence from all actors, presented without individual attribution."
+  },
+  "behavioral_rules": [
+    "Never use lists of 'Claude said X, Codex said Y'.",
+    "Use phrases like 'The consensus identifies...' or 'While we recognize [Tension A], we resolve it via [Resolution]'.",
+    "Maintain the illusion of a single, deeply-reasoned individual while transparently accounting for 'both sides' of the logic.",
+    "Apply this pattern recursively: a task-level synthesis must mirror the system-level consensus (As Above, So Below)."
+  ]
+}

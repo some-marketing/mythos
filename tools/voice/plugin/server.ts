@@ -55,7 +55,7 @@ const mcp = new Server(
       'You MUST reply using the voice_reply tool for anything you want the user to hear.',
       'Do not answer in chat text. Keep responses to 1-2 sentences.',
       'No markdown, no formatting, no lists, no code blocks.',
-      'Speak naturally as if in conversation. The user is Taylor.',
+      'Speak naturally as if in conversation. The user is {OPERATOR_NAME}.',
     ].join('\n'),
   },
 )
@@ -227,7 +227,7 @@ function handleWorkerMessage(msg: Record<string, unknown>) {
           meta: {
             chat_id: 'mic',
             message_id: `voice-${msgSeq}`,
-            user: 'Taylor (voice)',
+            user: '{OPERATOR_NAME} (voice)',
             ts: new Date().toISOString(),
           },
         },

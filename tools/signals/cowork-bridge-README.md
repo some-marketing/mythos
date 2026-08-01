@@ -10,7 +10,6 @@ read `_dev/cowork-sessions/dispatch-bridge-cowork-variant.md`.
 tools/signals/
 ├── cowork-orchestrator-bridge.js   # Cowork-side: writes packets, polls verdicts
 ├── desktop-cowork-consumer.sh      # Desktop-side: consumed by launchd
-├── com.smos.cowork-bridge.plist    # launchd template (paths hard-coded)
 └── cowork-bridge-README.md         # this file
 ```
 
@@ -25,36 +24,28 @@ _dev/reports/signals/
 
 ## Install — the single user action
 
-Run this once from a Terminal on your laptop. It loads the launchd job into
-your user agent so it survives reboots:
+The portable service catalog resolves every path from the current repository.
+After reviewing the host activation manifest, install this service with:
 
 ```bash
-cp ~/Documents/GitHub/Mythos/tools/signals/com.smos.cowork-bridge.plist \
-   ~/Library/LaunchAgents/com.smos.cowork-bridge.plist
-launchctl bootstrap "gui/$(id -u)" \
-   ~/Library/LaunchAgents/com.smos.cowork-bridge.plist
-launchctl enable "gui/$(id -u)/com.smos.cowork-bridge"
+tools/launchd/install.sh cowork-bridge
 ```
 
-To unload later:
+To stop it without deleting repository state:
 
 ```bash
-launchctl bootout "gui/$(id -u)/com.smos.cowork-bridge"
-rm ~/Library/LaunchAgents/com.smos.cowork-bridge.plist
+launchctl bootout "gui/$(id -u)/org.mythos.portable.cowork-bridge"
 ```
 
-> **Why we copy into `~/Library/LaunchAgents/`:** launchd's bootstrap needs
-> a stable, user-owned path. Loading directly from the repo works but means
-> every `git checkout` of the plist requires a `bootout`/`bootstrap` cycle.
-> Copying into the standard agent dir keeps the install stable across
-> branches and keeps the working tree clean. The repo copy is the source
-> of truth; the LaunchAgents copy is a snapshot.
+The installer renders a concrete plist from `tools/launchd/services.json`,
+backs up any installed plist, and records a rollback receipt under ignored
+local state.
 
 ## Verify the install
 
 ```bash
-launchctl print "gui/$(id -u)/com.smos.cowork-bridge" | head -40
-ls -la ~/Documents/GitHub/Mythos/_dev/logs/cowork-bridge/
+launchctl print "gui/$(id -u)/org.mythos.portable.cowork-bridge" | head -40
+ls -la _dev/state/launchd/cowork-bridge/
 ```
 
 A successful install shows `state = running` and an empty log dir (the dir

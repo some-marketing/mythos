@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Stage 6 — Insights Readout Narrative (Companion Artifact)",
+  "description": "Narrative companion to the helper-classified 06-readout.json. Authored by stage-6-insights-readout-agent. The agent does NOT classify and does NOT mutate 06-readout.json; it sources verdicts and observed numbers from the helper output and produces a stakeholder-voice narrative around them.",
+  "type": "object",
+  "required": [
+    "timestamp",
+    "readout_helper_artifact_path",
+    "preregistration_path",
+    "verdict_referenced_from_helper",
+    "per_cell_verdicts",
+    "narrative_md",
+    "citations",
+    "modeled_reporting_caveat_present"
+  ],
+  "properties": {
+    "timestamp": { "type": "string", "format": "date-time" },
+    "readout_helper_artifact_path": {
+      "type": "string",
+      "description": "Path to the helper-emitted 06-readout.json that this narrative wraps. Helper retains classification authority."
+    },
+    "preregistration_path": {
+      "type": "string",
+      "description": "Path to the locked Stage 5a pre-registration artifact the helper measured against."
+    },
+    "verdict_referenced_from_helper": {
+      "type": "string",
+      "enum": ["decide", "monitor", "do_not_decide_yet", "needs_helper_clarification", "needs_input_resolution"],
+      "description": "Aggregate verdict mirrored from the helper output. The agent does not author this; it copies it. The two refusal states (needs_helper_clarification, needs_input_resolution) indicate the agent declined to author a narrative because helper output or inputs were inconsistent or missing."
+    },
+    "per_cell_verdicts": {
+      "type": "array",
+      "description": "Per-cell verdicts mirrored verbatim from the helper output. The agent never authors verdicts; it carries them.",
+      "items": {
+        "type": "object",
+        "required": ["framework_id", "verdict_from_helper"],
+        "properties": {
+          "framework_id": { "type": "string" },
+          "verdict_from_helper": {
+            "type": "string",
+            "enum": ["decide", "monitor", "do_not_decide_yet"]
+          },
+          "stopping_rule_triggered": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "narrative_md": {
+      "type": "string",
+      "description": "Stakeholder-voice Markdown body. Must not contradict any per-cell verdict. Modeled-reporting caveat appears verbatim in the body."
+    },
+    "citations": {
+      "type": "array",
+      "description": "Every observed number cites the helper artifact; every threshold cites the pre-registration artifact. No free-floating numbers.",
+      "items": {
+        "type": "object",
+        "required": ["claim", "source_path", "field"],
+        "properties": {
+          "claim": { "type": "string" },
+          "source_path": { "type": "string" },
+          "field": { "type": "string" }
+        }
+      }
+    },
+    "modeled_reporting_caveat_present": {
+      "type": "boolean",
+      "description": "MUST be true for a valid run. The modeled-reporting caveat must appear verbatim in narrative_md and this flag must confirm presence."
+    },
+    "refusal_reason": {
+      "type": ["string", "null"],
+      "description": "Populated only when verdict_referenced_from_helper is needs_helper_clarification or needs_input_resolution; names the inconsistency or missing field that blocked narrative authoring."
+    }
+  },
+  "additionalProperties": false
+}

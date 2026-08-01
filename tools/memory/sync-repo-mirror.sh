@@ -5,7 +5,7 @@
 # WHAT:
 #   1. Accepts a single memory file path as $1 (the plaintext copy already
 #      written under the harness memory dir, e.g.
-#      ~/.claude/projects/-Users-admin-dev-mythos-recovered/memory/<name>.md).
+#      ~/.claude/projects/{PROJECT_SLUG}/memory/<name>.md).
 #   2. Copies it (idempotently — only writes if content differs) to
 #      Mythos-memories/memory/<name>.md inside this repo.
 #   3. Updates Mythos-memories/memory/MEMORY.md with a one-line index entry

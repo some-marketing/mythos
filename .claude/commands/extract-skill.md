@@ -1,16 +1,32 @@
 ---
-description: Plain-id alias for /awaken-essence
-allowed-tools: [Read, Write, Edit, Bash, Grep, Glob]
+description: Extract reusable skill from conversation workflow
+mode: PATCH_ALLOWED
 ---
 
 <objective>
-Run `/awaken-essence`. `extract-skill` is the plain-software id; the full command body lives under the mythic name.
+Analyze the current conversation to identify a repeatable workflow, then generate the full Mythos artifact set (SKILL.md, command, agent, verification script, manifest updates) by invoking the extract-skill skill.
 </objective>
 
 <process>
-1. Follow `.claude/commands/awaken-essence.md`.
+- If arguments contain a skill name, use it as the suggested name for the new skill.
+- Load and follow the extract-skill skill workflow: .claude/skills/extract-skill/SKILL.md, executing the full automated workflow from step 1 through step 11.
+- Analyze the conversation to identify the repeatable workflow pattern, inputs, outputs, and decision points.
+- Present the extracted workflow to the user for confirmation before generating artifacts.
+- Generate all required artifacts: SKILL.md, command file, agent definition, and optional verification script.
+- Run node tools/verify/verify-skill.cjs to validate the generated artifacts.
+- Update the manifest with new skill, command, and agent entries.
+- Run npm run manifest:sync to ensure manifest consistency.
 </process>
 
 <success_criteria>
-- `/extract-skill` resolves to the same behavior as `/awaken-essence`
+- Workflow extracted accurately from conversation context
+- All artifacts generated (SKILL.md, command, agent, optional verification script)
+- Artifacts pass node tools/verify/verify-skill.cjs validation
+- Manifest updated with new entries
+- User confirmed workflow before generation
 </success_criteria>
+
+<handoff>
+skill_created: sync-manifest
+validation_failures: review-progress
+</handoff>

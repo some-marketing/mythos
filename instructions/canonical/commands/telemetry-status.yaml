@@ -1,0 +1,24 @@
+{
+  "id": "telemetry-status",
+  "description": "Tabular rollup of subagent dispatches, metrics, and costs",
+  "mode": "COORDINATOR",
+  "objective": "Provide proprioception of system costs and subagent performance",
+  "process": [
+    "Resolve arguments: extract --scope and --since if provided.",
+    "Invoke the rollup tool (tools/telemetry/dispatches/rollup.cjs) via Bash.",
+    "Present the tabular summary of mean, p50, and p95 metrics to the operator."
+  ],
+  "arguments": {
+    "--scope": "Filter by workstream scope",
+    "--since": "Filter by time (ISO string or N hours)"
+  },
+  "artifacts": [
+    "_dev/reports/telemetry/dispatches.jsonl"
+  ],
+  "implementation": "tools/telemetry/dispatches/rollup.cjs",
+  "success_criteria": [
+    "Rollup table emitted with p50/p95 stats",
+    "Filters correctly applied",
+    "Exit 0"
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "id": "dl",
+  "description": "Shortest operator alias for deliberate: reason solo, council-review, synthesize, then route through orchestrate-loop",
+  "mode": "COORDINATOR",
+  "objective": "Provide a two-letter operator shorthand for `/deliberate` without creating a second consultation or orchestration contract. DL means deliberate: reason on your own, run the multi-lobe council review, synthesize one voice, then route the synthesis through `/owl` and canonical `/orchestrate-loop`.",
+  "scope_resolution": {
+    "default": "Alias to deliberate with the same target grammar, ritual stages, early-exit rule, and authority rules",
+    "arguments": {
+      "<task-or-question>": "Pass through to /deliberate target handling",
+      "<task-id>": "Pass through to /deliberate target handling",
+      "<path>": "Pass through to /deliberate target handling",
+      "active-workstreams": "Pass through to /deliberate active-workstreams handling"
+    }
+  },
+  "process": [
+    "Treat dl as a human-memory wrapper around `/deliberate`, not an independent workflow definition.",
+    "Resolve the alias mechanically through `instructions/canonical/command-aliases.yaml`; keep the typed alias as provenance only.",
+    "Resolve every invocation through `instructions/canonical/commands/deliberate.yaml`.",
+    "Preserve the deliberate boundary: reason solo first, run `/convene` for council review (Codex once by default), synthesize one voice naming disagreements, then route through `/owl` or canonical `/orchestrate-loop`.",
+    "Do not introduce dl-specific routing, state names, artifact contracts, review lanes, actors, or permissions."
+  ],
+  "routing_rules": [
+    "Canonical ritual behavior remains owned by `/deliberate`.",
+    "Canonical multi-lobe consultation behavior remains owned by `/convene`.",
+    "Canonical orchestration behavior remains owned by `/orchestrate-loop`, with `/owl` as the readable shorthand.",
+    "Use `/dl` when the operator wants the shortest shorthand for the full deliberation ritual.",
+    "Use `/deliberate` in formal specs, tests, and cross-actor handoffs when clarity matters.",
+    "Never interpret dl as permission to bypass human-operator gates, destructive confirmations, external publication gates, credential gates, budget/scope commitments, or same-rank authority conflicts."
+  ],
+  "success_criteria": [
+    "Operators can invoke dl with the same target shapes accepted by deliberate",
+    "The invocation resolves to the same behavior and evidence expectations as deliberate",
+    "Generated command surfaces list dl as a coordinator alias",
+    "No duplicate consultation, orchestration, or closeout contract is introduced"
+  ],
+  "handoff": {
+    "canonical_route": "deliberate <target-or-question>",
+    "operator_shorthand": "dl <target-or-question>",
+    "formal_cross_actor_handoff": "deliberate <target-or-question>"
+  },
+  "artifacts": [
+    "instructions/canonical/commands/dl.yaml",
+    "instructions/canonical/command-aliases.yaml",
+    "instructions/canonical/commands/deliberate.yaml",
+    "instructions/canonical/commands/convene.yaml",
+    "instructions/canonical/commands/owl.yaml",
+    "instructions/canonical/commands/orchestrate-loop.yaml",
+    ".claude/commands/dl.md",
+    ".claude/commands/deliberate.md"
+  ]
+}

@@ -1,0 +1,145 @@
+{
+  "schema": "PrivateSurfaceIntrospectionRule/1.0",
+  "status": "active",
+  "authority": "kernel-class",
+  "mode": "advisory",
+  "summary": "Private local substrates are not default frontier-model context. Access requires substrate-specific allowances, query bounds, wrapper-mediated reads, redaction, and a search receipt.",
+  "provenance": {
+    "task_plan": "_dev/reports/analysis/task-plans/private-surface-introspection-rule__plan.json",
+    "amendment": "_dev/reports/analysis/task-plans/kernel-perimeter-plans__amendment__2026-05-02.json",
+    "convene_syntheses": [
+      "_dev/reports/analysis/convene-runs/20260502T122117Z-private-surface-introspection-ratification/synthesis.md",
+      "_dev/reports/analysis/convene-runs/20260502T122106Z-kernel-perimeter-mind-body-2026-05-02/synthesis.md"
+    ]
+  },
+  "private_substrates": [
+    "notes",
+    "messages",
+    "mail",
+    "calendar",
+    "voice_memos",
+    "photos",
+    "browser_data",
+    "icloud_cache",
+    "keychain",
+    "one_password",
+    "microphone",
+    "audio_output",
+    "screen"
+  ],
+  "rules": [
+    {
+      "id": "private-surfaces-not-default-substrate",
+      "text": "Private local databases, caches, media stores, and live capture channels are not default context for any AI actor."
+    },
+    {
+      "id": "per-task-ratification",
+      "text": "Private-substrate access requires either a named standing local allowance or task-specific human-operator ratification. Standing allowances must name the substrate, allowed operation class, retention, and frontier-egress boundary."
+    },
+    {
+      "id": "surface-specific-authorization",
+      "text": "Authorization is specific to the named substrate and task. Moving from one substrate to another requires a fresh checkpoint."
+    },
+    {
+      "id": "query-bounds-first",
+      "text": "Wrappers must apply bounded predicates before content inspection, such as date, sender/contact class, file type, title class, MIME type, or explicit query terms."
+    },
+    {
+      "id": "incidental-match-suppression",
+      "text": "Incidental private matches are suppressed from model context. Report counts or classes only unless the human operator ratifies disclosure for the task."
+    },
+    {
+      "id": "discard-means-no-retention",
+      "text": "When the human operator says to discard private-surface material, do not retain it in evidence, summaries, memory, transcripts beyond unavoidable runtime logs, or future-search influence."
+    },
+    {
+      "id": "ephemeral-derived-artifacts",
+      "text": "Derived artifacts from private-surface reads are ephemeral by default and must declare retention and cleanup status."
+    },
+    {
+      "id": "no-repo-commit-of-private-output",
+      "text": "Private-surface outputs, transcripts, note titles, message snippets, filenames, contact identifiers, and credential-adjacent labels must not be committed to the repo unless a later operator-ratified archival rule explicitly allows a redacted derivative."
+    },
+    {
+      "id": "search-receipt-required",
+      "text": "Every permitted private-surface answer includes a receipt with substrate, wrapper, ratification id, query bounds, fields read, incidental count, redaction applied, retained artifacts, and cleanup status."
+    },
+    {
+      "id": "cross-surface-sweeps-explicit-only",
+      "text": "Cross-surface sweeping requires an explicit phrase or checkpoint from the human operator. A broad task outcome is not a cross-surface authorization."
+    },
+    {
+      "id": "session-residue-cleanup",
+      "text": "Registered wrappers must declare temporary paths and cleanup behavior. Session-end cleanup removes registered private-surface residue unless retention was explicitly ratified."
+    },
+    {
+      "id": "project-boundary-receipt-is-restrictive-only",
+      "text": "A ProjectBoundaryReceipt may report bounded filesystem observations and refuse an unsafe read or write. It cannot grant private-surface access, create an operator allowance, widen an actor's authority, or replace substrate-specific ratification."
+    },
+    {
+      "id": "framework-capability-receipt-is-not-authorization",
+      "text": "A framework capability or MCP preflight receipt reports observed availability, authorization shape, and bounded scope only. Static configuration is not live capability, and no receipt may obtain credentials or authorize a private-surface read."
+    },
+    {
+      "id": "boundary-receipt-redaction",
+      "text": "Framework and project boundary receipts serialize allowlisted classifications and stable hashes only. They must not serialize client directory names, project slugs, raw source paths, source content, environment values, credentials, or grant identifiers."
+    }
+  ],
+  "redaction_defaults": [
+    "emails",
+    "phones",
+    "addresses",
+    "account_ids",
+    "tokens_in_urls",
+    "personal_names_unless_allowlisted",
+    "message_snippets",
+    "note_titles",
+    "event_titles",
+    "filenames",
+    "transcript_text",
+    "credential_adjacent_labels"
+  ],
+  "receipt_fields": [
+    "substrate",
+    "wrapper",
+    "ratification_id",
+    "query_bounds",
+    "fields_read",
+    "incidental_count",
+    "redaction_applied",
+    "retained_artifacts",
+    "cleanup_status"
+  ],
+  "standing_allowances": [
+    {
+      "id": "voice-memos-local-capture-index",
+      "substrate": "voice_memos",
+      "allowed_without_per_task_prompt": [
+        "local metadata inventory",
+        "local transcription",
+        "local semantic indexing",
+        "local redacted derivative capture"
+      ],
+      "still_requires_per_task_prompt": [
+        "quoting transcript or audio content to the human operator",
+        "sending transcript or audio content to a frontier model",
+        "surfacing non-allowlisted names or third-party speech",
+        "cross-surface correlation with notes, messages, mail, calendar, browser, photos, keychain, or 1Password"
+      ],
+      "retention": "local_private_index_or_ephemeral_artifact_only",
+      "frontier_egress": "redacted_summary_or_receipt_only_unless_task_ratified",
+      "receipt_required": true
+    }
+  ],
+  "hook_policy": {
+    "advisory_minimum_clean_sessions": 5,
+    "block_false_positive_tolerance": 0,
+    "violation_log": "_dev/state/perimeter-violations.jsonl",
+    "raw_command_logging": false
+  },
+  "credential_policy": {
+    "keychain": "tty_approval_per_item",
+    "one_password": "tty_approval_per_item",
+    "standing_access": false
+  }
+}

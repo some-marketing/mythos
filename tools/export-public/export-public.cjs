@@ -59,7 +59,7 @@ try { ({ appendReceipt } = require('../maintenance/lib/hygiene-lane-health.cjs')
 // correctly by accident. Routing that lane through the shared isTextFile-based
 // inspectFile() exposed the gap: .ps1 was never classified as text, which would
 // have silently skipped substitution/scanning on it going forward.
-const TEXT_EXTENSIONS = new Set(['.md', '.json', '.yaml', '.yml', '.js', '.cjs', '.mjs', '.txt', '.html', '.css', '.sh', '.ps1', '.py', '.env', '.example']);
+const TEXT_EXTENSIONS = new Set(['.md', '.json', '.yaml', '.yml', '.js', '.cjs', '.mjs', '.txt', '.html', '.css', '.sh', '.ps1', '.py', '.env', '.example', '.command', '.jsx', '.plist', '.swift', '.ts', '.tsx']);
 
 function loadJson(p) { return JSON.parse(fs.readFileSync(p, 'utf8')); }
 
@@ -436,7 +436,7 @@ function validateStagedFramework(stagingDir) {
   }
   const promptsDir = path.join(stagingDir, 'prompts');
   if (fs.existsSync(promptsDir)) {
-    const promptFiles = fs.readdirSync(promptsDir).filter((f) => f.endsWith('.md'));
+    const promptFiles = fs.readdirSync(promptsDir).filter((f) => f.endsWith('.md') && f.toLowerCase() !== 'readme.md');
     if (typeof manifest.prompt_count === 'number' && manifest.prompt_count !== promptFiles.length) {
       problems.push(`prompt_count=${manifest.prompt_count} but staged prompts/=${promptFiles.length}`);
     }
@@ -550,7 +550,9 @@ function exportFramework(fwId, exportMap, denylist, opts) {
 
   for (const rel of allFiles) {
     // mock is the most specific class — it wins over exclude globs
-    const mockRel = (entry.files.mock || {})[rel];
+    const mockSpec = (entry.files.mock || {})[rel];
+    const mockRel = typeof mockSpec === 'string' ? mockSpec : mockSpec && mockSpec.source;
+    const mockTargetRel = typeof mockSpec === 'object' && mockSpec.target ? mockSpec.target : rel;
     if (!mockRel && matchesAny(rel, entry.files.exclude)) { excluded.push(rel); continue; }
     if (mockRel) {
       const mockSrc = path.join(MOCKS_DIR, fwId.replace(/\//g, '__'), mockRel);
@@ -564,7 +566,7 @@ function exportFramework(fwId, exportMap, denylist, opts) {
       // against the full private-signature class set (not just forbidden[]),
       // for the same reason as the content check below.
       if (isDevLane) rawForbiddenHits.push(...scanForDenylist(rel, denylist, rel));
-      const dest = path.join(staging, rel);
+      const dest = path.join(staging, mockTargetRel);
       fs.mkdirSync(path.dirname(dest), { recursive: true });
       // R2-6 (mock-bypass mechanic): mocks used to copy verbatim, meaning
       // substitution never ran on them at all — a mock authored against one map
@@ -602,7 +604,8 @@ function exportFramework(fwId, exportMap, denylist, opts) {
           fs.copyFileSync(mockSrc, dest);
         }
       }
-      mocked.push(rel);
+      fs.chmodSync(dest, fs.statSync(mockSrc).mode & 0o777);
+      mocked.push(mockTargetRel);
       continue;
     }
     if (!matchesAny(rel, entry.files.export)) { excluded.push(rel); continue; }
@@ -634,6 +637,7 @@ function exportFramework(fwId, exportMap, denylist, opts) {
         fs.copyFileSync(src, dest);
       }
     }
+    fs.chmodSync(dest, fs.statSync(src).mode & 0o777);
     exported.push(rel);
   }
 
@@ -799,7 +803,9 @@ function copyTree(srcDir, destDir) {
   for (const rel of walk(srcDir)) {
     const dest = path.join(destDir, rel);
     fs.mkdirSync(path.dirname(dest), { recursive: true });
-    fs.copyFileSync(path.join(srcDir, rel), dest);
+    const source = path.join(srcDir, rel);
+    fs.copyFileSync(source, dest);
+    fs.chmodSync(dest, fs.statSync(source).mode & 0o777);
   }
 }
 

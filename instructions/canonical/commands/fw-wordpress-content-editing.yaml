@@ -1,0 +1,22 @@
+{
+  "id": "fw-wordpress-content-editing",
+  "description": "Run Content Editing \u2014 Scoped WordPress admin content editing with visual and functional verification",
+  "mode": "COORDINATOR",
+  "objective": "Execute the Content Editing framework against a client project. Routes into the per-framework harness at frameworks/wordpress/content-editing/.claude/.",
+  "process": [
+    "Read authoritative process from .claude/commands/fw-wordpress-content-editing.md and frameworks/wordpress/content-editing/manifest.json.",
+    "Verify project path and framework link.",
+    "Verify MCP availability per framework manifest.",
+    "Execute via /run-framework wordpress/content-editing <project-path>.",
+    "Validate outputs against manifest output contract."
+  ],
+  "success_criteria": [
+    "Framework prompt chain executed in correct order",
+    "Output artifacts match manifest output contract"
+  ],
+  "source_of_truth": {
+    "claude_command": ".claude/commands/fw-wordpress-content-editing.md",
+    "framework_manifest": "frameworks/wordpress/content-editing/manifest.json",
+    "canonical_spec_note": "This canonical spec is the thin routing layer. The Claude command (.claude/commands/) and framework manifest carry the full argument contract, prompt chain, phase table, and operational detail."
+  }
+}

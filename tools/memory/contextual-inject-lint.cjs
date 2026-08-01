@@ -25,26 +25,34 @@ const crypto = require('crypto');
 const PROJECT_ROOT = path.resolve(__dirname, '../..');
 const FINDINGS_DIR = path.join(PROJECT_ROOT, '_dev/reports/analysis');
 
-// EXACT patterns from task plan S4. Do not edit without updating the plan.
+const PRIVATE_CREDENTIAL_PATTERNS = (process.env.MYTHOS_PRIVATE_CREDENTIAL_MARKERS || '')
+  .split(',')
+  .map(value => value.trim())
+  .filter(Boolean)
+  .map((marker, index) => ({
+    label: `private-credential-marker-${index + 1}`,
+    re: new RegExp(`${marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}.*(?:password|auth|token|bypass)`, 'i'),
+  }));
+
+// Portable generic patterns plus optional local-only client markers.
 const REGEX_PATTERNS = [
   { label: 'op://',                       re: /op:\/\// },
   { label: '1password.com/vaults/',       re: /1password\.com\/vaults\// },
   { label: 'claude-temp-page',            re: /claude-temp-page/ },
   { label: 'app-password',                re: /\bapp-password\b/i },
-  { label: '{CLIENT_CODE} WP cred markers',         re: /(highlandhearing|expressionengine).*(password|auth|token)/i },
-  { label: '{CLIENT_CODE} WP cred markers',        re: /(www|apply)\.somedealer-as.*(password|auth|qa[\s-]?bypass)/i },
+  { label: 'expressionengine credential markers', re: /expressionengine.*(?:password|auth|token)/i },
   { label: 'e164 phone shape',            re: /\+1\d{10}/ },
-  { label: 'generic email shape',         re: /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/ }
+  { label: 'generic email shape',         re: /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/ },
+  ...PRIVATE_CREDENTIAL_PATTERNS,
 ];
 
 // Exact-string PII memory basenames (substring match on the line).
 const PII_BASENAMES = [
-  'user_katie_partner',
-  'user_family_first_memory_2026_04_29',
-  'user_some_marketing_address',
-  'reference_ai_private_1password_account',
-  'reference_imessage_chat_id'
-];
+  'credentials.md',
+  'account-identifiers.md',
+  'private-context.md',
+  ...(process.env.MYTHOS_PRIVATE_CONTEXT_MARKERS || '').split(','),
+].map(value => value.trim()).filter(Boolean);
 
 function redact(matched) {
   // Never echo credential bytes. Record length + pattern fingerprint.

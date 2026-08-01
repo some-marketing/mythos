@@ -67,7 +67,7 @@ export function rawCsvName(formId, runId, type) {
  * @returns {string}
  */
 export function canonicalReportName(formId, runId, env, createdon) {
-  return `PROCESSED_PAYLOAD_SENT_TO_CRM__${formId}__${runId}__${env}__${createdon}__for_{DEVELOPER_NAME}.md`;
+  return `PROCESSED_PAYLOAD_SENT_TO_CRM__${formId}__${runId}__${env}__${createdon}__recipient.md`;
 }
 
 /**
@@ -77,7 +77,7 @@ export function canonicalReportName(formId, runId, env, createdon) {
  * @returns {string}
  */
 export function deepAnalysisName(formId, runId) {
-  return `DEEP_ANALYSIS__${formId}__${runId}__for_{DEVELOPER_NAME}.md`;
+  return `DEEP_ANALYSIS__${formId}__${runId}__recipient.md`;
 }
 
 /**

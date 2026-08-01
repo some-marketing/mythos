@@ -1,0 +1,24 @@
+{
+  "id": "remember",
+  "description": "Capture a memory in explicitly acknowledged, local-only private state without writing personal context into the repository.",
+  "mode": "PATCH_ALLOWED",
+  "objective": "Provide a portable memory-write substitute that is dry-run by default, requires an explicit local-state acknowledgement to write, and refuses repository-contained destinations.",
+  "process": [
+    "1. Resolve the input file without echoing its contents.",
+    "2. Run node tools/memory/portable-remember.cjs <file> --dry-run and report the proposed local destination.",
+    "3. Require explicit operator acknowledgement before any plaintext local-state write.",
+    "4. On approval, run the same command with --ack-local-private-state.",
+    "5. Report only the receipt metadata; never copy memory content into repository artifacts."
+  ],
+  "success_criteria": [
+    "Dry-run is the default behavior",
+    "Any written memory is outside the Mythos repository",
+    "The destination file is private to the local user",
+    "No credentials, vault identifiers, or personal context enter tracked files"
+  ],
+  "boundaries": [
+    "Does not integrate with an account, password manager, or remote vault",
+    "Does not write into the Mythos repository or its generated surfaces",
+    "Does not write without --ack-local-private-state"
+  ]
+}

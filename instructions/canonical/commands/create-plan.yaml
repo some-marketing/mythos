@@ -1,0 +1,61 @@
+{
+  "id": "create-plan",
+  "description": "Operator-friendly alias for plan-task",
+  "mode": "REVIEW_ONLY",
+  "objective": "Provide a natural-language operator entry point for bounded task planning while delegating the actual planning workflow to the canonical plan-task process and artifact contract.",
+  "scope_resolution": {
+    "default": "Alias to plan-task with the same task description or Dart task id grammar",
+    "arguments": {
+      "<task description>": "Create a bounded task plan from a natural-language task request",
+      "<dart-task-id>": "Create a bounded task plan from a linked Dart task",
+      "--client CODE": "Pass through client context to plan-task",
+      "--project ID": "Pass through project context to plan-task",
+      "--source dart": "Mark the plan source as dart when appropriate"
+    }
+  },
+  "process": [
+    "Treat create-plan as a compatibility wrapper around plan-task, not as an independent planning contract.",
+    "Resolve the arguments using the same grammar as plan-task: task description or Dart task id plus optional client/project/source flags.",
+    "Load the canonical plan-task skill/process and run the same similarity assessment and bounded planning workflow.",
+    "Determine scope_type: if the task has a client_code and is client delivery work, scope_type is 'client' with storage_root 'clients/{client_code}/plans'; if the task is framework, runtime, or cross-client system work, scope_type is 'system' with storage_root '_dev/reports/analysis/task-plans'. Write plan artifacts to the resolved storage_root using the task-intake schema and markdown summary.",
+    "Require the same explicit routing metadata as plan-task: risk_tier, review_lane, review_lane_rationale, and optional escalation_triggers.",
+    "If the task is linked to Dart, preserve the normal planning breadcrumb/writeback proposal behavior from plan-task.",
+    "Do not invent a second artifact schema or alternate execution path. Approved plans still execute through run-plan."
+  ],
+  "routing_rules": [
+    "Canonical bounded task planning workflow remains plan-task.",
+    "create-plan exists to reduce operator friction, not to create a parallel planning system.",
+    "Approved task plans execute through run-plan, not execute-plan directly unless converted into a compatible prompt plan.",
+    "If the operator needs queue truth before creating a plan, recommend npm run next-step or plan-active-workstreams depending on context."
+  ],
+  "success_criteria": [
+    "Operators can invoke create-plan with natural task wording",
+    "The resulting artifacts match the same bounded task-plan contract as plan-task",
+    "The resulting artifacts include explicit run-plan routing expectations",
+    "No duplicate planning schema or routing ambiguity is introduced",
+    "Execution handoff remains run-plan for approved task plans"
+  ],
+  "handoff": {
+    "plan_created": "review-task-plan <task-id|path> or run-plan <task-id|path>",
+    "queue_truth_needed_first": "npm run next-step",
+    "system_status_needed_first": "mythos-status"
+  },
+  "scope_enforcement": {
+    "rule": "Same scope enforcement as plan-task: every invocation must declare an explicit scope. Either pass --client CODE for client-delivery work, or declare system scope explicitly. Ambiguous scope must block — do not default silently.",
+    "client_scope": "scope_type 'client', storage_root 'clients/{client_code}/plans'",
+    "system_scope": "scope_type 'system', storage_root '_dev/reports/analysis/task-plans'",
+    "enforcement": "If neither --client CODE nor an explicit system-scope declaration is present, prompt the operator to clarify before proceeding."
+  },
+  "operator_guidance_phase_1": true,
+  "operator_guidance_contract": {
+    "rule": "This command must end with conditional next-step options (each with condition, command, why), plus a concrete request for operator input that would improve or harden the system."
+  },
+  "shared_resolver_requirement": {
+    "rule": "All task-plan lookups and write-root resolution must use resolveWriteRoot() from tools/planning/lib/resolve-task-plan.js. Do not assume _dev-only storage. The resolver searches system root (_dev/reports/analysis/task-plans/) and all client roots (clients/*/plans/) with ambiguity blocking.",
+    "exports_used": ["resolveWriteRoot()", "resolveTaskPlanPaths()"]
+  },
+  "artifacts": [
+    "<storage_root>/<task-id>__plan.json",
+    "<storage_root>/<task-id>__plan.md"
+  ]
+}

@@ -1,16 +1,46 @@
 ---
-description: Plain-id alias for /gauntlet
-allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, Task]
+description: Run a high-rigor orchestrate-loop profile that sends candidate work through distinct-family adversarial review, third-family context checking, research disposition for every finding, Perplexity research for public claims, and evidence-based re-entry until clean or at the inherited review ceiling
+mode: COORDINATOR
 ---
 
 <objective>
-Run `/gauntlet`. `evidence-loop` is the plain-software id; the full command body lives under the mythic name.
+Apply the Evidence Loop as a profile of /orchestrate-loop for plans, implementations, audits, deliverables, and operational workflows that warrant explicit research-resolved cross-verification. Evidence Loop adds no independent lifecycle state or authority: /orchestrate-loop remains the sole controller and owns target resolution, execution routing, review ceilings, termination, debrief, and closeout.
 </objective>
 
 <process>
-1. Follow `.claude/commands/gauntlet.md`.
+- PROFILE ENTRY — resolve the target, authority, current loop state, custody, risk tier, and review ceiling through /orchestrate-loop. Evidence Loop MUST NOT create a second state machine, iteration counter, termination state, or closeout path.
+- ANTI-CEREMONY EXIT — if the target is REPO_HYGIENE, exempt REVIEW_ONLY work, or one safe deterministic step with no consequential claim, ambiguity, privacy/security/compliance surface, or repeated disagreement, record why the profile is unnecessary and continue through ordinary /orchestrate-loop without distinct-family or Perplexity calls.
+- CANDIDATE — use the native route selected by /orchestrate-loop to collect deterministic evidence and produce the candidate through a bounded worker when work is required. The coordinator is not the default worker.
+- ADVERSARIAL REVIEW — dispatch an acceptance reviewer from a family distinct from the producer. Disclose the mind/model at dispatch time and verify current model routing. The producer cannot close its own acceptance-grade finding.
+- CONTEXT CHECK — when the profile remains active, dispatch a third family distinct from producer and reviewer to check omissions, consequences, stale context, cross-domain assumptions, and operator continuity. Perplexity is never counted as this family.
+- FINDING LEDGER — record every returned finding durably. The ledger root owns max_iterations. Each finding requires finding_id, severity, producer_family, reviewer_family, context_family when required, evidence, research_disposition, privacy_status, sources or query artifact when applicable, answer, next_action, status, iteration_count, supersedes, and superseded_by. Validate with node tools/evidence-loop/validate-finding-ledger.cjs <ledger.json> before research or re-entry.
+- RESEARCH DISPOSITION — assign exactly one disposition: internal_evidence, public_web, private_prohibited, operator_only, superseded, or blocked. Every finding passes this step; only public_web findings call Perplexity.
+- RESEARCH RESOLUTION — internal_evidence uses repo truth, tests, static analysis, or direct source evidence and MUST make zero web calls. public_web uses Perplexity with cited sources after the query artifact passes privacy classification. private_prohibited fails closed before query construction and cannot be generalized for web search merely to satisfy the ritual. operator_only bubbles up only after answerable evidence is attached. superseded and blocked remain durable. The coordinator must enforce these egress rules before dispatch; ledger validation verifies the declared artifact but does not prove the absence of an unrecorded network side effect.
+- SYNTHESIS — the coordinator synthesizes review, context, and research evidence without counting the research substrate as a vote. Route repairs, evidence collection, amendment, execution, or operator decisions through the native command owned by /orchestrate-loop.
+- RE-ENTRY — return the ledger and resulting evidence to /orchestrate-loop. Inherit its states and ceilings exactly: low 3, medium 4, high 5 by default. Clean maps to ready_for_clear; missing evidence to evidence_missing; plan drift to plan_diverged; ceiling exhaustion to review_iteration_ceiling_reached; protected human decisions to blocked pending the human operator.
+- CLOSEOUT — meaningful work closes through /debrief-run and truthful HandoffSignal/1.0 state under /orchestrate-loop ownership. Findings are never deleted to manufacture a clean result; supersession preserves provenance.
 </process>
 
 <success_criteria>
-- `/evidence-loop` resolves to the same behavior as `/gauntlet`
+- Target and authority resolved by /orchestrate-loop before profile work
+- No parallel loop state, counter, termination, or closeout authority introduced
+- Producer, acceptance reviewer, and required context checker are family-distinct
+- Every finding has one validated research disposition
+- Internal findings make zero web calls and private-prohibited findings fail closed before query construction
+- Perplexity sources inform findings but never count as reviewer-family approval
+- Only protected human decisions bubble up after answerable questions are resolved
+- Review ceilings and exit states are inherited from /orchestrate-loop
+- Superseded findings remain durably linked rather than deleted
+- Meaningful cycles end with debrief evidence and truthful signal state
 </success_criteria>
+
+<handoff>
+profile_unnecessary: /orchestrate-loop <target>
+candidate_needed: use the exact worker or native execution route selected by /orchestrate-loop
+review_needed: /dispatch-bridge --target <distinct-family> --task "<adversarial review>" --command "/review-progress <scope>"
+context_needed: /dispatch-bridge --target gemini --task "<bounded context and omission check>" --command freeform
+public_research_needed: Perplexity browser Pro path, then secret-safe API fallback; attach cited artifact
+private_research_prohibited: record private_prohibited; perform no external query; continue with allowed local/operator evidence
+reenter: /orchestrate-loop <target>
+ready_for_clear: /debrief-run <target>, then close or emit the exact next stage command
+</handoff>

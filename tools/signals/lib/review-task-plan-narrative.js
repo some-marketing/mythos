@@ -150,7 +150,7 @@ function renderNarrativeContractPrompt(projectRoot, contract) {
     '```',
     'under the key `narrative_completion`.',
     'The canonical Markdown must contain this exact machine-readable line:',
-    `\`<!-- sm_os_narrative_completion: ${markdownBinding} -->\``,
+    `\`<!-- mythos_narrative_completion: ${markdownBinding} -->\``,
     'Do not report the review complete until both canonical files carry this run/hash binding. A successful CLI exit without the bound pair is classified as `narrative_incomplete`.',
     ''
   ].join('\n');
@@ -158,7 +158,7 @@ function renderNarrativeContractPrompt(projectRoot, contract) {
 
 function readMarkdownBinding(filePath) {
   const text = fs.readFileSync(filePath, 'utf8');
-  const match = text.match(/<!--\s*sm_os_narrative_completion:\s*(\{[^\n]+\})\s*-->/);
+  const match = text.match(/<!--\s*(?:mythos_narrative_completion|sm_os_narrative_completion):\s*(\{[^\n]+\})\s*-->/);
   if (!match) return null;
   try {
     return JSON.parse(match[1]);

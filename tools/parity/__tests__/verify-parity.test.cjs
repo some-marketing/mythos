@@ -9,6 +9,7 @@ const { spawnSync } = require('child_process');
 const { fileSha, sha256, treeDigest } = require('../lib.cjs');
 
 const verifier = path.join(__dirname, '..', 'verify-parity.cjs');
+const graphBuilder = path.join(__dirname, '..', 'build-wiring-graph.cjs');
 
 function fixture() {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-verify-parity-'));
@@ -163,5 +164,20 @@ test('cannot disable canonical ledger security scanning through baseline metadat
   const result = run(root);
   assert.equal(result.status, 1);
   assert.match(result.stdout, /security evidence artifact registry must contain only the canonical reconciliation ledger/);
+  fs.rmSync(root, { recursive: true, force: true });
+});
+
+test('wiring graph excludes linked-worktree .git control files', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-wiring-graph-'));
+  fs.mkdirSync(path.join(root, 'parity'), { recursive: true });
+  fs.mkdirSync(path.join(root, 'tools'), { recursive: true });
+  fs.writeFileSync(path.join(root, '.git'), 'gitdir: /machine-specific/worktree\n');
+  fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify({ scripts: {} }));
+  fs.writeFileSync(path.join(root, 'tools', 'demo.js'), 'module.exports = true;\n');
+
+  const result = spawnSync(process.execPath, [graphBuilder, '--root', root], { encoding: 'utf8' });
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+  const graph = JSON.parse(fs.readFileSync(path.join(root, 'parity', 'wiring-graph.json'), 'utf8'));
+  assert.equal(graph.nodes.some(node => node.path === '.git'), false);
   fs.rmSync(root, { recursive: true, force: true });
 });

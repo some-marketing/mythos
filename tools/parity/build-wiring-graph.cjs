@@ -192,6 +192,7 @@ function main() {
     || relative === 'parity/baseline.json'
     || relative === 'parity/reconciliation-ledger.json'
     || relative.startsWith('node_modules/')
+    || relative === '.git'
     || relative.startsWith('.git/')
     || relative.startsWith('_dev/state/')
     || relative.startsWith('_dev/reports/')

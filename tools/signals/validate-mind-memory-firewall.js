@@ -24,7 +24,7 @@ const FORBIDDEN_KEYS = new Set([
   'history', 'memory', 'memories', 'context',
   'previous_decisions', 'prior_ticks', 'prior',
   'parent_context', 'parent', 'ancestor',
-  'sm_os_memory', 'Mythos', 'lessons', 'concepts',
+  'mythos_memory', 'sm_os_memory', 'Mythos', 'lessons', 'concepts',
   'other_planets', 'neighbor_states',
   'world_state_minds', 'world_state',
   'chat_history', 'conversation', 'transcript',
@@ -106,7 +106,7 @@ function runBuiltIn() {
     ...valid,
     history: [{ tick: 119, action: 'move_to', x: 240, y: -175 }],
     memory: 'previous run had 1200 births',
-    sm_os_memory: { concepts: ['planet-nodes'] },
+    mythos_memory: { concepts: ['planet-nodes'] },
     chain_of_thought: 'I think I should eat because energy is dropping...',
     parent_context: 'The operator wants divergence studies'
   };

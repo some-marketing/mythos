@@ -64,6 +64,7 @@ function resolveModel(payload) {
 function resolveDeclaredTier(payload) {
   return String(
     payload.process_tier ||
+    payload.mythos_process_tier ||
     payload.sm_os_process_tier ||
     process.env.MYTHOS_PROCESS_TIER ||
     ''

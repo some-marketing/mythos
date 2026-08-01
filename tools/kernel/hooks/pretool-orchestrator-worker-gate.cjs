@@ -66,6 +66,8 @@ const ORCHESTRATION_GLOBS = [
   /\b_dev[/\\]state[/\\]session-boundary[/\\]/,
   /\b_dev[/\\]state[/\\]orchestrator-worker-gate[/\\]/,
   /\b_dev[/\\]handoffs?[/\\]/,
+  /\bmythos-memories[/\\]/i,
+  // Legacy path retained so in-flight SM_OS sessions remain writable.
   /\bsm_os-memories[/\\]/,
   /(?:^|[/\\])(?:plan|debrief|synthesis|handoff|next-session|cross-session|session-boundary|HANDOFF|DEBRIEF)[-._]/i,
   /(?:handoff|debrief|synthesis|next-session|cross-session|session-boundary)\.(?:md|json|yaml|txt)$/i,

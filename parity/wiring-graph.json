@@ -2130,7 +2130,7 @@
       "id": "file:.claude/agents/stakeholder-voice-linter.md",
       "type": "file",
       "path": ".claude/agents/stakeholder-voice-linter.md",
-      "sha256": "914a7d2e218107b80a07067d13e3bc70de37d79f386e6799075393e0b24456cd",
+      "sha256": "17dcbd7f8a046abc28ad67457efdb6c67532fdb0c7bf3dceb17b3f51bd59e6c9",
       "mode": 420
     },
     {
@@ -11356,7 +11356,7 @@
       "id": "file:tools/codex/prompts/review-task-plan.md",
       "type": "file",
       "path": "tools/codex/prompts/review-task-plan.md",
-      "sha256": "9b5189f70440569ed8e66f97a3628a61f816214bf6d3ecfe692ed6b4c0c63fdf",
+      "sha256": "ae8d96cfb42cee720755b7fe943be0584364bf033e716f4e08a3adcb298de7e2",
       "mode": 420
     },
     {
@@ -13736,7 +13736,7 @@
       "id": "file:tools/kernel/hooks/pretool-orchestrator-worker-gate.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/pretool-orchestrator-worker-gate.cjs",
-      "sha256": "5bc4f8fbb81490b11b12aeec41f1110167d38292af4093a51ce9a43ef08b92ce",
+      "sha256": "129bf1b5dfab105ab3f8d148129b828c53cab88b6f9f3ef712eb648d5029c1cd",
       "mode": 420
     },
     {
@@ -13764,7 +13764,7 @@
       "id": "file:tools/kernel/hooks/session-start-tier-stamp.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/session-start-tier-stamp.cjs",
-      "sha256": "94ae4c15efd2653a436adf58b9ab006593e0bbc2fd53cc97266c145715268bc5",
+      "sha256": "c0108c0457ee8ad5794f54138f41cbb402db32f1a6e8a6808530538f5e6109b3",
       "mode": 420
     },
     {
@@ -16025,7 +16025,7 @@
       "id": "file:tools/parity/__tests__/verify-parity.test.cjs",
       "type": "file",
       "path": "tools/parity/__tests__/verify-parity.test.cjs",
-      "sha256": "f074c74209453cc494708f3509ecab7f778b70dee35ba0fa53b7345726fd0060",
+      "sha256": "a04235cc17731263438a09ef9b087ee82fa68d5d5b6f6f8d4ce6ee8ee8441dcf",
       "mode": 420
     },
     {
@@ -16053,7 +16053,7 @@
       "id": "file:tools/parity/build-wiring-graph.cjs",
       "type": "file",
       "path": "tools/parity/build-wiring-graph.cjs",
-      "sha256": "99803e88782bf5c544171a01181b68bdfc2a278708dbb0ddaf614946d30bb244",
+      "sha256": "c666f694e911f3794cd9628ab879200c4b274baef3f52738e5cd4507fcacb3cc",
       "mode": 420
     },
     {
@@ -17520,6 +17520,13 @@
       "mode": 420
     },
     {
+      "id": "file:tools/signals/lib/__tests__/review-task-plan-narrative.test.cjs",
+      "type": "file",
+      "path": "tools/signals/lib/__tests__/review-task-plan-narrative.test.cjs",
+      "sha256": "0b4d8663df0d83ccc82738c6981e58d017a73498ff63e332865bafc150d2669d",
+      "mode": 420
+    },
+    {
       "id": "file:tools/signals/lib/__tests__/run-openrouter-bridge.test.js",
       "type": "file",
       "path": "tools/signals/lib/__tests__/run-openrouter-bridge.test.js",
@@ -17761,7 +17768,7 @@
       "id": "file:tools/signals/lib/review-task-plan-narrative.js",
       "type": "file",
       "path": "tools/signals/lib/review-task-plan-narrative.js",
-      "sha256": "1b72ba008f8b58dfdaa31d8580a6e6deb29403082fedbcc7aeda6e5869c37bed",
+      "sha256": "bc24bbece71e949c0b4d1e4de7264934058d42d9af961cf7a8e9f6aa8d4ab329",
       "mode": 420
     },
     {
@@ -17978,7 +17985,7 @@
       "id": "file:tools/signals/validate-mind-memory-firewall.js",
       "type": "file",
       "path": "tools/signals/validate-mind-memory-firewall.js",
-      "sha256": "2075c748119194b1d648ba22b257d7bac99f0ae186816197ebdf61f2141ecded",
+      "sha256": "58204dc5047385242960e8878901847436529d4f51c51bdf3e11f73d75389373",
       "mode": 493
     },
     {
@@ -29607,6 +29614,15 @@
       "target": "tools/memory/lib/resolve-sqlite3.cjs",
       "required": true,
       "specifier": "./lib/resolve-sqlite3.cjs"
+    },
+    {
+      "id": "38249014a5e27b125ea5e45efe98ea4362fcd804dd2865c41131ce8ed62df6bc",
+      "type": "static-import",
+      "from": "file:tools/signals/lib/__tests__/review-task-plan-narrative.test.cjs",
+      "to": "file:tools/signals/lib/review-task-plan-narrative.js",
+      "target": "tools/signals/lib/review-task-plan-narrative.js",
+      "required": true,
+      "specifier": "../review-task-plan-narrative"
     },
     {
       "id": "3828c37057c76c8ce046e2b94555aad1e44b9c67a6fd8a442ab5c9accc4fbf76",
@@ -43459,6 +43475,15 @@
       "specifier": "./verify-remote.js"
     },
     {
+      "id": "cc532520ff11483263feedd59c0c517fec9ab6a6febfdea7dbe612ecd5ac4ba0",
+      "type": "static-import",
+      "from": "file:tools/signals/lib/__tests__/review-task-plan-narrative.test.cjs",
+      "to": "file:tools/kernel/hooks/session-start-tier-stamp.cjs",
+      "target": "tools/kernel/hooks/session-start-tier-stamp.cjs",
+      "required": true,
+      "specifier": "../../../kernel/hooks/session-start-tier-stamp.cjs"
+    },
+    {
       "id": "cc69433d197ed6bb27e8e68095422cd676c18a7e3cee3f8479fb01803c70b89a",
       "type": "schema-consumer",
       "from": "file:_dev/config/README.md",
@@ -48662,8 +48687,8 @@
     }
   ],
   "counts": {
-    "nodes": 3747,
-    "edges": 2668,
+    "nodes": 3748,
+    "edges": 2670,
     "unresolved": 0
   }
 }

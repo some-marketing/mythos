@@ -13547,7 +13547,7 @@
       "id": "file:tools/kernel/hooks/__tests__/pretool-orchestrator-worker-gate.test.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/__tests__/pretool-orchestrator-worker-gate.test.cjs",
-      "sha256": "6777dd168181a04e695d4500ae313b9fb304a04e4135c088d4b531d9c4097d5e",
+      "sha256": "c89012b898905d148991f39771279681f4b8361dabe71e5ce7bee3337537ad3c",
       "mode": 420
     },
     {
@@ -13736,7 +13736,7 @@
       "id": "file:tools/kernel/hooks/pretool-orchestrator-worker-gate.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/pretool-orchestrator-worker-gate.cjs",
-      "sha256": "e4722b40da75bf49d21a81c6d099b236be9e8c1e99f03c6dfb4e0ebc39b9c516",
+      "sha256": "4668c51c51c27d144e27cc339ab20231fa72e64e5a8e680d1e20756386e56144",
       "mode": 420
     },
     {
@@ -16025,7 +16025,7 @@
       "id": "file:tools/parity/__tests__/verify-parity.test.cjs",
       "type": "file",
       "path": "tools/parity/__tests__/verify-parity.test.cjs",
-      "sha256": "e044027e5b24e56509a5494988c477ead62dd8b8539391252bf8602d7556193a",
+      "sha256": "42b0f1604b3cda57ac7024b9793beab8aeb31bb8a2923f8992bbc01c95e28d2b",
       "mode": 420
     },
     {

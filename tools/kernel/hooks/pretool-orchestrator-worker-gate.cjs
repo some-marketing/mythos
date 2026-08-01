@@ -61,6 +61,8 @@ const BLOCK_MESSAGE =
   '/dispatch-bridge --target <codex|gemini>, the Agent tool, or a subagent; ' +
   'the coordinator may read returned evidence and write orchestration artifacts.';
 
+const MEMORY_ROOT_NAMES = ['Mythos-memories', 'sm_os-memories'];
+
 // -- Orchestration artifact path globs (Write/Edit to these -> allowed) ---------
 // These are the coordinator's own durable outputs: signals, plans, debriefs,
 // synthesis documents, next-session handoffs, coordination notes.
@@ -71,8 +73,6 @@ const ORCHESTRATION_GLOBS = [
   /\b_dev[/\\]state[/\\]session-boundary[/\\]/,
   /\b_dev[/\\]state[/\\]orchestrator-worker-gate[/\\]/,
   /\b_dev[/\\]handoffs?[/\\]/,
-  // Legacy path retained so in-flight SM_OS sessions remain writable.
-  /\bsm_os-memories[/\\]/,
   /(?:^|[/\\])(?:plan|debrief|synthesis|handoff|next-session|cross-session|session-boundary|HANDOFF|DEBRIEF)[-._]/i,
   /(?:handoff|debrief|synthesis|next-session|cross-session|session-boundary)\.(?:md|json|yaml|txt)$/i,
   /\b_dev[/\\]reports[/\\]convene-runs[/\\]/,
@@ -205,15 +205,26 @@ function hasUnsafeLinkComponent(rootPath, candidatePath, pathImpl, fsImpl) {
   return false;
 }
 
-function resolveMemoryPath(filePath, projectDir, pathImpl) {
+function resolveMemoryPath(filePath, projectDir, pathImpl, rootName = 'Mythos-memories') {
   const fp = String(filePath || '');
   if (!fp) return null;
   const projectRoot = pathImpl.resolve(projectDir);
   const candidate = pathImpl.isAbsolute(fp)
     ? pathImpl.resolve(fp)
     : pathImpl.resolve(projectRoot, fp);
-  const memoryRoot = pathImpl.join(projectRoot, 'Mythos-memories');
+  const memoryRoot = pathImpl.join(projectRoot, rootName);
   return { candidate, memoryRoot };
+}
+
+function resolveMemoryFamilyPath(filePath, projectDir, pathImpl, caseInsensitive = false) {
+  for (const rootName of MEMORY_ROOT_NAMES) {
+    const resolved = resolveMemoryPath(filePath, projectDir, pathImpl, rootName);
+    if (!resolved) return null;
+    const candidate = caseInsensitive ? resolved.candidate.toLowerCase() : resolved.candidate;
+    const memoryRoot = caseInsensitive ? resolved.memoryRoot.toLowerCase() : resolved.memoryRoot;
+    if (candidate.startsWith(memoryRoot + pathImpl.sep)) return resolved;
+  }
+  return null;
 }
 
 function isLexicallyCanonicalMemoryPath(
@@ -230,11 +241,7 @@ function isLexicallyMemoryRootPath(
   projectDir = resolveProjectDir(),
   pathImpl = require('path')
 ) {
-  const resolved = resolveMemoryPath(filePath, projectDir, pathImpl);
-  if (!resolved) return false;
-  return resolved.candidate.toLowerCase().startsWith(
-    resolved.memoryRoot.toLowerCase() + pathImpl.sep
-  );
+  return Boolean(resolveMemoryFamilyPath(filePath, projectDir, pathImpl, true));
 }
 
 function isCanonicalMemoryPath(
@@ -251,6 +258,19 @@ function isCanonicalMemoryPath(
   );
 }
 
+function isSafeMemoryFamilyPath(
+  filePath,
+  projectDir = resolveProjectDir(),
+  pathImpl = require('path'),
+  fsImpl = require('fs')
+) {
+  const resolved = resolveMemoryFamilyPath(filePath, projectDir, pathImpl, false);
+  return Boolean(
+    resolved
+    && !hasUnsafeLinkComponent(resolved.memoryRoot, resolved.candidate, pathImpl, fsImpl)
+  );
+}
+
 function isOrchestrationPath(filePath, projectDir, pathImpl, fsImpl) {
   const fp = String(filePath || '');
   // Any casing of a path lexically inside the private memory root must pass
@@ -258,7 +278,7 @@ function isOrchestrationPath(filePath, projectDir, pathImpl, fsImpl) {
   // from reaching the canonical directory through a lookalike path and then
   // regaining privilege through a generic artifact-name glob.
   if (isLexicallyMemoryRootPath(fp, projectDir, pathImpl)) {
-    return isCanonicalMemoryPath(fp, projectDir, pathImpl, fsImpl);
+    return isSafeMemoryFamilyPath(fp, projectDir, pathImpl, fsImpl);
   }
   return ORCHESTRATION_GLOBS.some((re) => re.test(fp));
 }
@@ -530,6 +550,7 @@ module.exports = {
   isCanonicalMemoryPath,
   isLexicallyCanonicalMemoryPath,
   isLexicallyMemoryRootPath,
+  isSafeMemoryFamilyPath,
   isOrchestrationPath,
   main,
 };

@@ -321,6 +321,13 @@ check('absolute Edit to root Mythos-memories/ -> orchestration_write -> allow', 
   assert.strictEqual(result.class, 'orchestration_write');
 });
 
+check('Edit to root legacy sm_os-memories/ -> orchestration_write -> allow', () => {
+  const sb = makeSandbox();
+  const result = runGate(sb, 'Edit', { file_path: 'sm_os-memories/memory/MEMORY.md' }, { enforcing: true });
+  assert.strictEqual(result.status, 0);
+  assert.strictEqual(result.class, 'orchestration_write');
+});
+
 check('Edit through a Mythos-memories symlink -> blocked', () => {
   const sb = makeSandbox();
   const trackedTarget = path.join(sb.root, 'src');
@@ -369,6 +376,35 @@ check('alternate memory-root casing cannot re-allow a handoff symlink', () => {
     { enforcing: true }
   );
   assert.strictEqual(result.status, 2, 'case variation must not bypass memory containment');
+  assert.strictEqual(result.class, 'mutation');
+});
+
+check('legacy memory symlink cannot re-enter through a generic handoff glob', () => {
+  const sb = makeSandbox();
+  const trackedTarget = path.join(sb.root, 'src');
+  const memoryRoot = path.join(sb.root, 'sm_os-memories');
+  fs.mkdirSync(trackedTarget, { recursive: true });
+  fs.mkdirSync(memoryRoot, { recursive: true });
+  fs.symlinkSync(trackedTarget, path.join(memoryRoot, 'tracked-link'), 'dir');
+  const result = runGate(
+    sb,
+    'Edit',
+    { file_path: 'sm_os-memories/tracked-link/handoff.md' },
+    { enforcing: true }
+  );
+  assert.strictEqual(result.status, 2, 'legacy symlink must not bypass containment');
+  assert.strictEqual(result.class, 'mutation');
+});
+
+check('alternate legacy-root casing cannot re-enter through a generic handoff glob', () => {
+  const sb = makeSandbox();
+  const result = runGate(
+    sb,
+    'Edit',
+    { file_path: 'SM_OS-MEMORIES/tracked-link/handoff.md' },
+    { enforcing: true }
+  );
+  assert.strictEqual(result.status, 2, 'legacy case variation must not bypass containment');
   assert.strictEqual(result.class, 'mutation');
 });
 

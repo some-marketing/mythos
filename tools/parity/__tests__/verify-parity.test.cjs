@@ -64,7 +64,7 @@ function fixture() {
       graph_nodes: 4,
       graph_edges: 0,
     },
-    runtime_exclusions: ['.git/**', 'Mythos-memories/**', 'parity/reconciliation-ledger.json', 'private-denylist.json'],
+    runtime_exclusions: ['.git/**', 'Mythos-memories/**', 'sm_os-memories/**', 'parity/reconciliation-ledger.json', 'private-denylist.json'],
     prohibited_paths: ['clients/**'],
     prohibited_content_regexes: ['/Users' + '/'],
     prohibited_token_hashes: [privateMarkerHash],
@@ -97,11 +97,13 @@ test('passes an exact registered portable tree', () => {
   fs.rmSync(root, { recursive: true, force: true });
 });
 
-test('ignores untracked canonical private memory while retaining tracked-memory enforcement', () => {
+test('ignores untracked private memory roots while retaining tracked-memory enforcement', () => {
   const root = fixture();
-  const memoryPath = path.join(root, 'Mythos-memories', 'memory', 'MEMORY.md');
-  fs.mkdirSync(path.dirname(memoryPath), { recursive: true });
-  fs.writeFileSync(memoryPath, 'private local memory\n');
+  for (const rootName of ['Mythos-memories', 'sm_os-memories']) {
+    const memoryPath = path.join(root, rootName, 'memory', 'MEMORY.md');
+    fs.mkdirSync(path.dirname(memoryPath), { recursive: true });
+    fs.writeFileSync(memoryPath, 'private local memory\n');
+  }
   const result = run(root);
   assert.equal(result.status, 0, result.stdout + result.stderr);
   fs.rmSync(root, { recursive: true, force: true });

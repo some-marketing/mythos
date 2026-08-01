@@ -199,27 +199,49 @@ function hasSymlinkComponent(rootPath, candidatePath, pathImpl, fsImpl) {
   return false;
 }
 
+function resolveMemoryPath(filePath, projectDir, pathImpl) {
+  const fp = String(filePath || '');
+  if (!fp) return null;
+  const projectRoot = pathImpl.resolve(projectDir);
+  const candidate = pathImpl.isAbsolute(fp)
+    ? pathImpl.resolve(fp)
+    : pathImpl.resolve(projectRoot, fp);
+  const memoryRoot = pathImpl.join(projectRoot, 'Mythos-memories');
+  return { candidate, memoryRoot };
+}
+
+function isLexicallyCanonicalMemoryPath(
+  filePath,
+  projectDir = resolveProjectDir(),
+  pathImpl = require('path')
+) {
+  const resolved = resolveMemoryPath(filePath, projectDir, pathImpl);
+  return Boolean(resolved && resolved.candidate.startsWith(resolved.memoryRoot + pathImpl.sep));
+}
+
 function isCanonicalMemoryPath(
   filePath,
   projectDir = resolveProjectDir(),
   pathImpl = require('path'),
   fsImpl = require('fs')
 ) {
-  const fp = String(filePath || '');
-  if (!fp) return false;
-  const projectRoot = pathImpl.resolve(projectDir);
-  const candidate = pathImpl.isAbsolute(fp)
-    ? pathImpl.resolve(fp)
-    : pathImpl.resolve(projectRoot, fp);
-  const memoryRoot = pathImpl.join(projectRoot, 'Mythos-memories');
-  return candidate.startsWith(memoryRoot + pathImpl.sep)
-    && !hasSymlinkComponent(memoryRoot, candidate, pathImpl, fsImpl);
+  const resolved = resolveMemoryPath(filePath, projectDir, pathImpl);
+  return Boolean(
+    resolved
+    && resolved.candidate.startsWith(resolved.memoryRoot + pathImpl.sep)
+    && !hasSymlinkComponent(resolved.memoryRoot, resolved.candidate, pathImpl, fsImpl)
+  );
 }
 
 function isOrchestrationPath(filePath, projectDir, pathImpl, fsImpl) {
   const fp = String(filePath || '');
-  return isCanonicalMemoryPath(fp, projectDir, pathImpl, fsImpl)
-    || ORCHESTRATION_GLOBS.some((re) => re.test(fp));
+  // A path lexically inside the private memory root must pass every canonical
+  // memory check. Never let generic artifact-name globs re-privilege a path
+  // rejected because of a symlink or filesystem ambiguity.
+  if (isLexicallyCanonicalMemoryPath(fp, projectDir, pathImpl)) {
+    return isCanonicalMemoryPath(fp, projectDir, pathImpl, fsImpl);
+  }
+  return ORCHESTRATION_GLOBS.some((re) => re.test(fp));
 }
 
 function classifyBash(command) {
@@ -487,6 +509,7 @@ module.exports = {
   classifyBash,
   classifyTool,
   isCanonicalMemoryPath,
+  isLexicallyCanonicalMemoryPath,
   isOrchestrationPath,
   main,
 };

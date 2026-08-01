@@ -338,6 +338,23 @@ check('Edit through a Mythos-memories symlink -> blocked', () => {
   assert.strictEqual(result.class, 'mutation');
 });
 
+check('generic handoff filename cannot re-allow a rejected memory symlink', () => {
+  const sb = makeSandbox();
+  const trackedTarget = path.join(sb.root, 'src');
+  const memoryRoot = path.join(sb.root, 'Mythos-memories');
+  fs.mkdirSync(trackedTarget, { recursive: true });
+  fs.mkdirSync(memoryRoot, { recursive: true });
+  fs.symlinkSync(trackedTarget, path.join(memoryRoot, 'tracked-link'), 'dir');
+  const result = runGate(
+    sb,
+    'Edit',
+    { file_path: 'Mythos-memories/tracked-link/handoff.md' },
+    { enforcing: true }
+  );
+  assert.strictEqual(result.status, 2, 'generic artifact glob must not bypass memory containment');
+  assert.strictEqual(result.class, 'mutation');
+});
+
 for (const unsafePath of [
   'mythos-memories/memory/MEMORY.md',
   'MYTHOS-MEMORIES/memory/MEMORY.md',

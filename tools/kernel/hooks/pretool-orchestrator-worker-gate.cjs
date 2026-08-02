@@ -29,6 +29,11 @@
 //
 // FAIL-OPEN: any exception, malformed stdin, unknown tool, or missing state ->
 //   allow (exit 0). A broken gate can never brick a session.
+//   Privileged memory-path classification is intentionally narrower: an
+//   existing symlink, multiply linked regular file, or ambiguous filesystem
+//   component is classified as an ordinary mutation. This protects the
+//   repository/export membrane while leaving the outer hook's unexpected-
+//   exception behavior fail-open.
 //
 // SUBAGENT EXEMPTION: if CLAUDE_SUBAGENT_ID is set -> always allow.
 //   Workers are supposed to do the work.
@@ -56,6 +61,8 @@ const BLOCK_MESSAGE =
   '/dispatch-bridge --target <codex|gemini>, the Agent tool, or a subagent; ' +
   'the coordinator may read returned evidence and write orchestration artifacts.';
 
+const MEMORY_ROOT_NAMES = ['Mythos-memories', 'sm_os-memories'];
+
 // -- Orchestration artifact path globs (Write/Edit to these -> allowed) ---------
 // These are the coordinator's own durable outputs: signals, plans, debriefs,
 // synthesis documents, next-session handoffs, coordination notes.
@@ -66,7 +73,6 @@ const ORCHESTRATION_GLOBS = [
   /\b_dev[/\\]state[/\\]session-boundary[/\\]/,
   /\b_dev[/\\]state[/\\]orchestrator-worker-gate[/\\]/,
   /\b_dev[/\\]handoffs?[/\\]/,
-  /\bsm_os-memories[/\\]/,
   /(?:^|[/\\])(?:plan|debrief|synthesis|handoff|next-session|cross-session|session-boundary|HANDOFF|DEBRIEF)[-._]/i,
   /(?:handoff|debrief|synthesis|next-session|cross-session|session-boundary)\.(?:md|json|yaml|txt)$/i,
   /\b_dev[/\\]reports[/\\]convene-runs[/\\]/,
@@ -171,8 +177,109 @@ const TRIVIAL_BASH_ALLOW_PATTERNS = [
 
 // -- Helpers --------------------------------------------------------------------
 
-function isOrchestrationPath(filePath) {
+function hasUnsafeLinkComponent(rootPath, candidatePath, pathImpl, fsImpl) {
+  const relative = pathImpl.relative(rootPath, candidatePath);
+  const components = [rootPath];
+  let current = rootPath;
+  for (const segment of relative.split(pathImpl.sep).filter(Boolean)) {
+    current = pathImpl.join(current, segment);
+    components.push(current);
+  }
+
+  for (const component of components) {
+    try {
+      const stat = fsImpl.lstatSync(component);
+      if (stat.isSymbolicLink()) return true;
+      // A regular file with multiple directory entries may be a hard link to
+      // a tracked file. Editing either name mutates the shared inode, so such
+      // a target cannot receive privileged memory-write classification.
+      if (stat.isFile() && stat.nlink > 1) return true;
+    } catch (err) {
+      // A missing component cannot currently redirect this synchronous check.
+      // Any other ambiguity fails closed for privileged classification. The
+      // eventual tool write is separate, so this is not an atomic TOCTOU guard.
+      if (err && err.code === 'ENOENT') return false;
+      return true;
+    }
+  }
+  return false;
+}
+
+function resolveMemoryPath(filePath, projectDir, pathImpl, rootName = 'Mythos-memories') {
   const fp = String(filePath || '');
+  if (!fp) return null;
+  const projectRoot = pathImpl.resolve(projectDir);
+  const candidate = pathImpl.isAbsolute(fp)
+    ? pathImpl.resolve(fp)
+    : pathImpl.resolve(projectRoot, fp);
+  const memoryRoot = pathImpl.join(projectRoot, rootName);
+  return { candidate, memoryRoot };
+}
+
+function resolveMemoryFamilyPath(filePath, projectDir, pathImpl, caseInsensitive = false) {
+  for (const rootName of MEMORY_ROOT_NAMES) {
+    const resolved = resolveMemoryPath(filePath, projectDir, pathImpl, rootName);
+    if (!resolved) return null;
+    const candidate = caseInsensitive ? resolved.candidate.toLowerCase() : resolved.candidate;
+    const memoryRoot = caseInsensitive ? resolved.memoryRoot.toLowerCase() : resolved.memoryRoot;
+    if (candidate.startsWith(memoryRoot + pathImpl.sep)) return resolved;
+  }
+  return null;
+}
+
+function isLexicallyCanonicalMemoryPath(
+  filePath,
+  projectDir = resolveProjectDir(),
+  pathImpl = require('path')
+) {
+  const resolved = resolveMemoryPath(filePath, projectDir, pathImpl);
+  return Boolean(resolved && resolved.candidate.startsWith(resolved.memoryRoot + pathImpl.sep));
+}
+
+function isLexicallyMemoryRootPath(
+  filePath,
+  projectDir = resolveProjectDir(),
+  pathImpl = require('path')
+) {
+  return Boolean(resolveMemoryFamilyPath(filePath, projectDir, pathImpl, true));
+}
+
+function isCanonicalMemoryPath(
+  filePath,
+  projectDir = resolveProjectDir(),
+  pathImpl = require('path'),
+  fsImpl = require('fs')
+) {
+  const resolved = resolveMemoryPath(filePath, projectDir, pathImpl);
+  return Boolean(
+    resolved
+    && resolved.candidate.startsWith(resolved.memoryRoot + pathImpl.sep)
+    && !hasUnsafeLinkComponent(resolved.memoryRoot, resolved.candidate, pathImpl, fsImpl)
+  );
+}
+
+function isSafeMemoryFamilyPath(
+  filePath,
+  projectDir = resolveProjectDir(),
+  pathImpl = require('path'),
+  fsImpl = require('fs')
+) {
+  const resolved = resolveMemoryFamilyPath(filePath, projectDir, pathImpl, false);
+  return Boolean(
+    resolved
+    && !hasUnsafeLinkComponent(resolved.memoryRoot, resolved.candidate, pathImpl, fsImpl)
+  );
+}
+
+function isOrchestrationPath(filePath, projectDir, pathImpl, fsImpl) {
+  const fp = String(filePath || '');
+  // Any casing of a path lexically inside the private memory root must pass
+  // every exact-canonical memory check. This blocks case-insensitive filesystems
+  // from reaching the canonical directory through a lookalike path and then
+  // regaining privilege through a generic artifact-name glob.
+  if (isLexicallyMemoryRootPath(fp, projectDir, pathImpl)) {
+    return isSafeMemoryFamilyPath(fp, projectDir, pathImpl, fsImpl);
+  }
   return ORCHESTRATION_GLOBS.some((re) => re.test(fp));
 }
 
@@ -205,7 +312,7 @@ function classifyBash(command) {
   return 'trivial_read';
 }
 
-function classifyTool(tool, toolInput) {
+function classifyTool(tool, toolInput, projectDir, pathImpl, fsImpl) {
   const t = String(tool || '').toLowerCase();
   const input = toolInput && typeof toolInput === 'object' ? toolInput : {};
 
@@ -226,10 +333,10 @@ function classifyTool(tool, toolInput) {
   // Write / Edit / MultiEdit: depends on target path
   if (t === 'write' || t === 'edit' || t === 'multiedit') {
     const fp = String(input.file_path || '');
-    if (isOrchestrationPath(fp)) return 'orchestration_write';
+    if (isOrchestrationPath(fp, projectDir, pathImpl, fsImpl)) return 'orchestration_write';
     // MultiEdit may have edits array
     if (t === 'multiedit' && Array.isArray(input.edits)) {
-      if (input.edits.every((e) => isOrchestrationPath(e && e.file_path))) {
+      if (input.edits.every((e) => isOrchestrationPath(e && e.file_path, projectDir, pathImpl, fsImpl))) {
         return 'orchestration_write';
       }
     }
@@ -380,7 +487,7 @@ function _main(options, _injected) {
   const enforcing = ['1', 'true', 'yes', 'on'].includes(enforcingRaw);
 
   // -- Classify the requested tool ---------------------------------------------
-  const toolClass = classifyTool(toolToken, toolInput);
+  const toolClass = classifyTool(toolToken, toolInput, projectDir, path, fs);
 
   // -- Delegation event: record + allow ----------------------------------------
   if (toolClass === 'delegation') {
@@ -440,6 +547,10 @@ module.exports = {
   TRIVIAL_BASH_ALLOW_PATTERNS,
   classifyBash,
   classifyTool,
+  isCanonicalMemoryPath,
+  isLexicallyCanonicalMemoryPath,
+  isLexicallyMemoryRootPath,
+  isSafeMemoryFamilyPath,
   isOrchestrationPath,
   main,
 };

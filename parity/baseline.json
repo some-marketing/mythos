@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "93bd3335ca2a4b583f6f5b45732b9710f8c7f0e23848d97e65215faf8faf379c",
+    "expected_tree_sha256": "1913c373d50f7d035d8371829c3d3925ab7fb603b858c9d6929db3a720f40efa",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -122,7 +122,7 @@
       },
       {
         "path": ".claude/agents/stakeholder-voice-linter.md",
-        "sha256": "914a7d2e218107b80a07067d13e3bc70de37d79f386e6799075393e0b24456cd",
+        "sha256": "17dcbd7f8a046abc28ad67457efdb6c67532fdb0c7bf3dceb17b3f51bd59e6c9",
         "mode": 420
       },
       {
@@ -1482,7 +1482,7 @@
       },
       {
         "path": ".github/workflows/parity.yml",
-        "sha256": "8b0c4104697a0903e28088524a822dcd982275798e1aab94b8f831936b19b01a",
+        "sha256": "cc447d96c62e9163da5129b80c2a368c1c4d1174ea2ce2143e39ae2809a541e1",
         "mode": 420
       },
       {
@@ -6007,7 +6007,7 @@
       },
       {
         "path": "package.json",
-        "sha256": "aba48eeac50ef1a8871b586b96f6c4a22c2a105296ab642aa6c6c975120ad69a",
+        "sha256": "4c27ab2493e2c0bb938875af277ca73469726594bc0c2d43923a2a9fa31fdd20",
         "mode": 420
       },
       {
@@ -6037,7 +6037,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "1aec6cc66b3cc60357ab5f853e6dfafddc11b39e7c98b3efdb17cb7d4c38995b",
+        "sha256": "929b4568d0ae494340e3776224b89e99ad6d26c64223131986815cc17ea531cb",
         "mode": 420
       },
       {
@@ -7212,7 +7212,7 @@
       },
       {
         "path": "tools/codex/prompts/review-task-plan.md",
-        "sha256": "9b5189f70440569ed8e66f97a3628a61f816214bf6d3ecfe692ed6b4c0c63fdf",
+        "sha256": "ae8d96cfb42cee720755b7fe943be0584364bf033e716f4e08a3adcb298de7e2",
         "mode": 420
       },
       {
@@ -8772,7 +8772,7 @@
       },
       {
         "path": "tools/kernel/hooks/__tests__/pretool-orchestrator-worker-gate.test.cjs",
-        "sha256": "1cb3d38e7f85cd7566c5bf66dcfb566c1940eb26b6e84b61ec008cee33c6db0d",
+        "sha256": "c89012b898905d148991f39771279681f4b8361dabe71e5ce7bee3337537ad3c",
         "mode": 420
       },
       {
@@ -8907,7 +8907,7 @@
       },
       {
         "path": "tools/kernel/hooks/pretool-orchestrator-worker-gate.cjs",
-        "sha256": "5bc4f8fbb81490b11b12aeec41f1110167d38292af4093a51ce9a43ef08b92ce",
+        "sha256": "4668c51c51c27d144e27cc339ab20231fa72e64e5a8e680d1e20756386e56144",
         "mode": 420
       },
       {
@@ -8927,7 +8927,7 @@
       },
       {
         "path": "tools/kernel/hooks/session-start-tier-stamp.cjs",
-        "sha256": "94ae4c15efd2653a436adf58b9ab006593e0bbc2fd53cc97266c145715268bc5",
+        "sha256": "c0108c0457ee8ad5794f54138f41cbb402db32f1a6e8a6808530538f5e6109b3",
         "mode": 420
       },
       {
@@ -10537,12 +10537,12 @@
       },
       {
         "path": "tools/parity/__tests__/reconciliation-ledger.test.cjs",
-        "sha256": "019886dcb49551979fbf01c6ea18c1555156eaa0a269fecb2144741cb509a408",
+        "sha256": "09589d0799b6cc3221092028746d21d691a85950b4a2b5880f3ac7ede26d477f",
         "mode": 420
       },
       {
         "path": "tools/parity/__tests__/verify-parity.test.cjs",
-        "sha256": "f074c74209453cc494708f3509ecab7f778b70dee35ba0fa53b7345726fd0060",
+        "sha256": "0aa06b0b3de14d494ba55bb5779d57371925b2916418e78f4ac220ededdbf1cb",
         "mode": 420
       },
       {
@@ -10552,7 +10552,7 @@
       },
       {
         "path": "tools/parity/build-baseline.cjs",
-        "sha256": "ab013980e885e6710929715aba1a04c011abb631f1a7be8a3a3b5ec138fb8236",
+        "sha256": "6b0eab3b51c6cb73efabd21e62751ddb7a260c7112e734f64cc6c83e966d4797",
         "mode": 420
       },
       {
@@ -10562,7 +10562,7 @@
       },
       {
         "path": "tools/parity/build-wiring-graph.cjs",
-        "sha256": "99803e88782bf5c544171a01181b68bdfc2a278708dbb0ddaf614946d30bb244",
+        "sha256": "12c11bee283fac5ad6bc5b94efdf4bee972f9e40dd69d62cf200efbd1b2ab100",
         "mode": 420
       },
       {
@@ -10572,12 +10572,17 @@
       },
       {
         "path": "tools/parity/generate-reconciliation-ledger.cjs",
-        "sha256": "8edf2a681fbc801da8a50e7599f38bc98c119def6a3516c474d08d5e46707de9",
+        "sha256": "36d13b70b60543b963abcd9b8eb745521be01a4a339fa156a9bcd47f0476e624",
         "mode": 420
       },
       {
         "path": "tools/parity/lib.cjs",
         "sha256": "1f4df93f7c7f32d86eb3cf4673148212493a35dd0ad5be06e7e55edcb3674562",
+        "mode": 420
+      },
+      {
+        "path": "tools/parity/private-memory-policy.cjs",
+        "sha256": "f32ce9e761ce0513b6198fdaeff48092e314d7f8daa8dabd7cbfc9e11a17e5bc",
         "mode": 420
       },
       {
@@ -10587,7 +10592,7 @@
       },
       {
         "path": "tools/parity/verify-parity.cjs",
-        "sha256": "67351f2c2ba7adf46384e8804301d1bdb21ece1d260c7f2acd09c5b780f6a624",
+        "sha256": "ff8c6b3d9d3e75f1c28a9f964c88673b0e5a2f11d4671c1311c4c44b144ca317",
         "mode": 420
       },
       {
@@ -11616,6 +11621,11 @@
         "mode": 420
       },
       {
+        "path": "tools/signals/lib/__tests__/review-task-plan-narrative.test.cjs",
+        "sha256": "0b4d8663df0d83ccc82738c6981e58d017a73498ff63e332865bafc150d2669d",
+        "mode": 420
+      },
+      {
         "path": "tools/signals/lib/__tests__/run-openrouter-bridge.test.js",
         "sha256": "a04a4905321f1b8cc3fc8014b6f1ba1ac48bdabc2d280a94e2e37a2e9821b54a",
         "mode": 420
@@ -11787,7 +11797,7 @@
       },
       {
         "path": "tools/signals/lib/review-task-plan-narrative.js",
-        "sha256": "1b72ba008f8b58dfdaa31d8580a6e6deb29403082fedbcc7aeda6e5869c37bed",
+        "sha256": "bc24bbece71e949c0b4d1e4de7264934058d42d9af961cf7a8e9f6aa8d4ab329",
         "mode": 420
       },
       {
@@ -11937,7 +11947,7 @@
       },
       {
         "path": "tools/signals/validate-mind-memory-firewall.js",
-        "sha256": "2075c748119194b1d648ba22b257d7bac99f0ae186816197ebdf61f2141ecded",
+        "sha256": "58204dc5047385242960e8878901847436529d4f51c51bdf3e11f73d75389373",
         "mode": 493
       },
       {
@@ -13434,13 +13444,16 @@
     "package_script_count": 203,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "1aec6cc66b3cc60357ab5f853e6dfafddc11b39e7c98b3efdb17cb7d4c38995b",
-    "graph_nodes": 3747,
-    "graph_edges": 2668
+    "graph_sha256": "929b4568d0ae494340e3776224b89e99ad6d26c64223131986815cc17ea531cb",
+    "graph_nodes": 3749,
+    "graph_edges": 2677
   },
   "runtime_exclusions": [
     ".git/**",
     "node_modules/**",
+    "Mythos-memories/**",
+    "sm_os-memories/**",
+    "_dev/desktop/work/personal/**",
     ".env",
     ".env.*.local",
     "_dev/archive/**",

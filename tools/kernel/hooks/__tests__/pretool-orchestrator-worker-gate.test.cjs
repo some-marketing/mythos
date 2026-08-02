@@ -314,6 +314,130 @@ check('Edit to Mythos-memories/ -> orchestration_write -> allow', () => {
   assert.strictEqual(result.class, 'orchestration_write');
 });
 
+check('absolute Edit to root Mythos-memories/ -> orchestration_write -> allow', () => {
+  const sb = makeSandbox();
+  const result = runGate(sb, 'Edit', { file_path: path.join(sb.root, 'Mythos-memories', 'memory', 'MEMORY.md') }, { enforcing: true });
+  assert.strictEqual(result.status, 0);
+  assert.strictEqual(result.class, 'orchestration_write');
+});
+
+check('Edit to root legacy sm_os-memories/ -> orchestration_write -> allow', () => {
+  const sb = makeSandbox();
+  const result = runGate(sb, 'Edit', { file_path: 'sm_os-memories/memory/MEMORY.md' }, { enforcing: true });
+  assert.strictEqual(result.status, 0);
+  assert.strictEqual(result.class, 'orchestration_write');
+});
+
+check('Edit through a Mythos-memories symlink -> blocked', () => {
+  const sb = makeSandbox();
+  const trackedTarget = path.join(sb.root, 'src');
+  const memoryRoot = path.join(sb.root, 'Mythos-memories');
+  fs.mkdirSync(trackedTarget, { recursive: true });
+  fs.mkdirSync(memoryRoot, { recursive: true });
+  fs.symlinkSync(trackedTarget, path.join(memoryRoot, 'tracked-link'), 'dir');
+  const result = runGate(
+    sb,
+    'Edit',
+    { file_path: 'Mythos-memories/tracked-link/output.md' },
+    { enforcing: true }
+  );
+  assert.strictEqual(result.status, 2, 'symlink escape must be blocked');
+  assert.strictEqual(result.class, 'mutation');
+});
+
+check('generic handoff filename cannot re-allow a rejected memory symlink', () => {
+  const sb = makeSandbox();
+  const trackedTarget = path.join(sb.root, 'src');
+  const memoryRoot = path.join(sb.root, 'Mythos-memories');
+  fs.mkdirSync(trackedTarget, { recursive: true });
+  fs.mkdirSync(memoryRoot, { recursive: true });
+  fs.symlinkSync(trackedTarget, path.join(memoryRoot, 'tracked-link'), 'dir');
+  const result = runGate(
+    sb,
+    'Edit',
+    { file_path: 'Mythos-memories/tracked-link/handoff.md' },
+    { enforcing: true }
+  );
+  assert.strictEqual(result.status, 2, 'generic artifact glob must not bypass memory containment');
+  assert.strictEqual(result.class, 'mutation');
+});
+
+check('alternate memory-root casing cannot re-allow a handoff symlink', () => {
+  const sb = makeSandbox();
+  const trackedTarget = path.join(sb.root, 'src');
+  const memoryRoot = path.join(sb.root, 'Mythos-memories');
+  fs.mkdirSync(trackedTarget, { recursive: true });
+  fs.mkdirSync(memoryRoot, { recursive: true });
+  fs.symlinkSync(trackedTarget, path.join(memoryRoot, 'tracked-link'), 'dir');
+  const result = runGate(
+    sb,
+    'Edit',
+    { file_path: 'mythos-memories/tracked-link/handoff.md' },
+    { enforcing: true }
+  );
+  assert.strictEqual(result.status, 2, 'case variation must not bypass memory containment');
+  assert.strictEqual(result.class, 'mutation');
+});
+
+check('legacy memory symlink cannot re-enter through a generic handoff glob', () => {
+  const sb = makeSandbox();
+  const trackedTarget = path.join(sb.root, 'src');
+  const memoryRoot = path.join(sb.root, 'sm_os-memories');
+  fs.mkdirSync(trackedTarget, { recursive: true });
+  fs.mkdirSync(memoryRoot, { recursive: true });
+  fs.symlinkSync(trackedTarget, path.join(memoryRoot, 'tracked-link'), 'dir');
+  const result = runGate(
+    sb,
+    'Edit',
+    { file_path: 'sm_os-memories/tracked-link/handoff.md' },
+    { enforcing: true }
+  );
+  assert.strictEqual(result.status, 2, 'legacy symlink must not bypass containment');
+  assert.strictEqual(result.class, 'mutation');
+});
+
+check('alternate legacy-root casing cannot re-enter through a generic handoff glob', () => {
+  const sb = makeSandbox();
+  const result = runGate(
+    sb,
+    'Edit',
+    { file_path: 'SM_OS-MEMORIES/tracked-link/handoff.md' },
+    { enforcing: true }
+  );
+  assert.strictEqual(result.status, 2, 'legacy case variation must not bypass containment');
+  assert.strictEqual(result.class, 'mutation');
+});
+
+check('Edit through a hard-linked memory target -> blocked', () => {
+  const sb = makeSandbox();
+  const memoryRoot = path.join(sb.root, 'Mythos-memories');
+  const trackedTarget = path.join(sb.root, 'tracked.md');
+  fs.mkdirSync(memoryRoot, { recursive: true });
+  fs.writeFileSync(trackedTarget, 'tracked');
+  fs.linkSync(trackedTarget, path.join(memoryRoot, 'memory.md'));
+  const result = runGate(
+    sb,
+    'Edit',
+    { file_path: 'Mythos-memories/memory.md' },
+    { enforcing: true }
+  );
+  assert.strictEqual(result.status, 2, 'hard-linked target must be blocked');
+  assert.strictEqual(result.class, 'mutation');
+});
+
+for (const unsafePath of [
+  'mythos-memories/memory/MEMORY.md',
+  'MYTHOS-MEMORIES/memory/MEMORY.md',
+  'clients/example/Mythos-memories/memory/MEMORY.md',
+]) {
+  check(`Edit to non-canonical memory lookalike ${unsafePath} -> blocked`, () => {
+    const sb = makeSandbox();
+    const result = runGate(sb, 'Edit', { file_path: unsafePath }, { enforcing: true });
+    assert.strictEqual(result.status, 2);
+    assert.strictEqual(result.class, 'mutation');
+  });
+}
+
 // Agent / Task -> delegation -> always allowed
 check('Agent tool -> delegation -> allow', () => {
   const sb = makeSandbox();
@@ -533,6 +657,49 @@ check('_dev/handoffs/handoff.md -> orchestration', () => {
 
 check('Mythos-memories/memory/MEMORY.md -> orchestration', () => {
   assert.ok(gate.isOrchestrationPath('Mythos-memories/memory/MEMORY.md'));
+});
+
+check('canonical memory classification is root-bound and case-sensitive', () => {
+  const projectRoot = path.join(path.sep, 'tmp', 'mythos-project');
+  assert.ok(gate.isOrchestrationPath('Mythos-memories/memory/MEMORY.md', projectRoot, path));
+  assert.ok(gate.isOrchestrationPath(path.join(projectRoot, 'Mythos-memories', 'memory', 'MEMORY.md'), projectRoot, path));
+  assert.ok(!gate.isOrchestrationPath('mythos-memories/memory/MEMORY.md', projectRoot, path));
+  assert.ok(!gate.isOrchestrationPath('clients/example/Mythos-memories/memory/MEMORY.md', projectRoot, path));
+});
+
+check('canonical memory classification rejects symlink components', () => {
+  const sb = makeSandbox();
+  const memoryRoot = path.join(sb.root, 'Mythos-memories');
+  fs.mkdirSync(memoryRoot, { recursive: true });
+  fs.mkdirSync(path.join(sb.root, 'tracked'), { recursive: true });
+  fs.symlinkSync(path.join(sb.root, 'tracked'), path.join(memoryRoot, 'escape'), 'dir');
+  assert.strictEqual(
+    gate.isCanonicalMemoryPath('Mythos-memories/escape/output.md', sb.root, path, fs),
+    false
+  );
+});
+
+check('canonical memory classification rejects a symlinked memory root', () => {
+  const sb = makeSandbox();
+  fs.mkdirSync(path.join(sb.root, 'tracked'), { recursive: true });
+  fs.symlinkSync(path.join(sb.root, 'tracked'), path.join(sb.root, 'Mythos-memories'), 'dir');
+  assert.strictEqual(
+    gate.isCanonicalMemoryPath('Mythos-memories/output.md', sb.root, path, fs),
+    false
+  );
+});
+
+check('canonical memory classification rejects a symlinked target file', () => {
+  const sb = makeSandbox();
+  const memoryRoot = path.join(sb.root, 'Mythos-memories');
+  const trackedFile = path.join(sb.root, 'tracked.md');
+  fs.mkdirSync(memoryRoot, { recursive: true });
+  fs.writeFileSync(trackedFile, 'tracked');
+  fs.symlinkSync(trackedFile, path.join(memoryRoot, 'output.md'), 'file');
+  assert.strictEqual(
+    gate.isCanonicalMemoryPath('Mythos-memories/output.md', sb.root, path, fs),
+    false
+  );
 });
 
 check('src/feature.ts -> NOT orchestration', () => {

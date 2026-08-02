@@ -55,7 +55,7 @@ The caller should provide:
       "surrounding_text": "<~80 chars of context>",
       "suggested_rewrite": "<plain-language alternative>",
       "severity": "low" | "medium" | "high" | "needs_human_judgment",
-      "category": "sm_os_internal" | "framework_taxonomy" | "research_vocab" | "compliance_machinery" | "agency_tooling" | "ai_agent_vocab"
+      "category": "mythos_internal" | "framework_taxonomy" | "research_vocab" | "compliance_machinery" | "agency_tooling" | "ai_agent_vocab"
     }
   ],
   "lexicon_consulted": ["<category names actually scanned>"]

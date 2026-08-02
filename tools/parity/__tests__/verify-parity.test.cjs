@@ -7,8 +7,11 @@ const path = require('path');
 const test = require('node:test');
 const { spawnSync } = require('child_process');
 const { fileSha, sha256, treeDigest } = require('../lib.cjs');
+const { PRIVATE_LOCAL_EXCLUSIONS, PRIVATE_MEMORY_EXCLUSIONS } = require('../private-memory-policy.cjs');
 
 const verifier = path.join(__dirname, '..', 'verify-parity.cjs');
+const graphBuilder = path.join(__dirname, '..', 'build-wiring-graph.cjs');
+const baselineBuilder = path.join(__dirname, '..', 'build-baseline.cjs');
 
 function fixture() {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-verify-parity-'));
@@ -63,7 +66,7 @@ function fixture() {
       graph_nodes: 4,
       graph_edges: 0,
     },
-    runtime_exclusions: ['parity/reconciliation-ledger.json', 'private-denylist.json'],
+    runtime_exclusions: ['.git/**', ...PRIVATE_LOCAL_EXCLUSIONS, 'parity/reconciliation-ledger.json', 'private-denylist.json'],
     prohibited_paths: ['clients/**'],
     prohibited_content_regexes: ['/Users' + '/'],
     prohibited_token_hashes: [privateMarkerHash],
@@ -75,6 +78,8 @@ function fixture() {
     security_evidence_artifacts: ['parity/reconciliation-ledger.json'],
   }));
   fs.writeFileSync(path.join(root, 'parity/reconciliation-ledger.json'), '{"rows":[]}\n');
+  assert.equal(spawnSync('git', ['init', root], { encoding: 'utf8' }).status, 0);
+  assert.equal(spawnSync('git', ['-C', root, 'add', '.'], { encoding: 'utf8' }).status, 0);
   return root;
 }
 
@@ -91,6 +96,30 @@ test('passes an exact registered portable tree', () => {
   const root = fixture();
   const result = run(root);
   assert.equal(result.status, 0, result.stdout + result.stderr);
+  fs.rmSync(root, { recursive: true, force: true });
+});
+
+test('ignores untracked private memory roots while retaining tracked-memory enforcement', () => {
+  const root = fixture();
+  for (const rootName of ['Mythos-memories', 'sm_os-memories']) {
+    const memoryPath = path.join(root, rootName, 'memory', 'MEMORY.md');
+    fs.mkdirSync(path.dirname(memoryPath), { recursive: true });
+    fs.writeFileSync(memoryPath, 'private local memory\n');
+  }
+  const result = run(root);
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+  fs.rmSync(root, { recursive: true, force: true });
+});
+
+test('fails closed when baseline metadata omits a required private-local exclusion', () => {
+  const root = fixture();
+  const baselinePath = path.join(root, 'parity/baseline.json');
+  const baseline = JSON.parse(fs.readFileSync(baselinePath, 'utf8'));
+  baseline.runtime_exclusions = baseline.runtime_exclusions.filter(pattern => pattern !== '_dev/desktop/work/personal/**');
+  fs.writeFileSync(baselinePath, JSON.stringify(baseline));
+  const result = run(root);
+  assert.equal(result.status, 1);
+  assert.match(result.stdout, /missing required private-local runtime exclusion: _dev\/desktop\/work\/personal\/\*\*/);
   fs.rmSync(root, { recursive: true, force: true });
 });
 
@@ -164,4 +193,150 @@ test('cannot disable canonical ledger security scanning through baseline metadat
   assert.equal(result.status, 1);
   assert.match(result.stdout, /security evidence artifact registry must contain only the canonical reconciliation ledger/);
   fs.rmSync(root, { recursive: true, force: true });
+});
+
+test('parity generators share exact canonical and legacy private-memory exclusions', () => {
+  assert.deepEqual(PRIVATE_MEMORY_EXCLUSIONS, [
+    'Mythos-memories/**',
+    'sm_os-memories/**',
+  ]);
+  assert.deepEqual(PRIVATE_LOCAL_EXCLUSIONS, [
+    ...PRIVATE_MEMORY_EXCLUSIONS,
+    '_dev/desktop/work/personal/**',
+  ]);
+});
+
+test('wiring graph excludes linked-worktree control data and private memory', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-wiring-graph-'));
+  fs.mkdirSync(path.join(root, 'parity'), { recursive: true });
+  fs.mkdirSync(path.join(root, 'tools'), { recursive: true });
+  fs.writeFileSync(path.join(root, '.git'), 'gitdir: /machine-specific/worktree\n');
+  fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify({ scripts: {} }));
+  fs.writeFileSync(path.join(root, 'tools', 'demo.js'), 'module.exports = true;\n');
+  const privateMarkers = [];
+  for (const rootName of ['Mythos-memories', 'sm_os-memories']) {
+    const marker = `private-${rootName}-marker`;
+    const memoryPath = path.join(root, rootName, 'memory', 'MEMORY.md');
+    fs.mkdirSync(path.dirname(memoryPath), { recursive: true });
+    fs.writeFileSync(memoryPath, `${marker}\n`);
+    privateMarkers.push(marker);
+  }
+  const turnMarker = 'private-local-turn-marker';
+  const turnPath = path.join(root, '_dev', 'desktop', 'work', 'personal', 'turns', 'turn.jsonl');
+  fs.mkdirSync(path.dirname(turnPath), { recursive: true });
+  fs.writeFileSync(turnPath, `${turnMarker}\n`);
+  privateMarkers.push(turnMarker);
+
+  const result = spawnSync(process.execPath, [graphBuilder, '--root', root], { encoding: 'utf8' });
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+  const graph = JSON.parse(fs.readFileSync(path.join(root, 'parity', 'wiring-graph.json'), 'utf8'));
+  assert.equal(graph.nodes.some(node => node.path === '.git'), false);
+  assert.equal(graph.nodes.some(node => /^(?:Mythos-memories|sm_os-memories)(?:\/|$)/.test(node.path || '')), false);
+  const serialized = JSON.stringify(graph);
+  for (const marker of privateMarkers) {
+    assert.equal(serialized.includes(marker), false);
+    assert.equal(serialized.includes(sha256(`${marker}\n`)), false);
+  }
+  fs.rmSync(root, { recursive: true, force: true });
+});
+
+test('baseline regeneration excludes private memory paths and content hashes', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-baseline-target-'));
+  const sourceRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-baseline-source-'));
+  const configRoot = path.join(sourceRoot, 'tools', 'export-public', 'config');
+  fs.mkdirSync(configRoot, { recursive: true });
+  fs.writeFileSync(path.join(configRoot, 'mythos-export-map.json'), JSON.stringify({ frameworks: {}, units: {} }));
+  fs.writeFileSync(path.join(configRoot, 'denylist-mythos.json'), JSON.stringify({
+    client_codes: [], domains: [], identifiers: [], forbidden: [],
+  }));
+  const privateDenylistPath = path.join(sourceRoot, 'private-denylist.json');
+  fs.writeFileSync(privateDenylistPath, JSON.stringify({
+    client_codes: [], domains: [], identifiers: [], forbidden: [],
+  }));
+  assert.equal(spawnSync('git', ['init', sourceRoot], { encoding: 'utf8' }).status, 0);
+  assert.equal(spawnSync('git', ['-C', sourceRoot, 'add', '.'], { encoding: 'utf8' }).status, 0);
+  const commit = spawnSync('git', [
+    '-C', sourceRoot,
+    '-c', 'user.name=Mythos Test',
+    '-c', 'user.email=mythos-test@example.invalid',
+    'commit', '-m', 'fixture',
+  ], { encoding: 'utf8' });
+  assert.equal(commit.status, 0, commit.stdout + commit.stderr);
+  const sourceCommit = spawnSync('git', ['-C', sourceRoot, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).stdout.trim();
+
+  fs.mkdirSync(path.join(root, 'parity'), { recursive: true });
+  fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify({ scripts: {} }));
+  fs.writeFileSync(path.join(root, 'parity', 'wiring-graph.json'), JSON.stringify({
+    counts: { nodes: 0, edges: 0 },
+  }));
+  const privateMarkers = [];
+  for (const rootName of ['Mythos-memories', 'sm_os-memories']) {
+    const marker = `baseline-private-${rootName}-marker`;
+    const memoryPath = path.join(root, rootName, 'memory', 'MEMORY.md');
+    fs.mkdirSync(path.dirname(memoryPath), { recursive: true });
+    fs.writeFileSync(memoryPath, `${marker}\n`);
+    privateMarkers.push(marker);
+  }
+  const turnMarker = 'baseline-private-local-turn-marker';
+  const turnPath = path.join(root, '_dev', 'desktop', 'work', 'personal', 'turns', 'turn.jsonl');
+  fs.mkdirSync(path.dirname(turnPath), { recursive: true });
+  fs.writeFileSync(turnPath, `${turnMarker}\n`);
+  privateMarkers.push(turnMarker);
+
+  const result = spawnSync(process.execPath, [
+    baselineBuilder,
+    '--root', root,
+    '--source-root', sourceRoot,
+    '--source-commit', sourceCommit,
+    '--target-base-commit', 'fixture-target-base',
+    '--private-denylist', privateDenylistPath,
+  ], { encoding: 'utf8' });
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+  const baseline = JSON.parse(fs.readFileSync(path.join(root, 'parity', 'baseline.json'), 'utf8'));
+  assert.deepEqual(
+    baseline.runtime_exclusions.filter(pattern => PRIVATE_LOCAL_EXCLUSIONS.includes(pattern)),
+    PRIVATE_LOCAL_EXCLUSIONS,
+  );
+  assert.equal(baseline.target.expected_files.some(row => /^(?:Mythos-memories|sm_os-memories)(?:\/|$)/.test(row.path)), false);
+  const serialized = JSON.stringify(baseline);
+  for (const marker of privateMarkers) {
+    assert.equal(serialized.includes(marker), false);
+    assert.equal(serialized.includes(sha256(`${marker}\n`)), false);
+  }
+  fs.rmSync(root, { recursive: true, force: true });
+  fs.rmSync(sourceRoot, { recursive: true, force: true });
+});
+
+test('fails closed when a memory-family path is force-tracked with any casing', () => {
+  const root = fixture();
+  const memoryPath = path.join(root, 'nested', 'MyThOs-MeMoRiEs', 'private.md');
+  fs.mkdirSync(path.dirname(memoryPath), { recursive: true });
+  fs.writeFileSync(memoryPath, 'private fixture\n');
+  assert.equal(spawnSync('git', ['-C', root, 'add', '-f', 'nested/MyThOs-MeMoRiEs/private.md'], { encoding: 'utf8' }).status, 0);
+  const result = run(root);
+  assert.equal(result.status, 1);
+  assert.match(result.stdout, /prohibited tracked memory path: nested\/MyThOs-MeMoRiEs\/private\.md/);
+  fs.rmSync(root, { recursive: true, force: true });
+});
+
+test('fails closed when a private local session path is force-tracked', () => {
+  const root = fixture();
+  const turnPath = path.join(root, '_dev', 'desktop', 'work', 'personal', 'turns', 'turn.jsonl');
+  fs.mkdirSync(path.dirname(turnPath), { recursive: true });
+  fs.writeFileSync(turnPath, 'private fixture\n');
+  assert.equal(spawnSync('git', ['-C', root, 'add', '-f', '_dev/desktop/work/personal/turns/turn.jsonl'], { encoding: 'utf8' }).status, 0);
+  const result = run(root);
+  assert.equal(result.status, 1);
+  assert.match(result.stdout, /prohibited tracked private-local path: _dev\/desktop\/work\/personal\/turns\/turn\.jsonl/);
+  fs.rmSync(root, { recursive: true, force: true });
+});
+
+test('repository ignore policy protects exact canonical and legacy memory roots on case-sensitive Git', () => {
+  const repositoryRoot = path.resolve(__dirname, '..', '..', '..');
+  for (const protectedPath of ['Mythos-memories/private.md', 'sm_os-memories/private.md']) {
+    const result = spawnSync('git', ['-C', repositoryRoot, '-c', 'core.ignoreCase=false', 'check-ignore', '--no-index', '-q', '--', protectedPath]);
+    assert.equal(result.status, 0, `${protectedPath} must be ignored`);
+  }
+  const lookalike = spawnSync('git', ['-C', repositoryRoot, '-c', 'core.ignoreCase=false', 'check-ignore', '--no-index', '-q', '--', 'mythos-memories/private.md']);
+  assert.equal(lookalike.status, 1, 'lowercase lookalike must stay visible to Git and blocked by the gate');
 });

@@ -112,6 +112,32 @@ test('generates one deterministic ordered disposition for every inventoried path
   fs.rmSync(input.root, { recursive: true, force: true });
 });
 
+test('generation and authoritative checking ignore private memory paths and hashes', () => {
+  const input = fixture();
+  const withoutMemory = generate(input);
+  const privateMarkers = [];
+  for (const surfaceRoot of [input.sourceExportRoot, input.targetBaseRoot, input.targetCurrentRoot]) {
+    for (const rootName of ['Mythos-memories', 'sm_os-memories']) {
+      const marker = `ledger-private-${path.basename(surfaceRoot)}-${rootName}-marker`;
+      write(surfaceRoot, `${rootName}/memory/MEMORY.md`, `${marker}\n`);
+      privateMarkers.push(marker);
+    }
+    const turnMarker = `ledger-private-${path.basename(surfaceRoot)}-local-turn-marker`;
+    write(surfaceRoot, '_dev/desktop/work/personal/turns/turn.jsonl', `${turnMarker}\n`);
+    privateMarkers.push(turnMarker);
+  }
+
+  const withMemory = generate(input);
+  assert.deepEqual(withMemory, withoutMemory);
+  const serialized = JSON.stringify(withMemory);
+  for (const marker of privateMarkers) {
+    assert.equal(serialized.includes(marker), false);
+    assert.equal(serialized.includes(sha256(`${marker}\n`)), false);
+  }
+  assert.equal(check(input, withMemory).status, 0);
+  fs.rmSync(input.root, { recursive: true, force: true });
+});
+
 test('blocks an uncovered file from any of the three inventory surfaces', () => {
   const input = fixture();
   write(input.targetCurrentRoot, 'unreviewed-target-file.txt', 'must receive a disposition\n');

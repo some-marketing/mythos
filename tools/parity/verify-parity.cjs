@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
 const { fileSha, matches, sha256, treeDigest, walk } = require('./lib.cjs');
+const { PRIVATE_LOCAL_EXCLUSIONS } = require('./private-memory-policy.cjs');
 const { scanForDenylist } = require('../export-public/export-public.cjs');
 
 const TEXT_EXTENSIONS = new Set(['', '.cjs', '.command', '.css', '.html', '.js', '.json', '.md', '.mjs', '.plist', '.ps1', '.py', '.sh', '.ts', '.tsx', '.txt', '.yaml', '.yml']);
@@ -54,6 +55,12 @@ function gitTracked(root) {
   return result.stdout.split('\0').filter(Boolean).sort();
 }
 
+function isMemoryFamilyPath(relative) {
+  return String(relative).split(/[\\/]/).some(segment => (
+    /^(?:mythos-memories|sm_os-memories)$/i.test(segment)
+  ));
+}
+
 function main() {
   const args = process.argv.slice(2);
   const root = path.resolve(option(args, '--root') || path.join(__dirname, '..', '..'));
@@ -82,6 +89,11 @@ function main() {
   }
   if (JSON.stringify(baseline.security_evidence_artifacts) !== JSON.stringify(REQUIRED_SECURITY_EVIDENCE_ARTIFACTS)) {
     findings.push('security evidence artifact registry must contain only the canonical reconciliation ledger');
+  }
+  for (const pattern of PRIVATE_LOCAL_EXCLUSIONS) {
+    if (!(baseline.runtime_exclusions || []).includes(pattern)) {
+      findings.push(`missing required private-local runtime exclusion: ${pattern}`);
+    }
   }
 
   const tokenUniverse = new Set([
@@ -138,6 +150,8 @@ function main() {
   if (tracked) {
     for (const relative of tracked) {
       if (matches(relative, baseline.prohibited_paths || [])) findings.push(`prohibited tracked path: ${relative}`);
+      if (isMemoryFamilyPath(relative)) findings.push(`prohibited tracked memory path: ${relative}`);
+      if (matches(relative, PRIVATE_LOCAL_EXCLUSIONS)) findings.push(`prohibited tracked private-local path: ${relative}`);
     }
   }
 

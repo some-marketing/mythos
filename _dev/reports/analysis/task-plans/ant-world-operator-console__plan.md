@@ -37,6 +37,31 @@ probing internals.
   mind not having access to the dashboard. this is for the human side monitoring and
   interaction."* Binding: operator-only, no console state re-enters observation space.
 
+- **R2 (2026-08-03T01:07Z) — OQ1 RESOLVED: steering is Option C, both paths.** Scheduled
+  numeric config changes AND natural-language instruction injection. S4 (config) and S5
+  (instructions) are both in scope.
+
+- **R3 (2026-08-03T01:07Z) — OQ2 RESOLVED: `G-NO-SCRIPTED-RIVALRY` is scoped, not deleted.**
+  Operator: *"I think we'll see survival strategies develop regardless but I think the
+  instructions are in fact part of the experiment."* The operator also correctly observed
+  that OQ2 is not materially separable from OQ1 — instruction injection *is* the relaxation;
+  they are one lever seen from the engineering side and the research side.
+
+  **Ruling as implemented:** the rule becomes a property of an ARM, not of the system.
+  - **Uninstructed arm** — `G-NO-SCRIPTED-RIVALRY` holds exactly as written today. No
+    strategy hint, no pre-loaded instinct. This arm is what licenses any claim of the form
+    "the environment taught X."
+  - **Instructed arm** — the rule is deliberately relaxed. Instructions are an experimental
+    variable, not contamination.
+  - **Both arms are required.** The operator's expectation ("strategies develop regardless")
+    is a testable prediction, and it is only testable if an uninstructed arm exists to
+    compare against. Running only instructed sessions would make the prediction unfalsifiable
+    — the failure mode already seen with the pheromone relay, where the effect tracked the
+    intervention rather than the thing being measured.
+  - Every injected instruction is recorded to `run-log.jsonl` as an
+    `event: "operator-intervention"` row with tick and payload, so arm membership is a
+    property of the data and never of anyone's memory.
+
 ## Research-resolved open questions
 
 **OQ3 — recurrence thresholds for the lexicon unlock rule. RESOLVED (repo truth, cheapest
@@ -264,6 +289,53 @@ the existing dashboard is reachable on the host's other interfaces. The plan's
 "localhost-only" risk claim was **false as written**. Binding to `127.0.0.1` is added to S3
 as a correctness fix, and — since operator ruling R1 makes the console operator-only — this
 is a containment fix, not a nicety.
+
+### C2b — proposed replacement construct: prediction, not recurrence (answers OQ3)
+
+Operator, 2026-08-03T01:07Z: *"I'm not sure what the best path is here. we'll have to test,
+but i'm open to recommendations."* This is the recommendation, offered as a **testable
+protocol with a stated refutation condition**, not as a resolved answer. It remains subject
+to C7's consequence-grade convene before adoption.
+
+**Replace "a label recurred" with "a label predicts."** A label carries information about the
+world if knowing it improves prediction of the context it appears in, relative to a null in
+which labels are shuffled across the same events. Recurrence counts repetition; prediction
+measures whether the repetition tracks anything.
+
+**Class separation first (mandatory, from finding F4).** Only one of three classes can even
+be a candidate:
+- *Environment-authored* (`clay`, `water`, `ore`, `fiber`, `mud`) — spawned by
+  `applyMaterialDynamics`, attributed to whichever hive advanced the world. Never a
+  candidate; counting these measures fixture behaviour.
+- *Engine-authored* (`chamber`, `untrained-network.js:222`) — hard-coded by us. Never a
+  candidate.
+- *Mind-chosen free strings* — only the LLM decider emits these, and only these can be
+  candidates. Note they are unvalidated free text (`world-state.js:148`,
+  `llm-decide.js:39`) and must be treated as untrusted input.
+
+**The test.** For each candidate label L, over occurrences with recorded state-at-time-of-use
+(requires S0):
+1. Fit a simple predictor of context from L (tile state, stockpile band, tick band,
+   neighbouring structures).
+2. Fit the identical predictor on a **permutation null** — the same labels shuffled across
+   the same events, preserving base rates.
+3. Score = real minus null, exactly the selectivity shape from the control-task literature,
+   applied to *behaviour* rather than to internal activations. This is the honest transfer of
+   that method: it needs no access to internals and makes no claim about them.
+4. Require the effect to hold on **held-out occurrences split by episode**, across ≥2 hives.
+
+**Binding acceptance test (the nonce control, from finding F7).** Inject a synthetic label
+assigned at random to the same number of events, and repeat it five times across two hives
+and two episodes — the exact case the recurrence rule would have wrongly established. The
+protocol must **reject** it. If it cannot, the construct is refuted and no threshold rescues
+it.
+
+**Refutation condition for the whole approach:** if no mind-chosen label ever beats its
+permutation null on held-out episodes, then there is nothing to translate and the wiki leg
+should be abandoned rather than softened. That outcome is a real result, not a failure.
+
+**Dependency:** this protocol is unbuildable until S0 supplies tick and
+state-at-time-of-use. It therefore confirms rather than competes with C1's sequencing.
 
 ### C7 — a code-review profile cannot ratify the research construct
 

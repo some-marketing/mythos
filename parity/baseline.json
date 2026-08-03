@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "a49f5b2b359e9d55440458b0627912bf1b7176e558029edcc938b62216cca9c0",
+    "expected_tree_sha256": "d728eeca94871132c77c56b47e089b4a8ed2274b56c67b55ae2a08e07fa25176",
     "expected_files": [
       {
         "path": "_dev/commands/.gitkeep",
@@ -2113,11 +2113,6 @@
       {
         "path": ".githooks/README.md",
         "sha256": "900c604c268eef8e564f3abc2072b9826e022dd6b09ff9d1d0ba4d5f7123c040",
-        "mode": 420
-      },
-      {
-        "path": ".github/workflows/codex-review.yml",
-        "sha256": "5920a17418dd5e0f938fc31bb274153c2f9c111b8eeaab79a25fb6527fc7df53",
         "mode": 420
       },
       {
@@ -6192,7 +6187,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "7e05b9724e4eb24228ffc64af31472012653a181dfed68295ff6b63655ca5a03",
+        "sha256": "6de9a2644672dcc38b43a97c792fc2af65ac08e64637a36143654132d5fa2761",
         "mode": 420
       },
       {
@@ -13709,8 +13704,8 @@
     "package_script_count": 203,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "7e05b9724e4eb24228ffc64af31472012653a181dfed68295ff6b63655ca5a03",
-    "graph_nodes": 3775,
+    "graph_sha256": "6de9a2644672dcc38b43a97c792fc2af65ac08e64637a36143654132d5fa2761",
+    "graph_nodes": 3774,
     "graph_edges": 2716
   },
   "runtime_exclusions": [

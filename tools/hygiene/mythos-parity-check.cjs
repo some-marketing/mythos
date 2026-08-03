@@ -36,12 +36,20 @@ const argVal = (flag, def) => {
 const hasFlag = (flag) => process.argv.indexOf(flag) !== -1;
 
 const ORWELL_SSH = argVal('--orwell', 'orwell');
-const ORWELL_MYTHOS = argVal('--orwell-mythos', 'C:/Users/taylo/mythos');
+const ORWELL_MYTHOS = argVal('--orwell-mythos', resolveRemoteMythosRoot());
 const MYTHOS_ROOT = path.resolve(__dirname, '..', '..');
 const MEMORY_DIR = argVal('--memory-dir', path.join(process.env.HOME, '.claude', 'projects', '-Users-admin-mythos', 'memory'));
 const VAULT_SUBSTRATE = argVal('--vault-dir', path.join(MYTHOS_ROOT, 'Mythos-memories', 'substrate'));
 const HANDOFF_PATH = argVal('--handoff', path.join(MYTHOS_ROOT, 'Mythos-memories', 'next-session-handoff.md'));
 const RECONCILE = hasFlag('--reconcile');
+
+function resolveRemoteMythosRoot() {
+  if (process.env.ORWELL_MYTHOS) return process.env.ORWELL_MYTHOS;
+  const out = run(['ssh', '-o', 'ConnectTimeout=8', '-o', 'BatchMode=yes', '-o', 'UpdateHostKeys=no',
+    ORWELL_SSH, 'echo %USERPROFILE%']);
+  if (out && out.trim()) return `${out.trim()}\mythos`;
+  return 'mythos';
+}
 
 function run(cmd, opts = {}) {
   try {
@@ -61,7 +69,7 @@ function localBranch() {
 }
 
 function remoteHead() {
-  // Windows side: git -C "C:/Users/taylo/mythos" rev-parse HEAD, via ssh.
+  // Windows side: git -C "<remote mythos root>" rev-parse HEAD, via ssh.
   const out = run(['ssh', '-o', 'ConnectTimeout=10', '-o', 'BatchMode=yes', '-o', 'UpdateHostKeys=no',
     ORWELL_SSH, `git -C ${ORWELL_MYTHOS} rev-parse HEAD`]);
   return out;

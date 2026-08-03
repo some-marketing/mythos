@@ -156,7 +156,7 @@ function runnerForTarget(target, hostAlias = '') {
       args: []
     };
   }
-  if (target === 'claude' || target === 'opencode' || target === 'opencode-local') {
+  if (target === 'claude' || target === 'opencode' || target === 'opencode-local' || target === 'codewhale') {
     return {
       id: 'signals:run:actor',
       script: path.join('tools', 'signals', 'run-actor-bridge.js'),

@@ -27,7 +27,7 @@ const PROJECT_ROOT = path.resolve(__dirname, '../..');
 function printHelp() {
   process.stdout.write(`Usage: node tools/codex/smos-launcher.js <action> [options]
 
-Managed Mythos runtime entrypoint (authority: ${RUNTIME_AUTHORITY_ID}).
+Managed ${RUNTIME_AUTHORITY_ID} runtime entrypoint for Mythos.
 
   Actions:
   boot                         Run the managed session-start bootstrap once
@@ -38,7 +38,7 @@ Managed Mythos runtime entrypoint (authority: ${RUNTIME_AUTHORITY_ID}).
   command "/slash args"        Run a deterministic Mythos command handler
   bridge --target <actor>      Dispatch through the canonical Mythos bridge
          --task "<summary>"    Supports codex, claude, gemini, opencode,
-         [--command <cmd>]     opencode-local, and openrouter
+         [--command <cmd>]     opencode-local, codewhale, and openrouter
          [--scope <scope>] [--context <a,b,c>] [--run-now] [--json]
   signal [selectors]           Resolve authority and run the Codex bridge for one coordination signal
   end-session [selector]        Emit EndSessionCloseout/1.0 for --system, --client CODE, or --scope <workstream>
@@ -54,15 +54,15 @@ Signal selectors:
   --json
 
 Examples:
-  npm run codex:mythos -- boot
-  npm run codex:mythos -- plan
-  npm run codex:mythos -- ground --target tools/planning/assess-similarity.js
-  npm run codex:mythos -- shell --command "git status"
-  npm run codex:mythos -- shell --command "touch output.txt" --target clients/example.txt
-  npm run codex:mythos -- command "/review-task-plan task-id"
-  npm run codex:mythos -- bridge --target gemini --task "review this" --run-now --json
-  npm run codex:mythos -- signal --scope codex-bridge__task-review --dry-run
-  npm run codex:mythos -- end-session --system
+  npm run codex:smos -- boot
+  npm run codex:smos -- plan
+  npm run codex:smos -- ground --target tools/planning/assess-similarity.js
+  npm run codex:smos -- shell --command "git status"
+  npm run codex:smos -- shell --command "touch output.txt" --target clients/example.txt
+  npm run codex:smos -- command "/review-task-plan task-id"
+  npm run codex:smos -- bridge --target gemini --task "review this" --run-now --json
+  npm run codex:smos -- signal --scope codex-bridge__task-review --dry-run
+  npm run codex:smos -- end-session --system
 `);
 }
 

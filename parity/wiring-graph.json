@@ -1448,6 +1448,13 @@
       "mode": 420
     },
     {
+      "id": "file:_dev/config/harness-protocol-propagation.json",
+      "type": "file",
+      "path": "_dev/config/harness-protocol-propagation.json",
+      "sha256": "14727506cf9a45c36695913005bd3eb5a4f8e73f4ad7ba78460286f5a916b4a5",
+      "mode": 420
+    },
+    {
       "id": "file:_dev/config/README.md",
       "type": "file",
       "path": "_dev/config/README.md",
@@ -8252,6 +8259,13 @@
       "mode": 420
     },
     {
+      "id": "file:instructions/adapters/codewhale.yaml",
+      "type": "file",
+      "path": "instructions/adapters/codewhale.yaml",
+      "sha256": "209f015d919132516b144987446ed8a6afd329ad6cf224455a1617af3f8a5cd4",
+      "mode": 420
+    },
+    {
       "id": "file:instructions/adapters/codex.yaml",
       "type": "file",
       "path": "instructions/adapters/codex.yaml",
@@ -9347,7 +9361,7 @@
       "id": "file:instructions/canonical/dispatch-routing-rule.yaml",
       "type": "file",
       "path": "instructions/canonical/dispatch-routing-rule.yaml",
-      "sha256": "26351b161ad9593fb57b39941b14f8c2a35344151e157bc1a589bd8d0d266cab",
+      "sha256": "a80c8021dc99c6ff64d65dec35277a73a2ed1277b4489b0da2dd24a4cd565ea2",
       "mode": 420
     },
     {
@@ -9473,7 +9487,7 @@
       "id": "file:instructions/canonical/harness-runtime-contract.md",
       "type": "file",
       "path": "instructions/canonical/harness-runtime-contract.md",
-      "sha256": "c1c4085507c22281e2d36237f3bcbc7c501a50af2bfefc17701bb549cd5dc6e8",
+      "sha256": "84e4c21519c0a3e3e409358422077e74b3d333ca4acec9317865dfa77839196c",
       "mode": 420
     },
     {
@@ -10404,7 +10418,7 @@
       "id": "file:tools/ant-hive-world/run-live.js",
       "type": "file",
       "path": "tools/ant-hive-world/run-live.js",
-      "sha256": "a5afd4bd8024e5632d8e9112e9d56ea48e28418aa0eab08a4cbfaa285e350273",
+      "sha256": "1eabe9b85f1ada493f4034fb71ad17ae688fbed3c21665d161ff9360a4da9aec",
       "mode": 420
     },
     {
@@ -10433,6 +10447,20 @@
       "type": "file",
       "path": "tools/ant-hive-world/validate-hive-mind.js",
       "sha256": "726687aa2fb1edc8c93bdb387ed4cb83780cbb23a83ad771a4747da8a95ad997",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/world-mind-harness.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/world-mind-harness.cjs",
+      "sha256": "eab2f9c0a5e3c88956fc3efe3184b6e45c51ceccf730affd0b0a97cc612882ef",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/world-mind.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/world-mind.js",
+      "sha256": "09a87ac21b493ca4410bd381a15acd2351a1b7dc7eae467ceb464d68adaaaa0d",
       "mode": 420
     },
     {
@@ -11503,7 +11531,7 @@
       "id": "file:tools/codex/smos-launcher.js",
       "type": "file",
       "path": "tools/codex/smos-launcher.js",
-      "sha256": "234474b95d82f346bae1cf8d81a6e5e65600cdabb611533ef08ffdcfa463eabf",
+      "sha256": "4f0d8955aec132d835cf4469bd8ec43fef04a72ca1f03bc1026d96733e0e79ad",
       "mode": 420
     },
     {
@@ -12977,11 +13005,25 @@
       "mode": 420
     },
     {
+      "id": "file:tools/hygiene/hash-dir.cjs",
+      "type": "file",
+      "path": "tools/hygiene/hash-dir.cjs",
+      "sha256": "3a7fbd7985432fedf18670d4c261d1f005a82bd8a74cb3cb78aab2cbc49aa7f6",
+      "mode": 420
+    },
+    {
       "id": "file:tools/hygiene/mirror-deliverables.sh",
       "type": "file",
       "path": "tools/hygiene/mirror-deliverables.sh",
       "sha256": "d62ebf61c1649ab7a9abfe0427524c0bab44bcce1e43d97cf9f61dae6ddc5058",
       "mode": 493
+    },
+    {
+      "id": "file:tools/hygiene/mythos-parity-check.cjs",
+      "type": "file",
+      "path": "tools/hygiene/mythos-parity-check.cjs",
+      "sha256": "f55db58ce53729828ef41ee4215ca8b637ae960dae77995e9e737934bb2bda91",
+      "mode": 420
     },
     {
       "id": "file:tools/hygiene/sync-obsidian-vault.sh",
@@ -13163,6 +13205,13 @@
       "type": "file",
       "path": "tools/instructions/README.md",
       "sha256": "5c9cde91ee16102f5837a577beac93862f6fe08f2bdfd6c3598da6927ebb65bc",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/instructions/validate-harness-protocol-parity.cjs",
+      "type": "file",
+      "path": "tools/instructions/validate-harness-protocol-parity.cjs",
+      "sha256": "a0d7670ec5d5dcba88a4c153aca7240060152f7616a12198a36c359a1bf85382",
       "mode": 420
     },
     {
@@ -17292,7 +17341,7 @@
       "id": "file:tools/sessions/lib/active-session-registry.js",
       "type": "file",
       "path": "tools/sessions/lib/active-session-registry.js",
-      "sha256": "fba6f6f6a71f6d2b4f62fc8b998ff3b1d0a3b80bb5c7deda68060300fbb38b45",
+      "sha256": "ff3020cbc5088b217b92c252c1100939bef38d085c9cb170c6f70927e81bf8d3",
       "mode": 420
     },
     {
@@ -17565,7 +17614,7 @@
       "id": "file:tools/signals/lib/__tests__/dispatch-bridge-target-command-compat.test.cjs",
       "type": "file",
       "path": "tools/signals/lib/__tests__/dispatch-bridge-target-command-compat.test.cjs",
-      "sha256": "2a0a33ed7319c8d9c4d8cc6aef824764f6e85021dcb82e3475310559ff943766",
+      "sha256": "5d61716195f893fbd9151caf2ab5b343dff08790d38995408def5fdcc50f452d",
       "mode": 420
     },
     {
@@ -17579,7 +17628,7 @@
       "id": "file:tools/signals/lib/__tests__/distinct-families.test.js",
       "type": "file",
       "path": "tools/signals/lib/__tests__/distinct-families.test.js",
-      "sha256": "ca36293d5e0a5d854913cb1ece91a6c7f92b5609e7c258170fc865045dbdb093",
+      "sha256": "913ef54eb7bec0e3b491df37b4027a02c236b79b18fd558ea6132da238d7f261",
       "mode": 420
     },
     {
@@ -17719,7 +17768,7 @@
       "id": "file:tools/signals/lib/actor-registry.js",
       "type": "file",
       "path": "tools/signals/lib/actor-registry.js",
-      "sha256": "817d494559733dc70366b5d7d098243dcc5ddba78e750a9213a1d1c906d7aea5",
+      "sha256": "99c3c333b22910aafa8662ec0c0295d232f141ce341d52418e46baa9c24be49d",
       "mode": 420
     },
     {
@@ -17740,7 +17789,7 @@
       "id": "file:tools/signals/lib/bridge-target-policy.js",
       "type": "file",
       "path": "tools/signals/lib/bridge-target-policy.js",
-      "sha256": "5ca2629cfb252de64df8501dd627bb66c5bbd8813f9fe0c829b0c45a6d4bcdd5",
+      "sha256": "db2368c67dec242265e6ded80ffc2bf3a8b2f55d4d587ce0b1b1ebcb03a97f09",
       "mode": 420
     },
     {
@@ -17803,7 +17852,7 @@
       "id": "file:tools/signals/lib/dispatch-bridge.js",
       "type": "file",
       "path": "tools/signals/lib/dispatch-bridge.js",
-      "sha256": "7e41c684985e7eb11809e07f9663b849fdaf74a265546feebb462508ef786d5f",
+      "sha256": "7a7c05c5860632ddf7f16ba2c8bceea0ce54e56026efad88d45572ca2b8d20c8",
       "mode": 420
     },
     {
@@ -17936,7 +17985,7 @@
       "id": "file:tools/signals/lib/target-command-policy.cjs",
       "type": "file",
       "path": "tools/signals/lib/target-command-policy.cjs",
-      "sha256": "b3d7972ee926b63b5c26a48d936d925bbcdf2c3f4be1c2c14a5b20e1d6ca10f0",
+      "sha256": "ca1d6591f304f3f780bfc583de52249d6319bf0b328ecc47ca837d6ab8f2e0af",
       "mode": 420
     },
     {
@@ -25515,6 +25564,15 @@
       "declared_target": "frameworks/wordpress/livecanvas-rebuild/.claude/agents/livecanvas-rebuild"
     },
     {
+      "id": "0aac0fb5e9b7a1f84bdead2c73967e84596c06fa9428497e81468b1778c685c9",
+      "type": "static-import",
+      "from": "file:tools/hygiene/hash-dir.cjs",
+      "to": "file:tools/reconciliation/lib/normalized-content-hash.cjs",
+      "target": "tools/reconciliation/lib/normalized-content-hash.cjs",
+      "required": true,
+      "specifier": "../reconciliation/lib/normalized-content-hash.cjs"
+    },
+    {
       "id": "0ac1f9159c9ef84fbe28c2690c844397397f94ea08d3fffe9ebdab16b07ef761",
       "type": "agent-definition",
       "from": "agent:signal-normalizer",
@@ -27000,6 +27058,15 @@
       "declared_target": ".claude/commands/review-task-plan.md"
     },
     {
+      "id": "1aac1b5334be8b5978ff4e19637e1608bef15a7ff0a5c2397dae2de4dd3f6d98",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/run-live.js",
+      "to": "file:tools/ant-hive-world/world-mind.js",
+      "target": "tools/ant-hive-world/world-mind.js",
+      "required": true,
+      "specifier": "./world-mind.js"
+    },
+    {
       "id": "1aeff230785c784a1bdc08b3380b48e7fee62bfdf357ca6c710f3ca68e434384",
       "type": "static-import",
       "from": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
@@ -28337,6 +28404,15 @@
       "target": "tools/planning/lib/plan-visibility.js",
       "required": true,
       "specifier": "./lib/plan-visibility"
+    },
+    {
+      "id": "28492519efc9d02f00fdc58406d2149c4ac2c9952539b3d98208fd5898189497",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/world-mind.js",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "./untrained-network.js"
     },
     {
       "id": "285961633fc7f40c5840ac0ccaa9fb63d7d7939cf3d6acfe7a10ab58e9f04516",
@@ -32251,6 +32327,15 @@
       "target": "tools/codex/commands/telemetry-status.js",
       "required": true,
       "specifier": "../codex/commands/telemetry-status"
+    },
+    {
+      "id": "5176a33590ca6694d5c7f7bc86a1885ee1e45d9ade33a40418eb490b12449f5d",
+      "type": "static-import",
+      "from": "file:tools/hygiene/mythos-parity-check.cjs",
+      "to": "file:tools/reconciliation/lib/normalized-content-hash.cjs",
+      "target": "tools/reconciliation/lib/normalized-content-hash.cjs",
+      "required": true,
+      "specifier": "../reconciliation/lib/normalized-content-hash.cjs"
     },
     {
       "id": "51bedeedb9c3c881c99814dbaa76c73e1bdd495ba3edf9aa84fc19640f9ff86a",
@@ -45140,6 +45225,15 @@
       "specifier": "./lib/dart-api"
     },
     {
+      "id": "da443cc907220e3696cea19b9872680385106c7c5eb4e0642158877d90c63d0a",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/world-mind.js",
+      "to": "file:tools/ant-hive-world/world-state.js",
+      "target": "tools/ant-hive-world/world-state.js",
+      "required": true,
+      "specifier": "./world-state.js"
+    },
+    {
       "id": "da4ccf3008d8b0084f8a0aef01e277aa429f86762602c9f4c0b1bfcddb13f62c",
       "type": "static-import",
       "from": "file:tools/ai-bridge/lib/plan-audience-enrichment.cjs",
@@ -47649,6 +47743,15 @@
       "declared_target": ".claude/skills/owl/SKILL.md"
     },
     {
+      "id": "f26b0c08558b816776037379f0b5f69dad6809c8111b2027193f1c40b83a2493",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/run-live.js",
+      "to": "file:tools/ant-hive-world/world-state.js",
+      "target": "tools/ant-hive-world/world-state.js",
+      "required": true,
+      "specifier": "./world-state.js"
+    },
+    {
       "id": "f29ba91a0531c440cecf0060bb47b339ee72d69de16a3b3e9e3c5f0cf3fa2034",
       "type": "manifest-target",
       "from": "manifest-path:frameworks/paid-media/meta-creative-iteration/.claude/agents/meta-creative-iteration",
@@ -49182,8 +49285,8 @@
     }
   ],
   "counts": {
-    "nodes": 3767,
-    "edges": 2710,
+    "nodes": 3774,
+    "edges": 2716,
     "unresolved": 0
   }
 }

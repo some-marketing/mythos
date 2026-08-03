@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "fb240e89c7b0d79736ab7b3c4bee515edf2ac09bea9ed42644b781b3ea3fa669",
+    "expected_tree_sha256": "d728eeca94871132c77c56b47e089b4a8ed2274b56c67b55ae2a08e07fa25176",
     "expected_files": [
       {
         "path": "_dev/commands/.gitkeep",
@@ -83,6 +83,11 @@
       {
         "path": "_dev/concepts/simulation-scale-and-boundary-doctrine.md",
         "sha256": "65e8dc0c785bf9162a01ec074d3eb8f9239fe96a737d8adc1edd5ba30ed855bb",
+        "mode": 420
+      },
+      {
+        "path": "_dev/config/harness-protocol-propagation.json",
+        "sha256": "14727506cf9a45c36695913005bd3eb5a4f8e73f4ad7ba78460286f5a916b4a5",
         "mode": 420
       },
       {
@@ -626,6 +631,11 @@
         "mode": 420
       },
       {
+        "path": "_dev/reports/analysis/task-plans/mythos-full-parity-port__amendment__20260803T151800Z.json",
+        "sha256": "773d7ec1f302a7d43dfd6e98674f91e2ca515d9ce0db0bf868cfdf52912e6082",
+        "mode": 420
+      },
+      {
         "path": "_dev/reports/analysis/task-plans/README.md",
         "sha256": "a31d3daf190a4055acf3753d74f25bee1e6e32629e2f76648f86254398959f65",
         "mode": 420
@@ -633,11 +643,6 @@
       {
         "path": "_dev/reports/README.md",
         "sha256": "714a1c0b0fb6cb5e5774d482305ef9ab5a4dec81138ae88bcf933e56112491ae",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/task-plans/mythos-full-parity-port__amendment__20260803T151800Z.json",
-        "sha256": "773d7ec1f302a7d43dfd6e98674f91e2ca515d9ce0db0bf868cfdf52912e6082",
         "mode": 420
       },
       {
@@ -5121,6 +5126,11 @@
         "mode": 420
       },
       {
+        "path": "instructions/adapters/codewhale.yaml",
+        "sha256": "209f015d919132516b144987446ed8a6afd329ad6cf224455a1617af3f8a5cd4",
+        "mode": 420
+      },
+      {
         "path": "instructions/adapters/codex.yaml",
         "sha256": "1612b6b0a408b9bd1e0ac2f7d09233def14336906324b28a7ca6d51391174e1e",
         "mode": 420
@@ -5902,7 +5912,7 @@
       },
       {
         "path": "instructions/canonical/dispatch-routing-rule.yaml",
-        "sha256": "26351b161ad9593fb57b39941b14f8c2a35344151e157bc1a589bd8d0d266cab",
+        "sha256": "a80c8021dc99c6ff64d65dec35277a73a2ed1277b4489b0da2dd24a4cd565ea2",
         "mode": 420
       },
       {
@@ -5992,7 +6002,7 @@
       },
       {
         "path": "instructions/canonical/harness-runtime-contract.md",
-        "sha256": "c1c4085507c22281e2d36237f3bcbc7c501a50af2bfefc17701bb549cd5dc6e8",
+        "sha256": "84e4c21519c0a3e3e409358422077e74b3d333ca4acec9317865dfa77839196c",
         "mode": 420
       },
       {
@@ -6177,7 +6187,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "600a965f0d06586cdf44458936cec228d1025a0c36d31a53bf84c9eb476afdb8",
+        "sha256": "6de9a2644672dcc38b43a97c792fc2af65ac08e64637a36143654132d5fa2761",
         "mode": 420
       },
       {
@@ -6521,11 +6531,6 @@
         "mode": 420
       },
       {
-        "path": "tools/ant-hive-world/EVENT-SCHEMA.md",
-        "sha256": "91185f471b30b20f99532984a287c35d6dff520821dfe8db9c12cfc2bab49bf3",
-        "mode": 420
-      },
-      {
         "path": "tools/ant-hive-world/__tests__/dashboard.test.cjs",
         "sha256": "3bec1baadbf811e1898f407cf96abb6fe918bb166b0ae73487f05fee76a21982",
         "mode": 420
@@ -6621,6 +6626,11 @@
         "mode": 420
       },
       {
+        "path": "tools/ant-hive-world/EVENT-SCHEMA.md",
+        "sha256": "91185f471b30b20f99532984a287c35d6dff520821dfe8db9c12cfc2bab49bf3",
+        "mode": 420
+      },
+      {
         "path": "tools/ant-hive-world/generate-blank-hive-seed.js",
         "sha256": "976fefe903042b383336c3d8cd02da0ef563f1a708fafe4045a27ac48b3cbe50",
         "mode": 420
@@ -6662,7 +6672,7 @@
       },
       {
         "path": "tools/ant-hive-world/run-live.js",
-        "sha256": "a5afd4bd8024e5632d8e9112e9d56ea48e28418aa0eab08a4cbfaa285e350273",
+        "sha256": "1eabe9b85f1ada493f4034fb71ad17ae688fbed3c21665d161ff9360a4da9aec",
         "mode": 420
       },
       {
@@ -6683,6 +6693,16 @@
       {
         "path": "tools/ant-hive-world/validate-hive-mind.js",
         "sha256": "726687aa2fb1edc8c93bdb387ed4cb83780cbb23a83ad771a4747da8a95ad997",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/world-mind-harness.cjs",
+        "sha256": "eab2f9c0a5e3c88956fc3efe3184b6e45c51ceccf730affd0b0a97cc612882ef",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/world-mind.js",
+        "sha256": "09a87ac21b493ca4410bd381a15acd2351a1b7dc7eae467ceb464d68adaaaa0d",
         "mode": 420
       },
       {
@@ -7447,7 +7467,7 @@
       },
       {
         "path": "tools/codex/smos-launcher.js",
-        "sha256": "234474b95d82f346bae1cf8d81a6e5e65600cdabb611533ef08ffdcfa463eabf",
+        "sha256": "4f0d8955aec132d835cf4469bd8ec43fef04a72ca1f03bc1026d96733e0e79ad",
         "mode": 420
       },
       {
@@ -8501,9 +8521,19 @@
         "mode": 420
       },
       {
+        "path": "tools/hygiene/hash-dir.cjs",
+        "sha256": "3a7fbd7985432fedf18670d4c261d1f005a82bd8a74cb3cb78aab2cbc49aa7f6",
+        "mode": 420
+      },
+      {
         "path": "tools/hygiene/mirror-deliverables.sh",
         "sha256": "d62ebf61c1649ab7a9abfe0427524c0bab44bcce1e43d97cf9f61dae6ddc5058",
         "mode": 493
+      },
+      {
+        "path": "tools/hygiene/mythos-parity-check.cjs",
+        "sha256": "f55db58ce53729828ef41ee4215ca8b637ae960dae77995e9e737934bb2bda91",
+        "mode": 420
       },
       {
         "path": "tools/hygiene/sync-obsidian-vault.sh",
@@ -8633,6 +8663,11 @@
       {
         "path": "tools/instructions/README.md",
         "sha256": "5c9cde91ee16102f5837a577beac93862f6fe08f2bdfd6c3598da6927ebb65bc",
+        "mode": 420
+      },
+      {
+        "path": "tools/instructions/validate-harness-protocol-parity.cjs",
+        "sha256": "a0d7670ec5d5dcba88a4c153aca7240060152f7616a12198a36c359a1bf85382",
         "mode": 420
       },
       {
@@ -11582,7 +11617,7 @@
       },
       {
         "path": "tools/sessions/lib/active-session-registry.js",
-        "sha256": "fba6f6f6a71f6d2b4f62fc8b998ff3b1d0a3b80bb5c7deda68060300fbb38b45",
+        "sha256": "ff3020cbc5088b217b92c252c1100939bef38d085c9cb170c6f70927e81bf8d3",
         "mode": 420
       },
       {
@@ -11777,7 +11812,7 @@
       },
       {
         "path": "tools/signals/lib/__tests__/dispatch-bridge-target-command-compat.test.cjs",
-        "sha256": "2a0a33ed7319c8d9c4d8cc6aef824764f6e85021dcb82e3475310559ff943766",
+        "sha256": "5d61716195f893fbd9151caf2ab5b343dff08790d38995408def5fdcc50f452d",
         "mode": 420
       },
       {
@@ -11787,7 +11822,7 @@
       },
       {
         "path": "tools/signals/lib/__tests__/distinct-families.test.js",
-        "sha256": "ca36293d5e0a5d854913cb1ece91a6c7f92b5609e7c258170fc865045dbdb093",
+        "sha256": "913ef54eb7bec0e3b491df37b4027a02c236b79b18fd558ea6132da238d7f261",
         "mode": 420
       },
       {
@@ -11887,7 +11922,7 @@
       },
       {
         "path": "tools/signals/lib/actor-registry.js",
-        "sha256": "817d494559733dc70366b5d7d098243dcc5ddba78e750a9213a1d1c906d7aea5",
+        "sha256": "99c3c333b22910aafa8662ec0c0295d232f141ce341d52418e46baa9c24be49d",
         "mode": 420
       },
       {
@@ -11902,7 +11937,7 @@
       },
       {
         "path": "tools/signals/lib/bridge-target-policy.js",
-        "sha256": "5ca2629cfb252de64df8501dd627bb66c5bbd8813f9fe0c829b0c45a6d4bcdd5",
+        "sha256": "db2368c67dec242265e6ded80ffc2bf3a8b2f55d4d587ce0b1b1ebcb03a97f09",
         "mode": 420
       },
       {
@@ -11947,7 +11982,7 @@
       },
       {
         "path": "tools/signals/lib/dispatch-bridge.js",
-        "sha256": "7e41c684985e7eb11809e07f9663b849fdaf74a265546feebb462508ef786d5f",
+        "sha256": "7a7c05c5860632ddf7f16ba2c8bceea0ce54e56026efad88d45572ca2b8d20c8",
         "mode": 420
       },
       {
@@ -12042,7 +12077,7 @@
       },
       {
         "path": "tools/signals/lib/target-command-policy.cjs",
-        "sha256": "b3d7972ee926b63b5c26a48d936d925bbcdf2c3f4be1c2c14a5b20e1d6ca10f0",
+        "sha256": "ca1d6591f304f3f780bfc583de52249d6319bf0b328ecc47ca837d6ab8f2e0af",
         "mode": 420
       },
       {
@@ -13669,9 +13704,9 @@
     "package_script_count": 203,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "600a965f0d06586cdf44458936cec228d1025a0c36d31a53bf84c9eb476afdb8",
-    "graph_nodes": 3767,
-    "graph_edges": 2710
+    "graph_sha256": "6de9a2644672dcc38b43a97c792fc2af65ac08e64637a36143654132d5fa2761",
+    "graph_nodes": 3774,
+    "graph_edges": 2716
   },
   "runtime_exclusions": [
     ".git/**",

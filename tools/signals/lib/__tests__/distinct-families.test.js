@@ -28,6 +28,7 @@ test('familyForTarget maps each bridge target to its lab family', () => {
   assert.equal(familyForTarget('gemini'), 'google');
   assert.equal(familyForTarget('claude'), 'anthropic');
   assert.equal(familyForTarget('codex'), 'openai');
+  assert.equal(familyForTarget('codewhale'), 'deepseek');
   assert.equal(familyForTarget('ollama'), 'local');
   assert.equal(familyForTarget('openrouter'), 'openrouter-multi');
   assert.equal(familyForTarget('nonexistent'), null);
@@ -74,12 +75,30 @@ test('bridge target policies carry a family field', () => {
 
 test('reachable families have non-empty current_models', () => {
   // The bundle: families we can actually reach must list their models.
-  for (const id of ['gemini', 'claude', 'codex', 'openrouter', 'ollama']) {
+  for (const id of ['gemini', 'claude', 'codex', 'codewhale', 'openrouter', 'ollama']) {
     const p = BRIDGE_TARGET_POLICIES[id];
     const t = p && p.transports && p.transports[p.default_transport];
     assert.ok(t && Array.isArray(t.current_models) && t.current_models.length,
       `${id} default transport should list current_models`);
   }
+});
+
+test('codewhale is a registered deepseek-family target with deepseek-v4-flash', () => {
+  const p = BRIDGE_TARGET_POLICIES.codewhale;
+  assert.ok(p, 'codewhale policy should exist');
+  assert.equal(p.family, 'deepseek');
+  const t = p.transports[p.default_transport];
+  assert.ok(t.current_models.includes('deepseek-v4-flash'));
+  assert.match(t.launch_contract, /codewhale exec/);
+  assert.equal(familyForTarget('codewhale'), 'deepseek');
+  // selectDistinctFamily can resolve codewhale as a distinct lane from an
+  // onshore origin when the payload is NOT sensitive.
+  const pick = selectDistinctFamily('anthropic', { riskTier: 'high', sensitive: false });
+  assert.ok(pick);
+  assert.ok(MODEL_FAMILIES.deepseek.members.includes('codewhale'));
+  // And the safety invariant holds: sensitive never routes to deepseek.
+  const sensitive = selectDistinctFamily('anthropic', { riskTier: 'high', sensitive: true });
+  assert.notEqual(sensitive.family, 'deepseek');
 });
 
 const { selectByUseCase } = require('../bridge-target-policy');

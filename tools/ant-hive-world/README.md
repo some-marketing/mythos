@@ -122,18 +122,18 @@ that's supposed to demonstrate learning from scratch. Baking in a
   (`lore-engine/generate-entry.js`) is intentionally generic ("an ant
   colony simulation's browsable wiki") rather than tied to any specific
   fictional setting.
-- **`embodiment-bridge/`** (not ported): the source project's
+- **`embodiment-bridge/`** (ported, sanitized): the source project's
   containment/remote-execution bridge for running the physics simulation
-  on a separate machine. This is excluded because it is genuinely
-  inseparable from private infrastructure -- it hardcodes a specific
-  remote hostname as its default target, ships a release-gate checker tied
-  to one specific historical containment plan and its Docker image
-  digests, and its client/server split only makes sense against that
-  specific remote host's setup. `embodiment/` (the local physics smoke test
-  the bridge would eventually run remotely) is fully portable and is
-  included; the remote-execution wrapper around it is not, and forcing an
-  extraction would have shipped broken, host-specific plumbing rather than
-  a working generic tool.
+  on a separate machine. Ported with the private-infrastructure specifics
+  stripped: the remote hostname, the operator username/path, the pinned
+  image digest, and the containment-plan amendment IDs are replaced by
+  environment-driven configuration (ANT_HIVE_EMBODIMENT_HOST,
+  ANT_HIVE_EMBODIMENT_IMAGE_DIGEST, ANT_HIVE_EMBODIMENT_STAGE_DIR) with
+  generic fallbacks, so the mechanism ships while the actual simulation's
+  private specifics stay local. `embodiment/` (the local physics smoke test
+  the bridge would eventually run remotely) remains fully portable and is
+  included; only the operator-held host configuration is kept out of the
+  tree.
 - **A subset of `untrained-network.test.cjs`'s regression tests** (10 tests)
   still asserts specific checksum-verified fixture data embedded in
   private planning documents that recorded one historical

@@ -10289,6 +10289,76 @@
       "mode": 420
     },
     {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/bridge_scene.xml",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/bridge_scene.xml",
+      "sha256": "6c06cc20b0724aea3b69d80c334110147751f79930c840b5e02795595fcf912c",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/bridge_step.py",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/bridge_step.py",
+      "sha256": "07e7e44bf3cceb29e604f1af08551fa08d26eaf8d82104717a1f9c3202d9094d",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/bridge-client.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/bridge-client.js",
+      "sha256": "dd738c2a662274ef1aa055c1ae050c2dd5ace158ce14f13780885a5e14d480d0",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/bridge-network.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/bridge-network.js",
+      "sha256": "b6dc115d81498f5a86511f9372110c8dfd698e79d4cf89f16452eadd730bbe77",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/check-containment-gate.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/check-containment-gate.js",
+      "sha256": "60e04e54f2d4944d51b4600fbd0e27aa98f1aead8e1a0e283f11c0ec7734d5b5",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/Dockerfile",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/Dockerfile",
+      "sha256": "bce02465eb587e13fdbc252db634717b7834ee89e01f87993c5fd18741580b0d",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/requirements-lock.txt",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/requirements-lock.txt",
+      "sha256": "e7293a6c8a62a65c7ba53246765b573df95e8936e0bcf5be6b39c9aa2ba5b051",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/verify-containment.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/verify-containment.js",
+      "sha256": "8f10e8b58c3fd51f91468d152676c532a4772c78bcb06e0f162eb1887eaf8796",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/verify-s1-roundtrip.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/verify-s1-roundtrip.js",
+      "sha256": "8bb681c6d67a4e4e7c6f2282c37692ff774b3be1cf981f7f82ecd8a933ccf6ed",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/verify-s2-perception.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/verify-s2-perception.js",
+      "sha256": "b27d9ff2eb81b9337eda2cfc044fbf92d70ca21a491c076937cbef0010f93c60",
+      "mode": 420
+    },
+    {
       "id": "file:tools/ant-hive-world/embodiment/requirements.txt",
       "type": "file",
       "path": "tools/ant-hive-world/embodiment/requirements.txt",
@@ -10383,7 +10453,7 @@
       "id": "file:tools/ant-hive-world/README.md",
       "type": "file",
       "path": "tools/ant-hive-world/README.md",
-      "sha256": "3e29f86bd6ecc45351d31531d07a9ae919f7335f86ef15a307571117f3ede92a",
+      "sha256": "cc1cb6331499102922cfb33afe09a7018401fe42f6cd968ad3aa4f51e5dfb295",
       "mode": 420
     },
     {
@@ -26545,6 +26615,15 @@
       "specifier": "../boot-dead-session-reaper.cjs"
     },
     {
+      "id": "1680c6a82045c24af015ac3894c0296fc780a8890916fb475474ac12744d38d9",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/embodiment-bridge/verify-s1-roundtrip.js",
+      "to": "file:tools/ant-hive-world/embodiment-bridge/bridge-client.js",
+      "target": "tools/ant-hive-world/embodiment-bridge/bridge-client.js",
+      "required": true,
+      "specifier": "./bridge-client"
+    },
+    {
       "id": "16aed9d470bfbd97b6a7a5e73554be31628a9490ad90fb161824b1f5ccd8829f",
       "type": "static-import",
       "from": "file:tools/seo-validation/run.js",
@@ -26852,6 +26931,15 @@
       "target": ".claude/commands/audit-framework.md",
       "required": true,
       "declared_target": ".claude/commands/audit-framework.md"
+    },
+    {
+      "id": "194dd400e9eaebf1d62d875db685dcfd4f806d1e2cb817b4270d7a4fcad95ee4",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/embodiment-bridge/bridge-network.js",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "../untrained-network.js"
     },
     {
       "id": "1955c2f476bb810a1c252a909c31982741ac02389d65b66f7dd2f41645586a09",
@@ -31081,6 +31169,15 @@
       "specifier": "../../verify/lib/signal.cjs"
     },
     {
+      "id": "453a453d483a4366bbb69bcfb237e67a25677dc2e85631a367fb5568d41d6fbc",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/embodiment-bridge/verify-s2-perception.js",
+      "to": "file:tools/ant-hive-world/embodiment-bridge/bridge-network.js",
+      "target": "tools/ant-hive-world/embodiment-bridge/bridge-network.js",
+      "required": true,
+      "specifier": "./bridge-network"
+    },
+    {
       "id": "45424a906310fe7f27a8ed7cc0b8c5eb4af9fe480e48ead79bed67a152afaf41",
       "type": "static-import",
       "from": "file:tools/hygiene/auto-commit.js",
@@ -33611,6 +33708,15 @@
       "target": "tools/instructions/lib/schema/canonical-system.schema.json",
       "required": true,
       "declared_target": "tools/instructions/lib/schema/canonical-system.schema.json"
+    },
+    {
+      "id": "6023c70a2bd084baf85839cd053d98e5f0d9b93c576d1dc73d342f8a42aa5670",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/embodiment-bridge/verify-s2-perception.js",
+      "to": "file:tools/ant-hive-world/embodiment-bridge/bridge-client.js",
+      "target": "tools/ant-hive-world/embodiment-bridge/bridge-client.js",
+      "required": true,
+      "specifier": "./bridge-client"
     },
     {
       "id": "602bfc2e10f274073faa511fb3214219ad87eca8182c2987abfc5dafb355700d",
@@ -49071,8 +49177,8 @@
     }
   ],
   "counts": {
-    "nodes": 3763,
-    "edges": 2701,
+    "nodes": 3773,
+    "edges": 2705,
     "unresolved": 0
   }
 }

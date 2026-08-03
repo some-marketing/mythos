@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "5dbafe49769b53a4056d59eb2487e74b5943daccc372ee8e0a535cc8f7b321b9",
+    "expected_tree_sha256": "cc0445c493f523ac4cb4918743dff39443857a9040b1cd8450a8b411ef944214",
     "expected_files": [
       {
         "path": "_dev/commands/.gitkeep",
@@ -481,6 +481,11 @@
         "mode": 420
       },
       {
+        "path": "_dev/reports/analysis/task-plans/mythos-full-parity-port__amendment__20260803T145526Z.json",
+        "sha256": "e3710ba2faf8c489885cf6d5304be8c390036a9a84cfd63d5a7b9e1469dd238a",
+        "mode": 420
+      },
+      {
         "path": "_dev/reports/analysis/task-plans/README.md",
         "sha256": "a31d3daf190a4055acf3753d74f25bee1e6e32629e2f76648f86254398959f65",
         "mode": 420
@@ -488,11 +493,6 @@
       {
         "path": "_dev/reports/README.md",
         "sha256": "714a1c0b0fb6cb5e5774d482305ef9ab5a4dec81138ae88bcf933e56112491ae",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/task-plans/mythos-full-parity-port__amendment__20260803T145526Z.json",
-        "sha256": "e3710ba2faf8c489885cf6d5304be8c390036a9a84cfd63d5a7b9e1469dd238a",
         "mode": 420
       },
       {
@@ -6032,7 +6032,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "b7ea9a205329875e3ea94ad7e11b20226a579645c18393dfa878b95e684b1da5",
+        "sha256": "fabc0c4771aedeaa665f28f2dbcb16d03543e0364d40665c486e76ce74e2e4d4",
         "mode": 420
       },
       {
@@ -6446,6 +6446,56 @@
         "mode": 420
       },
       {
+        "path": "tools/ant-hive-world/embodiment-bridge/bridge_scene.xml",
+        "sha256": "6c06cc20b0724aea3b69d80c334110147751f79930c840b5e02795595fcf912c",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/bridge_step.py",
+        "sha256": "07e7e44bf3cceb29e604f1af08551fa08d26eaf8d82104717a1f9c3202d9094d",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/bridge-client.js",
+        "sha256": "dd738c2a662274ef1aa055c1ae050c2dd5ace158ce14f13780885a5e14d480d0",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/bridge-network.js",
+        "sha256": "b6dc115d81498f5a86511f9372110c8dfd698e79d4cf89f16452eadd730bbe77",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/check-containment-gate.js",
+        "sha256": "60e04e54f2d4944d51b4600fbd0e27aa98f1aead8e1a0e283f11c0ec7734d5b5",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/Dockerfile",
+        "sha256": "bce02465eb587e13fdbc252db634717b7834ee89e01f87993c5fd18741580b0d",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/requirements-lock.txt",
+        "sha256": "e7293a6c8a62a65c7ba53246765b573df95e8936e0bcf5be6b39c9aa2ba5b051",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/verify-containment.js",
+        "sha256": "8f10e8b58c3fd51f91468d152676c532a4772c78bcb06e0f162eb1887eaf8796",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/verify-s1-roundtrip.js",
+        "sha256": "8bb681c6d67a4e4e7c6f2282c37692ff774b3be1cf981f7f82ecd8a933ccf6ed",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/verify-s2-perception.js",
+        "sha256": "b27d9ff2eb81b9337eda2cfc044fbf92d70ca21a491c076937cbef0010f93c60",
+        "mode": 420
+      },
+      {
         "path": "tools/ant-hive-world/embodiment/requirements.txt",
         "sha256": "99d5cc2dfdc8da431280b166b28e1661eec23e657947fa558f5191e14132f5d5",
         "mode": 420
@@ -6512,7 +6562,7 @@
       },
       {
         "path": "tools/ant-hive-world/README.md",
-        "sha256": "3e29f86bd6ecc45351d31531d07a9ae919f7335f86ef15a307571117f3ede92a",
+        "sha256": "cc1cb6331499102922cfb33afe09a7018401fe42f6cd968ad3aa4f51e5dfb295",
         "mode": 420
       },
       {
@@ -13514,9 +13564,9 @@
     "package_script_count": 203,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "b7ea9a205329875e3ea94ad7e11b20226a579645c18393dfa878b95e684b1da5",
-    "graph_nodes": 3763,
-    "graph_edges": 2701
+    "graph_sha256": "fabc0c4771aedeaa665f28f2dbcb16d03543e0364d40665c486e76ce74e2e4d4",
+    "graph_nodes": 3773,
+    "graph_edges": 2705
   },
   "runtime_exclusions": [
     ".git/**",

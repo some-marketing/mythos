@@ -507,3 +507,83 @@ test('sweepExpired does NOT sweep a dir whose ledger session_id mismatches the d
   assert.equal(fs.existsSync(dir), true, 'mismatched-session_id dir must not be swept');
   assert.deepEqual(result.sweptDirs, []);
 });
+
+test('setCurrentSessionId grounds the machine-wide _current-id sidecar', (t) => {
+  const dataDir = withTempRegistry(t);
+  registry.setCurrentSessionId('session-alpha');
+  assert.equal(registry.getCurrentSessionId(), 'session-alpha');
+  const sidecar = path.join(dataDir, '_current-id');
+  assert.ok(fs.existsSync(sidecar), '_current-id sidecar written');
+  assert.equal(fs.readFileSync(sidecar, 'utf8').trim(), 'session-alpha');
+  // idempotent overwrite
+  registry.setCurrentSessionId('session-beta');
+  assert.equal(registry.getCurrentSessionId(), 'session-beta');
+});
+
+test('setCurrentSessionId refuses an empty/absent session id', (t) => {
+  withTempRegistry(t);
+  assert.throws(() => registry.setCurrentSessionId(''), /sessionId is required/);
+  assert.throws(() => registry.setCurrentSessionId(null), /sessionId is required/);
+});
+
+test('adoptSessionCustody merges prior write-log paths with adopted_from provenance', (t) => {
+  const dataDir = withTempRegistry(t);
+  const prior = 'prior-session-1';
+  const current = 'current-session-2';
+  const priorDir = path.join(dataDir, prior);
+  fs.mkdirSync(priorDir, { recursive: true });
+  fs.writeFileSync(
+    path.join(priorDir, 'write_log.json'),
+    `${JSON.stringify({ session_id: prior, paths: [
+      { path: '_dev/reports/analysis/foo.md', at: '2026-08-03T00:00:00.000Z', tool: 'Write' },
+      { path: 'tools/something.cjs', at: '2026-08-03T00:00:00.000Z', tool: 'Edit' }
+    ] }, null, 2)}\n`
+  );
+
+  const res = registry.adoptSessionCustody({ fromSessionId: prior, toSessionId: current, now: '2026-08-03T12:00:00.000Z' });
+  assert.equal(res.adopted, true);
+  assert.equal(res.adopted_count, 2);
+  assert.deepEqual(res.paths.sort(), ['_dev/reports/analysis/foo.md', 'tools/something.cjs']);
+
+  const log = JSON.parse(fs.readFileSync(path.join(dataDir, current, 'write_log.json'), 'utf8'));
+  assert.equal(log.paths.length, 2);
+  assert.ok(log.paths.every((e) => e.adopted_from === prior), 'every merged entry carries adopted_from provenance');
+  assert.ok(log.paths.every((e) => e.at === '2026-08-03T12:00:00.000Z'), 'entries stamped with adoption time');
+});
+
+test('adoptSessionCustody is idempotent — re-adoption adds nothing', (t) => {
+  const dataDir = withTempRegistry(t);
+  const prior = 'prior-dup';
+  const current = 'current-dup';
+  const priorDir = path.join(dataDir, prior);
+  fs.mkdirSync(priorDir, { recursive: true });
+  fs.writeFileSync(
+    path.join(priorDir, 'write_log.json'),
+    `${JSON.stringify({ session_id: prior, paths: [
+      { path: 'a.txt', at: 'x', tool: 'Write' }
+    ] }, null, 2)}\n`
+  );
+  registry.adoptSessionCustody({ fromSessionId: prior, toSessionId: current });
+  const res = registry.adoptSessionCustody({ fromSessionId: prior, toSessionId: current });
+  assert.equal(res.adopted, false);
+  assert.equal(res.adopted_count, 0);
+  assert.equal(res.reason, 'all-paths-already-owned');
+  const log = JSON.parse(fs.readFileSync(path.join(dataDir, current, 'write_log.json'), 'utf8'));
+  assert.equal(log.paths.length, 1, 'dedupe keeps exactly one entry');
+});
+
+test('adoptSessionCustody with no prior write-log is a fail-open no-op', (t) => {
+  const dataDir = withTempRegistry(t);
+  const res = registry.adoptSessionCustody({ fromSessionId: 'ghost-session', toSessionId: 'current-x' });
+  assert.equal(res.adopted, false);
+  assert.equal(res.adopted_count, 0);
+  assert.equal(res.reason, 'no-prior-write-log');
+  assert.equal(fs.existsSync(path.join(dataDir, 'current-x', 'write_log.json')), false);
+});
+
+test('adoptSessionCustody rejects invalid or self-adoption session ids', (t) => {
+  withTempRegistry(t);
+  assert.equal(registry.adoptSessionCustody({ fromSessionId: '', toSessionId: 'x' }).reason, 'invalid-session-ids');
+  assert.equal(registry.adoptSessionCustody({ fromSessionId: 'x', toSessionId: '' }).reason, 'invalid-session-ids');
+  assert.equal(registry.adoptSessionCustody({ fromSessionId: 'same', toSessionId: 'same' }).reason, 'invalid-session-ids');
+});

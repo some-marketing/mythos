@@ -9,6 +9,7 @@ const {
   listActive,
   getSession,
   getCurrentSessionId,
+  setCurrentSessionId,
   setCurrentTask
 } = require('./lib/active-session-registry');
 
@@ -125,6 +126,16 @@ function main() {
       expectedIntervalMs: args.expected_interval_ms,
       workingSurface: args.surface
     });
+    // Ground the machine-wide current-session sidecar so write-ledger and
+    // custody hooks resolve the SAME session id even when the harness sets no
+    // CLAUDE_* env (codewhale registers a session but no env reaches Bash).
+    if (result && result.session_id) {
+      try {
+        setCurrentSessionId(result.session_id);
+      } catch (error) {
+        // best-effort; registration succeeded, sidecar write is advisory
+      }
+    }
   } else if (command === 'heartbeat') {
     result = heartbeat(requireSessionId(args));
   } else if (command === 'close') {

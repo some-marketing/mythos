@@ -16,6 +16,17 @@ function getSessionId(payload) {
   if (payload && payload.session_id) return payload.session_id;
   if (process.env.CLAUDE_SESSION_ID) return process.env.CLAUDE_SESSION_ID;
   if (process.env.CLAUDE_SESSION) return process.env.CLAUDE_SESSION;
+  // Identity parity with pretool-git-custody-gate.cjs: fall back to the
+  // active-session registry `_current-id` sidecar before the day bucket. The
+  // codewhale harness registers a session but sets no CLAUDE_* env, so without
+  // this its writes land in day-* and its own custody set stays empty.
+  try {
+    // Resolve relative to this hook (not CLAUDE_PROJECT_DIR), so the registry
+    // lookup is stable under test fixtures that redirect the project dir.
+    const registry = require(path.join(__dirname, '..', '..', 'sessions', 'lib', 'active-session-registry.js'));
+    const id = registry.getCurrentSessionId();
+    if (id) return id;
+  } catch (_) { /* sidecar absent or registry unreadable — fall through */ }
   return 'day-' + new Date().toISOString().slice(0, 10);
 }
 

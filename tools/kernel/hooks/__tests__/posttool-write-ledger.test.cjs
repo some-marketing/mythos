@@ -63,3 +63,45 @@ test('posttool-write-ledger - records written files per session', async (t) => {
     delete process.env.CLAUDE_PROJECT_DIR;
   }
 });
+
+test('posttool-write-ledger - falls back to _current-id sidecar when no env/payload session id', async (t) => {
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'smos-write-ledger-sidecar-'));
+  const originalSessionEnv = {
+    CLAUDE_SESSION_ID: process.env.CLAUDE_SESSION_ID,
+    CLAUDE_SESSION: process.env.CLAUDE_SESSION,
+    MYTHOS_ACTIVE_SESSION_DIR: process.env.MYTHOS_ACTIVE_SESSION_DIR
+  };
+
+  try {
+    process.env.CLAUDE_PROJECT_DIR = tmpDir;
+    delete process.env.CLAUDE_SESSION_ID;
+    delete process.env.CLAUDE_SESSION;
+    // Point the active-session registry at the fixture dir (same tree the hook
+    // writes into) and ground the _current-id sidecar.
+    process.env.MYTHOS_ACTIVE_SESSION_DIR = path.join(tmpDir, '_dev', 'state', 'active-sessions');
+    const sidecarDir = process.env.MYTHOS_ACTIVE_SESSION_DIR;
+    fs.mkdirSync(sidecarDir, { recursive: true });
+    fs.writeFileSync(path.join(sidecarDir, '_current-id'), 'sidecar-grounded-session\n');
+
+    const payload = {
+      // no session_id — the fallback must resolve via the sidecar
+      tool_name: 'Write',
+      tool_input: { file_path: 'from/sidecar.txt' }
+    };
+    main(payload);
+
+    const logFile = path.join(sidecarDir, 'sidecar-grounded-session', 'write_log.json');
+    assert.ok(fs.existsSync(logFile), 'write log lands in the sidecar-grounded session dir');
+    const log = JSON.parse(fs.readFileSync(logFile, 'utf8'));
+    assert.strictEqual(log.paths.length, 1);
+    assert.strictEqual(log.paths[0].path, 'from/sidecar.txt');
+  } finally {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+    delete process.env.CLAUDE_PROJECT_DIR;
+    delete process.env.MYTHOS_ACTIVE_SESSION_DIR;
+    if (originalSessionEnv.CLAUDE_SESSION_ID) process.env.CLAUDE_SESSION_ID = originalSessionEnv.CLAUDE_SESSION_ID;
+    else delete process.env.CLAUDE_SESSION_ID;
+    if (originalSessionEnv.CLAUDE_SESSION) process.env.CLAUDE_SESSION = originalSessionEnv.CLAUDE_SESSION;
+    else delete process.env.CLAUDE_SESSION;
+  }
+});

@@ -315,6 +315,79 @@ test('runConsumeBoundary: unknown scope exits 3 with SCOPE_NOT_FOUND, empty stdo
   assert.equal(lib.listPending(opts).length, 2, 'a fuzzy miss must never consume a pending marker');
 });
 
+test('consume adopts custody of the prior session referenced by the marker', () => {
+  const opts = tmpRoot();
+  const regDir = path.join(opts.root, '_dev', 'state', 'active-sessions');
+  const priorSid = 'prior-session-custody-1';
+  const registry = require('../lib/active-session-registry.js');
+  registry.setDataDir(regDir);
+  // register the crossing (current) session so resolveCurrentSessionId finds it
+  registry.registerSession({
+    sessionId: 'current-session-custody-1'
+  });
+
+  const handoffPath = path.join(opts.root, '_dev', 'handoffs', 'custody-a.md');
+  fs.mkdirSync(path.dirname(handoffPath), { recursive: true });
+  fs.writeFileSync(handoffPath, '# Handoff\n\n## Current State\nTake over.\n');
+
+  // seed the prior session's write-log (what the crossed session left dirty)
+  const priorDir = path.join(regDir, priorSid);
+  fs.mkdirSync(priorDir, { recursive: true });
+  fs.writeFileSync(
+    path.join(priorDir, 'write_log.json'),
+    JSON.stringify({ session_id: priorSid, paths: [
+      { path: '_dev/reports/analysis/from-prior.md', at: '2026-08-03T00:00:00.000Z', tool: 'Write' },
+      { path: 'tools/from-prior.cjs', at: '2026-08-03T00:00:00.000Z', tool: 'Edit' }
+    ] }, null, 2) + '\n'
+  );
+
+  lib.writeMarker(marker('system-custody-a', {
+    handoff_path: '_dev/handoffs/custody-a.md',
+    session_id: priorSid,
+    recommended_next_command: '/run-plan custody-a'
+  }), opts);
+
+  try {
+    const result = runConsumeBoundary('system-custody-a', opts);
+    assert.equal(result.exitCode, 0);
+    assert.match(result.stdout, /consumed boundary marker for system-custody-a/);
+    assert.match(result.stdout, /adopted custody from session prior-session-custody-1: 2 path\(s\)/);
+    assert.ok(result.adoption && result.adoption.adopted, 'adoption reported in result');
+    assert.equal(result.adoption.adopted_count, 2);
+
+    // current session ledger now owns the prior paths with provenance
+    const currentSid = registry.getCurrentSessionId();
+    assert.ok(currentSid, '_current-id grounded to the crossing session');
+    const log = JSON.parse(fs.readFileSync(path.join(regDir, currentSid, 'write_log.json'), 'utf8'));
+    const adopted = log.paths.filter((e) => e.adopted_from === priorSid);
+    assert.equal(adopted.length, 2, 'prior paths adopted into current ledger');
+  } finally {
+    registry.resetDataDir();
+  }
+});
+
+test('consume without a marker session_id performs no custody adoption', () => {
+  const opts = tmpRoot();
+  const regDir = path.join(opts.root, '_dev', 'state', 'active-sessions');
+  const registry = require('../lib/active-session-registry.js');
+  registry.setDataDir(regDir);
+
+  lib.writeMarker(marker('system-no-custody', {
+    handoff_path: '_dev/handoffs/no-custody.md',
+    recommended_next_command: '/whats-next'
+  }), opts);
+
+  try {
+    const result = runConsumeBoundary('system-no-custody', opts);
+    assert.equal(result.exitCode, 0);
+    assert.equal(result.prior_session_id, null, 'no prior session to adopt');
+    assert.equal(result.adoption, null, 'no adoption attempted');
+    assert.doesNotMatch(result.stdout, /adopted custody/);
+  } finally {
+    registry.resetDataDir();
+  }
+});
+
 test('runConsumeBoundary: unknown scope with zero pending markers still exits 3 and reports no pending scopes', () => {
   const opts = tmpRoot();
   const result = runConsumeBoundary('anything', opts);

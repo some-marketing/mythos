@@ -106,8 +106,10 @@ function defaultCommands() {
 
 // Harness session id, best-effort, for the SessionOpenPacket/1.0 additive
 // `session_id` field. Order: explicit env (the harness sets one of these),
-// then the durable active-session sidecar. Never fabricated — genuinely
-// unavailable resolves to null with a source note.
+// then the durable active-session sidecar, then (best-effort) the newest live
+// registered session — so a harness that registered a session but set no env
+// (codewhale) still resolves to its own id and grounds the sidecar. Never
+// fabricated — genuinely unavailable resolves to null with a source note.
 function resolveSessionId(projectRoot) {
   const env = process.env;
   const fromEnv = env.CLAUDE_SESSION_ID || env.MYTHOS_SESSION_ID || env.CODEX_SESSION_ID || '';
@@ -117,6 +119,21 @@ function resolveSessionId(projectRoot) {
     const id = fs.readFileSync(sidecar, 'utf8').trim();
     if (id) return { session_id: id, session_id_source: 'active-session-sidecar' };
   } catch { /* sidecar absent — fall through to null */ }
+  try {
+    const registry = require(path.join(projectRoot, 'tools', 'sessions', 'lib', 'active-session-registry.js'));
+    const active = registry.listActive({});
+    if (active.length === 1) {
+      return { session_id: active[0].session_id, session_id_source: 'sole-active-session' };
+    }
+    if (active.length > 1) {
+      const newest = active
+        .slice()
+        .sort((a, b) => String(b.last_heartbeat || '').localeCompare(String(a.last_heartbeat || '')))[0];
+      if (newest && newest.session_id) {
+        return { session_id: newest.session_id, session_id_source: 'newest-active-session' };
+      }
+    }
+  } catch { /* registry unreadable — fall through to null */ }
   return { session_id: null, session_id_source: 'unavailable' };
 }
 
@@ -525,6 +542,19 @@ function runNewSessionInner(projectRoot, opts) {
 
   const sessionInfo = resolveSessionId(projectRoot);
   const pendingBoundaries = surfacePendingBoundaries(projectRoot, scopeArg);
+
+  // Ground the machine-wide current-session sidecar at session open: a harness
+  // that registered a session but set no env (codewhale) leaves _current-id
+  // absent, which silently orphans its write-ledger and custody set. Writing
+  // it here is idempotent and never fabricates — only a genuinely resolved
+  // session id is grounded.
+  if (sessionInfo.session_id) {
+    try {
+      const sidecar = path.join(projectRoot, '_dev', 'state', 'active-sessions', '_current-id');
+      fs.mkdirSync(path.dirname(sidecar), { recursive: true });
+      fs.writeFileSync(sidecar, `${sessionInfo.session_id}\n`);
+    } catch { /* best-effort; grounding is advisory, never blocks open */ }
+  }
 
   const generatedAt = new Date().toISOString();
   const packet = {

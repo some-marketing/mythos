@@ -26,6 +26,37 @@
 
 const { consume, resolveScope, listPending } = require('./lib/boundary-markers.cjs');
 const { buildResumePacket } = require('./lib/resume-packet.cjs');
+const registry = require('./lib/active-session-registry.js');
+
+// Resolve the CURRENT session id for a crossing. Precedence mirrors the
+// custody gate: env → _current-id sidecar → (best-effort) newest live
+// registered session. Never fabricates an id: if nothing resolves, returns
+// null and the caller skips custody adoption (surfacing the gap).
+function resolveCurrentSessionId() {
+  const env = process.env;
+  const fromEnv = env.MYTHOS_SESSION_ID || env.CLAUDE_SESSION_ID || env.CODEX_SESSION_ID || '';
+  if (fromEnv) return { session_id: fromEnv, source: 'env' };
+
+  const sidecar = registry.getCurrentSessionId();
+  if (sidecar) return { session_id: sidecar, source: 'current-id-sidecar' };
+
+  try {
+    const active = registry.listActive({});
+    if (active.length === 1) {
+      return { session_id: active[0].session_id, source: 'sole-active-session' };
+    }
+    if (active.length > 1) {
+      const newest = active
+        .slice()
+        .sort((a, b) => String(b.last_heartbeat || '').localeCompare(String(a.last_heartbeat || '')))[0];
+      if (newest && newest.session_id) {
+        return { session_id: newest.session_id, source: 'newest-active-session' };
+      }
+    }
+  } catch (_) { /* best-effort; fall through to null */ }
+
+  return { session_id: null, source: 'unresolved' };
+}
 
 function runConsumeBoundary(scope, rootOpts = { mode: 'hard' }) {
   const lines = [];
@@ -64,6 +95,47 @@ function runConsumeBoundary(scope, rootOpts = { mode: 'hard' }) {
   const pendingMarker = resolved.marker;
   const consumedPath = consume(scope, rootOpts);
   lines.push(`consumed boundary marker for ${scope} -> ${consumedPath}`);
+
+  // Custody adoption on crossing: the marker's session_id is the session this
+  // crossing takes over. Merge its write-log paths into the current session's
+  // ledger so clean-house sees them as OWN and the custody gate classifies
+  // them own — the new session inherits custody of the session it crossed.
+  const priorSessionId = pendingMarker && pendingMarker.payload
+    ? pendingMarker.payload.session_id
+    : null;
+  let adoption = null;
+  if (priorSessionId) {
+    const current = resolveCurrentSessionId();
+    if (current && current.session_id) {
+      try {
+        // Ground the current-session sidecar so subsequent hooks (write-ledger,
+        // custody gate, auto-commit) resolve the same crossing session.
+        registry.setCurrentSessionId(current.session_id);
+      } catch (_) { /* best-effort; adoption still proceeds */ }
+      adoption = registry.adoptSessionCustody({
+        fromSessionId: priorSessionId,
+        toSessionId: current.session_id
+      });
+      if (adoption && adoption.adopted && adoption.adopted_count > 0) {
+        lines.push(
+          `adopted custody from session ${priorSessionId}: ` +
+          `${adoption.adopted_count} path(s) merged into ${current.session_id}`
+        );
+      } else {
+        lines.push(
+          `custody adoption skipped for prior session ${priorSessionId}: ` +
+          `${(adoption && adoption.reason) || 'no paths to adopt'} (current session: ${current.session_id})`
+        );
+      }
+    } else {
+      lines.push(
+        `CUSTODY ADOPTION GAP: marker for ${scope} references prior session ${priorSessionId} ` +
+        `but no current session id resolved (${current ? current.source : 'unknown'}). ` +
+        `Adopt manually via a session that registers _current-id first.`
+      );
+    }
+  }
+
   if (pendingMarker && pendingMarker.payload) {
     const packet = buildResumePacket(pendingMarker.payload, {
       ...rootOpts,
@@ -71,7 +143,13 @@ function runConsumeBoundary(scope, rootOpts = { mode: 'hard' }) {
     });
     lines.push(packet.text.trimEnd());
   }
-  return { exitCode: 0, stdout: `${lines.join('\n')}\n`, stderr: '' };
+  return {
+    exitCode: 0,
+    stdout: `${lines.join('\n')}\n`,
+    stderr: '',
+    adoption,
+    prior_session_id: priorSessionId
+  };
 }
 
 function main() {

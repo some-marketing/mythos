@@ -39,7 +39,12 @@ stripped -- what ships here is the mechanism, not the story.
   Both mechanisms are fully inert by default (opt-in via config) so the
   base training loop is unaffected unless explicitly enabled.
 - **`run-live.js`** -- an attended run driver: sets up N hives, gives each a
-  fresh network, and drives ticks to a durable JSONL run log.
+  fresh network, and drives ticks to a durable JSONL run log. `--arm` records
+  experimental-arm membership and defaults to `uninstructed`.
+- **`event-schema.js`** / **`EVENT-SCHEMA.md`** -- the versioned contract for
+  audit, geometry, and run-log rows: process-stable run/episode/arm identity,
+  a tick on every event, and embedded state-at-time-of-use. Historical rows
+  remain readable and are classified as `pre-contract`.
 - **`dashboard.js`** -- a zero-dependency local HTTP dashboard (plain HTML +
   polling JS, nothing leaves localhost) showing live resource/territory/
   population state and exposing every tunable simulation constant as a form
@@ -129,12 +134,13 @@ that's supposed to demonstrate learning from scratch. Baking in a
   included; the remote-execution wrapper around it is not, and forcing an
   extraction would have shipped broken, host-specific plumbing rather than
   a working generic tool.
-- **A subset of `untrained-network.test.cjs`'s regression tests** (10 of the
-  original 40) asserted specific checksum-verified fixture data embedded in
+- **A subset of `untrained-network.test.cjs`'s regression tests** (10 tests)
+  still asserts specific checksum-verified fixture data embedded in
   private planning documents that recorded one historical
   policy-collapse investigation (an "entropy collapse" incident and its
   fix). Those fixtures are not portable -- they live in planning artifacts
-  outside this export. The 30 remaining tests (all self-contained: network
+  outside this export, so those tests report missing-fixture failures here.
+  The remaining tests (all self-contained: network
   init, forward pass, `decide`/`trainStep` mechanics, the entropy-bonus
   schedule and reactive-controller inertness/hysteresis contracts, and the
   general non-fixture collapse/recovery regression tests defined directly
@@ -148,10 +154,12 @@ that's supposed to demonstrate learning from scratch. Baking in a
 
 ## Tests
 
-`__tests__/` (11 files, 126 passing tests via `node --test __tests__/*.cjs`):
+`__tests__/` (13 files; 138 self-contained tests pass, while the 10 historical
+fixture-dependent tests described above report their missing inputs):
 harness/tick mechanics, world-state resource/territory/pheromone/ecosystem/
 material dynamics, the untrained network's init/decide/train contracts, the
-schema validator, the lore-engine's trigger-detection/generation/watch loop
+event and hive-state schema validators, the lore-engine's
+trigger-detection/generation/watch loop
 (with a mocked local-model dispatch, no network calls in tests), the
 dashboard's snapshot/wiki-read endpoints, and a 3-item isolation checklist
 (separate sandboxes, no reach-outside-this-directory requires, fault

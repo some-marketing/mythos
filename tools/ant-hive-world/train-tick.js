@@ -18,13 +18,61 @@ const { decide, trainStep, applyUpkeep, forward, encodeState, computeEntropy } =
 // mild negative because it wastes a turn without result. `starved` currently
 // means upkeep crossed from positive food to zero; persistent zero-food ticks
 // are not flagged (the open reward-design gap recorded in the run debrief).
-function computeReward(applyResult, starved) {
+// REWARD CONTRACT v2 (2026-08-03) -- fixes an inverted foraging incentive.
+//
+// v1 penalized `starved`, the positive-to-zero CROSSING. Because a hive already
+// at zero food never crosses, v1 produced this ordering at food === 0:
+//
+//   idle   : 0 -> 0, no crossing, reward  0
+//   gather : 0 -> 1 -> 0, CROSSING fires, reward +1 - 2 = -1
+//
+// A starving hive was therefore rewarded for staying starved and punished for
+// acquiring food -- the strongest possible wrong signal, applied exactly in the
+// state where foraging matters most. This is the same coupling that made
+// `starve_crossings` track food gathers (fixed there as a metric, 2026-08-02;
+// the identical defect survived here in the reward until now). Found by a
+// third-family review of PR #6, 2026-08-03.
+//
+// v2 penalizes `foodExhausted`, the STATE of ending a tick with nothing, which
+// the v1 comment already conceded was the real gap ("persistent zero-food ticks
+// are not flagged"). Under v2:
+//
+//   food 0, idle   : ends 0, exhausted, reward  0 - 2 = -2
+//   food 0, gather : ends 0, exhausted, reward +1 - 2 = -1   (gather now wins)
+//   food 1, gather : ends 1, not exhausted, reward       +1
+//
+// A SUCCESSFUL gather now weakly dominates idling in every state, which is the
+// invariant v1 violated. SCOPE (codex distinct review): this holds for
+// successful gathers only — a FAILED gather while exhausted scores -2.5 against
+// idle's -2, since the wasted-turn penalty stacks on exhaustion. That is a
+// deliberate "don't forage at an empty patch" signal, pinned by test.
+//
+// NOTE FOR ANALYSIS: v2 changes reward semantics, so cumulative reward is NOT
+// comparable across the version boundary — every persisted row carries
+// reward_contract_version, and any summarizer pooling rows must reject mixed or
+// missing versions. `starved` is unchanged and remains the published crossing
+// metric.
+//
+// UNRESOLVED (codex, requires an experiment not a review): penalizing the
+// exhaustion STATE means a persistently starving hive now takes -2 every tick
+// rather than once. REINFORCE here has no baseline, so a state-wide penalty
+// multiplies directly into the sampled-action gradient; in expectation an
+// action-independent penalty cancels, but over finite trajectories it raises
+// gradient magnitude and variance. Failed actions now reach -2.5, exceeding the
+// +2 build-streak magnitude the entropy schedule and controller were calibrated
+// against. Those controls are mechanically unchanged but NOT behaviourally
+// revalidated. A seeded starvation-regime comparison is required before v2
+// results are trusted for learning-dynamics claims.
+const REWARD_CONTRACT_VERSION = 2;
+
+function computeReward(applyResult, foodExhausted) {
   let reward = 0;
   if (applyResult.verb === 'gather') reward += applyResult.applied ? 1 : -0.5;
   else if (applyResult.verb === 'build') reward += applyResult.applied ? 2 : -0.5;
   else if (applyResult.verb === 'claim-territory') reward += applyResult.applied ? 1.5 : -0.5;
-  // 'idle' contributes 0 -- a genuine, unpenalized choice.
-  if (starved) reward -= 2;
+  // 'idle' contributes 0 from the action itself -- a genuine choice -- but it
+  // no longer escapes the exhaustion penalty by having avoided the crossing.
+  if (foodExhausted) reward -= 2;
   return reward;
 }
 
@@ -165,11 +213,15 @@ function trainTick(hive, worldStatePath, network, rng, liveConfig = {}, tickInde
   const worldState = require('./world-state.js').readWorldState(worldStatePath);
   const action = decide(network, hiveState, worldState, rng, liveConfig, tickIndex);
 
-  const result = tick(hive, worldStatePath, () => action, liveConfig, rng);
-  const { hiveState: afterUpkeep, starved } = applyUpkeep(result.hiveState, liveConfig.upkeep_cost_food);
+  const eventTick = tickIndex === undefined ? undefined : tickIndex + 1;
+  const result = tick(hive, worldStatePath, () => action, liveConfig, rng, eventTick);
+  const { hiveState: afterUpkeep, starved, foodExhausted } = applyUpkeep(result.hiveState, liveConfig.upkeep_cost_food);
   fs.writeFileSync(hive.hiveStatePath, JSON.stringify(afterUpkeep, null, 2));
 
-  const reward = computeReward({ verb: action.verb, applied: result.applied }, starved);
+  // Reward keys off the exhaustion STATE, not the crossing (contract v2 --
+  // see REWARD_CONTRACT_VERSION above). `starved` is still returned and logged
+  // unchanged, so the published crossing metric keeps its meaning.
+  const reward = computeReward({ verb: action.verb, applied: result.applied }, foodExhausted);
   const scheduleWeight = computeEntropyBonusWeight(tickIndex, liveConfig);
   // Reactive controller (resolved s4-reactive-controller gate): reads the
   // PREVIOUS tick's own-hive policy_entropy_post_update from controllerState
@@ -210,7 +262,9 @@ function trainTick(hive, worldStatePath, network, rng, liveConfig = {}, tickInde
     action: action.verb,
     applied: result.applied,
     starved,
+    food_exhausted: foodExhausted,
     reward,
+    reward_contract_version: REWARD_CONTRACT_VERSION,
     policy_entropy: action.policy_entropy,
     policy_entropy_post_update: policyEntropyPostUpdate,
     forced_exploration: action.forced_exploration,

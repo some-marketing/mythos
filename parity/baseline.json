@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "4c7a65466263ee82495ed7c104ced8588d613da72488f3af12c6d674f9e43c93",
+    "expected_tree_sha256": "fb240e89c7b0d79736ab7b3c4bee515edf2ac09bea9ed42644b781b3ea3fa669",
     "expected_files": [
       {
         "path": "_dev/commands/.gitkeep",
@@ -633,6 +633,11 @@
       {
         "path": "_dev/reports/README.md",
         "sha256": "714a1c0b0fb6cb5e5774d482305ef9ab5a4dec81138ae88bcf933e56112491ae",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/task-plans/mythos-full-parity-port__amendment__20260803T151800Z.json",
+        "sha256": "773d7ec1f302a7d43dfd6e98674f91e2ca515d9ce0db0bf868cfdf52912e6082",
         "mode": 420
       },
       {
@@ -6172,7 +6177,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "929b4568d0ae494340e3776224b89e99ad6d26c64223131986815cc17ea531cb",
+        "sha256": "600a965f0d06586cdf44458936cec228d1025a0c36d31a53bf84c9eb476afdb8",
         "mode": 420
       },
       {
@@ -6516,6 +6521,76 @@
         "mode": 420
       },
       {
+        "path": "tools/ant-hive-world/EVENT-SCHEMA.md",
+        "sha256": "91185f471b30b20f99532984a287c35d6dff520821dfe8db9c12cfc2bab49bf3",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/dashboard.test.cjs",
+        "sha256": "3bec1baadbf811e1898f407cf96abb6fe918bb166b0ae73487f05fee76a21982",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/event-schema.test.cjs",
+        "sha256": "cbf4874a3fa6fffa49afa9ec5b2abef13a0d5e95bdf66c46f38c016b215d38b9",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/harness.test.cjs",
+        "sha256": "db550d86fe7616c801ec9bc95ffd55c2a2818fea3c54ec55c81f6dad3a44b97a",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/isolation.test.cjs",
+        "sha256": "45d66d1c5545d37a5be0b8c57a9199b373884b56154824813a05fb882ef15ded",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/llm-decide.test.cjs",
+        "sha256": "01e88bef76ca0b47278fa92b875775adc5f68bc489acfc97d6232aac3fb22ea1",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/lore-engine-determinism.test.cjs",
+        "sha256": "9f4a403f99ecdfb1693f5d0e30fa72763527a243018f1b83fff429db4ed902b4",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/lore-engine-watch.test.cjs",
+        "sha256": "57eadd1da4a4c09b968ccc3e2c91710e65ed1b856c823bc2714c9990a41c5130",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/lore-engine.test.cjs",
+        "sha256": "79f14606638209b76c929d7d9deb2c4aa520d1e1762ac0d591643323d43447ea",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/reward-contract.test.cjs",
+        "sha256": "9dac4bb4d848b33a5a8d83a6c5f2f2eecb2c8e40a2624fb742bfb63e664c4ed0",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/untrained-network.test.cjs",
+        "sha256": "41c7cd8da5c3509c83cbeeb77aaeae6bfa20a899d9ddd6998ad7973ad9d9c77d",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/validate-hive-mind.test.cjs",
+        "sha256": "a884fe3b7737827957d5a69ce5b0fa24fc2a8067d47a5bc2ed709ed0227de404",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/world-state-materials.test.cjs",
+        "sha256": "a20a14d07a2673dac25c0ee8ffd7c90e11e578bc93751b95a9aae86800079ba2",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/world-state-pheromones.test.cjs",
+        "sha256": "822b4ebe14fc6ebbb3bb70447d59b3bbfe0c665f1d4c9904b69622e54037bde7",
+        "mode": 420
+      },
+      {
         "path": "tools/ant-hive-world/dashboard.js",
         "sha256": "09a6ee968ab0430ab67e747a93dc8775d679aa7f257e91acb37dcbe12f088cff",
         "mode": 420
@@ -6541,13 +6616,18 @@
         "mode": 420
       },
       {
+        "path": "tools/ant-hive-world/event-schema.js",
+        "sha256": "9f6458e30c0b44203e9fe92ab52b0b5e0e52a33404bd690e456395fa2121d9ac",
+        "mode": 420
+      },
+      {
         "path": "tools/ant-hive-world/generate-blank-hive-seed.js",
         "sha256": "976fefe903042b383336c3d8cd02da0ef563f1a708fafe4045a27ac48b3cbe50",
         "mode": 420
       },
       {
         "path": "tools/ant-hive-world/harness.js",
-        "sha256": "8fe453d8032a9416d2eab7eea858a066863af85b8de528d12573ce544905b409",
+        "sha256": "75169f7ffd100dff323f8efc02b5a5af8df2eceded941881dcc8b8255bd48ad8",
         "mode": 420
       },
       {
@@ -6577,12 +6657,12 @@
       },
       {
         "path": "tools/ant-hive-world/README.md",
-        "sha256": "736bb54fd6a717ded2a80fa6846b72d59d380df1c2da0e62d94fdb4ebbd86521",
+        "sha256": "3e29f86bd6ecc45351d31531d07a9ae919f7335f86ef15a307571117f3ede92a",
         "mode": 420
       },
       {
         "path": "tools/ant-hive-world/run-live.js",
-        "sha256": "363824027cbf52573e3bbbb3bc8500322fd4e863e9ca7f263a3e8024a45c7531",
+        "sha256": "a5afd4bd8024e5632d8e9112e9d56ea48e28418aa0eab08a4cbfaa285e350273",
         "mode": 420
       },
       {
@@ -6592,12 +6672,12 @@
       },
       {
         "path": "tools/ant-hive-world/train-tick.js",
-        "sha256": "4a2ab4203ef8b171b443e57f3280667ea1dcfbb528f2dfc0f6352c9eb3ee9150",
+        "sha256": "332e9898ef10dca8d726e53fac31f4abdd63e7cd99db13671cf13c0ca2cd61af",
         "mode": 420
       },
       {
         "path": "tools/ant-hive-world/untrained-network.js",
-        "sha256": "6134350b2b80cd320685c4354cac901923f1411badc267e4866d6b678d23b7e3",
+        "sha256": "a7750d0611c17dea3dea0df7617abf4e0b990766fdb10c211be012a00a40e341",
         "mode": 420
       },
       {
@@ -13589,9 +13669,9 @@
     "package_script_count": 203,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "929b4568d0ae494340e3776224b89e99ad6d26c64223131986815cc17ea531cb",
-    "graph_nodes": 3749,
-    "graph_edges": 2677
+    "graph_sha256": "600a965f0d06586cdf44458936cec228d1025a0c36d31a53bf84c9eb476afdb8",
+    "graph_nodes": 3767,
+    "graph_edges": 2710
   },
   "runtime_exclusions": [
     ".git/**",

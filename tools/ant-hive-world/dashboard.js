@@ -17,6 +17,7 @@ const fs = require('fs');
 const path = require('path');
 const http = require('http');
 const { readWorldState } = require('./world-state.js');
+const { detect: detectMirror } = require('./mirror-detector.js');
 const { DEFAULT_CONFIG, readLiveConfig, writeLiveConfig } = require('./live-config.js');
 
 function argVal(flag, def) {
@@ -104,6 +105,51 @@ function computeSnapshot() {
   const worldState = readWorldState(WORLD_STATE_PATH);
   const hives = discoverHives(SANDBOX_ROOT);
 
+  // Culture & construction lens (operator 2026-08-03: "see what the minds are
+  // building... understand if a culture is forming"). Pure read surface over
+  // data the sim already records -- no behavior change to the sim itself.
+  //   - build_ledger: every geometry_log entry (who built what, where, when,
+  //     and the stockpile state at the moment of construction).
+  //   - behavior: per-hive verb histogram + action success rate over the
+  //     audit-log (what each colony actually DOES, and how often it lands).
+  //   - territory_conflicts: count of territory-contested events (inter-hive
+  //     competition -- the raw material of culture).
+  //   - pheromones: the communication trails currently in the shared world.
+  const buildLedger = (worldState && Array.isArray(worldState.geometry_log))
+    ? worldState.geometry_log.slice(-40).map((e) => ({
+        hive: e.hive,
+        kind: e.kind,
+        coords: e.coords,
+        at: e.at,
+        wood_at_build: e.state_at_event && e.state_at_event.stockpile ? e.state_at_event.stockpile.wood : null,
+        food_at_build: e.state_at_event && e.state_at_event.stockpile ? e.state_at_event.stockpile.food : null
+      }))
+    : [];
+
+  const behavior = {};
+  const territoryConflicts = {};
+  for (const h of hives) {
+    const entries = readJsonlEntries(path.join(SANDBOX_ROOT, h.identity, 'audit-log.jsonl')).slice(-300);
+    const verbs = {};
+    let applied = 0;
+    let contested = 0;
+    for (const e of entries) {
+      if (e.event === 'territory-contested') contested += 1;
+      if (e.verb) verbs[e.verb] = (verbs[e.verb] || 0) + 1;
+      if (e.applied) applied += 1;
+    }
+    behavior[h.identity] = {
+      window_entries: entries.length,
+      action_success_rate: entries.length ? applied / entries.length : null,
+      verbs
+    };
+    territoryConflicts[h.identity] = contested;
+  }
+
+  const pheromones = (worldState && worldState.pheromones)
+    ? Object.fromEntries(Object.entries(worldState.pheromones).map(([k, v]) => [k, v]))
+    : {};
+
   const territoryCounts = {};
   if (worldState && worldState.territory) {
     for (const owner of Object.values(worldState.territory)) {
@@ -152,7 +198,15 @@ function computeSnapshot() {
         ? h.hiveState.hive_state.worker_dispatch_state.last_action
         : null,
       last_audit_event: h.lastAudit
-    }))
+    })),
+    culture: {
+      build_ledger: buildLedger,
+      behavior,
+      territory_conflicts: territoryConflicts,
+      pheromones,
+      total_builds: buildLedger.length,
+      mirror: (worldState && Array.isArray(worldState.geometry_log) && worldState.geometry_log.length) ? detectMirror(worldState) : null
+    }
   };
 }
 
@@ -246,6 +300,15 @@ const PAGE = `<!doctype html>
   <div id="ecosystem"></div>
 </div>
 
+<div class="culture" style="margin-top:1.5rem;">
+  <h2 class="section">Culture & construction</h2>
+  <div class="colonies" id="culture-behavior" style="margin-top:0.8rem;"></div>
+  <div class="resources" style="margin-top:1rem;">
+    <h3 style="font-size:0.9rem;color:#e0a949;margin:0 0 0.4rem;">Build ledger (last 40)</h3>
+    <div id="culture-builds" style="font-size:0.8rem;color:#c2ab8d;line-height:1.5;"></div>
+  </div>
+</div>
+
 <div class="colonies" id="colonies" style="margin-top:1.5rem;"></div>
 
 <div class="wiki">
@@ -307,7 +370,47 @@ async function refresh() {
     </div>
   \`).join('');
 
+  renderCulture(data);
   renderWikiTabs(data.colonies.map((c) => c.identity));
+}
+
+// Culture lens (operator 2026-08-03): surface what the minds build and the
+// behavioral fingerprints that hint at a forming culture. Pure render -- no
+// sim writes.
+function renderCulture(data) {
+  const culture = data.culture || {};
+  const behaviorEl = document.getElementById('culture-behavior');
+  const verbs = (b) => Object.entries(b.verbs || {}).sort((a, c) => c[1] - a[1]).map(([v, n]) => v + ':' + n).join('  ·  ') || '(no actions yet)';
+  behaviorEl.innerHTML = (data.colonies || []).map((c) => {
+    const b = (culture.behavior || {})[c.identity] || {};
+    const conflicts = (culture.territory_conflicts || {})[c.identity] || 0;
+    return '<div class="colony">' +
+      '<h2>' + c.identity + '</h2>' +
+      '<div class="row"><span>Action success (last 300)</span><b>' + (b.action_success_rate != null ? Math.round(b.action_success_rate * 100) + '%' : '—') + '</b></div>' +
+      '<div class="row"><span>Territory contests (win/lose signals)</span><b>' + conflicts + '</b></div>' +
+      '<div class="row"><span>Behavior fingerprint</span><b style="font-size:0.75rem;font-weight:400;">' + verbs(b) + '</b></div>' +
+      '</div>';
+  }).join('') || '<div class="row">(none yet)</div>';
+
+  const mirror = culture.mirror;
+  if (mirror) {
+    const mirrorEl = document.createElement('div');
+    mirrorEl.style.cssText = 'margin-top:1rem;padding:0.8rem 1rem;border:1px solid rgba(243,233,219,0.13);border-radius:10px;background:#261d13;';
+    const color = mirror.verdict === 'mirror-forming' ? '#7ee081' : mirror.verdict === 'approaching-null' ? '#e0a949' : '#c2ab8d';
+    mirrorEl.innerHTML = '<h3 style="font-size:0.9rem;color:"#e0a949";margin:0 0 0.4rem;">Mirror gate (three-sided experiment)</h3>' +
+      '<div class="row"><span>Gate: "will they create a simulation that mirrors this one"</span><b style="color:"' + color + '";">' + mirror.verdict + '</b></div>' +
+      '<div class="row"><span>Builds / features</span><b>' + mirror.n_builds + ' / ' + mirror.n_features + '</b></div>' +
+      '<div class="row"><span>Observed mean nearest-feature dist</span><b>' + (mirror.observed != null ? mirror.observed.toFixed(2) : '—') + '</b></div>' +
+      '<div class="row"><span>Null mean ± sd</span><b>' + (mirror.null_mean != null ? mirror.null_mean.toFixed(2) + ' ± ' + mirror.null_sd.toFixed(2) : '—') + '</b></div>' +
+      '<div class="row"><span>p-value (permutation, ' + mirror.shuffles + ')</span><b>' + (mirror.p_value != null ? mirror.p_value.toFixed(3) : '—') + '</b></div>' +
+      '<div style="font-size:0.72rem;color:#8a7a63;margin-top:0.4rem;">p&lt;0.05 = mirror forming; p&lt;0.2 = approaching null; else null-consistent. Panel appears only when the detector runs cleanly.</div>';
+    buildsEl.insertAdjacentElement('beforebegin', mirrorEl);
+  }
+  const buildsEl = document.getElementById('culture-builds');
+  const ledger = culture.build_ledger || [];
+  buildsEl.innerHTML = ledger.length ? ledger.map((e) =>
+    '<div class="row"><span>' + e.hive + ' ' + (e.kind || '?') + ' @ [' + (e.coords || []).join(',') + ']</span><b>wood ' + (e.wood_at_build != null ? e.wood_at_build : '—') + '</b></div>'
+  ).join('') : '<div class="row">(no structures built yet)</div>';
 }
 
 // --- Wiki view (plan ant-hive-world-lore-wiki-layer, S3) -----------------

@@ -219,7 +219,7 @@ function decide(network, hiveState, worldState, rng, liveConfig = {}, tickIndex)
     const tileId = chooseForageTile(worldState, 'wood', foragerRng, trailFollowProb);
     return { verb: 'gather', resourceKey: 'wood', amount: 1, tileId, _action_index: chosenIndex, _probs: probs, policy_entropy: policyEntropy, forced_exploration: forced };
   }
-  if (chosenVerb === 'build') return { verb: 'build', entry: { kind: 'chamber', coords: [Math.floor(input[5]), 0, 0] }, _action_index: chosenIndex, _probs: probs, policy_entropy: policyEntropy, forced_exploration: forced };
+  if (chosenVerb === 'build') return { verb: 'build', entry: { kind: 'chamber', coords: null }, _action_index: chosenIndex, _probs: probs, policy_entropy: policyEntropy, forced_exploration: forced }; // coords null: the network decides IF to build, not WHERE -- harness resolves placement onto owned territory (operator 2026-08-03, mirror-gate geometry)
   if (chosenVerb === 'claim-territory') return { verb: 'claim-territory', tileId: `tile-${Math.floor((rng || Math.random)() * 100)}`, _action_index: chosenIndex, _probs: probs, policy_entropy: policyEntropy, forced_exploration: forced };
   return { verb: 'idle', _action_index: chosenIndex, _probs: probs, policy_entropy: policyEntropy, forced_exploration: forced };
 }

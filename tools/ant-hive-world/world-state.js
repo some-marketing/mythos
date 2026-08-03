@@ -39,6 +39,24 @@ function readWorldState(statePath) {
 // in a new spot rather than the same exhausted one recovering.
 const INITIAL_FOOD_SOURCE_COUNT = 5;
 const INITIAL_FOOD_SOURCE_AMOUNT = 8;
+// Spatial geometry (operator 2026-08-03, three-sided experiment gate):
+// tile-N labels map onto a 10x10 grid so the world has real coordinates a
+// mirror detector can correlate against. Pure helpers -- no behavior change
+// to existing tile semantics.
+const TILE_GRID_SIZE = 10;
+function tileToCoords(tileId) {
+  const m = /(?:^|-)(\d+)$/.exec(String(tileId));
+  if (!m) return null;
+  const n = parseInt(m[1], 10);
+  return [n % TILE_GRID_SIZE, Math.floor(n / TILE_GRID_SIZE), 0];
+}
+function coordsToTile(x, y) {
+  return `tile-${y * TILE_GRID_SIZE + x}`;
+}
+function parseTileIndex(tileId) {
+  const m = /(?:^|-)(\d+)$/.exec(String(tileId));
+  return m ? parseInt(m[1], 10) : null;
+}
 
 function seedFoodSources(count, amount) {
   const sources = {};
@@ -432,6 +450,10 @@ module.exports = {
   DEFAULT_MUD_CONVERSION_RATE,
   applyMaterialDynamics,
   DEFAULT_PHEROMONE_DECAY,
+  TILE_GRID_SIZE,
+  tileToCoords,
+  coordsToTile,
+  parseTileIndex,
   INITIAL_FOOD_SOURCE_COUNT,
   INITIAL_FOOD_SOURCE_AMOUNT,
   DEFAULT_FOOD_SOURCE_SPAWN_CHANCE,

@@ -120,7 +120,8 @@ test('run-live writes contracted rows with an explicit default arm and resolvabl
   assert.equal(result.status, 0, result.stderr);
 
   const runRows = readJsonl(path.join(root, 'run-log.jsonl'));
-  assert.equal(runRows.length, 2);
+  // 3 rows: hive-a, hive-b, and the world-mind coordination row (operator 2026-08-03).
+  assert.equal(runRows.length, 3);
   const context = {
     run_id: runRows[0].run_id,
     episode_id: runRows[0].episode_id,
@@ -131,6 +132,7 @@ test('run-live writes contracted rows with an explicit default arm and resolvabl
   assert.equal(new Set(runRows.map((row) => row.episode_id)).size, 1);
 
   for (const row of runRows) {
+    if (row.hive === 'world') continue; // world-mind row is run-log-only, no per-hive audit file
     const auditPath = path.join(root, row.hive, 'audit-log.jsonl');
     const auditTick = readJsonl(auditPath).find((entry) => entry.event === 'tick');
     assert.ok(auditTick, `missing audit tick for ${row.hive}`);

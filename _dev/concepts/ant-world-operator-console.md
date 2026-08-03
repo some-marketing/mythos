@@ -7,6 +7,16 @@
 > stands and is load-bearing here; its *framing* is retired.
 > Deliberate leg: carried forward from convene `20260803T003126Z-growing-dashboard-mind-legibility`
 > (kernel triad, consequence-grade) rather than re-run.
+>
+> **CONTRACT NOTICE (2026-08-03, after codex PR review).** The surface described here is a
+> **behavioural/event index that reports correlations**. It makes NO claim about what any
+> mind represents, means, or understands. Where the words *meaning*, *definition*,
+> *lexicon*, *understanding*, or *their language* appear below, they describe either the
+> operator's original request or a retired framing — they are never the contract. Any
+> workflow loading this concept should take the correlation contract, not the prose around
+> it. (This notice exists because correction C3 in the plan claimed those words had been
+> struck from the concept when they had only been struck from the plan — corrections do not
+> propagate themselves.)
 
 ## What the operator actually asked for
 
@@ -63,10 +73,20 @@ literally would manufacture a false impression of discovery:
   model. A token-to-English gloss would be translating our own vocabulary back to
   ourselves and presenting it as their understanding.
 
-**The honest and more useful construction: a term's meaning in their world is given by how
-they use it, not by its English word.** A lexicon entry is therefore a *grounded
-behavioural definition* derived entirely from logged facts, with our reading marked
-separately as ours:
+**The honest and more useful construction: record what a label CO-OCCURS WITH, and make no
+claim about what it means.** An index entry is therefore a *correlation record* derived
+entirely from logged facts, with our reading marked separately as ours and carrying no
+authority:
+
+> **SUPERSEDED FRAMING, RETAINED FOR PROVENANCE.** This section originally said a term's
+> *meaning* is given by how they use it, and called the entry a *grounded behavioural
+> definition*. Codex review (2026-08-03, PR #6) established that this re-imports the
+> representational claim the concept was written to avoid: counting events claims nothing,
+> but calling the counts a "meaning" or a "definition" does. The surface is a
+> **behavioural/event index reporting correlations**. The words *meaning*, *definition*,
+> *understanding*, *lexicon*, and *their language* carry no authority anywhere in this
+> document — where they survive below, they are describing the operator's original request
+> or the retired framing, never the contract.
 
 > **spire** — first built tick 1,204 by hive-0. Built 47 times across 3 episodes. 89% on
 > tiles adjacent to a depleted food source. Never built while stockpile > 12.

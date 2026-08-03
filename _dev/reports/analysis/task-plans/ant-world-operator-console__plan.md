@@ -337,6 +337,59 @@ should be abandoned rather than softened. That outcome is a real result, not a f
 **Dependency:** this protocol is unbuildable until S0 supplies tick and
 state-at-time-of-use. It therefore confirms rather than competes with C1's sequencing.
 
+### C8 — GitHub-review findings (codex, PR #6, 2026-08-03T01:59Z)
+
+The GitHub codex reviewer independently reproduced **three of gemini's findings without
+seeing gemini's review**. Independent convergence from two distinct families on the same
+three defects is the strongest evidence produced across this whole effort, and each is
+promoted from "a reviewer's opinion" to "established."
+
+**C8-1 (P1) — the zero-bank gather reward. FIXED.** Codex traced the identical arithmetic:
+action applies before upkeep (`train-tick.js:168-172`), `applyUpkeep` flags any
+positive-to-zero transition (`untrained-network.js:296-302`), so a hive at zero goes
+`0 → 1 → 0` and scores `+1 - 2 = -1`. Its words: *"the policy is trained away from the
+action needed to escape zero food, and the proposed reward/starvation panels would report
+this corrupted signal."* Fixed on the working branch as reward contract v2 (commits
+`0bbac6a6f`, `7f0610ef5`), verified by a separate codex pass which returned
+CORRECT-BUT-INCOMPLETE and whose findings are folded. **Not in this PR** — see C8-5.
+
+**C8-2 (P1) — arm-scoping does not isolate anything. RULING R3 IS INSUFFICIENT AS WRITTEN.**
+Both hives share one `WORLD_STATE_PATH` (`run-live.js:72-73,141-142`), and gathers, builds,
+claims, trails and ecosystem advancement all mutate it (`harness.js`). An instructed hive
+therefore changes the resources and observations the "uninstructed" hive experiences, so
+logging arm membership cannot support the claim that the environment taught the latter.
+**Correction: arms require independent world instances, not separate hives in one world.**
+R3's intent survives; its implementation does not. S4/S5 must not proceed on per-hive arms.
+
+**C8-3 (P1) — the permutation null is insufficient; C2b needs a pretrained baseline.**
+`llm-decide.js:19-35` prompts a pretrained model with the very world state the test later
+predicts from its emitted strings. Real labels can therefore beat shuffled labels purely
+because the base model already associates those words with those state features — with the
+colony having learned nothing — and the nonce control cannot detect that structured-prior
+path. **Correction: add a frozen / fresh-pretrained-policy baseline as a required arm.** A
+label counts only if it beats BOTH the permutation null and an untrained-colony baseline
+running the same model.
+
+**C8-4 (P1) — review provenance is unfalsifiable: `pinned_model: null`.** Every convene
+manifest in this PR records the harness name but not the model, so these artifacts cannot
+establish which model produced the claimed distinct-family evidence, nor whether it was
+tiered appropriately. This is a defect in the evidence itself, not in the design.
+**Correction: convene dispatches must record and disclose the actual model.** Until they
+do, every "distinct-family review" citation in this repo is weaker than it appears.
+
+**C8-5 (P2) — no `__plan.json` sibling.** `resolveTaskPlanPaths()` looks for `__plan.json`,
+so this plan ID resolves to `null` and the Markdown alone yields `plan-json-unreadable`.
+The plan is consequently invisible to review, visibility, audit, and `/run-plan` flows.
+The paired machine-readable artifact is required even while the verdict is CHANGES-REQUIRED.
+
+**C8-6 (P2) — C3 was not propagated to the concept. FIXED.** C3 claimed *meaning*,
+*definition*, *understanding*, *lexicon* and *their language* had been struck; they had been
+struck from this plan only, and survived in `_dev/concepts/ant-world-operator-console.md`,
+so any workflow loading the concept received the rejected representational framing. A
+contract notice and a superseded-framing marker now carry the correction into the concept
+itself. This is the recorded lesson *corrections do not propagate themselves*, observed a
+third time.
+
 ### C7 — a code-review profile cannot ratify the research construct
 
 The reviewer stated its own scope limit: sufficient to reject the plan as executable, too

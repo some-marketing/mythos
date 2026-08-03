@@ -1,3 +1,9 @@
+<!-- provenance -->
+> SANITIZED FOR PORTABILITY: the absolute local checkout prefix has been rewritten to
+> `<repo>/` so this artifact satisfies the repository parity check's
+> prohibited-content rule. No other character of the response was altered — the reviewer
+> text, its findings, and its citations are otherwise byte-identical to what was returned.
+
 # NOW / codex response
 
 - slot_id: now
@@ -16,9 +22,9 @@ The bulletin fixes the original substrate confound, but the current design does 
 
 Residual confound paths:
 
-- The same RNG currently drives action choice, forage targeting, food spawning, and ecosystem dynamics ([harness.js](/Users/admin/mythos/tools/ant-hive-world/harness.js:87), [train-tick.js](/Users/admin/mythos/tools/ant-hive-world/train-tick.js:166)). If selecting, shuffling, or posting a bulletin consumes draws, the arm changes world physics through RNG displacement. Bulletin logic needs a separate deterministic RNG stream; paired arms must consume identical draws.
-- Persisting a post through `writeWorldState` increments `seq`, changes `written_at`, serializes more data, and performs an atomic file replacement ([world-state.js](/Users/admin/mythos/tools/ant-hive-world/world-state.js:122)). Extra writes can change ordering, wall-clock deadline exposure, or which hive sees which round’s message. Post cadence and observation snapshot must be identical across arms, preferably without an additional world-state write.
-- Hive ticks are sequential, and every tick advances stochastic world dynamics ([harness.js](/Users/admin/mythos/tools/ant-hive-world/harness.js:163)). “Posted once per round” is underspecified until posting is fixed before both hives, after both hives, or against an immutable round-start snapshot.
+- The same RNG currently drives action choice, forage targeting, food spawning, and ecosystem dynamics ([harness.js](<repo>/tools/ant-hive-world/harness.js:87), [train-tick.js](<repo>/tools/ant-hive-world/train-tick.js:166)). If selecting, shuffling, or posting a bulletin consumes draws, the arm changes world physics through RNG displacement. Bulletin logic needs a separate deterministic RNG stream; paired arms must consume identical draws.
+- Persisting a post through `writeWorldState` increments `seq`, changes `written_at`, serializes more data, and performs an atomic file replacement ([world-state.js](<repo>/tools/ant-hive-world/world-state.js:122)). Extra writes can change ordering, wall-clock deadline exposure, or which hive sees which round’s message. Post cadence and observation snapshot must be identical across arms, preferably without an additional world-state write.
+- Hive ticks are sequential, and every tick advances stochastic world dynamics ([harness.js](<repo>/tools/ant-hive-world/harness.js:163)). “Posted once per round” is underspecified until posting is fixed before both hives, after both hives, or against an immutable round-start snapshot.
 - Expanded-network initialization consumes additional RNG and changes controller behavior. Exact null equivalence requires cloning the original 9×5 parameter submatrix, isolating initialization RNG, masking before entropy calculation and gradient computation, and keeping controller constants fixed by a predeclared derivation. Statistical similarity is weaker than numerical identity.
 
 Fixed write count is not fixed information volume. A null posted precisely when the sender has nothing communicates “sender has nothing.” Thus nullness remains endogenous even though writes are constant. For the correspondence test, presence, null schedule, confidence, actionability, recurrence, sender identity, and freshness must be yoked; only the tile↔sender-state mapping may change. Fixed cadence gives a valid result for a fixed-bandwidth channel, but it does not generalize to realistic voluntary communication. State that scope plainly.

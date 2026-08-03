@@ -19,6 +19,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { decorateEvent, processEventContext } = require('./event-schema.js');
 const {
   readWorldState,
   initialWorldState,
@@ -59,18 +60,37 @@ const BUILD_COST = { wood: 2 };
 // reinforcement to stay marked -- an unattended trail evaporates.
 const PHEROMONE_DEPOSIT = 1;
 
-function ensureSandbox(sandboxRoot, identity) {
+function ensureSandbox(sandboxRoot, identity, eventContext = processEventContext) {
   const dir = path.join(sandboxRoot, identity);
   fs.mkdirSync(dir, { recursive: true });
   return {
     dir,
     hiveStatePath: path.join(dir, 'hive-state.json'),
-    auditLogPath: path.join(dir, 'audit-log.jsonl')
+    auditLogPath: path.join(dir, 'audit-log.jsonl'),
+    eventContext,
+    nextEventTick: 1
   };
 }
 
-function appendAudit(auditLogPath, event) {
-  fs.appendFileSync(auditLogPath, JSON.stringify({ ts: new Date().toISOString(), ...event }) + '\n');
+function appendAudit(auditLogPath, event, eventContext, eventTick) {
+  const row = decorateEvent('audit', eventContext, eventTick, event);
+  fs.appendFileSync(auditLogPath, JSON.stringify({ ts: new Date().toISOString(), ...row }) + '\n');
+}
+
+function materialSourceContext(before, after, material) {
+  const keys = material === 'mud'
+    ? ['clay_sources', 'water_sources']
+    : [`${material}_sources`];
+  const beforeSources = Object.assign({}, ...keys.map((key) => before[key] || {}));
+  const afterSources = Object.assign({}, ...keys.map((key) => after[key] || {}));
+  const tileIds = Object.keys(beforeSources).filter((tileId) =>
+    (afterSources[tileId] || 0) < beforeSources[tileId]
+  );
+  return {
+    tile_id: tileIds.length === 1 ? tileIds[0] : null,
+    tile_ids: tileIds,
+    resource_depleted: Object.keys(afterSources).length === 0
+  };
 }
 
 // A single tick for ONE hive: sense -> decide -> apply -> log. `decideFn`
@@ -84,7 +104,9 @@ function appendAudit(auditLogPath, event) {
 // existing caller/test is unaffected. `rng` (optional, defaults to
 // Math.random) drives the ecosystem's stochastic processes (food-source
 // spawn, grazing) -- injectable for deterministic tests.
-function tick(hive, worldStatePath, decideFn, liveConfig = {}, rng = Math.random) {
+function tick(hive, worldStatePath, decideFn, liveConfig = {}, rng = Math.random, suppliedEventTick) {
+  const eventContext = hive.eventContext || processEventContext;
+  const eventTick = suppliedEventTick === undefined ? hive.nextEventTick++ : suppliedEventTick;
   const buildCostWood = liveConfig.build_cost_wood ?? BUILD_COST.wood;
   const pheromoneDeposit = liveConfig.pheromone_deposit ?? PHEROMONE_DEPOSIT;
   const pheromoneDecay = liveConfig.pheromone_decay; // undefined -> world-state.js's own default
@@ -95,13 +117,18 @@ function tick(hive, worldStatePath, decideFn, liveConfig = {}, rng = Math.random
 
   const action = decideFn({ hiveState, worldState });
   if (!VERBS.includes(action.verb)) {
-    appendAudit(hive.auditLogPath, { event: 'rejected-verb', verb: action.verb });
+    appendAudit(hive.auditLogPath, {
+      event: 'rejected-verb', hive: hiveState.identity, verb: action.verb,
+      stockpile: hiveState.hive_state.stockpile || {}, tile_id: action.tileId || null,
+      resource_depleted: null
+    }, eventContext, eventTick);
     return { hiveState, worldState, applied: false };
   }
 
   let applied = false;
   let stockpileCredit = null;
   let stockpileDebit = null;
+  let actionResourceDepleted = null;
   const currentStockpile = hiveState.hive_state.stockpile || {};
   if (action.verb === 'gather') {
     // Food is depleted from a SPECIFIC discrete source (action.tileId);
@@ -112,6 +139,9 @@ function tick(hive, worldStatePath, decideFn, liveConfig = {}, rng = Math.random
       : claimResource(worldState, action.resourceKey, action.amount || 1);
     applied = result.ok;
     worldState = result.state;
+    actionResourceDepleted = action.resourceKey === 'food'
+      ? !Object.prototype.hasOwnProperty.call(worldState.food_sources || {}, action.tileId)
+      : (worldState.resources?.[action.resourceKey] || 0) <= 0;
     if (applied) {
       stockpileCredit = { resourceKey: action.resourceKey, amount: action.amount || 1 };
       if (action.tileId) {
@@ -122,18 +152,36 @@ function tick(hive, worldStatePath, decideFn, liveConfig = {}, rng = Math.random
     const buildCost = { wood: buildCostWood };
     const canAfford = Object.entries(buildCost).every(([key, amt]) => (currentStockpile[key] || 0) >= amt);
     if (canAfford) {
-      worldState = appendGeometry(worldState, { hive: hiveState.identity, ...action.entry, at: new Date().toISOString() });
+      const geometryState = {
+        stockpile: { ...currentStockpile, wood: (currentStockpile.wood || 0) - buildCostWood },
+        tile_id: action.entry?.tileId || null,
+        coords: action.entry?.coords || null,
+        resource_depleted: (currentStockpile.wood || 0) - buildCostWood <= 0
+      };
+      worldState = appendGeometry(worldState, decorateEvent('geometry', eventContext, eventTick, {
+        hive: hiveState.identity, ...action.entry, at: new Date().toISOString(), state_at_event: geometryState
+      }));
       applied = true;
       stockpileDebit = buildCost;
+      actionResourceDepleted = geometryState.resource_depleted;
     } else {
-      appendAudit(hive.auditLogPath, { event: 'build-insufficient-materials', required: buildCost, have: currentStockpile });
+      appendAudit(hive.auditLogPath, {
+        event: 'build-insufficient-materials', hive: hiveState.identity, required: buildCost,
+        have: currentStockpile, stockpile: currentStockpile,
+        tile_id: action.entry?.tileId || null, coords: action.entry?.coords || null,
+        resource_depleted: (currentStockpile.wood || 0) <= 0
+      }, eventContext, eventTick);
     }
   } else if (action.verb === 'claim-territory') {
     const result = claimTerritory(worldState, action.tileId, hiveState.identity);
     applied = result.ok;
     worldState = result.state;
     if (!result.ok) {
-      appendAudit(hive.auditLogPath, { event: 'territory-contested', tileId: action.tileId, contested_by: result.contested_by });
+      appendAudit(hive.auditLogPath, {
+        event: 'territory-contested', hive: hiveState.identity, tileId: action.tileId,
+        tile_id: action.tileId || null, contested_by: result.contested_by,
+        stockpile: currentStockpile, resource_depleted: null
+      }, eventContext, eventTick);
     }
   }
   // 'idle' applies nothing -- a genuine no-op is a real, loggable choice.
@@ -182,6 +230,7 @@ function tick(hive, worldStatePath, decideFn, liveConfig = {}, rng = Math.random
   // unit tests. Diff discovered_types before/after and emit one audit event
   // per newly-discovered material, attributed to whichever hive's tick
   // happened to trigger the world-state advance this round.
+  const materialStateBefore = worldState;
   const discoveredBefore = new Set(worldState.discovered_types || []);
   worldState = applyMaterialDynamics(worldState, rng, {
     materialSpawnChance: liveConfig.material_spawn_chance,
@@ -191,14 +240,24 @@ function tick(hive, worldStatePath, decideFn, liveConfig = {}, rng = Math.random
   const newlyDiscovered = (worldState.discovered_types || []).filter((t) => !discoveredBefore.has(t));
 
   const nextWorldState = writeWorldState(worldStatePath, worldState);
-  appendAudit(hive.auditLogPath, { event: 'tick', verb: action.verb, applied, stockpile_credit: stockpileCredit, tileId: action.tileId });
+  appendAudit(hive.auditLogPath, {
+    event: 'tick', hive: hiveState.identity, verb: action.verb, applied,
+    stockpile_credit: stockpileCredit, stockpile_debit: stockpileDebit,
+    stockpile: nextStockpile, tileId: action.tileId,
+    tile_id: action.tileId || action.entry?.tileId || null,
+    coords: action.entry?.coords || null, resource_depleted: actionResourceDepleted
+  }, eventContext, eventTick);
   for (const material of newlyDiscovered) {
     // A distinct event NAME (not 'tick') -- this is a supplementary
     // annotation about the same round's environmental process, not a
     // separate game tick, so it must not be counted as one by anything
     // that increments a per-tick counter off audit-log 'tick' events
     // (e.g. lore-engine/detect-triggers.js's territory-throttle counter).
-    appendAudit(hive.auditLogPath, { event: 'material-discovered', material, applied: true });
+    appendAudit(hive.auditLogPath, {
+      event: 'material-discovered', hive: hiveState.identity, material, applied: true,
+      stockpile: nextStockpile,
+      ...materialSourceContext(materialStateBefore, worldState, material)
+    }, eventContext, eventTick);
   }
 
   return { hiveState: nextHiveState, worldState: nextWorldState, applied };
@@ -211,10 +270,10 @@ function tick(hive, worldStatePath, decideFn, liveConfig = {}, rng = Math.random
 // later) work the same way. Each hive's sandbox is independent;
 // the shared world-state file is the only common surface, same as the
 // 2-hive case.
-function setupHives(sandboxRoot, seeds, worldStatePath, resourcePool) {
+function setupHives(sandboxRoot, seeds, worldStatePath, resourcePool, eventContext = processEventContext) {
   const hives = {};
   for (const seed of seeds) {
-    const hive = ensureSandbox(sandboxRoot, seed.identity);
+    const hive = ensureSandbox(sandboxRoot, seed.identity, eventContext);
     fs.writeFileSync(hive.hiveStatePath, JSON.stringify(seed, null, 2));
     hives[seed.identity] = hive;
   }
@@ -225,15 +284,15 @@ function setupHives(sandboxRoot, seeds, worldStatePath, resourcePool) {
 // Introduce a hive into an ALREADY-RUNNING world (an NPC colony, or a
 // something-else colony added mid-run) -- does not touch the shared
 // world-state file or any other hive's sandbox; purely additive.
-function addHive(sandboxRoot, seed) {
-  const hive = ensureSandbox(sandboxRoot, seed.identity);
+function addHive(sandboxRoot, seed, eventContext = processEventContext) {
+  const hive = ensureSandbox(sandboxRoot, seed.identity, eventContext);
   fs.writeFileSync(hive.hiveStatePath, JSON.stringify(seed, null, 2));
   return hive;
 }
 
 // Backward-compatible 2-hive convenience wrapper over setupHives.
-function setupTwoHives(sandboxRoot, seedA, seedB, worldStatePath, resourcePool) {
-  const hives = setupHives(sandboxRoot, [seedA, seedB], worldStatePath, resourcePool);
+function setupTwoHives(sandboxRoot, seedA, seedB, worldStatePath, resourcePool, eventContext = processEventContext) {
+  const hives = setupHives(sandboxRoot, [seedA, seedB], worldStatePath, resourcePool, eventContext);
   return { hiveA: hives[seedA.identity], hiveB: hives[seedB.identity] };
 }
 

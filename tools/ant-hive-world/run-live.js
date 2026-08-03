@@ -17,7 +17,7 @@
 // same --sandbox-root separately; not spawned from here so the operator can
 // stop/restart the dashboard independently of the run).
 //
-// Usage: node run-live.js [--ticks N] [--forever] [--tick-interval-ms N] [--sandbox-root <dir>]
+// Usage: node run-live.js [--ticks N] [--forever] [--tick-interval-ms N] [--sandbox-root <dir>] [--arm <name>]
 //
 // --forever: keep running until the process receives SIGINT/SIGTERM (Ctrl-C
 // or `kill <pid>`) -- operator (2026-07-16): "just leave it running see what
@@ -36,6 +36,7 @@ const { generateBlankHiveSeed } = require('./generate-blank-hive-seed.js');
 const { createNetwork, mulberry32 } = require('./untrained-network.js');
 const { trainTick } = require('./train-tick.js');
 const { readLiveConfig, writeLiveConfig } = require('./live-config.js');
+const { createEventContext, decorateEvent, processEventContext } = require('./event-schema.js');
 
 function argVal(flag, def) {
   const i = process.argv.indexOf(flag);
@@ -52,6 +53,12 @@ const SANDBOX_ROOT = argVal('--sandbox-root', path.join(__dirname, '..', '..', '
 const WORLD_STATE_PATH = path.join(SANDBOX_ROOT, 'shared', 'world-state.json');
 const RUN_LOG_PATH = path.join(SANDBOX_ROOT, 'run-log.jsonl');
 const CONFIG_PATH = path.join(SANDBOX_ROOT, 'live-config.json');
+const ARM_ID = argVal('--arm', 'uninstructed');
+const EVENT_CONTEXT = createEventContext({
+  armId: ARM_ID,
+  runId: processEventContext.run_id,
+  episodeId: processEventContext.episode_id
+});
 
 let stopRequested = false;
 function requestStop(signal) {
@@ -70,7 +77,7 @@ const RESOURCE_POOL = { food: 40, wood: 30, stone: 15 };
 const AUTHORED_BY = 'ant-hive-world/run-live.js -- untrained-network, no pretraining, early-minds generation';
 
 const seeds = HIVE_IDS.map((id) => generateBlankHiveSeed(id, AUTHORED_BY, new Date().toISOString()));
-const hives = setupHives(SANDBOX_ROOT, seeds, WORLD_STATE_PATH, RESOURCE_POOL);
+const hives = setupHives(SANDBOX_ROOT, seeds, WORLD_STATE_PATH, RESOURCE_POOL, EVENT_CONTEXT);
 
 // Seed the live-config file from CLI args so the dashboard's initial form
 // reflects what this run actually started with, not just internal defaults.
@@ -125,10 +132,12 @@ process.stdout.write(FOREVER
   ? `Running until stopped (SIGINT/SIGTERM), ${TICK_INTERVAL_MS}ms between rounds. Run log: ${RUN_LOG_PATH}\n`
   : `Running ${TICKS} ticks per hive (alternating). Run log: ${RUN_LOG_PATH}\n`);
 process.stdout.write(`Config file (live-tunable via the dashboard): ${CONFIG_PATH}\n`);
+process.stdout.write(`Event identity: run=${EVENT_CONTEXT.run_id} episode=${EVENT_CONTEXT.episode_id} arm=${EVENT_CONTEXT.arm_id}\n`);
 process.stdout.write(`Start the dashboard separately to watch live: node tools/ant-hive-world/dashboard.js --sandbox-root ${SANDBOX_ROOT}\n\n`);
 
 function appendRunLog(entry) {
-  fs.appendFileSync(RUN_LOG_PATH, JSON.stringify({ ts: new Date().toISOString(), ...entry }) + '\n');
+  const row = decorateEvent('run', EVENT_CONTEXT, entry.tick, entry);
+  fs.appendFileSync(RUN_LOG_PATH, JSON.stringify({ ts: new Date().toISOString(), ...row }) + '\n');
 }
 
 async function runTicks() {
@@ -147,7 +156,13 @@ async function runTicks() {
         action: result.action,
         applied: result.applied,
         starved: result.starved,
+        food_exhausted: result.food_exhausted,
         reward: result.reward,
+        // Persisted per row, NOT just returned in-process: without this a
+        // summarizer cannot tell a v1 reward from a v2 one and will silently
+        // pool them into one cumulative series. Reward semantics changed at
+        // v2, so pooled cum_reward across the boundary is meaningless.
+        reward_contract_version: result.reward_contract_version,
         policy_entropy: result.policy_entropy,
         policy_entropy_post_update: result.policy_entropy_post_update,
         forced_exploration: result.forced_exploration,

@@ -299,10 +299,19 @@ function applyUpkeep(hiveState, upkeepCost) {
   const food = stockpile.food || 0;
   const nextFood = Math.max(0, food - cost);
   stockpile.food = nextFood;
+  // `starved` is the positive-to-zero CROSSING. It is a published metric
+  // (_dev/sim-runs/authority-probe.js:72 documents the terminology, and prior
+  // results are reported in its units), so its definition must not move.
   const starved = food > 0 && nextFood === 0;
+  // `foodExhausted` is the STATE: the hive ends this tick with nothing.
+  // Distinct from the crossing because a hive already at zero never crosses,
+  // and rewarding on the crossing alone inverts the incentive to forage —
+  // see computeReward in train-tick.js.
+  const foodExhausted = nextFood === 0;
   return {
     hiveState: { ...hiveState, hive_state: { ...hiveState.hive_state, stockpile } },
-    starved
+    starved,
+    foodExhausted
   };
 }
 

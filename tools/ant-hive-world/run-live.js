@@ -34,6 +34,8 @@ const path = require('path');
 const { setupHives, tick } = require('./harness.js');
 const { generateBlankHiveSeed } = require('./generate-blank-hive-seed.js');
 const { createNetwork, mulberry32 } = require('./untrained-network.js');
+const { createWorldMind, decideWorld, applyWorldVerb, WORLD_VERB_ORDER } = require('./world-mind.js');
+const { readWorldState, writeWorldState } = require('./world-state.js');
 const { trainTick } = require('./train-tick.js');
 const { readLiveConfig, writeLiveConfig } = require('./live-config.js');
 const { createEventContext, decorateEvent, processEventContext } = require('./event-schema.js');
@@ -113,6 +115,16 @@ const rngs = {
   'hive-b': mulberry32((seedB + 12345) >>> 0)
 };
 
+// World mind (operator 2026-08-03) — a fresh, untrained network one level
+// above the hive minds, reading the full shared world-state and emitting
+// world-level coordination verbs (environmental/signaling, never hive
+// commands — no-godmode/carriage doctrine). Fresh seed, fresh weights, in
+// process memory only; dies with the process. Never persisted.
+const seedW = (baseSeed + 1000003) >>> 0; // distinct prime offset from hive seeds
+const worldMind = createWorldMind(seedW);
+const worldRng = mulberry32((seedW + 12345) >>> 0);
+process.stdout.write(`World mind: seed=${seedW} (fresh, coordination-only, environmental verbs).\n`);
+
 // Reactive-entropy-controller state, ONE object per hive (resolved
 // s4-reactive-controller gate): each controller reads only its OWN hive's
 // last measured policy_entropy_post_update, threaded explicitly through
@@ -169,6 +181,42 @@ async function runTicks() {
         entropy_controller_active: result.entropy_controller_active,
         effective_entropy_bonus_weight: result.effective_entropy_bonus_weight,
         stockpile: result.hiveState.hive_state.stockpile
+      });
+    }
+    // World mind (operator 2026-08-03): one world-level decision per round,
+    // after the hives have acted. Preference order:
+    //   1. The Mythos-harnessed world mind's pushed decision
+    //      (world-mind-decision.json in the sandbox root, written host-
+    //      initiated by tools/ant-hive-world/world-mind-harness.cjs on the
+    //      Mac — the LLM world mind with memory/vault/goal access).
+    //   2. Fallback: the in-process untrained world-mind network, so the sim
+    //      keeps coordinating even when the harness is not running.
+    // Both emit the same environmental/signaling verbs — never override a
+    // hive's decision (no-godmode/carriage doctrine). Logged as observations.
+    const worldStateNow = readWorldState(WORLD_STATE_PATH);
+    if (worldStateNow) {
+      let wm = null;
+      let source = 'harness';
+      try {
+        const pushed = JSON.parse(fs.readFileSync(path.join(SANDBOX_ROOT, 'world-mind-decision.json'), 'utf8'));
+        if (pushed && pushed.verb && WORLD_VERB_ORDER.includes(pushed.verb)) {
+          wm = { verb: pushed.verb, prob: 1, entropy: 0, note: String(pushed.rationale || '') };
+        }
+      } catch {}
+      if (!wm) {
+        wm = decideWorld(worldMind, worldStateNow, worldRng, i);
+        source = 'network-fallback';
+      }
+      const applied = applyWorldVerb(worldStateNow, wm, worldRng);
+      writeWorldState(WORLD_STATE_PATH, worldStateNow);
+      process.stdout.write(`[tick ${i + 1}] world -> ${wm.verb} source=${source} applied=${applied.applied} (${applied.note})\n`);
+      appendRunLog({
+        tick: i + 1,
+        hive: 'world',
+        action: wm.verb,
+        source,
+        applied: applied.applied,
+        note: applied.note
       });
     }
     i += 1;

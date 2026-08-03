@@ -47,21 +47,22 @@
   ],
   "harness_registry": {
     "authority": "tools/signals/lib/target-command-policy.cjs",
-    "managed_command_targets": ["codex", "claude", "opencode", "opencode-local"],
+    "managed_command_targets": ["codex", "claude", "opencode", "opencode-local", "codewhale"],
     "freeform_prompt_targets": ["gemini", "openrouter", "remote-ssh"],
     "model_notes": {
       "codex": "GPT-5.5",
-      "opencode-local": "Ollama-backed local; available local models include qwen2.5-coder:14b, deepseek-r1:14b, qwen3:4b, gemma4:31b; preferred lane for credential-adjacent work"
+      "opencode-local": "Ollama-backed local; available local models include qwen2.5-coder:14b, deepseek-r1:14b, qwen3:4b, gemma4:31b; preferred lane for credential-adjacent work",
+      "codewhale": "deepseek-v4-flash — distinct agent harness registered as a deepseek-family mind (tools/signals/lib/bridge-target-policy.js BRIDGE_TARGET_POLICIES.codewhale + MODEL_FAMILIES.deepseek). PRC-hosted: valid distinct-intelligence review lane only for non-sensitive payloads; sensitive lanes must route onshore."
     },
     "additional_dispatchable_harnesses": [
       {
         "id": "pi",
-        "dispatch_shape": "skill-surface, managed-command-shaped in practice: .pi/skills/mythos mirrors the Mythos skill set and .pi/extensions carries bridge/spawner extensions (claude-bridge.ts, pi-subagent-spawner.ts). NOT yet registered in target-command-policy.cjs.",
+        "dispatch_shape": "skill-surface, managed-command-shaped in practice: .pi/skills/sm-os mirrors the SM_OS skill set and .pi/extensions carries bridge/spawner extensions (claude-bridge.ts, pi-subagent-spawner.ts). NOT yet registered in target-command-policy.cjs.",
         "model": "multi-provider; pi-mono / @earendil-works/pi-coding-agent sets the model per invocation (see instructions/canonical/commands/pi-self-help.yaml for the local source archive route)"
       },
       {
         "id": "hermes",
-        "dispatch_shape": "freeform prompt via the Hermes agent CLI; .hermes/skills/mythos is ported from .claude/skills by tools/port-skills-to-hermes.cjs. NOT yet registered in target-command-policy.cjs.",
+        "dispatch_shape": "freeform prompt via the Hermes agent CLI; .hermes/skills/sm-os is ported from .claude/skills by tools/port-skills-to-hermes.cjs. NOT yet registered in target-command-policy.cjs.",
         "model": "OpenRouter-backed, configurable per run; observed anthropic/claude-sonnet-4 on 2026-06-06 (_dev/concepts/simulation-observer-memory-flow/dispatch/hermes-sonnet-review__20260606.md). See instructions/canonical/commands/hermes-self-help.yaml for the local source archive route."
       }
     ]

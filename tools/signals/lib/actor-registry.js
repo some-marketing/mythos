@@ -118,6 +118,28 @@ const ACTOR_REGISTRY = Object.freeze({
       full_auto: true
     })
   }),
+  codewhale: Object.freeze({
+    id: 'codewhale',
+    label: 'Codewhale',
+    binary: 'codewhale',
+    runtime: 'cli',
+    verification_only: false,
+    experimental: false,
+    cost_rank: 1,
+    batching: 'good',
+    preferred_for: Object.freeze(['review', 'deep-review', 'distinct-family-review']),
+    model_defaults: Object.freeze({
+      low: 'deepseek-v4-flash',
+      medium: 'deepseek-v4-flash',
+      high: 'deepseek-v4-flash'
+    }),
+    family: 'deepseek',
+    supports: Object.freeze({
+      read_only: true,
+      patch_allowed: true,
+      full_auto: true
+    })
+  }),
   cursor: Object.freeze({
     id: 'cursor',
     label: 'Cursor',

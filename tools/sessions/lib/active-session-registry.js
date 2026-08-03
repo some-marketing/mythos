@@ -344,6 +344,7 @@ function deriveModelFamily(actorType) {
   if (s.includes('claude') || s.includes('opus') || s.includes('sonnet') || s.includes('haiku') || s.includes('fable')) return 'claude';
   if (s.includes('codex') || s.includes('gpt')) return 'gpt';
   if (s.includes('gemini')) return 'gemini';
+  if (s.includes('codewhale') || s.includes('deepseek')) return 'deepseek';
   return null;
 }
 

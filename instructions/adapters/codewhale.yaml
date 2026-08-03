@@ -1,0 +1,62 @@
+{
+  "harness_id": "codewhale",
+  "enabled": true,
+  "target_paths": {
+    "root_instructions": "AGENTS.md"
+  },
+  "format_rules": {
+    "markdown": true,
+    "concise": true
+  },
+  "capability_mapping": {
+    "commands": "managed_tool_commands",
+    "skills": "skills",
+    "agents": "subagents"
+  },
+  "capabilities": {
+    "lifecycle_events": {
+      "supported": false,
+      "mechanism": "not_available",
+      "emulation": "harness_approval_policy",
+      "notes": "Codewhale has no .claude/settings.json hook surface. Its native approval/permission gate (Ask/auto posture) is the enforcement boundary for mutation-class actions; classify as ADVISORY/emulated, never BLOCKING hook parity."
+    },
+    "role_registry": {
+      "supported": true,
+      "mechanism": "subagents",
+      "emulation": null,
+      "notes": "Codewhale exposes a background-worker (agent) tool for delegated work with write-scope contracts."
+    },
+    "policy_surface": {
+      "supported": true,
+      "mechanism": "AGENTS.md",
+      "emulation": null,
+      "notes": "Codewhale loads AGENTS.md as its root project instructions (verified 2026-08-03)."
+    },
+    "memory_surface": {
+      "supported": false,
+      "mechanism": "not_available",
+      "emulation": "repo_state_files",
+      "notes": "No MEMORY.md-style native surface; durable artifacts under _dev/ remain the authority surface."
+    },
+    "checkpointing": {
+      "supported": true,
+      "mechanism": "session_checkpoints",
+      "emulation": "git_snapshot",
+      "notes": "Codewhale checkpoints session state; git snapshots provide durable version control."
+    },
+    "automation_runner": {
+      "supported": true,
+      "mechanism": "cli_headless",
+      "emulation": null,
+      "notes": "codewhale exec supports non-interactive runs (verified via codewhale --help 2026-08-03)."
+    },
+    "parallel_subagents": {
+      "supported": true,
+      "mechanism": "parallel_tools",
+      "emulation": null,
+      "notes": "Multiple background workers can run in parallel."
+    }
+  },
+  "unsupported_features_policy": "warn",
+  "post_processors": []
+}

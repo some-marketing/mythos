@@ -17,6 +17,9 @@
  *                        broadcast shape without self-recursive dispatch.
  *   target=codex      -> --command must be in AGENTS.md "Implemented managed
  *                        commands" line.
+ *   target=codewhale  -> same shape as codex: AGENTS.md "Implemented managed
+ *                        commands" line (Codewhale loads AGENTS.md as its root
+ *                        instructions and runs Mythos commands via the runner).
  *   target=claude     -> --command must exist as .claude/commands/<name>.md.
  *   target=opencode   -> same shape as claude (managed-command actor).
  *   target=opencode-local -> same shape as opencode; Ollama-backed local
@@ -37,7 +40,7 @@ const fs = require('fs');
 const path = require('path');
 
 const FREEFORM_PROMPT_TARGETS = Object.freeze(['gemini', 'openrouter', 'remote-ssh']);
-const MANAGED_COMMAND_TARGETS = Object.freeze(['codex', 'claude', 'opencode', 'opencode-local']);
+const MANAGED_COMMAND_TARGETS = Object.freeze(['codex', 'claude', 'opencode', 'opencode-local', 'codewhale']);
 
 const AGENTS_MD_REL = 'AGENTS.md';
 const CLAUDE_COMMANDS_REL = path.join('.claude', 'commands');
@@ -298,12 +301,12 @@ function validateTargetCommandCompat(params) {
   }
   const cmdLower = headMatch[1].toLowerCase();
 
-  if (target === 'codex') {
+  if (target === 'codex' || target === 'codewhale') {
     const reg = readCodexManagedCommands(path.join(projectRoot, AGENTS_MD_REL));
     if (reg.commands.length === 0) {
       return {
         allowed: false,
-        reason: `AGENTS.md "Implemented managed commands" line not found at ${AGENTS_MD_REL}; cannot validate codex command "${command}"`,
+        reason: `AGENTS.md "Implemented managed commands" line not found at ${AGENTS_MD_REL}; cannot validate ${target} command "${command}"`,
         registry_source: reg.source
       };
     }
@@ -316,7 +319,7 @@ function validateTargetCommandCompat(params) {
     }
     return {
       allowed: true,
-      reason: `command "${command}" is in AGENTS.md managed list for codex`,
+      reason: `command "${command}" is in AGENTS.md managed list for ${target}`,
       registry_source: reg.source
     };
   }

@@ -1,12 +1,12 @@
-# Mythos Harness Runtime Contract
+# SM_OS Harness Runtime Contract
 
 Status: first-slice contract.
 
-This file defines the harness-neutral authority surface for Mythos runtime behavior. It does not claim that every adapter can enforce every behavior. It defines how an adapter must state what it can prove.
+This file defines the harness-neutral authority surface for SM_OS runtime behavior. It does not claim that every adapter can enforce every behavior. It defines how an adapter must state what it can prove.
 
 ## Authority
 
-Mythos owns policy authority for reusable runtime behavior:
+SM_OS owns policy authority for reusable runtime behavior:
 
 - task intake and Actor Continuity payloads
 - lifecycle event vocabulary
@@ -15,7 +15,7 @@ Mythos owns policy authority for reusable runtime behavior:
 - capability evidence
 - review and closeout routing
 
-Claude, Codex, Gemini, OpenCode, Goose, Aider, Continue, Kilo, Pi, Hermes, and future harnesses are adapters. An adapter may provide native enforcement, advisory context, or no support for a behavior. Adapter memory surfaces are advisory. Durable artifacts remain the authority surface unless the human operator explicitly resolves a conflict.
+Claude, Codex, Codewhale, Gemini, OpenCode, Goose, Aider, Continue, Kilo, Pi, Hermes, and future harnesses are adapters. An adapter may provide native enforcement, advisory context, or no support for a behavior. Adapter memory surfaces are advisory. Durable artifacts remain the authority surface unless the human operator explicitly resolves a conflict.
 
 ## Lifecycle Events
 
@@ -32,7 +32,7 @@ Adapters may expose different native event names. The adapter contract is to map
 
 ## Actor Invocation Payload
 
-Every Mythos actor invocation must carry:
+Every SM_OS actor invocation must carry:
 
 - Current State
 - Question / Work
@@ -76,7 +76,7 @@ Each claimed capability should carry:
 - reviewed_at
 - known limits
 
-Source-review evidence is reference material. It can justify a design candidate, but it cannot prove runtime enforcement in Mythos until Mythos invokes or tests the behavior.
+Source-review evidence is reference material. It can justify a design candidate, but it cannot prove runtime enforcement in SM_OS until SM_OS invokes or tests the behavior.
 
 ## First-Slice Adapter Rules
 

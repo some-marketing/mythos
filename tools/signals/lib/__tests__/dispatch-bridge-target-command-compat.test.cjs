@@ -74,6 +74,32 @@ test('b2) target=codex command=/owl ALLOWED (human shorthand alias)', () => {
   assert.match(r.registry_source, /AGENTS\.md$/);
 });
 
+test('b3) target=codewhale command=/orchestrate-loop ALLOWED (AGENTS.md managed list, same registry as codex)', () => {
+  const root = makeFixtureRoot({ agentsMd: STD_AGENTS });
+  const r = validateTargetCommandCompat({
+    target: 'codewhale', command: '/orchestrate-loop', projectRoot: root
+  });
+  assert.equal(r.allowed, true, r.reason);
+  assert.match(r.registry_source, /AGENTS\.md$/);
+});
+
+test('b4) target=codewhale command=/not-a-real-command REJECTED (not in AGENTS.md managed list)', () => {
+  const root = makeFixtureRoot({ agentsMd: STD_AGENTS });
+  const r = validateTargetCommandCompat({
+    target: 'codewhale', command: '/not-a-real-command', projectRoot: root
+  });
+  assert.equal(r.allowed, false, r.reason);
+  assert.match(r.registry_source, /AGENTS\.md$/);
+});
+
+test('b5) target=codewhale command omitted REJECTED (managed-command actor, freeform shape refused)', () => {
+  const root = makeFixtureRoot({ agentsMd: STD_AGENTS });
+  const r = validateTargetCommandCompat({
+    target: 'codewhale', projectRoot: root
+  });
+  assert.equal(r.allowed, false, r.reason);
+});
+
 test('c) target=claude command=/convene ALLOWED when .claude/commands/convene.md exists', () => {
   const root = makeFixtureRoot({
     claudeCommands: ['convene', 'orchestrate-loop']

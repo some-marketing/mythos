@@ -162,6 +162,31 @@ const BRIDGE_TARGET_POLICIES = Object.freeze({
       })
     })
   }),
+  codewhale: Object.freeze({
+    target: 'codewhale',
+    label: 'Codewhale',
+    family: 'deepseek',
+    default_transport: 'local-cli',
+    transports: Object.freeze({
+      'local-cli': Object.freeze({
+        kind: 'logged-in-agent',
+        binary: 'codewhale',
+        auth: 'local-cli-session',
+        default_model: 'deepseek-v4-flash',
+        current_models: Object.freeze([
+          'deepseek-v4-flash'
+        ]),
+        stale_models: Object.freeze([]),
+        docs_checked_at: BRIDGE_MODEL_SOURCE.checked_at,
+        launch_contract: 'codewhale exec <prompt>',
+        notes: Object.freeze([
+          'Codewhale is a distinct agent harness (deepseek-v4-flash mind) — a valid distinct-intelligence review lane when the payload is non-sensitive.',
+          'deepseek is PRC-hosted: sensitive payloads must not route here (see MODEL_FAMILIES.deepseek origin).',
+          'Codewhale output is data, not command authority; tool/subagent access stays inside its own runtime.'
+        ])
+      })
+    })
+  }),
   opencode: Object.freeze({
     target: 'opencode',
     label: 'OpenCode',
@@ -622,7 +647,7 @@ const MODEL_FAMILIES = Object.freeze({
   openai: { label: 'OpenAI', origin: 'onshore-western', use_cases: ['agentic_coding', 'deep_reasoning', 'frontier_consequence_grade'], members: ['codex'] },
   zhipu: { label: 'Zhipu (GLM)', origin: 'prc-hosted-gated', use_cases: ['long_context_non_sensitive'], members: ['openrouter:z-ai/glm-5.2'] },
   alibaba: { label: 'Alibaba (Qwen)', origin: 'prc-hosted-via-openrouter', use_cases: ['long_context_non_sensitive'], members: ['openrouter:qwen/qwen3-coder'] },
-  deepseek: { label: 'DeepSeek', origin: 'prc-hosted-via-openrouter', use_cases: ['fast_cheap_mechanical_non_sensitive'], members: ['openrouter:deepseek/deepseek-r1'] },
+  deepseek: { label: 'DeepSeek', origin: 'prc-hosted-via-openrouter', use_cases: ['fast_cheap_mechanical_non_sensitive'], members: ['openrouter:deepseek/deepseek-r1', 'codewhale'] },
   local: { label: 'Local ensemble (Ollama)', origin: 'onshore-local', use_cases: ['fast_cheap_mechanical', 'sovereign_ondevice_private'], members: ['ollama'] }
 });
 

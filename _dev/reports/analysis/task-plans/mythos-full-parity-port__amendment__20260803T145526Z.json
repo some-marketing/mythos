@@ -1,0 +1,47 @@
+{
+  "schema": "PlanAmendment/1.1",
+  "task_id": "mythos-full-parity-port",
+  "amends_plan_version": "mythos-full-parity-port baseline (PR #6 ratified 2026-08-03T03:08Z)",
+  "amendment_id": "A1-ant-hive-world-reward-v2-s0-baseline-update",
+  "generated_at": "2026-08-03T14:55:26Z",
+  "session": "f8a6ebeb-1ce6-4486-95b1-c0ffd3339d1c",
+  "operator_direction": {
+    "at": "2026-08-03T14:45Z",
+    "statement_verbatim": "can you implement the code required for this plan? (ant-hive-world-divergence-review)",
+    "context": "Operator directed implementation of ant-hive-world-divergence-review. D3b requires the mythos-full-parity-port plan amendment covering the parity/baseline.json change on branch sim/ant-world-reward-v2-s0 before the PR opens (G-PARITY-AMENDMENT). PR #6 retroactive amendment stays separate standing debt (operator option offered, not folded this pass)."
+  },
+  "evidence_baseline": "parity/baseline.json at branch sim/ant-world-reward-v2-s0 pre-change + _dev/reports/analysis/mechanical-reconcile__ant-hive-world-divergence__20260803T144500Z.json (evidence_commit_sha ef09482b6)",
+  "divergences": [
+    {
+      "id": "DV1",
+      "classification": "output_changed",
+      "original": "baseline target.expected_files pinned digests for the 19 registered tools/ant-hive-world/** paths as at main cb52bbc05",
+      "execution_fact": "Branch sim/ant-world-reward-v2-s0 (2a62dcfa atop cb52bbc05) carries the slice-A port of 40f8940be: 5 registered files changed (README.md, harness.js, run-live.js, train-tick.js, untrained-network.js) and 15 slice-A files are new (event-schema.js, EVENT-SCHEMA.md, 13 __tests__ files). verify-parity reported unregistered-extra + digest drift until updated.",
+      "plan_update": "Regenerated baseline target section: 5 changed digests updated (README.md 3e29f86b... == manifest frozen_hash), 15 new files added (mode 420), expected_tree_sha256 recomputed in verifier walk order (9b5083e4...), wiring graph regenerated (3763/2701) with graph_sha256 b7ea9a20...; verify-parity PASS exit 0, 0 findings."
+    },
+    {
+      "id": "DV2",
+      "classification": "wiring_regen",
+      "original": "wiring-graph.json node digests pinned pre-port contents; graph_nodes=3747, graph_edges=2668",
+      "execution_fact": "build-wiring-graph.cjs regenerated: 5 changed file nodes carry new digests, 16 new nodes, 3763 nodes / 2701 edges.",
+      "plan_update": "Accept regenerated graph as branch truth; baseline wiring counts + graph_sha256 updated. No aliases or package scripts changed."
+    }
+  ],
+  "operator_gates": [
+    {
+      "id": "G1",
+      "requirement": "verify-parity.cjs passes with 0 findings on the branch at frozen head_sha",
+      "evidence": "verify-parity.cjs . at branch HEAD: exit 0, ok:true, findings:0 (2026-08-03)",
+      "status": "resolved"
+    },
+    {
+      "id": "G2",
+      "requirement": "amendment reviewed by the codex lane before the PR opens (G-PARITY-AMENDMENT); verdict folded",
+      "evidence": "codex lane dispatch + verdict recorded in linked review artifact",
+      "status": "open"
+    }
+  ],
+  "non_goals": [
+    "PR #6 retroactive mythos-full-parity-port amendment (standing debt)"
+  ]
+}

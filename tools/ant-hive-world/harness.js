@@ -32,7 +32,9 @@ const {
   decayPheromones,
   maybeSpawnFoodSource,
   applyEcosystemDynamics,
-  applyMaterialDynamics
+  applyMaterialDynamics,
+  tileToCoords,
+  coordsToTile
 } = require('./world-state.js');
 
 // One verb set for this tier -- deliberately small, because there is no
@@ -152,14 +154,31 @@ function tick(hive, worldStatePath, decideFn, liveConfig = {}, rng = Math.random
     const buildCost = { wood: buildCostWood };
     const canAfford = Object.entries(buildCost).every(([key, amt]) => (currentStockpile[key] || 0) >= amt);
     if (canAfford) {
+      // Spatial placement (operator 2026-08-03, three-sided experiment gate):
+      // the network decides IF to build, not WHERE. Resolve placement onto a
+      // tile this hive owns so geometry_log carries real world coordinates.
+      let placedCoords = action.entry && action.entry.coords;
+      const owned = Object.entries(worldState.territory || {}).filter(([, owner]) => owner === hiveState.identity).map(([tileId]) => tileId);
+      // Spread builds across owned tiles (operator 2026-08-03): rotating through
+      // the hive\u0027s territory means geometry_log carries spatial variety, so the
+      // mirror detector can distinguish a layout from a single-point cluster.
+      const buildsSoFar = (worldState.geometry_log || []).filter((g) => g.hive === hiveState.identity).length;
+      const placeTile = owned.length ? owned[buildsSoFar % owned.length] : (worldState.territory && Object.keys(worldState.territory)[0]);
+      if (!placedCoords) {
+        placedCoords = placeTile ? tileToCoords(placeTile) : [0, 0, 0];
+      }
       const geometryState = {
         stockpile: { ...currentStockpile, wood: (currentStockpile.wood || 0) - buildCostWood },
-        tile_id: action.entry?.tileId || null,
-        coords: action.entry?.coords || null,
+        tile_id: action.entry?.tileId || placeTile || null,
+        coords: placedCoords,
         resource_depleted: (currentStockpile.wood || 0) - buildCostWood <= 0
       };
+      // Drop the network's null coords from the entry spread so the resolved
+      // placement (above) is what geometry_log carries at the top level -- the
+      // level the mirror detector and dashboard ledger read.
+      const { coords: _ignoredCoords, ...entryRest } = action.entry || {};
       worldState = appendGeometry(worldState, decorateEvent('geometry', eventContext, eventTick, {
-        hive: hiveState.identity, ...action.entry, at: new Date().toISOString(), state_at_event: geometryState
+        hive: hiveState.identity, ...entryRest, coords: placedCoords, at: new Date().toISOString(), state_at_event: geometryState
       }));
       applied = true;
       stockpileDebit = buildCost;

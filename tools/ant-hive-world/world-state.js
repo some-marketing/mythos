@@ -39,6 +39,24 @@ function readWorldState(statePath) {
 // in a new spot rather than the same exhausted one recovering.
 const INITIAL_FOOD_SOURCE_COUNT = 5;
 const INITIAL_FOOD_SOURCE_AMOUNT = 8;
+// Spatial geometry (operator 2026-08-03, three-sided experiment gate):
+// tile-N labels map onto a 10x10 grid so the world has real coordinates a
+// mirror detector can correlate against. Pure helpers -- no behavior change
+// to existing tile semantics.
+const TILE_GRID_SIZE = 10;
+function tileToCoords(tileId) {
+  const m = /(?:^|-)(\d+)$/.exec(String(tileId));
+  if (!m) return null;
+  const n = parseInt(m[1], 10);
+  return [n % TILE_GRID_SIZE, Math.floor(n / TILE_GRID_SIZE), 0];
+}
+function coordsToTile(x, y) {
+  return `tile-${y * TILE_GRID_SIZE + x}`;
+}
+function parseTileIndex(tileId) {
+  const m = /(?:^|-)(\d+)$/.exec(String(tileId));
+  return m ? parseInt(m[1], 10) : null;
+}
 
 function seedFoodSources(count, amount) {
   const sources = {};
@@ -46,6 +64,23 @@ function seedFoodSources(count, amount) {
     sources[`tile-${(i * 17) % 100}`] = amount;
   }
   return sources;
+}
+
+// S2 (spatial geometry, operator 2026-08-03 three-sided experiment gate):
+// give each discrete food source an EXPLICIT world coordinate so the mirror
+// detector can correlate build positions against real resource positions
+// instead of label-only tiles. The food_sources map keeps its `tile-N: amount`
+// shape (sumFoodSources / claimFoodSource / depleteFoodSourcesTotal all depend
+// on it); the coordinates live in a parallel map keyed by the same tileId.
+// Tile labels that do not resolve to grid coords are omitted — no invented
+// positions. Deterministic, pure, no behavior change to existing consumers.
+function foodSourceCoords(foodSources) {
+  const coords = {};
+  for (const tileId of Object.keys(foodSources || {})) {
+    const c = tileToCoords(tileId);
+    if (c) coords[tileId] = c;
+  }
+  return coords;
 }
 
 function sumFoodSources(foodSources) {
@@ -101,6 +136,7 @@ function initialWorldState(resourcePool) {
     complete: true,
     resources: { ...(resourcePool || {}), ...materialResources, mud: 0, food: sumFoodSources(foodSources) },
     food_sources: foodSources,
+    food_source_coords: foodSourceCoords(foodSources),
     ...materialSources,
     discovered_types: ['food', 'wood', 'stone'],
     // Population-level predator/prey dynamics -- operator (2026-07-16):
@@ -432,6 +468,10 @@ module.exports = {
   DEFAULT_MUD_CONVERSION_RATE,
   applyMaterialDynamics,
   DEFAULT_PHEROMONE_DECAY,
+  TILE_GRID_SIZE,
+  tileToCoords,
+  coordsToTile,
+  parseTileIndex,
   INITIAL_FOOD_SOURCE_COUNT,
   INITIAL_FOOD_SOURCE_AMOUNT,
   DEFAULT_FOOD_SOURCE_SPAWN_CHANCE,
@@ -447,6 +487,7 @@ module.exports = {
   readWorldState,
   initialWorldState,
   writeWorldState,
+  foodSourceCoords,
   claimResource,
   appendGeometry,
   claimTerritory,

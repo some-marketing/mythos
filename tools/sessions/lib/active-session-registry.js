@@ -451,6 +451,116 @@ function getCurrentSessionId() {
   return id || null;
 }
 
+// Ground the machine-wide "current session" sidecar. Written by the session
+// lifecycle entry points (session.js register, consume-boundary crossing, and
+// the coordination-dispatcher SessionStart handler) so write-ledger and
+// custody hooks resolve the SAME session id even when the harness sets no
+// env var (codewhale harness registers a session but sets no CLAUDE_* env).
+// Fail-closed on write errors: a caller that explicitly grounds identity
+// should see the failure rather than silently proceeding with an ungrounded
+// sidecar.
+function setCurrentSessionId(sessionId) {
+  assertSessionId(sessionId);
+  const sidecar = path.join(getActiveSessionDir(), '_current-id');
+  ensureDir(getActiveSessionDir());
+  const tmp = `${sidecar}.tmp.${process.pid}.${Date.now()}`;
+  try {
+    fs.writeFileSync(tmp, `${sessionId}\n`);
+    fs.renameSync(tmp, sidecar);
+  } catch (error) {
+    try {
+      if (fs.existsSync(tmp)) fs.unlinkSync(tmp);
+    } catch (unlinkError) {
+      // ignore cleanup failure; preserve the original write failure
+    }
+    throw error;
+  }
+  return sessionId;
+}
+
+// Adopt another session's write-log paths into this session's custody set.
+// Used at session crossing: when a new session consumes a boundary marker
+// whose payload carries `session_id` (the session it is crossing from), the
+// prior session's write-log entries are merged into the current session's
+// write_log.json with adopted_from provenance. This makes clean-house custody
+// scoping see those paths as OWN and the git-custody gate classify them as
+// own (own-check runs before the foreign scan). Fail-open: no prior ledger
+// or an unreadable one is a no-op, never a throw.
+// Optional `filter` (fn path -> boolean) scopes the adoption to a subset of
+// the prior session's paths (e.g. one workstream) so adopting a large ledger
+// never drags unrelated workstreams into the current session's custody.
+function adoptSessionCustody({ fromSessionId, toSessionId, now, filter }) {
+  const out = {
+    from_session_id: fromSessionId,
+    to_session_id: toSessionId,
+    adopted: false,
+    adopted_count: 0,
+    paths: [],
+    reason: null
+  };
+  if (!fromSessionId || !toSessionId || fromSessionId === toSessionId) {
+    out.reason = 'invalid-session-ids';
+    return out;
+  }
+  let prior = null;
+  try {
+    prior = readJson(path.join(getActiveSessionDir(), fromSessionId, 'write_log.json'));
+  } catch (error) {
+    prior = null;
+  }
+  if (!prior || !Array.isArray(prior.paths) || prior.paths.length === 0) {
+    out.reason = 'no-prior-write-log';
+    return out;
+  }
+  const matcher = typeof filter === 'function' ? filter : null;
+  const relevant = matcher ? prior.paths.filter((entry) => {
+    const p = typeof entry === 'string' ? entry : (entry && entry.path);
+    return p ? matcher(p) : false;
+  }) : prior.paths;
+  if (relevant.length === 0) {
+    out.reason = 'no-paths-match-filter';
+    return out;
+  }
+
+  const toDir = path.join(getActiveSessionDir(), toSessionId);
+  const toFile = path.join(toDir, 'write_log.json');
+  let current = { paths: [] };
+  try {
+    current = readJson(toFile);
+  } catch (error) {
+    current = { paths: [] };
+  }
+  if (!Array.isArray(current.paths)) current.paths = [];
+  const seen = new Set(current.paths.map((entry) => (typeof entry === 'string' ? entry : entry.path)));
+
+  const stamp = now || new Date().toISOString();
+  let added = 0;
+  const addedPaths = [];
+  for (const entry of relevant) {
+    const p = typeof entry === 'string' ? entry : (entry && entry.path);
+    if (!p || seen.has(p)) continue;
+    current.paths.push({
+      path: p,
+      at: stamp,
+      tool: 'adopt',
+      adopted_from: fromSessionId
+    });
+    seen.add(p);
+    added++;
+    addedPaths.push(p);
+  }
+
+  if (added > 0) {
+    ensureDir(toDir);
+    writeJson(toFile, current);
+  }
+  out.adopted = added > 0;
+  out.adopted_count = added;
+  out.paths = addedPaths;
+  if (added === 0) out.reason = 'all-paths-already-owned';
+  return out;
+}
+
 function setCurrentTask(sessionId, task, options = {}) {
   const filePath = sessionPath(sessionId);
   if (!fs.existsSync(filePath)) {
@@ -670,6 +780,8 @@ module.exports = {
   listActive,
   getSession,
   getCurrentSessionId,
+  setCurrentSessionId,
+  adoptSessionCustody,
   setCurrentTask,
   findByWorkingSurface
 };

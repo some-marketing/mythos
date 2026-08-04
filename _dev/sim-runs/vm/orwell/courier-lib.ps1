@@ -83,9 +83,11 @@ function Mount-Courier {
   if ($chk -match 'found no problems') {
     Write-Host "courier integrity: OK (chkdsk found no problems)"
   } else {
-    # CODE REVIEW (PR #12, codex P1): after a forced power-off during a FAT32
-    # write, chkdsk damage means the harvest would copy corrupted output as
-    # trusted results. Fail the mount instead of allowing callers to continue.
+    # CODE REVIEW (PR #12, codex P1/P2): after a forced power-off during a
+    # FAT32 write, chkdsk damage means the harvest would copy corrupted
+    # output as trusted results. Fail the mount -- and dismount the VHD
+    # first so the damaged courier is not left attached, blocking repair.
+    Dismount-VHD -Path $Path -ErrorAction SilentlyContinue
     throw "courier integrity: PROBLEMS REPORTED by chkdsk -- refusing to mount. Repair with chkdsk /F while the VM is off before trusting results.`n$chk"
   }
 

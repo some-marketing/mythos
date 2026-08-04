@@ -14,6 +14,14 @@ REMOTE='orwell'
 RUN_NAME="${1:-}"
 [ -n "$RUN_NAME" ] || { echo "usage: pull-results.sh <run-name>" >&2; exit 1; }
 
+# CODE REVIEW (PR #12, codex P1): RUN_NAME is interpolated into a remote
+# PowerShell command and a local destination path; a quote or path traversal
+# would break out of the quoted Test-Path argument or redirect the pull
+# outside _dev/state. Enforce the same single-token grammar as run-job.ps1.
+case "$RUN_NAME" in
+  '' | -* | _* | *[!A-Za-z0-9_-]*) echo "usage: run name must match ^[A-Za-z0-9][A-Za-z0-9_-]*$" >&2; exit 1 ;;
+esac
+
 REMOTE_DIR="D:/HyperV/AntWorld/Staging/Out/$RUN_NAME"
 DEST="$REPO_ROOT/_dev/state/$RUN_NAME"
 

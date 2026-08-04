@@ -453,7 +453,13 @@ function strongestTrail(state, kind) {
 // A food tip is actionable only if the destination has a live source at that
 // tile. Recorded by every arm; acted on only by `filter-max`.
 function isActionable(destState, kind, tileId) {
-  if (kind !== 'food') return true;
+  if (kind !== 'food') {
+    // CODE REVIEW (PR #12, codex P1): a wood tip is only actionable while
+    // the destination still has wood to act on; once resources.wood is
+    // exhausted the filtering arms must not keep reporting it actionable.
+    if (kind === 'wood') return ((destState.resources || {}).wood || 0) > 0;
+    return true;
+  }
   return Boolean((destState.food_sources || {})[tileId]);
 }
 

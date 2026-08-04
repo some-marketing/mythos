@@ -68,18 +68,28 @@ finally { Dismount-Courier }
 $runDir = Join-Path $Sterile $RunName
 $man    = Join-Path $runDir 'RESULT-MANIFEST.txt'
 if (Test-Path $man) {
-  $ok = 0; $bad = 0
+  $ok = 0; $bad = 0; $malformed = 0
+  $manifestFiles = New-Object 'System.Collections.Generic.HashSet[string]'
   foreach ($line in (Get-Content $man)) {
-    if ($line -notmatch '^([0-9a-f]{64})\s+\.?[\\/]?(.+)$') { continue }
+    if (-not $line) { continue }
+    if ($line -notmatch '^([0-9a-f]{64})\s+\.?[\\/]?(.+)$') { $malformed++; continue }
     $want = $Matches[1]
     $rel  = $Matches[2].Trim() -replace '/', '\'
     $f    = Join-Path $runDir $rel
+    [void]$manifestFiles.Add($rel.ToLowerInvariant())
     if (-not (Test-Path -LiteralPath $f)) { "MISSING $rel"; $bad++; continue }
     $got = (Get-FileHash -LiteralPath $f -Algorithm SHA256).Hash.ToLower()
     if ($got -eq $want) { $ok++ } else { "MISMATCH $rel"; $bad++ }
   }
-  "manifest verification: $ok OK, $bad BAD"
-  if ($bad -gt 0) { throw "result manifest verification failed on the host side" }
+  # CODE REVIEW (PR #12, codex P1): malformed lines, an empty manifest, or
+  # files the manifest does not list must fail closed -- unverified guest
+  # output must not be presented as a harvested run.
+  $actualFiles = @(Get-ChildItem -LiteralPath $runDir -Recurse -File)
+  $unlisted = @($actualFiles | Where-Object { -not $manifestFiles.Contains($_.FullName.Substring($runDir.Length + 1).ToLowerInvariant()) })
+  "manifest verification: $ok OK, $bad BAD, $malformed malformed, $($unlisted.Count) unlisted"
+  if ($bad -gt 0 -or $malformed -gt 0 -or $ok -eq 0 -or $unlisted.Count -gt 0) {
+    throw "result manifest verification failed on the host side (ok=$ok bad=$bad malformed=$malformed unlisted=$($unlisted.Count))"
+  }
 } else {
   # CODE REVIEW (PR #12, codex P1): without the guest's RESULT-MANIFEST.txt
   # the host cannot verify output integrity; partial unverified output must

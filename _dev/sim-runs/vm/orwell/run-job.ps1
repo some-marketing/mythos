@@ -47,6 +47,13 @@ if (-not $DeadlineIso) {
   # the watchdog horizon minus a margin so the guest stops itself first.
   $DeadlineIso = (Get-Date).ToUniversalTime().AddMinutes($WatchdogMinutes - 5).ToString("yyyy-MM-ddTHH:mm:ssZ")
 }
+
+# CODE REVIEW (PR #12, codex P2): $DeadlineIso is interpolated unquoted into
+# job.env, sourced by Bash as root; an explicit value with spaces, quotes, or
+# metacharacters would be parsed as a command. Require ISO-8601.
+if ($DeadlineIso -notmatch '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(Z|[+-]\d{2}:\d{2})$') {
+  throw "DeadlineIso [$DeadlineIso] is not ISO-8601 (yyyy-MM-ddTHH:mm:ssZ); refusing to write job.env"
+}
 if ($Mode -eq 'turn' -and $Ticks -lt 1) { throw 'Ticks must be >= 1 for MODE=turn' }
 # ---------------------------------------------------------------------------
 # PRECONDITION: the golden baseline must exist before any experiment runs.

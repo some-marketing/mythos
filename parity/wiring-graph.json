@@ -2116,14 +2116,14 @@
       "id": "file:_dev/sim-runs/vm/orwell/first-boot.ps1",
       "type": "file",
       "path": "_dev/sim-runs/vm/orwell/first-boot.ps1",
-      "sha256": "e5ae09ef6484dd71db2e09f4d36d0dd1d20242b80cc4d76b92235053537897be",
+      "sha256": "dfab28089612f12bdd53ba508bfb108e43eb42b6d83a527ddf323b88015a20a2",
       "mode": 420
     },
     {
       "id": "file:_dev/sim-runs/vm/orwell/harvest-results.ps1",
       "type": "file",
       "path": "_dev/sim-runs/vm/orwell/harvest-results.ps1",
-      "sha256": "15c448138b530aab45ec60266584d803b92db40b6ada228f2bf022d47f771746",
+      "sha256": "ba42c284378fa7343f0e795632d02051e7ae68aee9dce8828e7ebc555dac96f0",
       "mode": 420
     },
     {
@@ -2186,7 +2186,7 @@
       "id": "file:_dev/sim-runs/vm/orwell/revert-to-golden.ps1",
       "type": "file",
       "path": "_dev/sim-runs/vm/orwell/revert-to-golden.ps1",
-      "sha256": "d48e52a7e2b384a30375e1cd899416e5edd60984cf10ca470f6f6240dff3c21e",
+      "sha256": "3241fd5d8e440d48e702bfbee455e97139eedfc90f75651254243663ebd801c6",
       "mode": 420
     },
     {

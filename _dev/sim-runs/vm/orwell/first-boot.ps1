@@ -59,3 +59,25 @@ while ((Get-VM -Name $VMName).State -ne 'Off') {
 $na2 = @(Get-VMNetworkAdapter -VMName $VMName)
 "network adapters after boot: $($na2.Count) (must be 0)"
 if ($na2.Count -ne 0) { throw "FAIL: adapter appeared during provisioning" }
+
+# CODE REVIEW (PR #12, codex P1 round 5): cloud-init's power_state powers the
+# guest off unconditionally, so VM Off alone does NOT prove provisioning
+# succeeded -- a failed payload extraction or runtime install still ends Off.
+# Require the guest's own BOOTSTRAP-RC == 0 and the provision report before
+# declaring provisioning complete, else seal-golden.ps1 could preserve a
+# broken baseline as golden.
+Detach-Courier
+$dl = Mount-Courier -ReadOnly
+try {
+  if (-not (Test-Path "${dl}:\out\BOOTSTRAP-RC")) {
+    throw "FAIL: no BOOTSTRAP-RC on courier -- provisioning did not report a result; refusing to treat boot as complete"
+  }
+  $bootRc = (Get-Content "${dl}:\out\BOOTSTRAP-RC" -Raw).Trim()
+  if ($bootRc -ne '0') {
+    throw "FAIL: bootstrap exit code '$bootRc' (expected 0) -- provisioning failed; do NOT seal a broken baseline"
+  }
+  if (-not (Test-Path "${dl}:\out\provision-report.txt")) {
+    throw "FAIL: provision-report.txt missing -- provisioning evidence incomplete"
+  }
+  "bootstrap verified: BOOTSTRAP-RC=0, provision-report.txt present"
+} finally { Dismount-Courier }

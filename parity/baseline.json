@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "723ebf8fe129b4549054ee0c74e8a3d9ae3f9d1c3bef248c7161276225639cc0",
+    "expected_tree_sha256": "1b13e688e14f2cbf15d73741feec29b5a1f67d2e0e36b522b4af071b8f8c181c",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -2222,12 +2222,12 @@
       },
       {
         "path": "_dev/sim-runs/vm/orwell/first-boot.ps1",
-        "sha256": "e5ae09ef6484dd71db2e09f4d36d0dd1d20242b80cc4d76b92235053537897be",
+        "sha256": "dfab28089612f12bdd53ba508bfb108e43eb42b6d83a527ddf323b88015a20a2",
         "mode": 420
       },
       {
         "path": "_dev/sim-runs/vm/orwell/harvest-results.ps1",
-        "sha256": "15c448138b530aab45ec60266584d803b92db40b6ada228f2bf022d47f771746",
+        "sha256": "ba42c284378fa7343f0e795632d02051e7ae68aee9dce8828e7ebc555dac96f0",
         "mode": 420
       },
       {
@@ -2267,7 +2267,7 @@
       },
       {
         "path": "_dev/sim-runs/vm/orwell/revert-to-golden.ps1",
-        "sha256": "d48e52a7e2b384a30375e1cd899416e5edd60984cf10ca470f6f6240dff3c21e",
+        "sha256": "3241fd5d8e440d48e702bfbee455e97139eedfc90f75651254243663ebd801c6",
         "mode": 420
       },
       {
@@ -6552,7 +6552,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "fc2b8451a6f6feb9417a462b40556c51399bb5e4c5acd1278ca27319bba86b60",
+        "sha256": "46c33d8eaaa9628483eecb6ed02fff0a262721420cc098f9b7db7ad8ee508df7",
         "mode": 420
       },
       {
@@ -14124,7 +14124,7 @@
     "package_script_count": 203,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "fc2b8451a6f6feb9417a462b40556c51399bb5e4c5acd1278ca27319bba86b60",
+    "graph_sha256": "46c33d8eaaa9628483eecb6ed02fff0a262721420cc098f9b7db7ad8ee508df7",
     "graph_nodes": 3859,
     "graph_edges": 2776
   },

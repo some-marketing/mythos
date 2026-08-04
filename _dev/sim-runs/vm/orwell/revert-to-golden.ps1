@@ -40,8 +40,16 @@ if (-not $FromExport) {
   "=== REVERT TO CHECKPOINT ==="
   $snaps = Get-VMSnapshot -VMName $VMName | Sort-Object CreationTime -Descending
   if (-not $snaps) { throw "no checkpoints exist; use -FromExport" }
-  $target = if ($SnapshotName) { $snaps | Where-Object { $_.Name -eq $SnapshotName } } else { $snaps | Select-Object -First 1 }
-  if (-not $target) { throw "checkpoint '$SnapshotName' not found" }
+  # CODE REVIEW (PR #12, codex P1 round 5): the default restore target must be
+  # a golden-* baseline -- the snapshot list is sorted only by creation time, so
+  # any newer manual/operational checkpoint would otherwise be selected and
+  # post-experiment guest state restored as if it were the pristine baseline.
+  # Mirrors the golden-* filter run-job.ps1 applies when establishing a baseline.
+  $target = if ($SnapshotName) { $snaps | Where-Object { $_.Name -eq $SnapshotName } } else { $snaps | Where-Object { $_.Name -like 'golden-*' } | Select-Object -First 1 }
+  if (-not $target) {
+    if ($SnapshotName) { throw "checkpoint '$SnapshotName' not found" }
+    throw "no golden-* checkpoint found; refusing to restore a non-baseline snapshot. Use -SnapshotName to pick explicitly."
+  }
   "restoring: $($target.Name) ($($target.CreationTime))"
   Restore-VMSnapshot -VMName $VMName -Name $target.Name -Confirm:$false
 }

@@ -115,3 +115,19 @@ Get-ChildItem -LiteralPath $Sterile -Recurse -File |
 "harvest manifest: $outMan"
 Get-ChildItem -LiteralPath $Sterile -Recurse -File |
   Select-Object FullName, Length | Format-Table -AutoSize | Out-String
+
+# CODE REVIEW (PR #12, codex P1 round 5): the guest records its own outcome in
+# out/STATUS (driver/test RC, or a named sentinel such as invalid-ticks /
+# halted-exit3), and the guest's finish() exits zero regardless. Without this
+# gate a failed engine test or driver would be harvested, manifested, and
+# reported as a successful job. Artifacts are preserved above; a missing or
+# nonzero guest status must fail the host job after harvest.
+$guestStatusPath = Join-Path $Sterile 'STATUS'
+if (-not (Test-Path -LiteralPath $guestStatusPath)) {
+  throw "no guest STATUS in harvested output -- the run did not report an outcome; refusing to report success"
+}
+$guestStatus = (Get-Content -LiteralPath $guestStatusPath -Raw).Trim()
+if ($guestStatus -ne '0') {
+  throw "guest STATUS is '$guestStatus' (expected 0) -- the run did not complete successfully; artifacts preserved but the job must fail"
+}
+"guest STATUS verified: 0"

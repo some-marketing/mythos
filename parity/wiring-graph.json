@@ -2060,7 +2060,7 @@
       "id": "file:_dev/sim-runs/vm/orwell/build-export.sh",
       "type": "file",
       "path": "_dev/sim-runs/vm/orwell/build-export.sh",
-      "sha256": "e00a21b73349988b6475b87529160238033550b52a822db6ffddededb42d0da5",
+      "sha256": "407daf478a6508c6ee655a3b82e4158ab926e15b78be89c8810b7db58840472f",
       "mode": 493
     },
     {
@@ -2144,7 +2144,7 @@
       "id": "file:_dev/sim-runs/vm/orwell/provision-vm.ps1",
       "type": "file",
       "path": "_dev/sim-runs/vm/orwell/provision-vm.ps1",
-      "sha256": "8eb0832782bb58647c1df41c1f18a4964f3b6fbee19760455ee0d1a028fe7b91",
+      "sha256": "e87dea803bd3f392762bd720a27292275d1c2eb7bf4b07a1584e55460a6dd52d",
       "mode": 420
     },
     {
@@ -4409,6 +4409,13 @@
       "mode": 420
     },
     {
+      "id": "file:ant-hive-world/embodiment-bridge/__pycache__/bridge_step.cpython-314.pyc",
+      "type": "file",
+      "path": "ant-hive-world/embodiment-bridge/__pycache__/bridge_step.cpython-314.pyc",
+      "sha256": "4f00f506cdeb7606d2a08caef482263515deede4b3047368b1dac55d5f98656d",
+      "mode": 420
+    },
+    {
       "id": "file:ant-hive-world/embodiment-bridge/bridge_scene.xml",
       "type": "file",
       "path": "ant-hive-world/embodiment-bridge/bridge_scene.xml",
@@ -4419,7 +4426,7 @@
       "id": "file:ant-hive-world/embodiment-bridge/bridge_step.py",
       "type": "file",
       "path": "ant-hive-world/embodiment-bridge/bridge_step.py",
-      "sha256": "8430ad20a738a4097c4933907b46b942bba488feaeeb83b3125e66e3e219e7da",
+      "sha256": "2011181b659c7fdea5c41994094bbd04eab7f69c0660b626650f78b83df36e19",
       "mode": 420
     },
     {
@@ -4461,7 +4468,7 @@
       "id": "file:ant-hive-world/embodiment-bridge/verify-containment.js",
       "type": "file",
       "path": "ant-hive-world/embodiment-bridge/verify-containment.js",
-      "sha256": "44fe62605c83d7b3c88194735bcd1d7c83a780a15ba5f35189960e1f871ae758",
+      "sha256": "e2cada0d772f9955bb3f1f41953b635e95fcd07cd2fc5d8336e4e53144e06170",
       "mode": 420
     },
     {
@@ -10828,6 +10835,13 @@
       "mode": 420
     },
     {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/__pycache__/bridge_step.cpython-314.pyc",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/__pycache__/bridge_step.cpython-314.pyc",
+      "sha256": "991b2935ed3e569f3a3fccd70e34a887b7f4ea7c5a0891a4fc422efdfdcfa802",
+      "mode": 420
+    },
+    {
       "id": "file:tools/ant-hive-world/embodiment-bridge/bridge_scene.xml",
       "type": "file",
       "path": "tools/ant-hive-world/embodiment-bridge/bridge_scene.xml",
@@ -10838,7 +10852,7 @@
       "id": "file:tools/ant-hive-world/embodiment-bridge/bridge_step.py",
       "type": "file",
       "path": "tools/ant-hive-world/embodiment-bridge/bridge_step.py",
-      "sha256": "8430ad20a738a4097c4933907b46b942bba488feaeeb83b3125e66e3e219e7da",
+      "sha256": "2011181b659c7fdea5c41994094bbd04eab7f69c0660b626650f78b83df36e19",
       "mode": 420
     },
     {
@@ -10880,7 +10894,7 @@
       "id": "file:tools/ant-hive-world/embodiment-bridge/verify-containment.js",
       "type": "file",
       "path": "tools/ant-hive-world/embodiment-bridge/verify-containment.js",
-      "sha256": "44fe62605c83d7b3c88194735bcd1d7c83a780a15ba5f35189960e1f871ae758",
+      "sha256": "e2cada0d772f9955bb3f1f41953b635e95fcd07cd2fc5d8336e4e53144e06170",
       "mode": 420
     },
     {
@@ -50432,7 +50446,7 @@
     }
   ],
   "counts": {
-    "nodes": 3861,
+    "nodes": 3863,
     "edges": 2776,
     "unresolved": 0
   }

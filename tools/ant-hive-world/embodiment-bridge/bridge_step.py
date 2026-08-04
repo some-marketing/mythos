@@ -9,7 +9,7 @@ and prints the resulting qpos/qvel AND the S0 Decision-1 perception vector
 -- [pos_x, pos_y, pos_z, vel_x, vel_y, vel_z, distance_to_target] -- as ONE
 line of JSON to stdout. Still no action mapping or reward mapping (S3-S4).
 
-Deployed to Orwell at C:\\Users\\taylo\\smos_ant_embodiment\\bridge_step.py
+Deployed to Orwell at C:\\Users\\<operator>\\smos_ant_embodiment\\bridge_step.py
 and invoked via plain SSH remote command execution from the Node side (see
 S1's docstring history for why this replaced the originally-proposed
 port-forward transport).

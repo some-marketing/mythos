@@ -82,11 +82,11 @@ const BASE_IMAGE_DIGEST =
   'python:3.11-slim@sha256:db3ff2e1800a8581e2c48a27c3995339d47bdf046da21c7627accd3d51053a93';
 
 const REMOTE_STAGE_DIR =
-  'C:\\Users\\taylo\\smos_ant_embodiment\\verify-containment-s3';
+  'C:\\Users\\<operator>\\smos_ant_embodiment\\verify-containment-s3';
 // No REMOTE_SCRATCH_DIR anymore: /scratch is a size-capped in-container
 // tmpfs (repair 2026-07-18), not a Windows host directory.
 const REMOTE_NEGTEST_DIR =
-  'C:\\Users\\taylo\\smos_ant_embodiment\\verify-containment-s3-negtest';
+  'C:\\Users\\<operator>\\smos_ant_embodiment\\verify-containment-s3-negtest';
 const REPO_DOCKERFILE = path.join(__dirname, 'Dockerfile');
 const REPO_REQ_LOCK = path.join(__dirname, 'requirements-lock.txt');
 const REPO_BRIDGE_STEP = path.join(__dirname, 'bridge_step.py');

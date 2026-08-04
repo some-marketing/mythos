@@ -43,6 +43,12 @@ cp -R "tools/ant-hive-world" "$PAYLOAD/tools/ant-hive-world"
 # host) -- and must never ride in the portable courier payload. Excluded
 # at copy time here AND asserted absent in the post-copy assertions below.
 rm -rf "$PAYLOAD/tools/ant-hive-world/embodiment-bridge"
+# CODE REVIEW (PR #12, codex P1): world-mind-harness.cjs is the Mac-side
+# Mythos world mind -- it reads ~/.claude/... and Mythos-memories/... and
+# invokes frontier-model CLIs; it is explicitly NOT portable and must
+# never ride in the zero-NIC guest payload. Excluded here AND asserted
+# absent below.
+rm -f "$PAYLOAD/tools/ant-hive-world/world-mind-harness.cjs"
 
 # ---------------------------------------------------------------------------
 # ALLOWLIST 2 — the drivers. Top-level .js only. The vm/ subdirectory is
@@ -106,6 +112,11 @@ fi
 # the D1 allowlist (its README: "not ported") -- assert it did not ride in.
 if find "$PAYLOAD" -path '*/embodiment-bridge/*' | grep -q .; then
   echo "FATAL: embodiment-bridge/ content present in payload (host-derived, excluded)" >&2; fail=1
+fi
+# world-mind-harness.cjs is Mac-side Mythos mind tooling (reads ~/.claude
+# and Mythos-memories, invokes frontier CLIs) -- assert it did not ride in.
+if find "$PAYLOAD" -name 'world-mind-harness.cjs' | grep -q .; then
+  echo "FATAL: world-mind-harness.cjs present in payload (Mac-side mind tooling, excluded)" >&2; fail=1
 fi
 [ "$fail" -eq 0 ] || exit 1
 say "      assertions passed"

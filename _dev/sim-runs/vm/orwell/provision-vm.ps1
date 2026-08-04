@@ -138,9 +138,14 @@ try {
   # CODE REVIEW (PR #12, codex P2): the manifest must pair with the selected
   # payload -- an independent first filesystem result could copy an older
   # manifest beside the newest archive and make bootstrap verification fail.
+  # CODE REVIEW (PR #12, codex P2): the manifest is REQUIRED, not optional.
+  # The guest bootstrap only verifies PAYLOAD-MANIFEST.txt when it exists, so
+  # a misstaged provisioning path that omitted it could let first-boot.ps1
+  # accept and seal an image whose per-file allowlist was never verified.
   $manName = $pay.Name -replace '\.tar\.gz$', '.MANIFEST.txt'
   $manPath = Join-Path $Root "Staging\In\$manName"
-  if (Test-Path -LiteralPath $manPath) { Copy-Item -LiteralPath $manPath -Destination "${dl}:\PAYLOAD-MANIFEST.txt" -Force }
+  if (-not (Test-Path -LiteralPath $manPath)) { throw "payload manifest missing: $manPath (the selected payload's per-file allowlist must be verified during provisioning)" }
+  Copy-Item -LiteralPath $manPath -Destination "${dl}:\PAYLOAD-MANIFEST.txt" -Force
 
   New-Item -ItemType Directory -Path "${dl}:\out" -Force | Out-Null
   "courier contents:"

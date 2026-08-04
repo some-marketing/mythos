@@ -36,6 +36,13 @@ say() { printf '%s\n' "$*"; }
 say "[1/4] engine: tools/ant-hive-world"
 mkdir -p "$PAYLOAD/tools"
 cp -R "tools/ant-hive-world" "$PAYLOAD/tools/ant-hive-world"
+# CODE REVIEW (PR #12, codex P1): embodiment-bridge/ is host-derived
+# remote-execution plumbing -- its README classifies it as "not ported"
+# (hardcoded remote host default, release-gate checker tied to one
+# containment plan, client/server split only meaningful against that
+# host) -- and must never ride in the portable courier payload. Excluded
+# at copy time here AND asserted absent in the post-copy assertions below.
+rm -rf "$PAYLOAD/tools/ant-hive-world/embodiment-bridge"
 
 # ---------------------------------------------------------------------------
 # ALLOWLIST 2 — the drivers. Top-level .js only. The vm/ subdirectory is
@@ -94,6 +101,11 @@ fi
 # The word 'clients/' must not appear as a path component.
 if find "$PAYLOAD" -path '*/clients/*' | grep -q .; then
   echo "FATAL: clients/ content present in payload" >&2; fail=1
+fi
+# embodiment-bridge/ is host-derived remote-execution plumbing excluded by
+# the D1 allowlist (its README: "not ported") -- assert it did not ride in.
+if find "$PAYLOAD" -path '*/embodiment-bridge/*' | grep -q .; then
+  echo "FATAL: embodiment-bridge/ content present in payload (host-derived, excluded)" >&2; fail=1
 fi
 [ "$fail" -eq 0 ] || exit 1
 say "      assertions passed"

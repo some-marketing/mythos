@@ -362,6 +362,19 @@ write_files:
         TURN_ROOT="/opt/antworld/_dev/state/$RUN_NAME"
         CHECKPOINT_ROOT="/opt/antworld/_dev/state/checkpoints"
         mkdir -p "$CHECKPOINT_ROOT"
+        # CODE REVIEW (PR #12, codex P1): the turn driver's sandbox root is
+        # derived only from RUN_NAME. If a run name is reused without a full
+        # golden restore, setupHives resets hive/world state while
+        # run-log.jsonl and other sandbox evidence are appended under the
+        # same root -- the harvested projection and checkpoint would combine
+        # two fresh-mind runs under one identity. Fail closed on a nonempty
+        # turn root: a turn is a turn.
+        if [ -d "$TURN_ROOT" ] && [ -n "$(ls -A "$TURN_ROOT" 2>/dev/null)" ]; then
+          echo "FATAL: turn root $TURN_ROOT is not empty; a reused RUN_NAME would mix separate runs' observations -- use a fresh RUN_NAME or restore the golden baseline"
+          echo "reused-turn-root" > "$COURIER/out/STATUS"
+          finish
+          exit 0
+        fi
         echo "MODE=turn run=$RUN_NAME ticks=$TICKS deadline=$DEADLINE_ISO"
         cd /opt/antworld
         runuser -u antworld -- /usr/local/bin/node tools/ant-hive-world/run-live.js \

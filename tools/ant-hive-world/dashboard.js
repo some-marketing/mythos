@@ -305,6 +305,7 @@ const PAGE = `<!doctype html>
   <div class="colonies" id="culture-behavior" style="margin-top:0.8rem;"></div>
   <div class="resources" style="margin-top:1rem;">
     <h3 style="font-size:0.9rem;color:#e0a949;margin:0 0 0.4rem;">Build ledger (last 40)</h3>
+    <div id="culture-mirror" style="font-size:0.8rem;color:#c2ab8d;line-height:1.5;"></div>
     <div id="culture-builds" style="font-size:0.8rem;color:#c2ab8d;line-height:1.5;"></div>
   </div>
 </div>
@@ -392,20 +393,29 @@ function renderCulture(data) {
       '</div>';
   }).join('') || '<div class="row">(none yet)</div>';
 
+  const mirrorEl = document.getElementById('culture-mirror');
   const buildsEl = document.getElementById('culture-builds');
   const mirror = culture.mirror;
+  // CODE REVIEW (PR #12, codex P2): the panel used to be inserted with
+  // insertAdjacentElement on every refresh while buildsEl.innerHTML only
+  // replaced the ledger, so any non-null culture.mirror grew duplicate/
+  // stale mirror panels indefinitely. Render into the stable
+  // #culture-mirror container instead: innerHTML replaces the previous
+  // panel on each refresh, and the panel is cleared when the detector
+  // stops running.
   if (mirror) {
-    const mirrorEl = document.createElement('div');
-    mirrorEl.style.cssText = 'margin-top:1rem;padding:0.8rem 1rem;border:1px solid rgba(243,233,219,0.13);border-radius:10px;background:#261d13;';
     const color = mirror.verdict === 'mirror-forming' ? '#7ee081' : mirror.verdict === 'approaching-null' ? '#e0a949' : '#c2ab8d';
-    mirrorEl.innerHTML = '<h3 style="font-size:0.9rem;color:"#e0a949";margin:0 0 0.4rem;">Mirror gate (three-sided experiment)</h3>' +
-      '<div class="row"><span>Gate: "will they create a simulation that mirrors this one"</span><b style="color:"' + color + '";">' + mirror.verdict + '</b></div>' +
+    mirrorEl.innerHTML = '<div style="margin-top:1rem;padding:0.8rem 1rem;border:1px solid rgba(243,233,219,0.13);border-radius:10px;background:#261d13;">' +
+      '<h3 style="font-size:0.9rem;color:#e0a949;margin:0 0 0.4rem;">Mirror gate (three-sided experiment)</h3>' +
+      '<div class="row"><span>Gate: "will they create a simulation that mirrors this one"</span><b style="color:' + color + ';">' + mirror.verdict + '</b></div>' +
       '<div class="row"><span>Builds / features</span><b>' + mirror.n_builds + ' / ' + mirror.n_features + '</b></div>' +
       '<div class="row"><span>Observed mean nearest-feature dist</span><b>' + (mirror.observed != null ? mirror.observed.toFixed(2) : '—') + '</b></div>' +
       '<div class="row"><span>Null mean ± sd</span><b>' + (mirror.null_mean != null ? mirror.null_mean.toFixed(2) + ' ± ' + mirror.null_sd.toFixed(2) : '—') + '</b></div>' +
       '<div class="row"><span>p-value (permutation, ' + mirror.shuffles + ')</span><b>' + (mirror.p_value != null ? mirror.p_value.toFixed(3) : '—') + '</b></div>' +
-      '<div style="font-size:0.72rem;color:#8a7a63;margin-top:0.4rem;">p&lt;0.05 = mirror forming; p&lt;0.2 = approaching null; else null-consistent. Panel appears only when the detector runs cleanly.</div>';
-    buildsEl.insertAdjacentElement('beforebegin', mirrorEl);
+      '<div style="font-size:0.72rem;color:#8a7a63;margin-top:0.4rem;">p&lt;0.05 = mirror forming; p&lt;0.2 = approaching null; else null-consistent. Panel appears only when the detector runs cleanly.</div>' +
+      '</div>';
+  } else {
+    mirrorEl.innerHTML = '';
   }
   const ledger = culture.build_ledger || [];
   buildsEl.innerHTML = ledger.length ? ledger.map((e) =>

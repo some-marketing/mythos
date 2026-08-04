@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "27363cf9b42265caddcc552d3e8c85ee30c58fd5f71a4259455db201adbfe46e",
+    "expected_tree_sha256": "4fb61922cb3995fcdc6a15d378705c906ea82eae8ef1f98f3f13c5a3d71154d3",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -2182,7 +2182,7 @@
       },
       {
         "path": "_dev/sim-runs/vm/orwell/build-export.sh",
-        "sha256": "a14449ac24090f897a0dbc88685678137a7d04fda74dcad53a828a1d0e714de8",
+        "sha256": "e00a21b73349988b6475b87529160238033550b52a822db6ffddededb42d0da5",
         "mode": 493
       },
       {
@@ -2202,7 +2202,7 @@
       },
       {
         "path": "_dev/sim-runs/vm/orwell/cloud-init/user-data",
-        "sha256": "c8ca75e789d1ecb091831808c9553b791d4d12a6c2f5533e0f7017cd7592ee9d",
+        "sha256": "5596c5386781d9f2d34ac4d62282d68ea3f1edca467adcf7b541214fcc535ac7",
         "mode": 420
       },
       {
@@ -6562,7 +6562,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "8d27dd18ed453c6ceea2bde3f3a1cc632d701476b0739633e897c07c09770705",
+        "sha256": "be72eaad232edeba06fdc9c0eeee8fa8fdfc53542e3317f1dfab656e0a808443",
         "mode": 420
       },
       {
@@ -6972,7 +6972,7 @@
       },
       {
         "path": "tools/ant-hive-world/dashboard.js",
-        "sha256": "8be0cd3c32a0b25dc3eb1a96c956d2284729c3778ec65999432e9dc6ccaabee5",
+        "sha256": "85519e486fdf806096eb48e6e68b279880bdcc668bdb28c9b019885d15591351",
         "mode": 420
       },
       {
@@ -14134,7 +14134,7 @@
     "package_script_count": 203,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "8d27dd18ed453c6ceea2bde3f3a1cc632d701476b0739633e897c07c09770705",
+    "graph_sha256": "be72eaad232edeba06fdc9c0eeee8fa8fdfc53542e3317f1dfab656e0a808443",
     "graph_nodes": 3861,
     "graph_edges": 2776
   },

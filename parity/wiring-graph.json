@@ -2060,7 +2060,7 @@
       "id": "file:_dev/sim-runs/vm/orwell/build-export.sh",
       "type": "file",
       "path": "_dev/sim-runs/vm/orwell/build-export.sh",
-      "sha256": "a14449ac24090f897a0dbc88685678137a7d04fda74dcad53a828a1d0e714de8",
+      "sha256": "e00a21b73349988b6475b87529160238033550b52a822db6ffddededb42d0da5",
       "mode": 493
     },
     {
@@ -2088,7 +2088,7 @@
       "id": "file:_dev/sim-runs/vm/orwell/cloud-init/user-data",
       "type": "file",
       "path": "_dev/sim-runs/vm/orwell/cloud-init/user-data",
-      "sha256": "c8ca75e789d1ecb091831808c9553b791d4d12a6c2f5533e0f7017cd7592ee9d",
+      "sha256": "5596c5386781d9f2d34ac4d62282d68ea3f1edca467adcf7b541214fcc535ac7",
       "mode": 420
     },
     {
@@ -10824,7 +10824,7 @@
       "id": "file:tools/ant-hive-world/dashboard.js",
       "type": "file",
       "path": "tools/ant-hive-world/dashboard.js",
-      "sha256": "8be0cd3c32a0b25dc3eb1a96c956d2284729c3778ec65999432e9dc6ccaabee5",
+      "sha256": "85519e486fdf806096eb48e6e68b279880bdcc668bdb28c9b019885d15591351",
       "mode": 420
     },
     {

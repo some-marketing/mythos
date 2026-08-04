@@ -43,6 +43,15 @@ try {
   foreach ($f in @('job.env','CANCEL')) {
     if (Test-Path "${dl}:\$f") { Remove-Item "${dl}:\$f" -Force; "cleared stale ${f} from courier" }
   }
+  # CODE REVIEW (PR #12, codex P1 round 7): a previous successful provisioning
+  # leaves BOOTSTRAP-RC and provision-report.txt on the courier. On a refresh
+  # boot where cloud-init fails to rerun (or bootstrap fails before writing
+  # them), the stale receipts would satisfy the post-boot verification and let
+  # a broken image be sealed. Delete them so only freshly generated evidence
+  # can pass.
+  foreach ($f in @('BOOTSTRAP-RC','provision-report.txt')) {
+    if (Test-Path "${dl}:\out\$f") { Remove-Item "${dl}:\out\$f" -Force; "cleared stale ${f} from courier out/" }
+  }
 } finally { Dismount-Courier | Out-Null }
 Attach-Courier | Out-Null
 

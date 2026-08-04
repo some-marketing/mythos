@@ -46,10 +46,23 @@ while ((Get-VM -Name $VMName).State -ne 'Off') {
 Detach-Courier
 $dl = Mount-Courier -ReadOnly
 try {
-  if (Test-Path "${dl}:\out\STATUS") { "STATUS: " + (Get-Content "${dl}:\out\STATUS" -Raw).Trim() }
+  # CODE REVIEW (PR #12, codex P1 round 7): a guest that powers off without
+  # running the job service (courier-mount or service-start failure) produces
+  # no evidence at all; the previous code only printed FAIL and still exited
+  # 0. Throw unless the cancellation status AND the membrane audit are both
+  # present and valid -- otherwise automation treats the reverse-membrane and
+  # cancellation test as proven when neither occurred.
+  if (-not (Test-Path "${dl}:\out\STATUS")) {
+    throw "FAIL: no guest STATUS -- the job service never reported a cancellation"
+  }
+  $guestStatus = (Get-Content "${dl}:\out\STATUS" -Raw).Trim()
+  if ($guestStatus -ne 'cancelled-before-start') {
+    throw "FAIL: guest STATUS is '$guestStatus' (expected 'cancelled-before-start') -- cancellation was not honoured"
+  }
+  "STATUS: $guestStatus"
   if (Test-Path "${dl}:\out\membrane-audit.txt") {
     "--- MEMBRANE AUDIT ---"
     Get-Content "${dl}:\out\membrane-audit.txt"
-  } else { "FAIL: no membrane audit produced" }
+  } else { throw "FAIL: no membrane audit produced -- reverse-membrane evidence is missing" }
   if (Test-Path "${dl}:\out\job.log") { "--- job.log ---"; Get-Content "${dl}:\out\job.log" }
 } finally { Dismount-Courier }

@@ -472,7 +472,12 @@ const server = http.createServer((req, res) => {
 module.exports = { computeSnapshot, computeWikiSnapshot, discoverHives, server, CONFIG_FIELDS };
 
 if (require.main === module) {
-  server.listen(PORT, () => {
+  // CODE REVIEW (PR #12, codex P2 round 7): the dashboard is local-only by
+  // contract but the unauthenticated /config endpoint can alter the live
+  // experiment; binding with no host would listen on a wildcard address and
+  // expose it to any reachable client. Bind explicitly to loopback.
+  const LOOPBACK_HOST = '127.0.0.1';
+  server.listen(PORT, LOOPBACK_HOST, () => {
     process.stdout.write(`ant-hive-world dashboard: http://localhost:${PORT} (sandbox: ${SANDBOX_ROOT})\n`);
   });
 }

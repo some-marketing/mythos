@@ -56,8 +56,29 @@ const rounds = start ? start.episode_rounds : null;
 // Contract rule 2. Episodes that did not reach the full round budget are
 // dropped entirely, not down-weighted.
 const allFinals = readJsonl(path.join(ROOT, 'metrics.jsonl')).filter((r) => r.final);
-const finals = allFinals.filter((r) => rounds === null || r.round === rounds);
-const droppedEpisodes = new Set(allFinals.filter((r) => rounds !== null && r.round !== rounds).map((r) => r.episode));
+
+// CODE REVIEW (PR #12, codex P1 round 7): the driver writes every group's
+// final:true rows before the terminal episode-end event, so a crash between
+// the two leaves partial rows whose round equals the budget. Those rows must
+// not be analyzed as a complete episode. Restrict analysis to episodes with a
+// complete episode-end event AND the expected arm-by-replicate row count
+// (groups_per_episode).
+const episodeEnds = new Set(
+  events.filter((e) => e.event === 'episode-end' && e.complete === true).map((e) => e.episode)
+);
+const expectedPerEpisode = start ? start.groups_per_episode : null;
+const perEpisodeCount = new Map();
+for (const r of allFinals) {
+  if (rounds !== null && r.round !== rounds) continue;
+  perEpisodeCount.set(r.episode, (perEpisodeCount.get(r.episode) || 0) + 1);
+}
+const finals = allFinals.filter((r) => {
+  if (rounds !== null && r.round !== rounds) return false;
+  if (!episodeEnds.has(r.episode)) return false;
+  if (expectedPerEpisode !== null && perEpisodeCount.get(r.episode) !== expectedPerEpisode) return false;
+  return true;
+});
+const droppedEpisodes = new Set(allFinals.filter((r) => !finals.includes(r)).map((r) => r.episode));
 
 const HEADLINE = ['cum_reward', 'starve_crossings', 'applied_rate', 'builds', 'structures', 'territory', 'mean_entropy'];
 const PER_WORLD = ['cum_reward', 'starve_crossings', 'builds', 'structures', 'territory', 'world_food'];

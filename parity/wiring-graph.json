@@ -2032,7 +2032,7 @@
       "id": "file:_dev/sim-runs/summarize-authority-probe.js",
       "type": "file",
       "path": "_dev/sim-runs/summarize-authority-probe.js",
-      "sha256": "08d3b83937a77cfcad9cfc213eca61cd68abd85c5a021b4c333902eacb8a0e89",
+      "sha256": "80e4b3feeee6156b19e1f012949835d29e7f60f38b6642c3dd54e7982bc1eb4b",
       "mode": 420
     },
     {
@@ -2116,7 +2116,7 @@
       "id": "file:_dev/sim-runs/vm/orwell/first-boot.ps1",
       "type": "file",
       "path": "_dev/sim-runs/vm/orwell/first-boot.ps1",
-      "sha256": "dfab28089612f12bdd53ba508bfb108e43eb42b6d83a527ddf323b88015a20a2",
+      "sha256": "284e3583c6e910673911e29052baf7d8388858510faaa96fdd104b47622edae0",
       "mode": 420
     },
     {
@@ -2214,7 +2214,7 @@
       "id": "file:_dev/sim-runs/vm/orwell/verify-membrane.ps1",
       "type": "file",
       "path": "_dev/sim-runs/vm/orwell/verify-membrane.ps1",
-      "sha256": "b60e6aee81f1f12690521220711e9a76bd5e3d5bc51df8a467a97c66360f9a12",
+      "sha256": "72c5466813b442cbb657d99029723f44c049b0175855149d9b23dda8d6343af8",
       "mode": 420
     },
     {
@@ -4391,7 +4391,7 @@
       "id": "file:ant-hive-world/dashboard.js",
       "type": "file",
       "path": "ant-hive-world/dashboard.js",
-      "sha256": "4de278e4c551de015f9ee683c5462b2b2f276c662e188e3c73993036fbba14ac",
+      "sha256": "73ff006d27ef2de28cfeda3d4aeed0c468374320dbe2b4c4a88e222a3ae66047",
       "mode": 420
     },
     {
@@ -4489,7 +4489,7 @@
       "id": "file:ant-hive-world/embodiment/verify_embodiment_smoke.py",
       "type": "file",
       "path": "ant-hive-world/embodiment/verify_embodiment_smoke.py",
-      "sha256": "8455005cbebf885fcea31a11fa5ade36212b453fe3fcf4fc01d084fd86044afd",
+      "sha256": "02540db4c0f06e179f86b4f52b9cf3f5a95155e558f96994655e60c66e6f2a69",
       "mode": 420
     },
     {

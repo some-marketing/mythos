@@ -22,6 +22,7 @@ This is a scripted check against the log, not an eyeballed viewer
 screenshot.
 """
 
+import hashlib
 import json
 import math
 import os
@@ -29,6 +30,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 LOG_PATH = os.path.join(HERE, "run-log.jsonl")
+SCENE_PATH = os.path.join(HERE, "scene.xml")
 
 SPHERE_RADIUS = 0.05  # must match scene.xml's ant_placeholder_geom size
 EXPECTED_RESTING_HEIGHT = SPHERE_RADIUS
@@ -141,6 +143,23 @@ def main():
     if not entries:
         print("VERIFY_EMBODIMENT_SMOKE_FAIL log is empty")
         sys.exit(1)
+
+    # CODE REVIEW (PR #12, codex P2 round 7): the runner records scene_sha256 on
+    # every entry precisely to bind evidence to a scene. If scene.xml changed
+    # after the log was generated, the trajectory below would certify the new
+    # scene without ever executing it. Require every entry to match the current
+    # scene hash before running the physics checks.
+    with open(SCENE_PATH, "rb") as f:
+        current_scene_sha = hashlib.sha256(f.read()).hexdigest()
+    for i, e in enumerate(entries):
+        logged = e.get("scene_sha256")
+        if logged != current_scene_sha:
+            print(
+                "VERIFY_EMBODIMENT_SMOKE_FAIL entry %d scene_sha256 %s != current scene %s"
+                % (i, logged, current_scene_sha)
+            )
+            sys.exit(1)
+    print("scene binding OK: %d entries match current scene %s" % (len(entries), current_scene_sha[:12]))
 
     all_passed = True
     for name, check_fn in CHECKS:

@@ -68,6 +68,69 @@ function getLiveSignalSummary(projectRoot = PROJECT_ROOT) {
   }));
 }
 
+// ── Section: Bridge activity ──
+
+// Bridge targets this repo can dispatch to, with the binary that powers each.
+// `binary` is a command name (resolved via PATH); `credentialEnv` is the env
+// var the bridge needs when its binary requires one. Absence of either marks
+// the lane unavailable — this is availability, not "active".
+const BRIDGE_TARGETS = Object.freeze([
+  { actor: 'codex', binary: 'codex', credentialEnv: null },
+  { actor: 'gemini', binary: 'gemini', credentialEnv: 'GEMINI_API_KEY', opItem: 'sm_os-gemini-credential' },
+  { actor: 'claude', binary: 'claude', credentialEnv: null },
+  { actor: 'openrouter', binary: null, credentialEnv: 'OPENROUTER_API_KEY' }
+]);
+
+function resolveCredentialPresent(target) {
+  if (!target.credentialEnv) return true;
+  if (process.env[target.credentialEnv]) return true;
+  if (target.opItem) {
+    try {
+      const { execSync } = require('child_process');
+      execSync(`op item get ${JSON.stringify(target.opItem)} --fields label=credential`, {
+        encoding: 'utf8', timeout: 3000, stdio: 'ignore'
+      });
+      return true;
+    } catch {
+      return false;
+    }
+  }
+  return false;
+}
+
+function resolveBinary(command) {
+  if (!command) return null;
+  try {
+    const { execSync } = require('child_process');
+    return execSync(`command -v ${command}`, { encoding: 'utf8', timeout: 3000 }).trim() || null;
+  } catch {
+    return null;
+  }
+}
+
+function getBridgeSummary(projectRoot = PROJECT_ROOT) {
+  const entries = listSignals({ root: projectRoot });
+  // Live signals that are bridge-targeted: dispatch-bridge signals carry the
+  // actor they were sent to; ready-for-review signals name their next actor.
+  const perActor = new Map();
+  for (const e of entries) {
+    const actor = e.signal && (e.signal.recommended_next_actor || e.signal.actor);
+    if (!actor) continue;
+    const slot = perActor.get(actor) || { live: 0, scopes: [] };
+    slot.live += 1;
+    if (slot.scopes.length < 5) slot.scopes.push(e.signal.scope || e.signal.signal_scope || e.filename);
+    perActor.set(actor, slot);
+  }
+
+  return BRIDGE_TARGETS.map((t) => ({
+    actor: t.actor,
+    binary: resolveBinary(t.binary),
+    credential: resolveCredentialPresent(t),
+    live: perActor.get(t.actor) ? perActor.get(t.actor).live : 0,
+    scopes: perActor.get(t.actor) ? perActor.get(t.actor).scopes : []
+  }));
+}
+
 // ── Section: Closeout readiness ──
 
 function getCloseoutSummary(projectRoot = PROJECT_ROOT) {
@@ -103,6 +166,7 @@ function buildStatus(projectRoot = PROJECT_ROOT) {
     schema: 'MythosStatusSnapshot/1.0',
     timestamp: new Date().toISOString(),
     live_signals: getLiveSignalSummary(projectRoot),
+    bridges: getBridgeSummary(projectRoot),
     closeout: getCloseoutSummary(projectRoot),
     inventory: getSystemInventory(projectRoot)
   };
@@ -125,6 +189,21 @@ function formatText(status) {
     }
   } else {
     lines.push('Live signals: none');
+  }
+  lines.push('');
+
+  // Bridges — what's live and what's available
+  const bridges = status.bridges || [];
+  lines.push(`Bridges (${bridges.filter((b) => b.live > 0).length} active / ${bridges.filter((b) => b.binary && b.credential).length} available):`);
+  if (bridges.length === 0) {
+    lines.push('  (none)');
+  } else {
+    for (const b of bridges) {
+      const avail = b.binary && b.credential ? 'avail' : (b.binary ? 'no-cred' : 'no-bin');
+      const active = b.live > 0 ? `LIVE(${b.live})` : 'idle';
+      const scopes = b.scopes.length > 0 ? ` — ${b.scopes.join(', ')}` : '';
+      lines.push(`  [${avail}] ${b.actor}: ${active}${scopes}`);
+    }
   }
   lines.push('');
 
@@ -181,6 +260,7 @@ module.exports = {
   buildStatus,
   formatText,
   getLiveSignalSummary,
+  getBridgeSummary,
   getCloseoutSummary,
   getSystemInventory
 };

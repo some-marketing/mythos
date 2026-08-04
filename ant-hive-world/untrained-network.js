@@ -291,7 +291,7 @@ function trainStep(network, hiveState, worldState, actionIndex, reward, entropyB
 }
 
 // Apply upkeep decay to a hive's own stockpile -- the actual survival
-// pressure. Returns { hiveState, starved } so callers can compute a
+// pressure. Returns { hiveState, starved, foodExhausted } so callers can compute a
 // starvation-reward penalty and log it as a real event, not a silent decay.
 function applyUpkeep(hiveState, upkeepCost) {
   const cost = upkeepCost === undefined ? UPKEEP_COST : upkeepCost;
@@ -300,9 +300,11 @@ function applyUpkeep(hiveState, upkeepCost) {
   const nextFood = Math.max(0, food - cost);
   stockpile.food = nextFood;
   const starved = food > 0 && nextFood === 0;
+  const foodExhausted = nextFood === 0;
   return {
     hiveState: { ...hiveState, hive_state: { ...hiveState.hive_state, stockpile } },
-    starved
+    starved,
+    foodExhausted
   };
 }
 

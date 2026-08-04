@@ -15,16 +15,23 @@ const { decide, trainStep, applyUpkeep, forward, encodeState, computeEntropy } =
 // Survival/resource-based reward (operator, 2026-07-16). Real consequences,
 // not narrated ones: a successful gather/build/claim is rewarded because it
 // is what keeps the hive fed and growing; a failed/contested action is a
-// mild negative because it wastes a turn without result. `starved` currently
-// means upkeep crossed from positive food to zero; persistent zero-food ticks
-// are not flagged (the open reward-design gap recorded in the run debrief).
-function computeReward(applyResult, starved) {
+// mild negative because it wastes a turn without result.
+// REWARD CONTRACT v2 (2026-08-03, ported from tools/ant-hive-world after
+// the codex review of PR #12): v1 penalized `starved`, the positive-to-zero
+// CROSSING, so a hive already at zero food was rewarded for idling (0) and
+// punished for a successful gather (+1-2=-1). v2 penalizes `foodExhausted`,
+// the STATE of ending a tick with nothing: at food 0, gather (+1-2=-1) now
+// dominates idle (0-2=-2). `starved` remains the published crossing metric.
+const REWARD_CONTRACT_VERSION = 2;
+
+function computeReward(applyResult, foodExhausted) {
   let reward = 0;
   if (applyResult.verb === 'gather') reward += applyResult.applied ? 1 : -0.5;
   else if (applyResult.verb === 'build') reward += applyResult.applied ? 2 : -0.5;
   else if (applyResult.verb === 'claim-territory') reward += applyResult.applied ? 1.5 : -0.5;
-  // 'idle' contributes 0 -- a genuine, unpenalized choice.
-  if (starved) reward -= 2;
+  // 'idle' contributes 0 from the action itself -- a genuine choice -- but it
+  // no longer escapes the exhaustion penalty by having avoided the crossing.
+  if (foodExhausted) reward -= 2;
   return reward;
 }
 
@@ -166,10 +173,10 @@ function trainTick(hive, worldStatePath, network, rng, liveConfig = {}, tickInde
   const action = decide(network, hiveState, worldState, rng, liveConfig, tickIndex);
 
   const result = tick(hive, worldStatePath, () => action, liveConfig, rng);
-  const { hiveState: afterUpkeep, starved } = applyUpkeep(result.hiveState, liveConfig.upkeep_cost_food);
+  const { hiveState: afterUpkeep, starved, foodExhausted } = applyUpkeep(result.hiveState, liveConfig.upkeep_cost_food);
   fs.writeFileSync(hive.hiveStatePath, JSON.stringify(afterUpkeep, null, 2));
 
-  const reward = computeReward({ verb: action.verb, applied: result.applied }, starved);
+  const reward = computeReward({ verb: action.verb, applied: result.applied }, foodExhausted);
   const scheduleWeight = computeEntropyBonusWeight(tickIndex, liveConfig);
   // Reactive controller (resolved s4-reactive-controller gate): reads the
   // PREVIOUS tick's own-hive policy_entropy_post_update from controllerState
@@ -210,6 +217,8 @@ function trainTick(hive, worldStatePath, network, rng, liveConfig = {}, tickInde
     action: action.verb,
     applied: result.applied,
     starved,
+    food_exhausted: foodExhausted,
+    reward_contract_version: REWARD_CONTRACT_VERSION,
     reward,
     policy_entropy: action.policy_entropy,
     policy_entropy_post_update: policyEntropyPostUpdate,

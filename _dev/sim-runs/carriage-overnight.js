@@ -111,6 +111,18 @@ if (!(ROOT + path.sep).startsWith(ALLOWED_PREFIX)) {
   process.stderr.write(`FAIL-CLOSED: --root ${ROOT} is not under ${ALLOWED_PREFIX}\n`);
   process.exit(2);
 }
+
+// CODE REVIEW (PR #12, codex P1): reusing a nonempty run root silently
+// appends events/metrics while episode/replicate numbering restarts at
+// zero, and summarizers pair rows by episode:replicate alone -- separate
+// runs get double-counted. Refuse a nonempty root: a run is a run.
+if (fs.existsSync(ROOT)) {
+  const existing = fs.readdirSync(ROOT);
+  if (existing.length > 0) {
+    process.stderr.write("FAIL-CLOSED: --root " + ROOT + " is not empty (" + existing.length + " entries); reuse would double-count run rows -- choose a fresh root or move it aside\n");
+    process.exit(2);
+  }
+}
 if (!DEADLINE_ISO) {
   process.stderr.write('FAIL-CLOSED: --deadline-iso is mandatory (unattended runs must carry a wall-clock bound)\n');
   process.exit(2);

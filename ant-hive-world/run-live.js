@@ -54,6 +54,21 @@ const WORLD_STATE_PATH = path.join(SANDBOX_ROOT, 'shared', 'world-state.json');
 const RUN_LOG_PATH = path.join(SANDBOX_ROOT, 'run-log.jsonl');
 const CONFIG_PATH = path.join(SANDBOX_ROOT, 'live-config.json');
 
+// CODE REVIEW (PR #12, codex P1): launching this driver a second time with
+// the same sandbox root -- including the fixed default -- makes setupHives
+// overwrite hive/world state while the existing audit logs remain, and
+// appendRunLog then appends a new tick sequence starting at one with no run
+// identifier. The sandbox silently mixes observations from different fresh
+// minds and reset worlds. Refuse a nonempty root: a run is a run (same
+// guard as carriage-overnight.js / authority-probe.js).
+if (fs.existsSync(SANDBOX_ROOT)) {
+  const existing = fs.readdirSync(SANDBOX_ROOT);
+  if (existing.length > 0) {
+    process.stderr.write("FAIL-CLOSED: --sandbox-root " + SANDBOX_ROOT + " is not empty (" + existing.length + " entries); reuse would mix separate runs' observations -- choose a fresh root or move it aside\n");
+    process.exit(2);
+  }
+}
+
 let stopRequested = false;
 function requestStop(signal) {
   stopRequested = true;

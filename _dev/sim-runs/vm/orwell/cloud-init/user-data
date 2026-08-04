@@ -89,9 +89,19 @@ write_files:
       NODE_TARBALL="$(ls "$COURIER"/node-*-linux-x64.tar.xz 2>/dev/null | head -1)"
       if [ -z "$NODE_TARBALL" ]; then echo "FATAL: node tarball absent from courier"; exit 1; fi
       echo "installing node from $(basename "$NODE_TARBALL")"
-      if [ -f "$COURIER/node.sha256" ]; then
-        ( cd "$COURIER" && sha256sum -c node.sha256 )
+      # CODE REVIEW (PR #12, codex P1): a missing checksum previously skipped
+      # verification entirely and a failed `sha256sum -c` was ignored (this
+      # script runs without `set -e`), so an altered archive could be
+      # extracted and sealed as a trusted runtime. The host always writes
+      # node.sha256 alongside the tarball (provision-vm.ps1) -- require it
+      # and fail closed on any verification failure, mirroring the payload
+      # checksum block below.
+      if [ ! -f "$COURIER/node.sha256" ]; then
+        echo "FATAL: node.sha256 absent from courier -- refusing to install unverified runtime"; exit 1
       fi
+      ( cd "$COURIER" && sha256sum -c node.sha256 ) \
+        || { echo "FATAL: node tarball checksum verification failed"; exit 1; }
+      echo "node tarball sha256 VERIFIED"
       mkdir -p /usr/local/node
       # Explicit failure checks: this script runs without `set -e` so that a
       # failure still reaches the EXIT trap and gets reported, which means every

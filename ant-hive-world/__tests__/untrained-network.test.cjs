@@ -362,37 +362,27 @@ test('trainTick adds policy_entropy_post_update as a NEW, distinct field without
   assert.notEqual(result.policy_entropy, result.policy_entropy_post_update);
 });
 
-// --- S3: frozen early-window fixture, loaded from the resolved S0 gate -----
+// --- S3: frozen early-window fixture, shipped with the repo ----------------
 //
-// The fixture bytes are NOT retyped here -- they are loaded directly from
-// the resolved amendment's operator_gates[].resolution field (the durable
-// artifact the operator actually approved), and fixture_sha256 is recomputed
-// over those exact loaded UTF-8 bytes BEFORE any JSON.parse() of them, per
-// the plan's S3 gate. If this does not match the frozen checksum, the test
-// fails loudly rather than silently trusting a possibly-drifted fixture.
+// CODE REVIEW (PR #12, codex P2): the previous loader climbed three parents
+// from this file and resolved under <repo-parent>/_dev/reports/analysis/
+// task-plans/ -- outside the repository -- and neither that amendment nor
+// the second loader's comparison memo is tracked anywhere in the commit, so
+// every fixture-backed S3/S3v2 test failed with ENOENT in a clean checkout.
+// The exact frozen bytes are now committed as a plain fixture file next to
+// these tests (fixtures/fixture-v1.json, byte-for-byte the content frozen at
+// the s0-candidate-choice gate), and fixture_sha256 is still recomputed over
+// those exact loaded UTF-8 bytes BEFORE any JSON.parse() of them, per the
+// plan's S3 gate. If this does not match the frozen checksum, the test fails
+// loudly rather than silently trusting a possibly-drifted fixture.
 
 function loadFrozenFixtureJson() {
-  const amendmentPath = path.join(
-    __dirname, '..', '..', '..',
-    '_dev', 'reports', 'analysis', 'task-plans',
-    'ant-hive-world-exploration-fix-hiveb-collapse__amendment__20260718T181836Z.json'
-  );
-  const amendmentRaw = fs.readFileSync(amendmentPath, 'utf8');
-  const amendment = JSON.parse(amendmentRaw);
-  const gate = (amendment.operator_gates || []).find((g) => g.id === 's0-candidate-choice');
-  assert.ok(gate, 'expected the resolved s0-candidate-choice operator gate in the amendment');
-  assert.equal(gate.status, 'resolved', 'S1 (and this S3 test) may not run while the gate is still open');
-  const resolution = gate.resolution;
-  const marker = 'pre-parse): ';
-  const markerIdx = resolution.indexOf(marker);
-  assert.ok(markerIdx !== -1, 'expected the "...pre-parse): {fixture_json}" convention in the resolution text');
-  // The literal fixture_json string runs to the end of the resolution field.
-  return resolution.slice(markerIdx + marker.length);
+  return fs.readFileSync(path.join(__dirname, 'fixtures', 'fixture-v1.json'), 'utf8');
 }
 
 const FROZEN_FIXTURE_SHA256 = '44ad0a4ab6e87523ec047b7512f159e0b6bd4e00796bc7232798220e7e63e9c5';
 
-test('S3 fixture integrity: fixture_json loaded from the resolved S0 gate hashes to the frozen fixture_sha256 (checked BEFORE any candidate runs)', () => {
+test('S3 fixture integrity: shipped fixture-v1.json (byte-exact copy of the resolved S0 gate content) hashes to the frozen fixture_sha256 (checked BEFORE any candidate runs)', () => {
   const fixtureJson = loadFrozenFixtureJson();
   const actualHash = crypto.createHash('sha256').update(fixtureJson, 'utf8').digest('hex');
   assert.equal(actualHash, FROZEN_FIXTURE_SHA256, 'fixture drifted from what the operator approved at the s0-candidate-choice gate -- stop, do not proceed');
@@ -611,36 +601,21 @@ test('S3 EARLY WINDOW (ticks 0-20): CANDIDATE (b)+(c) (decaying schedule + updat
 
 // --- S3v2: frozen normalization-era fixture, at RESOURCE_POOL scale -------
 //
-// Loaded from the durable filing location the s4-normalization-escalation
-// gate specified: a new section appended to the comparison memo (section 8),
-// NOT a new gate amendment -- fixture v2 exists to re-prove the mechanism
-// under the changed input contract, not to reopen the operator decision.
-// fixture_sha256 is recomputed over the exact loaded UTF-8 bytes BEFORE any
-// JSON.parse(), same discipline as the v1 loader above.
+// CODE REVIEW (PR #12, codex P2): same fix as the v1 loader -- the fixture v2
+// bytes that previously lived in the comparison memo's "## 8. Fixture v2"
+// section (a file not tracked in this commit) are now committed as a plain
+// fixture file next to these tests (fixtures/fixture-v2.json, byte-for-byte
+// the content frozen at the s4-normalization-escalation gate). fixture_sha256
+// is recomputed over the exact loaded UTF-8 bytes BEFORE any JSON.parse(),
+// same discipline as the v1 loader above.
 
 function loadFrozenFixtureV2Json() {
-  const memoPath = path.join(
-    __dirname, '..', '..', '..',
-    '_dev', 'reports', 'analysis',
-    'ant-hive-world-exploration-fix-hiveb-collapse-candidate-comparison.md'
-  );
-  const memoText = fs.readFileSync(memoPath, 'utf8');
-  const sectionIdx = memoText.indexOf('## 8. Fixture v2');
-  assert.ok(sectionIdx !== -1, 'expected a "## 8. Fixture v2" section in the comparison memo');
-  const afterSection = memoText.slice(sectionIdx);
-  const headingIdx = afterSection.indexOf('Literal `fixture_json`');
-  assert.ok(headingIdx !== -1, 'expected a "Literal `fixture_json`" heading in the fixture v2 section');
-  const fenceStart = afterSection.indexOf('```\n{', headingIdx);
-  assert.ok(fenceStart !== -1, 'expected a fenced ```\\n{...} code block containing the literal fixture v2 JSON');
-  const contentStart = fenceStart + 4; // skip the opening "```\n"
-  const fenceEnd = afterSection.indexOf('\n```', contentStart);
-  assert.ok(fenceEnd !== -1, 'expected a closing fence for the fixture v2 JSON block');
-  return afterSection.slice(contentStart, fenceEnd);
+  return fs.readFileSync(path.join(__dirname, 'fixtures', 'fixture-v2.json'), 'utf8');
 }
 
 const FROZEN_FIXTURE_V2_SHA256 = 'f8ee5b840b4bb17c8bb10f15e921409fd8479cbc5cb86f693e277157a98de969';
 
-test('S3v2 fixture integrity: fixture_json loaded from the comparison memo (section 8) hashes to the frozen fixture_sha256, at the REALISTIC RESOURCE_POOL scale (checked BEFORE any candidate runs)', () => {
+test('S3v2 fixture integrity: shipped fixture-v2.json (byte-exact copy of the comparison memo section-8 content) hashes to the frozen fixture_sha256, at the REALISTIC RESOURCE_POOL scale (checked BEFORE any candidate runs)', () => {
   const fixtureJson = loadFrozenFixtureV2Json();
   const actualHash = crypto.createHash('sha256').update(fixtureJson, 'utf8').digest('hex');
   assert.equal(actualHash, FROZEN_FIXTURE_V2_SHA256, 'fixture v2 drifted from what was frozen at the s4-normalization-escalation gate -- stop, do not proceed');

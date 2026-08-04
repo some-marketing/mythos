@@ -38,10 +38,28 @@ const stopped = events.find((e) => e.event === 'run-stopped');
 const failed = events.find((e) => e.event === 'fail-closed-stop');
 
 // A partial final episode (killed mid-run) also writes final:true rows. Only
-// count episodes that reached the full round budget, so a truncated last
+// count episodes that reached the full round budget AND emitted the
+// `episode-end` marker with the expected group count, so a truncated last
 // episode never dilutes the means.
 const rounds = start ? start.episode_rounds : null;
-const finals = readJsonl(METRICS).filter((r) => r.final && (rounds === null || r.round === rounds));
+const groupsPerEpisode = start ? start.groups_per_episode : null;
+// CODE REVIEW (PR #12, codex P1): carriage-overnight.js writes `episode-end`
+// only after the entire group loop has written its final:true rows. A
+// process terminated after completing all rounds but while writing those
+// rows would otherwise pass the round-budget filter alone; the summary could
+// then analyze a partial set of conditions/replicates as a complete episode.
+// Require both the marker and the expected row count per episode.
+const endedEpisodes = new Set(events.filter((e) => e.event === 'episode-end').map((e) => e.episode));
+const finalRows = readJsonl(METRICS).filter((r) => r.final && (rounds === null || r.round === rounds));
+const rowsByEpisode = new Map();
+for (const row of finalRows) {
+  if (!rowsByEpisode.has(row.episode)) rowsByEpisode.set(row.episode, []);
+  rowsByEpisode.get(row.episode).push(row);
+}
+const finals = finalRows.filter((r) =>
+  endedEpisodes.has(r.episode) &&
+  (groupsPerEpisode === null || rowsByEpisode.get(r.episode).length === groupsPerEpisode)
+);
 
 const METRICS_OF_INTEREST = ['cum_reward', 'applied_rate', 'starved', 'builds', 'structures', 'territory', 'mean_entropy', 'world_food'];
 

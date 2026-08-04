@@ -21,7 +21,8 @@ of labor that keeps the coordinator's context pure:
   external research (incl. the Perplexity fallback), and produces the context brief.
 - **Coder (default: Claude worker subagents):** does the actual code/file authoring in
   bounded worker lanes under coordinator contracts, strictly bound to the reader's
-  context brief (operator correction 2026-07-03; Codex moves to the distinct-review lane).
+  context brief. (Default only — per the 2026-08-04 no-pigeonhole ruling, codex or any
+  other registered mind may take the coder lane when it is the better fit.)
 - **Planner / synthesizer (main-chain Claude):** plans up front, orchestrates the
   dispatches, and synthesizes returned outputs. NEVER reads files directly.
 
@@ -70,7 +71,7 @@ work-unit, and routes onward through the canonical `/dl` machinery
 <rule id="never-read">[INVARIANT] — Main-chain Claude NEVER reads files. If about to Read/Grep/open a target file, halt and delegate the read to the reader mind (Gemini). Zero exceptions. This invariant never relaxes.</rule>
 <rule id="adaptive">[PROTOCOL] — Adaptive dispatch: skip the reader leg when there is nothing to read, and skip the coder leg when there is nothing to code. The planner/synthesizer role always runs.</rule>
 <rule id="triviality-threshold">[PROTOCOL] — Write-delegation is proportional. For trivial, ungated, single-file work whose exact content is already specced, main-chain Claude may write it directly rather than manufacturing a bounded plan + `/run-plan`. Full Gemini→Codex delegation is for substantial coding. (The never-read invariant still holds regardless.)</rule>
-<rule id="roles-fixed-minds-swappable">[PROTOCOL] — The roles (reader / coder / synthesizer) are fixed; the mind bound to each is operator-configurable. Defaults: reader=Gemini, coder=Claude workers (2026-07-03 correction; was Codex), synthesizer=main-chain Claude.</rule>
+<rule id="roles-fixed-minds-swappable">[PROTOCOL] — The roles (reader / coder / synthesizer) are fixed; the mind bound to each is chosen by fit per dispatch (operator ruling 2026-08-04: no mind is pigeonholed to a role — codex may fill any role, as may gemini/Claude tiers). Defaults are hints only: reader=Gemini, coder=Claude workers, synthesizer=main-chain Claude. The reviewer, whoever it is, must be distinct-family from the producer.</rule>
 <rule id="disclose-per-dispatch">[PROTOCOL] — Disclose the mind bound to each role at dispatch time and tier it to the work altitude (dispatch-routing-rule).</rule>
 <rule id="ungated-alias-surface">[PROTOCOL] — /dlx is a user/project-space wrapper. It does NOT require registration in the governance-gated canonical alias registry. Personal aliases must never need a ConveneReceipt (feedback_commands-aliasable-by-end-users).</rule>
 </execution_rules>

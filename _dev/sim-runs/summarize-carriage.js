@@ -98,14 +98,30 @@ for (const [label, other] of [['carriage - isolated', isolated], ['carriage - sh
   if (!pairs.length) continue;
   process.stdout.write(`paired difference: ${label} (n=${pairs.length} matched seed bases)\n`);
   for (const key of METRICS_OF_INTEREST) {
-    const diffs = pairs.map((p) => p.c[key] - p.o[key]).filter(Number.isFinite);
-    if (!diffs.length) continue;
-    const m = mean(diffs);
-    const sd = stdev(diffs);
-    // Standard-error band on the paired mean. Not a significance test --
-    // an interval that excludes 0 is a reason to look harder, not a result.
-    const se = sd / Math.sqrt(diffs.length);
-    process.stdout.write(`  ${key.padEnd(16)} mean_diff=${fmt(m)} se=${fmt(se)} 95%~[${fmt(m - 1.96 * se)}, ${fmt(m + 1.96 * se)}]\n`);
+    // CODE REVIEW (PR #12, codex P1): the carriage driver derives every
+    // replicate in an episode from one per-episode seed base, so replicate
+    // pairs within an episode are NOT independent. Treating each pair as an
+    // independent observation narrows the interval artificially. Cluster at
+    // the episode level: average the paired differences within each episode,
+    // then compute uncertainty over episodes (mirrors summarize-authority-
+    // probe.js).
+    const paired = pairs
+      .map((p) => ({ d: p.c[key] - p.o[key], episode: p.c.episode }))
+      .filter((x) => Number.isFinite(x.d));
+    if (!paired.length) continue;
+    const byEpisode = new Map();
+    for (const x of paired) {
+      if (!byEpisode.has(x.episode)) byEpisode.set(x.episode, []);
+      byEpisode.get(x.episode).push(x.d);
+    }
+    const episodeDiffs = [...byEpisode.values()].map((ds) => mean(ds));
+    const m = mean(episodeDiffs);
+    const sd = stdev(episodeDiffs);
+    // Standard-error band on the paired mean, clustered by episode. Not a
+    // significance test -- an interval that excludes 0 is a reason to look
+    // harder, not a result.
+    const se = sd / Math.sqrt(episodeDiffs.length);
+    process.stdout.write(`  ${key.padEnd(16)} mean_diff=${fmt(m)} se=${fmt(se)} (${episodeDiffs.length} ep clusters) 95%~[${fmt(m - 1.96 * se)}, ${fmt(m + 1.96 * se)}]\n`);
   }
   process.stdout.write('\n');
 }

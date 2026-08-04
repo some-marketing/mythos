@@ -26,6 +26,14 @@ say "pulling $REMOTE:$REMOTE_DIR -> $DEST"
 exists="$(ssh "$REMOTE" "powershell -NoProfile -NonInteractive -Command \"Test-Path -LiteralPath '$REMOTE_DIR'\"" 2>/dev/null | tr -d '\r\n ')"
 [ "$exists" = "True" ] || die "no sterile staging directory on orwell for run '$RUN_NAME'"
 
+
+# CODE REVIEW (PR #12, codex P1): pulling into a nonempty destination leaves
+# stale files from earlier pulls -- scp does not remove them -- and the
+# PULL-MANIFEST.txt then presents them as part of the newly verified pull.
+# Refuse a nonempty destination.
+if [ -d "$DEST" ] && [ -n "$(ls -A "$DEST" 2>/dev/null)" ]; then
+  die "destination $DEST is not empty; move it aside or remove it before pulling"
+fi
 mkdir -p "$DEST"
 scp -q -r "$REMOTE:$REMOTE_DIR/." "$DEST/"
 

@@ -32,9 +32,10 @@ $ProgressPreference    = 'SilentlyContinue'
 # CODE REVIEW (PR #12, codex P2): $RunName is interpolated unquoted into
 # job.env, which the guest sources as root -- whitespace, quotes, newlines, or
 # shell metacharacters would be parsed as commands. Restrict it to a safe
-# token grammar before it reaches the environment file.
-if ($RunName -notmatch '^[A-Za-z0-9][A-Za-z0-9 _-]*$') {
-  throw 'RunName [$RunName] contains characters outside [A-Za-z0-9 _-]; refusing to write job.env (it is sourced by Bash as root)'
+# token grammar -- NO SPACES: an unquoted RUN_NAME=overnight run 1 would parse
+# .run. as a command when the guest sources it -- before it reaches the env file.
+if ($RunName -notmatch '^[A-Za-z0-9][A-Za-z0-9_-]*$') {
+  throw 'RunName [$RunName] contains characters outside [A-Za-z0-9_-]; refusing to write job.env (it is sourced by Bash as root)'
 }
 . (Join-Path $PSScriptRoot 'courier-lib.ps1')
 

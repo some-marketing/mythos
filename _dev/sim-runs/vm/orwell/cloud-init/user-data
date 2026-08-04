@@ -213,6 +213,10 @@ write_files:
         # completion would race a `poweroff -f` against the clean shutdown.
         touch /run/antworld-clean
         systemctl poweroff
+        # CODE REVIEW (PR #12, codex P1): finish must be terminal -- without
+        # this exit the shell falls through into later mode branches after
+        # unmounting the courier and can start the normal simulation anyway.
+        exit 0
       }
 
       mkdir -p "$COURIER/out"

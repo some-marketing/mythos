@@ -84,7 +84,11 @@ if (Test-Path $man) {
   # CODE REVIEW (PR #12, codex P1): malformed lines, an empty manifest, or
   # files the manifest does not list must fail closed -- unverified guest
   # output must not be presented as a harvested run.
-  $actualFiles = @(Get-ChildItem -LiteralPath $runDir -Recurse -File)
+  # CODE REVIEW (PR #12, codex P1): the guest's find deliberately excludes
+  # RESULT-MANIFEST.txt from the manifest it writes, so the manifest itself
+  # must not appear in the coverage set -- otherwise it is always unlisted
+  # and every otherwise valid harvest throws at this gate.
+  $actualFiles = @(Get-ChildItem -LiteralPath $runDir -Recurse -File | Where-Object { $_.Name -ne 'RESULT-MANIFEST.txt' })
   $unlisted = @($actualFiles | Where-Object { -not $manifestFiles.Contains($_.FullName.Substring($runDir.Length + 1).ToLowerInvariant()) })
   "manifest verification: $ok OK, $bad BAD, $malformed malformed, $($unlisted.Count) unlisted"
   if ($bad -gt 0 -or $malformed -gt 0 -or $ok -eq 0 -or $unlisted.Count -gt 0) {

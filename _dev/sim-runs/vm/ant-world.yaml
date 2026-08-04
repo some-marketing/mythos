@@ -1,0 +1,196 @@
+# _dev/sim-runs/vm/ant-world.yaml — Lima instance definition for the
+# completely-isolated ant-hive-world testbed (operator ruling 2026-08-02T19:08Z).
+#
+# WHY A VM AND NOT A CONTAINER: on macOS, container runtimes share a single
+# utility VM and routinely carry host bind mounts. The ruling considered and
+# rejected containers for exactly that reason. This is a dedicated guest under
+# Apple Virtualization.framework (vmType: vz) with no shared filesystem at all.
+#
+# THE MEMBRANE, STATED PLAINLY:
+#   - mounts: []            -> no virtiofs/9p share exists. The guest has no
+#                              name for any host path. This is the load-bearing
+#                              isolation control; everything else is defence in
+#                              depth.
+#   - portForwards ignore   -> Lima's automatic "expose every guest port on host
+#                              loopback" behaviour is off. Nothing is published.
+#   - loadDotSSHPubKeys     -> false. Only Lima's own generated key is trusted;
+#                              the operator's personal SSH identities are not
+#                              copied into the guest.
+#   - hostResolver off      -> guest DNS is not proxied through a host-side
+#                              resolver process.
+#   - guest egress firewall -> provisioned below. After lockdown the guest can
+#                              answer host-initiated SSH and nothing else: it
+#                              cannot reach the host, the LAN, or the internet.
+#
+# Results leave this VM only through _dev/sim-runs/vm/pull-results.sh, which is
+# host-initiated. The guest has no route back.
+
+minimumLimaVersion: 2.0.0
+
+base:
+# NOTE: deliberately NOT basing on template:_default/mounts — that template
+# mounts the host home directory into the guest, which is the exact thing this
+# testbed exists to prevent.
+- template:_images/debian-13
+
+vmType: "vz"
+os: Linux
+arch: aarch64
+
+cpus: 4
+memory: "8GiB"
+disk: "20GiB"
+
+# No shared folders. Not read-only ones, not writable ones. None.
+mounts: []
+
+# Rosetta is x86 translation; irrelevant here and one less host integration.
+vmOpts:
+  vz:
+    rosetta:
+      enabled: false
+      binfmt: false
+
+containerd:
+  system: false
+  user: false
+
+ssh:
+  # Do not copy ~/.ssh/*.pub into the guest's authorized_keys.
+  loadDotSSHPubKeys: false
+
+# Do not auto-publish guest ports onto the host. Lima's default forwards every
+# listening guest port to 127.0.0.1 on the host; that is convenient and exactly
+# wrong for a quarantined testbed.
+portForwards:
+- guestPortRange: [1, 65535]
+  ignore: true
+# dashboard (operator: 2026-08-03, guildmaster loop) — expose only the dashboard port
+- guestPort: 4174
+  hostPort: 4174
+  hostAddress: 127.0.0.1
+
+# Guest resolves DNS itself rather than through the host agent's resolver.
+# (After lockdown the guest has no egress anyway, so this resolves nothing.)
+hostResolver:
+  enabled: false
+
+# No extra NICs: no bridged/shared vmnet interface beyond the built-in NAT that
+# vz requires for the SSH control channel.
+networks: []
+
+provision:
+# ---------------------------------------------------------------------------
+# Stage 1 — Node runtime, matching the host's major version (host is v24.x).
+# Runs with egress still available. Idempotent: on every subsequent boot this
+# short-circuits, which matters because after stage 2 there is no network to
+# download anything with.
+# ---------------------------------------------------------------------------
+- mode: system
+  script: |
+    #!/bin/bash
+    set -euo pipefail
+    if [ -x /usr/local/node/bin/node ]; then
+      echo "node already installed: $(/usr/local/node/bin/node --version)"
+      exit 0
+    fi
+    NODE_VER=v24.10.0
+    TARBALL=node-${NODE_VER}-linux-arm64.tar.xz
+    cd /tmp
+    curl -fsSLO "https://nodejs.org/dist/${NODE_VER}/${TARBALL}"
+    curl -fsSLO "https://nodejs.org/dist/${NODE_VER}/SHASUMS256.txt"
+    grep " ${TARBALL}\$" SHASUMS256.txt | sha256sum -c -
+    mkdir -p /usr/local/node
+    tar -xJf "${TARBALL}" -C /usr/local/node --strip-components=1
+    ln -sf /usr/local/node/bin/node /usr/local/bin/node
+    ln -sf /usr/local/node/bin/npm /usr/local/bin/npm
+    rm -f "/tmp/${TARBALL}" /tmp/SHASUMS256.txt
+    node --version
+
+# ---------------------------------------------------------------------------
+# Stage 2 — the run tree. Layout mirrors the repo because the driver resolves
+# its engine at ../../tools/ant-hive-world and fail-closes unless --root sits
+# under <repo>/_dev/. /opt/antworld is therefore a stand-in repo root, and the
+# driver runs unmodified.
+# ---------------------------------------------------------------------------
+- mode: system
+  script: |
+    #!/bin/bash
+    set -euo pipefail
+    install -d -o lima -g lima /opt/antworld
+    install -d -o lima -g lima /opt/antworld/tools
+    install -d -o lima -g lima /opt/antworld/_dev
+    install -d -o lima -g lima /opt/antworld/_dev/sim-runs
+    install -d -o lima -g lima /opt/antworld/_dev/state
+    install -d -o lima -g lima /opt/antworld/_dev/state/kill-switches
+    install -d -o lima -g lima /opt/antworld/_dev/results
+
+# ---------------------------------------------------------------------------
+# Stage 3 — egress lockdown. Installed and enabled here so it survives reboot.
+#
+# The rule set permits: anything on loopback, and replies on connections that
+# were opened from outside (host-initiated SSH). It denies every packet this
+# guest tries to originate. Consequence: `limactl shell/copy/stop` keep working
+# because the host opens those; the guest cannot reach 192.168.64.1, the LAN,
+# or the internet.
+#
+# Note the ordering — this runs after Node is installed, because once it is
+# active nothing can be downloaded. To install more software later, see the
+# runbook's "temporarily lifting the lockdown" section.
+# ---------------------------------------------------------------------------
+- mode: system
+  script: |
+    #!/bin/bash
+    set -euo pipefail
+    export DEBIAN_FRONTEND=noninteractive
+    if ! command -v nft >/dev/null 2>&1; then
+      apt-get update -qq && apt-get install -y -qq nftables
+    fi
+    cat > /etc/nftables.conf <<'NFT'
+    #!/usr/sbin/nft -f
+    flush ruleset
+
+    table inet antworld {
+      chain output {
+        type filter hook output priority filter; policy drop;
+        oifname "lo" accept
+        ct state established,related accept
+        # Everything else the guest tries to originate is dropped, including
+        # any route toward the host at the vz NAT gateway.
+        counter comment "guest-originated egress denied"
+      }
+
+      chain input {
+        type filter hook input priority filter; policy accept;
+      }
+
+      chain forward {
+        type filter hook forward priority filter; policy drop;
+      }
+    }
+    NFT
+    chmod 0755 /etc/nftables.conf
+    systemctl enable nftables.service
+    systemctl restart nftables.service
+    nft list ruleset | head -30
+
+# ---------------------------------------------------------------------------
+# Stage 4 — silence multicast discovery. systemd-resolved listens on 5353/5355
+# (mDNS + LLMNR) by default. Lima's host agent notices those listeners and
+# publishes them onto host loopback, which is a forwarder this testbed never
+# asked for. Turning the listeners off in the guest removes the thing being
+# forwarded rather than papering over it host-side. Nothing here needs service
+# discovery: the only traffic is host-initiated SSH.
+# ---------------------------------------------------------------------------
+- mode: system
+  script: |
+    #!/bin/bash
+    set -euo pipefail
+    mkdir -p /etc/systemd/resolved.conf.d
+    cat > /etc/systemd/resolved.conf.d/no-multicast.conf <<'CONF'
+    [Resolve]
+    MulticastDNS=no
+    LLMNR=no
+    CONF
+    systemctl restart systemd-resolved
+    echo "multicast discovery disabled"

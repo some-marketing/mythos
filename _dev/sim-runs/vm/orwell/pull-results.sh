@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+# pull-results.sh — OUTBOUND HOP 2: orwell sterile staging -> laptop repo.
+#
+# Hop 1 (harvest-results.ps1) already moved guest output off the courier into
+# sterile staging on orwell, rejecting anything that was not a plain data file
+# and verifying the guest-written manifest. This script performs the second and
+# final hop, and re-verifies every hash on arrival.
+#
+# The laptop initiates. orwell never pushes.
+set -euo pipefail
+
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
+REMOTE='orwell'
+RUN_NAME="${1:-}"
+[ -n "$RUN_NAME" ] || { echo "usage: pull-results.sh <run-name>" >&2; exit 1; }
+
+REMOTE_DIR="D:/HyperV/AntWorld/Staging/Out/$RUN_NAME"
+DEST="$REPO_ROOT/_dev/state/$RUN_NAME"
+
+say() { printf '%s\n' "$*"; }
+die() { printf 'FATAL: %s\n' "$*" >&2; exit 1; }
+
+say "pulling $REMOTE:$REMOTE_DIR -> $DEST"
+
+# Confirm the remote staging directory exists before touching the local tree.
+exists="$(ssh "$REMOTE" "powershell -NoProfile -NonInteractive -Command \"Test-Path -LiteralPath '$REMOTE_DIR'\"" 2>/dev/null | tr -d '\r\n ')"
+[ "$exists" = "True" ] || die "no sterile staging directory on orwell for run '$RUN_NAME'"
+
+mkdir -p "$DEST"
+scp -q -r "$REMOTE:$REMOTE_DIR/." "$DEST/"
+
+# --- re-verify the harvest manifest locally ---------------------------------
+MAN="$DEST/HARVEST-MANIFEST.txt"
+[ -f "$MAN" ] || die "no HARVEST-MANIFEST.txt in pulled results"
+
+say ""
+say "verifying harvest manifest on the laptop side"
+ok=0; bad=0
+while IFS= read -r line; do
+  # PowerShell writes this manifest with CRLF, so strip the carriage return
+  # before anything else -- otherwise every path carries a trailing \r and every
+  # single file reports MISSING while sitting right there on disk.
+  line="${line%$'\r'}"
+  case "$line" in \#*|'') continue ;; esac
+  want="${line%%  *}"
+  rel="${line#*  }"
+  # orwell writes Windows separators; normalise for the local filesystem.
+  rel="$(printf '%s' "$rel" | tr '\\' '/')"
+  rel="${rel%$'\r'}"
+  f="$DEST/$rel"
+  if [ ! -f "$f" ]; then say "  MISSING  $rel"; bad=$((bad+1)); continue; fi
+  got="$(shasum -a 256 "$f" | awk '{print $1}')"
+  if [ "$got" = "$want" ]; then ok=$((ok+1)); else say "  MISMATCH $rel"; bad=$((bad+1)); fi
+done < "$MAN"
+
+say "  $ok verified, $bad bad"
+[ "$bad" -eq 0 ] || die "hop 2 verification failed — results are not byte-identical to what orwell harvested"
+
+# --- provenance -------------------------------------------------------------
+{
+  echo "# PULL-MANIFEST — ant-world orwell testbed"
+  echo "# pulled:    $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  echo "# run:       $RUN_NAME"
+  echo "# source:    $REMOTE:$REMOTE_DIR"
+  echo "# hop 1:     guest courier -> orwell sterile staging (harvest-results.ps1)"
+  echo "# hop 2:     orwell sterile staging -> this repo (pull-results.sh)"
+  echo "# verified:  $ok files, sha256 matched at both hops"
+  echo "#"
+  echo "# sha256  relative-path"
+  ( cd "$DEST" && find . -type f ! -name PULL-MANIFEST.txt | LC_ALL=C sort | while read -r f; do
+      printf '%s  %s\n' "$(shasum -a 256 "$f" | awk '{print $1}')" "${f#./}"
+    done )
+} > "$DEST/PULL-MANIFEST.txt"
+
+say ""
+say "results at: $DEST"
+say "provenance: $DEST/PULL-MANIFEST.txt"

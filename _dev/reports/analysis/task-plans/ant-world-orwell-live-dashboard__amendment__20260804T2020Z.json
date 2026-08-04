@@ -1,0 +1,43 @@
+{
+  "schema": "TaskPlanAmendment/1.0",
+  "amendment_id": "ant-world-orwell-live-dashboard__amendment__20260804T2020Z",
+  "plan_id": "ant-world-orwell-live-dashboard",
+  "plan_path": "_dev/reports/analysis/task-plans/ant-world-orwell-live-dashboard__plan.json",
+  "trigger": "Distinct-family review (codex GPT-5.5 via managed bridge, run 20260804T201348Z, scope orwell-provision-hardening-review) returned 3 MAJOR + 1 MODERATE on the uncommitted provisioning-hardening slice, including MAJOR: plan custody does not match the reviewed slice — the plan's tooling/custody surface names only build-export.sh of the eight files the hardening touched. Verdict: do not approve execution before a bounded amendment.",
+  "timestamp": "2026-08-04T20:20:00.000Z",
+  "amended_by_actor_id": "go-orchestrator",
+  "amended_by_harness_id": "claude",
+  "supersedes_prior_amendment": null,
+  "divergences": [
+    {
+      "id": "DV1",
+      "classification": "scope_expanded",
+      "original": "S1 child unit (3) 'courier/deployment mechanics' assumed the existing Orwell provisioning tooling was sound; the plan's lived_context.tooling custody names only build-export.sh from the provisioning script set.",
+      "execution_fact": "The 2026-08-04T0332Z baseline attempt falsified that assumption: first-boot.ps1 timed out and the courier retained the stale 20260802T200855Z payload with STATUS cancelled-before-start (_dev/reports/analysis/ant-world-orwell-live-dashboard__baseline-3000-attempt__20260804.md). Diagnosis (sonnet recon, this session) identified a self-referential hash check in load-courier.ps1 (H1) and a no-durable-evidence gap in psrun/psrunfile (H2). A repair slice was executed as uncommitted edits to eight files.",
+      "plan_update": "Bind the provisioning-hardening custody set to this plan: _dev/sim-runs/vm/orwell/load-courier.ps1, first-boot.ps1, build-export.sh, psrun.sh, psrunfile.sh, check-provisioning.ps1, README.md, and the appended §15 (+addenda) of _dev/reports/analysis/ant-world-orwell-runbook__20260802.md. EXTENDED 2026-08-04T20:52Z (codex trial orwell-rooted-path-fix-trial, MAJOR custody finding): the rooted-path root-cause fix slice additionally binds courier-lib.ps1, run-job.ps1, harvest-results.ps1, and verify-membrane.ps1. Acceptance evidence: codex review artifacts codex-cli-run__20260804T201348Z__orwell-provision-hardening-review.* and codex-cli-run__20260804T204946Z__orwell-rooted-path-fix-trial.*, the root-cause evidence bundle orwell-courier-reversion-evidence__20260804T2040Z.md, post-fix re-verification, and bash -n receipts for shell files. Live-retry evidence obligation (codex MODERATE): the retry transcript must include a mounted-VHD identity receipt (Get-VHD DiskNumber cross-checked against the mounted volume) — path-shape validation is not volume-identity validation."
+    },
+    {
+      "id": "DV2",
+      "classification": "assumption_changed",
+      "original": "S2 'deploy through the reviewed Orwell tooling and run the 3,000-tick exploratory baseline' assumed load-courier.ps1 and first-boot.ps1 signatures as previously documented.",
+      "execution_fact": "The hardened scripts now REQUIRE -ExpectedSha256 (64-hex validated); first-boot.ps1 fail-closes pre-boot if the courier payload hash does not match; psrunfile.sh/psrun.sh emit durable transcripts under _dev/state/orwell-transcripts/.",
+      "plan_update": "The G-REMOTE-MUTATION command packet must use the new signatures: psrunfile.sh load-courier.ps1 -ExpectedSha256 <sha256> and psrunfile.sh first-boot.ps1 -ExpectedSha256 <same>. The packet must open with read-only remote inspection (check-provisioning.ps1, now payload-visible; Staging\\In listing) to resolve the H1-vs-H2 evidence gap before any mutation."
+    },
+    {
+      "id": "DV3",
+      "classification": "step_blocked",
+      "original": "Publication of the local export artifact triple (archive, sha256, manifest) had no completion-marker contract.",
+      "execution_fact": "Codex MAJOR findings: sequential renames are not atomic set-visibility; transcript filenames could collide same-second. Fix slice (in flight at amendment time): manifest-written-last as the completion marker, PID-suffixed transcript names, immediate 64-hex ExpectedSha256 validation.",
+      "plan_update": "Adopt manifest-last-as-completion-marker as the publication contract (coordinator default, reversible; operator may substitute versioned-directory publication). Consumers key on manifest presence. Record residual gap if inbound-push.sh selects archives without checking the manifest sibling."
+    }
+  ],
+  "risk_reassessment": {
+    "risk_tier": "high",
+    "review_lane": "operator-gate",
+    "unchanged": true,
+    "note": "Risk tier and lane unchanged; this amendment binds custody and updates command signatures only. No remote mutation is authorized by this amendment."
+  },
+  "plan_still_executable": true,
+  "next_command": "/run-plan ant-world-orwell-live-dashboard (after post-fix re-verification; G-REMOTE-MUTATION packet to operator)",
+  "notes": "Operator decisions surfaced by codex and still open: (1) keep the eight-file hardening inside this plan (this amendment's default) vs split into a separately reviewed prerequisite; (2) manifest-last marker (default taken) vs versioned-directory publication; (3) checkpoint recovery halt-for-repair vs last-known-good — belongs to the S0 contract, untouched here."
+}

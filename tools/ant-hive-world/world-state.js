@@ -66,6 +66,23 @@ function seedFoodSources(count, amount) {
   return sources;
 }
 
+// S2 (spatial geometry, operator 2026-08-03 three-sided experiment gate):
+// give each discrete food source an EXPLICIT world coordinate so the mirror
+// detector can correlate build positions against real resource positions
+// instead of label-only tiles. The food_sources map keeps its `tile-N: amount`
+// shape (sumFoodSources / claimFoodSource / depleteFoodSourcesTotal all depend
+// on it); the coordinates live in a parallel map keyed by the same tileId.
+// Tile labels that do not resolve to grid coords are omitted — no invented
+// positions. Deterministic, pure, no behavior change to existing consumers.
+function foodSourceCoords(foodSources) {
+  const coords = {};
+  for (const tileId of Object.keys(foodSources || {})) {
+    const c = tileToCoords(tileId);
+    if (c) coords[tileId] = c;
+  }
+  return coords;
+}
+
 function sumFoodSources(foodSources) {
   return Object.values(foodSources || {}).reduce((a, b) => a + b, 0);
 }
@@ -119,6 +136,7 @@ function initialWorldState(resourcePool) {
     complete: true,
     resources: { ...(resourcePool || {}), ...materialResources, mud: 0, food: sumFoodSources(foodSources) },
     food_sources: foodSources,
+    food_source_coords: foodSourceCoords(foodSources),
     ...materialSources,
     discovered_types: ['food', 'wood', 'stone'],
     // Population-level predator/prey dynamics -- operator (2026-07-16):
@@ -469,6 +487,7 @@ module.exports = {
   readWorldState,
   initialWorldState,
   writeWorldState,
+  foodSourceCoords,
   claimResource,
   appendGeometry,
   claimTerritory,

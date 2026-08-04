@@ -2039,7 +2039,7 @@
       "id": "file:_dev/sim-runs/summarize-carriage.js",
       "type": "file",
       "path": "_dev/sim-runs/summarize-carriage.js",
-      "sha256": "54623ed4d17ba0489497ee2e9fcfad1ae83323bf9bc5e54801d2a27fd7091b8d",
+      "sha256": "316777d4dd8583307c3cadb10e7f3bcd55bb8c3322fbe4fdf21a9159b93f59e1",
       "mode": 420
     },
     {
@@ -2088,7 +2088,7 @@
       "id": "file:_dev/sim-runs/vm/orwell/cloud-init/user-data",
       "type": "file",
       "path": "_dev/sim-runs/vm/orwell/cloud-init/user-data",
-      "sha256": "0e72518dfb502d269b0a069bce86468d5f6fff88740acb890200c7a11ec31a9b",
+      "sha256": "c8ca75e789d1ecb091831808c9553b791d4d12a6c2f5533e0f7017cd7592ee9d",
       "mode": 420
     },
     {
@@ -4311,6 +4311,20 @@
       "mode": 420
     },
     {
+      "id": "file:ant-hive-world/__tests__/fixtures/fixture-v1.json",
+      "type": "file",
+      "path": "ant-hive-world/__tests__/fixtures/fixture-v1.json",
+      "sha256": "44ad0a4ab6e87523ec047b7512f159e0b6bd4e00796bc7232798220e7e63e9c5",
+      "mode": 420
+    },
+    {
+      "id": "file:ant-hive-world/__tests__/fixtures/fixture-v2.json",
+      "type": "file",
+      "path": "ant-hive-world/__tests__/fixtures/fixture-v2.json",
+      "sha256": "f8ee5b840b4bb17c8bb10f15e921409fd8479cbc5cb86f693e277157a98de969",
+      "mode": 420
+    },
+    {
       "id": "file:ant-hive-world/__tests__/harness.test.cjs",
       "type": "file",
       "path": "ant-hive-world/__tests__/harness.test.cjs",
@@ -4363,7 +4377,7 @@
       "id": "file:ant-hive-world/__tests__/untrained-network.test.cjs",
       "type": "file",
       "path": "ant-hive-world/__tests__/untrained-network.test.cjs",
-      "sha256": "41c7cd8da5c3509c83cbeeb77aaeae6bfa20a899d9ddd6998ad7973ad9d9c77d",
+      "sha256": "ea5595347b9803140672f952a0843c117cb5caa964d54a9d552332836613fe8c",
       "mode": 420
     },
     {
@@ -4545,7 +4559,7 @@
       "id": "file:ant-hive-world/run-live.js",
       "type": "file",
       "path": "ant-hive-world/run-live.js",
-      "sha256": "52fe118c4a8fa8bacc9ff01f223f3d79ba5a781a8d2f078f2aed12729dee8ced",
+      "sha256": "4ad2ed50f17a56cb45aa434fbd595deead837b086027fa75824ee38c975866e8",
       "mode": 420
     },
     {
@@ -50418,7 +50432,7 @@
     }
   ],
   "counts": {
-    "nodes": 3859,
+    "nodes": 3861,
     "edges": 2776,
     "unresolved": 0
   }

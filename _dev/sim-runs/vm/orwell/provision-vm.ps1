@@ -135,8 +135,12 @@ try {
   if (Test-Path -LiteralPath $paySum) {
     Copy-Item -LiteralPath $paySum -Destination "${dl}:\$($pay.Name).sha256" -Force
   }
-  $man = Get-ChildItem (Join-Path $Root 'Staging\In\antworld-payload-*.MANIFEST.txt') | Select-Object -First 1
-  if ($man) { Copy-Item -LiteralPath $man.FullName -Destination "${dl}:\PAYLOAD-MANIFEST.txt" -Force }
+  # CODE REVIEW (PR #12, codex P2): the manifest must pair with the selected
+  # payload -- an independent first filesystem result could copy an older
+  # manifest beside the newest archive and make bootstrap verification fail.
+  $manName = $pay.Name -replace '\.tar\.gz$', '.MANIFEST.txt'
+  $manPath = Join-Path $Root "Staging\In\$manName"
+  if (Test-Path -LiteralPath $manPath) { Copy-Item -LiteralPath $manPath -Destination "${dl}:\PAYLOAD-MANIFEST.txt" -Force }
 
   New-Item -ItemType Directory -Path "${dl}:\out" -Force | Out-Null
   "courier contents:"

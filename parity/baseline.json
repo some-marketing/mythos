@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "7be4842a5957ef1caa2a1dec62e57da3cf92496397d7a5cc7227a5d71bef7bf1",
+    "expected_tree_sha256": "723ebf8fe129b4549054ee0c74e8a3d9ae3f9d1c3bef248c7161276225639cc0",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -2146,6 +2146,161 @@
         "mode": 420
       },
       {
+        "path": "_dev/sim-runs/authority-probe.js",
+        "sha256": "d310d2536aa18d3e29dd862ba8dfca7ddbcaa2cb9bfb0ddab8b290fbb8372700",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/carriage-overnight.js",
+        "sha256": "bbbbcae0bb1249abde458643a8e1e435d220e0ca1ad08fce76a836cca268f035",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/summarize-authority-probe.js",
+        "sha256": "08d3b83937a77cfcad9cfc213eca61cd68abd85c5a021b4c333902eacb8a0e89",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/summarize-carriage.js",
+        "sha256": "54623ed4d17ba0489497ee2e9fcfad1ae83323bf9bc5e54801d2a27fd7091b8d",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/ant-world.yaml",
+        "sha256": "8ed04bf01e3d67ab9893154813c23b56fb4678c6a2e3892e0b38d9dfe22f5e10",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/README.md",
+        "sha256": "6a1f4b0aaba27a5181059cdbc6bef304a629d9bb1dc0f51fa3220fea2863a3e6",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/attach-courier.ps1",
+        "sha256": "38f0632c4f0d96eb6d2e6b4d74280128867f6c39b12e765003062e6451189e83",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/build-export.sh",
+        "sha256": "a14449ac24090f897a0dbc88685678137a7d04fda74dcad53a828a1d0e714de8",
+        "mode": 493
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/check-provisioning.ps1",
+        "sha256": "76418528ff0f24453bb251df2379afb5f2ae430d5563b1ecf9e1404d4757549c",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/cloud-init/meta-data",
+        "sha256": "53eadc9283e496a2cd48df09fd7f4655f9e553542736a2aae77a4702379de3a3",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/cloud-init/network-config",
+        "sha256": "546efccf061f610aaf4b4dbdfe7dcb3a0683b1ff44e4b5bc6d76061e17aa354a",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/cloud-init/user-data",
+        "sha256": "0e72518dfb502d269b0a069bce86468d5f6fff88740acb890200c7a11ec31a9b",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/console-capture.ps1",
+        "sha256": "b7c96daaa4d781fbe6306681410f9028e915b77f6386e37fc24bdb155179e312",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/convert-image.ps1",
+        "sha256": "e5c8cc1a8f5a81f61bc9dffb978fb0be2f6e83b9ba1f08085a2380789efcf7ad",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/courier-lib.ps1",
+        "sha256": "5153ee7c9778f7047e034f39b44dad0721ebcf6518d1b25c9ac2dfe0737eb8c2",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/first-boot.ps1",
+        "sha256": "e5ae09ef6484dd71db2e09f4d36d0dd1d20242b80cc4d76b92235053537897be",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/harvest-results.ps1",
+        "sha256": "15c448138b530aab45ec60266584d803b92db40b6ada228f2bf022d47f771746",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/inbound-push.sh",
+        "sha256": "00093a7884058eaa95a75eafbc18da4e2b4bca1c60bc2e1efdeb978fb0132615",
+        "mode": 493
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/load-courier.ps1",
+        "sha256": "6255b3485eb61c0308b2af572009da57710157c57179efa54d8b8bdf1f141d8f",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/provision-vm.ps1",
+        "sha256": "8eb0832782bb58647c1df41c1f18a4964f3b6fbee19760455ee0d1a028fe7b91",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/psrun.sh",
+        "sha256": "972c58ce96ec4cba9d6e76d6ef90bb4366b6befbc73121527bfe34db1206e939",
+        "mode": 493
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/psrunfile.sh",
+        "sha256": "33680f2271781962c98ac0beafcb29c93196278e1bdcb0606ba8c670c28e5cc7",
+        "mode": 493
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/pull-results.sh",
+        "sha256": "3800d9a79c9684f3250b5f64873bd30ec7f85192b504578472f2550074ea3dde",
+        "mode": 493
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/refresh-seed.ps1",
+        "sha256": "f288a6ca0e853c14b9f75908ed8288bc4991052891c752a156dea3f1631bc26b",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/revert-to-golden.ps1",
+        "sha256": "d48e52a7e2b384a30375e1cd899416e5edd60984cf10ca470f6f6240dff3c21e",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/run-job.ps1",
+        "sha256": "73b9e7b31f69120a4ea184baee38c7ff64505e4b61aae57f40f2dd1c2114690b",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/seal-golden.ps1",
+        "sha256": "392dc58c73e2a92995bd3261aa778e9ab9aba5bc4cd3effc5218479c16af12ce",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/teardown-vm.ps1",
+        "sha256": "d5248b5756ead9037cb83680ae93ae0c501babae04f1de0f6adae95bf9d175cc",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/verify-membrane.ps1",
+        "sha256": "b60e6aee81f1f12690521220711e9a76bd5e3d5bc51df8a467a97c66360f9a12",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/pull-results.sh",
+        "sha256": "cfb717f0f2558d6067920314bf3d7de01305cb57695214a256c32d1821e7fffb",
+        "mode": 493
+      },
+      {
+        "path": "_dev/sim-runs/vm/revert-to-golden.sh",
+        "sha256": "a52dabe052a3201815d7caca780bed1f03bf789cf9378a69a8d2cb1497ee64df",
+        "mode": 493
+      },
+      {
         "path": "_dev/staging/README.md",
         "sha256": "ce2d04b3d35a673a0762f63973c3ff29da6d498450564206ffa222aae7887cac",
         "mode": 420
@@ -2173,6 +2328,206 @@
       {
         "path": "_dev/staging/skills/finding-repair-loop/verify-finding-repair-loop.cjs",
         "sha256": "41368b1a899e12b8bffd9fcc212e59ea4a86386ef18eb923d5ee6b683c01b3fa",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/__tests__/dashboard.test.cjs",
+        "sha256": "3bec1baadbf811e1898f407cf96abb6fe918bb166b0ae73487f05fee76a21982",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/__tests__/harness.test.cjs",
+        "sha256": "db550d86fe7616c801ec9bc95ffd55c2a2818fea3c54ec55c81f6dad3a44b97a",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/__tests__/isolation.test.cjs",
+        "sha256": "45d66d1c5545d37a5be0b8c57a9199b373884b56154824813a05fb882ef15ded",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/__tests__/llm-decide.test.cjs",
+        "sha256": "01e88bef76ca0b47278fa92b875775adc5f68bc489acfc97d6232aac3fb22ea1",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/__tests__/lore-engine-determinism.test.cjs",
+        "sha256": "9f4a403f99ecdfb1693f5d0e30fa72763527a243018f1b83fff429db4ed902b4",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/__tests__/lore-engine-watch.test.cjs",
+        "sha256": "57eadd1da4a4c09b968ccc3e2c91710e65ed1b856c823bc2714c9990a41c5130",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/__tests__/lore-engine.test.cjs",
+        "sha256": "79f14606638209b76c929d7d9deb2c4aa520d1e1762ac0d591643323d43447ea",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/__tests__/reward-contract.test.cjs",
+        "sha256": "9dac4bb4d848b33a5a8d83a6c5f2f2eecb2c8e40a2624fb742bfb63e664c4ed0",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/__tests__/untrained-network.test.cjs",
+        "sha256": "41c7cd8da5c3509c83cbeeb77aaeae6bfa20a899d9ddd6998ad7973ad9d9c77d",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/__tests__/validate-hive-mind.test.cjs",
+        "sha256": "a884fe3b7737827957d5a69ce5b0fa24fc2a8067d47a5bc2ed709ed0227de404",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/__tests__/world-state-materials.test.cjs",
+        "sha256": "a20a14d07a2673dac25c0ee8ffd7c90e11e578bc93751b95a9aae86800079ba2",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/__tests__/world-state-pheromones.test.cjs",
+        "sha256": "822b4ebe14fc6ebbb3bb70447d59b3bbfe0c665f1d4c9904b69622e54037bde7",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/dashboard.js",
+        "sha256": "4de278e4c551de015f9ee683c5462b2b2f276c662e188e3c73993036fbba14ac",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/embodiment-bridge/Dockerfile",
+        "sha256": "7678b7340d3d9c567fcaf7788e368c10c9c40e59610a27032f13989db4b06adf",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/embodiment-bridge/bridge-client.js",
+        "sha256": "4b8685b8604df75a22ff089b6a7921562a8dfd0f3f5b95b77ab1597fbbe8f528",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/embodiment-bridge/bridge-network.js",
+        "sha256": "b6dc115d81498f5a86511f9372110c8dfd698e79d4cf89f16452eadd730bbe77",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/embodiment-bridge/bridge_scene.xml",
+        "sha256": "6c06cc20b0724aea3b69d80c334110147751f79930c840b5e02795595fcf912c",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/embodiment-bridge/bridge_step.py",
+        "sha256": "8430ad20a738a4097c4933907b46b942bba488feaeeb83b3125e66e3e219e7da",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/embodiment-bridge/check-containment-gate.js",
+        "sha256": "a97c234bf909041979870c95d39e8282f7cc3f33d645539fc659a6c3294ecf7a",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/embodiment-bridge/requirements-lock.txt",
+        "sha256": "e5c10c36a8d8ed18547e264b3255a7607278d5155d95fd874253b7fa2fe64987",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/embodiment-bridge/verify-containment.js",
+        "sha256": "44fe62605c83d7b3c88194735bcd1d7c83a780a15ba5f35189960e1f871ae758",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/embodiment-bridge/verify-s1-roundtrip.js",
+        "sha256": "f3697fa6f9b03d9b42d4f502d3f711037f65c981b4c73a8638e8b3136d587121",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/embodiment-bridge/verify-s2-perception.js",
+        "sha256": "95850f4d23697beaea877d2bb1d0730c6747c6a29186df933c4ddc60cbd3fa67",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/embodiment/requirements.txt",
+        "sha256": "99d5cc2dfdc8da431280b166b28e1661eec23e657947fa558f5191e14132f5d5",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/embodiment/run_embodiment_smoke.py",
+        "sha256": "dea19a7f86a9d554feacac46cf0a69da8e1a679f4131bb25f05921308d629ba4",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/embodiment/scene.xml",
+        "sha256": "d1bce4d5e8c3865fddd9a370e948b0247971cbc317da6045e82697320d6ab80c",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/embodiment/verify_embodiment_smoke.py",
+        "sha256": "8455005cbebf885fcea31a11fa5ade36212b453fe3fcf4fc01d084fd86044afd",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/generate-blank-hive-seed.js",
+        "sha256": "976fefe903042b383336c3d8cd02da0ef563f1a708fafe4045a27ac48b3cbe50",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/harness.js",
+        "sha256": "99b0ecfaa94724944c53c607bc7e821fe5d474fd479880de5754739007836863",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/live-config.js",
+        "sha256": "32f334e8bb75cb01df6f15400bd7c01503c4394f3afc32d1cb61aeed9632c7a0",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/llm-decide.js",
+        "sha256": "59eee1bab1ab4db448474fafa04d7e1c2c9971fb6e3224b429fad0088c8339fe",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/lore-engine/detect-triggers.js",
+        "sha256": "917701547def0568edffa5034da2477079ec261b42993b18cd78c7e092e7b4a9",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/lore-engine/generate-entry.js",
+        "sha256": "4977e46ae1665af9eabc5bf40757ef842ea9feb3f6f4143b7fc8ca0dd0e482ca",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/lore-engine/watch.js",
+        "sha256": "d8fd24ce8005afe2cd5b86838ba18567faddde8a40b8c45d3d199665cb5e74e6",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/run-live.js",
+        "sha256": "52fe118c4a8fa8bacc9ff01f223f3d79ba5a781a8d2f078f2aed12729dee8ced",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/schema/hive-mind.schema.json",
+        "sha256": "94839fe318e6426a974eb974cd71ec7ba6b60af5df32503f05f134bafb16699e",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/train-tick.js",
+        "sha256": "023c88c2c99d2be81d74e1dd709b4a09c90b15615a471e9a5ca72b8204f12d1c",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/untrained-network.js",
+        "sha256": "f8d67f2968239a584602fbc2740259fb7ca7fccbb9414b60b032ceb0ff104367",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/validate-hive-mind.js",
+        "sha256": "82f5f5eaacc8e540ffbc22704052c0f87ebf2f4580e22651dd8aafea0e96fb08",
+        "mode": 420
+      },
+      {
+        "path": "ant-hive-world/world-state.js",
+        "sha256": "97734b9e4d6b89d8f60b864369e77063309518f03503463999c72c03be83e5e4",
         "mode": 420
       },
       {
@@ -6197,7 +6552,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "eb2c36dae7a2c74133c5b8a9f9324ac13034e7a6922f88ece4ba3e0fa9773b9d",
+        "sha256": "fc2b8451a6f6feb9417a462b40556c51399bb5e4c5acd1278ca27319bba86b60",
         "mode": 420
       },
       {
@@ -6537,17 +6892,17 @@
       },
       {
         "path": "tools/ant-hive-world/README.md",
-        "sha256": "3e29f86bd6ecc45351d31531d07a9ae919f7335f86ef15a307571117f3ede92a",
+        "sha256": "cf9fe7bab1b47a6428e82b85e0081ff59d43a1c2237d43f3dfad1ed8f818a181",
         "mode": 420
       },
       {
         "path": "tools/ant-hive-world/__tests__/dashboard.test.cjs",
-        "sha256": "3bec1baadbf811e1898f407cf96abb6fe918bb166b0ae73487f05fee76a21982",
+        "sha256": "8c11e140cbc1ece9e6b554a0b4b17a889200051f4c6ad929ef8299ae593bf0bf",
         "mode": 420
       },
       {
         "path": "tools/ant-hive-world/__tests__/event-schema.test.cjs",
-        "sha256": "d8e53ff2a450b0600753c1530ce097c32bb4fb80ad221be87c20b94cd8e308a3",
+        "sha256": "e8c75ab67837cc1b8146f1ba6edd858761238f369891d12d7ee83129018fd871",
         "mode": 420
       },
       {
@@ -6607,7 +6962,57 @@
       },
       {
         "path": "tools/ant-hive-world/dashboard.js",
-        "sha256": "d084d46143fde338c0ce01fc927f9e0b314090c1a38afeb7d957b38dc827edf0",
+        "sha256": "8be0cd3c32a0b25dc3eb1a96c956d2284729c3778ec65999432e9dc6ccaabee5",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/Dockerfile",
+        "sha256": "7678b7340d3d9c567fcaf7788e368c10c9c40e59610a27032f13989db4b06adf",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/bridge-client.js",
+        "sha256": "4b8685b8604df75a22ff089b6a7921562a8dfd0f3f5b95b77ab1597fbbe8f528",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/bridge-network.js",
+        "sha256": "b6dc115d81498f5a86511f9372110c8dfd698e79d4cf89f16452eadd730bbe77",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/bridge_scene.xml",
+        "sha256": "6c06cc20b0724aea3b69d80c334110147751f79930c840b5e02795595fcf912c",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/bridge_step.py",
+        "sha256": "8430ad20a738a4097c4933907b46b942bba488feaeeb83b3125e66e3e219e7da",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/check-containment-gate.js",
+        "sha256": "a97c234bf909041979870c95d39e8282f7cc3f33d645539fc659a6c3294ecf7a",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/requirements-lock.txt",
+        "sha256": "e5c10c36a8d8ed18547e264b3255a7607278d5155d95fd874253b7fa2fe64987",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/verify-containment.js",
+        "sha256": "44fe62605c83d7b3c88194735bcd1d7c83a780a15ba5f35189960e1f871ae758",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/verify-s1-roundtrip.js",
+        "sha256": "f3697fa6f9b03d9b42d4f502d3f711037f65c981b4c73a8638e8b3136d587121",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/verify-s2-perception.js",
+        "sha256": "95850f4d23697beaea877d2bb1d0730c6747c6a29186df933c4ddc60cbd3fa67",
         "mode": 420
       },
       {
@@ -6632,7 +7037,7 @@
       },
       {
         "path": "tools/ant-hive-world/event-schema.js",
-        "sha256": "9f6458e30c0b44203e9fe92ab52b0b5e0e52a33404bd690e456395fa2121d9ac",
+        "sha256": "48beb5bb958fe23723589f790e6bb5e7c0b8a0bf8f8083dcf3550a8001d34fe9",
         "mode": 420
       },
       {
@@ -13719,9 +14124,9 @@
     "package_script_count": 203,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "eb2c36dae7a2c74133c5b8a9f9324ac13034e7a6922f88ece4ba3e0fa9773b9d",
-    "graph_nodes": 3777,
-    "graph_edges": 2722
+    "graph_sha256": "fc2b8451a6f6feb9417a462b40556c51399bb5e4c5acd1278ca27319bba86b60",
+    "graph_nodes": 3859,
+    "graph_edges": 2776
   },
   "runtime_exclusions": [
     ".git/**",

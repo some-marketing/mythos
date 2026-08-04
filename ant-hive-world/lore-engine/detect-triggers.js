@@ -17,6 +17,13 @@ const DEFAULT_TERRITORY_THROTTLE_TICKS = 20;
 const DEFAULT_STRUCTURE_MILESTONE_COUNTS = [5, 10, 25, 50];
 const DEFAULT_POPULATION_CRASH_FRACTION = 0.15; // population <= 15% of its max counts as a crash
 const DEFAULT_POPULATION_BOOM_FRACTION = 0.9;   // population >= 90% of its max counts as a boom
+// CODE REVIEW (PR #12, codex P2): the population milestone thresholds are
+// fractions of the ecosystem's max population caps, but those caps were only
+// ever supplied by test-only callers -- the live watcher CLI passed no
+// maxPrey/maxPredators, so every crash/boom check was skipped. Default them
+// from world-state.js's own exported caps (the single source of truth for
+// the ecosystem) instead of requiring every caller to know about them.
+const { DEFAULT_MAX_PREY, DEFAULT_MAX_PREDATORS } = require('../world-state.js');
 
 function freshCheckpoint() {
   return {
@@ -37,6 +44,8 @@ function detectTriggers({ hiveId, newAuditEntries, checkpoint, worldStateSnapsho
   const structureMilestoneCounts = opts.structureMilestoneCounts ?? DEFAULT_STRUCTURE_MILESTONE_COUNTS;
   const populationCrashFraction = opts.populationCrashFraction ?? DEFAULT_POPULATION_CRASH_FRACTION;
   const populationBoomFraction = opts.populationBoomFraction ?? DEFAULT_POPULATION_BOOM_FRACTION;
+  const maxPrey = opts.maxPrey ?? DEFAULT_MAX_PREY;
+  const maxPredators = opts.maxPredators ?? DEFAULT_MAX_PREDATORS;
 
   const next = {
     discovered_subjects: [...(checkpoint?.discovered_subjects || [])],
@@ -131,10 +140,10 @@ function detectTriggers({ hiveId, newAuditEntries, checkpoint, worldStateSnapsho
   // hovering near a threshold does not spam milestone entries every poll.
   if (worldStateSnapshot) {
     const checks = [
-      { key: 'prey-crash', pop: worldStateSnapshot.prey_population, max: opts.maxPrey, fraction: populationCrashFraction, direction: 'below' },
-      { key: 'prey-boom', pop: worldStateSnapshot.prey_population, max: opts.maxPrey, fraction: populationBoomFraction, direction: 'above' },
-      { key: 'predator-crash', pop: worldStateSnapshot.predator_population, max: opts.maxPredators, fraction: populationCrashFraction, direction: 'below' },
-      { key: 'predator-boom', pop: worldStateSnapshot.predator_population, max: opts.maxPredators, fraction: populationBoomFraction, direction: 'above' }
+      { key: 'prey-crash', pop: worldStateSnapshot.prey_population, max: maxPrey, fraction: populationCrashFraction, direction: 'below' },
+      { key: 'prey-boom', pop: worldStateSnapshot.prey_population, max: maxPrey, fraction: populationBoomFraction, direction: 'above' },
+      { key: 'predator-crash', pop: worldStateSnapshot.predator_population, max: maxPredators, fraction: populationCrashFraction, direction: 'below' },
+      { key: 'predator-boom', pop: worldStateSnapshot.predator_population, max: maxPredators, fraction: populationBoomFraction, direction: 'above' }
     ];
     for (const check of checks) {
       if (typeof check.pop !== 'number' || !check.max) continue;

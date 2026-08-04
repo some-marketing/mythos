@@ -59,6 +59,20 @@ case "${DEST_PARENT_ABS}/" in
 esac
 DEST_RUN="${DEST_PARENT_ABS}/${RUN_NAME}"
 
+# CODE REVIEW (PR #12, codex P2): limactl copy is a copy, not a deleting
+# mirror -- re-running this pull for the same run name merges into an
+# existing destination, and the PULL-MANIFEST.txt `find` below then records
+# stale files that never came from the current guest pull. Refuse a nonempty
+# destination (same guard as the Orwell courier pulls and the sim drivers):
+# a pull is a pull.
+if [ -d "$DEST_RUN" ]; then
+  existing="$(find "$DEST_RUN" -mindepth 1 -maxdepth 1 2>/dev/null | wc -l | tr -d ' ')"
+  if [ "$existing" -ne 0 ]; then
+    echo "FAIL-CLOSED: destination ${DEST_RUN} is not empty (${existing} entries); a re-pull would mix stale files into PULL-MANIFEST.txt -- choose a fresh run-name or move the old pull aside" >&2
+    exit 2
+  fi
+fi
+
 if ! limactl list "$INSTANCE" --format json 2>/dev/null | grep -q '"status":"Running"'; then
   echo "FAIL-CLOSED: instance '${INSTANCE}' is not running. Start it with: limactl start ${INSTANCE}" >&2
   exit 2

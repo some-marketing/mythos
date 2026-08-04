@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "f9c4feb16e0c15be53aad69d71c4c3cc1d30ac2f0442184a80e22b49301984d2",
+    "expected_tree_sha256": "90a127bd81d8af7fdb626c7843d1b34d12b68a1c1702218ae89aaa6148600778",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -2237,7 +2237,7 @@
       },
       {
         "path": "_dev/sim-runs/vm/orwell/load-courier.ps1",
-        "sha256": "6255b3485eb61c0308b2af572009da57710157c57179efa54d8b8bdf1f141d8f",
+        "sha256": "1bad6b391036ad0a79c029e92bc5f086e096f04bf01736075b0cea670fef396b",
         "mode": 420
       },
       {
@@ -2292,7 +2292,7 @@
       },
       {
         "path": "_dev/sim-runs/vm/pull-results.sh",
-        "sha256": "cfb717f0f2558d6067920314bf3d7de01305cb57695214a256c32d1821e7fffb",
+        "sha256": "cf220dd460c6e816930a5ad8fd251013ff1ac7158c00a748fcfd942e2f43688d",
         "mode": 493
       },
       {
@@ -2497,7 +2497,7 @@
       },
       {
         "path": "ant-hive-world/lore-engine/detect-triggers.js",
-        "sha256": "917701547def0568edffa5034da2477079ec261b42993b18cd78c7e092e7b4a9",
+        "sha256": "840f37d0e354709f54516da596c6b38e2b413165d86fcbc209ea60331eabd4ab",
         "mode": 420
       },
       {
@@ -6562,7 +6562,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "7b1f235785fbb677e91ca24b1fca034d763a0dea4ba82e0ce593a620c994dd79",
+        "sha256": "f94d7c8bceff4f476c1c809770fc9d45f4b189e7f84aed5eddfcd95ba131135f",
         "mode": 420
       },
       {
@@ -14134,9 +14134,9 @@
     "package_script_count": 203,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "7b1f235785fbb677e91ca24b1fca034d763a0dea4ba82e0ce593a620c994dd79",
+    "graph_sha256": "f94d7c8bceff4f476c1c809770fc9d45f4b189e7f84aed5eddfcd95ba131135f",
     "graph_nodes": 3861,
-    "graph_edges": 2776
+    "graph_edges": 2777
   },
   "runtime_exclusions": [
     ".git/**",

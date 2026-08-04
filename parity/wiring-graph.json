@@ -2137,7 +2137,7 @@
       "id": "file:_dev/sim-runs/vm/orwell/load-courier.ps1",
       "type": "file",
       "path": "_dev/sim-runs/vm/orwell/load-courier.ps1",
-      "sha256": "6255b3485eb61c0308b2af572009da57710157c57179efa54d8b8bdf1f141d8f",
+      "sha256": "1bad6b391036ad0a79c029e92bc5f086e096f04bf01736075b0cea670fef396b",
       "mode": 420
     },
     {
@@ -2221,7 +2221,7 @@
       "id": "file:_dev/sim-runs/vm/pull-results.sh",
       "type": "file",
       "path": "_dev/sim-runs/vm/pull-results.sh",
-      "sha256": "cfb717f0f2558d6067920314bf3d7de01305cb57695214a256c32d1821e7fffb",
+      "sha256": "cf220dd460c6e816930a5ad8fd251013ff1ac7158c00a748fcfd942e2f43688d",
       "mode": 493
     },
     {
@@ -4538,7 +4538,7 @@
       "id": "file:ant-hive-world/lore-engine/detect-triggers.js",
       "type": "file",
       "path": "ant-hive-world/lore-engine/detect-triggers.js",
-      "sha256": "917701547def0568edffa5034da2477079ec261b42993b18cd78c7e092e7b4a9",
+      "sha256": "840f37d0e354709f54516da596c6b38e2b413165d86fcbc209ea60331eabd4ab",
       "mode": 420
     },
     {
@@ -33215,6 +33215,15 @@
       "specifier": "../harness.js"
     },
     {
+      "id": "531a9a201bf08eb19df17ede426735631e2fd25899b9e510c9ce0943d740255d",
+      "type": "static-import",
+      "from": "file:ant-hive-world/lore-engine/detect-triggers.js",
+      "to": "file:ant-hive-world/world-state.js",
+      "target": "ant-hive-world/world-state.js",
+      "required": true,
+      "specifier": "../world-state.js"
+    },
+    {
       "id": "5326db437698b3b75489a350307deab57f60b4069b7030beee8aff1eda3cb5f1",
       "type": "static-import",
       "from": "file:tools/context/repo-awareness.cjs",
@@ -50433,7 +50442,7 @@
   ],
   "counts": {
     "nodes": 3861,
-    "edges": 2776,
+    "edges": 2777,
     "unresolved": 0
   }
 }

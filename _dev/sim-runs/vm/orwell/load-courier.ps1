@@ -31,19 +31,25 @@ if ($expected -ne $actual) { throw "staging hash mismatch: expected $expected ac
 Detach-Courier
 $dl = Mount-Courier
 try {
-  $old = @(Get-ChildItem -LiteralPath $dl -Filter 'antworld-payload-*' -Force -ErrorAction SilentlyContinue)
+  # CODE REVIEW (PR #12, codex P1): Mount-Courier returns only the drive
+  # letter (e.g. `E`), so bare `$dl` addresses a RELATIVE path named `E`
+  # instead of the mounted FAT32 root -- the refresh would copy/verify
+  # outside the courier while the guest is reattached with stale cargo.
+  # Every sibling script uses the drive-root form `${dl}:\`; do the same.
+  $dlRoot = "${dl}:\"
+  $old = @(Get-ChildItem -LiteralPath $dlRoot -Filter 'antworld-payload-*' -Force -ErrorAction SilentlyContinue)
   foreach ($f in $old) { Remove-Item -LiteralPath $f.FullName -Force }
   foreach ($f in @('PAYLOAD-MANIFEST.txt','job.env','job.env.consumed','CANCEL')) {
-    $p = Join-Path $dl $f
+    $p = Join-Path $dlRoot $f
     if (Test-Path -LiteralPath $p) { Remove-Item -LiteralPath $p -Force }
   }
-  $out = Join-Path $dl 'out'
+  $out = Join-Path $dlRoot 'out'
   if (Test-Path -LiteralPath $out) { Remove-Item -LiteralPath $out -Recurse -Force }
   New-Item -ItemType Directory -Path $out -Force | Out-Null
-  Copy-Item -LiteralPath $payload.FullName -Destination $dl -Force
-  Copy-Item -LiteralPath $sumPath -Destination (Join-Path $dl ($payload.Name + '.sha256')) -Force
-  Copy-Item -LiteralPath $manifest -Destination (Join-Path $dl 'PAYLOAD-MANIFEST.txt') -Force
-  $remoteHash = (Get-FileHash -LiteralPath (Join-Path $dl $payload.Name) -Algorithm SHA256).Hash.ToLower()
+  Copy-Item -LiteralPath $payload.FullName -Destination $dlRoot -Force
+  Copy-Item -LiteralPath $sumPath -Destination (Join-Path $dlRoot ($payload.Name + '.sha256')) -Force
+  Copy-Item -LiteralPath $manifest -Destination (Join-Path $dlRoot 'PAYLOAD-MANIFEST.txt') -Force
+  $remoteHash = (Get-FileHash -LiteralPath (Join-Path $dlRoot $payload.Name) -Algorithm SHA256).Hash.ToLower()
   if ($remoteHash -ne $actual) { throw "courier hash mismatch: expected $actual actual $remoteHash" }
   "courier payload verified: $remoteHash"
 } finally { Dismount-Courier }

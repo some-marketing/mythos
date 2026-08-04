@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "f2fbc1fe47b7fb7fe267bef424de69762c1b541207aa8ed96e889184dc14a1d8",
+    "expected_tree_sha256": "f9c4feb16e0c15be53aad69d71c4c3cc1d30ac2f0442184a80e22b49301984d2",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -2408,11 +2408,6 @@
       {
         "path": "ant-hive-world/embodiment-bridge/Dockerfile",
         "sha256": "7678b7340d3d9c567fcaf7788e368c10c9c40e59610a27032f13989db4b06adf",
-        "mode": 420
-      },
-      {
-        "path": "ant-hive-world/embodiment-bridge/__pycache__/bridge_step.cpython-314.pyc",
-        "sha256": "4f00f506cdeb7606d2a08caef482263515deede4b3047368b1dac55d5f98656d",
         "mode": 420
       },
       {
@@ -6567,7 +6562,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "8ea1eb702d528c005a9d6e3a1bf0916501bfc316832fd4e988d9356c85e6f6cb",
+        "sha256": "7b1f235785fbb677e91ca24b1fca034d763a0dea4ba82e0ce593a620c994dd79",
         "mode": 420
       },
       {
@@ -6983,11 +6978,6 @@
       {
         "path": "tools/ant-hive-world/embodiment-bridge/Dockerfile",
         "sha256": "7678b7340d3d9c567fcaf7788e368c10c9c40e59610a27032f13989db4b06adf",
-        "mode": 420
-      },
-      {
-        "path": "tools/ant-hive-world/embodiment-bridge/__pycache__/bridge_step.cpython-314.pyc",
-        "sha256": "991b2935ed3e569f3a3fccd70e34a887b7f4ea7c5a0891a4fc422efdfdcfa802",
         "mode": 420
       },
       {
@@ -14144,8 +14134,8 @@
     "package_script_count": 203,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "8ea1eb702d528c005a9d6e3a1bf0916501bfc316832fd4e988d9356c85e6f6cb",
-    "graph_nodes": 3863,
+    "graph_sha256": "7b1f235785fbb677e91ca24b1fca034d763a0dea4ba82e0ce593a620c994dd79",
+    "graph_nodes": 3861,
     "graph_edges": 2776
   },
   "runtime_exclusions": [

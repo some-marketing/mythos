@@ -3,6 +3,10 @@
 const crypto = require('node:crypto');
 
 const EVENT_SCHEMA_VERSION = '1.0.0';
+// Only these versions satisfy the contract predicate. A recognized name
+// with an unsupported or garbage version is still pre-contract (codex
+// PR #8 P2, carried onto PR #12).
+const SUPPORTED_SCHEMA_VERSIONS = Object.freeze([EVENT_SCHEMA_VERSION]);
 const SCHEMA_NAMES = Object.freeze({
   audit: 'ant-hive-world.audit-event',
   geometry: 'ant-hive-world.geometry-event',
@@ -46,18 +50,20 @@ function decorateEvent(kind, context, tick, row) {
 }
 
 // Readers must keep accepting historical JSONL rows. Unknown or missing
-// schema metadata is data, not an exception: it marks a pre-contract row.
+// schema metadata -- including an unsupported or garbage schema_version --
+// is data, not an exception: it marks a pre-contract row.
 function identifyEventRow(row) {
   if (!row || typeof row !== 'object' || Array.isArray(row)) {
     return { contract_status: 'pre-contract', row };
   }
   const contracted = Object.values(SCHEMA_NAMES).includes(row.schema_name) &&
-    typeof row.schema_version === 'string';
+    SUPPORTED_SCHEMA_VERSIONS.includes(row.schema_version);
   return { contract_status: contracted ? 'contract' : 'pre-contract', row };
 }
 
 module.exports = {
   EVENT_SCHEMA_VERSION,
+  SUPPORTED_SCHEMA_VERSIONS,
   SCHEMA_NAMES,
   createEventContext,
   processEventContext,

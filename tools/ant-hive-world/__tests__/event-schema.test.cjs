@@ -92,6 +92,13 @@ test('pre-contract rows are tolerated and explicitly identified', () => {
   assert.equal(identifyEventRow(current).contract_status, 'contract');
 });
 
+test('a recognized schema name with an unsupported or garbage version is pre-contract (codex PR #8 P2)', () => {
+  const future = { schema_name: SCHEMA_NAMES.audit, schema_version: '2.0.0' };
+  assert.equal(identifyEventRow(future).contract_status, 'pre-contract', 'unsupported version is not a contract');
+  const garbage = { schema_name: SCHEMA_NAMES.audit, schema_version: 'garbage' };
+  assert.equal(identifyEventRow(garbage).contract_status, 'pre-contract', 'garbage version is not a contract');
+});
+
 test('run, episode, and arm identity are stable in-process and distinct across processes', () => {
   const moduleA = require('../event-schema.js');
   const moduleB = require('../event-schema.js');

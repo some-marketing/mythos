@@ -10229,7 +10229,7 @@
       "id": "file:tools/ant-hive-world/__tests__/event-schema.test.cjs",
       "type": "file",
       "path": "tools/ant-hive-world/__tests__/event-schema.test.cjs",
-      "sha256": "cbf4874a3fa6fffa49afa9ec5b2abef13a0d5e95bdf66c46f38c016b215d38b9",
+      "sha256": "d8e53ff2a450b0600753c1530ce097c32bb4fb80ad221be87c20b94cd8e308a3",
       "mode": 420
     },
     {
@@ -10313,7 +10313,7 @@
       "id": "file:tools/ant-hive-world/dashboard.js",
       "type": "file",
       "path": "tools/ant-hive-world/dashboard.js",
-      "sha256": "09a6ee968ab0430ab67e747a93dc8775d679aa7f257e91acb37dcbe12f088cff",
+      "sha256": "d084d46143fde338c0ce01fc927f9e0b314090c1a38afeb7d957b38dc827edf0",
       "mode": 420
     },
     {
@@ -10369,7 +10369,7 @@
       "id": "file:tools/ant-hive-world/harness.js",
       "type": "file",
       "path": "tools/ant-hive-world/harness.js",
-      "sha256": "75169f7ffd100dff323f8efc02b5a5af8df2eceded941881dcc8b8255bd48ad8",
+      "sha256": "ebde66c096f688ea95976f712e5cfa81d19ecd4ee7199298faad61f8ed913bd7",
       "mode": 420
     },
     {
@@ -10408,6 +10408,13 @@
       "mode": 420
     },
     {
+      "id": "file:tools/ant-hive-world/mirror-detector.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/mirror-detector.js",
+      "sha256": "37bf9117c5df263bf643bdbab7effb65dd7af1229f42c171201b83e0237a7c23",
+      "mode": 420
+    },
+    {
       "id": "file:tools/ant-hive-world/README.md",
       "type": "file",
       "path": "tools/ant-hive-world/README.md",
@@ -10439,7 +10446,7 @@
       "id": "file:tools/ant-hive-world/untrained-network.js",
       "type": "file",
       "path": "tools/ant-hive-world/untrained-network.js",
-      "sha256": "a7750d0611c17dea3dea0df7617abf4e0b990766fdb10c211be012a00a40e341",
+      "sha256": "bc9692acf7ff4e3c8c61738af983887629d5bd841553f2672db625f0adb237ce",
       "mode": 420
     },
     {
@@ -10467,7 +10474,7 @@
       "id": "file:tools/ant-hive-world/world-state.js",
       "type": "file",
       "path": "tools/ant-hive-world/world-state.js",
-      "sha256": "05e012ca31c27c33d9ab9eb830f7f1effc1cc11663268d8252b702fd10290d7c",
+      "sha256": "81847138a6171f99da9b8a238e64e58e235ba3c256921420acffc6e80070860d",
       "mode": 420
     },
     {
@@ -11566,7 +11573,7 @@
       "id": "file:tools/commands/handlers/new-session.cjs",
       "type": "file",
       "path": "tools/commands/handlers/new-session.cjs",
-      "sha256": "48dfe5b628822a09fca1bfc1f822c562a290e35b16324cd4f98e18e86f9a9095",
+      "sha256": "b0daec029400d5ed51e25a96f203f192db27327f81beb3092ab0ef3276447202",
       "mode": 420
     },
     {
@@ -13687,7 +13694,7 @@
       "id": "file:tools/kernel/hooks/__tests__/posttool-write-ledger.test.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/__tests__/posttool-write-ledger.test.cjs",
-      "sha256": "343b4a427c341bab9b0b3cf9a7b14dfc6b85128dcfc87f961b3081c914a5867a",
+      "sha256": "1236bdd3e09fd7169aa2368807b756a04050bd688c4310d09cfa9e4c14138dfc",
       "mode": 420
     },
     {
@@ -13869,7 +13876,7 @@
       "id": "file:tools/kernel/hooks/posttool-write-ledger.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/posttool-write-ledger.cjs",
-      "sha256": "805ba8cebc689506034c43946d26d82e4f809349387cce114f97c6588e616e4a",
+      "sha256": "61f2221247701d47e364ad018394c6cda9600128bfecde3ea554e553700ed40d",
       "mode": 420
     },
     {
@@ -16260,6 +16267,13 @@
       "mode": 420
     },
     {
+      "id": "file:tools/parity/surgical-baseline-repair.cjs",
+      "type": "file",
+      "path": "tools/parity/surgical-baseline-repair.cjs",
+      "sha256": "b8658b58e77af2c964f2a6e097f3ce0d4ba74f68b1743a74d3b3739750152d24",
+      "mode": 420
+    },
+    {
       "id": "file:tools/parity/validate-host-activation.cjs",
       "type": "file",
       "path": "tools/parity/validate-host-activation.cjs",
@@ -17271,7 +17285,7 @@
       "id": "file:tools/sessions/__tests__/boundary-markers.test.js",
       "type": "file",
       "path": "tools/sessions/__tests__/boundary-markers.test.js",
-      "sha256": "218c2c6e933c781d0bc0b2536ebdd0faf4eb2ec2ad3758e2e976577a7d57b1b0",
+      "sha256": "3d6417f3ee65219cf89ec6ccfc3b351ebef16d9d5eb91f962725dfbb2acfeba9",
       "mode": 420
     },
     {
@@ -17299,7 +17313,7 @@
       "id": "file:tools/sessions/consume-boundary.cjs",
       "type": "file",
       "path": "tools/sessions/consume-boundary.cjs",
-      "sha256": "99d1d7a45a1b8adbe60e3487ad5ec9ead66f621b28dcd5cb9379556052e42426",
+      "sha256": "a5adcb9e7106d89a1813655e54d2c7a95c5cece08305bc34e9122f6ddadfef9b",
       "mode": 420
     },
     {
@@ -17331,17 +17345,24 @@
       "mode": 420
     },
     {
+      "id": "file:tools/sessions/lib/__tests__/active-session-registry-filter.test.js",
+      "type": "file",
+      "path": "tools/sessions/lib/__tests__/active-session-registry-filter.test.js",
+      "sha256": "d2c8e40fe5ea585f78e4726c02baf490da2d26649163d3d284cafd7aad278b3c",
+      "mode": 420
+    },
+    {
       "id": "file:tools/sessions/lib/__tests__/active-session-registry.test.js",
       "type": "file",
       "path": "tools/sessions/lib/__tests__/active-session-registry.test.js",
-      "sha256": "0b3e15475180f646e3c6a49d79e818c005ea3f68ba727909ece74a3d1d5c5177",
+      "sha256": "dbdfb05f94e749b980fb61d25a066d6643d1746d195f781bbfa0144cb5253792",
       "mode": 420
     },
     {
       "id": "file:tools/sessions/lib/active-session-registry.js",
       "type": "file",
       "path": "tools/sessions/lib/active-session-registry.js",
-      "sha256": "ff3020cbc5088b217b92c252c1100939bef38d085c9cb170c6f70927e81bf8d3",
+      "sha256": "041d8aa7b2898b8a7ff941a3bad94419179c66267888e3d6875bd6c6bf311959",
       "mode": 420
     },
     {
@@ -17383,7 +17404,7 @@
       "id": "file:tools/sessions/session.js",
       "type": "file",
       "path": "tools/sessions/session.js",
-      "sha256": "15c2b3965881ff755df0ebb5b8abb3ce9e05ceefcc08ddeb6de680aaa16f11f6",
+      "sha256": "94ec75c740cf1a8002c637179027d33081ec077a717b5df95fe90f14633132ff",
       "mode": 493
     },
     {
@@ -18335,7 +18356,7 @@
       "id": "file:tools/status/mythos-status.js",
       "type": "file",
       "path": "tools/status/mythos-status.js",
-      "sha256": "e3a1a38c83414c85bb69c20b9460c9441b976e9384aa412d1b70f1a43946f4a3",
+      "sha256": "332b0a0ff54cf5803f45df1dad7f41d9357d3ceb7fe958a10b2e8749ecc16eb7",
       "mode": 420
     },
     {
@@ -18349,7 +18370,7 @@
       "id": "file:tools/status/status.js",
       "type": "file",
       "path": "tools/status/status.js",
-      "sha256": "3c4b9e2d45f3bbf9140d3aa227165c01d9c393d597b60760c80145a44c943b63",
+      "sha256": "6068ceee48a2a91e06fd527815e624ac8baad6873293e88dcecad14608f21b30",
       "mode": 420
     },
     {
@@ -30491,6 +30512,15 @@
       "specifier": "./lib/workspace"
     },
     {
+      "id": "3dd5c50a11204466010d84983dbd7ac2bf4ea4787ea4221da14f9eeb27e3023e",
+      "type": "static-import",
+      "from": "file:tools/sessions/lib/__tests__/active-session-registry-filter.test.js",
+      "to": "file:tools/sessions/lib/active-session-registry.js",
+      "target": "tools/sessions/lib/active-session-registry.js",
+      "required": true,
+      "specifier": "../active-session-registry"
+    },
+    {
       "id": "3e090a59554a39f83a83d93a9369783c5d1a2fa5a7e7687868abbd38869fb65e",
       "type": "static-import",
       "from": "file:tools/client-storage/lib.js",
@@ -39785,6 +39815,15 @@
       "declared_target": ".claude/commands/reconcile-lessons.md"
     },
     {
+      "id": "9de5968d5e22e3152680c6f83cf0a17aec72f53c6a7c94c163ce6ac4a33894eb",
+      "type": "static-import",
+      "from": "file:tools/sessions/__tests__/boundary-markers.test.js",
+      "to": "file:tools/sessions/lib/active-session-registry.js",
+      "target": "tools/sessions/lib/active-session-registry.js",
+      "required": true,
+      "specifier": "../lib/active-session-registry.js"
+    },
+    {
       "id": "9de5aa9cb95aeaa7627c982b6ebc5344b47a16279f76ca85ea055b0269180511",
       "type": "skill-definition-file",
       "from": "skill-definition:orchestrate",
@@ -44621,6 +44660,15 @@
       "specifier": "../shared/env"
     },
     {
+      "id": "d30e7dc2373c655e5bf20d023b7594f1322c1b9b9c315da0c51e5e1ed1acb35d",
+      "type": "static-import",
+      "from": "file:tools/parity/surgical-baseline-repair.cjs",
+      "to": "file:tools/parity/lib.cjs",
+      "target": "tools/parity/lib.cjs",
+      "required": true,
+      "specifier": "./lib.cjs"
+    },
+    {
       "id": "d314292870b89894da668e7a3336d6dd2f24cad3b8f14d950924a45056bfa6d4",
       "type": "static-import",
       "from": "file:tools/verify/build-sovereign-core-final-receipt.cjs",
@@ -45030,6 +45078,15 @@
       "target": "tools/verify/schemas/test-execution-receipt.schema.json",
       "required": true,
       "specifier": "../../schemas/test-execution-receipt.schema.json"
+    },
+    {
+      "id": "d76862818e6fadbb2994305754bbfffc210017017ed1a8d98f698e49cddd4703",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/dashboard.js",
+      "to": "file:tools/ant-hive-world/mirror-detector.js",
+      "target": "tools/ant-hive-world/mirror-detector.js",
+      "required": true,
+      "specifier": "./mirror-detector.js"
     },
     {
       "id": "d77b6427e5534ec647c7b364adbe210b8cb8ae440f7e41a84bf39ff0d4183694",
@@ -47281,6 +47338,15 @@
       "declared_target": ".claude/skills/canonical-path-authority-gate/SKILL.md"
     },
     {
+      "id": "ee4f6b209a39a4d3a9748a3285ffcd66b894ce09ff5add5e0ac7421dbfcea90f",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/mirror-detector.js",
+      "to": "file:tools/ant-hive-world/world-state.js",
+      "target": "tools/ant-hive-world/world-state.js",
+      "required": true,
+      "specifier": "./world-state.js"
+    },
+    {
       "id": "ee913084009def8d67c8635de3938e06009e27142a8654dad00bab33377b333b",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/attune.md",
@@ -49248,6 +49314,15 @@
       "specifier": "./model-tiering"
     },
     {
+      "id": "ff8895b6a753d36f2f2997c0e5d220baa3bb65bc1fd91a92edeb7e96db919609",
+      "type": "static-import",
+      "from": "file:tools/sessions/consume-boundary.cjs",
+      "to": "file:tools/sessions/lib/active-session-registry.js",
+      "target": "tools/sessions/lib/active-session-registry.js",
+      "required": true,
+      "specifier": "./lib/active-session-registry.js"
+    },
+    {
       "id": "ff98a5b95bbeed3336e05972fbce10b1548dd66990bb9803a25f7937d915182d",
       "type": "schema-definition-file",
       "from": "schema-definition:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/stage-status.schema.json",
@@ -49285,8 +49360,8 @@
     }
   ],
   "counts": {
-    "nodes": 3774,
-    "edges": 2716,
+    "nodes": 3777,
+    "edges": 2722,
     "unresolved": 0
   }
 }

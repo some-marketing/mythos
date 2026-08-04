@@ -35,7 +35,7 @@ test('adoptSessionCustody with a filter scopes adoption to matching paths only',
   seedPrior(dataDir, prior, [
     { path: 'tools/ant-hive-world/dashboard.js', at: 'x', tool: 'Write' },
     { path: 'tools/ant-hive-world/world-mind.js', at: 'x', tool: 'Write' },
-    { path: 'clients/ECH/next-session-handoff.md', at: 'x', tool: 'Write' },
+    { path: 'clients/ZZ-FIXTURE/next-session-handoff.md', at: 'x', tool: 'Write' },
     { path: '_dev/reports/analysis/relational-substrate-port__plan.json', at: 'x', tool: 'Write' }
   ]);
 
@@ -61,7 +61,7 @@ test('adoptSessionCustody with a filter matching nothing is a fail-open no-op', 
   const dataDir = withTempRegistry(t);
   const prior = 'prior-nomatch';
   seedPrior(dataDir, prior, [
-    { path: 'clients/ECH/x.md', at: 'x', tool: 'Write' }
+    { path: 'clients/ZZ-FIXTURE/x.md', at: 'x', tool: 'Write' }
   ]);
   const res = registry.adoptSessionCustody({
     fromSessionId: prior,

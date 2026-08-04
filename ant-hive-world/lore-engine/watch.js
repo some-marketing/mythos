@@ -23,7 +23,7 @@ const fs = require('fs');
 const path = require('path');
 const { readWorldState } = require('../world-state.js');
 const { freshCheckpoint, detectTriggers } = require('./detect-triggers.js');
-const { generateEntry, dispatchViaOrwellSubmind } = require('./generate-entry.js');
+const { generateEntry, dispatchViaLocalOllama } = require('./generate-entry.js');
 
 const DEFAULT_ROLLING_CONTEXT_SIZE = 5;
 const DEFAULT_MAX_RETRIES = 3;
@@ -74,7 +74,7 @@ function pollHiveOnce({ hiveId, hiveDir, worldStatePath, opts = {} }) {
   const wikiLogPath = path.join(hiveDir, 'wiki-log.jsonl');
   const checkpointPath = path.join(hiveDir, 'wiki-checkpoint.json');
   const milestoneQueuePath = path.join(hiveDir, 'pending-milestone-narration.jsonl');
-  const dispatchFn = opts.dispatchFn || dispatchViaOrwellSubmind;
+  const dispatchFn = opts.dispatchFn || dispatchViaLocalOllama;
   const maxRetries = opts.maxRetries ?? DEFAULT_MAX_RETRIES;
 
   const checkpoint = readCheckpoint(checkpointPath);

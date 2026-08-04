@@ -49,7 +49,7 @@ function hasFlag(flag) {
 const FOREVER = hasFlag('--forever');
 const TICKS = parseInt(argVal('--ticks', '300'), 10);
 const TICK_INTERVAL_MS = parseInt(argVal('--tick-interval-ms', '0'), 10);
-const SANDBOX_ROOT = argVal('--sandbox-root', path.join(__dirname, '..', '..', '_dev', 'state', 'ant-hive-world-run'));
+const SANDBOX_ROOT = argVal('--sandbox-root', path.join(__dirname, '..', '_dev', 'state', 'ant-hive-world-run'));
 const WORLD_STATE_PATH = path.join(SANDBOX_ROOT, 'shared', 'world-state.json');
 const RUN_LOG_PATH = path.join(SANDBOX_ROOT, 'run-log.jsonl');
 const CONFIG_PATH = path.join(SANDBOX_ROOT, 'live-config.json');

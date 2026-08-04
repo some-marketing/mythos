@@ -4,15 +4,14 @@
 // tools/ant-hive-world/lore-engine/generate-entry.js — plan
 // ant-hive-world-lore-wiki-layer, S1. Turns a ROUTINE-tier trigger (from
 // detect-triggers.js) into a wiki-log entry by dispatching to Orwell's
-// Ollama via tools/fleet/orwell-submind.js (S0 axis 2 decision). Milestone-
+// Ollama via the local dispatcher (S0 axis 2 decision). Milestone-
 // tier triggers are NOT handled here -- see the S0 memo's explicit note
 // that unattended frontier-model dispatch is out of this plan's scope;
 // the watcher queues those separately for manual/attended resolution.
 //
 // `dispatchFn` is injectable so this module is unit-testable without a
-// real SSH round-trip to Orwell; the real dispatch (spawning
-// orwell-submind.js as a CLI child process, since it has no importable JS
-// API) is the default, used only when this runs for real via watch.js.
+// real Ollama round-trip; the real dispatch (a local curl chat call) is
+// the default, used only when this runs for real via watch.js.
 
 const { spawnSync } = require('child_process');
 const fs = require('fs');
@@ -21,6 +20,8 @@ const path = require('path');
 
 const REPO_ROOT = path.resolve(__dirname, '..', '..', '..');
 const DEFAULT_ROLLING_CONTEXT_SIZE = 5; // S0 axis 3: last N of the SAME hive's own entries
+const DEFAULT_OLLAMA_URL = process.env.LORE_ENGINE_OLLAMA_URL || 'http://localhost:11434/api/chat';
+const DEFAULT_MODEL = process.env.LORE_ENGINE_MODEL || 'deepseek-r1:14b';
 
 function buildPrompt(trigger, recentEntries) {
   const contextBlock = (recentEntries || [])
@@ -43,31 +44,39 @@ function buildPrompt(trigger, recentEntries) {
   ].join('\n');
 }
 
-// Real dispatch: writes the prompt to a scratch file and shells out to the
-// existing, proven orwell-submind.js CLI (no importable API -- confirmed in
-// the S0 memo). Returns the same { verdict, response, ... } shape that tool
-// emits.
-function dispatchViaOrwellSubmind(promptText, opts = {}) {
-  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'lore-engine-'));
-  const taskFile = path.join(tmpDir, 'prompt.txt');
-  const outFile = path.join(tmpDir, 'result.json');
-  fs.writeFileSync(taskFile, promptText, 'utf8');
+// Real dispatch: a plain local Ollama chat call (curl over localhost, no
+// network dependency beyond that), mirroring the pattern used by
+// llm-decide.js elsewhere in this project. Returns { verdict, response,
+// model } / { verdict: 'error'|'timeout', error }. Ported from the
+// canonical tools/ant-hive-world implementation (codex review, PR #12
+// round 3) -- the previous dispatch targeted tools/fleet/orwell-submind.js,
+// which does not exist in the tree.
+function dispatchViaLocalOllama(promptText, opts = {}) {
+  const model = opts.model || DEFAULT_MODEL;
+  const url = opts.ollamaUrl || DEFAULT_OLLAMA_URL;
+  const payload = JSON.stringify({
+    model,
+    messages: [{ role: 'user', content: promptText }],
+    stream: false,
+    options: { temperature: 0.7, num_predict: 300 }
+  });
+  const result = spawnSync('curl', ['-s', url, '-d', payload], {
+    encoding: 'utf-8',
+    timeout: opts.timeoutMs ?? 60000,
+    maxBuffer: 4 * 1024 * 1024
+  });
+  if (result.error) {
+    return { verdict: result.error.code === 'ETIMEDOUT' ? 'timeout' : 'error', error: result.error.message };
+  }
+  if (result.status !== 0) {
+    return { verdict: 'error', error: `curl exited ${result.status}: ${result.stderr}` };
+  }
   try {
-    const args = [
-      path.join(REPO_ROOT, 'tools', 'fleet', 'orwell-submind.js'),
-      'dispatch',
-      '--task-file', taskFile,
-      '--out', outFile,
-      '--timeout-ms', String(opts.timeoutMs ?? 60000)
-    ];
-    if (opts.model) args.push('--model', opts.model);
-    const result = spawnSync('node', args, { encoding: 'utf8' });
-    if (result.status !== 0 && !fs.existsSync(outFile)) {
-      return { verdict: 'error', error: result.stderr || 'orwell-submind.js dispatch failed with no output' };
-    }
-    return JSON.parse(fs.readFileSync(outFile, 'utf8'));
-  } finally {
-    fs.rmSync(tmpDir, { recursive: true, force: true });
+    const parsed = JSON.parse(result.stdout);
+    const content = (parsed.message && parsed.message.content) || '';
+    return { verdict: 'ok', response: content, model };
+  } catch (e) {
+    return { verdict: 'error', error: `parse_failed: ${e.message}` };
   }
 }
 
@@ -90,7 +99,7 @@ function sanitizeNarrativeText(raw) {
 // trigger: a ROUTINE-tier trigger from detect-triggers.js.
 // recentEntries: this hive's own last-N wiki-log entries (already loaded
 // by the caller -- this module has no file I/O for the wiki log itself).
-function generateEntry(trigger, { recentEntries = [], dispatchFn = dispatchViaOrwellSubmind, model, timeoutMs } = {}) {
+function generateEntry(trigger, { recentEntries = [], dispatchFn = dispatchViaLocalOllama, model, timeoutMs } = {}) {
   if (trigger.tier !== 'routine') {
     return { ok: false, error: `generate-entry.js only handles routine-tier triggers, got tier=${trigger.tier}` };
   }
@@ -126,7 +135,7 @@ function generateEntry(trigger, { recentEntries = [], dispatchFn = dispatchViaOr
 module.exports = {
   buildPrompt,
   sanitizeNarrativeText,
-  dispatchViaOrwellSubmind,
+  dispatchViaLocalOllama,
   generateEntry,
   DEFAULT_ROLLING_CONTEXT_SIZE,
   MAX_ENTRY_LENGTH

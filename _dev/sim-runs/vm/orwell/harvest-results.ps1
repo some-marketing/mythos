@@ -16,6 +16,13 @@ $ErrorActionPreference = 'Stop'
 $ProgressPreference    = 'SilentlyContinue'
 . (Join-Path $PSScriptRoot 'courier-lib.ps1')
 
+# CODE REVIEW (PR #12, codex P1): $RunName controls $Sterile, which this
+# script recursively deletes. A value like '..\..\Golden' would delete the
+# baseline without confirmation. Enforce the same single-token grammar as
+# run-job.ps1 before constructing or deleting the staging path.
+if ($RunName -notmatch '^[A-Za-z0-9][A-Za-z0-9_-]*$') {
+  throw "RunName [$RunName] contains characters outside [A-Za-z0-9_-]; refusing to construct the sterile staging path"
+}
 $Root    = 'D:\HyperV\AntWorld'
 $Sterile = Join-Path $Root "Staging\Out\$RunName"
 
@@ -74,7 +81,10 @@ if (Test-Path $man) {
   "manifest verification: $ok OK, $bad BAD"
   if ($bad -gt 0) { throw "result manifest verification failed on the host side" }
 } else {
-  "WARNING: no RESULT-MANIFEST.txt -- cannot verify guest output integrity"
+  # CODE REVIEW (PR #12, codex P1): without the guest's RESULT-MANIFEST.txt
+  # the host cannot verify output integrity; partial unverified output must
+  # not be presented as a harvested run. Fail closed.
+  throw "no RESULT-MANIFEST.txt in the guest output -- refusing to harvest unverifiable results"
 }
 
 # --- host-side manifest for the next hop ------------------------------------

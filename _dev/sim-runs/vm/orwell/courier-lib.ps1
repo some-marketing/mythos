@@ -83,9 +83,10 @@ function Mount-Courier {
   if ($chk -match 'found no problems') {
     Write-Host "courier integrity: OK (chkdsk found no problems)"
   } else {
-    Write-Host "courier integrity: PROBLEMS REPORTED by chkdsk --"
-    Write-Host $chk
-    Write-Host "NOTE: repair with chkdsk /F while the VM is off before trusting results."
+    # CODE REVIEW (PR #12, codex P1): after a forced power-off during a FAT32
+    # write, chkdsk damage means the harvest would copy corrupted output as
+    # trusted results. Fail the mount instead of allowing callers to continue.
+    throw "courier integrity: PROBLEMS REPORTED by chkdsk -- refusing to mount. Repair with chkdsk /F while the VM is off before trusting results.`n$chk"
   }
 
   $vol.DriveLetter

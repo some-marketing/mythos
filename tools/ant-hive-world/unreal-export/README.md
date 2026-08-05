@@ -173,3 +173,103 @@ can reproduce the emitted mirror block from the harvest directory alone.
   of the S0-named source field list) and `pheromones`/`discovered_types`
   (not named in S0 either) -- kept out to hold the contract to exactly what
   S0 specifies, not the full raw file.
+
+## S3 -- `watch-imports.js` (consumption-only watch loop)
+
+`watch-imports.js` polls a pulled-harvests root (default `_dev/state/`) for
+new, complete, manifest-verified harvest directories and invokes
+`import-turn.js` on each one exactly once per `turn_id`. It never invokes
+`run-job`, `harvest`, or `CANCEL` -- turn/harvest/cancellation orchestration
+and the short-turn timelapse cadence remain owned by
+`ant-world-orwell-live-dashboard`, per plan step S3.
+
+```sh
+node tools/ant-hive-world/unreal-export/watch-imports.js \
+  [--root <dir>] [--out-dir <dir>] [--interval <seconds>] [--once] \
+  [--deploy] [--host <ssh-host>] [--remote-dir <win-path>] \
+  [--build-script <win-path>] [--psrun <path-to-psrun.sh>] \
+  [--shuffles <n>] [--journal <path>]
+```
+
+- `--root` -- pulled-harvests root to scan. Defaults to `_dev/state/`.
+- `--out-dir` -- passed straight through to `import-turn.js`; also where
+  this script looks for `import-index.jsonl` to decide what's already
+  journaled. Defaults to this directory.
+- `--interval` -- poll interval in seconds. Defaults to `30`.
+- `--once` -- run a single pass and exit (for testing; no polling loop).
+- `--deploy` -- after a successful local import, scp the new
+  `unreal-import__<turn_id>.json` to the orwell host's `Imports\` directory
+  (same `DEST_SCP` forward-slash convention as `ue/deploy.sh`) and trigger a
+  headless rebuild via `_dev/sim-runs/vm/orwell/psrun.sh` invoking
+  `Tools\BuildLevel.ps1 -Import <remote-path>`. Without `--deploy`, imports
+  are local-only.
+- `--host`, `--remote-dir`, `--build-script`, `--psrun` -- deploy-target
+  overrides; default to `orwell`,
+  `D:\UnrealProjects\AntWorldProjection\Imports`,
+  `D:\UnrealProjects\AntWorldProjection\Tools\BuildLevel.ps1`, and
+  `_dev/sim-runs/vm/orwell/psrun.sh` respectively.
+- `--shuffles` -- forwarded to `import-turn.js`.
+- `--journal` -- advisory override for this script's own "already
+  journaled?" pre-check only (useful when pointing `--root`/`--out-dir` at a
+  test fixture with a separately-seeded journal copy). `import-turn.js`'s
+  own journal is always `<out-dir>/import-index.jsonl`; this script never
+  writes to any journal itself.
+
+### What a pass does
+
+1. Lists directories directly under `--root`.
+2. For each, a read-only completeness probe checks for `PULL-MANIFEST.txt`,
+   a run subdirectory carrying `RESULT-MANIFEST.txt`, and readable
+   `world-state.json` / `turn-projection.json` inside it. Incomplete
+   directories (a pull still in progress) are logged and skipped -- they
+   are retried on the next pass, not treated as an error. This probe does
+   **not** verify sha256 against the manifest chain; that verification, and
+   its fail-closed behavior on a mismatch, belongs entirely to
+   `import-turn.js`.
+3. For each complete harvest dir, reads `turn-projection.json`'s `run_name`
+   and checks it against the turn IDs already present in
+   `import-index.jsonl`. Already-journaled turns are logged as a no-op and
+   never re-invoke `import-turn.js`.
+4. For each new turn, spawns `node import-turn.js <harvest-dir> --out-dir
+   <out-dir>` as a child process and parses its stdout banner. A
+   non-zero exit is logged as a failure and the loop continues to the next
+   directory -- one bad harvest never stops the watch loop.
+5. On a successful import, `--deploy` (if passed) triggers the scp + remote
+   rebuild described above; otherwise the pass logs that the import is
+   local-only.
+
+Every action (skip, no-op, import attempt, import success/failure, deploy
+step) is logged with an ISO-8601 timestamp to stdout/stderr.
+
+### Shutdown
+
+`SIGINT`/`SIGTERM` stop the polling loop cleanly between passes (the
+current pass, if any, always finishes -- `import-turn.js` is invoked via a
+synchronous child process, so a shutdown signal never lands mid-write).
+`--once` skips the loop entirely for single-pass testing.
+
+### Execution-verified (this session)
+
+Two `--once` passes were run and their transcripts captured in the S3 close
+message for this task:
+
+1. Against the real `_dev/state/` root: `baseline-3000-r6` and
+   `baseline-3000-r7` were both recognized as already-journaled (logged as
+   `NOOP`, zero import attempts, zero journal or output mutation --
+   confirmed via `git status` and a before/after diff of
+   `import-index.jsonl`).
+2. Against a scratchpad copy of `_dev/state/baseline-3000-r7` (renamed
+   `run_name` to `baseline-3000-r7-test` in the copy's
+   `turn-projection.json`, with the three manifest entries for that file
+   patched to the new sha256 so the copy's own manifest chain stays
+   internally consistent) and a scratchpad copy of the real
+   `import-index.jsonl` seeded as the out-dir's journal: the script
+   recognized the new turn, invoked `import-turn.js`, and imported it with
+   `absolute_day_start=6000` -- correctly continuing from the seeded
+   journal's `r6`+`r7` cumulative tick count (3000 + 3000). The real
+   `import-index.jsonl` and the real `unreal-import__*.json` outputs under
+   this directory were confirmed unchanged before and after.
+
+`--deploy` was **not** exercised against orwell in this session --
+deploy-path verification is written-not-verified and belongs to the
+operator's first timelapse session (per this task's scope boundary).

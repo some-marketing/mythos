@@ -67,6 +67,12 @@ FEATURE_STYLE = {
 }
 FEATURE_FALLBACK = ("cube", (0.90, 0.90, 0.90))
 
+# default amount rendered for a food patch that is only present in
+# food_source_coords (i.e. a discrete patch location with no remaining
+# amount currently reported in food_sources) -- keeps the marker visible
+# at a modest height rather than collapsing to zero.
+FOOD_COORD_DEFAULT_AMOUNT = 1.0
+
 
 def log(msg):
     unreal.log("ANTWORLD %s" % msg)
@@ -289,8 +295,14 @@ def build_territory(source, width, meshes, mats):
 
 
 def collect_features(source):
-    """Every *_sources map flattened to (resource, tile_id, amount)."""
+    """Every *_sources map flattened to (resource, tile_id, amount), unioned
+    with food_source_coords so discrete food patches still render a marker
+    even when the current food_sources map has drained/omitted that tile.
+    Dedupe is by (resource, tile_id): a tile already present in food_sources
+    keeps its reported amount, coords-only tiles get FOOD_COORD_DEFAULT_AMOUNT.
+    """
     features = []
+    seen = set()
     for key, value in sorted(source.items()):
         if not key.endswith("_sources") or not isinstance(value, dict):
             continue
@@ -300,7 +312,17 @@ def collect_features(source):
                 amount = float(amount)
             except (TypeError, ValueError):
                 amount = 0.0
+            seen.add((resource, tile_id))
             features.append((resource, tile_id, amount))
+
+    coords = source.get("food_source_coords")
+    if isinstance(coords, dict):
+        for tile_id in sorted(coords):
+            key = ("food", tile_id)
+            if key in seen:
+                continue
+            seen.add(key)
+            features.append(("food", tile_id, FOOD_COORD_DEFAULT_AMOUNT))
     return features
 
 

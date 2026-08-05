@@ -20,11 +20,20 @@
 // _dev/sim-runs/vm/orwell/psrun.sh invoking Tools\BuildLevel.ps1 -Import
 // <remote-path>. Without --deploy, imports are local-only.
 //
+// Deploy success is tracked separately from import success, in a sidecar
+// (<out-dir>/deploy-state.jsonl: one line per turn_id that fully deployed --
+// scp AND remote rebuild both succeeded). The import journal alone is NOT
+// sufficient to gate deploys: a turn_id that is already journaled (import
+// succeeded) but never made it into deploy-state.jsonl (deploy failed, or
+// hasn't been attempted with --deploy yet) is retried on every subsequent
+// --deploy pass. Only a fully successful deploy writes the sidecar line.
+//
 // This script NEVER invokes run-job, harvest, or CANCEL surfaces -- it only
 // reads directories that have already crossed the courier boundary and
 // carry a verified manifest chain, and it only ever appends to state that
-// import-turn.js itself owns (the journal) or writes to the orwell Imports\
-// directory when explicitly asked to deploy. Turn/harvest/cancellation
+// import-turn.js itself owns (the journal), state this script itself owns
+// (deploy-state.jsonl), or writes to the orwell Imports\ directory when
+// explicitly asked to deploy. Turn/harvest/cancellation
 // orchestration and the short-turn timelapse cadence remain owned by
 // ant-world-orwell-live-dashboard.
 //
@@ -101,7 +110,8 @@ function parseArgs() {
     buildScript: argVal('--build-script', DEFAULT_BUILD_SCRIPT),
     psrun: path.resolve(argVal('--psrun', DEFAULT_PSRUN)),
     shuffles,
-    journalPath: argVal('--journal', null) // advisory override; see readJournalTurnIds()
+    journalPath: argVal('--journal', null), // advisory override; see readJournalTurnIds()
+    deployStatePath: argVal('--deploy-state', null) // advisory override; see readDeployStateTurnIds()
   };
 }
 
@@ -177,6 +187,96 @@ function readJournalTurnIds(outDir, journalPathOverride) {
     }
   }
   return seen;
+}
+
+// --- deploy state (deploy-state.jsonl -- this script's own sidecar, next to
+// the journal; import-turn.js never reads or writes it) ---------------------
+//
+// The journal (import-index.jsonl) records "this turn_id was imported"; it
+// says nothing about whether a subsequent --deploy attempt for that turn
+// actually landed on orwell. Without a separate ledger, a --deploy that
+// fails after a successful import becomes a permanent no-op on every later
+// pass, because the journal-skip check alone treats the turn as already
+// handled. deploy-state.jsonl closes that gap: a line is appended here ONLY
+// after both the scp and the remote rebuild trigger succeed (see
+// runDeploySweep()), so a partial/failed deploy leaves no line and is
+// retried on the next pass that runs with --deploy.
+
+function resolveDeployStatePath(outDir, override) {
+  return override || path.join(outDir, 'deploy-state.jsonl');
+}
+
+// Tolerant read, mirroring readJournalTurnIds(): a corrupt line is logged
+// and skipped rather than treated as fatal -- this is only a "was this
+// turn already deployed" pre-check, and the worst case of misreading it is
+// an extra (idempotent, best-effort) redeploy attempt, never data loss.
+function readDeployStateTurnIds(outDir, deployStatePathOverride) {
+  const deployStatePath = resolveDeployStatePath(outDir, deployStatePathOverride);
+  const seen = new Set();
+  if (!fs.existsSync(deployStatePath)) return seen;
+  const text = fs.readFileSync(deployStatePath, 'utf8');
+  const lines = text.split(/\r?\n/);
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (line === '') continue;
+    try {
+      const entry = JSON.parse(line);
+      if (entry && entry.turn_id) seen.add(entry.turn_id);
+    } catch (err) {
+      logErr(
+        `WARN deploy-state line ${i + 1} of ${deployStatePath} is unreadable (${err.message}); skipping for this pre-check`
+      );
+    }
+  }
+  return seen;
+}
+
+// Appended ONLY after a deploy attempt fully succeeds (scp AND remote
+// rebuild both report success) -- see the call site in runDeploySweep().
+function writeDeployStateEntry(outDir, deployStatePathOverride, turnId, target) {
+  const deployStatePath = resolveDeployStatePath(outDir, deployStatePathOverride);
+  fs.mkdirSync(path.dirname(deployStatePath), { recursive: true });
+  const entry = { turn_id: turnId, deployed_at: new Date().toISOString(), target };
+  fs.appendFileSync(deployStatePath, `${JSON.stringify(entry)}\n`);
+}
+
+// Reconstructs the on-disk path import-turn.js writes for a given turn_id
+// (see buildDoc()'s outPath convention in import-turn.js) so an already
+// -journaled turn from a PRIOR pass can still be located for a deploy retry
+// without re-running the importer.
+function outPathForTurn(outDir, turnId) {
+  return path.join(outDir, `unreal-import__${turnId}.json`);
+}
+
+// One deploy sweep: any turn_id that is journaled but not yet recorded in
+// deploy-state.jsonl gets a (re)deploy attempt. Covers both turns imported
+// earlier in THIS pass and turns imported (and possibly deploy-failed) in
+// any earlier pass -- the journal-skip in the import loop above never
+// prevents a retry here.
+function runDeploySweep(journaledTurnIds, opts, summary) {
+  const deployedTurnIds = readDeployStateTurnIds(opts.outDir, opts.deployStatePath);
+  const pending = Array.from(journaledTurnIds).filter((turnId) => !deployedTurnIds.has(turnId));
+  summary.deployPending = pending.length;
+  summary.deployed = 0;
+  summary.deployFailed = 0;
+
+  for (const turnId of pending) {
+    const outPath = outPathForTurn(opts.outDir, turnId);
+    if (!fs.existsSync(outPath)) {
+      logErr(`deploy: turn_id=${turnId} is journaled but ${outPath} is missing -- skipping this pass`);
+      continue;
+    }
+    log(`deploy: turn_id=${turnId} not yet in deploy-state -- attempting (re)deploy`);
+    const result = deployImport(outPath, opts);
+    if (result.deployed && result.rebuilt) {
+      writeDeployStateEntry(opts.outDir, opts.deployStatePath, turnId, opts.host);
+      summary.deployed += 1;
+      log(`deploy: turn_id=${turnId} OK -- recorded in ${resolveDeployStatePath(opts.outDir, opts.deployStatePath)}`);
+    } else {
+      summary.deployFailed += 1;
+      logErr(`deploy: turn_id=${turnId} FAILED this pass (deployed=${result.deployed} rebuilt=${result.rebuilt}) -- no deploy-state line written, will retry next pass`);
+    }
+  }
 }
 
 // --- import-turn.js invocation -----------------------------------------------
@@ -311,15 +411,20 @@ function runOnce(opts) {
     // is treated as a no-op rather than a second import attempt.
     journaledTurnIds.add(banner.turnId);
 
-    if (opts.deploy) {
-      deployImport(banner.outPath, opts);
-    } else {
+    if (!opts.deploy) {
       log(`IMPORT ${name}: --deploy not passed -- import is local only`);
     }
+    // Deploy (or retry of a previously failed deploy) happens in one sweep
+    // over journaledTurnIds below, not inline here -- see runDeploySweep().
+  }
+
+  if (opts.deploy) {
+    runDeploySweep(journaledTurnIds, opts, summary);
   }
 
   log(
-    `pass complete: scanned=${summary.scanned} imported=${summary.imported} already_journaled=${summary.alreadyJournaled} skipped_incomplete=${summary.skippedIncomplete} failed=${summary.failed}`
+    `pass complete: scanned=${summary.scanned} imported=${summary.imported} already_journaled=${summary.alreadyJournaled} skipped_incomplete=${summary.skippedIncomplete} failed=${summary.failed}` +
+      (opts.deploy ? ` deploy_pending=${summary.deployPending} deployed=${summary.deployed} deploy_failed=${summary.deployFailed}` : '')
   );
   return summary;
 }
@@ -370,7 +475,17 @@ function main() {
   tick();
 }
 
-module.exports = { runOnce, inspectHarvestDir, readJournalTurnIds, parseImportBanner, toRemoteScpPath };
+module.exports = {
+  runOnce,
+  inspectHarvestDir,
+  readJournalTurnIds,
+  parseImportBanner,
+  toRemoteScpPath,
+  readDeployStateTurnIds,
+  writeDeployStateEntry,
+  resolveDeployStatePath,
+  outPathForTurn
+};
 
 if (require.main === module) {
   main();

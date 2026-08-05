@@ -63,6 +63,36 @@ The build is idempotent: if the map already exists it is loaded, emptied, and
 repopulated, so re-running against a newer import advances the scene in place.
 That is the hook S3's watch loop will call.
 
+### Editor-concurrency guard (`-Force`)
+
+`build_world.py` destroys and respawns every actor in the level
+(`open_blank_level()`). There is no engine-level lock stopping that from
+running headlessly at the same time as an interactive `UnrealEditor.exe`
+session that has the same project open, and doing so can clobber
+in-progress edits in that open session. Before launching the headless
+editor, `BuildLevel.ps1` runs a best-effort check for a concurrent
+interactive session: an `UnrealEditor.exe` process (`Get-Process`) whose
+main window title names this project, or a recently-touched `*.lock` file
+under the project's `Saved\` directory. If either is found, the script
+refuses and exits (`ANTWORLD_HOST_EDITOR_GUARD=REFUSED`, exit code `4`)
+rather than proceeding. Pass `-Force` to override once you've confirmed by
+hand that it's safe to rebuild anyway (e.g. you know the "running" editor
+process is actually stale). This is a heuristic, not a hard guarantee -- a
+session with no visible window, or a lock file the current engine version
+doesn't touch, can still evade it.
+
+### Timeout is an explicit failure
+
+If `UnrealEditor-Cmd.exe` doesn't finish within `-TimeoutSeconds` (default
+1800), `BuildLevel.ps1` kills the process, prints
+`ANTWORLD_HOST_TIMEOUT=<seconds>` and, after printing the usual evidence
+markers/report/umap status for whatever partial state exists, prints
+`ANTWORLD_HOST_TIMEOUT_RESULT=...` and exits with code `3`. A timed-out,
+killed build is never reported as a successful run -- callers that gate on
+the exit code (for example `watch-imports.js --deploy`'s remote rebuild
+trigger) see it as a failure and retry on the next pass rather than
+treating a killed build as done.
+
 ## Evidence surface
 
 Every run emits, to stdout and to `Saved/antworld_headless.log`:
@@ -87,11 +117,18 @@ the log-grep receipt.
   Unreal units.
 - **Territory** (`source.territory`) — a thin cube slab per tile, coloured by
   owning hive (`hive-a` warm amber, `hive-b` cool teal).
-- **Features** (every `source.*_sources` map) — one marker per source, shape
-  and colour per resource type (food sphere/green, wood cylinder/brown, stone
-  cube/grey, clay cone/orange, water sphere/blue, ore cube/violet, fiber
-  cylinder/pale). Marker height scales with the remaining amount, clamped at
-  10. Markers sit off tile centre so builds stay readable.
+- **Features** (every `source.*_sources` map, unioned with
+  `source.food_source_coords`) — one marker per source, shape and colour per
+  resource type (food sphere/green, wood cylinder/brown, stone cube/grey,
+  clay cone/orange, water sphere/blue, ore cube/violet, fiber cylinder/pale).
+  Marker height scales with the remaining amount, clamped at 10. Markers sit
+  off tile centre so builds stay readable. `food_source_coords` is a
+  discrete-patch-location map that can carry tiles absent from
+  `food_sources` (e.g. a patch whose amount currently reports as drained, or
+  is simply missing, from `food_sources`, but whose location is still
+  tracked); any such coords-only tile still renders a food marker, at a
+  fixed default height, so a food patch is never silently invisible just
+  because its amount entry is missing.
 - **Builds** (`derived.build_ledger`) — a cylinder per entry at its recorded
   `coords`, coloured by hive, labelled `Build_<i>_<hive>_<kind>_tick<tick>`.
   The tick is carried in the actor label so the S3 timelapse can reveal builds

@@ -188,7 +188,7 @@ node tools/ant-hive-world/unreal-export/watch-imports.js \
   [--root <dir>] [--out-dir <dir>] [--interval <seconds>] [--once] \
   [--deploy] [--host <ssh-host>] [--remote-dir <win-path>] \
   [--build-script <win-path>] [--psrun <path-to-psrun.sh>] \
-  [--shuffles <n>] [--journal <path>]
+  [--shuffles <n>] [--journal <path>] [--deploy-state <path>]
 ```
 
 - `--root` -- pulled-harvests root to scan. Defaults to `_dev/state/`.
@@ -214,6 +214,9 @@ node tools/ant-hive-world/unreal-export/watch-imports.js \
   test fixture with a separately-seeded journal copy). `import-turn.js`'s
   own journal is always `<out-dir>/import-index.jsonl`; this script never
   writes to any journal itself.
+- `--deploy-state` -- advisory override for the deploy-state sidecar path
+  (see "Deploy tracking is separate from import tracking" below). Defaults
+  to `<out-dir>/deploy-state.jsonl`.
 
 ### What a pass does
 
@@ -234,12 +237,38 @@ node tools/ant-hive-world/unreal-export/watch-imports.js \
    <out-dir>` as a child process and parses its stdout banner. A
    non-zero exit is logged as a failure and the loop continues to the next
    directory -- one bad harvest never stops the watch loop.
-5. On a successful import, `--deploy` (if passed) triggers the scp + remote
-   rebuild described above; otherwise the pass logs that the import is
-   local-only.
+5. If `--deploy` was passed, a deploy sweep runs once at the end of the pass
+   (see below) -- it is not triggered inline per-import.
 
 Every action (skip, no-op, import attempt, import success/failure, deploy
 step) is logged with an ISO-8601 timestamp to stdout/stderr.
+
+### Deploy tracking is separate from import tracking
+
+`import-index.jsonl` answers "was this turn imported?" -- it says nothing
+about whether a later `--deploy` attempt for that turn actually landed on
+orwell. Relying on the import journal alone to gate deploys means a
+`--deploy` that fails (bad host, scp failure, a remote rebuild that times
+out or errors) after a successful import becomes a **permanent no-op**: the
+turn is already journaled, so every later pass would skip it before ever
+retrying the deploy.
+
+`deploy-state.jsonl` (default `<out-dir>/deploy-state.jsonl`, one JSON line
+per turn: `{turn_id, deployed_at, target}`) closes that gap. On every pass
+run with `--deploy`, after the import loop finishes, the script sweeps every
+journaled `turn_id` and (re)attempts a deploy for any that are **not yet**
+in `deploy-state.jsonl` -- covering both turns imported earlier in the same
+pass and turns imported (and deploy-failed) in any earlier pass. A line is
+appended to `deploy-state.jsonl` **only** when both the scp and the remote
+rebuild trigger fully succeed; a partial or failed deploy (including a
+`BuildLevel.ps1` rebuild that exits non-zero -- see the timeout-handling
+note below) leaves no line and is retried on the next `--deploy` pass.
+
+This depends on `Tools\BuildLevel.ps1` reporting rebuild failure via a
+non-zero exit code, which it now does explicitly on a timeout (see
+`ue/README.md`'s "Rebuild the level" section) -- previously a killed,
+timed-out build could exit as if it had succeeded, which would have caused
+this sweep to wrongly mark the turn deployed.
 
 ### Shutdown
 

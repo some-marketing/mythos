@@ -90,12 +90,34 @@ function randSmall(rng) {
   return (rng() - 0.5) * 0.2;
 }
 
-function createNetwork(seed) {
+// `dims` (optional) lets a caller that is NOT a hive mind build a network at
+// its own dimensions (plan ant-world-mind-network-repair, S0). Every field is
+// optional and every default is this module's own constant, so an omitted
+// `dims` -- which is every pre-existing caller -- produces a byte-identical
+// network to the one this function built before the parameter existed: the
+// same three Array.from loops consume the same rng draws in the same order.
+//
+// This exists because the world mind reused this constructor and silently
+// inherited the HIVE's INPUT_SIZE (9) while its own encoder emitted 8
+// features, so forward() read input[8] === undefined and every hidden unit
+// became NaN. The fix is not a second hardcoded constant somewhere else --
+// it is letting the caller state the shape ITS OWN encoder needs, and
+// asserting the two agree at construction time (see world-mind.js).
+function createNetwork(seed, dims) {
+  const d = dims || {};
+  const inputSize = d.inputSize === undefined ? INPUT_SIZE : d.inputSize;
+  const hiddenSize = d.hiddenSize === undefined ? HIDDEN_SIZE : d.hiddenSize;
+  const outputSize = d.outputSize === undefined ? OUTPUT_SIZE : d.outputSize;
+  for (const [name, value] of [['inputSize', inputSize], ['hiddenSize', hiddenSize], ['outputSize', outputSize]]) {
+    if (!Number.isInteger(value) || value <= 0) {
+      throw new Error(`createNetwork: ${name} must be a positive integer, got ${JSON.stringify(value)}`);
+    }
+  }
   const rng = mulberry32(seed === undefined ? Date.now() ^ Math.floor(Math.random() * 1e9) : seed);
-  const W1 = Array.from({ length: HIDDEN_SIZE }, () => Array.from({ length: INPUT_SIZE }, () => randSmall(rng)));
-  const b1 = Array.from({ length: HIDDEN_SIZE }, () => 0);
-  const W2 = Array.from({ length: OUTPUT_SIZE }, () => Array.from({ length: HIDDEN_SIZE }, () => randSmall(rng)));
-  const b2 = Array.from({ length: OUTPUT_SIZE }, () => 0);
+  const W1 = Array.from({ length: hiddenSize }, () => Array.from({ length: inputSize }, () => randSmall(rng)));
+  const b1 = Array.from({ length: hiddenSize }, () => 0);
+  const W2 = Array.from({ length: outputSize }, () => Array.from({ length: hiddenSize }, () => randSmall(rng)));
+  const b2 = Array.from({ length: outputSize }, () => 0);
   return { W1, b1, W2, b2 };
 }
 

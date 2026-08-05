@@ -23,6 +23,18 @@ param(
   [int]$MaxEpisodes    = 5,
   [int]$Replicates     = 2,
   [int]$Ticks          = 3000,
+  # MODE=turn only. Names a guest-local checkpoint generation directory
+  # (gen-<absolute_day>-<run_name>) for the turn driver to continue from. The
+  # value is written into job.env verbatim -- this script does not and cannot
+  # verify it, because the generation lives inside the guest and there is no
+  # channel to the running guest. If it does not validate, the driver halts the
+  # turn and returns resume-failed-halt:<stage>:<reason> in STATUS rather than
+  # silently starting fresh.
+  [string]$ResumeFrom,
+  # MODE=turn only. Explicit root seed for the run's RNG lineage. Left empty,
+  # the driver draws one from the OS CSPRNG and records it in the checkpoint --
+  # never from the wall clock, so no turn's behaviour depends on when it ran.
+  [string]$RootSeed,
   [int]$WatchdogMinutes = 60
 )
 
@@ -39,6 +51,18 @@ if (-not $DeadlineIso) {
   $DeadlineIso = (Get-Date).ToUniversalTime().AddMinutes($WatchdogMinutes - 5).ToString("yyyy-MM-ddTHH:mm:ssZ")
 }
 if ($Mode -eq 'turn' -and $Ticks -lt 1) { throw 'Ticks must be >= 1 for MODE=turn' }
+if ($ResumeFrom -and $Mode -ne 'turn') { throw 'ResumeFrom applies to MODE=turn only' }
+if ($RootSeed   -and $Mode -ne 'turn') { throw 'RootSeed applies to MODE=turn only' }
+# job.env is sourced by bash in the guest, so a value containing whitespace, a
+# newline or a quote would either break the parse or inject a second variable.
+# Refuse here rather than shipping a malformed spec into a guest with no channel
+# back out of it.
+if ($ResumeFrom -and $ResumeFrom -notmatch '^gen-[0-9]+-[A-Za-z0-9._-]+$') {
+  throw "REFUSING: ResumeFrom '$ResumeFrom' is not a generation id of the form gen-<absolute_day>-<run_name>"
+}
+if ($RootSeed -and $RootSeed -notmatch '^[0-9]+$') {
+  throw "REFUSING: RootSeed '$RootSeed' is not a non-negative integer"
+}
 # ---------------------------------------------------------------------------
 # PRECONDITION: the golden baseline must exist before any experiment runs.
 #
@@ -85,6 +109,12 @@ try {
 
   # LF endings: this file is sourced by bash in the guest.
   $job = "RUN_NAME=$RunName`nMODE=$Mode`nDEADLINE_ISO=$DeadlineIso`nEPISODE_ROUNDS=$EpisodeRounds`nMAX_EPISODES=$MaxEpisodes`nREPLICATES=$Replicates`nTICKS=$Ticks`n"
+  # Written verbatim, and only when supplied: an empty RESUME_FROM line would
+  # be indistinguishable in the guest from an absent one, and the guest reads
+  # "absent" as an explicit fresh start, so emitting an empty value would make
+  # the spec say less than nothing.
+  if ($ResumeFrom) { $job += "RESUME_FROM=$ResumeFrom`n" }
+  if ($RootSeed)   { $job += "ROOT_SEED=$RootSeed`n" }
   $jobEnvPath = Join-Path $dl 'job.env'
   [IO.File]::WriteAllText($jobEnvPath, $job, (New-Object Text.UTF8Encoding $false))
   "job.env written:"

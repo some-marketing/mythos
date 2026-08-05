@@ -1,0 +1,24 @@
+{
+  "absolute_day": 300,
+  "absolute_tick": 300,
+  "event_context": {
+    "arm_id": "mind-repair-baseline",
+    "episode_id": "bba9e755-8fef-4e5a-b819-dab0368c78d6",
+    "run_id": "c4b28c98-e0ba-4401-b405-ba55470d95bf"
+  },
+  "fresh_start": true,
+  "hives": {
+    "hive-a": {
+      "next_event_tick": 1
+    },
+    "hive-b": {
+      "next_event_tick": 1
+    }
+  },
+  "parent_episode_id": null,
+  "parent_run_id": null,
+  "root_seed": 1001,
+  "root_seed_source": "arg",
+  "run_name": "baselineA",
+  "turn_index": 0
+}

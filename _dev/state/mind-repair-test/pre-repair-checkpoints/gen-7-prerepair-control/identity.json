@@ -1,0 +1,24 @@
+{
+  "absolute_day": 7,
+  "absolute_tick": 7,
+  "event_context": {
+    "arm_id": "mind-repair-pre",
+    "episode_id": "3e73c533-9ffe-4cb5-a537-da935680aa76",
+    "run_id": "3349e33e-1a2b-4b16-a0c0-e1f39352ff77"
+  },
+  "fresh_start": false,
+  "hives": {
+    "hive-a": {
+      "next_event_tick": 1
+    },
+    "hive-b": {
+      "next_event_tick": 1
+    }
+  },
+  "parent_episode_id": "9373f82a-e00e-4cbf-9ed8-39c0390e0e64",
+  "parent_run_id": "7aadbf61-53d9-4ec6-9f84-ea224916927c",
+  "root_seed": 4242,
+  "root_seed_source": "restored",
+  "run_name": "prerepair-control",
+  "turn_index": 1
+}

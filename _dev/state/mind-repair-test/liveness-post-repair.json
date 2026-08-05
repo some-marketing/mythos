@@ -1,0 +1,115 @@
+{
+  "schema": "MindLivenessProbe/1.0",
+  "measured_at": "2026-08-05T03:06:06.750Z",
+  "engine_shape": {
+    "w1_rows": 8,
+    "w1_cols": 8,
+    "w2_rows": 5,
+    "w2_cols": 8,
+    "matches_declared": true
+  },
+  "encoder_feature_count": 8,
+  "fixture": {
+    "path": "_dev/state/mind-repair-test/fixture-world-states.json",
+    "generator": "_dev/state/mind-repair-test/fixture-gen.js",
+    "seed": 20260805,
+    "count": 1000
+  },
+  "probe_seeds": {
+    "a": 1,
+    "b": 999999
+  },
+  "thresholds": {
+    "nan_count_max": 0,
+    "seed_sensitivity_l2": 0.01,
+    "seed_sensitivity_pct_min": 0.9,
+    "distinct_policies_tolerance": 1e-9,
+    "distinct_policies_min": 100,
+    "entropy_mean_min": 0.1,
+    "entropy_mean_max": 1.5594379124341002
+  },
+  "criteria": {
+    "a_no_nan": {
+      "measured": 0,
+      "threshold": 0,
+      "pass": true,
+      "breakdown": {
+        "hiddenPre": 0,
+        "hidden": 0,
+        "logits": 0,
+        "probs": 0
+      }
+    },
+    "b_seed_sensitivity": {
+      "l2_threshold": 0.01,
+      "pct_threshold": 0.9,
+      "pct_passing": 0,
+      "states_passing": 0,
+      "l2_min": 0.0010292535487704325,
+      "l2_max": 0.004950702123988338,
+      "l2_mean": 0.0033252425604375422,
+      "pass": false
+    },
+    "c_state_sensitivity": {
+      "tolerance": 1e-9,
+      "threshold": 100,
+      "distinct_seed_a": 1000,
+      "distinct_seed_b": 1000,
+      "pass": true
+    },
+    "d_non_degeneracy": {
+      "mean": 1.6094019149227106,
+      "min": 1.6093720017072746,
+      "max": 1.609436919264087,
+      "lower_bound": 0.1,
+      "upper_bound": 1.5594379124341002,
+      "ln_output_size": 1.6094379124341003,
+      "pass": false
+    },
+    "e_weight_update": {
+      "path_exists": false,
+      "static_scan": {
+        "engine_files_scanned": 14,
+        "world_mind_update_callers": [],
+        "note": "no engine file calls any weight-update function with the world mind as subject; trainStep() is called only with hive networks (train-tick.js)"
+      },
+      "pre_checksum": "8bc83e48ad81c937f9d9e24009e4c97f3fc373c138449f38937d3999fdaa285b",
+      "post_checksum": "8bc83e48ad81c937f9d9e24009e4c97f3fc373c138449f38937d3999fdaa285b",
+      "empirical": {
+        "generation_dir": "_dev/state/mind-repair-test/baseline-ckpt-a/gen-300-baselineA",
+        "construction_seed": 1001004,
+        "ticks_elapsed": 300,
+        "checksums_differ": false,
+        "reading": "world-mind parameters after the run are byte-identical to construction: no weight update occurred"
+      }
+    }
+  },
+  "diagnostics": {
+    "note": "weight-scale amplification probe -- evidence about WHY (b)/(d) land where they do; not a criterion and not used in any verdict",
+    "weight_scale_sweep": [
+      {
+        "weight_scale": 1,
+        "mean_entropy": 1.6094019149227106,
+        "mean_seed_l2": 0.0033252425604375422,
+        "max_seed_l2": 0.004950702123988338,
+        "mean_prob_spread": 0.004172525598860439
+      },
+      {
+        "weight_scale": 10,
+        "mean_entropy": 1.2745627486653561,
+        "mean_seed_l2": 0.34773720770995553,
+        "max_seed_l2": 0.5453695238725411,
+        "mean_prob_spread": 0.4217726523241306
+      },
+      {
+        "weight_scale": 50,
+        "mean_entropy": 0.05288603009573993,
+        "mean_seed_l2": 1.0144855666539205,
+        "max_seed_l2": 1.414211275883283,
+        "mean_prob_spread": 0.9786143205642406
+      }
+    ],
+    "interpretation": "the forward path is genuinely wired: scaling the same weights moves entropy and seed separation substantially, which is impossible if inputs were still being dropped"
+  },
+  "liveness_verdict": "reads-state-but-fails-magnitude-criteria"
+}

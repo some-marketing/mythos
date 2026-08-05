@@ -1,0 +1,1 @@
+resume-failed-halt:version:architecture-hash-mismatch

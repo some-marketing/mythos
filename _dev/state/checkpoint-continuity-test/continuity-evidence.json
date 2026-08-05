@@ -1,0 +1,3116 @@
+{
+  "schema": "ContinuityEvidence/1.0",
+  "plan": "ant-world-checkpoint-loader",
+  "step": "S3",
+  "generated_at": "2026-08-05T02:55:36.883Z",
+  "node_version": "v24.10.0",
+  "overall_verdict": "PASS",
+  "design": {
+    "ticks_per_leg": 150,
+    "ticks_total": 300,
+    "replicates": 2,
+    "root_seeds": [
+      20260805,
+      20260806
+    ],
+    "fresh_seeds": [
+      777000111,
+      777000222
+    ],
+    "shuffle_streams": "world,hive-a,hive-b",
+    "equivalence_standard": "A post-resume decision stream (absolute ticks 150..299) byte-equal to A-PRIME ticks 150..299",
+    "decision_stream_fields": "per actor per absolute tick: action, applied, reward, policy entropy pre/post update, forced-exploration flag, controller flag, effective entropy weight, stockpile; world rows add verb, source, RNG-drawn tile note, prob, entropy. Wall-clock and identity fields are deliberately excluded -- see run-live.js appendDecision."
+  },
+  "verdicts": {
+    "equivalence_A_vs_Aprime": {
+      "standard": "byte-equal decision stream over ticks 150..299 in every replicate",
+      "pass": true,
+      "per_replicate": [
+        {
+          "name": "rep0: A POST-RESUME vs A-PRIME (ticks 150..300) -- EQUIVALENCE STANDARD",
+          "identical": true,
+          "differing_rows": 0
+        },
+        {
+          "name": "rep1: A POST-RESUME vs A-PRIME (ticks 150..300) -- EQUIVALENCE STANDARD",
+          "identical": true,
+          "differing_rows": 0
+        }
+      ]
+    },
+    "pre_resume_agreement": {
+      "pass": true,
+      "per_replicate": [
+        {
+          "name": "rep0: A pre-checkpoint vs A-PRIME (ticks 0..150)",
+          "identical": true
+        },
+        {
+          "name": "rep1: A pre-checkpoint vs A-PRIME (ticks 0..150)",
+          "identical": true
+        }
+      ]
+    },
+    "divergence_controls": {
+      "standard": "A must differ replicably from BOTH B (fresh seeds) and C (shuffled streams)",
+      "pass": true,
+      "per_control": [
+        {
+          "name": "rep0: A vs B (fresh-seed control, ticks 0..300)",
+          "differing_rows": 855,
+          "divergence_rate": 0.95
+        },
+        {
+          "name": "rep0: A vs C (shuffled-RNG control, ticks 0..300)",
+          "differing_rows": 863,
+          "divergence_rate": 0.958889
+        },
+        {
+          "name": "rep1: A vs B (fresh-seed control, ticks 0..300)",
+          "differing_rows": 863,
+          "divergence_rate": 0.958889
+        },
+        {
+          "name": "rep1: A vs C (shuffled-RNG control, ticks 0..300)",
+          "differing_rows": 853,
+          "divergence_rate": 0.947778
+        }
+      ]
+    },
+    "save_load_save_byte_identity": {
+      "pass": true,
+      "per_replicate": [
+        {
+          "source_generation": "gen-150-A-rep0",
+          "source_root": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-0/checkpoints",
+          "roundtrip_generation": "gen-150-A-rep0",
+          "roundtrip_root": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/roundtrip/rep-0/checkpoints",
+          "per_file": {
+            "mind.json": {
+              "before": "1128d9f921049350be81e506c99679a265383c5e65d4581408b8ea86327b4d49",
+              "after": "1128d9f921049350be81e506c99679a265383c5e65d4581408b8ea86327b4d49",
+              "identical": true
+            },
+            "rng.json": {
+              "before": "35f1fc0ba939aa6961ed02d4121dcbc05a7445b0c0dcd6fc920fcc02cc513b88",
+              "after": "35f1fc0ba939aa6961ed02d4121dcbc05a7445b0c0dcd6fc920fcc02cc513b88",
+              "identical": true
+            },
+            "world.json": {
+              "before": "e03cd183fc80bd41eda03375a2072e762eeb2477fbb564c9e81d04c8dbce6ed0",
+              "after": "e03cd183fc80bd41eda03375a2072e762eeb2477fbb564c9e81d04c8dbce6ed0",
+              "identical": true
+            },
+            "identity.json": {
+              "before": "a7bd62718dced6d75d4db025a186a51b8f7143bc3520dd5528767d01bd9ddda7",
+              "after": "a7bd62718dced6d75d4db025a186a51b8f7143bc3520dd5528767d01bd9ddda7",
+              "identical": true
+            }
+          },
+          "byte_identical": true,
+          "manifest_checksum_differs_reason": "created_at (provenance-only wall-clock field)"
+        },
+        {
+          "source_generation": "gen-150-A-rep1",
+          "source_root": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-1/checkpoints",
+          "roundtrip_generation": "gen-150-A-rep1",
+          "roundtrip_root": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/roundtrip/rep-1/checkpoints",
+          "per_file": {
+            "mind.json": {
+              "before": "ee2eb74fe9f2b352f022ef8a3b4bc8aa1d95124c9480eada0c572d76d09221b6",
+              "after": "ee2eb74fe9f2b352f022ef8a3b4bc8aa1d95124c9480eada0c572d76d09221b6",
+              "identical": true
+            },
+            "rng.json": {
+              "before": "fda26071d2f5f649cd94c519c87f5e4fa9f1c7583d7b392a69a5204f4e8dede1",
+              "after": "fda26071d2f5f649cd94c519c87f5e4fa9f1c7583d7b392a69a5204f4e8dede1",
+              "identical": true
+            },
+            "world.json": {
+              "before": "8c3e2f13287d526acc06df61ad447d1bc654654e374d180a3a84d6f1567a6d21",
+              "after": "8c3e2f13287d526acc06df61ad447d1bc654654e374d180a3a84d6f1567a6d21",
+              "identical": true
+            },
+            "identity.json": {
+              "before": "6ca1bd6e186db57a88dbfb730872d2698a965cf6ea01e8fee8af762516f8c17b",
+              "after": "6ca1bd6e186db57a88dbfb730872d2698a965cf6ea01e8fee8af762516f8c17b",
+              "identical": true
+            }
+          },
+          "byte_identical": true,
+          "manifest_checksum_differs_reason": "created_at (provenance-only wall-clock field)"
+        }
+      ]
+    },
+    "tamper_refusal_arm_D": {
+      "pass": true,
+      "detail": {
+        "tampered_generation": "gen-150-A-rep0",
+        "tampered_file": "mind.json",
+        "sha256_before": "1128d9f921049350be81e506c99679a265383c5e65d4581408b8ea86327b4d49",
+        "sha256_after": "01267774b227eee522d221f8993708de4178ae26d5e660796d3ca1e887c3e090",
+        "still_valid_json": true,
+        "exit_code": 1,
+        "status": "resume-failed-halt:checksums:checksum-mismatch-mind.json",
+        "expected_status_prefix": "resume-failed-halt:checksums:",
+        "refused_at_checksum_stage": true,
+        "sandbox_created": false,
+        "original_generation_untouched": true
+      }
+    },
+    "refusal_ladder": {
+      "pass": true,
+      "detail": [
+        {
+          "probe": "stage1-missing",
+          "resume_from": "gen-999999-does-not-exist",
+          "exit_code": 1,
+          "status": "resume-failed-halt:exists:generation-dir-absent",
+          "expected_status_prefix": "resume-failed-halt:exists:",
+          "matched": true,
+          "sandbox_created": false,
+          "state_constructed": false
+        },
+        {
+          "probe": "stage2-uncommitted",
+          "resume_from": "gen-150-A-rep0",
+          "exit_code": 1,
+          "status": "resume-failed-halt:committed:manifest-absent",
+          "expected_status_prefix": "resume-failed-halt:committed:",
+          "matched": true,
+          "sandbox_created": false,
+          "state_constructed": false
+        },
+        {
+          "probe": "stage2-torn-manifest",
+          "resume_from": "gen-150-A-rep0",
+          "exit_code": 1,
+          "status": "resume-failed-halt:committed:manifest-self-checksum-mismatch",
+          "expected_status_prefix": "resume-failed-halt:committed:manifest-self-checksum-mismatch",
+          "matched": true,
+          "sandbox_created": false,
+          "state_constructed": false
+        },
+        {
+          "probe": "stage-identity-renamed-dir",
+          "resume_from": "gen-150-A-rep0-renamed",
+          "exit_code": 1,
+          "status": "resume-failed-halt:identity:generation-id-mismatch-manifest-gen-150-A-rep0-dir-gen-150-A-rep0-renamed",
+          "expected_status_prefix": "resume-failed-halt:identity:generation-id-mismatch-",
+          "matched": true,
+          "sandbox_created": false,
+          "state_constructed": false
+        },
+        {
+          "probe": "stage3-code-version",
+          "resume_from": "gen-150-A-rep0",
+          "exit_code": 1,
+          "status": "resume-failed-halt:version:code-version-mismatch-ant-hive-world-checkpoint-0.9.0",
+          "expected_status_prefix": "resume-failed-halt:version:code-version-mismatch",
+          "matched": true,
+          "sandbox_created": false,
+          "state_constructed": false
+        },
+        {
+          "probe": "stage4-unlisted-file",
+          "resume_from": "gen-150-A-rep0",
+          "exit_code": 1,
+          "status": "resume-failed-halt:checksums:unlisted-file-extra.json",
+          "expected_status_prefix": "resume-failed-halt:checksums:unlisted-file-",
+          "matched": true,
+          "sandbox_created": false,
+          "state_constructed": false
+        },
+        {
+          "probe": "stage-input-packet-mismatch",
+          "resume_from": "gen-150-A-rep0",
+          "exit_code": 1,
+          "status": "resume-failed-halt:input-packet:checksum-mismatch",
+          "expected_status_prefix": "resume-failed-halt:input-packet:checksum-mismatch",
+          "matched": true,
+          "sandbox_created": true,
+          "state_constructed": false
+        },
+        {
+          "probe": "stage5-parent-missing",
+          "resume_from": "gen-300-A-rep0b",
+          "exit_code": 1,
+          "status": "resume-failed-halt:lineage:parent-not-committed-manifest-absent",
+          "expected_status_prefix": "resume-failed-halt:lineage:parent-not-committed-",
+          "matched": true,
+          "sandbox_created": false,
+          "state_constructed": false
+        },
+        {
+          "probe": "stage5-parent-checksum",
+          "resume_from": "gen-300-A-rep0b",
+          "exit_code": 1,
+          "status": "resume-failed-halt:lineage:parent-checksum-mismatch",
+          "expected_status_prefix": "resume-failed-halt:lineage:parent-checksum-mismatch",
+          "matched": true,
+          "sandbox_created": false,
+          "state_constructed": false
+        }
+      ]
+    },
+    "collision_fail_closed": {
+      "pass": true,
+      "detail": {
+        "generation": "gen-5-collide",
+        "exit_code": 1,
+        "status": "checkpoint-collision:gen-5-collide",
+        "expected_status": "checkpoint-collision:gen-5-collide",
+        "matched": true,
+        "committed_generation_unchanged": true
+      }
+    },
+    "sweep_and_retention": {
+      "pass": true,
+      "detail": {
+        "swept_lines": [
+          "swept uncommitted checkpoint .staging-gen-5-orphan-4242 (staging-residue)",
+          "swept uncommitted checkpoint gen-5-orphan (manifest-absent)"
+        ],
+        "orphan_removed": true,
+        "staging_removed": true,
+        "committed_retained": true,
+        "committed_still_valid": true
+      }
+    },
+    "frozen_inputs": {
+      "standard": "no arm may carry an operator-console decision packet",
+      "pass": true
+    },
+    "rng_parity": {
+      "pass": true,
+      "detail": {
+        "ok": true,
+        "seeds": [
+          0,
+          1,
+          12345,
+          2166136261,
+          4294967295
+        ],
+        "draws": 4096
+      }
+    },
+    "overall_pass": true
+  },
+  "arms": {
+    "A": [
+      {
+        "rep": 0,
+        "root_seed": 20260805,
+        "checkpoint_root": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-0/checkpoints",
+        "leg1_sandbox": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-0/leg1",
+        "leg2_sandbox": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-0/leg2",
+        "checkpoint_generation": "gen-150-A-rep0",
+        "checkpoint_manifest_checksum": "144f9d808ef754946f7e2e8070fc473bb421e76ca21287835d3506d15be16b0a",
+        "checkpoint_files": [
+          {
+            "bytes": 13617,
+            "path": "mind.json",
+            "sha256": "1128d9f921049350be81e506c99679a265383c5e65d4581408b8ea86327b4d49"
+          },
+          {
+            "bytes": 460,
+            "path": "rng.json",
+            "sha256": "35f1fc0ba939aa6961ed02d4121dcbc05a7445b0c0dcd6fc920fcc02cc513b88"
+          },
+          {
+            "bytes": 17839,
+            "path": "world.json",
+            "sha256": "e03cd183fc80bd41eda03375a2072e762eeb2477fbb564c9e81d04c8dbce6ed0"
+          },
+          {
+            "bytes": 507,
+            "path": "identity.json",
+            "sha256": "a7bd62718dced6d75d4db025a186a51b8f7143bc3520dd5528767d01bd9ddda7"
+          }
+        ],
+        "resumed_generation": "gen-300-A-rep0b",
+        "resumed_manifest": {
+          "absolute_day": 300,
+          "absolute_tick": 300,
+          "architecture": {
+            "hash": "359184320348f7650dee789ccdf0131e0b6c8f56c9d08c4ab6b33d1b5a9ce933",
+            "hive": {
+              "hidden_size": 8,
+              "input_size": 9,
+              "learning_rate": 0.05,
+              "output_size": 5,
+              "resource_norm_k": 20
+            },
+            "verbs": {
+              "harness_verbs": [
+                "gather",
+                "build",
+                "claim-territory",
+                "idle"
+              ],
+              "hive_verb_order": [
+                "gather-food",
+                "gather-wood",
+                "build",
+                "claim-territory",
+                "idle"
+              ],
+              "world_verb_order": [
+                "seed-wood",
+                "seed-stone",
+                "signal-food",
+                "relax-decay",
+                "idle"
+              ]
+            },
+            "world_mind": {
+              "actual_shape": {
+                "matches_declared": false,
+                "w1_cols": 9,
+                "w1_rows": 8,
+                "w2_cols": 8,
+                "w2_rows": 5
+              },
+              "hidden_size": 8,
+              "input_size": 8,
+              "output_size": 5,
+              "resource_norm_k": 40
+            }
+          },
+          "code_version": "ant-hive-world-checkpoint-1.0.0",
+          "created_at": "2026-08-05T02:55:31.652Z",
+          "files": [
+            {
+              "bytes": 13617,
+              "path": "mind.json",
+              "sha256": "99f0cd59f3c97713f3036b76ecb2171805ab4e24a8e040235e4e18f99190d1c5"
+            },
+            {
+              "bytes": 463,
+              "path": "rng.json",
+              "sha256": "64571098f6ccfba7aaecd80e6a7ef31f7bbb760f67a021ea5a7af47c824f74d1"
+            },
+            {
+              "bytes": 18757,
+              "path": "world.json",
+              "sha256": "f71e3ff24d9fb81643ded3364c5e07ad4e5be8fea789eb9c915f83b74ad0b1f4"
+            },
+            {
+              "bytes": 582,
+              "path": "identity.json",
+              "sha256": "0d282e92824c42542f4fc1645679fe715b60a3f5a611c5fb3f6b0140b09d79cf"
+            }
+          ],
+          "generation_id": "gen-300-A-rep0b",
+          "goal": null,
+          "identity": {
+            "arm_id": "A-rep0-leg2",
+            "episode_id": "38e7dcf5-8efb-4ccf-8005-935d850d63bd",
+            "fresh_start": false,
+            "parent_episode_id": "095d4fa2-b05a-4c93-9f24-ff5d4bec24a3",
+            "parent_run_id": "db3c258a-5ec8-4747-8b1b-73ea75d65be7",
+            "root_seed": 20260805,
+            "root_seed_source": "restored",
+            "run_id": "da3af629-4fb1-4d5f-9789-1e909fc1076d",
+            "turn_index": 1
+          },
+          "input_packet": {
+            "present": false,
+            "sha256": null
+          },
+          "manifest_self_checksum": "a388572613bbc958ac217a560db82ac062be93ebb28d4658ce46b638e0d85804",
+          "parent": {
+            "generation_id": "gen-150-A-rep0",
+            "lineage_depth": 1,
+            "manifest_checksum": "144f9d808ef754946f7e2e8070fc473bb421e76ca21287835d3506d15be16b0a"
+          },
+          "run_name": "A-rep0b",
+          "schema": "CheckpointManifest/1.0",
+          "schema_version": "1.0"
+        },
+        "console_packet_leg1": {
+          "path": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-0/leg1/world-mind-decision.json",
+          "present": false
+        },
+        "console_packet_leg2": {
+          "path": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-0/leg2/world-mind-decision.json",
+          "present": false
+        },
+        "decision_stream_rows": 900,
+        "decision_stream_sha256": "d3289139c08ac96c995b6cd24fd43de76459d2c76b6492ef3a1a37b7e37bbe27"
+      },
+      {
+        "rep": 1,
+        "root_seed": 20260806,
+        "checkpoint_root": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-1/checkpoints",
+        "leg1_sandbox": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-1/leg1",
+        "leg2_sandbox": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-1/leg2",
+        "checkpoint_generation": "gen-150-A-rep1",
+        "checkpoint_manifest_checksum": "db6bb78d4119041792c080d71ab45acfff914b87b0abc44445ce19ce5fc8cdf9",
+        "checkpoint_files": [
+          {
+            "bytes": 13553,
+            "path": "mind.json",
+            "sha256": "ee2eb74fe9f2b352f022ef8a3b4bc8aa1d95124c9480eada0c572d76d09221b6"
+          },
+          {
+            "bytes": 461,
+            "path": "rng.json",
+            "sha256": "fda26071d2f5f649cd94c519c87f5e4fa9f1c7583d7b392a69a5204f4e8dede1"
+          },
+          {
+            "bytes": 18723,
+            "path": "world.json",
+            "sha256": "8c3e2f13287d526acc06df61ad447d1bc654654e374d180a3a84d6f1567a6d21"
+          },
+          {
+            "bytes": 507,
+            "path": "identity.json",
+            "sha256": "6ca1bd6e186db57a88dbfb730872d2698a965cf6ea01e8fee8af762516f8c17b"
+          }
+        ],
+        "resumed_generation": "gen-300-A-rep1b",
+        "resumed_manifest": {
+          "absolute_day": 300,
+          "absolute_tick": 300,
+          "architecture": {
+            "hash": "359184320348f7650dee789ccdf0131e0b6c8f56c9d08c4ab6b33d1b5a9ce933",
+            "hive": {
+              "hidden_size": 8,
+              "input_size": 9,
+              "learning_rate": 0.05,
+              "output_size": 5,
+              "resource_norm_k": 20
+            },
+            "verbs": {
+              "harness_verbs": [
+                "gather",
+                "build",
+                "claim-territory",
+                "idle"
+              ],
+              "hive_verb_order": [
+                "gather-food",
+                "gather-wood",
+                "build",
+                "claim-territory",
+                "idle"
+              ],
+              "world_verb_order": [
+                "seed-wood",
+                "seed-stone",
+                "signal-food",
+                "relax-decay",
+                "idle"
+              ]
+            },
+            "world_mind": {
+              "actual_shape": {
+                "matches_declared": false,
+                "w1_cols": 9,
+                "w1_rows": 8,
+                "w2_cols": 8,
+                "w2_rows": 5
+              },
+              "hidden_size": 8,
+              "input_size": 8,
+              "output_size": 5,
+              "resource_norm_k": 40
+            }
+          },
+          "code_version": "ant-hive-world-checkpoint-1.0.0",
+          "created_at": "2026-08-05T02:55:33.960Z",
+          "files": [
+            {
+              "bytes": 13550,
+              "path": "mind.json",
+              "sha256": "9d58fc37b9f77702e872d564dbcaffa2b722cd64dc2e47afcbfa124c8c7a919d"
+            },
+            {
+              "bytes": 462,
+              "path": "rng.json",
+              "sha256": "93d616cc7d390e11c78479a1c594b4d99491d2664627389cc436d979284e38b6"
+            },
+            {
+              "bytes": 19595,
+              "path": "world.json",
+              "sha256": "232309893bc5df82bea0309471075d397a30d928976902c6d166687cc2085ef4"
+            },
+            {
+              "bytes": 582,
+              "path": "identity.json",
+              "sha256": "10b3c80a2bfcd05a6156c823f763b6dba695f86f0ac8e99c5faeecfab55a32b9"
+            }
+          ],
+          "generation_id": "gen-300-A-rep1b",
+          "goal": null,
+          "identity": {
+            "arm_id": "A-rep1-leg2",
+            "episode_id": "a75206e0-8fef-4987-83ce-a0ed7278405f",
+            "fresh_start": false,
+            "parent_episode_id": "a9c9c9f3-abe5-424c-b90d-06d97f682451",
+            "parent_run_id": "e069c08f-892a-417a-8d17-28ecb302a155",
+            "root_seed": 20260806,
+            "root_seed_source": "restored",
+            "run_id": "6db3b0ca-942c-4be5-9826-f8fe82c27b6d",
+            "turn_index": 1
+          },
+          "input_packet": {
+            "present": false,
+            "sha256": null
+          },
+          "manifest_self_checksum": "4884cd7425d9c470fa5c9dbd25492a405846bae5b522b60e2ad88f2d694ee71a",
+          "parent": {
+            "generation_id": "gen-150-A-rep1",
+            "lineage_depth": 1,
+            "manifest_checksum": "db6bb78d4119041792c080d71ab45acfff914b87b0abc44445ce19ce5fc8cdf9"
+          },
+          "run_name": "A-rep1b",
+          "schema": "CheckpointManifest/1.0",
+          "schema_version": "1.0"
+        },
+        "console_packet_leg1": {
+          "path": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-1/leg1/world-mind-decision.json",
+          "present": false
+        },
+        "console_packet_leg2": {
+          "path": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-1/leg2/world-mind-decision.json",
+          "present": false
+        },
+        "decision_stream_rows": 900,
+        "decision_stream_sha256": "3ccb559cb2dede13a5aabb83566171da830a63f313468c7514bc6ac00877f92d"
+      }
+    ],
+    "A_PRIME": [
+      {
+        "rep": 0,
+        "root_seed": 20260805,
+        "sandbox": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-Aprime/rep-0/sandbox",
+        "checkpoint_root": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-Aprime/rep-0/checkpoints",
+        "generation": "gen-300-Aprime-rep0",
+        "manifest_checksum": "391dbc28510ee9c54000d14e39ac63678fcb2f6f56870a0607c07c56cbdac27f",
+        "console_packet": {
+          "path": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-Aprime/rep-0/sandbox/world-mind-decision.json",
+          "present": false
+        },
+        "decision_stream_rows": 900,
+        "decision_stream_sha256": "d3289139c08ac96c995b6cd24fd43de76459d2c76b6492ef3a1a37b7e37bbe27"
+      },
+      {
+        "rep": 1,
+        "root_seed": 20260806,
+        "sandbox": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-Aprime/rep-1/sandbox",
+        "checkpoint_root": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-Aprime/rep-1/checkpoints",
+        "generation": "gen-300-Aprime-rep1",
+        "manifest_checksum": "6896322b902bd98bdab215b9e54a72605918cd25e52fc252717b461b4d1ca1f7",
+        "console_packet": {
+          "path": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-Aprime/rep-1/sandbox/world-mind-decision.json",
+          "present": false
+        },
+        "decision_stream_rows": 900,
+        "decision_stream_sha256": "3ccb559cb2dede13a5aabb83566171da830a63f313468c7514bc6ac00877f92d"
+      }
+    ],
+    "B": [
+      {
+        "rep": 0,
+        "root_seed": 777000111,
+        "sandbox": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-B/rep-0/sandbox",
+        "checkpoint_root": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-B/rep-0/checkpoints",
+        "generation": "gen-300-B-rep0",
+        "manifest_checksum": "9ade0212476d7378137a41c2efcdd097daf79afe027d68f7af8ad89558e24c57",
+        "console_packet": {
+          "path": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-B/rep-0/sandbox/world-mind-decision.json",
+          "present": false
+        },
+        "decision_stream_rows": 900,
+        "decision_stream_sha256": "dc972a8c4bdffd35980883b66514db343e5b9ef1fff9ba6cc796ebd109d8dabf"
+      },
+      {
+        "rep": 1,
+        "root_seed": 777000222,
+        "sandbox": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-B/rep-1/sandbox",
+        "checkpoint_root": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-B/rep-1/checkpoints",
+        "generation": "gen-300-B-rep1",
+        "manifest_checksum": "b2ece0ac4af07f84409eeac5352ffbf5b5b7a36011996454ee2b2c30257d9453",
+        "console_packet": {
+          "path": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-B/rep-1/sandbox/world-mind-decision.json",
+          "present": false
+        },
+        "decision_stream_rows": 900,
+        "decision_stream_sha256": "6f1784021362e1577867f5c486d19869089b670d5c72731db0d0ea4e9f7948ab"
+      }
+    ],
+    "C": [
+      {
+        "rep": 0,
+        "root_seed": 20260805,
+        "sandbox": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-C/rep-0/sandbox",
+        "checkpoint_root": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-C/rep-0/checkpoints",
+        "generation": "gen-300-C-rep0",
+        "manifest_checksum": "d3338651719b7836e6a6de98c0bfda00c511d0f806172e027c60596d964a044d",
+        "console_packet": {
+          "path": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-C/rep-0/sandbox/world-mind-decision.json",
+          "present": false
+        },
+        "decision_stream_rows": 900,
+        "decision_stream_sha256": "e5aa753e83774c429147c3dfabe3b4a6b8d4f1718f89730b52d8e231743b07a2"
+      },
+      {
+        "rep": 1,
+        "root_seed": 20260806,
+        "sandbox": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-C/rep-1/sandbox",
+        "checkpoint_root": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-C/rep-1/checkpoints",
+        "generation": "gen-300-C-rep1",
+        "manifest_checksum": "a795ad8e045cdec2f5076dae3f615a74cdaadcede2a61cc3ef9bf686700ff0b7",
+        "console_packet": {
+          "path": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-C/rep-1/sandbox/world-mind-decision.json",
+          "present": false
+        },
+        "decision_stream_rows": 900,
+        "decision_stream_sha256": "e6788e1714cbd9f7c2b047043503c0c0ff9a4b2892b7b3e19320a1abbcae634d"
+      }
+    ],
+    "D": {
+      "tampered_generation": "gen-150-A-rep0",
+      "tampered_file": "mind.json",
+      "sha256_before": "1128d9f921049350be81e506c99679a265383c5e65d4581408b8ea86327b4d49",
+      "sha256_after": "01267774b227eee522d221f8993708de4178ae26d5e660796d3ca1e887c3e090",
+      "still_valid_json": true,
+      "exit_code": 1,
+      "status": "resume-failed-halt:checksums:checksum-mismatch-mind.json",
+      "expected_status_prefix": "resume-failed-halt:checksums:",
+      "refused_at_checksum_stage": true,
+      "sandbox_created": false,
+      "original_generation_untouched": true
+    }
+  },
+  "comparisons": [
+    {
+      "name": "rep0: A pre-checkpoint vs A-PRIME (ticks 0..150)",
+      "purpose": "sanity: identical seeds and identical start must already agree before any resume happens",
+      "result": {
+        "window": [
+          0,
+          150
+        ],
+        "rows_left": 450,
+        "rows_right": 450,
+        "identical": true,
+        "differing_rows": 0,
+        "divergence_rate": 0,
+        "first_divergences": [],
+        "left_sha256": "9a2575d1823bfeda55ece9d4d8befa18e23ef0aca9e555bfbf07218a79890c02",
+        "right_sha256": "9a2575d1823bfeda55ece9d4d8befa18e23ef0aca9e555bfbf07218a79890c02"
+      }
+    },
+    {
+      "name": "rep0: A POST-RESUME vs A-PRIME (ticks 150..300) -- EQUIVALENCE STANDARD",
+      "purpose": "the plan's equivalence standard: resume must be a true continuation, byte-equal on the decision stream",
+      "result": {
+        "window": [
+          150,
+          300
+        ],
+        "rows_left": 450,
+        "rows_right": 450,
+        "identical": true,
+        "differing_rows": 0,
+        "divergence_rate": 0,
+        "first_divergences": [],
+        "left_sha256": "a3165b2a8e80b73721dc38ecb324ed93f2b7c3c3181d917a3a7d0555913b790d",
+        "right_sha256": "a3165b2a8e80b73721dc38ecb324ed93f2b7c3c3181d917a3a7d0555913b790d"
+      }
+    },
+    {
+      "name": "rep0: A vs B (fresh-seed control, ticks 0..300)",
+      "purpose": "divergence control: different root seeds must produce a different trajectory",
+      "result": {
+        "window": [
+          0,
+          300
+        ],
+        "rows_left": 900,
+        "rows_right": 900,
+        "identical": false,
+        "differing_rows": 855,
+        "divergence_rate": 0.95,
+        "first_divergences": [
+          {
+            "index": 0,
+            "A": "{\"t\":0,\"actor\":\"hive-a\",\"action\":\"idle\",\"applied\":false,\"reward\":-2,\"pe\":1.6094355875204407,\"peu\":1.6085086866041314,\"fe\":true,\"ctl\":false,\"w\":3,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "B": "{\"t\":0,\"actor\":\"hive-a\",\"action\":\"claim-territory\",\"applied\":true,\"reward\":-0.5,\"pe\":1.6093666367390846,\"peu\":1.6093327884789672,\"fe\":true,\"ctl\":false,\"w\":3,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}"
+          },
+          {
+            "index": 1,
+            "A": "{\"t\":0,\"actor\":\"hive-b\",\"action\":\"claim-territory\",\"applied\":true,\"reward\":-0.5,\"pe\":1.6094222123348296,\"peu\":1.6093961313280642,\"fe\":true,\"ctl\":false,\"w\":3,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "B": "{\"t\":0,\"actor\":\"hive-b\",\"action\":\"gather\",\"applied\":true,\"reward\":-1,\"pe\":1.6094303073592022,\"peu\":1.60914965820868,\"fe\":true,\"ctl\":false,\"w\":3,\"starved\":false,\"exhausted\":true,\"stock\":{\"wood\":1,\"food\":0}}"
+          },
+          {
+            "index": 2,
+            "A": "{\"t\":0,\"actor\":\"world\",\"action\":\"idle\",\"source\":\"network-fallback\",\"applied\":false,\"note\":\"world idle — control with hives\",\"prob\":0.2,\"entropy\":1.6094379124341005}",
+            "B": "{\"t\":0,\"actor\":\"world\",\"action\":\"seed-wood\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world seeded 1 wood source at wood-tile-64\",\"prob\":0.2,\"entropy\":1.6094379124341005}"
+          },
+          {
+            "index": 3,
+            "A": "{\"t\":1,\"actor\":\"hive-a\",\"action\":\"claim-territory\",\"applied\":true,\"reward\":-0.5,\"pe\":1.6084915198802292,\"peu\":1.608586877228126,\"fe\":false,\"ctl\":false,\"w\":2.964,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "B": "{\"t\":1,\"actor\":\"hive-a\",\"action\":\"gather\",\"applied\":true,\"reward\":-1,\"pe\":1.6093539382247652,\"peu\":1.609273598005284,\"fe\":false,\"ctl\":false,\"w\":2.964,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0,\"wood\":1}}"
+          },
+          {
+            "index": 4,
+            "A": "{\"t\":1,\"actor\":\"hive-b\",\"action\":\"gather\",\"applied\":true,\"reward\":-1,\"pe\":1.609361810057711,\"peu\":1.6092522583110243,\"fe\":false,\"ctl\":false,\"w\":2.964,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0,\"wood\":1}}",
+            "B": "{\"t\":1,\"actor\":\"hive-b\",\"action\":\"idle\",\"applied\":false,\"reward\":-2,\"pe\":1.609146541149622,\"peu\":1.6086034801604923,\"fe\":false,\"ctl\":false,\"w\":2.964,\"starved\":false,\"exhausted\":true,\"stock\":{\"wood\":1,\"food\":0}}"
+          },
+          {
+            "index": 5,
+            "A": "{\"t\":1,\"actor\":\"world\",\"action\":\"signal-food\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world deposited food signal at tile-77\",\"prob\":0.2,\"entropy\":1.6094379124341005}",
+            "B": "{\"t\":1,\"actor\":\"world\",\"action\":\"seed-stone\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world seeded 1 stone source at stone-tile-34\",\"prob\":0.2,\"entropy\":1.6094379124341005}"
+          },
+          {
+            "index": 6,
+            "A": "{\"t\":2,\"actor\":\"hive-a\",\"action\":\"idle\",\"applied\":false,\"reward\":-2,\"pe\":1.6085923836710894,\"peu\":1.6059857680950909,\"fe\":false,\"ctl\":false,\"w\":2.928,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "B": "{\"t\":2,\"actor\":\"hive-a\",\"action\":\"gather\",\"applied\":false,\"reward\":-2.5,\"pe\":1.6092740236275738,\"peu\":1.608110693283256,\"fe\":false,\"ctl\":false,\"w\":2.928,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0,\"wood\":1}}"
+          },
+          {
+            "index": 7,
+            "A": "{\"t\":2,\"actor\":\"hive-b\",\"action\":\"build\",\"applied\":false,\"reward\":-2.5,\"pe\":1.609252035120009,\"peu\":1.6084788556185905,\"fe\":false,\"ctl\":false,\"w\":2.928,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0,\"wood\":1}}",
+            "B": "{\"t\":2,\"actor\":\"hive-b\",\"action\":\"claim-territory\",\"applied\":true,\"reward\":-0.5,\"pe\":1.6086057194881724,\"peu\":1.6087486424514938,\"fe\":false,\"ctl\":false,\"w\":2.928,\"starved\":false,\"exhausted\":true,\"stock\":{\"wood\":1,\"food\":0}}"
+          },
+          {
+            "index": 8,
+            "A": "{\"t\":2,\"actor\":\"world\",\"action\":\"relax-decay\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world relaxed pheromone decay (factor 0.9)\",\"prob\":0.2,\"entropy\":1.6094379124341005}",
+            "B": "{\"t\":2,\"actor\":\"world\",\"action\":\"signal-food\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world deposited food signal at tile-84\",\"prob\":0.2,\"entropy\":1.6094379124341005}"
+          },
+          {
+            "index": 9,
+            "A": "{\"t\":3,\"actor\":\"hive-a\",\"action\":\"build\",\"applied\":false,\"reward\":-2.5,\"pe\":1.605947249631428,\"peu\":1.6058792631297072,\"fe\":false,\"ctl\":false,\"w\":2.892,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "B": "{\"t\":3,\"actor\":\"hive-a\",\"action\":\"build\",\"applied\":false,\"reward\":-2.5,\"pe\":1.608115151114647,\"peu\":1.6072567077392292,\"fe\":false,\"ctl\":false,\"w\":2.892,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0,\"wood\":1}}"
+          }
+        ],
+        "left_sha256": "d3289139c08ac96c995b6cd24fd43de76459d2c76b6492ef3a1a37b7e37bbe27",
+        "right_sha256": "dc972a8c4bdffd35980883b66514db343e5b9ef1fff9ba6cc796ebd109d8dabf"
+      }
+    },
+    {
+      "name": "rep0: A vs C (shuffled-RNG control, ticks 0..300)",
+      "purpose": "divergence control: same root seed, permuted per-stream assignment -- isolates state from seeds",
+      "result": {
+        "window": [
+          0,
+          300
+        ],
+        "rows_left": 900,
+        "rows_right": 900,
+        "identical": false,
+        "differing_rows": 863,
+        "divergence_rate": 0.958889,
+        "first_divergences": [
+          {
+            "index": 0,
+            "A": "{\"t\":0,\"actor\":\"hive-a\",\"action\":\"idle\",\"applied\":false,\"reward\":-2,\"pe\":1.6094355875204407,\"peu\":1.6085086866041314,\"fe\":true,\"ctl\":false,\"w\":3,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "C": "{\"t\":0,\"actor\":\"hive-a\",\"action\":\"claim-territory\",\"applied\":true,\"reward\":-0.5,\"pe\":1.6094355875204407,\"peu\":1.6093861555866595,\"fe\":true,\"ctl\":false,\"w\":3,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}"
+          },
+          {
+            "index": 1,
+            "A": "{\"t\":0,\"actor\":\"hive-b\",\"action\":\"claim-territory\",\"applied\":true,\"reward\":-0.5,\"pe\":1.6094222123348296,\"peu\":1.6093961313280642,\"fe\":true,\"ctl\":false,\"w\":3,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "C": "{\"t\":0,\"actor\":\"hive-b\",\"action\":\"idle\",\"applied\":false,\"reward\":-2,\"pe\":1.6094222123348296,\"peu\":1.6086298695927614,\"fe\":true,\"ctl\":false,\"w\":3,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}"
+          },
+          {
+            "index": 3,
+            "A": "{\"t\":1,\"actor\":\"hive-a\",\"action\":\"claim-territory\",\"applied\":true,\"reward\":-0.5,\"pe\":1.6084915198802292,\"peu\":1.608586877228126,\"fe\":false,\"ctl\":false,\"w\":2.964,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "C": "{\"t\":1,\"actor\":\"hive-a\",\"action\":\"gather\",\"applied\":true,\"reward\":-1,\"pe\":1.6093838196704275,\"peu\":1.6091154899872941,\"fe\":false,\"ctl\":false,\"w\":2.964,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0,\"wood\":1}}"
+          },
+          {
+            "index": 4,
+            "A": "{\"t\":1,\"actor\":\"hive-b\",\"action\":\"gather\",\"applied\":true,\"reward\":-1,\"pe\":1.609361810057711,\"peu\":1.6092522583110243,\"fe\":false,\"ctl\":false,\"w\":2.964,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0,\"wood\":1}}",
+            "C": "{\"t\":1,\"actor\":\"hive-b\",\"action\":\"gather\",\"applied\":false,\"reward\":-2.5,\"pe\":1.6086311220660425,\"peu\":1.6075884512300156,\"fe\":false,\"ctl\":false,\"w\":2.964,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}"
+          },
+          {
+            "index": 5,
+            "A": "{\"t\":1,\"actor\":\"world\",\"action\":\"signal-food\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world deposited food signal at tile-77\",\"prob\":0.2,\"entropy\":1.6094379124341005}",
+            "C": "{\"t\":1,\"actor\":\"world\",\"action\":\"signal-food\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world deposited food signal at tile-33\",\"prob\":0.2,\"entropy\":1.6094379124341005}"
+          },
+          {
+            "index": 6,
+            "A": "{\"t\":2,\"actor\":\"hive-a\",\"action\":\"idle\",\"applied\":false,\"reward\":-2,\"pe\":1.6085923836710894,\"peu\":1.6059857680950909,\"fe\":false,\"ctl\":false,\"w\":2.928,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "C": "{\"t\":2,\"actor\":\"hive-a\",\"action\":\"build\",\"applied\":false,\"reward\":-2.5,\"pe\":1.6091274030009375,\"peu\":1.6080233521512393,\"fe\":false,\"ctl\":false,\"w\":2.928,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0,\"wood\":1}}"
+          },
+          {
+            "index": 7,
+            "A": "{\"t\":2,\"actor\":\"hive-b\",\"action\":\"build\",\"applied\":false,\"reward\":-2.5,\"pe\":1.609252035120009,\"peu\":1.6084788556185905,\"fe\":false,\"ctl\":false,\"w\":2.928,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0,\"wood\":1}}",
+            "C": "{\"t\":2,\"actor\":\"hive-b\",\"action\":\"gather\",\"applied\":true,\"reward\":-1,\"pe\":1.6076021895487762,\"peu\":1.607916313652076,\"fe\":false,\"ctl\":false,\"w\":2.928,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0,\"wood\":1}}"
+          },
+          {
+            "index": 8,
+            "A": "{\"t\":2,\"actor\":\"world\",\"action\":\"relax-decay\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world relaxed pheromone decay (factor 0.9)\",\"prob\":0.2,\"entropy\":1.6094379124341005}",
+            "C": "{\"t\":2,\"actor\":\"world\",\"action\":\"seed-wood\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world seeded 1 wood source at wood-tile-38\",\"prob\":0.2,\"entropy\":1.6094379124341005}"
+          },
+          {
+            "index": 9,
+            "A": "{\"t\":3,\"actor\":\"hive-a\",\"action\":\"build\",\"applied\":false,\"reward\":-2.5,\"pe\":1.605947249631428,\"peu\":1.6058792631297072,\"fe\":false,\"ctl\":false,\"w\":2.892,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "C": "{\"t\":3,\"actor\":\"hive-a\",\"action\":\"build\",\"applied\":false,\"reward\":-2.5,\"pe\":1.608065296454778,\"peu\":1.6045672635947517,\"fe\":false,\"ctl\":false,\"w\":2.892,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0,\"wood\":1}}"
+          },
+          {
+            "index": 10,
+            "A": "{\"t\":3,\"actor\":\"hive-b\",\"action\":\"build\",\"applied\":false,\"reward\":-2.5,\"pe\":1.6084724329279287,\"peu\":1.605347374298645,\"fe\":false,\"ctl\":false,\"w\":2.892,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0,\"wood\":1}}",
+            "C": "{\"t\":3,\"actor\":\"hive-b\",\"action\":\"gather\",\"applied\":false,\"reward\":-2.5,\"pe\":1.6079334199298292,\"peu\":1.6047290575777131,\"fe\":false,\"ctl\":false,\"w\":2.892,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0,\"wood\":1}}"
+          }
+        ],
+        "left_sha256": "d3289139c08ac96c995b6cd24fd43de76459d2c76b6492ef3a1a37b7e37bbe27",
+        "right_sha256": "e5aa753e83774c429147c3dfabe3b4a6b8d4f1718f89730b52d8e231743b07a2"
+      }
+    },
+    {
+      "name": "rep1: A pre-checkpoint vs A-PRIME (ticks 0..150)",
+      "purpose": "sanity: identical seeds and identical start must already agree before any resume happens",
+      "result": {
+        "window": [
+          0,
+          150
+        ],
+        "rows_left": 450,
+        "rows_right": 450,
+        "identical": true,
+        "differing_rows": 0,
+        "divergence_rate": 0,
+        "first_divergences": [],
+        "left_sha256": "bb270a3902c9d795a7af66c9b7f48c30c5aedb6887ec7ddb0bdd458c86759d5b",
+        "right_sha256": "bb270a3902c9d795a7af66c9b7f48c30c5aedb6887ec7ddb0bdd458c86759d5b"
+      }
+    },
+    {
+      "name": "rep1: A POST-RESUME vs A-PRIME (ticks 150..300) -- EQUIVALENCE STANDARD",
+      "purpose": "the plan's equivalence standard: resume must be a true continuation, byte-equal on the decision stream",
+      "result": {
+        "window": [
+          150,
+          300
+        ],
+        "rows_left": 450,
+        "rows_right": 450,
+        "identical": true,
+        "differing_rows": 0,
+        "divergence_rate": 0,
+        "first_divergences": [],
+        "left_sha256": "44ed47977b6618894e02e334d74e0539e16c9779a55256ae59b75e437f565c71",
+        "right_sha256": "44ed47977b6618894e02e334d74e0539e16c9779a55256ae59b75e437f565c71"
+      }
+    },
+    {
+      "name": "rep1: A vs B (fresh-seed control, ticks 0..300)",
+      "purpose": "divergence control: different root seeds must produce a different trajectory",
+      "result": {
+        "window": [
+          0,
+          300
+        ],
+        "rows_left": 900,
+        "rows_right": 900,
+        "identical": false,
+        "differing_rows": 863,
+        "divergence_rate": 0.958889,
+        "first_divergences": [
+          {
+            "index": 0,
+            "A": "{\"t\":0,\"actor\":\"hive-a\",\"action\":\"claim-territory\",\"applied\":true,\"reward\":-0.5,\"pe\":1.6094251410948082,\"peu\":1.6093331864925853,\"fe\":true,\"ctl\":false,\"w\":3,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "B": "{\"t\":0,\"actor\":\"hive-a\",\"action\":\"claim-territory\",\"applied\":true,\"reward\":-0.5,\"pe\":1.6093754695836318,\"peu\":1.6092298998863908,\"fe\":true,\"ctl\":false,\"w\":3,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}"
+          },
+          {
+            "index": 1,
+            "A": "{\"t\":0,\"actor\":\"hive-b\",\"action\":\"claim-territory\",\"applied\":true,\"reward\":-0.5,\"pe\":1.6094332374476084,\"peu\":1.6094041493508546,\"fe\":true,\"ctl\":false,\"w\":3,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "B": "{\"t\":0,\"actor\":\"hive-b\",\"action\":\"gather\",\"applied\":false,\"reward\":-2.5,\"pe\":1.6093923826397465,\"peu\":1.6080432978670243,\"fe\":true,\"ctl\":false,\"w\":3,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}"
+          },
+          {
+            "index": 2,
+            "A": "{\"t\":0,\"actor\":\"world\",\"action\":\"seed-wood\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world seeded 1 wood source at wood-tile-49\",\"prob\":0.2,\"entropy\":1.6094379124341005}",
+            "B": "{\"t\":0,\"actor\":\"world\",\"action\":\"seed-stone\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world seeded 1 stone source at stone-tile-62\",\"prob\":0.2,\"entropy\":1.6094379124341005}"
+          },
+          {
+            "index": 3,
+            "A": "{\"t\":1,\"actor\":\"hive-a\",\"action\":\"claim-territory\",\"applied\":true,\"reward\":-0.5,\"pe\":1.60924032518877,\"peu\":1.6090048126559897,\"fe\":false,\"ctl\":false,\"w\":2.964,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "B": "{\"t\":1,\"actor\":\"hive-a\",\"action\":\"gather\",\"applied\":true,\"reward\":-1,\"pe\":1.609182728880224,\"peu\":1.6091740035405597,\"fe\":false,\"ctl\":false,\"w\":2.964,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0,\"wood\":1}}"
+          },
+          {
+            "index": 4,
+            "A": "{\"t\":1,\"actor\":\"hive-b\",\"action\":\"claim-territory\",\"applied\":true,\"reward\":-0.5,\"pe\":1.6094110613030395,\"peu\":1.609294542129296,\"fe\":false,\"ctl\":false,\"w\":2.964,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "B": "{\"t\":1,\"actor\":\"hive-b\",\"action\":\"claim-territory\",\"applied\":true,\"reward\":-0.5,\"pe\":1.608063036841037,\"peu\":1.6081665561931235,\"fe\":false,\"ctl\":false,\"w\":2.964,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}"
+          },
+          {
+            "index": 5,
+            "A": "{\"t\":1,\"actor\":\"world\",\"action\":\"signal-food\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world deposited food signal at tile-14\",\"prob\":0.2,\"entropy\":1.6094379124341005}",
+            "B": "{\"t\":1,\"actor\":\"world\",\"action\":\"signal-food\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world deposited food signal at tile-31\",\"prob\":0.2,\"entropy\":1.6094379124341005}"
+          },
+          {
+            "index": 6,
+            "A": "{\"t\":2,\"actor\":\"hive-a\",\"action\":\"gather\",\"applied\":false,\"reward\":-2.5,\"pe\":1.6088177593016184,\"peu\":1.6072367991295868,\"fe\":false,\"ctl\":false,\"w\":2.928,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "B": "{\"t\":2,\"actor\":\"hive-a\",\"action\":\"gather\",\"applied\":false,\"reward\":-2.5,\"pe\":1.609179838642211,\"peu\":1.6081501441487271,\"fe\":false,\"ctl\":false,\"w\":2.928,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0,\"wood\":1}}"
+          },
+          {
+            "index": 7,
+            "A": "{\"t\":2,\"actor\":\"hive-b\",\"action\":\"gather\",\"applied\":false,\"reward\":-2.5,\"pe\":1.609308377065854,\"peu\":1.6082409825500483,\"fe\":false,\"ctl\":false,\"w\":2.928,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "B": "{\"t\":2,\"actor\":\"hive-b\",\"action\":\"idle\",\"applied\":false,\"reward\":-2,\"pe\":1.6082502006795758,\"peu\":1.6081161917044404,\"fe\":false,\"ctl\":false,\"w\":2.928,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}"
+          },
+          {
+            "index": 8,
+            "A": "{\"t\":2,\"actor\":\"world\",\"action\":\"signal-food\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world deposited food signal at tile-78\",\"prob\":0.2,\"entropy\":1.6094379124341005}",
+            "B": "{\"t\":2,\"actor\":\"world\",\"action\":\"relax-decay\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world relaxed pheromone decay (factor 0.9)\",\"prob\":0.2,\"entropy\":1.6094379124341005}"
+          },
+          {
+            "index": 9,
+            "A": "{\"t\":3,\"actor\":\"hive-a\",\"action\":\"idle\",\"applied\":false,\"reward\":-2,\"pe\":1.6072001698665068,\"peu\":1.606560944978599,\"fe\":false,\"ctl\":false,\"w\":2.892,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "B": "{\"t\":3,\"actor\":\"hive-a\",\"action\":\"idle\",\"applied\":false,\"reward\":-2,\"pe\":1.608147227701691,\"peu\":1.6082177055829694,\"fe\":false,\"ctl\":false,\"w\":2.892,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0,\"wood\":1}}"
+          }
+        ],
+        "left_sha256": "3ccb559cb2dede13a5aabb83566171da830a63f313468c7514bc6ac00877f92d",
+        "right_sha256": "6f1784021362e1577867f5c486d19869089b670d5c72731db0d0ea4e9f7948ab"
+      }
+    },
+    {
+      "name": "rep1: A vs C (shuffled-RNG control, ticks 0..300)",
+      "purpose": "divergence control: same root seed, permuted per-stream assignment -- isolates state from seeds",
+      "result": {
+        "window": [
+          0,
+          300
+        ],
+        "rows_left": 900,
+        "rows_right": 900,
+        "identical": false,
+        "differing_rows": 853,
+        "divergence_rate": 0.947778,
+        "first_divergences": [
+          {
+            "index": 1,
+            "A": "{\"t\":0,\"actor\":\"hive-b\",\"action\":\"claim-territory\",\"applied\":true,\"reward\":-0.5,\"pe\":1.6094332374476084,\"peu\":1.6094041493508546,\"fe\":true,\"ctl\":false,\"w\":3,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "C": "{\"t\":0,\"actor\":\"hive-b\",\"action\":\"gather\",\"applied\":false,\"reward\":-2.5,\"pe\":1.6094332374476084,\"peu\":1.608232626107224,\"fe\":true,\"ctl\":false,\"w\":3,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}"
+          },
+          {
+            "index": 2,
+            "A": "{\"t\":0,\"actor\":\"world\",\"action\":\"seed-wood\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world seeded 1 wood source at wood-tile-49\",\"prob\":0.2,\"entropy\":1.6094379124341005}",
+            "C": "{\"t\":0,\"actor\":\"world\",\"action\":\"relax-decay\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world relaxed pheromone decay (factor 0.9)\",\"prob\":0.2,\"entropy\":1.6094379124341005}"
+          },
+          {
+            "index": 4,
+            "A": "{\"t\":1,\"actor\":\"hive-b\",\"action\":\"claim-territory\",\"applied\":true,\"reward\":-0.5,\"pe\":1.6094110613030395,\"peu\":1.609294542129296,\"fe\":false,\"ctl\":false,\"w\":2.964,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "C": "{\"t\":1,\"actor\":\"hive-b\",\"action\":\"claim-territory\",\"applied\":true,\"reward\":-0.5,\"pe\":1.6082325733025926,\"peu\":1.608369495282763,\"fe\":false,\"ctl\":false,\"w\":2.964,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}"
+          },
+          {
+            "index": 5,
+            "A": "{\"t\":1,\"actor\":\"world\",\"action\":\"signal-food\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world deposited food signal at tile-14\",\"prob\":0.2,\"entropy\":1.6094379124341005}",
+            "C": "{\"t\":1,\"actor\":\"world\",\"action\":\"seed-wood\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world seeded 1 wood source at wood-tile-44\",\"prob\":0.2,\"entropy\":1.6094379124341005}"
+          },
+          {
+            "index": 7,
+            "A": "{\"t\":2,\"actor\":\"hive-b\",\"action\":\"gather\",\"applied\":false,\"reward\":-2.5,\"pe\":1.609308377065854,\"peu\":1.6082409825500483,\"fe\":false,\"ctl\":false,\"w\":2.928,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "C": "{\"t\":2,\"actor\":\"hive-b\",\"action\":\"gather\",\"applied\":false,\"reward\":-2.5,\"pe\":1.608360943316382,\"peu\":1.6050686290180831,\"fe\":false,\"ctl\":false,\"w\":2.928,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}"
+          },
+          {
+            "index": 8,
+            "A": "{\"t\":2,\"actor\":\"world\",\"action\":\"signal-food\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world deposited food signal at tile-78\",\"prob\":0.2,\"entropy\":1.6094379124341005}",
+            "C": "{\"t\":2,\"actor\":\"world\",\"action\":\"signal-food\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world deposited food signal at tile-8\",\"prob\":0.2,\"entropy\":1.6094379124341005}"
+          },
+          {
+            "index": 10,
+            "A": "{\"t\":3,\"actor\":\"hive-b\",\"action\":\"idle\",\"applied\":false,\"reward\":-2,\"pe\":1.6082340993160893,\"peu\":1.6081831911380624,\"fe\":false,\"ctl\":false,\"w\":2.892,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "C": "{\"t\":3,\"actor\":\"hive-b\",\"action\":\"gather\",\"applied\":true,\"reward\":-1,\"pe\":1.6050655098058266,\"peu\":1.6054245046629083,\"fe\":false,\"ctl\":false,\"w\":2.892,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0,\"wood\":1}}"
+          },
+          {
+            "index": 11,
+            "A": "{\"t\":3,\"actor\":\"world\",\"action\":\"seed-stone\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world seeded 1 stone source at stone-tile-92\",\"prob\":0.2,\"entropy\":1.6094379124341005}",
+            "C": "{\"t\":3,\"actor\":\"world\",\"action\":\"signal-food\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world deposited food signal at tile-25\",\"prob\":0.2,\"entropy\":1.6094379124341005}"
+          },
+          {
+            "index": 12,
+            "A": "{\"t\":4,\"actor\":\"hive-a\",\"action\":\"gather\",\"applied\":true,\"reward\":-1,\"pe\":1.6064802483496212,\"peu\":1.6075246160468264,\"fe\":false,\"ctl\":false,\"w\":2.856,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0,\"wood\":1}}",
+            "C": "{\"t\":4,\"actor\":\"hive-a\",\"action\":\"build\",\"applied\":false,\"reward\":-2.5,\"pe\":1.6065422151120587,\"peu\":1.6074684135191517,\"fe\":false,\"ctl\":false,\"w\":2.856,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}"
+          },
+          {
+            "index": 13,
+            "A": "{\"t\":4,\"actor\":\"hive-b\",\"action\":\"build\",\"applied\":false,\"reward\":-2.5,\"pe\":1.6081813911001877,\"peu\":1.608054764033299,\"fe\":false,\"ctl\":false,\"w\":2.856,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "C": "{\"t\":4,\"actor\":\"hive-b\",\"action\":\"gather\",\"applied\":true,\"reward\":-1,\"pe\":1.605421386040758,\"peu\":1.6053532846801233,\"fe\":false,\"ctl\":false,\"w\":2.856,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0,\"wood\":2}}"
+          }
+        ],
+        "left_sha256": "3ccb559cb2dede13a5aabb83566171da830a63f313468c7514bc6ac00877f92d",
+        "right_sha256": "e6788e1714cbd9f7c2b047043503c0c0ff9a4b2892b7b3e19320a1abbcae634d"
+      }
+    },
+    {
+      "name": "rep0 vs rep1 of arm A (different root seeds)",
+      "purpose": "replication: the equivalence result must not be an artifact of one seed",
+      "result": {
+        "window": [
+          0,
+          300
+        ],
+        "rows_left": 900,
+        "rows_right": 900,
+        "identical": false,
+        "differing_rows": 867,
+        "divergence_rate": 0.963333,
+        "first_divergences": [
+          {
+            "index": 0,
+            "A_rep0": "{\"t\":0,\"actor\":\"hive-a\",\"action\":\"idle\",\"applied\":false,\"reward\":-2,\"pe\":1.6094355875204407,\"peu\":1.6085086866041314,\"fe\":true,\"ctl\":false,\"w\":3,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "A_rep1": "{\"t\":0,\"actor\":\"hive-a\",\"action\":\"claim-territory\",\"applied\":true,\"reward\":-0.5,\"pe\":1.6094251410948082,\"peu\":1.6093331864925853,\"fe\":true,\"ctl\":false,\"w\":3,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}"
+          },
+          {
+            "index": 1,
+            "A_rep0": "{\"t\":0,\"actor\":\"hive-b\",\"action\":\"claim-territory\",\"applied\":true,\"reward\":-0.5,\"pe\":1.6094222123348296,\"peu\":1.6093961313280642,\"fe\":true,\"ctl\":false,\"w\":3,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "A_rep1": "{\"t\":0,\"actor\":\"hive-b\",\"action\":\"claim-territory\",\"applied\":true,\"reward\":-0.5,\"pe\":1.6094332374476084,\"peu\":1.6094041493508546,\"fe\":true,\"ctl\":false,\"w\":3,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}"
+          },
+          {
+            "index": 2,
+            "A_rep0": "{\"t\":0,\"actor\":\"world\",\"action\":\"idle\",\"source\":\"network-fallback\",\"applied\":false,\"note\":\"world idle — control with hives\",\"prob\":0.2,\"entropy\":1.6094379124341005}",
+            "A_rep1": "{\"t\":0,\"actor\":\"world\",\"action\":\"seed-wood\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world seeded 1 wood source at wood-tile-49\",\"prob\":0.2,\"entropy\":1.6094379124341005}"
+          },
+          {
+            "index": 3,
+            "A_rep0": "{\"t\":1,\"actor\":\"hive-a\",\"action\":\"claim-territory\",\"applied\":true,\"reward\":-0.5,\"pe\":1.6084915198802292,\"peu\":1.608586877228126,\"fe\":false,\"ctl\":false,\"w\":2.964,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "A_rep1": "{\"t\":1,\"actor\":\"hive-a\",\"action\":\"claim-territory\",\"applied\":true,\"reward\":-0.5,\"pe\":1.60924032518877,\"peu\":1.6090048126559897,\"fe\":false,\"ctl\":false,\"w\":2.964,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}"
+          },
+          {
+            "index": 4,
+            "A_rep0": "{\"t\":1,\"actor\":\"hive-b\",\"action\":\"gather\",\"applied\":true,\"reward\":-1,\"pe\":1.609361810057711,\"peu\":1.6092522583110243,\"fe\":false,\"ctl\":false,\"w\":2.964,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0,\"wood\":1}}",
+            "A_rep1": "{\"t\":1,\"actor\":\"hive-b\",\"action\":\"claim-territory\",\"applied\":true,\"reward\":-0.5,\"pe\":1.6094110613030395,\"peu\":1.609294542129296,\"fe\":false,\"ctl\":false,\"w\":2.964,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}"
+          },
+          {
+            "index": 5,
+            "A_rep0": "{\"t\":1,\"actor\":\"world\",\"action\":\"signal-food\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world deposited food signal at tile-77\",\"prob\":0.2,\"entropy\":1.6094379124341005}",
+            "A_rep1": "{\"t\":1,\"actor\":\"world\",\"action\":\"signal-food\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world deposited food signal at tile-14\",\"prob\":0.2,\"entropy\":1.6094379124341005}"
+          },
+          {
+            "index": 6,
+            "A_rep0": "{\"t\":2,\"actor\":\"hive-a\",\"action\":\"idle\",\"applied\":false,\"reward\":-2,\"pe\":1.6085923836710894,\"peu\":1.6059857680950909,\"fe\":false,\"ctl\":false,\"w\":2.928,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "A_rep1": "{\"t\":2,\"actor\":\"hive-a\",\"action\":\"gather\",\"applied\":false,\"reward\":-2.5,\"pe\":1.6088177593016184,\"peu\":1.6072367991295868,\"fe\":false,\"ctl\":false,\"w\":2.928,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}"
+          },
+          {
+            "index": 7,
+            "A_rep0": "{\"t\":2,\"actor\":\"hive-b\",\"action\":\"build\",\"applied\":false,\"reward\":-2.5,\"pe\":1.609252035120009,\"peu\":1.6084788556185905,\"fe\":false,\"ctl\":false,\"w\":2.928,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0,\"wood\":1}}",
+            "A_rep1": "{\"t\":2,\"actor\":\"hive-b\",\"action\":\"gather\",\"applied\":false,\"reward\":-2.5,\"pe\":1.609308377065854,\"peu\":1.6082409825500483,\"fe\":false,\"ctl\":false,\"w\":2.928,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}"
+          },
+          {
+            "index": 8,
+            "A_rep0": "{\"t\":2,\"actor\":\"world\",\"action\":\"relax-decay\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world relaxed pheromone decay (factor 0.9)\",\"prob\":0.2,\"entropy\":1.6094379124341005}",
+            "A_rep1": "{\"t\":2,\"actor\":\"world\",\"action\":\"signal-food\",\"source\":\"network-fallback\",\"applied\":true,\"note\":\"world deposited food signal at tile-78\",\"prob\":0.2,\"entropy\":1.6094379124341005}"
+          },
+          {
+            "index": 9,
+            "A_rep0": "{\"t\":3,\"actor\":\"hive-a\",\"action\":\"build\",\"applied\":false,\"reward\":-2.5,\"pe\":1.605947249631428,\"peu\":1.6058792631297072,\"fe\":false,\"ctl\":false,\"w\":2.892,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}",
+            "A_rep1": "{\"t\":3,\"actor\":\"hive-a\",\"action\":\"idle\",\"applied\":false,\"reward\":-2,\"pe\":1.6072001698665068,\"peu\":1.606560944978599,\"fe\":false,\"ctl\":false,\"w\":2.892,\"starved\":false,\"exhausted\":true,\"stock\":{\"food\":0}}"
+          }
+        ],
+        "left_sha256": "d3289139c08ac96c995b6cd24fd43de76459d2c76b6492ef3a1a37b7e37bbe27",
+        "right_sha256": "3ccb559cb2dede13a5aabb83566171da830a63f313468c7514bc6ac00877f92d"
+      }
+    }
+  ],
+  "save_load_save": [
+    {
+      "source_generation": "gen-150-A-rep0",
+      "source_root": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-0/checkpoints",
+      "roundtrip_generation": "gen-150-A-rep0",
+      "roundtrip_root": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/roundtrip/rep-0/checkpoints",
+      "per_file": {
+        "mind.json": {
+          "before": "1128d9f921049350be81e506c99679a265383c5e65d4581408b8ea86327b4d49",
+          "after": "1128d9f921049350be81e506c99679a265383c5e65d4581408b8ea86327b4d49",
+          "identical": true
+        },
+        "rng.json": {
+          "before": "35f1fc0ba939aa6961ed02d4121dcbc05a7445b0c0dcd6fc920fcc02cc513b88",
+          "after": "35f1fc0ba939aa6961ed02d4121dcbc05a7445b0c0dcd6fc920fcc02cc513b88",
+          "identical": true
+        },
+        "world.json": {
+          "before": "e03cd183fc80bd41eda03375a2072e762eeb2477fbb564c9e81d04c8dbce6ed0",
+          "after": "e03cd183fc80bd41eda03375a2072e762eeb2477fbb564c9e81d04c8dbce6ed0",
+          "identical": true
+        },
+        "identity.json": {
+          "before": "a7bd62718dced6d75d4db025a186a51b8f7143bc3520dd5528767d01bd9ddda7",
+          "after": "a7bd62718dced6d75d4db025a186a51b8f7143bc3520dd5528767d01bd9ddda7",
+          "identical": true
+        }
+      },
+      "byte_identical": true,
+      "manifest_checksum_differs_reason": "created_at (provenance-only wall-clock field)"
+    },
+    {
+      "source_generation": "gen-150-A-rep1",
+      "source_root": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-1/checkpoints",
+      "roundtrip_generation": "gen-150-A-rep1",
+      "roundtrip_root": "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/roundtrip/rep-1/checkpoints",
+      "per_file": {
+        "mind.json": {
+          "before": "ee2eb74fe9f2b352f022ef8a3b4bc8aa1d95124c9480eada0c572d76d09221b6",
+          "after": "ee2eb74fe9f2b352f022ef8a3b4bc8aa1d95124c9480eada0c572d76d09221b6",
+          "identical": true
+        },
+        "rng.json": {
+          "before": "fda26071d2f5f649cd94c519c87f5e4fa9f1c7583d7b392a69a5204f4e8dede1",
+          "after": "fda26071d2f5f649cd94c519c87f5e4fa9f1c7583d7b392a69a5204f4e8dede1",
+          "identical": true
+        },
+        "world.json": {
+          "before": "8c3e2f13287d526acc06df61ad447d1bc654654e374d180a3a84d6f1567a6d21",
+          "after": "8c3e2f13287d526acc06df61ad447d1bc654654e374d180a3a84d6f1567a6d21",
+          "identical": true
+        },
+        "identity.json": {
+          "before": "6ca1bd6e186db57a88dbfb730872d2698a965cf6ea01e8fee8af762516f8c17b",
+          "after": "6ca1bd6e186db57a88dbfb730872d2698a965cf6ea01e8fee8af762516f8c17b",
+          "identical": true
+        }
+      },
+      "byte_identical": true,
+      "manifest_checksum_differs_reason": "created_at (provenance-only wall-clock field)"
+    }
+  ],
+  "refusal_probes": [
+    {
+      "probe": "stage1-missing",
+      "resume_from": "gen-999999-does-not-exist",
+      "exit_code": 1,
+      "status": "resume-failed-halt:exists:generation-dir-absent",
+      "expected_status_prefix": "resume-failed-halt:exists:",
+      "matched": true,
+      "sandbox_created": false,
+      "state_constructed": false
+    },
+    {
+      "probe": "stage2-uncommitted",
+      "resume_from": "gen-150-A-rep0",
+      "exit_code": 1,
+      "status": "resume-failed-halt:committed:manifest-absent",
+      "expected_status_prefix": "resume-failed-halt:committed:",
+      "matched": true,
+      "sandbox_created": false,
+      "state_constructed": false
+    },
+    {
+      "probe": "stage2-torn-manifest",
+      "resume_from": "gen-150-A-rep0",
+      "exit_code": 1,
+      "status": "resume-failed-halt:committed:manifest-self-checksum-mismatch",
+      "expected_status_prefix": "resume-failed-halt:committed:manifest-self-checksum-mismatch",
+      "matched": true,
+      "sandbox_created": false,
+      "state_constructed": false
+    },
+    {
+      "probe": "stage-identity-renamed-dir",
+      "resume_from": "gen-150-A-rep0-renamed",
+      "exit_code": 1,
+      "status": "resume-failed-halt:identity:generation-id-mismatch-manifest-gen-150-A-rep0-dir-gen-150-A-rep0-renamed",
+      "expected_status_prefix": "resume-failed-halt:identity:generation-id-mismatch-",
+      "matched": true,
+      "sandbox_created": false,
+      "state_constructed": false
+    },
+    {
+      "probe": "stage3-code-version",
+      "resume_from": "gen-150-A-rep0",
+      "exit_code": 1,
+      "status": "resume-failed-halt:version:code-version-mismatch-ant-hive-world-checkpoint-0.9.0",
+      "expected_status_prefix": "resume-failed-halt:version:code-version-mismatch",
+      "matched": true,
+      "sandbox_created": false,
+      "state_constructed": false
+    },
+    {
+      "probe": "stage4-unlisted-file",
+      "resume_from": "gen-150-A-rep0",
+      "exit_code": 1,
+      "status": "resume-failed-halt:checksums:unlisted-file-extra.json",
+      "expected_status_prefix": "resume-failed-halt:checksums:unlisted-file-",
+      "matched": true,
+      "sandbox_created": false,
+      "state_constructed": false
+    },
+    {
+      "probe": "stage-input-packet-mismatch",
+      "resume_from": "gen-150-A-rep0",
+      "exit_code": 1,
+      "status": "resume-failed-halt:input-packet:checksum-mismatch",
+      "expected_status_prefix": "resume-failed-halt:input-packet:checksum-mismatch",
+      "matched": true,
+      "sandbox_created": true,
+      "state_constructed": false
+    },
+    {
+      "probe": "stage5-parent-missing",
+      "resume_from": "gen-300-A-rep0b",
+      "exit_code": 1,
+      "status": "resume-failed-halt:lineage:parent-not-committed-manifest-absent",
+      "expected_status_prefix": "resume-failed-halt:lineage:parent-not-committed-",
+      "matched": true,
+      "sandbox_created": false,
+      "state_constructed": false
+    },
+    {
+      "probe": "stage5-parent-checksum",
+      "resume_from": "gen-300-A-rep0b",
+      "exit_code": 1,
+      "status": "resume-failed-halt:lineage:parent-checksum-mismatch",
+      "expected_status_prefix": "resume-failed-halt:lineage:parent-checksum-mismatch",
+      "matched": true,
+      "sandbox_created": false,
+      "state_constructed": false
+    }
+  ],
+  "collision": {
+    "generation": "gen-5-collide",
+    "exit_code": 1,
+    "status": "checkpoint-collision:gen-5-collide",
+    "expected_status": "checkpoint-collision:gen-5-collide",
+    "matched": true,
+    "committed_generation_unchanged": true
+  },
+  "sweep": {
+    "swept_lines": [
+      "swept uncommitted checkpoint .staging-gen-5-orphan-4242 (staging-residue)",
+      "swept uncommitted checkpoint gen-5-orphan (manifest-absent)"
+    ],
+    "orphan_removed": true,
+    "staging_removed": true,
+    "committed_retained": true,
+    "committed_still_valid": true
+  },
+  "behaviour_shape": {
+    "A": [
+      {
+        "hive-a": {
+          "n": 300,
+          "actions": {
+            "idle": 44,
+            "claim-territory": 134,
+            "build": 38,
+            "gather": 84
+          },
+          "applied": 112,
+          "applied_rate": 0.3733,
+          "mean_reward": -1.6933,
+          "mean_entropy_post": 1.2627
+        },
+        "hive-b": {
+          "n": 300,
+          "actions": {
+            "claim-territory": 148,
+            "gather": 70,
+            "build": 45,
+            "idle": 37
+          },
+          "applied": 131,
+          "applied_rate": 0.4367,
+          "mean_reward": -1.5817,
+          "mean_entropy_post": 1.3052
+        },
+        "world": {
+          "n": 300,
+          "actions": {
+            "idle": 68,
+            "signal-food": 51,
+            "relax-decay": 62,
+            "seed-wood": 52,
+            "seed-stone": 67
+          },
+          "applied": 160,
+          "applied_rate": 0.5333,
+          "mean_reward": 0,
+          "mean_entropy_post": null
+        }
+      },
+      {
+        "hive-a": {
+          "n": 300,
+          "actions": {
+            "claim-territory": 159,
+            "gather": 64,
+            "idle": 36,
+            "build": 41
+          },
+          "applied": 127,
+          "applied_rate": 0.4233,
+          "mean_reward": -1.6067,
+          "mean_entropy_post": 1.2702
+        },
+        "hive-b": {
+          "n": 300,
+          "actions": {
+            "claim-territory": 143,
+            "gather": 65,
+            "idle": 38,
+            "build": 54
+          },
+          "applied": 116,
+          "applied_rate": 0.3867,
+          "mean_reward": -1.675,
+          "mean_entropy_post": 1.2699
+        },
+        "world": {
+          "n": 300,
+          "actions": {
+            "seed-wood": 53,
+            "signal-food": 58,
+            "seed-stone": 70,
+            "relax-decay": 64,
+            "idle": 55
+          },
+          "applied": 170,
+          "applied_rate": 0.5667,
+          "mean_reward": 0,
+          "mean_entropy_post": null
+        }
+      }
+    ],
+    "A_PRIME": [
+      {
+        "hive-a": {
+          "n": 300,
+          "actions": {
+            "idle": 44,
+            "claim-territory": 134,
+            "build": 38,
+            "gather": 84
+          },
+          "applied": 112,
+          "applied_rate": 0.3733,
+          "mean_reward": -1.6933,
+          "mean_entropy_post": 1.2627
+        },
+        "hive-b": {
+          "n": 300,
+          "actions": {
+            "claim-territory": 148,
+            "gather": 70,
+            "build": 45,
+            "idle": 37
+          },
+          "applied": 131,
+          "applied_rate": 0.4367,
+          "mean_reward": -1.5817,
+          "mean_entropy_post": 1.3052
+        },
+        "world": {
+          "n": 300,
+          "actions": {
+            "idle": 68,
+            "signal-food": 51,
+            "relax-decay": 62,
+            "seed-wood": 52,
+            "seed-stone": 67
+          },
+          "applied": 160,
+          "applied_rate": 0.5333,
+          "mean_reward": 0,
+          "mean_entropy_post": null
+        }
+      },
+      {
+        "hive-a": {
+          "n": 300,
+          "actions": {
+            "claim-territory": 159,
+            "gather": 64,
+            "idle": 36,
+            "build": 41
+          },
+          "applied": 127,
+          "applied_rate": 0.4233,
+          "mean_reward": -1.6067,
+          "mean_entropy_post": 1.2702
+        },
+        "hive-b": {
+          "n": 300,
+          "actions": {
+            "claim-territory": 143,
+            "gather": 65,
+            "idle": 38,
+            "build": 54
+          },
+          "applied": 116,
+          "applied_rate": 0.3867,
+          "mean_reward": -1.675,
+          "mean_entropy_post": 1.2699
+        },
+        "world": {
+          "n": 300,
+          "actions": {
+            "seed-wood": 53,
+            "signal-food": 58,
+            "seed-stone": 70,
+            "relax-decay": 64,
+            "idle": 55
+          },
+          "applied": 170,
+          "applied_rate": 0.5667,
+          "mean_reward": 0,
+          "mean_entropy_post": null
+        }
+      }
+    ],
+    "B": [
+      {
+        "hive-a": {
+          "n": 300,
+          "actions": {
+            "claim-territory": 148,
+            "gather": 74,
+            "build": 40,
+            "idle": 38
+          },
+          "applied": 127,
+          "applied_rate": 0.4233,
+          "mean_reward": -1.61,
+          "mean_entropy_post": 1.2695
+        },
+        "hive-b": {
+          "n": 300,
+          "actions": {
+            "gather": 70,
+            "idle": 41,
+            "claim-territory": 141,
+            "build": 48
+          },
+          "applied": 112,
+          "applied_rate": 0.3733,
+          "mean_reward": -1.7,
+          "mean_entropy_post": 1.2956
+        },
+        "world": {
+          "n": 300,
+          "actions": {
+            "seed-wood": 44,
+            "seed-stone": 58,
+            "signal-food": 56,
+            "relax-decay": 58,
+            "idle": 84
+          },
+          "applied": 158,
+          "applied_rate": 0.5267,
+          "mean_reward": 0,
+          "mean_entropy_post": null
+        }
+      },
+      {
+        "hive-a": {
+          "n": 300,
+          "actions": {
+            "claim-territory": 153,
+            "gather": 65,
+            "idle": 41,
+            "build": 41
+          },
+          "applied": 136,
+          "applied_rate": 0.4533,
+          "mean_reward": -1.54,
+          "mean_entropy_post": 1.2627
+        },
+        "hive-b": {
+          "n": 300,
+          "actions": {
+            "gather": 76,
+            "claim-territory": 145,
+            "idle": 35,
+            "build": 44
+          },
+          "applied": 113,
+          "applied_rate": 0.3767,
+          "mean_reward": -1.7017,
+          "mean_entropy_post": 1.2825
+        },
+        "world": {
+          "n": 300,
+          "actions": {
+            "seed-stone": 61,
+            "signal-food": 59,
+            "relax-decay": 62,
+            "seed-wood": 63,
+            "idle": 55
+          },
+          "applied": 167,
+          "applied_rate": 0.5567,
+          "mean_reward": 0,
+          "mean_entropy_post": null
+        }
+      }
+    ],
+    "C": [
+      {
+        "hive-a": {
+          "n": 300,
+          "actions": {
+            "claim-territory": 139,
+            "gather": 76,
+            "build": 43,
+            "idle": 42
+          },
+          "applied": 120,
+          "applied_rate": 0.4,
+          "mean_reward": -1.6433,
+          "mean_entropy_post": 1.4185
+        },
+        "hive-b": {
+          "n": 300,
+          "actions": {
+            "idle": 43,
+            "gather": 76,
+            "build": 38,
+            "claim-territory": 143
+          },
+          "applied": 99,
+          "applied_rate": 0.33,
+          "mean_reward": -1.7817,
+          "mean_entropy_post": 1.3049
+        },
+        "world": {
+          "n": 300,
+          "actions": {
+            "idle": 61,
+            "signal-food": 60,
+            "seed-wood": 64,
+            "relax-decay": 59,
+            "seed-stone": 56
+          },
+          "applied": 166,
+          "applied_rate": 0.5533,
+          "mean_reward": 0,
+          "mean_entropy_post": null
+        }
+      },
+      {
+        "hive-a": {
+          "n": 300,
+          "actions": {
+            "claim-territory": 242,
+            "gather": 30,
+            "idle": 13,
+            "build": 15
+          },
+          "applied": 206,
+          "applied_rate": 0.6867,
+          "mean_reward": -1.12,
+          "mean_entropy_post": 0.3546
+        },
+        "hive-b": {
+          "n": 300,
+          "actions": {
+            "gather": 77,
+            "claim-territory": 137,
+            "build": 40,
+            "idle": 46
+          },
+          "applied": 101,
+          "applied_rate": 0.3367,
+          "mean_reward": -1.7617,
+          "mean_entropy_post": 1.356
+        },
+        "world": {
+          "n": 300,
+          "actions": {
+            "relax-decay": 51,
+            "seed-wood": 65,
+            "signal-food": 58,
+            "seed-stone": 67,
+            "idle": 59
+          },
+          "applied": 156,
+          "applied_rate": 0.52,
+          "mean_reward": 0,
+          "mean_entropy_post": null
+        }
+      }
+    ]
+  },
+  "baseline_comparison": {
+    "note": "r6/r7 are 3000-tick wall-clock-seeded guest runs; only the first 300 ticks are compared, and only on shape. Exact equality is impossible by construction (different seeds) and is not the claim.",
+    "r6_first300": {
+      "hive-a": {
+        "n": 300,
+        "actions": {
+          "gather": 83,
+          "idle": 38,
+          "claim-territory": 137,
+          "build": 42
+        },
+        "applied": 113,
+        "applied_rate": 0.3767,
+        "mean_reward": -1.7,
+        "mean_entropy_post": 1.2919
+      },
+      "hive-b": {
+        "n": 300,
+        "actions": {
+          "gather": 71,
+          "idle": 58,
+          "claim-territory": 136,
+          "build": 35
+        },
+        "applied": 125,
+        "applied_rate": 0.4167,
+        "mean_reward": -1.5833,
+        "mean_entropy_post": 1.1803
+      },
+      "world": {
+        "n": 300,
+        "actions": {
+          "idle": 63,
+          "signal-food": 56,
+          "relax-decay": 64,
+          "seed-wood": 63,
+          "seed-stone": 54
+        },
+        "applied": 167,
+        "applied_rate": 0.5567,
+        "mean_reward": 0,
+        "mean_entropy_post": null
+      }
+    },
+    "r7_first300": {
+      "hive-a": {
+        "n": 300,
+        "actions": {
+          "gather": 72,
+          "claim-territory": 147,
+          "idle": 38,
+          "build": 43
+        },
+        "applied": 111,
+        "applied_rate": 0.37,
+        "mean_reward": -1.7117,
+        "mean_entropy_post": 1.243
+      },
+      "hive-b": {
+        "n": 300,
+        "actions": {
+          "gather": 72,
+          "idle": 43,
+          "build": 45,
+          "claim-territory": 140
+        },
+        "applied": 115,
+        "applied_rate": 0.3833,
+        "mean_reward": -1.6733,
+        "mean_entropy_post": 1.408
+      },
+      "world": {
+        "n": 300,
+        "actions": {
+          "seed-wood": 62,
+          "relax-decay": 60,
+          "seed-stone": 63,
+          "signal-food": 54,
+          "idle": 61
+        },
+        "applied": 158,
+        "applied_rate": 0.5267,
+        "mean_reward": 0,
+        "mean_entropy_post": null
+      }
+    },
+    "fresh_arms_this_slice": {
+      "A_PRIME": [
+        {
+          "hive-a": {
+            "n": 300,
+            "actions": {
+              "idle": 44,
+              "claim-territory": 134,
+              "build": 38,
+              "gather": 84
+            },
+            "applied": 112,
+            "applied_rate": 0.3733,
+            "mean_reward": -1.6933,
+            "mean_entropy_post": 1.2627
+          },
+          "hive-b": {
+            "n": 300,
+            "actions": {
+              "claim-territory": 148,
+              "gather": 70,
+              "build": 45,
+              "idle": 37
+            },
+            "applied": 131,
+            "applied_rate": 0.4367,
+            "mean_reward": -1.5817,
+            "mean_entropy_post": 1.3052
+          },
+          "world": {
+            "n": 300,
+            "actions": {
+              "idle": 68,
+              "signal-food": 51,
+              "relax-decay": 62,
+              "seed-wood": 52,
+              "seed-stone": 67
+            },
+            "applied": 160,
+            "applied_rate": 0.5333,
+            "mean_reward": 0,
+            "mean_entropy_post": null
+          }
+        },
+        {
+          "hive-a": {
+            "n": 300,
+            "actions": {
+              "claim-territory": 159,
+              "gather": 64,
+              "idle": 36,
+              "build": 41
+            },
+            "applied": 127,
+            "applied_rate": 0.4233,
+            "mean_reward": -1.6067,
+            "mean_entropy_post": 1.2702
+          },
+          "hive-b": {
+            "n": 300,
+            "actions": {
+              "claim-territory": 143,
+              "gather": 65,
+              "idle": 38,
+              "build": 54
+            },
+            "applied": 116,
+            "applied_rate": 0.3867,
+            "mean_reward": -1.675,
+            "mean_entropy_post": 1.2699
+          },
+          "world": {
+            "n": 300,
+            "actions": {
+              "seed-wood": 53,
+              "signal-food": 58,
+              "seed-stone": 70,
+              "relax-decay": 64,
+              "idle": 55
+            },
+            "applied": 170,
+            "applied_rate": 0.5667,
+            "mean_reward": 0,
+            "mean_entropy_post": null
+          }
+        }
+      ],
+      "B": [
+        {
+          "hive-a": {
+            "n": 300,
+            "actions": {
+              "claim-territory": 148,
+              "gather": 74,
+              "build": 40,
+              "idle": 38
+            },
+            "applied": 127,
+            "applied_rate": 0.4233,
+            "mean_reward": -1.61,
+            "mean_entropy_post": 1.2695
+          },
+          "hive-b": {
+            "n": 300,
+            "actions": {
+              "gather": 70,
+              "idle": 41,
+              "claim-territory": 141,
+              "build": 48
+            },
+            "applied": 112,
+            "applied_rate": 0.3733,
+            "mean_reward": -1.7,
+            "mean_entropy_post": 1.2956
+          },
+          "world": {
+            "n": 300,
+            "actions": {
+              "seed-wood": 44,
+              "seed-stone": 58,
+              "signal-food": 56,
+              "relax-decay": 58,
+              "idle": 84
+            },
+            "applied": 158,
+            "applied_rate": 0.5267,
+            "mean_reward": 0,
+            "mean_entropy_post": null
+          }
+        },
+        {
+          "hive-a": {
+            "n": 300,
+            "actions": {
+              "claim-territory": 153,
+              "gather": 65,
+              "idle": 41,
+              "build": 41
+            },
+            "applied": 136,
+            "applied_rate": 0.4533,
+            "mean_reward": -1.54,
+            "mean_entropy_post": 1.2627
+          },
+          "hive-b": {
+            "n": 300,
+            "actions": {
+              "gather": 76,
+              "claim-territory": 145,
+              "idle": 35,
+              "build": 44
+            },
+            "applied": 113,
+            "applied_rate": 0.3767,
+            "mean_reward": -1.7017,
+            "mean_entropy_post": 1.2825
+          },
+          "world": {
+            "n": 300,
+            "actions": {
+              "seed-stone": 61,
+              "signal-food": 59,
+              "relax-decay": 62,
+              "seed-wood": 63,
+              "idle": 55
+            },
+            "applied": 167,
+            "applied_rate": 0.5567,
+            "mean_reward": 0,
+            "mean_entropy_post": null
+          }
+        }
+      ]
+    },
+    "assertions": {
+      "all_fresh_hives_above_entropy_floor": true,
+      "all_fresh_hives_multi_verb": true,
+      "min_mean_entropy_post": 1.2627,
+      "verb_counts": [
+        {
+          "actor": "hive-a",
+          "verbs": 4
+        },
+        {
+          "actor": "hive-b",
+          "verbs": 4
+        },
+        {
+          "actor": "hive-a",
+          "verbs": 4
+        },
+        {
+          "actor": "hive-b",
+          "verbs": 4
+        },
+        {
+          "actor": "hive-a",
+          "verbs": 4
+        },
+        {
+          "actor": "hive-b",
+          "verbs": 4
+        },
+        {
+          "actor": "hive-a",
+          "verbs": 4
+        },
+        {
+          "actor": "hive-b",
+          "verbs": 4
+        }
+      ]
+    }
+  },
+  "divergence_enumeration": {
+    "standard": "the equivalence claim is byte-equality of the DECISION STREAM. These are the places where a resumed run and an uninterrupted one legitimately differ, each named with the reason it cannot feed a decision.",
+    "known_divergences": [
+      {
+        "field": "world-state.json written_at",
+        "site": "world-state.js:163",
+        "reason": "wall-clock stamp; read by nothing in the tick path"
+      },
+      {
+        "field": "geometry_log[].at",
+        "site": "harness.js:181",
+        "reason": "wall-clock stamp; encodeState reads only the COUNT of geometry entries (untrained-network.js:145), never their fields"
+      },
+      {
+        "field": "geometry_log[] run_id / episode_id / tick_key / arm_id",
+        "site": "harness.js:180 via decorateEvent",
+        "reason": "run identity; a resumed run is a new process with new uuids, and arm_id is the --arm label this harness passes (deliberately different per leg). Verified non-feeding in state-inventory.md section 4"
+      },
+      {
+        "field": "world-state.json seq",
+        "site": "world-state.js:162",
+        "reason": "counts writes to the world-state FILE. A resume performs one genuine extra write when it materialises the checkpointed world into the sandbox, so a resumed lineage runs exactly one ahead per resume. Produced only; no consumer in the tick path (the dashboard is the sole reader and no arm runs it). The counter remains accurate about what it measures."
+      },
+      {
+        "field": "run-log.jsonl ts",
+        "site": "run-live.js:152",
+        "reason": "wall-clock stamp on the log, not the sim"
+      },
+      {
+        "field": "audit-log.jsonl ts",
+        "site": "harness.js:79",
+        "reason": "same"
+      },
+      {
+        "field": "hive-state.json provenance.when",
+        "site": "run-live.js fresh-start path",
+        "reason": "genesis stamp; carried verbatim through the checkpoint, so a resumed hive keeps the ORIGINAL value and the uninterrupted run has its own"
+      },
+      {
+        "field": "manifest.json created_at and therefore manifest_self_checksum",
+        "site": "checkpoint.js commitGeneration",
+        "reason": "provenance-only; never compared during validation"
+      }
+    ],
+    "measured": [
+      {
+        "name": "rep0: arm A resumed leg final world-state vs A-PRIME final world-state",
+        "result": {
+          "comparable": true,
+          "tiers": [
+            {
+              "tier": 1,
+              "name": "raw",
+              "fields_removed_at_this_tier": [],
+              "identical": false
+            },
+            {
+              "tier": 2,
+              "name": "minus wall-clock",
+              "fields_removed_at_this_tier": [
+                "written_at",
+                "geometry_log[].at"
+              ],
+              "identical": false
+            },
+            {
+              "tier": 3,
+              "name": "minus wall-clock and run identity",
+              "fields_removed_at_this_tier": [
+                "geometry_log[].run_id",
+                "geometry_log[].episode_id",
+                "geometry_log[].tick_key",
+                "geometry_log[].arm_id"
+              ],
+              "identical": false
+            },
+            {
+              "tier": 4,
+              "name": "minus wall-clock, run identity and the world-file write counter",
+              "fields_removed_at_this_tier": [
+                "seq"
+              ],
+              "identical": true
+            }
+          ],
+          "identical_from_tier": 4,
+          "seq_left": 902,
+          "seq_right": 901,
+          "seq_delta": 1
+        }
+      },
+      {
+        "name": "rep1: arm A resumed leg final world-state vs A-PRIME final world-state",
+        "result": {
+          "comparable": true,
+          "tiers": [
+            {
+              "tier": 1,
+              "name": "raw",
+              "fields_removed_at_this_tier": [],
+              "identical": false
+            },
+            {
+              "tier": 2,
+              "name": "minus wall-clock",
+              "fields_removed_at_this_tier": [
+                "written_at",
+                "geometry_log[].at"
+              ],
+              "identical": false
+            },
+            {
+              "tier": 3,
+              "name": "minus wall-clock and run identity",
+              "fields_removed_at_this_tier": [
+                "geometry_log[].run_id",
+                "geometry_log[].episode_id",
+                "geometry_log[].tick_key",
+                "geometry_log[].arm_id"
+              ],
+              "identical": false
+            },
+            {
+              "tier": 4,
+              "name": "minus wall-clock, run identity and the world-file write counter",
+              "fields_removed_at_this_tier": [
+                "seq"
+              ],
+              "identical": true
+            }
+          ],
+          "identical_from_tier": 4,
+          "seq_left": 902,
+          "seq_right": 901,
+          "seq_delta": 1
+        }
+      }
+    ]
+  },
+  "transcripts": [
+    {
+      "label": "arm-A rep0 leg1",
+      "argv": [
+        "--ticks",
+        "150",
+        "--tick-interval-ms",
+        "0",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-0/leg1",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-0/checkpoints",
+        "--run-name",
+        "A-rep0",
+        "--root-seed",
+        "20260805",
+        "--arm",
+        "A-rep0-leg1"
+      ],
+      "env_overrides": {},
+      "exit_code": 0,
+      "duration_ms": 379,
+      "stdout_head": [
+        "resume: none requested -- explicit FRESH START (fresh_start=true)",
+        "Early minds this run: root_seed=20260805 (arg), hive-a seed=20260805, hive-b seed=20365534, world seed=21260808.",
+        "ant-hive-world attended run starting (fresh_start).",
+        "Sandbox: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-0/leg1",
+        "Checkpoint root: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-0/checkpoints",
+        "Shared resources at start: {\"food\":40,\"wood\":30,\"stone\":15}",
+        "Mind: untrained-network.js (from-scratch REINFORCE, no pretraining, no LLM).",
+        "Running 150 ticks per hive from absolute tick 0. Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-0/leg1/run-log.jsonl",
+        "Config file (live-tunable via the dashboard): /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-0/leg1/live-config.json",
+        "Event identity: run=db3c258a-5ec8-4747-8b1b-73ea75d65be7 episode=095d4fa2-b05a-4c93-9f24-ff5d4bec24a3 arm=A-rep0-leg1",
+        "Start the dashboard separately to watch live: node tools/ant-hive-world/dashboard.js --sandbox-root /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-0/leg1",
+        ""
+      ],
+      "stdout_tail": [
+        "[tick 150] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))",
+        "",
+        "Done after 150 rounds (absolute tick 0 -> 150). Final world-state: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-0/leg1/shared/world-state.json",
+        "Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-0/leg1/run-log.jsonl",
+        "checkpoint committed: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-0/checkpoints/gen-150-A-rep0",
+        "  generation gen-150-A-rep0 day=150 tick=150 depth=0",
+        "  files mind.json:1128d9f92104 rng.json:35f1fc0ba939 world.json:e03cd183fc80 identity.json:a7bd62718dce",
+        "  manifest 144f9d808ef754946f7e2e8070fc473bb421e76ca21287835d3506d15be16b0a"
+      ],
+      "stderr": []
+    },
+    {
+      "label": "arm-A rep0 leg2 (resume)",
+      "argv": [
+        "--ticks",
+        "150",
+        "--tick-interval-ms",
+        "0",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-0/leg2",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-0/checkpoints",
+        "--run-name",
+        "A-rep0b",
+        "--arm",
+        "A-rep0-leg2"
+      ],
+      "env_overrides": {
+        "RESUME_FROM": "gen-150-A-rep0"
+      },
+      "exit_code": 0,
+      "duration_ms": 411,
+      "stdout_head": [
+        "sweep exempted (resume target): gen-150-A-rep0",
+        "resume: requested generation gen-150-A-rep0 from /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-0/checkpoints",
+        "resume: validated gen-150-A-rep0 -- all 7 stages passed (exists -> committed -> identity -> version -> checksums -> input-packet -> lineage)",
+        "resume: continuing at absolute tick 150 (day 150, lineage depth 0, turn 0)",
+        "resume: log cursors [{\"path\":\"decision-stream.jsonl\",\"cursor\":94451,\"action\":\"absent\"},{\"path\":\"hive-a/audit-log.jsonl\",\"cursor\":92764,\"action\":\"absent\"},{\"path\":\"hive-b/audit-log.jsonl\",\"cursor\":90931,\"action\":\"absent\"},{\"path\":\"run-log.jsonl\",\"cursor\":257483,\"action\":\"absent\"}]",
+        "Resumed minds: hive-a/hive-b/world networks, controllers and all three RNG streams restored from gen-150-A-rep0; root seed 20260805 (restored).",
+        "ant-hive-world attended run starting (resume).",
+        "Sandbox: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-0/leg2",
+        "Checkpoint root: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-0/checkpoints",
+        "Shared resources at start: {\"food\":40,\"wood\":30,\"stone\":15}",
+        "Mind: untrained-network.js (from-scratch REINFORCE, no pretraining, no LLM).",
+        "Running 150 ticks per hive from absolute tick 150. Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-0/leg2/run-log.jsonl"
+      ],
+      "stdout_tail": [
+        "[tick 300] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-17)",
+        "",
+        "Done after 150 rounds (absolute tick 150 -> 300). Final world-state: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-0/leg2/shared/world-state.json",
+        "Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-0/leg2/run-log.jsonl",
+        "checkpoint committed: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-0/checkpoints/gen-300-A-rep0b",
+        "  generation gen-300-A-rep0b day=300 tick=300 depth=1",
+        "  files mind.json:99f0cd59f3c9 rng.json:64571098f6cc world.json:f71e3ff24d9f identity.json:0d282e92824c",
+        "  manifest a388572613bbc958ac217a560db82ac062be93ebb28d4658ce46b638e0d85804"
+      ],
+      "stderr": []
+    },
+    {
+      "label": "arm-Aprime rep0",
+      "argv": [
+        "--ticks",
+        "300",
+        "--tick-interval-ms",
+        "0",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-Aprime/rep-0/sandbox",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-Aprime/rep-0/checkpoints",
+        "--run-name",
+        "Aprime-rep0",
+        "--root-seed",
+        "20260805",
+        "--arm",
+        "Aprime-rep0"
+      ],
+      "env_overrides": {},
+      "exit_code": 0,
+      "duration_ms": 556,
+      "stdout_head": [
+        "resume: none requested -- explicit FRESH START (fresh_start=true)",
+        "Early minds this run: root_seed=20260805 (arg), hive-a seed=20260805, hive-b seed=20365534, world seed=21260808.",
+        "ant-hive-world attended run starting (fresh_start).",
+        "Sandbox: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-Aprime/rep-0/sandbox",
+        "Checkpoint root: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-Aprime/rep-0/checkpoints",
+        "Shared resources at start: {\"food\":40,\"wood\":30,\"stone\":15}",
+        "Mind: untrained-network.js (from-scratch REINFORCE, no pretraining, no LLM).",
+        "Running 300 ticks per hive from absolute tick 0. Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-Aprime/rep-0/sandbox/run-log.jsonl",
+        "Config file (live-tunable via the dashboard): /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-Aprime/rep-0/sandbox/live-config.json",
+        "Event identity: run=a7ee3fc7-445b-425e-90a6-a88a2c88ac12 episode=ab54eca8-af68-4e2a-b599-af0ed6a430a6 arm=Aprime-rep0",
+        "Start the dashboard separately to watch live: node tools/ant-hive-world/dashboard.js --sandbox-root /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-Aprime/rep-0/sandbox",
+        ""
+      ],
+      "stdout_tail": [
+        "[tick 300] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-17)",
+        "",
+        "Done after 300 rounds (absolute tick 0 -> 300). Final world-state: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-Aprime/rep-0/sandbox/shared/world-state.json",
+        "Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-Aprime/rep-0/sandbox/run-log.jsonl",
+        "checkpoint committed: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-Aprime/rep-0/checkpoints/gen-300-Aprime-rep0",
+        "  generation gen-300-Aprime-rep0 day=300 tick=300 depth=0",
+        "  files mind.json:99f0cd59f3c9 rng.json:64571098f6cc world.json:b125bc21cb72 identity.json:6f0b34f5c782",
+        "  manifest 391dbc28510ee9c54000d14e39ac63678fcb2f6f56870a0607c07c56cbdac27f"
+      ],
+      "stderr": []
+    },
+    {
+      "label": "arm-B rep0",
+      "argv": [
+        "--ticks",
+        "300",
+        "--tick-interval-ms",
+        "0",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-B/rep-0/sandbox",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-B/rep-0/checkpoints",
+        "--run-name",
+        "B-rep0",
+        "--root-seed",
+        "777000111",
+        "--arm",
+        "B-rep0"
+      ],
+      "env_overrides": {},
+      "exit_code": 0,
+      "duration_ms": 548,
+      "stdout_head": [
+        "resume: none requested -- explicit FRESH START (fresh_start=true)",
+        "Early minds this run: root_seed=777000111 (arg), hive-a seed=777000111, hive-b seed=777104840, world seed=778000114.",
+        "ant-hive-world attended run starting (fresh_start).",
+        "Sandbox: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-B/rep-0/sandbox",
+        "Checkpoint root: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-B/rep-0/checkpoints",
+        "Shared resources at start: {\"food\":40,\"wood\":30,\"stone\":15}",
+        "Mind: untrained-network.js (from-scratch REINFORCE, no pretraining, no LLM).",
+        "Running 300 ticks per hive from absolute tick 0. Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-B/rep-0/sandbox/run-log.jsonl",
+        "Config file (live-tunable via the dashboard): /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-B/rep-0/sandbox/live-config.json",
+        "Event identity: run=835a58ed-9fb0-40fa-9b93-6da0be472900 episode=49306631-6eee-458b-8f89-c2b1667bd479 arm=B-rep0",
+        "Start the dashboard separately to watch live: node tools/ant-hive-world/dashboard.js --sandbox-root /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-B/rep-0/sandbox",
+        ""
+      ],
+      "stdout_tail": [
+        "[tick 300] world -> seed-stone source=network-fallback applied=false (stone source cap reached)",
+        "",
+        "Done after 300 rounds (absolute tick 0 -> 300). Final world-state: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-B/rep-0/sandbox/shared/world-state.json",
+        "Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-B/rep-0/sandbox/run-log.jsonl",
+        "checkpoint committed: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-B/rep-0/checkpoints/gen-300-B-rep0",
+        "  generation gen-300-B-rep0 day=300 tick=300 depth=0",
+        "  files mind.json:454348426a39 rng.json:878296fb5788 world.json:a3054677ae4a identity.json:3c24560313ae",
+        "  manifest 9ade0212476d7378137a41c2efcdd097daf79afe027d68f7af8ad89558e24c57"
+      ],
+      "stderr": []
+    },
+    {
+      "label": "arm-C rep0",
+      "argv": [
+        "--ticks",
+        "300",
+        "--tick-interval-ms",
+        "0",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-C/rep-0/sandbox",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-C/rep-0/checkpoints",
+        "--run-name",
+        "C-rep0",
+        "--root-seed",
+        "20260805",
+        "--arm",
+        "C-rep0",
+        "--shuffle-streams",
+        "world,hive-a,hive-b"
+      ],
+      "env_overrides": {},
+      "exit_code": 0,
+      "duration_ms": 540,
+      "stdout_head": [
+        "resume: none requested -- explicit FRESH START (fresh_start=true)",
+        "stream seed assignment permuted: hive-a,hive-b,world -> world,hive-a,hive-b",
+        "Early minds this run: root_seed=20260805 (arg), hive-a seed=20260805, hive-b seed=20365534, world seed=21260808.",
+        "ant-hive-world attended run starting (fresh_start).",
+        "Sandbox: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-C/rep-0/sandbox",
+        "Checkpoint root: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-C/rep-0/checkpoints",
+        "Shared resources at start: {\"food\":40,\"wood\":30,\"stone\":15}",
+        "Mind: untrained-network.js (from-scratch REINFORCE, no pretraining, no LLM).",
+        "Running 300 ticks per hive from absolute tick 0. Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-C/rep-0/sandbox/run-log.jsonl",
+        "Config file (live-tunable via the dashboard): /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-C/rep-0/sandbox/live-config.json",
+        "Event identity: run=1d876b46-bcf3-44d1-9f21-4fe1bad54e4f episode=e8dd1d61-dd5e-471f-999b-40e6e868a4e5 arm=C-rep0",
+        "Start the dashboard separately to watch live: node tools/ant-hive-world/dashboard.js --sandbox-root /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-C/rep-0/sandbox"
+      ],
+      "stdout_tail": [
+        "[tick 300] world -> seed-stone source=network-fallback applied=false (stone source cap reached)",
+        "",
+        "Done after 300 rounds (absolute tick 0 -> 300). Final world-state: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-C/rep-0/sandbox/shared/world-state.json",
+        "Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-C/rep-0/sandbox/run-log.jsonl",
+        "checkpoint committed: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-C/rep-0/checkpoints/gen-300-C-rep0",
+        "  generation gen-300-C-rep0 day=300 tick=300 depth=0",
+        "  files mind.json:9566f1abe985 rng.json:459f6a6fccfe world.json:b1f7b2a4dfe0 identity.json:e22982dc0a6f",
+        "  manifest d3338651719b7836e6a6de98c0bfda00c511d0f806172e027c60596d964a044d"
+      ],
+      "stderr": []
+    },
+    {
+      "label": "arm-A rep1 leg1",
+      "argv": [
+        "--ticks",
+        "150",
+        "--tick-interval-ms",
+        "0",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-1/leg1",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-1/checkpoints",
+        "--run-name",
+        "A-rep1",
+        "--root-seed",
+        "20260806",
+        "--arm",
+        "A-rep1-leg1"
+      ],
+      "env_overrides": {},
+      "exit_code": 0,
+      "duration_ms": 321,
+      "stdout_head": [
+        "resume: none requested -- explicit FRESH START (fresh_start=true)",
+        "Early minds this run: root_seed=20260806 (arg), hive-a seed=20260806, hive-b seed=20365535, world seed=21260809.",
+        "ant-hive-world attended run starting (fresh_start).",
+        "Sandbox: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-1/leg1",
+        "Checkpoint root: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-1/checkpoints",
+        "Shared resources at start: {\"food\":40,\"wood\":30,\"stone\":15}",
+        "Mind: untrained-network.js (from-scratch REINFORCE, no pretraining, no LLM).",
+        "Running 150 ticks per hive from absolute tick 0. Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-1/leg1/run-log.jsonl",
+        "Config file (live-tunable via the dashboard): /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-1/leg1/live-config.json",
+        "Event identity: run=e069c08f-892a-417a-8d17-28ecb302a155 episode=a9c9c9f3-abe5-424c-b90d-06d97f682451 arm=A-rep1-leg1",
+        "Start the dashboard separately to watch live: node tools/ant-hive-world/dashboard.js --sandbox-root /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-1/leg1",
+        ""
+      ],
+      "stdout_tail": [
+        "[tick 150] world -> seed-stone source=network-fallback applied=false (stone source cap reached)",
+        "",
+        "Done after 150 rounds (absolute tick 0 -> 150). Final world-state: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-1/leg1/shared/world-state.json",
+        "Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-1/leg1/run-log.jsonl",
+        "checkpoint committed: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-1/checkpoints/gen-150-A-rep1",
+        "  generation gen-150-A-rep1 day=150 tick=150 depth=0",
+        "  files mind.json:ee2eb74fe9f2 rng.json:fda26071d2f5 world.json:8c3e2f13287d identity.json:6ca1bd6e186d",
+        "  manifest db6bb78d4119041792c080d71ab45acfff914b87b0abc44445ce19ce5fc8cdf9"
+      ],
+      "stderr": []
+    },
+    {
+      "label": "arm-A rep1 leg2 (resume)",
+      "argv": [
+        "--ticks",
+        "150",
+        "--tick-interval-ms",
+        "0",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-1/leg2",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-1/checkpoints",
+        "--run-name",
+        "A-rep1b",
+        "--arm",
+        "A-rep1-leg2"
+      ],
+      "env_overrides": {
+        "RESUME_FROM": "gen-150-A-rep1"
+      },
+      "exit_code": 0,
+      "duration_ms": 342,
+      "stdout_head": [
+        "sweep exempted (resume target): gen-150-A-rep1",
+        "resume: requested generation gen-150-A-rep1 from /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-1/checkpoints",
+        "resume: validated gen-150-A-rep1 -- all 7 stages passed (exists -> committed -> identity -> version -> checksums -> input-packet -> lineage)",
+        "resume: continuing at absolute tick 150 (day 150, lineage depth 0, turn 0)",
+        "resume: log cursors [{\"path\":\"decision-stream.jsonl\",\"cursor\":94539,\"action\":\"absent\"},{\"path\":\"hive-a/audit-log.jsonl\",\"cursor\":92837,\"action\":\"absent\"},{\"path\":\"hive-b/audit-log.jsonl\",\"cursor\":89327,\"action\":\"absent\"},{\"path\":\"run-log.jsonl\",\"cursor\":257571,\"action\":\"absent\"}]",
+        "Resumed minds: hive-a/hive-b/world networks, controllers and all three RNG streams restored from gen-150-A-rep1; root seed 20260806 (restored).",
+        "ant-hive-world attended run starting (resume).",
+        "Sandbox: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-1/leg2",
+        "Checkpoint root: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-1/checkpoints",
+        "Shared resources at start: {\"food\":40,\"wood\":30,\"stone\":15}",
+        "Mind: untrained-network.js (from-scratch REINFORCE, no pretraining, no LLM).",
+        "Running 150 ticks per hive from absolute tick 150. Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-1/leg2/run-log.jsonl"
+      ],
+      "stdout_tail": [
+        "[tick 300] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))",
+        "",
+        "Done after 150 rounds (absolute tick 150 -> 300). Final world-state: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-1/leg2/shared/world-state.json",
+        "Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-1/leg2/run-log.jsonl",
+        "checkpoint committed: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-A/rep-1/checkpoints/gen-300-A-rep1b",
+        "  generation gen-300-A-rep1b day=300 tick=300 depth=1",
+        "  files mind.json:9d58fc37b9f7 rng.json:93d616cc7d39 world.json:232309893bc5 identity.json:10b3c80a2bfc",
+        "  manifest 4884cd7425d9c470fa5c9dbd25492a405846bae5b522b60e2ad88f2d694ee71a"
+      ],
+      "stderr": []
+    },
+    {
+      "label": "arm-Aprime rep1",
+      "argv": [
+        "--ticks",
+        "300",
+        "--tick-interval-ms",
+        "0",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-Aprime/rep-1/sandbox",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-Aprime/rep-1/checkpoints",
+        "--run-name",
+        "Aprime-rep1",
+        "--root-seed",
+        "20260806",
+        "--arm",
+        "Aprime-rep1"
+      ],
+      "env_overrides": {},
+      "exit_code": 0,
+      "duration_ms": 534,
+      "stdout_head": [
+        "resume: none requested -- explicit FRESH START (fresh_start=true)",
+        "Early minds this run: root_seed=20260806 (arg), hive-a seed=20260806, hive-b seed=20365535, world seed=21260809.",
+        "ant-hive-world attended run starting (fresh_start).",
+        "Sandbox: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-Aprime/rep-1/sandbox",
+        "Checkpoint root: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-Aprime/rep-1/checkpoints",
+        "Shared resources at start: {\"food\":40,\"wood\":30,\"stone\":15}",
+        "Mind: untrained-network.js (from-scratch REINFORCE, no pretraining, no LLM).",
+        "Running 300 ticks per hive from absolute tick 0. Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-Aprime/rep-1/sandbox/run-log.jsonl",
+        "Config file (live-tunable via the dashboard): /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-Aprime/rep-1/sandbox/live-config.json",
+        "Event identity: run=6f77c847-bc85-4ebf-b0cd-7019bfc7fa79 episode=226562fe-89e9-41c6-bc78-e22706751c6f arm=Aprime-rep1",
+        "Start the dashboard separately to watch live: node tools/ant-hive-world/dashboard.js --sandbox-root /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-Aprime/rep-1/sandbox",
+        ""
+      ],
+      "stdout_tail": [
+        "[tick 300] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))",
+        "",
+        "Done after 300 rounds (absolute tick 0 -> 300). Final world-state: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-Aprime/rep-1/sandbox/shared/world-state.json",
+        "Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-Aprime/rep-1/sandbox/run-log.jsonl",
+        "checkpoint committed: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-Aprime/rep-1/checkpoints/gen-300-Aprime-rep1",
+        "  generation gen-300-Aprime-rep1 day=300 tick=300 depth=0",
+        "  files mind.json:9d58fc37b9f7 rng.json:93d616cc7d39 world.json:1bd13fc6d79a identity.json:20dcf59c13bb",
+        "  manifest 6896322b902bd98bdab215b9e54a72605918cd25e52fc252717b461b4d1ca1f7"
+      ],
+      "stderr": []
+    },
+    {
+      "label": "arm-B rep1",
+      "argv": [
+        "--ticks",
+        "300",
+        "--tick-interval-ms",
+        "0",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-B/rep-1/sandbox",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-B/rep-1/checkpoints",
+        "--run-name",
+        "B-rep1",
+        "--root-seed",
+        "777000222",
+        "--arm",
+        "B-rep1"
+      ],
+      "env_overrides": {},
+      "exit_code": 0,
+      "duration_ms": 568,
+      "stdout_head": [
+        "resume: none requested -- explicit FRESH START (fresh_start=true)",
+        "Early minds this run: root_seed=777000222 (arg), hive-a seed=777000222, hive-b seed=777104951, world seed=778000225.",
+        "ant-hive-world attended run starting (fresh_start).",
+        "Sandbox: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-B/rep-1/sandbox",
+        "Checkpoint root: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-B/rep-1/checkpoints",
+        "Shared resources at start: {\"food\":40,\"wood\":30,\"stone\":15}",
+        "Mind: untrained-network.js (from-scratch REINFORCE, no pretraining, no LLM).",
+        "Running 300 ticks per hive from absolute tick 0. Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-B/rep-1/sandbox/run-log.jsonl",
+        "Config file (live-tunable via the dashboard): /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-B/rep-1/sandbox/live-config.json",
+        "Event identity: run=9ebbe7de-8d4c-4416-9fc1-c4e879833142 episode=affc532e-ada5-41f7-8c40-76e8e5061994 arm=B-rep1",
+        "Start the dashboard separately to watch live: node tools/ant-hive-world/dashboard.js --sandbox-root /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-B/rep-1/sandbox",
+        ""
+      ],
+      "stdout_tail": [
+        "[tick 300] world -> idle source=network-fallback applied=false (world idle — control with hives)",
+        "",
+        "Done after 300 rounds (absolute tick 0 -> 300). Final world-state: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-B/rep-1/sandbox/shared/world-state.json",
+        "Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-B/rep-1/sandbox/run-log.jsonl",
+        "checkpoint committed: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-B/rep-1/checkpoints/gen-300-B-rep1",
+        "  generation gen-300-B-rep1 day=300 tick=300 depth=0",
+        "  files mind.json:7ce2562942d4 rng.json:dd1abb5d49d1 world.json:143ac61ada8c identity.json:676d23b9685f",
+        "  manifest b2ece0ac4af07f84409eeac5352ffbf5b5b7a36011996454ee2b2c30257d9453"
+      ],
+      "stderr": []
+    },
+    {
+      "label": "arm-C rep1",
+      "argv": [
+        "--ticks",
+        "300",
+        "--tick-interval-ms",
+        "0",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-C/rep-1/sandbox",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-C/rep-1/checkpoints",
+        "--run-name",
+        "C-rep1",
+        "--root-seed",
+        "20260806",
+        "--arm",
+        "C-rep1",
+        "--shuffle-streams",
+        "world,hive-a,hive-b"
+      ],
+      "env_overrides": {},
+      "exit_code": 0,
+      "duration_ms": 592,
+      "stdout_head": [
+        "resume: none requested -- explicit FRESH START (fresh_start=true)",
+        "stream seed assignment permuted: hive-a,hive-b,world -> world,hive-a,hive-b",
+        "Early minds this run: root_seed=20260806 (arg), hive-a seed=20260806, hive-b seed=20365535, world seed=21260809.",
+        "ant-hive-world attended run starting (fresh_start).",
+        "Sandbox: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-C/rep-1/sandbox",
+        "Checkpoint root: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-C/rep-1/checkpoints",
+        "Shared resources at start: {\"food\":40,\"wood\":30,\"stone\":15}",
+        "Mind: untrained-network.js (from-scratch REINFORCE, no pretraining, no LLM).",
+        "Running 300 ticks per hive from absolute tick 0. Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-C/rep-1/sandbox/run-log.jsonl",
+        "Config file (live-tunable via the dashboard): /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-C/rep-1/sandbox/live-config.json",
+        "Event identity: run=7ea2d1d2-65ef-4549-b589-ced294b1884c episode=4fd94737-b716-4b2f-a541-8c13765c784c arm=C-rep1",
+        "Start the dashboard separately to watch live: node tools/ant-hive-world/dashboard.js --sandbox-root /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-C/rep-1/sandbox"
+      ],
+      "stdout_tail": [
+        "[tick 300] world -> seed-wood source=network-fallback applied=false (wood source cap reached)",
+        "",
+        "Done after 300 rounds (absolute tick 0 -> 300). Final world-state: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-C/rep-1/sandbox/shared/world-state.json",
+        "Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-C/rep-1/sandbox/run-log.jsonl",
+        "checkpoint committed: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-C/rep-1/checkpoints/gen-300-C-rep1",
+        "  generation gen-300-C-rep1 day=300 tick=300 depth=0",
+        "  files mind.json:340439f93f8f rng.json:b0abe96ba192 world.json:a2eb1e39ba41 identity.json:ac282398b88c",
+        "  manifest a795ad8e045cdec2f5076dae3f615a74cdaadcede2a61cc3ef9bf686700ff0b7"
+      ],
+      "stderr": []
+    },
+    {
+      "label": "arm-D tamper resume",
+      "argv": [
+        "--ticks",
+        "10",
+        "--tick-interval-ms",
+        "0",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-D/sandbox",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-D/checkpoints",
+        "--run-name",
+        "D-tamper",
+        "--arm",
+        "D-tamper",
+        "--status-path",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-D/STATUS",
+        "--resume-from",
+        "gen-150-A-rep0"
+      ],
+      "env_overrides": {},
+      "exit_code": 1,
+      "duration_ms": 72,
+      "stdout_head": [
+        "sweep exempted (resume target): gen-150-A-rep0",
+        "resume: requested generation gen-150-A-rep0 from /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-D/checkpoints",
+        ""
+      ],
+      "stdout_tail": [
+        "sweep exempted (resume target): gen-150-A-rep0",
+        "resume: requested generation gen-150-A-rep0 from /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/arm-D/checkpoints"
+      ],
+      "stderr": [
+        "RESUME REFUSED at stage 'checksums': checksum-mismatch-mind.json",
+        "No state was constructed. Last-known-good generations are retained for manual recovery:",
+        "  gen-150-A-rep0 (day 150)",
+        "  gen-300-A-rep0b (day 300)",
+        "Halt-for-repair: this driver will not fall back to a fresh start.",
+        "STATUS=resume-failed-halt:checksums:checksum-mismatch-mind.json"
+      ]
+    },
+    {
+      "label": "refusal-probe stage1-missing",
+      "argv": [
+        "--ticks",
+        "5",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage1-missing/sandbox",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage1-missing/checkpoints",
+        "--run-name",
+        "probe-stage1-missing",
+        "--arm",
+        "probe-stage1-missing",
+        "--status-path",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage1-missing/STATUS",
+        "--resume-from",
+        "gen-999999-does-not-exist"
+      ],
+      "env_overrides": {},
+      "exit_code": 1,
+      "duration_ms": 69,
+      "stdout_head": [
+        "resume: requested generation gen-999999-does-not-exist from /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage1-missing/checkpoints",
+        ""
+      ],
+      "stdout_tail": [
+        "resume: requested generation gen-999999-does-not-exist from /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage1-missing/checkpoints"
+      ],
+      "stderr": [
+        "RESUME REFUSED at stage 'exists': generation-dir-absent",
+        "No state was constructed. Last-known-good generations are retained for manual recovery:",
+        "  gen-150-A-rep0 (day 150)",
+        "  gen-300-A-rep0b (day 300)",
+        "Halt-for-repair: this driver will not fall back to a fresh start.",
+        "STATUS=resume-failed-halt:exists:generation-dir-absent"
+      ]
+    },
+    {
+      "label": "refusal-probe stage2-uncommitted",
+      "argv": [
+        "--ticks",
+        "5",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage2-uncommitted/sandbox",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage2-uncommitted/checkpoints",
+        "--run-name",
+        "probe-stage2-uncommitted",
+        "--arm",
+        "probe-stage2-uncommitted",
+        "--status-path",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage2-uncommitted/STATUS",
+        "--resume-from",
+        "gen-150-A-rep0"
+      ],
+      "env_overrides": {},
+      "exit_code": 1,
+      "duration_ms": 65,
+      "stdout_head": [
+        "sweep exempted (resume target): gen-150-A-rep0",
+        "resume: requested generation gen-150-A-rep0 from /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage2-uncommitted/checkpoints",
+        ""
+      ],
+      "stdout_tail": [
+        "sweep exempted (resume target): gen-150-A-rep0",
+        "resume: requested generation gen-150-A-rep0 from /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage2-uncommitted/checkpoints"
+      ],
+      "stderr": [
+        "RESUME REFUSED at stage 'committed': manifest-absent",
+        "No state was constructed. Last-known-good generations are retained for manual recovery:",
+        "  gen-300-A-rep0b (day 300)",
+        "Halt-for-repair: this driver will not fall back to a fresh start.",
+        "STATUS=resume-failed-halt:committed:manifest-absent"
+      ]
+    },
+    {
+      "label": "refusal-probe stage2-torn-manifest",
+      "argv": [
+        "--ticks",
+        "5",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage2-torn-manifest/sandbox",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage2-torn-manifest/checkpoints",
+        "--run-name",
+        "probe-stage2-torn-manifest",
+        "--arm",
+        "probe-stage2-torn-manifest",
+        "--status-path",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage2-torn-manifest/STATUS",
+        "--resume-from",
+        "gen-150-A-rep0"
+      ],
+      "env_overrides": {},
+      "exit_code": 1,
+      "duration_ms": 66,
+      "stdout_head": [
+        "sweep exempted (resume target): gen-150-A-rep0",
+        "resume: requested generation gen-150-A-rep0 from /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage2-torn-manifest/checkpoints",
+        ""
+      ],
+      "stdout_tail": [
+        "sweep exempted (resume target): gen-150-A-rep0",
+        "resume: requested generation gen-150-A-rep0 from /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage2-torn-manifest/checkpoints"
+      ],
+      "stderr": [
+        "RESUME REFUSED at stage 'committed': manifest-self-checksum-mismatch",
+        "No state was constructed. Last-known-good generations are retained for manual recovery:",
+        "  gen-300-A-rep0b (day 300)",
+        "Halt-for-repair: this driver will not fall back to a fresh start.",
+        "STATUS=resume-failed-halt:committed:manifest-self-checksum-mismatch"
+      ]
+    },
+    {
+      "label": "refusal-probe stage-identity-renamed-dir",
+      "argv": [
+        "--ticks",
+        "5",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage-identity-renamed-dir/sandbox",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage-identity-renamed-dir/checkpoints",
+        "--run-name",
+        "probe-stage-identity-renamed-dir",
+        "--arm",
+        "probe-stage-identity-renamed-dir",
+        "--status-path",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage-identity-renamed-dir/STATUS",
+        "--resume-from",
+        "gen-150-A-rep0-renamed"
+      ],
+      "env_overrides": {},
+      "exit_code": 1,
+      "duration_ms": 66,
+      "stdout_head": [
+        "sweep exempted (resume target): gen-150-A-rep0-renamed",
+        "resume: requested generation gen-150-A-rep0-renamed from /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage-identity-renamed-dir/checkpoints",
+        ""
+      ],
+      "stdout_tail": [
+        "sweep exempted (resume target): gen-150-A-rep0-renamed",
+        "resume: requested generation gen-150-A-rep0-renamed from /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage-identity-renamed-dir/checkpoints"
+      ],
+      "stderr": [
+        "RESUME REFUSED at stage 'identity': generation-id-mismatch-manifest-gen-150-A-rep0-dir-gen-150-A-rep0-renamed",
+        "No state was constructed. Last-known-good generations are retained for manual recovery:",
+        "  gen-150-A-rep0-renamed (day 150)",
+        "  gen-300-A-rep0b (day 300)",
+        "Halt-for-repair: this driver will not fall back to a fresh start.",
+        "STATUS=resume-failed-halt:identity:generation-id-mismatch-manifest-gen-150-A-rep0-dir-gen-150-A-rep0-renamed"
+      ]
+    },
+    {
+      "label": "refusal-probe stage3-code-version",
+      "argv": [
+        "--ticks",
+        "5",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage3-code-version/sandbox",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage3-code-version/checkpoints",
+        "--run-name",
+        "probe-stage3-code-version",
+        "--arm",
+        "probe-stage3-code-version",
+        "--status-path",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage3-code-version/STATUS",
+        "--resume-from",
+        "gen-150-A-rep0"
+      ],
+      "env_overrides": {},
+      "exit_code": 1,
+      "duration_ms": 67,
+      "stdout_head": [
+        "sweep exempted (resume target): gen-150-A-rep0",
+        "resume: requested generation gen-150-A-rep0 from /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage3-code-version/checkpoints",
+        ""
+      ],
+      "stdout_tail": [
+        "sweep exempted (resume target): gen-150-A-rep0",
+        "resume: requested generation gen-150-A-rep0 from /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage3-code-version/checkpoints"
+      ],
+      "stderr": [
+        "RESUME REFUSED at stage 'version': code-version-mismatch-ant-hive-world-checkpoint-0.9.0",
+        "No state was constructed. Last-known-good generations are retained for manual recovery:",
+        "  gen-150-A-rep0 (day 150)",
+        "  gen-300-A-rep0b (day 300)",
+        "Halt-for-repair: this driver will not fall back to a fresh start.",
+        "STATUS=resume-failed-halt:version:code-version-mismatch-ant-hive-world-checkpoint-0.9.0"
+      ]
+    },
+    {
+      "label": "refusal-probe stage4-unlisted-file",
+      "argv": [
+        "--ticks",
+        "5",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage4-unlisted-file/sandbox",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage4-unlisted-file/checkpoints",
+        "--run-name",
+        "probe-stage4-unlisted-file",
+        "--arm",
+        "probe-stage4-unlisted-file",
+        "--status-path",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage4-unlisted-file/STATUS",
+        "--resume-from",
+        "gen-150-A-rep0"
+      ],
+      "env_overrides": {},
+      "exit_code": 1,
+      "duration_ms": 66,
+      "stdout_head": [
+        "sweep exempted (resume target): gen-150-A-rep0",
+        "resume: requested generation gen-150-A-rep0 from /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage4-unlisted-file/checkpoints",
+        ""
+      ],
+      "stdout_tail": [
+        "sweep exempted (resume target): gen-150-A-rep0",
+        "resume: requested generation gen-150-A-rep0 from /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage4-unlisted-file/checkpoints"
+      ],
+      "stderr": [
+        "RESUME REFUSED at stage 'checksums': unlisted-file-extra.json",
+        "No state was constructed. Last-known-good generations are retained for manual recovery:",
+        "  gen-150-A-rep0 (day 150)",
+        "  gen-300-A-rep0b (day 300)",
+        "Halt-for-repair: this driver will not fall back to a fresh start.",
+        "STATUS=resume-failed-halt:checksums:unlisted-file-extra.json"
+      ]
+    },
+    {
+      "label": "refusal-probe stage-input-packet-mismatch",
+      "argv": [
+        "--ticks",
+        "5",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage-input-packet-mismatch/sandbox",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage-input-packet-mismatch/checkpoints",
+        "--run-name",
+        "probe-stage-input-packet-mismatch",
+        "--arm",
+        "probe-stage-input-packet-mismatch",
+        "--status-path",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage-input-packet-mismatch/STATUS",
+        "--resume-from",
+        "gen-150-A-rep0"
+      ],
+      "env_overrides": {},
+      "exit_code": 1,
+      "duration_ms": 69,
+      "stdout_head": [
+        "sweep exempted (resume target): gen-150-A-rep0",
+        "resume: requested generation gen-150-A-rep0 from /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage-input-packet-mismatch/checkpoints",
+        ""
+      ],
+      "stdout_tail": [
+        "sweep exempted (resume target): gen-150-A-rep0",
+        "resume: requested generation gen-150-A-rep0 from /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage-input-packet-mismatch/checkpoints"
+      ],
+      "stderr": [
+        "RESUME REFUSED at stage 'input-packet': checksum-mismatch",
+        "No state was constructed. Last-known-good generations are retained for manual recovery:",
+        "  gen-150-A-rep0 (day 150)",
+        "  gen-300-A-rep0b (day 300)",
+        "Halt-for-repair: this driver will not fall back to a fresh start.",
+        "STATUS=resume-failed-halt:input-packet:checksum-mismatch"
+      ]
+    },
+    {
+      "label": "refusal-probe stage5-parent-missing",
+      "argv": [
+        "--ticks",
+        "5",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage5-parent-missing/sandbox",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage5-parent-missing/checkpoints",
+        "--run-name",
+        "probe-stage5-parent-missing",
+        "--arm",
+        "probe-stage5-parent-missing",
+        "--status-path",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage5-parent-missing/STATUS",
+        "--resume-from",
+        "gen-300-A-rep0b"
+      ],
+      "env_overrides": {},
+      "exit_code": 1,
+      "duration_ms": 67,
+      "stdout_head": [
+        "sweep exempted (resume target): gen-300-A-rep0b",
+        "resume: requested generation gen-300-A-rep0b from /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage5-parent-missing/checkpoints",
+        ""
+      ],
+      "stdout_tail": [
+        "sweep exempted (resume target): gen-300-A-rep0b",
+        "resume: requested generation gen-300-A-rep0b from /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage5-parent-missing/checkpoints"
+      ],
+      "stderr": [
+        "RESUME REFUSED at stage 'lineage': parent-not-committed-manifest-absent",
+        "No state was constructed. Last-known-good generations are retained for manual recovery:",
+        "  gen-300-A-rep0b (day 300)",
+        "Halt-for-repair: this driver will not fall back to a fresh start.",
+        "STATUS=resume-failed-halt:lineage:parent-not-committed-manifest-absent"
+      ]
+    },
+    {
+      "label": "refusal-probe stage5-parent-checksum",
+      "argv": [
+        "--ticks",
+        "5",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage5-parent-checksum/sandbox",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage5-parent-checksum/checkpoints",
+        "--run-name",
+        "probe-stage5-parent-checksum",
+        "--arm",
+        "probe-stage5-parent-checksum",
+        "--status-path",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage5-parent-checksum/STATUS",
+        "--resume-from",
+        "gen-300-A-rep0b"
+      ],
+      "env_overrides": {},
+      "exit_code": 1,
+      "duration_ms": 64,
+      "stdout_head": [
+        "sweep exempted (resume target): gen-300-A-rep0b",
+        "resume: requested generation gen-300-A-rep0b from /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage5-parent-checksum/checkpoints",
+        ""
+      ],
+      "stdout_tail": [
+        "sweep exempted (resume target): gen-300-A-rep0b",
+        "resume: requested generation gen-300-A-rep0b from /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/refusal-probes/stage5-parent-checksum/checkpoints"
+      ],
+      "stderr": [
+        "RESUME REFUSED at stage 'lineage': parent-checksum-mismatch",
+        "No state was constructed. Last-known-good generations are retained for manual recovery:",
+        "  gen-150-A-rep0 (day 150)",
+        "  gen-300-A-rep0b (day 300)",
+        "Halt-for-repair: this driver will not fall back to a fresh start.",
+        "STATUS=resume-failed-halt:lineage:parent-checksum-mismatch"
+      ]
+    },
+    {
+      "label": "collision first",
+      "argv": [
+        "--ticks",
+        "5",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/collision/sandbox",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/collision/checkpoints",
+        "--run-name",
+        "collide",
+        "--root-seed",
+        "4242",
+        "--arm",
+        "collide-1",
+        "--status-path",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/collision/STATUS"
+      ],
+      "env_overrides": {},
+      "exit_code": 0,
+      "duration_ms": 107,
+      "stdout_head": [
+        "resume: none requested -- explicit FRESH START (fresh_start=true)",
+        "Early minds this run: root_seed=4242 (arg), hive-a seed=4242, hive-b seed=108971, world seed=1004245.",
+        "ant-hive-world attended run starting (fresh_start).",
+        "Sandbox: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/collision/sandbox",
+        "Checkpoint root: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/collision/checkpoints",
+        "Shared resources at start: {\"food\":40,\"wood\":30,\"stone\":15}",
+        "Mind: untrained-network.js (from-scratch REINFORCE, no pretraining, no LLM).",
+        "Running 5 ticks per hive from absolute tick 0. Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/collision/sandbox/run-log.jsonl",
+        "Config file (live-tunable via the dashboard): /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/collision/sandbox/live-config.json",
+        "Event identity: run=5415deef-fc00-47f2-8d64-9cedcdf67165 episode=63c4d235-d1cc-4aa9-8264-85892bfc43be arm=collide-1",
+        "Start the dashboard separately to watch live: node tools/ant-hive-world/dashboard.js --sandbox-root /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/collision/sandbox",
+        ""
+      ],
+      "stdout_tail": [
+        "[tick 5] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-83)",
+        "",
+        "Done after 5 rounds (absolute tick 0 -> 5). Final world-state: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/collision/sandbox/shared/world-state.json",
+        "Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/collision/sandbox/run-log.jsonl",
+        "checkpoint committed: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/collision/checkpoints/gen-5-collide",
+        "  generation gen-5-collide day=5 tick=5 depth=0",
+        "  files mind.json:1c488af3d6ef rng.json:1e7a6d80fdfd world.json:886ac8820f2f identity.json:27d2f3353917",
+        "  manifest 03bf631a30245909e6041ec9d9e5d8458ab4deb03f2dfe138d031dab931b2efa"
+      ],
+      "stderr": []
+    },
+    {
+      "label": "collision second",
+      "argv": [
+        "--ticks",
+        "5",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/collision/sandbox",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/collision/checkpoints",
+        "--run-name",
+        "collide",
+        "--root-seed",
+        "4242",
+        "--arm",
+        "collide-2",
+        "--status-path",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/collision/STATUS"
+      ],
+      "env_overrides": {},
+      "exit_code": 1,
+      "duration_ms": 75,
+      "stdout_head": [
+        "resume: none requested -- explicit FRESH START (fresh_start=true)",
+        "Early minds this run: root_seed=4242 (arg), hive-a seed=4242, hive-b seed=108971, world seed=1004245.",
+        "ant-hive-world attended run starting (fresh_start).",
+        "Sandbox: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/collision/sandbox",
+        "Checkpoint root: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/collision/checkpoints",
+        "Shared resources at start: {\"food\":40,\"wood\":30,\"stone\":15}",
+        "Mind: untrained-network.js (from-scratch REINFORCE, no pretraining, no LLM).",
+        "Running 5 ticks per hive from absolute tick 0. Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/collision/sandbox/run-log.jsonl",
+        "Config file (live-tunable via the dashboard): /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/collision/sandbox/live-config.json",
+        "Event identity: run=2ca64d98-11a3-41ca-a1af-444d39e91e06 episode=3ce6a396-e195-40dd-a749-18038ff382be arm=collide-2",
+        "Start the dashboard separately to watch live: node tools/ant-hive-world/dashboard.js --sandbox-root /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/collision/sandbox",
+        ""
+      ],
+      "stdout_tail": [
+        "[tick 4] hive-b -> gather applied=true starved=false reward=-1 entropy=1.607",
+        "[tick 4] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-57)",
+        "[tick 5] hive-a -> idle applied=false starved=false reward=-2 entropy=1.604",
+        "[tick 5] hive-b -> idle applied=false starved=false reward=-2 entropy=1.607",
+        "[tick 5] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-83)",
+        "",
+        "Done after 5 rounds (absolute tick 0 -> 5). Final world-state: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/collision/sandbox/shared/world-state.json",
+        "Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/collision/sandbox/run-log.jsonl"
+      ],
+      "stderr": [
+        "CHECKPOINT REFUSED: generation gen-5-collide already exists and is committed.",
+        "Never overwritten, never auto-suffixed -- choose a new run name.",
+        "STATUS=checkpoint-collision:gen-5-collide"
+      ]
+    },
+    {
+      "label": "sweep seed run",
+      "argv": [
+        "--ticks",
+        "5",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/sweep/sandbox",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/sweep/checkpoints",
+        "--run-name",
+        "keep",
+        "--root-seed",
+        "99",
+        "--arm",
+        "sweep-keep"
+      ],
+      "env_overrides": {},
+      "exit_code": 0,
+      "duration_ms": 106,
+      "stdout_head": [
+        "resume: none requested -- explicit FRESH START (fresh_start=true)",
+        "Early minds this run: root_seed=99 (arg), hive-a seed=99, hive-b seed=104828, world seed=1000102.",
+        "ant-hive-world attended run starting (fresh_start).",
+        "Sandbox: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/sweep/sandbox",
+        "Checkpoint root: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/sweep/checkpoints",
+        "Shared resources at start: {\"food\":40,\"wood\":30,\"stone\":15}",
+        "Mind: untrained-network.js (from-scratch REINFORCE, no pretraining, no LLM).",
+        "Running 5 ticks per hive from absolute tick 0. Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/sweep/sandbox/run-log.jsonl",
+        "Config file (live-tunable via the dashboard): /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/sweep/sandbox/live-config.json",
+        "Event identity: run=53b08120-dced-43b6-8a46-112318fcd1e2 episode=cfd32609-acd1-4039-9470-2a42af87547e arm=sweep-keep",
+        "Start the dashboard separately to watch live: node tools/ant-hive-world/dashboard.js --sandbox-root /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/sweep/sandbox",
+        ""
+      ],
+      "stdout_tail": [
+        "[tick 5] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))",
+        "",
+        "Done after 5 rounds (absolute tick 0 -> 5). Final world-state: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/sweep/sandbox/shared/world-state.json",
+        "Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/sweep/sandbox/run-log.jsonl",
+        "checkpoint committed: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/sweep/checkpoints/gen-5-keep",
+        "  generation gen-5-keep day=5 tick=5 depth=0",
+        "  files mind.json:25f4ef0599be rng.json:75e87f8abc59 world.json:2dd1657cbd3f identity.json:a4a228bff6b5",
+        "  manifest a058c7a17a632ede5045b8b038cb482b5c8cd3ed3856d3e9ba66c64a2ad75e71"
+      ],
+      "stderr": []
+    },
+    {
+      "label": "sweep run",
+      "argv": [
+        "--ticks",
+        "5",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/sweep/sandbox2",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/sweep/checkpoints",
+        "--run-name",
+        "keep2",
+        "--root-seed",
+        "99",
+        "--arm",
+        "sweep-keep2"
+      ],
+      "env_overrides": {},
+      "exit_code": 0,
+      "duration_ms": 111,
+      "stdout_head": [
+        "swept uncommitted checkpoint .staging-gen-5-orphan-4242 (staging-residue)",
+        "swept uncommitted checkpoint gen-5-orphan (manifest-absent)",
+        "resume: none requested -- explicit FRESH START (fresh_start=true)",
+        "Early minds this run: root_seed=99 (arg), hive-a seed=99, hive-b seed=104828, world seed=1000102.",
+        "ant-hive-world attended run starting (fresh_start).",
+        "Sandbox: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/sweep/sandbox2",
+        "Checkpoint root: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/sweep/checkpoints",
+        "Shared resources at start: {\"food\":40,\"wood\":30,\"stone\":15}",
+        "Mind: untrained-network.js (from-scratch REINFORCE, no pretraining, no LLM).",
+        "Running 5 ticks per hive from absolute tick 0. Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/sweep/sandbox2/run-log.jsonl",
+        "Config file (live-tunable via the dashboard): /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/sweep/sandbox2/live-config.json",
+        "Event identity: run=a3cdf031-6627-4d83-875d-e7995885a15f episode=2bf79c9d-2dd8-4213-bb35-5dab54ce8132 arm=sweep-keep2"
+      ],
+      "stdout_tail": [
+        "[tick 5] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))",
+        "",
+        "Done after 5 rounds (absolute tick 0 -> 5). Final world-state: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/sweep/sandbox2/shared/world-state.json",
+        "Run log: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/sweep/sandbox2/run-log.jsonl",
+        "checkpoint committed: /Users/admin/mythos/_dev/state/checkpoint-continuity-test/runs/sweep/checkpoints/gen-5-keep2",
+        "  generation gen-5-keep2 day=5 tick=5 depth=0",
+        "  files mind.json:25f4ef0599be rng.json:75e87f8abc59 world.json:9cc33bd68fcc identity.json:1f013c628c9b",
+        "  manifest b8e81f1013caf0503101e71f22f8e4e2ad37e0432812902d3c83a2c654f8e433"
+      ],
+      "stderr": []
+    }
+  ]
+}

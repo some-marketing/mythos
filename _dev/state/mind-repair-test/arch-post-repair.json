@@ -1,0 +1,33 @@
+{
+  "arch_hash": "c32c9232429a7cdd2c4d9ad2f19d32c94bf88c4f796cfa5cdf27e429ec405a68",
+  "world_mind_declared_input_size": 8,
+  "encoder_feature_count": 8,
+  "actual_shape": {
+    "w1_rows": 8,
+    "w1_cols": 8,
+    "w2_rows": 5,
+    "w2_cols": 8,
+    "matches_declared": true
+  },
+  "built_w1": [
+    8,
+    8
+  ],
+  "built_w2": [
+    5,
+    8
+  ],
+  "architecture_world_mind_block": {
+    "input_size": 8,
+    "hidden_size": 8,
+    "output_size": 5,
+    "resource_norm_k": 40,
+    "actual_shape": {
+      "w1_rows": 8,
+      "w1_cols": 8,
+      "w2_rows": 5,
+      "w2_cols": 8,
+      "matches_declared": true
+    }
+  }
+}

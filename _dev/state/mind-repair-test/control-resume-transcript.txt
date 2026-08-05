@@ -1,0 +1,29 @@
+sweep exempted (resume target): gen-5-prerepair
+resume: requested generation gen-5-prerepair from /Users/admin/mythos/_dev/state/mind-repair-test/pre-repair-checkpoints
+resume: validated gen-5-prerepair -- all 7 stages passed (exists -> committed -> identity -> version -> checksums -> input-packet -> lineage)
+resume: continuing at absolute tick 5 (day 5, lineage depth 0, turn 0)
+resume: log cursors [{"path":"decision-stream.jsonl","cursor":2984,"action":"match","actual":2984},{"path":"hive-a/audit-log.jsonl","cursor":5503,"action":"match","actual":5503},{"path":"hive-b/audit-log.jsonl","cursor":2531,"action":"match","actual":2531},{"path":"run-log.jsonl","cursor":8459,"action":"match","actual":8459}]
+Resumed minds: hive-a/hive-b/world networks, controllers and all three RNG streams restored from gen-5-prerepair; root seed 4242 (restored).
+ant-hive-world attended run starting (resume).
+Sandbox: _dev/state/mind-repair-test/pre-repair-run
+Checkpoint root: /Users/admin/mythos/_dev/state/mind-repair-test/pre-repair-checkpoints
+Shared resources at start: {"food":40,"wood":30,"stone":15}
+Mind: untrained-network.js (from-scratch REINFORCE, no pretraining, no LLM).
+Running 2 ticks per hive from absolute tick 5. Run log: _dev/state/mind-repair-test/pre-repair-run/run-log.jsonl
+Config file (live-tunable via the dashboard): _dev/state/mind-repair-test/pre-repair-run/live-config.json
+Event identity: run=3349e33e-1a2b-4b16-a0c0-e1f39352ff77 episode=3e73c533-9ffe-4cb5-a537-da935680aa76 arm=mind-repair-pre
+Start the dashboard separately to watch live: node tools/ant-hive-world/dashboard.js --sandbox-root _dev/state/mind-repair-test/pre-repair-run
+
+[tick 6] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.605
+[tick 6] hive-b -> gather applied=true starved=false reward=-1 entropy=1.606
+[tick 6] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-27)
+[tick 7] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.606
+[tick 7] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.606
+[tick 7] world -> idle source=network-fallback applied=false (world idle — control with hives)
+
+Done after 2 rounds (absolute tick 5 -> 7). Final world-state: _dev/state/mind-repair-test/pre-repair-run/shared/world-state.json
+Run log: _dev/state/mind-repair-test/pre-repair-run/run-log.jsonl
+checkpoint committed: /Users/admin/mythos/_dev/state/mind-repair-test/pre-repair-checkpoints/gen-7-prerepair-control
+  generation gen-7-prerepair-control day=7 tick=7 depth=1
+  files mind.json:e2035c7fb7a0 rng.json:79e56b95599a world.json:e3cc74b8ba9e identity.json:c0039e7ce8c5
+  manifest d80c20437ceac843686918b2ffca76631aa1093a15fa0195466855990ed02f5e

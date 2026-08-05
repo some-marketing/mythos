@@ -1,2 +1,5 @@
 {"turn_id":"baseline-3000-r6","ticks":3000,"absolute_day_start":0,"ingested_at":"2026-08-05T00:23:04.373Z","payload_hash":"42b449ddddc72c1f76c45cab38bde06eaaeb557068d6b549d583446c52c3cbf3"}
 {"turn_id":"baseline-3000-r7","ticks":3000,"absolute_day_start":3000,"ingested_at":"2026-08-05T00:23:04.450Z","payload_hash":"434015367eecaf7090bf4138769637257b12f80820d254f05a4ad9fa1e5753ae"}
+{"turn_id":"cc-turn1","ticks":150,"absolute_day_start":6000,"ingested_at":"2026-08-05T03:26:14.048Z","payload_hash":"232bd0e906029d9f56a39d0e9710f5fb1cf5b42d8ec3f94608324ce36edea3d4"}
+{"turn_id":"cc-turn2","ticks":150,"absolute_day_start":6150,"ingested_at":"2026-08-05T03:26:18.044Z","payload_hash":"56a05c52db4579470b6ff098d938fc07574928f754e26c5be8406ab3c8ac941d"}
+{"turn_id":"cc-turn3","ticks":150,"absolute_day_start":6300,"ingested_at":"2026-08-05T03:26:18.129Z","payload_hash":"42cdf25f2bd9e39f724246140a35dca52600fd21191fdb0fe41ab6a630c27775"}

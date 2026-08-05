@@ -1,0 +1,139 @@
+{
+  "schema": "TaskIntake/1.0",
+  "task_id": "ant-world-mind-learning-path",
+  "title": "World-mind learning path \u2014 give the thinking mind a way to learn (closes thinks-but-cannot-learn)",
+  "timestamp": "2026-08-05T03:11:00.000Z",
+  "requested_by": "operator",
+  "source": "operator 2026-08-05T03:10Z ('this train is going lets /go') on the thinks-but-cannot-learn successor gap from ant-world-mind-network-repair (confirmed two ways: zero update call sites across 14 engine files; 300-tick pre/post weight checksums byte-identical)",
+  "scope_type": "system",
+  "storage_root": "_dev/reports/analysis/task-plans",
+  "description": "The world-mind now reads its world (network repair) and can persist across turns (checkpoint loader) but nothing ever updates its weights: trainStep is wired only to hive networks. Design and implement the world-mind's learning signal and update path so that turns actually change the mind \u2014 the final prerequisite for the mirror experiment to measure learning rather than initialization noise.",
+  "overlap_disposition": {
+    "checked_at": "2026-08-05T03:11Z",
+    "owning_candidate": "ant-world-mind-network-repair (discovered the gap; sequenced predecessor)",
+    "decision": "new plan, sequenced AFTER mind-repair commits (S3 trial in flight)",
+    "stated_reason": "The repair slice is evidence-complete for its scope; learning is a genuinely new design surface (what signal does the world-mind learn from?) requiring its own design decision and review, not an amendment. The Orwell continuity control (pre-stamped) runs with the frozen mind as a pure infrastructure trial and does NOT wait for this plan."
+  },
+  "context": {
+    "precedents": [
+      "_dev/state/mind-repair-test/mind-repair-evidence.json \u2014 the live-but-frozen mind's measured state incl. the weight-scale probe (10x -> entropy 1.2746; the magnitude landscape for calibrating learning-effect sizes)",
+      "tools/ant-hive-world/train-tick.js \u2014 how hive networks learn today (the pattern to study, not blindly copy)",
+      "tools/ant-hive-world/world-mind.js \u2014 applyWorldVerb and the verb/outcome surface the learning signal must be built from",
+      "_dev/state/checkpoint-continuity-test/state-inventory.md \u2014 every state/RNG stream the update path must respect (checkpoint coverage)",
+      "convene synthesis 20260805T014353Z \u2014 falsifier design the learning must eventually satisfy (replicated divergence vs controls)"
+    ],
+    "hard_constraints": [
+      "Local sandbox only until reviewed; no VM/orwell contact from this plan (deployment rides the owning plan's gates)",
+      "Learning state (optimizer accumulators etc.) MUST be added to the checkpoint generation (update state-inventory + serialization + arch/config hash implications) \u2014 a mind that learns but whose learning half-persists is worse than either",
+      "Time-derived anything remains forbidden; learning must be deterministic under fixed seeds (replays byte-reproducible)",
+      "Zero-NIC membrane and courier contract untouched"
+    ]
+  },
+  "bounded_plan": {
+    "steps": [
+      {
+        "step_id": "S0",
+        "title": "Learning-signal design memo (decision before code)",
+        "description": "Recon train-tick.js (how hives learn: signal, loss, cadence) and the world-mind's action surface (world verbs, applied outcomes, world-state deltas). Produce a short design memo with 2-3 candidate learning signals for the world-mind \u2014 e.g. (a) verb-applied/outcome reward mirroring the hive pattern, (b) a world-level objective (population/resource homeostasis delta), (c) prediction-error learning (predict next world-state features, learn from the miss) \u2014 each with: what it optimizes, what behavior it should produce, mirror-gate interpretability (does it confound the 'builds mirror features' question?), checkpoint-state footprint, and determinism story. RECOMMEND one with reasons. The memo goes to codex review BEFORE S1 implementation begins \u2014 the signal choice shapes the whole experiment and is exactly the kind of judgment that must not be a producer's silent default. REQUIRED MEMO DELIVERABLES (codex r1 MAJORs 3-4, defined at design time not left abstract): (i) for the RECOMMENDED signal, the exact signal equation (inputs, reward/loss formula, update rule, learning rate treatment); (ii) MIRROR-SAFETY CONTRACT: the explicit list of feature-coordinate inputs EXCLUDED from the reward computation, the lag structure (what tick's outcome trains what tick's decision), and a designed CONFOUND TEST \u2014 a simulated run where the signal is active but feature positions are shuffled post-hoc in analysis; if mirror-p 'improves' under shuffled features, the signal is confounded and fails; (iii) QUANTIFIED S2 TERMS: 'initialization-noise floor' = max seed-to-seed policy L2 measured across 10 fresh seeds on the repair fixture; 'frozen fluctuation band' = entropy min/max across a 300-tick frozen-mind run (both measured in the memo from existing evidence + one cheap run, becoming the S2 constants); 'monotone-ish' is REPLACED by: entropy at tick 300 departs from ln(5) by > 3x the frozen band width, and the tick-150 vs tick-300 departure ordering is consistent across both seeds.",
+        "is_gap": true,
+        "mode": "REVIEW_ONLY",
+        "files_touched": [
+          "_dev/reports/analysis/world-mind-learning-signal-memo__20260805.md (NEW)"
+        ]
+      },
+      {
+        "step_id": "S1",
+        "title": "Implement the reviewed signal + update path",
+        "description": "Wire the chosen learning signal and weight-update path for the world-mind (deterministic under fixed seeds; every new mutable state \u2014 optimizer accumulators, reward traces \u2014 added to the checkpoint generation, state-inventory.md updated with a dated addition, serialization + manifest coverage extended, CheckpointManifest/1.1 (codex r1 MAJOR 1): the current single architecture hash cannot separate shape from training state \u2014 S1 versions the schema to 1.1 splitting it into shape_hash (network dims + encoder feature count; mismatch = version-stage refusal) and training_config_hash (optimizer/hyperparameters; mismatch = WARN in provenance, not refusal). checkpoint.js validation honors both; 1.0 manifests remain readable (shape_hash falls back to the legacy arch hash); the schema bump + fallback rule is itself part of the S3 trial surface). Construction-time assertions extended to the new state.",
+        "is_gap": true,
+        "mode": "PATCH_ALLOWED",
+        "files_touched": [
+          "tools/ant-hive-world/world-mind.js",
+          "tools/ant-hive-world/world-train.js (NEW \u2014 decided: separate module, not a train-tick.js extension; train-tick.js gains only the call site)",
+          "tools/ant-hive-world/train-tick.js (call site only)",
+          "tools/ant-hive-world/checkpoint.js (state coverage + 1.1 validation)",
+          "tools/ant-hive-world/checkpoint-schema.json (1.1: shape_hash + training_config_hash split, 1.0 fallback)",
+          "_dev/state/checkpoint-continuity-test/state-inventory.md (dated addition)"
+        ]
+      },
+      {
+        "step_id": "S2",
+        "title": "Prove it LEARNS (relative criteria)",
+        "description": "Evidence contract WorldMindLearning/1.0: (a) weights CHANGE across a 300-tick run (checksums differ) and change DETERMINISTICALLY (same seed twice -> byte-identical final weights); (b) RELATIVE liveness recalibration per the repair worker's probe data \u2014 the respecified (b')/(d') criteria: post-learning policy diverges from its own initialization by L2 exceeding 10x the initialization-noise floor measured in mind-repair-evidence.json, and entropy trajectory shows monotone-ish departure from ln(5) (report the curve, threshold = departure exceeding 3x the frozen-mind fluctuation band); (c) learning IMPROVES the signal it optimizes (objective metric trends, n=2 seeds); (d) checkpoint round-trip mid-learning: save at tick 150, resume, continue to 300 -> byte-identical to uninterrupted across the FULL generation (weights AND optimizer state AND RNG state AND world state AND checkpoint bytes \u2014 codex r1 MINOR: not weights alone) (the A/A-prime standard now WITH moving weights \u2014 the true continuity-of-learning proof the convene wanted); (e) frozen-mind control run confirming the delta is the learning path, not incidental drift.",
+        "is_gap": false,
+        "mode": "RUN_ONLY",
+        "files_touched": [
+          "_dev/state/mind-learning-test/world-mind-learning-evidence.json (NEW)"
+        ]
+      },
+      {
+        "step_id": "S3",
+        "title": "Distinct trial + debrief + payload eligibility",
+        "description": "Codex trial bound to diff + evidence (G-MIND-LEARNING-REVIEW). Then the mind can enter a future payload rebuild \u2014 a FRESH operator decision per the pre-stamp's not-covered list (learning deployment is a new round, not the stamped continuity control).",
+        "is_gap": false,
+        "mode": "REVIEW_ONLY",
+        "files_touched": [
+          "_dev/reports/analysis/run-debrief__ant-world-mind-learning-path__<date>.md"
+        ]
+      }
+    ],
+    "required_gates": [
+      {
+        "gate_id": "G-LEARNING-SIGNAL-DESIGN",
+        "status": "pending",
+        "decision": "Codex review of the S0 design memo must clear before S1 implementation; the chosen signal is surfaced to the operator with the review verdict (reversible default taken if operator silent, per standing delegation)."
+      },
+      {
+        "gate_id": "G-MIND-LEARNING-REVIEW",
+        "status": "pending",
+        "decision": "S3 codex trial must clear before the learning mind enters any payload."
+      }
+    ],
+    "expected_outcomes": [
+      "The world-mind's weights move, deterministically, from a reviewed learning signal",
+      "Mid-learning checkpoint round-trip is byte-exact \u2014 true continuity of learning",
+      "Relative liveness criteria replace the miscalibrated absolute bars as the standard",
+      "Learning deployment is cleanly a NEW operator decision, not smuggled into the stamped control"
+    ],
+    "risk_notes": [
+      "Signal choice can confound the mirror gate (a signal that rewards building near features would make the mirror measure the reward, not emergence) \u2014 S0's interpretability column exists exactly for this; the mirror-safe choice wins ties",
+      "Escalation: any signal requiring new courier-crossing data, or hive-training changes beyond call-site reuse"
+    ]
+  },
+  "scope_identity": {
+    "owned_artifacts": [
+      "_dev/reports/analysis/world-mind-learning-signal-memo__20260805.md",
+      "tools/ant-hive-world/world-mind.js",
+      "tools/ant-hive-world/world-train.js (or train-tick.js extension)",
+      "tools/ant-hive-world/checkpoint.js (state coverage)",
+      "_dev/state/mind-learning-test/",
+      "_dev/reports/analysis/run-debrief__ant-world-mind-learning-path__<date>.md"
+    ]
+  },
+  "routing_expectations": {
+    "risk_tier": "medium",
+    "review_lane": "codex-bridge",
+    "review_lane_rationale": "Engine learning design \u2014 the signal choice shapes the experiment's meaning; double-gated (design review + code trial); local-only execution.",
+    "escalation_triggers": [
+      "signal requires courier-crossing data",
+      "hive training paths materially modified",
+      "nondeterminism unavoidable in the chosen design"
+    ]
+  },
+  "operator_gates": [],
+  "artifacts": [
+    "_dev/reports/analysis/task-plans/ant-world-mind-learning-path__plan.json",
+    "_dev/reports/analysis/task-plans/ant-world-mind-learning-path__plan.md"
+  ],
+  "amendment_r1": {
+    "at": "2026-08-05T03:18Z",
+    "per": "codex review 20260805T031209Z (NEEDS_AMENDMENT: 4 MAJOR + 2 MINOR)",
+    "disposition": [
+      "MAJOR 1 -> S1 schema 1.1 split with 1.0 fallback (encoded)",
+      "MAJOR 2 (world-mind.js:11-13 stale header) -> fixed in the mind-repair slice pre-commit (haiku worker)",
+      "MAJORs 3-4 -> bound as REQUIRED S0 memo deliverables with quantified definitions + designed confound test (encoded)",
+      "MINOR A/A-prime full-state comparison (encoded)",
+      "MINOR module choice: world-train.js decided (encoded)"
+    ]
+  }
+}

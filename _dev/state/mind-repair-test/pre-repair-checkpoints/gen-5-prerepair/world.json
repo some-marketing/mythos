@@ -1,0 +1,195 @@
+{
+  "hives": {
+    "hive-a": {
+      "hive_state": {
+        "dignity_floor_equivalent": {},
+        "hive_state": {
+          "resources": {},
+          "stockpile": {
+            "food": 0
+          },
+          "territory": {},
+          "worker_dispatch_state": {
+            "last_action": "idle",
+            "last_applied": false
+          }
+        },
+        "identity": "hive-a",
+        "knock_equivalent": {
+          "reachable": true
+        },
+        "provenance": {
+          "when": "2026-08-05T02:59:48.883Z",
+          "who": "ant-hive-world/run-live.js -- untrained-network, no pretraining, early-minds generation",
+          "why": "genesis: blank-start hive seed, no pre-loaded instinct/behavior content"
+        },
+        "version": "1.0.0"
+      }
+    },
+    "hive-b": {
+      "hive_state": {
+        "dignity_floor_equivalent": {},
+        "hive_state": {
+          "resources": {},
+          "stockpile": {
+            "food": 0,
+            "wood": 1
+          },
+          "territory": {},
+          "worker_dispatch_state": {
+            "last_action": "idle",
+            "last_applied": false
+          }
+        },
+        "identity": "hive-b",
+        "knock_equivalent": {
+          "reachable": true
+        },
+        "provenance": {
+          "when": "2026-08-05T02:59:48.883Z",
+          "who": "ant-hive-world/run-live.js -- untrained-network, no pretraining, early-minds generation",
+          "why": "genesis: blank-start hive seed, no pre-loaded instinct/behavior content"
+        },
+        "version": "1.0.0"
+      }
+    }
+  },
+  "live_config": {
+    "build_cost_wood": 2,
+    "entropy_bonus_decay_ticks": 75,
+    "entropy_bonus_weight": 0.3,
+    "entropy_bonus_weight_initial": 3,
+    "entropy_controller_boost_weight": 3,
+    "entropy_controller_enabled": 1,
+    "entropy_controller_release": 1.2,
+    "entropy_controller_trigger": 0.9,
+    "food_source_spawn_amount": 6,
+    "food_source_spawn_chance": 0.04,
+    "forced_exploration_interval": 75,
+    "material_harvest_rate": 0.15,
+    "material_spawn_chance": 0.03,
+    "max_food_sources": 7,
+    "mud_conversion_rate": 0.2,
+    "pheromone_decay": 0.9,
+    "pheromone_deposit": 1,
+    "predation_rate": 0.02,
+    "predator_death_rate": 0.08,
+    "predator_growth_rate": 0.15,
+    "prey_graze_rate": 0.4,
+    "prey_growth_rate": 0.05,
+    "tick_interval_ms": 0,
+    "trail_follow_prob": 0.8,
+    "update_clip": 0,
+    "upkeep_cost_food": 1
+  },
+  "log_cursors": {
+    "decision-stream.jsonl": 2984,
+    "hive-a/audit-log.jsonl": 5503,
+    "hive-b/audit-log.jsonl": 2531,
+    "run-log.jsonl": 8459
+  },
+  "world_state": {
+    "clay_sources": {
+      "clay-tile-0": 1.181246426044336,
+      "clay-tile-13": 1.181246426044336,
+      "clay-tile-26": 1.181246426044336,
+      "clay-tile-39": 1.181246426044336
+    },
+    "complete": true,
+    "discovered_types": [
+      "food",
+      "wood",
+      "stone",
+      "clay",
+      "water",
+      "ore",
+      "fiber",
+      "mud"
+    ],
+    "fiber_sources": {
+      "fiber-tile-21": 0.7874976173628905,
+      "fiber-tile-30": 1.7748212499999996,
+      "fiber-tile-34": 0.7874976173628905,
+      "fiber-tile-47": 0.7874976173628905
+    },
+    "food_source_coords": {
+      "tile-0": [
+        0,
+        0,
+        0
+      ],
+      "tile-17": [
+        7,
+        1,
+        0
+      ],
+      "tile-34": [
+        4,
+        3,
+        0
+      ],
+      "tile-51": [
+        1,
+        5,
+        0
+      ],
+      "tile-68": [
+        8,
+        6,
+        0
+      ]
+    },
+    "food_sources": {
+      "tile-0": 0.3882783643666605,
+      "tile-17": 0.3829527578914256,
+      "tile-34": 0.37896132194503007,
+      "tile-51": 0.3763017265880668,
+      "tile-68": 0.37497234624611897
+    },
+    "geometry_log": [],
+    "ore_sources": {
+      "ore-tile-14": 0.590623213022168,
+      "ore-tile-27": 0.590623213022168,
+      "ore-tile-28": 0.6948508388496094
+    },
+    "pheromones": {
+      "wood": {
+        "tile-7": 0.7290000000000001
+      }
+    },
+    "predator_population": 3.1400625012837717,
+    "prey_population": 8.915463325115779,
+    "resources": {
+      "clay": 5.1552127837856245,
+      "fiber": 11.862685897911327,
+      "food": 1.901466517037302,
+      "mud": 14.119801512037032,
+      "ore": 7.123902735106055,
+      "stone": 15,
+      "water": 5.1552127837856245,
+      "wood": 29
+    },
+    "schema_version": "1.0.0",
+    "seq": 16,
+    "stone_sources": {
+      "stone-tile-14": 4,
+      "stone-tile-57": 4,
+      "stone-tile-83": 4
+    },
+    "territory": {
+      "tile-56": "hive-a",
+      "tile-9": "hive-b"
+    },
+    "water_sources": {
+      "water-tile-20": 1.181246426044336,
+      "water-tile-33": 1.181246426044336,
+      "water-tile-46": 1.181246426044336,
+      "water-tile-7": 1.181246426044336
+    },
+    "wood_sources": {
+      "wood-tile-30": 4
+    },
+    "writer": "ant-hive-world/world-state",
+    "written_at": "2026-08-05T02:59:48.893Z"
+  }
+}

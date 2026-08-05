@@ -1,0 +1,136 @@
+{
+  "schema": "TaskIntake/1.0",
+  "task_id": "ant-world-mind-network-repair",
+  "title": "World-mind network repair \u2014 fix the inert-weights shape bug the state-reading repair (learning is the successor plan)",
+  "timestamp": "2026-08-05T02:48:00.000Z",
+  "requested_by": "operator",
+  "source": "operator direction 2026-08-05T02:47Z ('well we gotta fix it') on the inert-world-mind discovery from the checkpoint-loader S3 run",
+  "scope_type": "system",
+  "storage_root": "_dev/reports/analysis/task-plans",
+  "description": "The world-mind's network has never produced a non-uniform policy: createWorldMind delegates to createNetwork which sizes W1 as [8][9] using the hive network's INPUT_SIZE (9), while encodeWorldState emits 8 features; forward reads input[8]===undefined, every hiddenPre becomes NaN, relu(NaN)->0, and logits collapse to zero-initialized b2 -> uniform [0.2 x5] for every seed and world state (measured: seeds 1 and 999999 identical; explains r6's uniform world-verb distribution). Fix the dimension binding so the network is sized by ITS OWN encoder's feature count, verify a live policy, and establish the new honest baseline.",
+  "overlap_disposition": {
+    "checked_at": "2026-08-05T02:48Z",
+    "owning_candidate": "ant-world-checkpoint-loader (discovered the bug; world-mind.js in both write sets)",
+    "decision": "new plan, sequenced AFTER the checkpoint-loader slice commits (S4 trial in flight)",
+    "stated_reason": "The loader slice is behavior-preserving and evidence-complete; mixing a behavior-CHANGING repair into it would invalidate its A/A-prime equivalence evidence. Discovered-by is not owned-by. Sequencing: loader commits first; this repair applies on top; shape-hash change then correctly invalidates pre-repair checkpoints (forward-compat design already in the manifest)."
+  },
+  "context": {
+    "precedents": [
+      "checkpoint-loader S3 worker report 2026-08-05: the measured diagnosis (probs [0.2x5] all seeds/states; W1 [8][9] vs 8 features)",
+      "tools/ant-hive-world/world-mind.js + untrained-network.js createNetwork/INPUT_SIZE \u2014 the mis-binding site",
+      "_dev/state/checkpoint-continuity-test/state-inventory.md \u2014 stream/state map of the engine",
+      "r6/r7 baselines \u2014 the pre-repair behavior record (uniform world-verb distribution)"
+    ],
+    "hard_constraints": [
+      "Local sandbox only; no VM/orwell contact; no courier change",
+      "Lands AFTER the checkpoint-loader slice commits (world-mind.js conflict avoidance + evidence integrity)",
+      "Old checkpoints must REFUSE to load post-repair via the existing architecture/shape-hash validation \u2014 never load old weights into a re-shaped network",
+      "The dashboard/importer mirror derivations are unaffected structurally; only future BEHAVIOR changes"
+    ]
+  },
+  "bounded_plan": {
+    "steps": [
+      {
+        "step_id": "S0",
+        "title": "Single-source the dimension binding",
+        "description": "Fix shape: the world-mind network's input dimension derives from its OWN encoder (encodeWorldState feature count, currently 8) \u2014 one source of truth, no shared INPUT_SIZE constant with the hive network. Audit createWorldMind/createNetwork/encodeWorldState for any other cross-bound dimension. Add an explicit construction-time assertion: encoder feature count === W1 column count, throw on mismatch (this bug becomes impossible to reintroduce silently).",
+        "is_gap": true,
+        "mode": "PATCH_ALLOWED",
+        "files_touched": [
+          "tools/ant-hive-world/world-mind.js",
+          "tools/ant-hive-world/untrained-network.js (only if createNetwork needs a dims parameter; otherwise untouched)"
+        ]
+      },
+      {
+        "step_id": "S1",
+        "title": "Prove the mind is alive",
+        "description": "Prove the mind is alive \u2014 BOUNDED CRITERIA (codex r1): over a fixture of 1000 world states sampled from a seeded generator (fixture file + seed recorded in evidence): (a) ZERO NaN/Infinity anywhere in any forward pass; (b) SEED SENSITIVITY: policies from seed 1 vs seed 999999 on identical states differ by L2 distance > 0.01 on >= 90% of fixture states; (c) STATE SENSITIVITY: >= 100 distinct policy vectors (components compared at 1e-9 tolerance) across the fixture; (d) NON-DEGENERACY: mean per-state policy entropy < ln(5) - 0.05 (not stuck at uniform) AND > 0.1 (not collapsed to a delta); (e) weight-update path: if one exists, pre/post-run weight checksums differ over a 300-tick run; if NONE exists, report thinks-but-cannot-learn as the named successor gap. All thresholds are coordinator defaults, operator-overridable, recorded in evidence.",
+        "is_gap": true,
+        "mode": "PATCH_ALLOWED",
+        "files_touched": [
+          "_dev/state/mind-repair-test/ (evidence)"
+        ]
+      },
+      {
+        "step_id": "S2",
+        "title": "New honest baseline + checkpoint invalidation proof",
+        "description": "New honest baseline + checkpoint invalidation proof \u2014 EXACT EVIDENCE CONTRACT (codex r1): mind-repair-evidence.json fields: {schema:'MindRepairEvidence/1.0', fixture:{path,seed,count}, liveness:{nan_count, seed_sensitivity:{threshold,pct_passing}, distinct_policies:{tolerance,count}, entropy:{mean,min,max}}, weight_update:{path_exists, pre_checksum, post_checksum} , baseline:{runs:[{run_id, root_seed, ticks, verb_distribution, applied_rate, entropy}], uniformity_test:{method:'chi-square vs uniform', statistic, p_value, verdict:'non-uniform requires p<0.001'}}, checkpoint_invalidation:{pre_repair_generation_id, pre_repair_arch_hash, post_repair_arch_hash, refusal_status:'must be resume-failed-halt:version:*', refusal_transcript_path}, overall_verdict}. The chi-square test (not sampled counts alone) is the liveness baseline standard. ALSO: refresh the stale row at state-inventory.md:97 (currently claims W1 [8][8]; record actual pre-repair [8][9] and post-repair [8][8]) with a dated correction note, never silent edit.",
+        "is_gap": false,
+        "mode": "RUN_ONLY",
+        "files_touched": [
+          "_dev/state/mind-repair-test/mind-repair-evidence.json"
+        ]
+      },
+      {
+        "step_id": "S3",
+        "title": "Distinct trial + debrief",
+        "description": "Codex trial bound to the diff + evidence; findings per decision tree; debrief. Then the Orwell continuity control (owning plan) runs with a thinking mind \u2014 payload rebuild + G-REMOTE-MUTATION packet per the owning plan's gate.",
+        "is_gap": false,
+        "mode": "REVIEW_ONLY",
+        "files_touched": [
+          "_dev/reports/analysis/run-debrief__ant-world-mind-network-repair__<date>.md"
+        ]
+      }
+    ],
+    "required_gates": [
+      {
+        "gate_id": "G-MIND-REPAIR-REVIEW",
+        "status": "pending",
+        "decision": "S3 codex trial must clear before the payload rebuild enters any G-REMOTE-MUTATION packet."
+      }
+    ],
+    "expected_outcomes": [
+      "World-mind policy is live: non-uniform, seed-sensitive, state-sensitive, NaN-free",
+      "Construction-time dimension assertion makes the bug class unreintroducible",
+      "Pre-repair checkpoints refuse cleanly; new baseline recorded for regression",
+      "If no learning/update path exists, that is REPORTED as the named successor gap"
+    ],
+    "risk_notes": [
+      "Behavior change is the POINT \u2014 every downstream consumer of 'r6/r7 behavior shape' as a regression standard must switch to the S2 baseline after this lands",
+      "Escalation: any fix requiring encoder changes (9th feature) rather than network resizing is a design decision \u2014 surface both options with tradeoffs before choosing if the code makes resizing non-trivial"
+    ]
+  },
+  "scope_identity": {
+    "owned_artifacts": [
+      "tools/ant-hive-world/world-mind.js",
+      "tools/ant-hive-world/untrained-network.js (conditional)",
+      "_dev/state/mind-repair-test/",
+      "_dev/reports/analysis/run-debrief__ant-world-mind-network-repair__<date>.md"
+    ]
+  },
+  "routing_expectations": {
+    "risk_tier": "medium",
+    "review_lane": "codex-bridge",
+    "review_lane_rationale": "Small engine fix but it re-founds the experiment's behavioral baseline; local-only execution.",
+    "escalation_triggers": [
+      "encoder redesign needed instead of dimension rebinding",
+      "any ripple into hive networks' shared code paths"
+    ]
+  },
+  "operator_gates": [],
+  "artifacts": [
+    "_dev/reports/analysis/task-plans/ant-world-mind-network-repair__plan.json",
+    "_dev/reports/analysis/task-plans/ant-world-mind-network-repair__plan.md"
+  ],
+  "amendment_r1": {
+    "at": "2026-08-05T02:54Z",
+    "applied": [
+      "S1 bounded thresholds",
+      "S2 exact evidence contract + chi-square liveness",
+      "state-inventory.md:97 stale-row refresh (dated correction)",
+      "MINOR sidecar noted as tooling artifact"
+    ],
+    "review": "codex-cli-run__20260805T024845Z (diagnosis independently reproduced by reviewer)"
+  },
+  "acceptance_amendment_s3": {
+    "at": "2026-08-05T03:16Z",
+    "per": "codex S3 trial 20260805T031009Z (MAJOR + 2 MODERATE + 1 MINOR)",
+    "changes": [
+      "ACCEPTANCE RESPECIFIED: this slice's acceptance = wiring repair proven (zero NaN/Inf; >=100 distinct policy vectors; construction assertion fires; checkpoint invalidation with pre-fix control; no hive ripple) \u2014 ALL PASS. Criteria (b) seed-L2 and (d) entropy are DEFERRED as scale-aware calibration to plan ant-world-mind-learning-path S2 (relative criteria riding the weight-scale probe), per the trial's 'separate wiring repair from behavioral calibration'.",
+      "WORDING: this slice proves a STATE-READING mind, not a thinking/learning mind; titles and debrief use that language.",
+      "S0 contract frozen: createNetwork dims = {inputSize, hiddenSize, outputSize}, each defaulting to module constants, positive-integer validated \u2014 the explicit contract, not an incidental shape.",
+      "S3 debrief artifact produced (run-debrief__ant-world-mind-network-repair__20260805.md)."
+    ],
+    "verdict_disposition": "MAJOR resolved by recorded respecification (trial's own suggestion); MODERATEs resolved by wording + debrief; MINOR resolved by contract freeze note."
+  }
+}

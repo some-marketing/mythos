@@ -423,10 +423,28 @@ write_files:
       # ---------------------------------------------------------------
       # MODE=turn -- one exploratory world turn.  A turn is a bounded
       # invocation of run-live.js; one tick is one simulated day.  The
-      # guest keeps the authoritative run tree and checkpoint metadata
+      # guest keeps the authoritative run tree and checkpoint generations
       # under /opt/antworld.  Only the dashboard projection is copied to
-      # the courier.  Mind weights are process-local today, so a later turn
-      # MUST NOT claim continuity until the driver supplies a mind snapshot.
+      # the courier.
+      #
+      # CHECKPOINTS (plan ant-world-checkpoint-loader, S0/S2).  The driver
+      # itself now commits one generation directory per turn, atomically,
+      # under CHECKPOINT_ROOT -- mind parameters, RNG lineage, world state
+      # and identity in lockstep, sealed by a manifest whose arrival is the
+      # sole commit token.  The shell-level checkpoint block that used to
+      # live here was REMOVED, not wrapped: it copied the run tree after the
+      # fact and recorded "mind_state": "process-local-not-checkpointed",
+      # so it could never provide the lockstep the contract requires, and
+      # leaving both writers alive would have created exactly the
+      # old-writer/new-reader overlap the plan forbids.
+      #
+      # RESUME_FROM (optional, from job.env) names a generation directory
+      # basename to continue.  A resume that fails any of the driver's five
+      # validation stages halts the turn: the driver writes
+      # resume-failed-halt:<stage>:<reason> to the courier STATUS file and
+      # exits nonzero, having constructed no state.  There is no silent
+      # fresh-start fallback.  Absent RESUME_FROM, the turn is an explicit
+      # fresh start and records fresh_start=true in its provenance.
       # ---------------------------------------------------------------
       if [ "$MODE" = "turn" ]; then
         case "$TICKS" in ''|*[!0-9]*) echo "FATAL: TICKS must be a positive integer"; echo "invalid-ticks" > "$COURIER/out/STATUS"; finish; exit 0;; esac
@@ -435,49 +453,66 @@ write_files:
 
         TURN_ROOT="/opt/antworld/_dev/state/$RUN_NAME"
         CHECKPOINT_ROOT="/opt/antworld/_dev/state/checkpoints"
+        RESUME_FROM="${RESUME_FROM:-}"
+        ROOT_SEED="${ROOT_SEED:-}"
         mkdir -p "$CHECKPOINT_ROOT"
-        echo "MODE=turn run=$RUN_NAME ticks=$TICKS deadline=$DEADLINE_ISO"
+        echo "MODE=turn run=$RUN_NAME ticks=$TICKS deadline=$DEADLINE_ISO resume_from=${RESUME_FROM:-none} root_seed=${ROOT_SEED:-generated}"
+
+        # Forwarded as explicit CLI arguments rather than relying on the
+        # environment: runuser does not preserve the caller's environment, so
+        # a job.env value that is not passed on the command line would be
+        # silently dropped and the turn would fresh-start while the job spec
+        # said resume.  Optional fields are only appended when non-empty, so
+        # an absent RESUME_FROM stays an absent flag, which is what the
+        # driver reads as an explicit fresh start.
+        set -- --ticks "$TICKS" --tick-interval-ms 0 \
+               --sandbox-root "$TURN_ROOT" --arm "$RUN_NAME" \
+               --run-name "$RUN_NAME" --checkpoint-root "$CHECKPOINT_ROOT" \
+               --status-path "$COURIER/out/STATUS"
+        if [ -n "$RESUME_FROM" ]; then set -- "$@" --resume-from "$RESUME_FROM"; fi
+        if [ -n "$ROOT_SEED" ];   then set -- "$@" --root-seed "$ROOT_SEED"; fi
+
         cd /opt/antworld
-        runuser -u antworld -- /usr/local/bin/node tools/ant-hive-world/run-live.js \
-          --ticks "$TICKS" --tick-interval-ms 0 --sandbox-root "$TURN_ROOT" --arm "$RUN_NAME"
+        runuser -u antworld -- /usr/local/bin/node tools/ant-hive-world/run-live.js "$@"
         RC=$?
         echo "turn driver exit = $RC"
 
-        # Persist a guest-local, atomic checkpoint for inspection/recovery.
-        # This captures world observations and run logs, not neural weights;
-        # the explicit continuity flag prevents accidental claims of learning
-        # across a power cycle until a mind-serialization contract exists.
-        if [ -d "$TURN_ROOT" ]; then
-          CP_TMP="$CHECKPOINT_ROOT/.${RUN_NAME}.tmp.$$"
-          CP_DIR="$CHECKPOINT_ROOT/$RUN_NAME"
-          rm -rf "$CP_TMP"
-          mkdir -p "$CP_TMP"
-          cp -R "$TURN_ROOT/." "$CP_TMP/"
-          {
-            echo '{'
-            echo '  "schema_version": "orwell-turn-checkpoint-1",'
-            echo "  \"run_name\": \"$RUN_NAME\",";
-            echo "  \"ticks\": $TICKS,";
-            echo "  \"driver_exit\": $RC,";
-            echo '  "mind_state": "process-local-not-checkpointed",'
-            echo '  "resume_continuity": false'
-            echo '}'
-          } > "$CP_TMP/checkpoint.json"
-          sync
-          rm -rf "$CP_DIR"
-          mv "$CP_TMP" "$CP_DIR"
-          echo "checkpoint committed: $CP_DIR"
-        fi
+        # The driver commits its own checkpoint generation before exiting, and
+        # writes its own STATUS token on refusal.  A refusal token is kept
+        # verbatim: overwriting it with the numeric exit code would discard the
+        # named stage and reason, which is the entire point of halt-for-repair.
+        DRIVER_STATUS=""
+        if [ -s "$COURIER/out/STATUS" ]; then DRIVER_STATUS="$(cat "$COURIER/out/STATUS")"; fi
 
-        # The dashboard consumes this projection; no checkpoint internals
-        # or mind weights cross the courier boundary.
+        # The dashboard consumes this projection; no checkpoint internals,
+        # no manifests, no checksums and no mind weights cross the courier
+        # boundary.  mind_state and resume_continuity are pre-existing fields
+        # of this projection whose old hardcoded values became false once the
+        # driver started checkpointing; they now report what actually
+        # happened.  No field was added and no file was added.
         DST="$COURIER/out/$RUN_NAME"
         mkdir -p "$DST"
         if [ -d "$TURN_ROOT/shared" ]; then cp -R "$TURN_ROOT/shared/." "$DST/"; fi
         if [ -f "$TURN_ROOT/run-log.jsonl" ]; then cp "$TURN_ROOT/run-log.jsonl" "$DST/"; fi
-        printf '{"schema_version":"orwell-dashboard-projection-1","run_name":"%s","ticks":%s,"mind_state":"process-local-not-checkpointed","resume_continuity":false}\n' "$RUN_NAME" "$TICKS" > "$DST/turn-projection.json"
+        if [ -n "$RESUME_FROM" ] && [ "$RC" -eq 0 ]; then
+          RESUME_CONTINUITY=true
+        else
+          RESUME_CONTINUITY=false
+        fi
+        if [ "$RC" -eq 0 ]; then
+          MIND_STATE="checkpointed-guest-local"
+        else
+          MIND_STATE="turn-failed-no-checkpoint-claimed"
+        fi
+        printf '{"schema_version":"orwell-dashboard-projection-1","run_name":"%s","ticks":%s,"mind_state":"%s","resume_continuity":%s}\n' \
+          "$RUN_NAME" "$TICKS" "$MIND_STATE" "$RESUME_CONTINUITY" > "$DST/turn-projection.json"
         ( cd "$DST" && find . -type f ! -name RESULT-MANIFEST.txt -print0 | sort -z | xargs -0 sha256sum > RESULT-MANIFEST.txt )
-        echo "$RC" > "$COURIER/out/STATUS"
+        if [ "$RC" -ne 0 ] && [ -n "$DRIVER_STATUS" ]; then
+          echo "keeping driver refusal STATUS: $DRIVER_STATUS"
+          printf '%s\n' "$DRIVER_STATUS" > "$COURIER/out/STATUS"
+        else
+          echo "$RC" > "$COURIER/out/STATUS"
+        fi
         finish
       fi
 

@@ -1,0 +1,102 @@
+{
+  "clay_sources": {
+    "clay-tile-0": 0.6166180171853063,
+    "clay-tile-13": 0.6166180171853063,
+    "clay-tile-26": 0.6166180171853063,
+    "clay-tile-39": 0.6166180171853063
+  },
+  "complete": true,
+  "discovered_types": [
+    "food",
+    "wood",
+    "stone",
+    "clay",
+    "water",
+    "ore",
+    "fiber",
+    "mud"
+  ],
+  "fiber_sources": {
+    "fiber-tile-21": 0.4110786781235374,
+    "fiber-tile-30": 0.9264677851328124,
+    "fiber-tile-34": 0.4110786781235374,
+    "fiber-tile-47": 0.4110786781235374
+  },
+  "food_source_coords": {
+    "tile-0": [
+      0,
+      0,
+      0
+    ],
+    "tile-17": [
+      7,
+      1,
+      0
+    ],
+    "tile-34": [
+      4,
+      3,
+      0
+    ],
+    "tile-51": [
+      1,
+      5,
+      0
+    ],
+    "tile-68": [
+      8,
+      6,
+      0
+    ]
+  },
+  "food_sources": {},
+  "geometry_log": [],
+  "ore_sources": {
+    "ore-tile-14": 0.30830900859265314,
+    "ore-tile-27": 0.30830900859265314,
+    "ore-tile-28": 0.362716480697239
+  },
+  "pheromones": {
+    "wood": {
+      "tile-7": 1.2072969000000002
+    }
+  },
+  "predator_population": 3.1337628333365504,
+  "prey_population": 5.851959694386959,
+  "resources": {
+    "clay": 3.386258174583035,
+    "fiber": 13.840296180496573,
+    "food": 0,
+    "mud": 18.14726975667574,
+    "ore": 8.020665502117456,
+    "stone": 15,
+    "water": 3.386258174583035,
+    "wood": 28
+  },
+  "schema_version": "1.0.0",
+  "seq": 23,
+  "stone_sources": {
+    "stone-tile-14": 4,
+    "stone-tile-57": 4,
+    "stone-tile-83": 4,
+    "stone-tile-27": 4
+  },
+  "territory": {
+    "tile-56": "hive-a",
+    "tile-9": "hive-b",
+    "tile-41": "hive-a",
+    "tile-40": "hive-a",
+    "tile-55": "hive-b"
+  },
+  "water_sources": {
+    "water-tile-20": 0.6166180171853063,
+    "water-tile-33": 0.6166180171853063,
+    "water-tile-46": 0.6166180171853063,
+    "water-tile-7": 0.6166180171853063
+  },
+  "wood_sources": {
+    "wood-tile-30": 4
+  },
+  "writer": "ant-hive-world/world-state",
+  "written_at": "2026-08-05T03:00:02.897Z"
+}

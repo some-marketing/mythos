@@ -1,0 +1,24 @@
+{
+  "absolute_day": 5,
+  "absolute_tick": 5,
+  "event_context": {
+    "arm_id": "mind-repair-pre",
+    "episode_id": "9373f82a-e00e-4cbf-9ed8-39c0390e0e64",
+    "run_id": "7aadbf61-53d9-4ec6-9f84-ea224916927c"
+  },
+  "fresh_start": true,
+  "hives": {
+    "hive-a": {
+      "next_event_tick": 1
+    },
+    "hive-b": {
+      "next_event_tick": 1
+    }
+  },
+  "parent_episode_id": null,
+  "parent_run_id": null,
+  "root_seed": 4242,
+  "root_seed_source": "arg",
+  "run_name": "prerepair",
+  "turn_index": 0
+}

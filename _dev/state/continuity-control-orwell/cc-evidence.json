@@ -1,0 +1,90 @@
+{
+  "schema": "ContinuityControlEvidence/1.0",
+  "prestamp": "_dev/reports/analysis/g-remote-mutation-prestamp__continuity-control__20260805T0306Z.md",
+  "authorized_head_commit": "8cb706dd582b2b151be5cd99b710a4042dc6df9e",
+  "preconditions_verified": {
+    "mind_repair_s3_trial_cleared": true,
+    "mind_repair_trial_family": "codex GPT-5.5 (distinct from producer opus/sonnet/haiku)",
+    "commit_message_confirms": "G-MIND-REPAIR-REVIEW cleared by respecification",
+    "checkpoint_loader_review": "G-CHECKPOINT-REVIEW cleared (S0-S4 complete)"
+  },
+  "payload": {
+    "archive": "antworld-payload-20260805T031957Z.tar.gz",
+    "sha256": "a8245cfe6e17f71fda9458fb453f3beafd4807c2e128c90240ebc71185ee6c36",
+    "files": 595,
+    "hop1_hash_verified": true,
+    "load_courier_hash_verified": true,
+    "first_boot_hash_verified": true
+  },
+  "provisioning": {
+    "provision_boot_complete": true,
+    "network_adapters_pre_boot": 0,
+    "network_adapters_post_boot": 0,
+    "runner_sha256_before": "a58329a69c3389141f710afa1e41b7d2486e6880c2a9572f2655ebaa8ff91d2d",
+    "runner_sha256_after": "528d8723cbc3785e3a151b4231108d1ccd2f45c5372727b040267c1bd8e5adfb",
+    "runner_identity_changed": true,
+    "guest_manifest_verification": "595 OK, 0 FAILED"
+  },
+  "turns": [
+    {
+      "run_name": "cc-turn1",
+      "mode": "turn",
+      "ticks": 150,
+      "resume_from": "none (explicit FRESH START)",
+      "resume_stages_passed": null,
+      "resume_continuity_field": false,
+      "generation_id": "gen-150-cc-turn1",
+      "generation_day": 150,
+      "generation_lineage_depth": 0,
+      "status": 0,
+      "harvest_manifest": "10 verified, 0 bad",
+      "world_state_seq": 451,
+      "membrane_audit": "clean: loopback-only interface, no routes, no listening sockets, no host filesystem shares, no weight/RNG dumps harvested",
+      "watch_turn_health_verdict": "TURN ENDED (VM reached Off) before any stall verdict"
+    },
+    {
+      "run_name": "cc-turn2",
+      "mode": "turn",
+      "ticks": 150,
+      "resume_from": "gen-150-cc-turn1",
+      "resume_stages_passed": "7/7 (exists -> committed -> identity -> version -> checksums -> input-packet -> lineage)",
+      "resume_continuity_field": true,
+      "generation_id": "gen-300-cc-turn2",
+      "generation_day": 300,
+      "generation_lineage_depth": 1,
+      "status": 0,
+      "harvest_manifest": "10 verified, 0 bad",
+      "world_state_seq": 902,
+      "membrane_audit": "clean: loopback-only interface, no routes, no listening sockets, no host filesystem shares, no weight/RNG dumps harvested",
+      "note": "FIRST RESUMED TURN EVER for this program"
+    },
+    {
+      "run_name": "cc-turn3",
+      "mode": "turn",
+      "ticks": 150,
+      "resume_from": "gen-300-cc-turn2",
+      "resume_stages_passed": "7/7 (exists -> committed -> identity -> version -> checksums -> input-packet -> lineage)",
+      "resume_continuity_field": true,
+      "generation_id": "gen-450-cc-turn3",
+      "generation_day": 450,
+      "generation_lineage_depth": 2,
+      "status": 0,
+      "harvest_manifest": "10 verified, 0 bad",
+      "world_state_seq": 1353,
+      "membrane_audit": "clean: loopback-only interface, no routes, no listening sockets, no host filesystem shares, no weight/RNG dumps harvested"
+    }
+  ],
+  "lineage_chain": ["gen-150-cc-turn1", "gen-300-cc-turn2", "gen-450-cc-turn3"],
+  "unreal_import": {
+    "attempted": true,
+    "deploy_flag_used": false,
+    "receipts": [
+      {"turn_id": "cc-turn1", "absolute_day_start": 6000, "payload_hash": "232bd0e906029d9f56a39d0e9710f5fb1cf5b42d8ec3f94608324ce36edea3d4", "output": "tools/ant-hive-world/unreal-export/unreal-import__cc-turn1.json"},
+      {"turn_id": "cc-turn2", "absolute_day_start": 6150, "payload_hash": "56a05c52db4579470b6ff098d938fc07574928f754e26c5be8406ab3c8ac941d", "output": "tools/ant-hive-world/unreal-export/unreal-import__cc-turn2.json"},
+      {"turn_id": "cc-turn3", "absolute_day_start": 6300, "payload_hash": "42cdf25f2bd9e39f724246140a35dca52600fd21191fdb0fe41ab6a630c27775", "output": "tools/ant-hive-world/unreal-export/unreal-import__cc-turn3.json"}
+    ],
+    "journal": "tools/ant-hive-world/unreal-export/import-index.jsonl"
+  },
+  "known_limitation_disclosed_by_mind_repair_trial": "this control proves checkpoint/resume infrastructure continuity, not learning -- the world-mind can read state after resume but has no confirmed weight-update call site (thinks-but-cannot-learn, per S3 trial finding); the frozen mind is by design for this infrastructure trial",
+  "overall_verdict": "PASS -- all three turns clean. Payload hash matched at every -ExpectedSha256 gate. No resume refusal occurred. Both resumed turns (cc-turn2, cc-turn3) passed all 7 resume-gate stages. Membrane checks clean every turn. watch-turn-health reported no stall. No deviation from the pre-stamp conditions occurred; stamp remains valid throughout."
+}

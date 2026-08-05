@@ -1,0 +1,99 @@
+{
+  "absolute_day": 7,
+  "absolute_tick": 7,
+  "architecture": {
+    "hash": "359184320348f7650dee789ccdf0131e0b6c8f56c9d08c4ab6b33d1b5a9ce933",
+    "hive": {
+      "hidden_size": 8,
+      "input_size": 9,
+      "learning_rate": 0.05,
+      "output_size": 5,
+      "resource_norm_k": 20
+    },
+    "verbs": {
+      "harness_verbs": [
+        "gather",
+        "build",
+        "claim-territory",
+        "idle"
+      ],
+      "hive_verb_order": [
+        "gather-food",
+        "gather-wood",
+        "build",
+        "claim-territory",
+        "idle"
+      ],
+      "world_verb_order": [
+        "seed-wood",
+        "seed-stone",
+        "signal-food",
+        "relax-decay",
+        "idle"
+      ]
+    },
+    "world_mind": {
+      "actual_shape": {
+        "matches_declared": false,
+        "w1_cols": 9,
+        "w1_rows": 8,
+        "w2_cols": 8,
+        "w2_rows": 5
+      },
+      "hidden_size": 8,
+      "input_size": 8,
+      "output_size": 5,
+      "resource_norm_k": 40
+    }
+  },
+  "code_version": "ant-hive-world-checkpoint-1.0.0",
+  "created_at": "2026-08-05T03:00:02.915Z",
+  "files": [
+    {
+      "bytes": 13610,
+      "path": "mind.json",
+      "sha256": "e2035c7fb7a00ae2c8787054be548542931b686457ee3436fcb12b79a8960018"
+    },
+    {
+      "bytes": 445,
+      "path": "rng.json",
+      "sha256": "79e56b95599ab3f2d2f542f1ad77f24e42d7a0c8aec2c59f3d1d6f4302c48a2b"
+    },
+    {
+      "bytes": 4845,
+      "path": "world.json",
+      "sha256": "e3cc74b8ba9e6ccafaedccd07bdd8ee4e23b04396c2c4d320269b966c0cffa8b"
+    },
+    {
+      "bytes": 588,
+      "path": "identity.json",
+      "sha256": "c0039e7ce8c50befb3c80577424b9c53d4f4292dfb0fc5728a32a7f8bd3469c9"
+    }
+  ],
+  "generation_id": "gen-7-prerepair-control",
+  "goal": null,
+  "identity": {
+    "arm_id": "mind-repair-pre",
+    "episode_id": "3e73c533-9ffe-4cb5-a537-da935680aa76",
+    "fresh_start": false,
+    "parent_episode_id": "9373f82a-e00e-4cbf-9ed8-39c0390e0e64",
+    "parent_run_id": "7aadbf61-53d9-4ec6-9f84-ea224916927c",
+    "root_seed": 4242,
+    "root_seed_source": "restored",
+    "run_id": "3349e33e-1a2b-4b16-a0c0-e1f39352ff77",
+    "turn_index": 1
+  },
+  "input_packet": {
+    "present": false,
+    "sha256": null
+  },
+  "manifest_self_checksum": "d80c20437ceac843686918b2ffca76631aa1093a15fa0195466855990ed02f5e",
+  "parent": {
+    "generation_id": "gen-5-prerepair",
+    "lineage_depth": 1,
+    "manifest_checksum": "6d9f92fd4811fd12c0f6e17d67ff5091478089b21ba235544c74cc1398368159"
+  },
+  "run_name": "prerepair-control",
+  "schema": "CheckpointManifest/1.0",
+  "schema_version": "1.0"
+}

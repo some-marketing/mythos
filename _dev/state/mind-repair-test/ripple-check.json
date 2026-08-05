@@ -1,0 +1,54 @@
+{
+  "schema": "MindRepairRippleCheck/1.0",
+  "measured_at": "2026-08-05T03:02:05.271Z",
+  "hive_constants": {
+    "INPUT_SIZE": 9,
+    "HIDDEN_SIZE": 8,
+    "OUTPUT_SIZE": 5
+  },
+  "hive_shapes_vs_pre_repair_checkpoint": [
+    {
+      "hive": "hive-a",
+      "construction_seed": 4242,
+      "rebuilt_shape": [
+        8,
+        9,
+        5,
+        8
+      ],
+      "committed_shape": [
+        8,
+        9,
+        5,
+        8
+      ],
+      "shape_identical": true,
+      "rebuilt_checksum": "e23241357371a79a7a4fdc62e80c139986a266100932c9f64343ac440fde50e6"
+    },
+    {
+      "hive": "hive-b",
+      "construction_seed": 108971,
+      "rebuilt_shape": [
+        8,
+        9,
+        5,
+        8
+      ],
+      "committed_shape": [
+        8,
+        9,
+        5,
+        8
+      ],
+      "shape_identical": true,
+      "rebuilt_checksum": "94155f675a07c6a5cba7948c5bd3d7ccb45c155e479e895d72a6944c1bb1823d"
+    }
+  ],
+  "default_path_byte_identity": {
+    "seed": 12345,
+    "bare_checksum": "9db1a92d9125321a7d5d26117f3f58815c465a7911610cf7635cfaa8eabd596b",
+    "explicit_default_dims_checksum": "9db1a92d9125321a7d5d26117f3f58815c465a7911610cf7635cfaa8eabd596b",
+    "identical": true
+  },
+  "verdict": "no-ripple: hive network construction is unchanged"
+}

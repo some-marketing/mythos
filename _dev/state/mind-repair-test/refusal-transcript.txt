@@ -1,0 +1,9 @@
+sweep exempted (resume target): gen-5-prerepair
+resume: requested generation gen-5-prerepair from /Users/admin/mythos/_dev/state/mind-repair-test/pre-repair-checkpoints
+RESUME REFUSED at stage 'version': architecture-hash-mismatch
+No state was constructed. Last-known-good generations are retained for manual recovery:
+  gen-5-prerepair (day 5)
+  gen-7-prerepair-control (day 7)
+Halt-for-repair: this driver will not fall back to a fresh start.
+STATUS=resume-failed-halt:version:architecture-hash-mismatch
+EXIT=1

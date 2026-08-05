@@ -1,0 +1,154 @@
+{
+  "schema": "TaskIntake/1.0",
+  "task_id": "ant-world-checkpoint-loader",
+  "title": "Checkpoint loader \u2014 honest mind-continuity for ant-hive-world (implements the convene-ratified S0 contract)",
+  "timestamp": "2026-08-05T01:50:00.000Z",
+  "requested_by": "operator",
+  "source": "operator ratification 2026-08-05T01:49Z ('proceed') of convene synthesis 20260805T014353Z-ant-world-next-round-input; kernel triad consequence-grade",
+  "scope_type": "system",
+  "storage_root": "_dev/reports/analysis/task-plans",
+  "description": "Implement checkpoint save/load for the ant-hive-world world-mind so learning persists across Orwell turns, per the convene-ratified contract: a complete, atomic, guest-local resume image (network parameters + optimizer/controller state + architecture/config hash + full RNG lineage incl. per-agent stream counters + complete world state with build/geometry history and log cursors + absolute day/tick/run/episode/turn identity + parent-checkpoint hash + frozen input-packet hash + schema/code version + goal fields when present), sealed by a generation manifest with per-file checksums whose arrival at its final path is itself the single commit token (manifest-rename-last; no separate marker). Enables the ratified next round: a short-turn continuity control (2-3 x ~150 ticks, each resuming the prior checkpoint, no goal).",
+  "overlap_disposition": {
+    "checked_at": "2026-08-05T01:50Z",
+    "owning_candidate": "ant-world-orwell-live-dashboard (deployment/turn contract owner)",
+    "decision": "new plan, not amendment",
+    "stated_reason": "The owning plan owns deployment and turn orchestration; this is the engine-code implementation slice its S0 contract requires but does not contain. Codex verified in convene run 20260805T014353Z that no checkpoint loader exists in code (world-mind.js:10-13 declares weights never-persisted; README:48-53 documents restart loses weights). Interface: the loader lands in the payload the owning plan deploys."
+  },
+  "context": {
+    "precedents": [
+      "_dev/reports/analysis/convene-runs/20260805T014353Z-ant-world-next-round-input/synthesis.md \u2014 the ratified contract this implements (authoritative)",
+      "tools/ant-hive-world/world-mind.js \u2014 current never-persisted declaration",
+      "tools/ant-hive-world/README.md L48-53, L82-103 \u2014 documented absence of a loader",
+      "run-job r6/r7 guest logs \u2014 the turn driver already commits WORLD checkpoints (/opt/antworld/_dev/state/checkpoints/<run>); the gap is MIND state + RNG lineage + resume path + atomicity contract"
+    ],
+    "hard_constraints": [
+      "Checkpoints are guest-local: written under /opt/antworld/_dev/state/checkpoints/, NEVER copied to the courier; no new courier surface of any kind",
+      "Weights, optimizer state, full RNG state never cross the membrane (convene-unanimous)",
+      "Failed resume = halt-for-repair: refuse to run, write an explicit refusal STATUS, never silent fresh-start fallback; last-known-good retained for manual operator recovery only",
+      "Lockstep: mind state and world state checkpoint atomically together or not at all",
+      "All engine changes ride the existing payload build/export path (build-export.sh) \u2014 no provisioning or VM contract changes",
+      "G-REMOTE-MUTATION stays operator-stamped per deployment (owning plan's gate, untouched)"
+    ]
+  },
+  "bounded_plan": {
+    "steps": [
+      {
+        "step_id": "S0",
+        "title": "Checkpoint manifest schema + contract encoding",
+        "description": "Freeze CheckpointManifest/1.0 with GENERATION-LEVEL lockstep atomicity (codex r1 MAJOR 2): a checkpoint is one generation directory gen-<absolute_day>-<run_name>/ staged in full before any commit signal \u2014 ALL authoritative state files (mind, world, RNG, identity) written into the staging dir, per-file sha256 recorded in the manifest, fsync, then the manifest itself renamed into place LAST as the sole commit boundary. An uncommitted generation is invalid by definition and swept on next start (recovery rule); the newest committed generation is last-known-good and is NEVER auto-deleted (retention rule). This REPLACES the legacy world-checkpoint block in the turn driver (cloud-init/user-data runner section) \u2014 the legacy writer is removed, not wrapped. Manifest fields: every convene-contract field plus per-file checksums, generation id, parent generation id+hash, committed marker semantics. COMMIT REPRESENTATION (codex r2 MODERATE): the manifest file at its final path IS the single authoritative commit token \u2014 no separate marker file; presence of a checksum-valid manifest at <generation>/manifest.json = committed, anything else = not. COLLISION RULE: a generation id that already exists as a committed generation is a fail-closed refusal (STATUS=checkpoint-collision:<id>) \u2014 never overwrite, never auto-suffix; the caller must choose a new run_name.",
+        "is_gap": true,
+        "mode": "PATCH_ALLOWED",
+        "files_touched": [
+          "tools/ant-hive-world/checkpoint-schema.json (NEW)",
+          "_dev/sim-runs/vm/orwell/cloud-init/user-data (legacy checkpoint block REPLACED)"
+        ]
+      },
+      {
+        "step_id": "S1",
+        "title": "Mind-state + RNG lineage save/load",
+        "description": "Mind-state + RNG lineage save/load with an EXPLICIT STATE INVENTORY (codex r1 MAJOR 1): the first S1 deliverable is state-inventory.md, produced by a mechanical audit \u2014 grep every RNG consumer (Math.random, seeded PRNGs, shuffle/sample helpers) and every mutable module-level state across tools/ant-hive-world/*.js \u2014 listing EVERY stream and consumer by file:line: hive network parameters (weights/biases per layer), controller/optimizer accumulators, entropy/exploration state, training counters, event queues and pending effects, per-agent RNG streams (root seed + counter each), the sim RNG, config/architecture hashes. Serialization must cover the complete inventory; the inventory is itself reviewed at S4. Save integrates into the S0 generation writer (one atomic generation = mind + world + RNG + identity). Load restores byte-identical state: save->load->save produces identical checksums; a restored run's first N decisions match a continued run's under identical frozen inputs.",
+        "is_gap": true,
+        "mode": "PATCH_ALLOWED",
+        "files_touched": [
+          "_dev/state/checkpoint-continuity-test/state-inventory.md (NEW, S1's first deliverable)",
+          "tools/ant-hive-world/world-mind.js",
+          "tools/ant-hive-world/checkpoint.js (NEW)",
+          "tools/ant-hive-world/harness.js (integration points as needed)"
+        ]
+      },
+      {
+        "step_id": "S2",
+        "title": "Resume path + halt-for-repair in the turn driver",
+        "description": "Resume path + halt-for-repair with EXACT semantics (codex r1 MAJOR 3): job.env gains one field, RESUME_FROM=<generation-id> where <generation-id> is the guest-local generation dir basename (gen-<absolute_day>-<run_name>; coordinator default, operator-overridable). Validation ORDER, each stage failing closed with STATUS=resume-failed-halt:<stage>:<reason> and nonzero exit and ZERO state mutation: (1) generation dir exists; (2) manifest present with committed marker; (3) schema/code version compatibility; (4) per-file checksum verification; (5) parent-linkage continuity. Only after all five pass does restore begin. BINDING POINT: the resume gate is the FIRST act of run-live.js (the turn driver) after job.env parsing \u2014 it executes BEFORE any fresh-mind initialization, world load, or RNG seeding; on any refusal the driver exits with no state object ever constructed. The legacy checkpoint writer replacement (S0) and this gate land in the SAME slice so no code path exists where the old writer and new reader coexist. Absent RESUME_FROM = explicit fresh start, recorded as fresh_start=true in turn provenance. EXACT CALL SITE (codex r3): the gate is a new resolveResumeOrFreshStart(jobEnv) invoked in run-live.js's entry sequence IMMEDIATELY after argument/job.env parsing and BEFORE the existing state-construction block codex located at run-live.js:77-137 \u2014 that block becomes reachable only via the gate's return (either a validated restore handle or an explicit fresh-start token). Refusals write STATUS via the same courier STATUS path the runner already uses and exit nonzero from within the gate. cloud-init/user-data change is now DEFINITE, not 'if needed': the runner section forwards RESUME_FROM from job.env into the driver invocation. run-job.ps1 gains -ResumeFrom passthrough writing the field verbatim.",
+        "is_gap": true,
+        "mode": "PATCH_ALLOWED",
+        "files_touched": [
+          "tools/ant-hive-world/run-live.js (resume gate at entry; state-construction block gated)",
+          "_dev/sim-runs/vm/orwell/run-job.ps1 (-ResumeFrom passthrough)",
+          "_dev/sim-runs/vm/orwell/cloud-init/user-data (runner forwards RESUME_FROM \u2014 definite)"
+        ]
+      },
+      {
+        "step_id": "S3",
+        "title": "Local continuity control (execution verification)",
+        "description": "Local continuity control, FROZEN-INPUT REPLICATED five-arm design (codex r1 MAJOR 4 + r2 MAJOR 4): identical frozen input packets across all arms; n=2 replicates per arm. Arm A: checkpointed lineage \u2014 150 ticks, checkpoint at gen boundary, resume, 150 more. Arm A-PRIME: uninterrupted continuation \u2014 300 ticks straight through with A's exact seeds and inputs; the EQUIVALENCE STANDARD: A's post-resume trajectory must match A-prime's ticks 151-300 (decision-stream comparison; byte-equality target, any divergence enumerated and explained or the arm fails). Arm B: fresh-seed control (new root seeds). Arm C: shuffled-RNG control \u2014 same root seeds, per-stream assignment permuted. Arm D: tamper test \u2014 corrupt one file in a COPY of a committed generation, prove refusal at the checksum stage. Pass = A equivalent-to-A-prime (resume is a true continuation) AND A/A-prime replicably divergent from B and C (state, not seeds, carries behavior) AND D refuses. Fresh arms double as regression check against r6/r7 behavior shape. Evidence: state-inventory.md, continuity-evidence.json (per-arm run ids, checksums, decision-stream diffs, divergence metrics), arm-*/ outputs under _dev/state/checkpoint-continuity-test/. FROZEN-INPUT SEMANTICS (codex r3): 'frozen inputs' is defined concretely \u2014 (a) TIME-DERIVED SEEDS ARE ELIMINATED as part of S1: every seed currently derived from wall-clock (run-live.js:118-126,186-210 region) is replaced by explicit root seeds carried in job.env/provenance, so no arm's behavior depends on invocation time; (b) any external decision inputs (world-mind-decision.json operator-console packets) are either ABSENT for all S3 arms (default: the control runs use no console packets) or, if a packet is used, it is a byte-identical recorded file replayed to every arm and hashed into continuity-evidence.json; (c) run/episode identity fields feed provenance but MUST NOT feed any RNG or decision path \u2014 the S1 inventory explicitly verifies this non-dependence.",
+        "is_gap": false,
+        "mode": "RUN_ONLY",
+        "files_touched": [
+          "_dev/state/checkpoint-continuity-test/state-inventory.md (NEW)",
+          "_dev/state/checkpoint-continuity-test/continuity-evidence.json (NEW)",
+          "_dev/state/checkpoint-continuity-test/arm-*/ (run outputs)"
+        ]
+      },
+      {
+        "step_id": "S4",
+        "title": "Distinct review + debrief",
+        "description": "Codex distinct-family trial of the full slice bound to commits; findings fixed per the review decision tree; run debrief. Only after this clears does the owning plan's next G-REMOTE-MUTATION packet (payload rebuild + short-turn continuity control on Orwell) go to the operator.",
+        "is_gap": false,
+        "mode": "REVIEW_ONLY",
+        "files_touched": [
+          "_dev/reports/analysis/run-debrief__ant-world-checkpoint-loader__<date>.md (NEW)"
+        ]
+      }
+    ],
+    "required_gates": [
+      {
+        "gate_id": "G-CHECKPOINT-REVIEW",
+        "status": "pending",
+        "decision": "S4 codex distinct trial must clear (findings fixed or recorded per decision tree) before the owning plan's next G-REMOTE-MUTATION packet may include the rebuilt payload."
+      }
+    ],
+    "expected_outcomes": [
+      "A resumed run provably continues the same mind (checksum-identical restore, divergence from fresh-seed control)",
+      "Failed/invalid resume halts with a named refusal \u2014 silent fallback is impossible by construction",
+      "Checkpoints never appear on the courier; the sanitized projection is unchanged",
+      "The ratified short-turn continuity control on Orwell is one operator stamp away once S4 clears"
+    ],
+    "risk_notes": [
+      "Engine-code changes could alter baseline behavior even without resume \u2014 S3's fresh-run control also serves as a regression check against r6/r7 behavior shape",
+      "RNG lineage capture must cover every stream the sim consumes; a missed stream silently breaks determinism claims \u2014 S1's byte-identical save/load/save test is the falsifier",
+      "Escalation: any need to widen the courier or change VM/seed/golden surfaces -> stop, back to the operator"
+    ],
+    "hardening_opportunity": "CheckpointManifest/1.0 generalizes to other world sims (crow-world); candidate for reuse after this plan's evidence exists."
+  },
+  "scope_identity": {
+    "owned_artifacts": [
+      "tools/ant-hive-world/checkpoint-schema.json",
+      "tools/ant-hive-world/checkpoint.js",
+      "tools/ant-hive-world/world-mind.js (checkpoint integration)",
+      "tools/ant-hive-world/harness.js (integration points)",
+      "tools/ant-hive-world/run-live.js (resume path)",
+      "_dev/sim-runs/vm/orwell/run-job.ps1 (RESUME_FROM passthrough)",
+      "_dev/sim-runs/vm/orwell/cloud-init/user-data (job.env passthrough if needed)",
+      "_dev/state/checkpoint-continuity-test/",
+      "_dev/reports/analysis/run-debrief__ant-world-checkpoint-loader__<date>.md",
+      "_dev/state/checkpoint-continuity-test/state-inventory.md"
+    ]
+  },
+  "routing_expectations": {
+    "risk_tier": "medium",
+    "review_lane": "codex-bridge",
+    "review_lane_rationale": "Engine-code slice, repo-local execution verification (S3 is local sandbox runs); no credentials, no live mutation \u2014 Orwell deployment stays behind the owning plan's operator-stamped gate.",
+    "escalation_triggers": [
+      "any new courier surface or membrane-adjacent change",
+      "any VM/seed/golden/provisioning contract change beyond the job.env passthrough",
+      "S3 divergence control failing in a way that implicates the engine rather than the loader"
+    ]
+  },
+  "operator_gates": [],
+  "dart_writeback": null,
+  "artifacts": [
+    "_dev/reports/analysis/task-plans/ant-world-checkpoint-loader__plan.json",
+    "_dev/reports/analysis/task-plans/ant-world-checkpoint-loader__plan.md"
+  ],
+  "coordinator_defaults_disclosed": {
+    "set_at": "2026-08-05T01:58Z",
+    "items": [
+      "generation-id syntax gen-<absolute_day>-<run_name> (operator may rename the scheme)",
+      "S3 replication n=2 per arm",
+      "shuffled-RNG construction = permuted per-stream seed assignment"
+    ],
+    "note": "Codex r1 marked these operator decisions; taken as reversible defaults under the operator's 2026-08-04 delegation, disclosed here for override."
+  },
+  "review_note_r3": "Codex rounds r1-r3 progressively hardened this plan (11 findings applied). Remaining sub-plan-level precision items, if any surface in r4, transfer into the implementation contract as named open items \u2014 the S4 code trial on the actual implementation is the backstop gate (G-CHECKPOINT-REVIEW), per plan-review economics and the operator's standing delegation."
+}

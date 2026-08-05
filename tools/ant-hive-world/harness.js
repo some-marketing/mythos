@@ -309,10 +309,34 @@ function addHive(sandboxRoot, seed, eventContext = processEventContext) {
   return hive;
 }
 
+// Restore hives and the shared world from a checkpoint, instead of seeding them
+// blank (plan ant-world-checkpoint-loader, S1/S2). This is setupHives's exact
+// counterpart and the ONLY other way a live sandbox may come into existence:
+// setupHives writes `initialWorldState(resourcePool)`, which is precisely the
+// thing a resumed run must not do.
+//
+// `hiveStates` is a map identity -> the hive-state object as it was at
+// checkpoint time; `worldState` is the shared world at the same instant. Both
+// are written out verbatim, because a checkpoint that is reinterpreted on the
+// way in is not a checkpoint. The sandbox directories are created if absent and
+// reused if present -- append-only logs in them are the caller's problem to
+// truncate (checkpoint.js's applyLogCursors), since only the caller knows the
+// cursor.
+function restoreHives(sandboxRoot, hiveStates, worldStatePath, worldState, eventContext = processEventContext) {
+  const hives = {};
+  for (const identity of Object.keys(hiveStates).sort()) {
+    const hive = ensureSandbox(sandboxRoot, identity, eventContext);
+    fs.writeFileSync(hive.hiveStatePath, JSON.stringify(hiveStates[identity], null, 2));
+    hives[identity] = hive;
+  }
+  writeWorldState(worldStatePath, worldState);
+  return hives;
+}
+
 // Backward-compatible 2-hive convenience wrapper over setupHives.
 function setupTwoHives(sandboxRoot, seedA, seedB, worldStatePath, resourcePool, eventContext = processEventContext) {
   const hives = setupHives(sandboxRoot, [seedA, seedB], worldStatePath, resourcePool, eventContext);
   return { hiveA: hives[seedA.identity], hiveB: hives[seedB.identity] };
 }
 
-module.exports = { VERBS, ensureSandbox, appendAudit, tick, setupHives, addHive, setupTwoHives };
+module.exports = { VERBS, ensureSandbox, appendAudit, tick, setupHives, restoreHives, addHive, setupTwoHives };

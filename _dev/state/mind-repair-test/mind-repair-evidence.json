@@ -1,0 +1,419 @@
+{
+  "schema": "MindRepairEvidence/1.0",
+  "task_id": "ant-world-mind-network-repair",
+  "steps_covered": [
+    "S0",
+    "S1",
+    "S2"
+  ],
+  "assembled_at": "2026-08-05T03:08:36.620Z",
+  "verified_by": "execution in this session; every number below is read from an artifact listed in supplementary.artifacts",
+  "fixture": {
+    "path": "_dev/state/mind-repair-test/fixture-world-states.json",
+    "seed": 20260805,
+    "count": 1000
+  },
+  "liveness": {
+    "nan_count": 0,
+    "seed_sensitivity": {
+      "threshold": 0.01,
+      "pct_passing": 0
+    },
+    "distinct_policies": {
+      "tolerance": 1e-9,
+      "count": 1000
+    },
+    "entropy": {
+      "mean": 1.6094019149227106,
+      "min": 1.6093720017072746,
+      "max": 1.609436919264087
+    }
+  },
+  "weight_update": {
+    "path_exists": false,
+    "pre_checksum": "8bc83e48ad81c937f9d9e24009e4c97f3fc373c138449f38937d3999fdaa285b",
+    "post_checksum": "8bc83e48ad81c937f9d9e24009e4c97f3fc373c138449f38937d3999fdaa285b"
+  },
+  "baseline": {
+    "runs": [
+      {
+        "run_id": "gen-300-baselineA",
+        "root_seed": 1001,
+        "ticks": 300,
+        "verb_distribution": {
+          "seed-wood": 53,
+          "seed-stone": 47,
+          "signal-food": 75,
+          "relax-decay": 75,
+          "idle": 50
+        },
+        "applied_rate": 0.6366666666666667,
+        "entropy": {
+          "mean": 1.6094353457603878,
+          "min": 1.6094283605515414,
+          "max": 1.6094372558668102
+        },
+        "sampled_verb_prob": {
+          "min": 0.198513416675831,
+          "max": 0.20068746182884323,
+          "mean": 0.199942559271489
+        }
+      },
+      {
+        "run_id": "gen-300-baselineB",
+        "root_seed": 2002,
+        "ticks": 300,
+        "verb_distribution": {
+          "seed-wood": 56,
+          "seed-stone": 55,
+          "signal-food": 51,
+          "relax-decay": 60,
+          "idle": 78
+        },
+        "applied_rate": 0.5233333333333333,
+        "entropy": {
+          "mean": 1.609431369358034,
+          "min": 1.6094279111660652,
+          "max": 1.609435798011878
+        },
+        "sampled_verb_prob": {
+          "min": 0.1988445075683169,
+          "max": 0.2012736605675341,
+          "mean": 0.1999340539169137
+        }
+      }
+    ],
+    "uniformity_test": {
+      "method": "chi-square vs uniform",
+      "statistic": 6.416666666666667,
+      "p_value": 0.17011737366632024,
+      "verdict": "non-uniform requires p<0.001"
+    }
+  },
+  "checkpoint_invalidation": {
+    "pre_repair_generation_id": "gen-5-prerepair",
+    "pre_repair_arch_hash": "359184320348f7650dee789ccdf0131e0b6c8f56c9d08c4ab6b33d1b5a9ce933",
+    "post_repair_arch_hash": "c32c9232429a7cdd2c4d9ad2f19d32c94bf88c4f796cfa5cdf27e429ec405a68",
+    "refusal_status": "resume-failed-halt:version:architecture-hash-mismatch",
+    "refusal_transcript_path": "_dev/state/mind-repair-test/refusal-transcript.txt"
+  },
+  "overall_verdict": {
+    "shape_bug_repaired": true,
+    "bounded_criteria_all_passing": false,
+    "checkpoint_invalidation_proven": true,
+    "no_hive_ripple": true,
+    "construction_assertion_proven_to_fire": true,
+    "baseline_non_uniform": false,
+    "statement": "REPAIRED AND PROVEN: the world mind reads its world state. Pre-repair, the same prover on the same 1000-state fixture measured 16000 NaN hidden pre-activations, exactly 1 distinct policy vector, and seed-to-seed L2 identically 0. Post-repair: 0 NaN, 1000 distinct policy vectors, non-zero seed separation on every state. NOT PROVEN, and reported as failing: bounded criteria (b) seed sensitivity (max L2 0.00495 vs a 0.01 bar, 0% of states passing) and (d) non-degeneracy (mean entropy 1.60940 vs a 1.55944 upper bound). Both are absolute-magnitude bars that a freshly initialized network at this weight scale cannot meet; the weight-scale diagnostic shows the same weights at 10x give entropy 1.2746 and seed L2 0.3477, so the forward path is fully wired and this is an initialization-scale question, not a wiring one. SUCCESSOR GAP (named, per S1(e)): thinks-but-cannot-learn. No engine path updates the world mind's weights. Because nothing will ever move them, criterion (d) is unreachable by running longer. BASELINE: the new honest baseline is recorded, and it is NOT statistically distinguishable from uniform at p<0.001. That is now true for a different reason than before -- pre-repair the policy was exactly [0.2 x 5] by construction; post-repair it is state-derived but near-uniform because it is untrained and frozen. BUG CLASS CLOSED: the construction assertion was driven with four mis-shaped constructors -- including the original [8][9] defect reconstructed exactly -- and refused all four at module-load time, while accepting the correct 8/8/5 shape. CHECKPOINT INVALIDATION: proven end to end. The pre-repair generation resumed cleanly before the fix (exit 0, all 7 stages) and refuses after it with resume-failed-halt:version:architecture-hash-mismatch (exit 1, no state constructed)."
+  },
+  "supplementary": {
+    "note": "everything below is ADDITIVE to the plan field contract; the contracted fields above are unmodified by it",
+    "repair": {
+      "single_source_of_truth": "WORLD_INPUT_SIZE is now derived as encodeWorldState({}).length in world-mind.js; there is no hand-written input-width literal for the world mind anywhere",
+      "construction_assertion": "assertWorldMindShape() re-probes the encoder and throws on any encoder/W1 disagreement, plus hidden/output/bias width checks",
+      "createNetwork_change": "optional `dims` parameter {inputSize,hiddenSize,outputSize}, each defaulting to this module's own constant",
+      "shape_before": [
+        8,
+        9
+      ],
+      "shape_after": [
+        8,
+        8
+      ],
+      "matches_declared_before": false,
+      "matches_declared_after": true
+    },
+    "assertion_probe": {
+      "note": "the S0 construction assertion was not merely written -- it was driven with mis-shaped constructors and observed to refuse each one, with a control proving it accepts the correct shape",
+      "verdict": "assertion fires on every shape violation tested (including the original defect) and stays silent on the correct shape",
+      "source_checks": {
+        "assertion_present_in_source": true,
+        "assertion_called_from_constructor": true,
+        "input_size_derived_from_encoder": true
+      },
+      "original_defect_case": {
+        "case": "original defect: input width = hive INPUT_SIZE (9), encoder emits 8",
+        "dims": {
+          "inputSize": 9,
+          "hiddenSize": 8,
+          "outputSize": 5
+        },
+        "threw": true,
+        "stage": "construction-assertion",
+        "message": "world-mind construction: encoder emits 8 features but W1 has 9 columns -- a mismatch here makes every hidden unit NaN and the policy silently uniform"
+      },
+      "all_cases": [
+        {
+          "case": "original defect: input width = hive INPUT_SIZE (9), encoder emits 8",
+          "dims": {
+            "inputSize": 9,
+            "hiddenSize": 8,
+            "outputSize": 5
+          },
+          "threw": true,
+          "stage": "construction-assertion",
+          "message": "world-mind construction: encoder emits 8 features but W1 has 9 columns -- a mismatch here makes every hidden unit NaN and the policy silently uniform"
+        },
+        {
+          "case": "input width 7 (encoder emits 8)",
+          "dims": {
+            "inputSize": 7,
+            "hiddenSize": 8,
+            "outputSize": 5
+          },
+          "threw": true,
+          "stage": "construction-assertion",
+          "message": "world-mind construction: encoder emits 8 features but W1 has 7 columns -- a mismatch here makes every hidden unit NaN and the policy silently uniform"
+        },
+        {
+          "case": "hidden width 6 (WORLD_HIDDEN_SIZE is 8)",
+          "dims": {
+            "inputSize": 8,
+            "hiddenSize": 6,
+            "outputSize": 5
+          },
+          "threw": true,
+          "stage": "construction-assertion",
+          "message": "world-mind construction: W1 has 6 rows, expected 8"
+        },
+        {
+          "case": "output width 4 (5 world verbs)",
+          "dims": {
+            "inputSize": 8,
+            "hiddenSize": 8,
+            "outputSize": 4
+          },
+          "threw": true,
+          "stage": "construction-assertion",
+          "message": "world-mind construction: W2 has 4 rows, expected 5 verbs"
+        },
+        {
+          "case": "CONTROL correct dims 8/8/5 (must NOT throw)",
+          "dims": {
+            "inputSize": 8,
+            "hiddenSize": 8,
+            "outputSize": 5
+          },
+          "threw": false,
+          "stage": null,
+          "message": null
+        }
+      ],
+      "refusal_point": "module load: world-mind.js probes its own shape at require time (ACTUAL_WORLD_MIND_SHAPE), so a mis-shaped constructor cannot finish loading the module -- stronger than a call-time throw"
+    },
+    "hive_ripple_check": {
+      "verdict": "no-ripple: hive network construction is unchanged",
+      "default_path_byte_identical": true,
+      "hive_shapes_unchanged": true,
+      "note": "a hive network built by the CURRENT bare createNetwork(seed) has the same shape the PRE-repair engine committed, and bare vs explicit-default-dims construction is byte-identical at the same seed"
+    },
+    "pre_repair_liveness": {
+      "note": "the SAME prover against the SAME fixture before the fix -- this is the control that makes the post-repair numbers mean something",
+      "nan_count": 16000,
+      "distinct_policies": 1,
+      "seed_l2_max": 0,
+      "entropy_mean": 1.6094379124340874,
+      "verdict": "not-alive"
+    },
+    "criteria_detail": {
+      "note": "the bounded criteria with BOTH the measured value and its threshold, including the two that fail",
+      "a_no_nan": {
+        "measured": 0,
+        "threshold": 0,
+        "pass": true
+      },
+      "b_seed_sensitivity": {
+        "l2_threshold": 0.01,
+        "pct_threshold": 0.9,
+        "pct_passing": 0,
+        "l2_min": 0.0010292535487704325,
+        "l2_max": 0.004950702123988338,
+        "l2_mean": 0.0033252425604375422,
+        "pass": false
+      },
+      "c_state_sensitivity": {
+        "threshold": 100,
+        "distinct_seed_a": 1000,
+        "distinct_seed_b": 1000,
+        "pass": true
+      },
+      "d_non_degeneracy": {
+        "mean": 1.6094019149227106,
+        "lower_bound": 0.1,
+        "upper_bound": 1.5594379124341002,
+        "ln_output_size": 1.6094379124341003,
+        "pass": false
+      },
+      "e_weight_update": {
+        "path_exists": false,
+        "static_scan": {
+          "engine_files_scanned": 14,
+          "world_mind_update_callers": [],
+          "note": "no engine file calls any weight-update function with the world mind as subject; trainStep() is called only with hive networks (train-tick.js)"
+        },
+        "pre_checksum": "8bc83e48ad81c937f9d9e24009e4c97f3fc373c138449f38937d3999fdaa285b",
+        "post_checksum": "8bc83e48ad81c937f9d9e24009e4c97f3fc373c138449f38937d3999fdaa285b",
+        "empirical": {
+          "generation_dir": "_dev/state/mind-repair-test/baseline-ckpt-a/gen-300-baselineA",
+          "construction_seed": 1001004,
+          "ticks_elapsed": 300,
+          "checksums_differ": false,
+          "reading": "world-mind parameters after the run are byte-identical to construction: no weight update occurred"
+        }
+      }
+    },
+    "weight_scale_diagnostics": {
+      "note": "weight-scale amplification probe -- evidence about WHY (b)/(d) land where they do; not a criterion and not used in any verdict",
+      "weight_scale_sweep": [
+        {
+          "weight_scale": 1,
+          "mean_entropy": 1.6094019149227106,
+          "mean_seed_l2": 0.0033252425604375422,
+          "max_seed_l2": 0.004950702123988338,
+          "mean_prob_spread": 0.004172525598860439
+        },
+        {
+          "weight_scale": 10,
+          "mean_entropy": 1.2745627486653561,
+          "mean_seed_l2": 0.34773720770995553,
+          "max_seed_l2": 0.5453695238725411,
+          "mean_prob_spread": 0.4217726523241306
+        },
+        {
+          "weight_scale": 50,
+          "mean_entropy": 0.05288603009573993,
+          "mean_seed_l2": 1.0144855666539205,
+          "max_seed_l2": 1.414211275883283,
+          "mean_prob_spread": 0.9786143205642406
+        }
+      ],
+      "interpretation": "the forward path is genuinely wired: scaling the same weights moves entropy and seed separation substantially, which is impossible if inputs were still being dropped"
+    },
+    "uniformity_test_detail": {
+      "method_implementation": "X^2 = sum (O-E)^2/E with E = N/k; upper tail via the exact even-df chi-square survival function e^(-x/2) * sum_{j<m} (x/2)^j/j!, df = 2m = 4",
+      "pooled": {
+        "observed": [
+          109,
+          102,
+          126,
+          135,
+          128
+        ],
+        "expected_each": 120,
+        "n": 600,
+        "degrees_of_freedom": 4,
+        "statistic": 6.416666666666667,
+        "p_value": 0.17011737366632024
+      },
+      "per_run": [
+        {
+          "run_id": "gen-300-baselineA",
+          "observed": [
+            53,
+            47,
+            75,
+            75,
+            50
+          ],
+          "expected_each": 60,
+          "n": 300,
+          "degrees_of_freedom": 4,
+          "statistic": 12.799999999999999,
+          "p_value": 0.01229552382148712
+        },
+        {
+          "run_id": "gen-300-baselineB",
+          "observed": [
+            56,
+            55,
+            51,
+            60,
+            78
+          ],
+          "expected_each": 60,
+          "n": 300,
+          "degrees_of_freedom": 4,
+          "statistic": 7.433333333333334,
+          "p_value": 0.11468519589251806
+        }
+      ],
+      "significance_level": 0.001,
+      "pooled_is_non_uniform": false,
+      "reading": "the post-repair world-verb distribution is NOT statistically distinguishable from uniform at p<0.001 -- see overall_verdict; this is the expected consequence of an untrained near-uniform policy with no learning path, NOT of the shape bug, which is separately proven fixed by nan_count 0 and 1000 distinct policies"
+    },
+    "checkpoint_invalidation_detail": {
+      "pre_fix_control": {
+        "note": "BEFORE the fix, the same generation resumed cleanly -- this is what makes the post-fix refusal attributable to the repair rather than to any other property of the checkpoint",
+        "exit_code": 0,
+        "transcript_excerpt": "sweep exempted (resume target): gen-5-prerepair\nresume: requested generation gen-5-prerepair from /Users/admin/mythos/_dev/state/mind-repair-test/pre-repair-checkpoints\nresume: validated gen-5-prerepair -- all 7 stages passed (exists -> committed -> identity -> version -> checksums -> input-packet -> lineage)\nresume: continuing at absolute tick 5 (day 5, lineage depth 0, turn 0)"
+      },
+      "post_fix_refusal": {
+        "exit_code": 1,
+        "stage": "version",
+        "reason": "architecture-hash-mismatch",
+        "transcript": "sweep exempted (resume target): gen-5-prerepair\nresume: requested generation gen-5-prerepair from /Users/admin/mythos/_dev/state/mind-repair-test/pre-repair-checkpoints\nRESUME REFUSED at stage 'version': architecture-hash-mismatch\nNo state was constructed. Last-known-good generations are retained for manual recovery:\n  gen-5-prerepair (day 5)\n  gen-7-prerepair-control (day 7)\nHalt-for-repair: this driver will not fall back to a fresh start.\nSTATUS=resume-failed-halt:version:architecture-hash-mismatch\nEXIT=1\n"
+      },
+      "pre_repair_generation_created_before_fix": true,
+      "method_note": "the pre-repair generation was produced by RUNNING the engine at pre-fix HEAD (5 ticks, root seed 4242) and committing a real generation. No stash/checkout trick was used at any point."
+    },
+    "successor_gaps": [
+      {
+        "id": "thinks-but-cannot-learn",
+        "statement": "The world mind now reads its world state and produces a state-derived policy, but no engine code path updates its weights. trainStep() is called only with hive networks (train-tick.js). Its parameters at the end of a 300-tick run are byte-identical to construction.",
+        "evidence": "liveness criterion (e): static scan found zero world-mind update call sites across 14 engine files; empirical checksum comparison over a 300-tick run reported below",
+        "consequence": "the world mind is frozen at its initial weights forever, so criterion (d) (entropy meaningfully below ln 5) is not reachable by running longer -- only by a learning path or a different initial weight scale"
+      },
+      {
+        "id": "untrained-init-scale-vs-magnitude-criteria",
+        "statement": "Criteria (b) and (d) are absolute-magnitude bars that a freshly initialized network at this weight scale cannot meet. randSmall() draws from +/-0.1; through two layers the logits are O(0.01) and the softmax is necessarily near-uniform.",
+        "evidence": "weight_scale_diagnostics: scaling the SAME weights 10x gives mean entropy 1.2746 and mean seed L2 0.3477; 50x gives mean entropy 0.0529 -- so the forward path carries the signal fully and the near-uniformity is an initialization-scale property, not residual breakage",
+        "consequence": "this is a threshold-calibration decision for the operator (the plan states thresholds are coordinator defaults, operator-overridable), not evidence that the repair failed"
+      }
+    ],
+    "deviations": [
+      {
+        "id": "dims-object-instead-of-inputSize-param",
+        "deviation": "createNetwork received an optional `dims` OBJECT ({inputSize,hiddenSize,outputSize}) rather than only an optional inputSize scalar.",
+        "reason": "The audit the plan asked for (S0: \"audit for any other cross-bound dimension\") found TWO more: the world mind was also inheriting the hive network's HIDDEN_SIZE and OUTPUT_SIZE. They happen to equal the world mind's own values today (8 and 5), so they are silent -- exactly the condition that produced this bug. Passing only inputSize would have left the same bug class open on two axes.",
+        "blast_radius": "none: every field defaults to the module's own constant, and bare vs explicit-default construction is proven byte-identical at the same seed (supplementary.hive_ripple_check)"
+      },
+      {
+        "id": "three-valued-liveness-verdict",
+        "deviation": "The prover reports liveness_verdict as one of alive / reads-state-but-fails-magnitude-criteria / not-alive rather than a boolean.",
+        "reason": "The measured post-repair state is neither: the mind demonstrably reads its inputs (0 NaN, 1000/1000 distinct policies, non-zero seed separation) while failing two absolute-magnitude bars. Reporting \"alive\" would overclaim and \"not-alive\" would be false -- the pre-repair reading is what not-alive actually looks like."
+      },
+      {
+        "id": "defect-comment-rewritten",
+        "deviation": "The 24-line OBSERVED DEFECT comment block in world-mind.js was rewritten as DEFECT HISTORY rather than left in place.",
+        "reason": "It asserted the defect was NOT fixed. Leaving it would have made the file state something false about itself. It is rewritten as dated history, retaining the diagnosis and adding the pre-repair measurements, because the r6/r7 baselines were recorded under the broken behavior and their readers need to find this note."
+      }
+    ],
+    "artifacts": {
+      "fixture": "_dev/state/mind-repair-test/fixture-world-states.json",
+      "fixture_generator": "_dev/state/mind-repair-test/fixture-gen.js",
+      "prover": "_dev/state/mind-repair-test/prove-alive.js",
+      "liveness_pre_repair": "_dev/state/mind-repair-test/liveness-pre-repair.json",
+      "liveness_post_repair": "_dev/state/mind-repair-test/liveness-post-repair.json",
+      "arch_probe": "_dev/state/mind-repair-test/arch-probe.js",
+      "arch_pre_repair": "_dev/state/mind-repair-test/arch-pre-repair.json",
+      "arch_post_repair": "_dev/state/mind-repair-test/arch-post-repair.json",
+      "ripple_check": "_dev/state/mind-repair-test/ripple-check.json",
+      "assertion_probe": "_dev/state/mind-repair-test/assert-fires.js",
+      "assertion_probe_result": "_dev/state/mind-repair-test/assert-fires.json",
+      "baseline_run_a": "_dev/state/mind-repair-test/baseline-run-a/",
+      "baseline_run_b": "_dev/state/mind-repair-test/baseline-run-b/",
+      "pre_repair_generation": "_dev/state/mind-repair-test/pre-repair-checkpoints/gen-5-prerepair/",
+      "pre_fix_resume_control": "_dev/state/mind-repair-test/control-resume-transcript.txt",
+      "refusal_transcript": "_dev/state/mind-repair-test/refusal-transcript.txt",
+      "assembler": "_dev/state/mind-repair-test/assemble-evidence.js"
+    },
+    "engine_test_suite": {
+      "command": "node --test \"tools/ant-hive-world/__tests__/*.test.cjs\"",
+      "tests": 149,
+      "pass": 139,
+      "fail": 10,
+      "failure_cause": "all 10 failures are ENOENT on two artifact files absent from this checkout (_dev/reports/analysis/ant-hive-world-exploration-fix-hiveb-collapse-candidate-comparison.md and .../task-plans/ant-hive-world-exploration-fix-hiveb-collapse__amendment__20260718T181836Z.json). Zero assertion failures. Pre-existing and unrelated to this diff -- these tests never construct a world mind.",
+      "caveat": "NOT verified against a pre-repair run of the same suite in this session, because the pre-repair tree was not preserved. The independence claim rests on the failure mode (missing input files) and on those tests not touching world-mind.js."
+    }
+  }
+}

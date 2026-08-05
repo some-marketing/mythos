@@ -1,0 +1,21 @@
+{"t":0,"actor":"hive-a","action":"gather","applied":false,"reward":-2.5,"pe":1.609418371375288,"peu":1.6078645953337327,"fe":true,"ctl":false,"w":3,"starved":false,"exhausted":true,"stock":{"food":0}}
+{"t":0,"actor":"hive-b","action":"idle","applied":false,"reward":-2,"pe":1.6093270294135023,"peu":1.6086056599130711,"fe":true,"ctl":false,"w":3,"starved":false,"exhausted":true,"stock":{"food":0}}
+{"t":0,"actor":"world","action":"relax-decay","source":"network-fallback","applied":true,"note":"world relaxed pheromone decay (factor 0.9)","prob":0.2,"entropy":1.6094379124341005}
+{"t":1,"actor":"hive-a","action":"claim-territory","applied":true,"reward":-0.5,"pe":1.6078765518494982,"peu":1.6080525291956476,"fe":false,"ctl":false,"w":2.964,"starved":false,"exhausted":true,"stock":{"food":0}}
+{"t":1,"actor":"hive-b","action":"claim-territory","applied":true,"reward":-0.5,"pe":1.608612647182818,"peu":1.608699220117559,"fe":false,"ctl":false,"w":2.964,"starved":false,"exhausted":true,"stock":{"food":0}}
+{"t":1,"actor":"world","action":"seed-stone","source":"network-fallback","applied":true,"note":"world seeded 1 stone source at stone-tile-14","prob":0.2,"entropy":1.6094379124341005}
+{"t":2,"actor":"hive-a","action":"build","applied":false,"reward":-2.5,"pe":1.6081221613750487,"peu":1.6073603357174004,"fe":false,"ctl":false,"w":2.928,"starved":false,"exhausted":true,"stock":{"food":0}}
+{"t":2,"actor":"hive-b","action":"gather","applied":false,"reward":-2.5,"pe":1.6086644504294247,"peu":1.6068083145256749,"fe":false,"ctl":false,"w":2.928,"starved":false,"exhausted":true,"stock":{"food":0}}
+{"t":2,"actor":"world","action":"seed-wood","source":"network-fallback","applied":true,"note":"world seeded 1 wood source at wood-tile-30","prob":0.2,"entropy":1.6094379124341005}
+{"t":3,"actor":"hive-a","action":"gather","applied":false,"reward":-2.5,"pe":1.6073828247222348,"peu":1.6041675807181157,"fe":false,"ctl":false,"w":2.892,"starved":false,"exhausted":true,"stock":{"food":0}}
+{"t":3,"actor":"hive-b","action":"gather","applied":true,"reward":-1,"pe":1.606856402663648,"peu":1.6072953336740419,"fe":false,"ctl":false,"w":2.892,"starved":false,"exhausted":true,"stock":{"food":0,"wood":1}}
+{"t":3,"actor":"world","action":"seed-stone","source":"network-fallback","applied":true,"note":"world seeded 1 stone source at stone-tile-57","prob":0.2,"entropy":1.6094379124341005}
+{"t":4,"actor":"hive-a","action":"idle","applied":false,"reward":-2,"pe":1.604242814906031,"peu":1.6052950061168003,"fe":false,"ctl":false,"w":2.856,"starved":false,"exhausted":true,"stock":{"food":0}}
+{"t":4,"actor":"hive-b","action":"idle","applied":false,"reward":-2,"pe":1.6073845404734757,"peu":1.6059852264337924,"fe":false,"ctl":false,"w":2.856,"starved":false,"exhausted":true,"stock":{"food":0,"wood":1}}
+{"t":4,"actor":"world","action":"seed-stone","source":"network-fallback","applied":true,"note":"world seeded 1 stone source at stone-tile-83","prob":0.2,"entropy":1.6094379124341005}
+{"t":5,"actor":"hive-a","action":"claim-territory","applied":true,"reward":-0.5,"pe":1.60541230181176,"peu":1.6059546533199904,"fe":false,"ctl":false,"w":2.82,"starved":false,"exhausted":true,"stock":{"food":0}}
+{"t":5,"actor":"hive-b","action":"gather","applied":true,"reward":-1,"pe":1.6060533003957098,"peu":1.6062332224297577,"fe":false,"ctl":false,"w":2.82,"starved":false,"exhausted":true,"stock":{"food":0,"wood":2}}
+{"t":5,"actor":"world","action":"seed-stone","source":"network-fallback","applied":true,"note":"world seeded 1 stone source at stone-tile-27","prob":0.2,"entropy":1.6094379124341005}
+{"t":6,"actor":"hive-a","action":"claim-territory","applied":true,"reward":-0.5,"pe":1.605845843708706,"peu":1.6062814834517734,"fe":false,"ctl":false,"w":2.784,"starved":false,"exhausted":true,"stock":{"food":0}}
+{"t":6,"actor":"hive-b","action":"claim-territory","applied":true,"reward":-0.5,"pe":1.6062280263783628,"peu":1.6066784481309808,"fe":false,"ctl":false,"w":2.784,"starved":false,"exhausted":true,"stock":{"food":0,"wood":2}}
+{"t":6,"actor":"world","action":"idle","source":"network-fallback","applied":false,"note":"world idle — control with hives","prob":0.2,"entropy":1.6094379124341005}

@@ -1,0 +1,77 @@
+{
+  "schema": "MindRepairAssertionProbe/1.0",
+  "measured_at": "2026-08-05T03:08:00.373Z",
+  "source_checks": {
+    "assertion_present_in_source": true,
+    "assertion_called_from_constructor": true,
+    "input_size_derived_from_encoder": true
+  },
+  "cases": [
+    {
+      "case": "original defect: input width = hive INPUT_SIZE (9), encoder emits 8",
+      "dims": {
+        "inputSize": 9,
+        "hiddenSize": 8,
+        "outputSize": 5
+      },
+      "threw": true,
+      "stage": "construction-assertion",
+      "message": "world-mind construction: encoder emits 8 features but W1 has 9 columns -- a mismatch here makes every hidden unit NaN and the policy silently uniform"
+    },
+    {
+      "case": "input width 7 (encoder emits 8)",
+      "dims": {
+        "inputSize": 7,
+        "hiddenSize": 8,
+        "outputSize": 5
+      },
+      "threw": true,
+      "stage": "construction-assertion",
+      "message": "world-mind construction: encoder emits 8 features but W1 has 7 columns -- a mismatch here makes every hidden unit NaN and the policy silently uniform"
+    },
+    {
+      "case": "hidden width 6 (WORLD_HIDDEN_SIZE is 8)",
+      "dims": {
+        "inputSize": 8,
+        "hiddenSize": 6,
+        "outputSize": 5
+      },
+      "threw": true,
+      "stage": "construction-assertion",
+      "message": "world-mind construction: W1 has 6 rows, expected 8"
+    },
+    {
+      "case": "output width 4 (5 world verbs)",
+      "dims": {
+        "inputSize": 8,
+        "hiddenSize": 8,
+        "outputSize": 4
+      },
+      "threw": true,
+      "stage": "construction-assertion",
+      "message": "world-mind construction: W2 has 4 rows, expected 5 verbs"
+    },
+    {
+      "case": "CONTROL correct dims 8/8/5 (must NOT throw)",
+      "dims": {
+        "inputSize": 8,
+        "hiddenSize": 8,
+        "outputSize": 5
+      },
+      "threw": false,
+      "stage": null,
+      "message": null
+    }
+  ],
+  "post_probe_clean_load": {
+    "shape": {
+      "w1_rows": 8,
+      "w1_cols": 8,
+      "w2_rows": 5,
+      "w2_cols": 8,
+      "matches_declared": true
+    },
+    "loads_cleanly": true
+  },
+  "verdict": "assertion fires on every shape violation tested (including the original defect) and stays silent on the correct shape"
+}

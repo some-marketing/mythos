@@ -1,0 +1,25 @@
+{
+  "construction_seeds": {
+    "hive-a": 1001,
+    "hive-b": 105730,
+    "root": 1001,
+    "world": 1001004
+  },
+  "streams": {
+    "hive-a": {
+      "algorithm": "mulberry32",
+      "seed": 13346,
+      "state": -1498523294
+    },
+    "hive-b": {
+      "algorithm": "mulberry32",
+      "seed": 118075,
+      "state": -362629619
+    },
+    "world": {
+      "algorithm": "mulberry32",
+      "seed": 1013349,
+      "state": 1723180165
+    }
+  }
+}

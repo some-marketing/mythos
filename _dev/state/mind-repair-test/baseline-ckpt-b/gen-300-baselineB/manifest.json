@@ -1,0 +1,99 @@
+{
+  "absolute_day": 300,
+  "absolute_tick": 300,
+  "architecture": {
+    "hash": "c32c9232429a7cdd2c4d9ad2f19d32c94bf88c4f796cfa5cdf27e429ec405a68",
+    "hive": {
+      "hidden_size": 8,
+      "input_size": 9,
+      "learning_rate": 0.05,
+      "output_size": 5,
+      "resource_norm_k": 20
+    },
+    "verbs": {
+      "harness_verbs": [
+        "gather",
+        "build",
+        "claim-territory",
+        "idle"
+      ],
+      "hive_verb_order": [
+        "gather-food",
+        "gather-wood",
+        "build",
+        "claim-territory",
+        "idle"
+      ],
+      "world_verb_order": [
+        "seed-wood",
+        "seed-stone",
+        "signal-food",
+        "relax-decay",
+        "idle"
+      ]
+    },
+    "world_mind": {
+      "actual_shape": {
+        "matches_declared": true,
+        "w1_cols": 8,
+        "w1_rows": 8,
+        "w2_cols": 8,
+        "w2_rows": 5
+      },
+      "hidden_size": 8,
+      "input_size": 8,
+      "output_size": 5,
+      "resource_norm_k": 40
+    }
+  },
+  "code_version": "ant-hive-world-checkpoint-1.0.0",
+  "created_at": "2026-08-05T03:04:05.549Z",
+  "files": [
+    {
+      "bytes": 13311,
+      "path": "mind.json",
+      "sha256": "c03419f87ab74e729e3d4252904ad7849ca09bda5378f1c71c6dc928963b30b8"
+    },
+    {
+      "bytes": 444,
+      "path": "rng.json",
+      "sha256": "235e96bf716561c47c767c614c398500f523fd25aae05d785653309772362723"
+    },
+    {
+      "bytes": 19343,
+      "path": "world.json",
+      "sha256": "1233204747046bb596d59b85ad669b92a0f956dcdd4095ec15b827244ae2e4fb"
+    },
+    {
+      "bytes": 515,
+      "path": "identity.json",
+      "sha256": "5f0cdd7db0319d8fe7d1ff973ee663d3ae52a1c8eb58111c3a65554986280637"
+    }
+  ],
+  "generation_id": "gen-300-baselineB",
+  "goal": null,
+  "identity": {
+    "arm_id": "mind-repair-baseline",
+    "episode_id": "a11131ab-e145-4fc7-8770-cc3258787635",
+    "fresh_start": true,
+    "parent_episode_id": null,
+    "parent_run_id": null,
+    "root_seed": 2002,
+    "root_seed_source": "arg",
+    "run_id": "93e61b97-2fcf-4438-8d9f-91bfbc89e63d",
+    "turn_index": 0
+  },
+  "input_packet": {
+    "present": false,
+    "sha256": null
+  },
+  "manifest_self_checksum": "845a17122d1b33ec79f24c5713ca03649c57bcfa9acacd73814a3185a5bc4424",
+  "parent": {
+    "generation_id": null,
+    "lineage_depth": 0,
+    "manifest_checksum": null
+  },
+  "run_name": "baselineB",
+  "schema": "CheckpointManifest/1.0",
+  "schema_version": "1.0"
+}

@@ -1,0 +1,82 @@
+{
+  "schema": "MindLivenessProbe/1.0",
+  "measured_at": "2026-08-05T02:59:20.603Z",
+  "engine_shape": {
+    "w1_rows": 8,
+    "w1_cols": 9,
+    "w2_rows": 5,
+    "w2_cols": 8,
+    "matches_declared": false
+  },
+  "encoder_feature_count": 8,
+  "fixture": {
+    "path": "_dev/state/mind-repair-test/fixture-world-states.json",
+    "generator": "_dev/state/mind-repair-test/fixture-gen.js",
+    "seed": 20260805,
+    "count": 1000
+  },
+  "probe_seeds": {
+    "a": 1,
+    "b": 999999
+  },
+  "thresholds": {
+    "nan_count_max": 0,
+    "seed_sensitivity_l2": 0.01,
+    "seed_sensitivity_pct_min": 0.9,
+    "distinct_policies_tolerance": 1e-9,
+    "distinct_policies_min": 100,
+    "entropy_mean_min": 0.1,
+    "entropy_mean_max": 1.5594379124341002
+  },
+  "criteria": {
+    "a_no_nan": {
+      "measured": 16000,
+      "threshold": 0,
+      "pass": false,
+      "breakdown": {
+        "hiddenPre": 16000,
+        "hidden": 0,
+        "logits": 0,
+        "probs": 0
+      }
+    },
+    "b_seed_sensitivity": {
+      "l2_threshold": 0.01,
+      "pct_threshold": 0.9,
+      "pct_passing": 0,
+      "states_passing": 0,
+      "l2_min": 0,
+      "l2_max": 0,
+      "l2_mean": 0,
+      "pass": false
+    },
+    "c_state_sensitivity": {
+      "tolerance": 1e-9,
+      "threshold": 100,
+      "distinct_seed_a": 1,
+      "distinct_seed_b": 1,
+      "pass": false
+    },
+    "d_non_degeneracy": {
+      "mean": 1.6094379124340874,
+      "min": 1.6094379124341005,
+      "max": 1.6094379124341005,
+      "lower_bound": 0.1,
+      "upper_bound": 1.5594379124341002,
+      "ln_output_size": 1.6094379124341003,
+      "pass": false
+    },
+    "e_weight_update": {
+      "path_exists": false,
+      "static_scan": {
+        "engine_files_scanned": 14,
+        "world_mind_update_callers": [],
+        "note": "no engine file calls any weight-update function with the world mind as subject; trainStep() is called only with hive networks (train-tick.js)"
+      },
+      "pre_checksum": null,
+      "post_checksum": null,
+      "empirical": null
+    }
+  },
+  "liveness_verdict": "not-alive"
+}

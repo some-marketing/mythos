@@ -1,0 +1,919 @@
+resume: none requested -- explicit FRESH START (fresh_start=true)
+Early minds this run: root_seed=2002 (arg), hive-a seed=2002, hive-b seed=106731, world seed=1002005.
+ant-hive-world attended run starting (fresh_start).
+Sandbox: _dev/state/mind-repair-test/baseline-run-b
+Checkpoint root: /Users/admin/mythos/_dev/state/mind-repair-test/baseline-ckpt-b
+Shared resources at start: {"food":40,"wood":30,"stone":15}
+Mind: untrained-network.js (from-scratch REINFORCE, no pretraining, no LLM).
+Running 300 ticks per hive from absolute tick 0. Run log: _dev/state/mind-repair-test/baseline-run-b/run-log.jsonl
+Config file (live-tunable via the dashboard): _dev/state/mind-repair-test/baseline-run-b/live-config.json
+Event identity: run=93e61b97-2fcf-4438-8d9f-91bfbc89e63d episode=a11131ab-e145-4fc7-8770-cc3258787635 arm=mind-repair-baseline
+Start the dashboard separately to watch live: node tools/ant-hive-world/dashboard.js --sandbox-root _dev/state/mind-repair-test/baseline-run-b
+
+[tick 1] hive-a -> idle applied=false starved=false reward=-2 entropy=1.609 [forced]
+[tick 1] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.609 [forced]
+[tick 1] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-68)
+[tick 2] hive-a -> build applied=false starved=false reward=-2.5 entropy=1.609
+[tick 2] hive-b -> idle applied=false starved=false reward=-2 entropy=1.609
+[tick 2] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-37)
+[tick 3] hive-a -> build applied=false starved=false reward=-2.5 entropy=1.608
+[tick 3] hive-b -> gather applied=true starved=false reward=-1 entropy=1.608
+[tick 3] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 4] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.605
+[tick 4] hive-b -> idle applied=false starved=false reward=-2 entropy=1.609
+[tick 4] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-13)
+[tick 5] hive-a -> gather applied=true starved=false reward=-1 entropy=1.605
+[tick 5] hive-b -> gather applied=true starved=false reward=-1 entropy=1.606
+[tick 5] world -> seed-wood source=network-fallback applied=true (world seeded 1 wood source at wood-tile-61)
+[tick 6] hive-a -> idle applied=false starved=false reward=-2 entropy=1.606
+[tick 6] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.606
+[tick 6] world -> seed-wood source=network-fallback applied=true (world seeded 1 wood source at wood-tile-75)
+[tick 7] hive-a -> gather applied=true starved=false reward=-1 entropy=1.605
+[tick 7] hive-b -> idle applied=false starved=false reward=-2 entropy=1.607
+[tick 7] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-44)
+[tick 8] hive-a -> idle applied=false starved=false reward=-2 entropy=1.606
+[tick 8] hive-b -> idle applied=false starved=false reward=-2 entropy=1.604
+[tick 8] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 9] hive-a -> idle applied=false starved=false reward=-2 entropy=1.604
+[tick 9] hive-b -> gather applied=true starved=false reward=-1 entropy=1.600
+[tick 9] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-66)
+[tick 10] hive-a -> gather applied=true starved=false reward=-1 entropy=1.601
+[tick 10] hive-b -> build applied=true starved=false reward=0 entropy=1.600
+[tick 10] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 11] hive-a -> build applied=true starved=false reward=0 entropy=1.601
+[tick 11] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.600
+[tick 11] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-68)
+[tick 12] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.602
+[tick 12] hive-b -> gather applied=true starved=false reward=-1 entropy=1.599
+[tick 12] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 13] hive-a -> gather applied=true starved=false reward=-1 entropy=1.603
+[tick 13] hive-b -> idle applied=false starved=false reward=-2 entropy=1.599
+[tick 13] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-31)
+[tick 14] hive-a -> gather applied=true starved=false reward=-1 entropy=1.603
+[tick 14] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.595
+[tick 14] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 15] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.603
+[tick 15] hive-b -> idle applied=false starved=false reward=-2 entropy=1.592
+[tick 15] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 16] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.604
+[tick 16] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.586
+[tick 16] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-69)
+[tick 17] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.605
+[tick 17] hive-b -> build applied=true starved=false reward=0 entropy=1.581
+[tick 17] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 18] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.606
+[tick 18] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.582
+[tick 18] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 19] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.606
+[tick 19] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.588
+[tick 19] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-46)
+[tick 20] hive-a -> gather applied=true starved=false reward=-1 entropy=1.607
+[tick 20] hive-b -> gather applied=true starved=false reward=-1 entropy=1.589
+[tick 20] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 21] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.607
+[tick 21] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.590
+[tick 21] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-52)
+[tick 22] hive-a -> gather applied=true starved=false reward=-1 entropy=1.601
+[tick 22] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.596
+[tick 22] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 23] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.601
+[tick 23] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.591
+[tick 23] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-33)
+[tick 24] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.583
+[tick 24] hive-b -> gather applied=true starved=false reward=-1 entropy=1.595
+[tick 24] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 25] hive-a -> build applied=true starved=false reward=0 entropy=1.584
+[tick 25] hive-b -> idle applied=false starved=false reward=-2 entropy=1.597
+[tick 25] world -> seed-wood source=network-fallback applied=true (world seeded 1 wood source at wood-tile-18)
+[tick 26] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.587
+[tick 26] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.591
+[tick 26] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-42)
+[tick 27] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.587
+[tick 27] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.585
+[tick 27] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 28] hive-a -> build applied=true starved=false reward=0 entropy=1.507
+[tick 28] hive-b -> gather applied=true starved=false reward=-1 entropy=1.587
+[tick 28] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 29] hive-a -> build applied=false starved=false reward=-2.5 entropy=1.524
+[tick 29] hive-b -> idle applied=false starved=false reward=-2 entropy=1.588
+[tick 29] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 30] hive-a -> gather applied=true starved=false reward=-1 entropy=1.518
+[tick 30] hive-b -> gather applied=true starved=false reward=-1 entropy=1.582
+[tick 30] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 31] hive-a -> idle applied=false starved=false reward=-2 entropy=1.550
+[tick 31] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.583
+[tick 31] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-61)
+[tick 32] hive-a -> build applied=true starved=false reward=0 entropy=1.594
+[tick 32] hive-b -> build applied=true starved=false reward=0 entropy=1.585
+[tick 32] world -> seed-wood source=network-fallback applied=true (world seeded 1 wood source at wood-tile-91)
+[tick 33] hive-a -> idle applied=false starved=false reward=-2 entropy=1.597
+[tick 33] hive-b -> build applied=true starved=false reward=0 entropy=1.586
+[tick 33] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-71)
+[tick 34] hive-a -> build applied=false starved=false reward=-2.5 entropy=1.598
+[tick 34] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.587
+[tick 34] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 35] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.596
+[tick 35] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.589
+[tick 35] world -> seed-wood source=network-fallback applied=true (world seeded 1 wood source at wood-tile-53)
+[tick 36] hive-a -> gather applied=true starved=false reward=-1 entropy=1.600
+[tick 36] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.591
+[tick 36] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 37] hive-a -> build applied=false starved=false reward=-2.5 entropy=1.601
+[tick 37] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.584
+[tick 37] world -> seed-wood source=network-fallback applied=true (world seeded 1 wood source at wood-tile-76)
+[tick 38] hive-a -> gather applied=true starved=false reward=-1 entropy=1.599
+[tick 38] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.586
+[tick 38] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 39] hive-a -> gather applied=true starved=false reward=-1 entropy=1.599
+[tick 39] hive-b -> idle applied=false starved=false reward=-2 entropy=1.587
+[tick 39] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-36)
+[tick 40] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.599
+[tick 40] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.582
+[tick 40] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-88)
+[tick 41] hive-a -> idle applied=false starved=false reward=-2 entropy=1.601
+[tick 41] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.589
+[tick 41] world -> seed-wood source=network-fallback applied=true (world seeded 1 wood source at wood-tile-16)
+[tick 42] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.599
+[tick 42] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.582
+[tick 42] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 43] hive-a -> idle applied=false starved=false reward=-2 entropy=1.596
+[tick 43] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.583
+[tick 43] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-64)
+[tick 44] hive-a -> idle applied=false starved=false reward=-2 entropy=1.593
+[tick 44] hive-b -> gather applied=true starved=false reward=-1 entropy=1.586
+[tick 44] world -> seed-wood source=network-fallback applied=true (world seeded 1 wood source at wood-tile-61)
+[tick 45] hive-a -> build applied=true starved=false reward=0 entropy=1.588
+[tick 45] hive-b -> gather applied=true starved=false reward=-1 entropy=1.589
+[tick 45] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-64)
+[tick 46] hive-a -> gather applied=true starved=false reward=-1 entropy=1.589
+[tick 46] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.591
+[tick 46] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-80)
+[tick 47] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.589
+[tick 47] hive-b -> build applied=true starved=false reward=0 entropy=1.592
+[tick 47] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-75)
+[tick 48] hive-a -> gather applied=true starved=false reward=-1 entropy=1.592
+[tick 48] hive-b -> gather applied=true starved=false reward=-1 entropy=1.592
+[tick 48] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 49] hive-a -> gather applied=true starved=false reward=-1 entropy=1.592
+[tick 49] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.594
+[tick 49] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 50] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.591
+[tick 50] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.587
+[tick 50] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-87)
+[tick 51] hive-a -> build applied=true starved=false reward=0 entropy=1.587
+[tick 51] hive-b -> gather applied=true starved=false reward=-1 entropy=1.589
+[tick 51] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 52] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.587
+[tick 52] hive-b -> build applied=true starved=false reward=0 entropy=1.590
+[tick 52] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 53] hive-a -> build applied=true starved=false reward=0 entropy=1.581
+[tick 53] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.590
+[tick 53] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 54] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.582
+[tick 54] hive-b -> idle applied=false starved=false reward=-2 entropy=1.590
+[tick 54] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 55] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.584
+[tick 55] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.587
+[tick 55] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 56] hive-a -> gather applied=true starved=false reward=-1 entropy=1.587
+[tick 56] hive-b -> gather applied=true starved=false reward=-1 entropy=1.579
+[tick 56] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-20)
+[tick 57] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.586
+[tick 57] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.581
+[tick 57] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 58] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.589
+[tick 58] hive-b -> gather applied=true starved=false reward=-1 entropy=1.582
+[tick 58] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 59] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.581
+[tick 59] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.584
+[tick 59] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-81)
+[tick 60] hive-a -> gather applied=true starved=false reward=-1 entropy=1.584
+[tick 60] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.575
+[tick 60] world -> seed-wood source=network-fallback applied=true (world seeded 1 wood source at wood-tile-49)
+[tick 61] hive-a -> build applied=true starved=false reward=0 entropy=1.583
+[tick 61] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.576
+[tick 61] world -> seed-wood source=network-fallback applied=true (world seeded 1 wood source at wood-tile-36)
+[tick 62] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.583
+[tick 62] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.573
+[tick 62] world -> seed-wood source=network-fallback applied=true (world seeded 1 wood source at wood-tile-67)
+[tick 63] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.585
+[tick 63] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.576
+[tick 63] world -> seed-wood source=network-fallback applied=true (world seeded 1 wood source at wood-tile-42)
+[tick 64] hive-a -> build applied=false starved=false reward=-2.5 entropy=1.587
+[tick 64] hive-b -> build applied=true starved=false reward=0 entropy=1.578
+[tick 64] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-89)
+[tick 65] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.588
+[tick 65] hive-b -> idle applied=false starved=false reward=-2 entropy=1.578
+[tick 65] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 66] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.580
+[tick 66] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.575
+[tick 66] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 67] hive-a -> build applied=false starved=false reward=-2.5 entropy=1.577
+[tick 67] hive-b -> idle applied=false starved=false reward=-2 entropy=1.566
+[tick 67] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-85)
+[tick 68] hive-a -> idle applied=false starved=false reward=-2 entropy=1.576
+[tick 68] hive-b -> idle applied=false starved=false reward=-2 entropy=1.561
+[tick 68] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 69] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.573
+[tick 69] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.554
+[tick 69] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 70] hive-a -> build applied=false starved=false reward=-2.5 entropy=1.576
+[tick 70] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.543
+[tick 70] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 71] hive-a -> idle applied=false starved=false reward=-2 entropy=1.572
+[tick 71] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.543
+[tick 71] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 72] hive-a -> build applied=false starved=false reward=-2.5 entropy=1.568
+[tick 72] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.555
+[tick 72] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 73] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.562
+[tick 73] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.552
+[tick 73] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 74] hive-a -> build applied=false starved=false reward=-2.5 entropy=1.565
+[tick 74] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.555
+[tick 74] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-62)
+[tick 75] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.557
+[tick 75] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.555
+[tick 75] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 76] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.547 [forced]
+[tick 76] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.550 [forced]
+[tick 76] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-58)
+[tick 77] hive-a -> build applied=false starved=false reward=-2.5 entropy=1.550
+[tick 77] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.548
+[tick 77] world -> seed-wood source=network-fallback applied=true (world seeded 1 wood source at wood-tile-19)
+[tick 78] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.540
+[tick 78] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.551
+[tick 78] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 79] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.544
+[tick 79] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.554
+[tick 79] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 80] hive-a -> build applied=false starved=false reward=-2.5 entropy=1.532
+[tick 80] hive-b -> idle applied=false starved=false reward=-2 entropy=1.557
+[tick 80] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-13)
+[tick 81] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.519
+[tick 81] hive-b -> idle applied=false starved=false reward=-2 entropy=1.551
+[tick 81] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 82] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.506
+[tick 82] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.544
+[tick 82] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-15)
+[tick 83] hive-a -> idle applied=false starved=false reward=-2 entropy=1.510
+[tick 83] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.532
+[tick 83] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 84] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.502
+[tick 84] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.527
+[tick 84] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-1)
+[tick 85] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.507
+[tick 85] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.520
+[tick 85] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 86] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.492
+[tick 86] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.524
+[tick 86] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 87] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.496
+[tick 87] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.517
+[tick 87] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 88] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.500
+[tick 88] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.506
+[tick 88] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-99)
+[tick 89] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.495
+[tick 89] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.493
+[tick 89] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 90] hive-a -> idle applied=false starved=false reward=-2 entropy=1.500
+[tick 90] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.498
+[tick 90] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 91] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.492
+[tick 91] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.503
+[tick 91] world -> seed-wood source=network-fallback applied=true (world seeded 1 wood source at wood-tile-63)
+[tick 92] hive-a -> claim-territory applied=false starved=false reward=-2.5 entropy=1.496
+[tick 92] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.508
+[tick 92] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-7)
+[tick 93] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.514
+[tick 93] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.499
+[tick 93] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-90)
+[tick 94] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.517
+[tick 94] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.504
+[tick 94] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-86)
+[tick 95] hive-a -> idle applied=false starved=false reward=-2 entropy=1.503
+[tick 95] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.493
+[tick 95] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 96] hive-a -> idle applied=false starved=false reward=-2 entropy=1.495
+[tick 96] hive-b -> idle applied=false starved=false reward=-2 entropy=1.514
+[tick 96] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-72)
+[tick 97] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.486
+[tick 97] hive-b -> idle applied=false starved=false reward=-2 entropy=1.506
+[tick 97] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 98] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.490
+[tick 98] hive-b -> idle applied=false starved=false reward=-2 entropy=1.495
+[tick 98] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 99] hive-a -> idle applied=false starved=false reward=-2 entropy=1.486
+[tick 99] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.483
+[tick 99] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 100] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.475
+[tick 100] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.466
+[tick 100] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 101] hive-a -> claim-territory applied=false starved=false reward=-2.5 entropy=1.480
+[tick 101] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.447
+[tick 101] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-86)
+[tick 102] hive-a -> claim-territory applied=false starved=false reward=-2.5 entropy=1.499
+[tick 102] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.471
+[tick 102] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-8)
+[tick 103] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.514
+[tick 103] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.476
+[tick 103] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-31)
+[tick 104] hive-a -> claim-territory applied=false starved=false reward=-2.5 entropy=1.514
+[tick 104] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.482
+[tick 104] world -> seed-wood source=network-fallback applied=true (world seeded 1 wood source at wood-tile-53)
+[tick 105] hive-a -> build applied=false starved=false reward=-2.5 entropy=1.529
+[tick 105] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.464
+[tick 105] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-29)
+[tick 106] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.519
+[tick 106] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.449
+[tick 106] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 107] hive-a -> idle applied=false starved=false reward=-2 entropy=1.522
+[tick 107] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.455
+[tick 107] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 108] hive-a -> idle applied=false starved=false reward=-2 entropy=1.514
+[tick 108] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.478
+[tick 108] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-68)
+[tick 109] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.504
+[tick 109] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.483
+[tick 109] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-26)
+[tick 110] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.503
+[tick 110] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.488
+[tick 110] world -> seed-stone source=network-fallback applied=true (world seeded 1 stone source at stone-tile-18)
+[tick 111] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.507
+[tick 111] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.478
+[tick 111] world -> seed-wood source=network-fallback applied=true (world seeded 1 wood source at wood-tile-47)
+[tick 112] hive-a -> idle applied=false starved=false reward=-2 entropy=1.503
+[tick 112] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.483
+[tick 112] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-74)
+[tick 113] hive-a -> claim-territory applied=false starved=false reward=-2.5 entropy=1.492
+[tick 113] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.469
+[tick 113] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 114] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.511
+[tick 114] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.453
+[tick 114] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-46)
+[tick 115] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.506
+[tick 115] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.459
+[tick 115] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 116] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.498
+[tick 116] hive-b -> idle applied=false starved=false reward=-2 entropy=1.440
+[tick 116] world -> seed-wood source=network-fallback applied=true (world seeded 1 wood source at wood-tile-90)
+[tick 117] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.503
+[tick 117] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.426
+[tick 117] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-53)
+[tick 118] hive-a -> build applied=false starved=false reward=-2.5 entropy=1.492
+[tick 118] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.410
+[tick 118] world -> seed-wood source=network-fallback applied=true (world seeded 1 wood source at wood-tile-89)
+[tick 119] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.478
+[tick 119] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.390
+[tick 119] world -> seed-wood source=network-fallback applied=true (world seeded 1 wood source at wood-tile-89)
+[tick 120] hive-a -> build applied=false starved=false reward=-2.5 entropy=1.484
+[tick 120] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.368
+[tick 120] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 121] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.468
+[tick 121] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.375
+[tick 121] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 122] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.453
+[tick 122] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.403
+[tick 122] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 123] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.434
+[tick 123] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.429
+[tick 123] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 124] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.413
+[tick 124] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.409
+[tick 124] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 125] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.390
+[tick 125] hive-b -> idle applied=false starved=false reward=-2 entropy=1.436
+[tick 125] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 126] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.398
+[tick 126] hive-b -> idle applied=false starved=false reward=-2 entropy=1.421
+[tick 126] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 127] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.373
+[tick 127] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.405
+[tick 127] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 128] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.380
+[tick 128] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.382
+[tick 128] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 129] hive-a -> idle applied=false starved=false reward=-2 entropy=1.388
+[tick 129] hive-b -> idle applied=false starved=false reward=-2 entropy=1.409
+[tick 129] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 130] hive-a -> claim-territory applied=false starved=false reward=-2.5 entropy=1.369
+[tick 130] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.392
+[tick 130] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 131] hive-a -> build applied=false starved=false reward=-2.5 entropy=1.398
+[tick 131] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.369
+[tick 131] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 132] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.375
+[tick 132] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.377
+[tick 132] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 133] hive-a -> idle applied=false starved=false reward=-2 entropy=1.382
+[tick 133] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.352
+[tick 133] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 134] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.363
+[tick 134] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.327
+[tick 134] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-5)
+[tick 135] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.371
+[tick 135] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.335
+[tick 135] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 136] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.378
+[tick 136] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.363
+[tick 136] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-98)
+[tick 137] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.386
+[tick 137] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.371
+[tick 137] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 138] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.394
+[tick 138] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.378
+[tick 138] world -> seed-wood source=network-fallback applied=true (world seeded 1 wood source at wood-tile-92)
+[tick 139] hive-a -> claim-territory applied=false starved=false reward=-2.5 entropy=1.401
+[tick 139] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.353
+[tick 139] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-52)
+[tick 140] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.429
+[tick 140] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.361
+[tick 140] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 141] hive-a -> build applied=false starved=false reward=-2.5 entropy=1.406
+[tick 141] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.368
+[tick 141] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 142] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.384
+[tick 142] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.375
+[tick 142] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-98)
+[tick 143] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.391
+[tick 143] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.383
+[tick 143] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 144] hive-a -> claim-territory applied=false starved=false reward=-2.5 entropy=1.399
+[tick 144] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.390
+[tick 144] world -> seed-wood source=network-fallback applied=true (world seeded 1 wood source at wood-tile-22)
+[tick 145] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.426
+[tick 145] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.368
+[tick 145] world -> seed-wood source=network-fallback applied=true (world seeded 1 wood source at wood-tile-20)
+[tick 146] hive-a -> idle applied=false starved=false reward=-2 entropy=1.433
+[tick 146] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.375
+[tick 146] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 147] hive-a -> idle applied=false starved=false reward=-2 entropy=1.417
+[tick 147] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.351
+[tick 147] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 148] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.400
+[tick 148] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.324
+[tick 148] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 149] hive-a -> build applied=false starved=false reward=-2.5 entropy=1.376
+[tick 149] hive-b -> idle applied=false starved=false reward=-2 entropy=1.352
+[tick 149] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 150] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.350
+[tick 150] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.332
+[tick 150] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-89)
+[tick 151] hive-a -> idle applied=false starved=false reward=-2 entropy=1.322 [forced]
+[tick 151] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.340 [forced]
+[tick 151] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 152] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.299
+[tick 152] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.348
+[tick 152] world -> seed-wood source=network-fallback applied=true (world seeded 1 wood source at wood-tile-55)
+[tick 153] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.307
+[tick 153] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.376
+[tick 153] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 154] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.277
+[tick 154] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.404
+[tick 154] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 155] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.285
+[tick 155] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.411
+[tick 155] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 156] hive-a -> claim-territory applied=false starved=false reward=-2.5 entropy=1.253
+[tick 156] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.437
+[tick 156] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-80)
+[tick 157] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.283
+[tick 157] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.419
+[tick 157] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 158] hive-a -> build applied=false starved=false reward=-2.5 entropy=1.250
+[tick 158] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.426
+[tick 158] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 159] hive-a -> idle applied=false starved=false reward=-2 entropy=1.215
+[tick 159] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.451
+[tick 159] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 160] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.186
+[tick 160] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.431
+[tick 160] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-26)
+[tick 161] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.195
+[tick 161] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.456
+[tick 161] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 162] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.203
+[tick 162] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.438
+[tick 162] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-77)
+[tick 163] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.212
+[tick 163] hive-b -> idle applied=false starved=false reward=-2 entropy=1.444
+[tick 163] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 164] hive-a -> idle applied=false starved=false reward=-2 entropy=1.221
+[tick 164] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.432
+[tick 164] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 165] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.192
+[tick 165] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.456
+[tick 165] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 166] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.201
+[tick 166] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.437
+[tick 166] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 167] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.209
+[tick 167] hive-b -> idle applied=false starved=false reward=-2 entropy=1.443
+[tick 167] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 168] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.218
+[tick 168] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.431
+[tick 168] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 169] hive-a -> claim-territory applied=false starved=false reward=-2.5 entropy=1.227
+[tick 169] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.437
+[tick 169] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 170] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.256
+[tick 170] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.400
+[tick 170] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 171] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.265
+[tick 171] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=0.752 [ctl]
+[tick 171] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 172] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.231
+[tick 172] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.425
+[tick 172] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 173] hive-a -> build applied=false starved=false reward=-2.5 entropy=1.240
+[tick 173] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.431
+[tick 173] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 174] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.203
+[tick 174] hive-b -> idle applied=false starved=false reward=-2 entropy=1.437
+[tick 174] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-13)
+[tick 175] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.165
+[tick 175] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.424
+[tick 175] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 176] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=1.124
+[tick 176] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.430
+[tick 176] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 177] hive-a -> gather applied=false starved=false reward=-2.5 entropy=1.133
+[tick 177] hive-b -> idle applied=false starved=false reward=-2 entropy=1.410
+[tick 177] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 178] hive-a -> claim-territory applied=true starved=false reward=-0.5 entropy=0.110 [ctl]
+[tick 178] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.395
+[tick 178] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 179] hive-a -> idle applied=false starved=false reward=-2 entropy=0.870 [ctl]
+[tick 179] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.420
+[tick 179] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 180] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 180] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.405
+[tick 180] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 181] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 181] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.383
+[tick 181] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 182] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 182] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.408
+[tick 182] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 183] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 183] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.414
+[tick 183] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 184] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 184] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.394
+[tick 184] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 185] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 185] hive-b -> idle applied=false starved=false reward=-2 entropy=1.400
+[tick 185] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 186] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 186] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.385
+[tick 186] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 187] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 187] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.391
+[tick 187] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 188] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 188] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.397
+[tick 188] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 189] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 189] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.376
+[tick 189] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 190] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 190] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.400
+[tick 190] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 191] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 191] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.386
+[tick 191] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 192] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 192] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.410
+[tick 192] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 193] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 193] hive-b -> idle applied=false starved=false reward=-2 entropy=1.432
+[tick 193] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 194] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 194] hive-b -> idle applied=false starved=false reward=-2 entropy=1.421
+[tick 194] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 195] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 195] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.407
+[tick 195] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-79)
+[tick 196] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 196] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.429
+[tick 196] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 197] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 197] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.434
+[tick 197] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 198] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 198] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.439
+[tick 198] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-56)
+[tick 199] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 199] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.444
+[tick 199] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-41)
+[tick 200] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 200] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.427
+[tick 200] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 201] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 201] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.431
+[tick 201] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 202] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 202] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.449
+[tick 202] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 203] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 203] hive-b -> idle applied=false starved=false reward=-2 entropy=1.453
+[tick 203] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 204] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 204] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.443
+[tick 204] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 205] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 205] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.447
+[tick 205] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 206] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 206] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.451
+[tick 206] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 207] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 207] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.448
+[tick 207] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 208] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 208] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.432
+[tick 208] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-71)
+[tick 209] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 209] hive-b -> idle applied=false starved=false reward=-2 entropy=1.437
+[tick 209] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 210] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 210] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.425
+[tick 210] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 211] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 211] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.418
+[tick 211] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 212] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 212] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.423
+[tick 212] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 213] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 213] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.443
+[tick 213] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 214] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 214] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.448
+[tick 214] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 215] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 215] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.465
+[tick 215] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 216] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 216] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.462
+[tick 216] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 217] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 217] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.456
+[tick 217] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 218] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 218] hive-b -> idle applied=false starved=false reward=-2 entropy=1.461
+[tick 218] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 219] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 219] hive-b -> idle applied=false starved=false reward=-2 entropy=1.450
+[tick 219] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 220] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 220] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.438
+[tick 220] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-8)
+[tick 221] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 221] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.443
+[tick 221] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 222] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 222] hive-b -> idle applied=false starved=false reward=-2 entropy=1.433
+[tick 222] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 223] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 223] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.419
+[tick 223] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 224] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.001 [ctl]
+[tick 224] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.442
+[tick 224] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 225] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.001 [ctl]
+[tick 225] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.424
+[tick 225] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 226] hive-a -> build applied=false starved=false reward=-2.5 entropy=0.001 [forced] [ctl]
+[tick 226] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.429 [forced]
+[tick 226] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-88)
+[tick 227] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 227] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.412
+[tick 227] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 228] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 228] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.418
+[tick 228] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 229] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 229] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.423
+[tick 229] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 230] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 230] hive-b -> idle applied=false starved=false reward=-2 entropy=1.412
+[tick 230] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-55)
+[tick 231] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 231] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.396
+[tick 231] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 232] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 232] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.376
+[tick 232] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-55)
+[tick 233] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 233] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.400
+[tick 233] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 234] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 234] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.380
+[tick 234] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 235] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 235] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.364
+[tick 235] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-73)
+[tick 236] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 236] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.345
+[tick 236] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 237] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 237] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.371
+[tick 237] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 238] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 238] hive-b -> idle applied=false starved=false reward=-2 entropy=1.397
+[tick 238] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 239] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 239] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.381
+[tick 239] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-61)
+[tick 240] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 240] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.387
+[tick 240] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 241] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 241] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.411
+[tick 241] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 242] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 242] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.417
+[tick 242] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 243] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 243] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.403
+[tick 243] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 244] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 244] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.386
+[tick 244] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 245] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 245] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.364
+[tick 245] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 246] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 246] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.371
+[tick 246] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 247] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 247] hive-b -> idle applied=false starved=false reward=-2 entropy=1.348
+[tick 247] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 248] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 248] hive-b -> idle applied=false starved=false reward=-2 entropy=1.329
+[tick 248] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 249] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 249] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.308
+[tick 249] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 250] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 250] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.280
+[tick 250] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 251] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 251] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.249
+[tick 251] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 252] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 252] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.257
+[tick 252] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 253] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 253] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.225
+[tick 253] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 254] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 254] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.233
+[tick 254] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 255] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 255] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.241
+[tick 255] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 256] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 256] hive-b -> idle applied=false starved=false reward=-2 entropy=1.209
+[tick 256] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 257] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 257] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.181
+[tick 257] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 258] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 258] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.190
+[tick 258] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 259] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 259] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.198
+[tick 259] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 260] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 260] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.206
+[tick 260] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 261] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 261] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.235
+[tick 261] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 262] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 262] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.202
+[tick 262] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-30)
+[tick 263] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 263] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.165
+[tick 263] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-88)
+[tick 264] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 264] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.126
+[tick 264] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 265] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 265] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.135
+[tick 265] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 266] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 266] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.163
+[tick 266] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 267] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 267] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.125
+[tick 267] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 268] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 268] hive-b -> idle applied=false starved=false reward=-2 entropy=1.133
+[tick 268] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-66)
+[tick 269] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 269] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.101
+[tick 269] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 270] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 270] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.129
+[tick 270] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 271] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 271] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.137
+[tick 271] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 272] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 272] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.145
+[tick 272] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-90)
+[tick 273] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 273] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.107
+[tick 273] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 274] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 274] hive-b -> idle applied=false starved=false reward=-2 entropy=1.115
+[tick 274] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-84)
+[tick 275] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 275] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.082
+[tick 275] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 276] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 276] hive-b -> idle applied=false starved=false reward=-2 entropy=1.091
+[tick 276] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 277] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 277] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.057
+[tick 277] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 278] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 278] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.012
+[tick 278] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-92)
+[tick 279] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 279] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=0.964
+[tick 279] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 280] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 280] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=0.972
+[tick 280] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-90)
+[tick 281] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 281] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=0.980
+[tick 281] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 282] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 282] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.004
+[tick 282] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 283] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 283] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.012
+[tick 283] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-2)
+[tick 284] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 284] hive-b -> idle applied=false starved=false reward=-2 entropy=1.021
+[tick 284] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 285] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 285] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=0.984
+[tick 285] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 286] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 286] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=0.992
+[tick 286] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 287] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 287] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.017
+[tick 287] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 288] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 288] hive-b -> gather applied=false starved=false reward=-2.5 entropy=1.026
+[tick 288] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 289] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 289] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=0.978
+[tick 289] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 290] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 290] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=0.986
+[tick 290] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 291] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 291] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=0.994
+[tick 291] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-19)
+[tick 292] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 292] hive-b -> build applied=false starved=false reward=-2.5 entropy=1.002
+[tick 292] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 293] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 293] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=0.956
+[tick 293] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 294] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 294] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=0.964
+[tick 294] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 295] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 295] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=0.972
+[tick 295] world -> seed-stone source=network-fallback applied=false (stone source cap reached)
+[tick 296] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 296] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=0.980
+[tick 296] world -> seed-wood source=network-fallback applied=false (wood source cap reached)
+[tick 297] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 297] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.005
+[tick 297] world -> signal-food source=network-fallback applied=true (world deposited food signal at tile-90)
+[tick 298] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 298] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.030
+[tick 298] world -> idle source=network-fallback applied=false (world idle — control with hives)
+[tick 299] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 299] hive-b -> claim-territory applied=true starved=false reward=-0.5 entropy=1.056
+[tick 299] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+[tick 300] hive-a -> gather applied=false starved=false reward=-2.5 entropy=0.000 [ctl]
+[tick 300] hive-b -> claim-territory applied=false starved=false reward=-2.5 entropy=1.065
+[tick 300] world -> relax-decay source=network-fallback applied=true (world relaxed pheromone decay (factor 0.9))
+
+Done after 300 rounds (absolute tick 0 -> 300). Final world-state: _dev/state/mind-repair-test/baseline-run-b/shared/world-state.json
+Run log: _dev/state/mind-repair-test/baseline-run-b/run-log.jsonl
+checkpoint committed: /Users/admin/mythos/_dev/state/mind-repair-test/baseline-ckpt-b/gen-300-baselineB
+  generation gen-300-baselineB day=300 tick=300 depth=0
+  files mind.json:c03419f87ab7 rng.json:235e96bf7165 world.json:123320474704 identity.json:5f0cdd7db031
+  manifest 845a17122d1b33ec79f24c5713ca03649c57bcfa9acacd73814a3185a5bc4424

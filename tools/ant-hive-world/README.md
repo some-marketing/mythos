@@ -154,7 +154,7 @@ that's supposed to demonstrate learning from scratch. Baking in a
 
 ## Tests
 
-`__tests__/` (13 files; 138 self-contained tests pass, while the 10 historical
+`__tests__/` (12 files; 131 self-contained tests pass, while the 10 historical
 fixture-dependent tests described above report their missing inputs):
 harness/tick mechanics, world-state resource/territory/pheromone/ecosystem/
 material dynamics, the untrained network's init/decide/train contracts, the

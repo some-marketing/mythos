@@ -1,0 +1,25 @@
+{
+  "dignity_floor_equivalent": {},
+  "hive_state": {
+    "resources": {},
+    "stockpile": {
+      "food": 0,
+      "wood": 2
+    },
+    "territory": {},
+    "worker_dispatch_state": {
+      "last_action": "claim-territory",
+      "last_applied": true
+    }
+  },
+  "identity": "hive-b",
+  "knock_equivalent": {
+    "reachable": true
+  },
+  "provenance": {
+    "when": "2026-08-05T02:59:48.883Z",
+    "who": "ant-hive-world/run-live.js -- untrained-network, no pretraining, early-minds generation",
+    "why": "genesis: blank-start hive seed, no pre-loaded instinct/behavior content"
+  },
+  "version": "1.0.0"
+}

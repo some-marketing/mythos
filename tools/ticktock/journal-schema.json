@@ -1,0 +1,170 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://mythos.local/schemas/ticktock/JournalRecord/1.0",
+  "title": "JournalRecord/1.0",
+  "description": "ONE phase-transition record. The journal itself is a JSONL file of these, APPEND-ONLY: every transition writes a new record and no prior record is ever mutated, so the file is the run's history rather than its current opinion of its history. Each record chains to the previous one by prev_record_hash, which makes MID-FILE edits and deletions detectable. It does NOT make tail truncation detectable -- cut the last record off and the remainder is a shorter chain that verifies perfectly -- so the journal is accompanied by an independently written head anchor (JournalHeadAnchor/1.0 at <journal>.anchor.json) recording the head record_hash and the record count. Truncation is caught there, as a disagreement between the file and the anchor, and reported as halt_state JOURNAL-ANCHOR-MISMATCH. Resume reads ONLY the last record whose verified_checkpoint.verified is true -- a phase interrupted before its checkpoint verified is treated as never having completed, and its partial work is rolled back rather than replayed forward.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "record_index",
+    "charter_hash",
+    "cycle_index",
+    "phase_id",
+    "effect_class",
+    "entered",
+    "completed",
+    "idempotency_key",
+    "artifact_hashes",
+    "verified_checkpoint",
+    "halt_state",
+    "prev_record_hash",
+    "record_hash"
+  ],
+  "properties": {
+    "schema": { "const": "JournalRecord/1.0" },
+    "record_index": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Zero-based position in the append-only file. Must equal the record's line number; a gap or a repeat is a tampering signal, not a recoverable inconsistency."
+    },
+    "charter_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "cycle_index": { "type": "integer", "minimum": 0 },
+    "phase_id": {
+      "enum": ["tt.orient", "tt.tick", "tt.observe", "tt.text", "tt.research", "tt.tock", "tt.improve", "tt.ship", "tt.schedule"],
+      "description": "The nine stable phase identifiers, per the phase-identity decision record (_dev/reports/analysis/ticktock-phase-identity-decision.md). Identity is what makes resumability and exactly-once effects possible, so these strings are frozen: renaming one breaks every idempotency key ever computed."
+    },
+    "effect_class": {
+      "enum": ["PURE", "EFFECTFUL"],
+      "description": "Assigned by re-runnability, the only axis the resume contract needs. PURE (tt.orient, tt.observe, tt.research, tt.tock) is safe to re-execute unconditionally. EFFECTFUL (tt.tick, tt.text, tt.improve, tt.ship, tt.schedule) needs its idempotency key checked against the journal first, because re-running it could double-fire an effect the loop does not own outright."
+    },
+    "entered": { "type": "string", "description": "ISO-8601 UTC stamp at phase entry." },
+    "completed": {
+      "type": ["string", "null"],
+      "description": "ISO-8601 UTC stamp at phase completion, or null. Null plus verified_checkpoint.verified false is the signature of an interrupted phase."
+    },
+    "idempotency_key": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "sha256 per the decision record's exact formulas. Required (non-null) for every EFFECTFUL record; null for PURE records, which need no key because re-running them is a no-op. tt.tick = sha256(charter_hash + cycle_index + 'tick' + resume_from_generation); tt.text = sha256(charter_hash + cycle_index + 'text' + observe_artifact_hash); tt.improve = sha256(charter_hash + cycle_index + 'improve' + plan_ids_sorted); tt.ship = sha256(charter_hash + cycle_index + 'ship' + tree_hash_before); tt.schedule = sha256(charter_hash + cycle_index + 'schedule' + next_trigger_spec)."
+    },
+    "idempotency_inputs": {
+      "type": ["object", "null"],
+      "description": "The exact terms the key was computed from, recorded so a verifier recomputes the key rather than trusting it. Absent/null for PURE phases.",
+      "additionalProperties": true
+    },
+    "artifact_hashes": {
+      "type": "array",
+      "description": "Content hash of every artifact this phase produced. Empty for a phase that produced none.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "sha256"],
+        "properties": {
+          "path": { "type": "string", "minLength": 1 },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "bytes": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "verified_checkpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verified", "verified_at", "method", "rehash_matches"],
+      "description": "THE CHECKPOINT TOKEN. verified is true only after an INDEPENDENT re-read-and-re-hash of every artifact in artifact_hashes confirmed the recorded digests. Tool-reported write success is explicitly not sufficient: a tool reports what it attempted, and the checkpoint has to record what is actually on disk.",
+      "properties": {
+        "verified": { "type": "boolean" },
+        "verified_at": { "type": ["string", "null"] },
+        "method": {
+          "enum": ["independent-rehash", "none"],
+          "description": "'independent-rehash' is the only method that may accompany verified true. 'none' accompanies verified false."
+        },
+        "rehash_matches": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "description": "How many artifacts re-hashed equal. Must equal artifact_hashes.length when verified is true."
+        },
+        "rehash_mismatched_paths": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Paths whose re-hash disagreed with the recorded digest. Non-empty forces verified false."
+        }
+      }
+    },
+    "dispatch": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["dispatched", "dispatched_at", "receipt_confirmed", "receipt_at"],
+      "description": "External-effect bookkeeping for EFFECTFUL phases. The pair (dispatched, receipt_confirmed) is what distinguishes the two uncertainty states below: it is recorded at dispatch time, before the answer is known, precisely so that a process killed mid-flight leaves the distinction on disk rather than in a dead process's memory.",
+      "properties": {
+        "dispatched": { "type": "boolean" },
+        "dispatched_at": { "type": ["string", "null"] },
+        "receipt_confirmed": { "type": "boolean" },
+        "receipt_at": { "type": ["string", "null"] },
+        "receipt_detail": { "type": "string" },
+        "external_system": { "type": "string" }
+      }
+    },
+    "halt_state": {
+      "type": ["string", "null"],
+      "enum": [
+        null,
+        "EFFECT-RECEIPT-MISSING",
+        "EFFECT-DID-NOT-HAPPEN",
+        "BENCHMARK-DIVERGENCE",
+        "REBASELINE-FREQUENCY",
+        "ROSTER-HASH-MISMATCH",
+        "CHARTER-IMMUTABILITY-VIOLATION",
+        "MERGE-NOT-CLEAN",
+        "CEILING-EXCEEDED",
+        "ROTATION-MISSING",
+        "GATE-BLOCKED",
+        "JOURNAL-INTEGRITY-BROKEN",
+        "JOURNAL-ANCHOR-MISMATCH",
+        "JOURNAL-TORN-TAIL",
+        "JOURNAL-MALFORMED-RECORD"
+      ],
+      "description": "Null when the phase did not halt. EFFECT-RECEIPT-MISSING and EFFECT-DID-NOT-HAPPEN are DISTINCT, and the distinction is the whole point: EFFECT-RECEIPT-MISSING means the phase dispatched an external action and the receipt is unknown -- the effect may have happened -- and it requires an explicit reconciliation (query the external system: did the commit land, did the text send, did the PR open) before any resume, never an auto-retry and never an assumption of success. EFFECT-DID-NOT-HAPPEN means the phase halted before any external call was made, so resume proceeds normally from the last verified checkpoint. Collapsing the two would make every interrupted dispatch either a silent double-fire or a silent skip. JOURNAL-TORN-TAIL and JOURNAL-MALFORMED-RECORD are likewise distinct and likewise must not be collapsed: TORN-TAIL means the file's final line is unterminated and unparsable, which only a write cut off part-way can produce, so the cause is an interrupted run and the question is what that run was doing. MALFORMED-RECORD means an unparsable line that a truncated write cannot explain -- newline-terminated, or with complete lines after it -- so a line that was already committed was rewritten, and the question is who edited the file. Neither is resumable and neither is repaired automatically."
+    },
+    "halt_detail": { "type": "string", "description": "Human-readable detail for the halt. Never load-bearing: recovery routing is decided by halt_state alone." },
+    "reconciliation": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["required", "resolved", "resolved_at", "outcome"],
+      "description": "Present on records carrying halt_state EFFECT-RECEIPT-MISSING. required is true from the moment the halt is written; resume is refused until a later record records resolved true with an outcome.",
+      "properties": {
+        "required": { "type": "boolean" },
+        "resolved": { "type": "boolean" },
+        "resolved_at": { "type": ["string", "null"] },
+        "outcome": { "enum": ["effect-happened", "effect-did-not-happen", "unknown", "pending"] },
+        "evidence": { "type": "string" }
+      }
+    },
+    "rollback": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["performed", "restored_to_record_index", "discarded_paths"],
+      "description": "PARTIAL-PHASE ROLLBACK. On resume the workspace is restored to the last VERIFIED CHECKPOINT's state; mid-phase partial work belonging to the interrupted phase is discarded, never replayed forward. Recorded as its own journal record so that the rollback is itself part of the history.",
+      "properties": {
+        "performed": { "type": "boolean" },
+        "restored_to_record_index": { "type": ["integer", "null"], "minimum": 0 },
+        "discarded_paths": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "inherited_gate_checks": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "The exact gate_ids that can fire against this phase, named per the plan's inherited_gate_matrix. Enumerated on the record so a gate is never an unstated background assumption."
+    },
+    "prev_record_hash": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "record_hash of the previous record, or null for record_index 0. The chain is what makes a deleted or edited MIDDLE record detectable. It is deliberately not claimed to cover the tail: the last record has no successor to fail its chain check, so tail truncation is caught by the head anchor instead (see the schema description)."
+    },
+    "record_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "sha256 of this record's canonical projection with record_hash removed."
+    }
+  }
+}

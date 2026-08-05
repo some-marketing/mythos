@@ -33,12 +33,13 @@ const path = require('path');
 // (see world-mind.js encodeWorldState coordinates 4 and 7) and nothing else.
 const SCHEMA_VERSION = '1.1.0';
 
-// Derive the shared world-state's `hives` summary from per-hive states. The
-// definition of "starving" is NOT invented here: it is exactly the predicate
-// world-mind.js's encodeWorldState already applied when it derived coordinate 7
-// from a per-hive map -- a hive whose stockpile is present and at or below zero.
-// `starvation_pressure` is therefore a COUNT of starving hives (not a ratio),
-// because that count is what the encoder normalizes with normalizeWorldResource.
+// Derive the shared world-state's `hives` summary from per-hive states.
+// `starvation_pressure` is a COUNT of starving hives (not a ratio), because
+// that count is what the encoder normalizes with normalizeWorldResource. A
+// hive is starving when its per-hive stockpile is present and its FOOD
+// component is at or below zero (D-COORD7-DEAD: the live stockpile shape is
+// { food, wood }, an object, not a scalar -- treating it as a bare scalar
+// makes `stock <= 0` structurally always false).
 // Pure: reads only the object it is handed, touches no file.
 function summarizeHives(hiveStates) {
   const ids = Object.keys(hiveStates || {});
@@ -50,7 +51,11 @@ function summarizeHives(hiveStates) {
     // checkpoint.js holds the second.
     const inner = entry && entry.hive_state ? entry.hive_state : entry;
     const stock = inner && inner.stockpile;
-    if (stock !== undefined && stock <= 0) starving += 1;
+    // Bug fix (D-COORD7-DEAD): stockpile is an object ({ food, wood }), not a
+    // scalar -- `stock <= 0` was structurally always false, so
+    // starvation_pressure never left 0. A hive is starving when its FOOD
+    // stockpile is at or below zero.
+    if (stock && typeof stock.food === 'number' && stock.food <= 0) starving += 1;
   }
   return { count: ids.length, starvation_pressure: starving };
 }

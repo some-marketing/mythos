@@ -1,0 +1,173 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://mythos.local/schemas/ticktock/GenerationManifest/1.0",
+  "title": "GenerationManifest/1.0",
+  "description": "One record per /ticktock generation (cycle). It is the unit the lineage chain is made of: parent.parent_manifest_hash points at the previous generation's manifest_hash, so a reviewer walks the whole run mechanically instead of reconstructing it from narrative. A manifest carries what went in, what came out, what every locked reviewer said, what was measured, and which lane was rotated -- and it is written whether the cycle merged or halted, because a halted cycle is exactly the one whose record matters most.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "generation_id",
+    "cycle_index",
+    "created_at",
+    "charter_id",
+    "charter_hash",
+    "parent",
+    "inputs",
+    "outputs",
+    "reviews",
+    "merge_decision",
+    "metrics",
+    "rotation",
+    "manifest_hash"
+  ],
+  "properties": {
+    "schema": { "const": "GenerationManifest/1.0" },
+    "generation_id": {
+      "type": "string",
+      "pattern": "^tt-gen-[0-9]+-[A-Za-z0-9._-]+$",
+      "description": "tt-gen-<cycle_index>-<charter_id>. Also the manifest's filename stem."
+    },
+    "cycle_index": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Zero-based generation index within this charter. Second term of every EFFECTFUL phase's idempotency key: TICK on cycle 3 and TICK on cycle 4 are never the same effect."
+    },
+    "created_at": { "type": "string" },
+    "charter_id": { "type": "string", "minLength": 1 },
+    "charter_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "The charter this generation ran under. Constant across every generation of a run -- a change here means a new charter, therefore a new run, therefore a broken lineage unless the new charter records the old one as its predecessor."
+    },
+    "parent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parent_generation_id", "parent_manifest_hash"],
+      "description": "THE LINEAGE LINK. Both fields are null only for cycle_index 0; for any later cycle a null is a broken chain, not a fresh start.",
+      "properties": {
+        "parent_generation_id": { "type": ["string", "null"] },
+        "parent_manifest_hash": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["benchmark_fingerprint_hash", "benchmark_identical", "journal_head_record_hash", "artifact_hashes"],
+      "properties": {
+        "benchmark_fingerprint_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "benchmark_identical": {
+          "type": "boolean",
+          "description": "Result of running the frozen colony at cycle start. False halts the cycle -- it is recorded here rather than merely acted on, so a reviewer can see that the benchmark ran at all."
+        },
+        "journal_head_record_hash": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "record_hash of the journal's last record at cycle start. Ties the manifest to an exact point in the append-only journal."
+        },
+        "artifact_hashes": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/hashed_path" },
+          "description": "Every input artifact the cycle read as authority, with its content hash at read time."
+        }
+      }
+    },
+    "outputs": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/hashed_path" },
+      "description": "Every artifact the cycle produced, with the content hash confirmed by an independent re-read. May be empty when a cycle halts before producing anything."
+    },
+    "reviews": {
+      "type": "array",
+      "description": "One entry per LOCKED lane -- every lane in the charter roster appears here, including lanes that were unavailable or timed out. A missing lane is a defect, never an implicit pass.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["lane_id", "family", "model_pin_requested", "model_pin_observed", "pin_verified", "status", "verdict", "unresolved_findings", "dispatched_at", "returned_at"],
+        "properties": {
+          "lane_id": { "type": "string", "minLength": 1 },
+          "family": { "type": "string", "minLength": 1 },
+          "model_pin_requested": { "type": "string", "minLength": 1 },
+          "model_pin_observed": {
+            "type": ["string", "null"],
+            "description": "What the lane actually resolved to. Null when the lane never returned. A value differing from model_pin_requested is a substitution."
+          },
+          "pin_verified": {
+            "type": "boolean",
+            "description": "True only when model_pin_observed was read from the response and equals model_pin_requested. Never inferred from the absence of an error."
+          },
+          "status": {
+            "enum": ["clean", "findings", "timeout", "substituted", "pin_mismatch", "unavailable", "error"],
+            "description": "Timeout, substituted, pin_mismatch, unavailable and error each independently mark the merge not-clean, regardless of the verdict field -- a zero-findings verdict from a lane that never properly ran is a validation failure, not a pass."
+          },
+          "verdict": { "enum": ["APPROVE", "AMEND_REQUIRED", "REJECT", "NO_VERDICT"] },
+          "unresolved_findings": { "type": "integer", "minimum": 0 },
+          "dispatched_at": { "type": "string" },
+          "returned_at": { "type": ["string", "null"] },
+          "artifact_path": { "type": "string", "description": "Where the lane's raw review output was written." }
+        }
+      }
+    },
+    "merge_decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["clean", "reasons", "decided_at"],
+      "properties": {
+        "clean": {
+          "type": "boolean",
+          "description": "True only when every locked lane returned status clean with zero unresolved findings AND the recomputed roster hash still matched the charter."
+        },
+        "reasons": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "description": "Why not clean, one entry per failing condition. Empty exactly when clean is true."
+        },
+        "decided_at": { "type": "string" }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "description": "Measured quantities for this generation, keyed by evaluator name. Values are free-form because evaluators differ; the evaluator VERSIONS that produced them are pinned in the charter, which is what makes cross-generation comparison meaningful.",
+      "additionalProperties": true
+    },
+    "rotation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rotated_lane_id", "was_untested", "recorded_in_matrix", "prior_lane_ids"],
+      "description": "Rotation is mandatory per cycle: at least one previously untested mind/harness lane, recorded in the capabilities matrix. It is evidence-gathering, never permission to lower a gate -- there is no field here that can relax the merge contract.",
+      "properties": {
+        "rotated_lane_id": { "type": ["string", "null"] },
+        "was_untested": { "type": "boolean" },
+        "recorded_in_matrix": { "type": "boolean" },
+        "prior_lane_ids": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "halt": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["halt_state", "detail"],
+      "description": "Present when the cycle halted. halt_state uses the journal's halt vocabulary so a manifest and a journal record never disagree about why a run stopped.",
+      "properties": {
+        "halt_state": { "type": "string", "minLength": 1 },
+        "detail": { "type": "string" }
+      }
+    },
+    "manifest_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "sha256 of this document's canonical projection with manifest_hash removed. The next generation's parent.parent_manifest_hash must equal this value."
+    }
+  },
+  "definitions": {
+    "hashed_path": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "bytes": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

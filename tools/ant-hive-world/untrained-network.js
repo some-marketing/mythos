@@ -275,7 +275,23 @@ function decide(network, hiveState, worldState, rng, liveConfig = {}, tickIndex)
 // s4-combination-escalation gate for the full incident. undefined
 // (or any non-finite value) leaves dLogits completely untouched --
 // byte-identical to every pre-existing caller that does not opt in.
-function trainStep(network, hiveState, worldState, actionIndex, reward, entropyBonusWeight, updateClip) {
+// `options.freeze === true` is TRUE LEARNING-OFF for the hive network, and it
+// is a real freeze rather than a small learning rate: the forward pass runs,
+// the gradients are computed, and NOT ONE PARAMETER IS WRITTEN. It mirrors
+// world-train.js's worldTrainStep({freeze: true}) deliberately -- the same word
+// meaning the same thing on both learning paths, so "learning OFF" is one
+// claim about the engine instead of two claims that happen to share a name.
+//
+// Added for review finding F1 (tools/ticktock/benchmark-colony-v1.json declared
+// "learning OFF" while this function updated weights at a hard-coded 0.05 with
+// no way to disable it). A frozen baseline that keeps learning is not frozen.
+// Default (options omitted) is UNCHANGED behavior for every existing caller:
+// learning stays on unless someone asks for it to stop.
+//
+// The return value gains `_frozen` for observability and keeps returning the
+// network itself, so no existing caller's use of the return value changes.
+function trainStep(network, hiveState, worldState, actionIndex, reward, entropyBonusWeight, updateClip, options = {}) {
+  const freeze = options.freeze === true;
   const weight = entropyBonusWeight === undefined ? 0 : entropyBonusWeight;
   const input = encodeState(hiveState, worldState);
   const { hiddenPre, hidden, probs } = forward(network, input);
@@ -293,22 +309,30 @@ function trainStep(network, hiveState, worldState, actionIndex, reward, entropyB
     return Math.max(-clip, Math.min(clip, raw));
   });
 
-  // Backprop into W2/b2, then hidden, then W1/b1.
+  // Backprop into W2/b2, then hidden, then W1/b1. Under freeze the same
+  // quantities are computed in the same order -- dHidden reads W2 before this
+  // iteration would have written it, exactly as in the learning path, so the
+  // gradient is the identical number either way -- and the four assignment
+  // statements are simply not executed.
   const dHidden = new Array(HIDDEN_SIZE).fill(0);
   for (let i = 0; i < OUTPUT_SIZE; i++) {
     for (let j = 0; j < HIDDEN_SIZE; j++) {
       dHidden[j] += network.W2[i][j] * dLogits[i];
-      network.W2[i][j] += LEARNING_RATE * dLogits[i] * hidden[j];
+      if (!freeze) network.W2[i][j] += LEARNING_RATE * dLogits[i] * hidden[j];
     }
-    network.b2[i] += LEARNING_RATE * dLogits[i];
+    if (!freeze) network.b2[i] += LEARNING_RATE * dLogits[i];
   }
   for (let j = 0; j < HIDDEN_SIZE; j++) {
     const dPre = dHidden[j] * reluDeriv(hiddenPre[j]);
     for (let k = 0; k < INPUT_SIZE; k++) {
-      network.W1[j][k] += LEARNING_RATE * dPre * input[k];
+      if (!freeze) network.W1[j][k] += LEARNING_RATE * dPre * input[k];
     }
-    network.b1[j] += LEARNING_RATE * dPre;
+    if (!freeze) network.b1[j] += LEARNING_RATE * dPre;
   }
+  // Nothing is stamped onto `network` here, deliberately: the network object is
+  // what gets serialized into checkpoints, and a freeze must leave it byte-for-
+  // byte as it found it. Whether learning was frozen is the CALLER's fact, and
+  // run-live.js records it in run-log provenance where it belongs.
   return network;
 }
 

@@ -208,7 +208,16 @@ function computeControllerWeight(controllerState, scheduleWeight, liveConfig = {
 // fresh by the run loop at startup, mutated in place here (hysteresis flag +
 // previous tick's own-hive policy_entropy_post_update). Absent -> the
 // controller code path is fully inert.
-function trainTick(hive, worldStatePath, network, rng, liveConfig = {}, tickIndex, controllerState) {
+//
+// `options.freezeHiveLearning === true` (optional, default false) passes
+// trainStep a freeze: the tick decides, acts, decays, and scores exactly as
+// always, and then writes no weight. Added for review finding F1 -- the frozen
+// benchmark colony needs the hive learning path to actually stop, not merely to
+// be deterministic. Threaded as an explicit argument rather than through
+// liveConfig on purpose: liveConfig is re-read from disk every round and is
+// dashboard-tunable, and a freeze that a running dashboard could switch off
+// mid-run is not a freeze.
+function trainTick(hive, worldStatePath, network, rng, liveConfig = {}, tickIndex, controllerState, options = {}) {
   const hiveState = JSON.parse(fs.readFileSync(hive.hiveStatePath, 'utf8'));
   const worldState = require('./world-state.js').readWorldState(worldStatePath);
   const action = decide(network, hiveState, worldState, rng, liveConfig, tickIndex);
@@ -238,7 +247,8 @@ function trainTick(hive, worldStatePath, network, rng, liveConfig = {}, tickInde
   // passed straight through to trainStep()'s new optional last parameter;
   // undefined (absent from liveConfig) leaves trainStep() fully inert on
   // this argument -- see untrained-network.js's trainStep() comment.
-  trainStep(network, hiveState, worldState, action._action_index, reward, entropyBonusWeight, liveConfig.update_clip);
+  const freezeHiveLearning = options.freezeHiveLearning === true;
+  trainStep(network, hiveState, worldState, action._action_index, reward, entropyBonusWeight, liveConfig.update_clip, { freeze: freezeHiveLearning });
 
   // policy_entropy_post_update (plan ant-hive-world-exploration-fix-hiveb-
   // collapse, S1): the entropy of the SAME network/state pair evaluated
@@ -269,7 +279,11 @@ function trainTick(hive, worldStatePath, network, rng, liveConfig = {}, tickInde
     policy_entropy_post_update: policyEntropyPostUpdate,
     forced_exploration: action.forced_exploration,
     entropy_controller_active: controllerActive,
-    effective_entropy_bonus_weight: entropyBonusWeight
+    effective_entropy_bonus_weight: entropyBonusWeight,
+    // Reported rather than inferred from silence: a reader of a run row should
+    // be able to see that this tick wrote no weight, without having to know
+    // which flags the driver was started with.
+    hive_learning_frozen: freezeHiveLearning
   };
 }
 

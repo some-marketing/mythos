@@ -22,7 +22,8 @@
 //                         [--checkpoint-root <dir>] [--resume-from <generation-id>]
 //                         [--root-seed <int>] [--run-name <name>]
 //                         [--status-path <file>] [--no-checkpoint]
-//                         [--freeze-world-learning]
+//                         [--freeze-world-learning] [--freeze-hive-learning]
+//                         [--goal-packet <file>]
 //
 // --forever: keep running until the process receives SIGINT/SIGTERM (Ctrl-C
 // or `kill <pid>`) -- operator (2026-07-16): "just leave it running see what
@@ -45,6 +46,28 @@
 // exit, and zero state constructed. There is no silent fresh-start fallback,
 // by construction rather than by discipline -- the gate returns before the
 // state-construction block can run at all.
+//
+// GOALS (plan ant-world-goal-round-1, S0). --goal-packet (or GOAL_PACKET in
+// job.env) names a GoalPacket/1.0 file. It is loaded, shape-validated and
+// hash-verified in the ARGUMENT-PARSING section below -- before the resume
+// gate, before any state exists -- so a tampered or malformed packet refuses
+// the run rather than being noticed halfway through it.
+//
+// ONE-WAY EVALUATOR ISOLATION is the whole design of the goal path here, and it
+// is worth stating where the code lives rather than only in the plan:
+//   * the evaluator is called ONCE per round, in the world block, AFTER both
+//     hives have decided and acted, after the world mind has learned, decided
+//     and applied its verb, and after the world state has been written. There
+//     is no earlier call site;
+//   * its return value is assigned to exactly two things -- a trace row in a
+//     DEDICATED file, and `lastGoalEvaluation`, which feeds the end-of-run
+//     goal-result projection and the checkpoint manifest's goal identity;
+//   * it is never read by a decision, a reward, a parameter update, a verb
+//     application or a world write.
+// The trace deliberately does NOT go into decision-stream.jsonl. That stream is
+// the continuity-evidence surface, and a goal row in it would make a GOAL arm's
+// stream differ from a CONTROL arm's by construction -- destroying the one
+// comparison that can actually falsify this isolation claim.
 
 const fs = require('fs');
 const path = require('path');
@@ -62,6 +85,12 @@ const { trainTick } = require('./train-tick.js');
 const { readLiveConfig, writeLiveConfig } = require('./live-config.js');
 const { createEventContext, decorateEvent, processEventContext } = require('./event-schema.js');
 const checkpoint = require('./checkpoint.js');
+// Required HERE and nowhere else in the simulation. The isolation audit greps
+// for `goal-evaluator` across tools/ant-hive-world/: this driver is the only
+// hit outside the module's own tests and the rehearsal harness, which is what
+// makes "no mind, hive or training code reads the evaluator" checkable by
+// mechanism rather than by reading intentions.
+const goalEvaluator = require('./goal-evaluator.js');
 
 function argVal(flag, def) {
   const i = process.argv.indexOf(flag);
@@ -82,6 +111,16 @@ const WORLD_STATE_PATH = path.join(SANDBOX_ROOT, 'shared', 'world-state.json');
 const RUN_LOG_PATH = path.join(SANDBOX_ROOT, 'run-log.jsonl');
 const DECISION_STREAM_PATH = path.join(SANDBOX_ROOT, 'decision-stream.jsonl');
 const CONFIG_PATH = path.join(SANDBOX_ROOT, 'live-config.json');
+// The goal evaluator's per-tick trace. A file of its own, NOT a column on the
+// decision stream -- see the GOALS note in the header comment: the decision
+// stream has to stay byte-comparable between a goal arm and a no-goal control,
+// or the isolation claim has no falsifier left.
+const GOAL_TRACE_PATH = path.join(SANDBOX_ROOT, 'goal-evaluator-trace.jsonl');
+// The goal's sanitized projection surface. It lives under shared/ beside
+// world-state.json because that is the directory the guest runner already
+// copies to the courier -- the goal result therefore crosses the membrane on
+// the existing sanitized surface, adding no new courier path.
+const GOAL_RESULT_PATH = path.join(SANDBOX_ROOT, 'shared', 'goal-result.json');
 const ARM_ID = argVal('--arm', 'uninstructed');
 const NO_CHECKPOINT = hasFlag('--no-checkpoint');
 // FROZEN-MIND CONTROL (plan ant-world-mind-learning-path, S2 criterion (e)).
@@ -92,6 +131,15 @@ const NO_CHECKPOINT = hasFlag('--no-checkpoint');
 // one isolates the update itself rather than any incidental difference. Default
 // off; recorded in provenance rather than inferred from silence.
 const FREEZE_WORLD_LEARNING = hasFlag('--freeze-world-learning');
+// FROZEN-HIVE CONTROL (review finding F1 on the /ticktock benchmark colony).
+// The world mind had a freeze; the two HIVE networks did not, and their
+// REINFORCE update ran at a hard-coded 0.05 with no way to switch it off. That
+// made "learning OFF" a claim the engine could not honor: the benchmark colony
+// was reproducible under a fixed seed, which is a different property from being
+// frozen. With this flag the hives still decide, still act, still take upkeep
+// damage and still get scored -- and their weights do not move. Default off, so
+// every existing invocation behaves exactly as before.
+const FREEZE_HIVE_LEARNING = hasFlag('--freeze-hive-learning');
 
 // job.env is the guest's job spec, sourced into the runner's environment before
 // the driver is invoked. A CLI flag always wins over the environment: the flag
@@ -111,8 +159,47 @@ const jobEnv = {
   // names are unique per turn and a shared lineage is the point.
   CHECKPOINT_ROOT: argVal('--checkpoint-root', process.env.CHECKPOINT_ROOT
     || path.join(SANDBOX_ROOT, 'checkpoints')),
-  STATUS_PATH: argVal('--status-path', process.env.STATUS_PATH || null)
+  STATUS_PATH: argVal('--status-path', process.env.STATUS_PATH || null),
+  GOAL_PACKET: argVal('--goal-packet', process.env.GOAL_PACKET || null)
 };
+
+// ---------------------------------------------------------------------------
+// 1b. THE GOAL GATE -- load, shape-validate and hash-verify before anything
+// ---------------------------------------------------------------------------
+// Placed here, above the resume gate, for the same reason the resume gate sits
+// above state construction: a refusal must happen while there is still nothing
+// to undo. A packet whose recomputed sha256 does not match its packet_sha256
+// field is the TAMPER case, and it refuses here -- no sandbox written, no world
+// seeded, no network allocated, no checkpoint touched.
+//
+// Absent packet is not an error and not a silent default: it is recorded as an
+// explicit no-goal run, the same way an absent --resume-from is recorded as an
+// explicit fresh start.
+let GOAL_PACKET = null;
+let GOAL_PACKET_PATH = null;
+if (jobEnv.GOAL_PACKET) {
+  GOAL_PACKET_PATH = path.resolve(jobEnv.GOAL_PACKET);
+  try {
+    const loaded = goalEvaluator.loadGoalPacket(GOAL_PACKET_PATH);
+    GOAL_PACKET = loaded.packet;
+    process.stdout.write(
+      `goal: packet ${GOAL_PACKET.goal_id} loaded from ${GOAL_PACKET_PATH}\n` +
+      `goal: packet_sha256=${GOAL_PACKET.packet_sha256} evaluator=${goalEvaluator.EVALUATOR_VERSION} ` +
+      `deadline_absolute_tick=${GOAL_PACKET.deadline.absolute_tick}\n` +
+      GOAL_PACKET.conditions.map((c) =>
+        `goal:   ${c.condition_id}: ${c.threshold.source_field} ${c.comparator} ${c.threshold.value} ${c.threshold.units}\n`).join('')
+    );
+  } catch (e) {
+    process.stderr.write(
+      `GOAL PACKET REFUSED: ${e.reason || e.message}\n` +
+      `No state was constructed. Halt-for-repair: this driver will not run a goal turn with an unverified packet.\n`
+    );
+    writeStatus(e.status || 'goal-packet-invalid');
+    process.exit(1);
+  }
+} else {
+  process.stdout.write('goal: no packet supplied -- explicit NO-GOAL run (goal identity will be null)\n');
+}
 
 let stopRequested = false;
 function requestStop(signal) {
@@ -415,6 +502,9 @@ process.stdout.write(`Mind: untrained-network.js (from-scratch REINFORCE, no pre
 process.stdout.write(`World-mind learning: ${FREEZE_WORLD_LEARNING
   ? 'FROZEN (--freeze-world-learning) -- loss is measured and reported, no parameter is written'
   : 'ACTIVE -- masked one-step prediction error (world-train.js); W2/b2 never written'}\n`);
+process.stdout.write(`Hive-mind learning: ${FREEZE_HIVE_LEARNING
+  ? 'FROZEN (--freeze-hive-learning) -- reward is computed and reported, no weight is written'
+  : `ACTIVE -- REINFORCE at LEARNING_RATE=0.05 (untrained-network.js trainStep)`}\n`);
 process.stdout.write(FOREVER
   ? `Running until stopped (SIGINT/SIGTERM), ${TICK_INTERVAL_MS}ms between rounds. Run log: ${RUN_LOG_PATH}\n`
   : `Running ${TICKS} ticks per hive from absolute tick ${startTick}. Run log: ${RUN_LOG_PATH}\n`);
@@ -438,6 +528,38 @@ function appendRunLog(entry) {
 // change behavior.
 function appendDecision(row) {
   fs.appendFileSync(DECISION_STREAM_PATH, JSON.stringify(row) + '\n');
+}
+
+// The goal evaluator's trace: one row per round on which the evaluator ran.
+// It records what the evaluator READ, what it returned, and the proof-of-order
+// fields (`phase` and `post_decision`) that say where in the tick it ran. A
+// reviewer checking the isolation claim reads this file against the decision
+// stream: every trace row's tick must already have its hive and world decision
+// rows written.
+let lastGoalEvaluation = null;
+let goalTraceRows = 0;
+function appendGoalTrace(evaluation, decisionStreamTick) {
+  goalTraceRows += 1;
+  fs.appendFileSync(GOAL_TRACE_PATH, `${JSON.stringify({
+    t: evaluation.evaluated_at_tick,
+    decision_stream_tick: decisionStreamTick,
+    goal_id: evaluation.goal_id,
+    packet_sha256: evaluation.packet_sha256,
+    evaluator_version: evaluation.evaluator_version,
+    phase: 'post-tick-reporting',
+    post_decision: true,
+    inputs_read: evaluation.inputs_read,
+    met: evaluation.met,
+    at_or_past_deadline: evaluation.at_or_past_deadline,
+    met_at_deadline: evaluation.met_at_deadline,
+    per_condition: evaluation.per_condition.map((p) => ({
+      condition: p.condition,
+      measured: p.measured,
+      threshold: p.threshold,
+      satisfied: p.satisfied,
+      source_field_present: p.source_field_present
+    }))
+  })}\n`);
 }
 
 function currentInputPacket() {
@@ -482,13 +604,47 @@ function commitCheckpoint(absoluteTick) {
       root_seed_source: rootSeedSource,
       fresh_start: resolution.fresh_start,
       world_learning_frozen: FREEZE_WORLD_LEARNING,
+      hive_learning_frozen: FREEZE_HIVE_LEARNING,
       parent_run_id: parentRunId,
       parent_episode_id: parentEpisodeId
     },
     parent: parentLink,
     inputPacket: currentInputPacket(),
-    goal: null
+    // GOAL IDENTITY IN THE MANIFEST (codex r2). The literal `goal: null` that
+    // used to sit here was correct for a goal-free continuity control and wrong
+    // for anything else: a goal-bearing lineage could resume, chain and be
+    // harvested with no record anywhere in the checkpoint that a goal was in
+    // force. It now carries the goal id, the packet hash, the evaluator version
+    // and the final verdict -- identity and outcome, never the packet body, so
+    // the checkpoint does not become a second copy of the packet.
+    goal: GOAL_PACKET ? goalEvaluator.goalIdentity(GOAL_PACKET, lastGoalEvaluation) : null
   });
+}
+
+// The goal's sanitized projection. Written beside world-state.json under
+// shared/, which is the tree the guest runner already copies to the courier, so
+// the goal result reaches the dashboard/harvest surface without opening a new
+// membrane path. Contains the verdict and the measured values only -- no packet
+// body, no spatial data, no mind state.
+function writeGoalResult(absoluteTick) {
+  const payload = {
+    schema: 'GoalResult/1.0',
+    goal_id: GOAL_PACKET.goal_id,
+    packet_sha256: GOAL_PACKET.packet_sha256,
+    packet_path: GOAL_PACKET_PATH,
+    evaluator_version: goalEvaluator.EVALUATOR_VERSION,
+    run_name: jobEnv.RUN_NAME,
+    arm_id: ARM_ID,
+    turn_index: turnIndex,
+    absolute_tick: absoluteTick,
+    deadline_absolute_tick: GOAL_PACKET.deadline.absolute_tick,
+    reached_deadline: absoluteTick >= GOAL_PACKET.deadline.absolute_tick,
+    evaluator_ticks_traced: goalTraceRows,
+    final_evaluation: lastGoalEvaluation
+  };
+  fs.mkdirSync(path.dirname(GOAL_RESULT_PATH), { recursive: true });
+  fs.writeFileSync(GOAL_RESULT_PATH, `${JSON.stringify(payload, null, 2)}\n`);
+  return payload;
 }
 
 // --- MASKED-COORDINATE LIVENESS ACCUMULATOR (plan S1b) ----------------------
@@ -531,7 +687,7 @@ async function runTicks() {
     // hive per round and reads no file that was not already read.
     const roundHiveStates = {};
     for (const id of HIVE_IDS) {
-      const result = trainTick(hives[id], WORLD_STATE_PATH, networks[id], rngs[id], liveConfig, i, controllers[id]);
+      const result = trainTick(hives[id], WORLD_STATE_PATH, networks[id], rngs[id], liveConfig, i, controllers[id], { freezeHiveLearning: FREEZE_HIVE_LEARNING });
       roundHiveStates[id] = result.hiveState;
       process.stdout.write(`[tick ${i + 1}] ${id} -> ${result.action} applied=${result.applied} starved=${result.starved} reward=${result.reward} entropy=${result.policy_entropy?.toFixed(3)}${result.forced_exploration ? ' [forced]' : ''}${result.entropy_controller_active ? ' [ctl]' : ''}\n`);
       appendRunLog({
@@ -552,6 +708,7 @@ async function runTicks() {
         forced_exploration: result.forced_exploration,
         entropy_controller_active: result.entropy_controller_active,
         effective_entropy_bonus_weight: result.effective_entropy_bonus_weight,
+        hive_learning_frozen: result.hive_learning_frozen,
         stockpile: result.hiveState.hive_state.stockpile
       });
       appendDecision({
@@ -676,6 +833,28 @@ async function runTicks() {
         // replay against the checkpointed parameters.
         wx: worldFeaturesNow
       });
+
+      // --- POST-TICK REPORTING PATH: GOAL EVALUATION -----------------------
+      // THE LAST THING THAT HAPPENS IN THE ROUND, and deliberately so. Every
+      // hive decision, every hive state write, the world mind's learning step,
+      // its decision, its verb application and the world-state write have all
+      // completed above. The evaluator reads the world state that this round
+      // produced and returns a verdict that goes to the trace file and to the
+      // end-of-run projection -- and to nothing else. Removing this block would
+      // change no behavior anywhere in the sim, which is exactly the property
+      // the one-way isolation constraint asks for.
+      //
+      // TICK LABELLING: the evaluation is labelled with the COMPLETED-tick
+      // count (i + 1), which is the same absolute clock the run log and the
+      // checkpoint's absolute_tick use -- so a 450-tick deadline is reached
+      // exactly when the third turn's checkpoint says day 450. The decision
+      // stream's 0-based `t` for the same round is carried alongside as
+      // decision_stream_tick so the two files can be joined without arithmetic.
+      if (GOAL_PACKET) {
+        const evaluation = goalEvaluator.evaluateGoal(GOAL_PACKET, worldStateNow, i + 1);
+        appendGoalTrace(evaluation, i);
+        lastGoalEvaluation = evaluation;
+      }
     } else {
       // SKIPPED WORLD BLOCK. prev_features must be RESET, not left in place:
       // leaving it would silently stretch the lag to two ticks and the signal
@@ -706,6 +885,22 @@ async function runTicks() {
     `${liveness.live ? 'LIVE' : `DEAD-ZERO at ${JSON.stringify(liveness.dead_zero_coordinates)}`} ` +
     `(effective dimensionality ${liveness.effective_dimensionality} of ${WORLD_LOSS_MASK.length})\n`
   );
+  if (GOAL_PACKET) {
+    const result = writeGoalResult(i);
+    const verdict = result.reached_deadline
+      ? `DEADLINE REACHED -- goal ${result.final_evaluation && result.final_evaluation.met ? 'MET' : 'NOT MET'}`
+      : 'deadline not yet reached (partial round)';
+    process.stdout.write(
+      `\nGoal ${result.goal_id} (${result.packet_sha256.slice(0, 12)}): ${verdict}\n` +
+      (result.final_evaluation
+        ? result.final_evaluation.per_condition.map((p) =>
+          `  ${p.satisfied ? 'PASS' : 'FAIL'} ${p.condition}: measured ${p.measured} ${p.comparator} ${p.threshold} ${p.units}` +
+          `${p.source_field_present ? '' : ' [source field ABSENT from world-state -- measured as 0]'}\n`).join('')
+        : '  no evaluation ran (no world block completed)\n') +
+      `  evaluator trace: ${GOAL_TRACE_PATH} (${goalTraceRows} rows)\n` +
+      `  goal result: ${GOAL_RESULT_PATH}\n`
+    );
+  }
   process.stdout.write(`\nDone after ${i - startTick} rounds (absolute tick ${startTick} -> ${i}). Final world-state: ${WORLD_STATE_PATH}\nRun log: ${RUN_LOG_PATH}\n`);
   return i;
 }

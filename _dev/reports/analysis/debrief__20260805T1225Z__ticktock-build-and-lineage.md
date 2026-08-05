@@ -89,7 +89,9 @@ contain similar files. Consequences:
 
 **This needs its own `/plan-task` and its own review.** It was explicitly not
 improvised. Full branch is backed up to `localmirror`
-(`/Volumes/general_storage/Backups/Mythos.git`, verified external, 319 GB free).
+(the `localmirror` git remote — verified to resolve to an external volume with
+ample free space; resolve its path locally with `git remote -v`, it is
+deliberately not written here).
 
 ## Forbidden repeat actions
 

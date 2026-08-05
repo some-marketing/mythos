@@ -71,8 +71,9 @@ scratch — so **the two lineages share no common ancestor**.
 - **FORBIDDEN**: tree-replay (would delete 1,135 files and revert the rename),
   `--allow-unrelated-histories` without a plan, `git gc` at current free space,
   broad `git add` (3,984 foreign dirty files).
-- Backed up: `localmirror` → `/Volumes/general_storage/Backups/Mythos.git`
-  (verified external, 319 GB free).
+- Backed up to the `localmirror` remote (verified to resolve to an external
+  volume with ample free space; resolve the path locally with `git remote -v` —
+  it is deliberately not written here, per the export membrane).
 
 ## PLAN/SKILL DIVERGENCE TO REPAIR
 

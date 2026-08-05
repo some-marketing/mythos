@@ -1,7 +1,7 @@
 {
   "schema": "TaskIntake/1.0",
   "task_id": "unreal-world-projection",
-  "title": "Unreal Engine projection of ant-hive-world — timelapse 3D rendering of harvested turns on the orwell host",
+  "title": "Unreal Engine projection of ant-hive-world \u2014 timelapse 3D rendering of harvested turns on the orwell host",
   "timestamp": "2026-08-04T21:20:30.000Z",
   "requested_by": "operator",
   "source": "operator direction 2026-08-04T21:19Z: 'timelapse is fine but i want it in unreal'",
@@ -15,15 +15,15 @@
     "stated_reason": "The owning plan is mid-execution on a high-risk operator-gate lane and scoped to the Orwell deployment/turn contract. This work shares only the harvested-projection DATA surface, none of the mutation surface. Grafting an Unreal build onto a nearly-complete deployment plan would balloon its scope. Interface point (turn cadence + harvest manifest) is bound explicitly in S0."
   },
   "similarity_assessment": {
-    "top_match": "project-management/dart-collaboration (39 — weak, domain-noise)",
+    "top_match": "project-management/dart-collaboration (39 \u2014 weak, domain-noise)",
     "disposition": "no credible framework match; gap plan authored from scratch. The prior plan's external_skill_disposition already recorded 'no Unreal or simulation-runtime skill installed' as a known gap."
   },
   "context": {
     "precedents": [
-      "_dev/reports/analysis/task-plans/ant-world-orwell-live-dashboard__plan.json — the projection/harvest contract this consumes",
-      "_dev/reports/analysis/run-debrief__ant-hive-world-spatial-geometry-mirror-detector__20260803.md — spatial geometry (build coords) now present in the projection",
-      "tools/ant-hive-world/dashboard.js — existing 2D consumer of the same projection",
-      "tools/fleet/orwell-submind.js + fleet-hosts.json — orwell host access patterns (ssh, RTX 5070 Ti)"
+      "_dev/reports/analysis/task-plans/ant-world-orwell-live-dashboard__plan.json \u2014 the projection/harvest contract this consumes",
+      "_dev/reports/analysis/run-debrief__ant-hive-world-spatial-geometry-mirror-detector__20260803.md \u2014 spatial geometry (build coords) now present in the projection",
+      "tools/ant-hive-world/dashboard.js \u2014 existing 2D consumer of the same projection",
+      "tools/fleet/orwell-submind.js + fleet-hosts.json \u2014 orwell host access patterns (ssh, RTX 5070 Ti)"
     ],
     "hard_constraints": [
       "Read-only projection consumer: input is ONLY the harvested out/ projection that already crossed the courier after guest shutdown",
@@ -37,34 +37,45 @@
       {
         "step_id": "S0",
         "title": "Cadence + projection interface contract",
-        "description": "Define the short-turn timelapse loop (run-job -Mode turn -Ticks <100-250> repeated, harvest each turn) and freeze an UnrealImport/1.0 JSON schema derived from the harvested projection: per-turn world snapshot (territory, builds with coords, resources, hive population summaries, mirror statistic), turn id + absolute-day provenance on every file. No new data crosses the courier that does not already cross it.",
+        "description": "Define the short-turn timelapse loop (cadence owned by ant-world-orwell-live-dashboard) and freeze UnrealImport/1.0 DERIVED from the ACTUAL fixture key structure (verified against both fixtures 2026-08-04T23:54Z): world-state.json provides geometry_log (build events: hive, kind, coords, tick, run_id, episode_id, state_at_event), resources {clay,fiber,food,mud,ore,stone,water,wood}, top-level prey_population and predator_population, territory, food_source_coords plus the *_sources maps, seq, complete, written_at, schema_version. There is NO culture or hives key in world-state: the build ledger and mirror statistics are DERIVATIONS the importer computes from geometry_log plus the feature coordinate maps, exactly as tools/ant-hive-world/dashboard.js computes them (same permutation-null). Provenance: turn_id = turn-projection.json run_name; per-turn day span = turn-projection.json ticks (1 tick = 1 simulated day, ratified); absolute_day = cumulative sum of ticks across the import sequence, where the sequence is a PERSISTED append-only index journal (tools/ant-hive-world/unreal-export/import-index.jsonl, one line per turn_id: turn_id, ticks, absolute_day_start, ingested_at, payload_hash) — a turn's absolute_day is fixed at FIRST ingestion and immutable thereafter; re-importing a known turn_id MUST reuse the journaled value and MUST verify the payload_hash matches (mismatch = fail-closed refusal, never silent reassignment); arrival or retry order cannot change previously assigned values. Mirror-statistic derivation is DETERMINISTIC: the importer uses its own seeded PRNG (seed = a stable hash of turn_id), NOT mirror-detector.js's unseeded Math.random, and records the seed and shuffle count in the emitted file so any reviewer can reproduce the p-value byte-for-byte. payload_hash and boundary receipts composed from the host-side manifest chain (RESULT-MANIFEST.txt, HARVEST-MANIFEST.txt, PULL-MANIFEST.txt). turn-projection's mind_state/resume_continuity carried verbatim as advisory metadata. Schema ships with fixture-level validation; the importer must validate the r6 AND r7 fixtures clean before S2 begins.",
         "is_gap": false,
         "mode": "PATCH_ALLOWED",
-        "files_touched": ["tools/ant-hive-world/unreal-export/ (NEW)", "_dev/sim-runs/vm/orwell/README.md (cadence section)"]
+        "files_touched": [
+          "tools/ant-hive-world/unreal-export/ (NEW)",
+          "_dev/sim-runs/vm/orwell/README.md (cadence section)"
+        ]
       },
       {
         "step_id": "S1",
         "title": "Projection importer",
-        "description": "Node converter: harvested out/ -> UnrealImport/1.0 per-turn files in a watch directory on the orwell host (pushed via existing ssh path or generated host-side from pulled results). Deterministic, schema-validated, idempotent per turn id.",
+        "description": "Node converter: harvested pull directory -> UnrealImport/1.0 per-turn files. Inputs are the ACTUAL artifacts (world-state.json + turn-projection.json + manifest chain); derivations per S0. Deterministic, schema-validated (fixture tests against the r6 and r7 harvests), idempotent per turn id.",
         "is_gap": true,
         "mode": "PATCH_ALLOWED",
-        "files_touched": ["tools/ant-hive-world/unreal-export/import-turn.js (NEW)", "tools/ant-hive-world/unreal-export/schema.json (NEW)"]
+        "files_touched": [
+          "tools/ant-hive-world/unreal-export/import-turn.js (NEW)",
+          "tools/ant-hive-world/unreal-export/schema.json (NEW)"
+        ]
       },
       {
         "step_id": "S2",
         "title": "Unreal project scaffold on orwell host",
-        "description": "UE5 project on orwell (RTX 5070 Ti): data-driven level that spawns/updates actors from UnrealImport files — territory tiles, build meshes appearing at their recorded coords, resource markers, a HUD panel for turn id/absolute day/mirror p-value. Turn-advance + auto-advance (timelapse) modes. OPERATOR GATE before installing Unreal Engine on orwell (new heavyweight host software).",
+        "description": "UE5 project on orwell (RTX 5070 Ti): data-driven level that spawns/updates actors from UnrealImport files \u2014 territory tiles, build meshes appearing at their recorded coords, resource markers, a HUD panel for turn id/absolute day/mirror p-value. Turn-advance + auto-advance (timelapse) modes. Uses the ALREADY-INSTALLED UE 5.8 at C:\\Program Files\\Epic Games (probe-verified 2026-08-04T23:35Z); residual approvals (project dir, watch-service files, version choice) delegated by operator with reversible defaults.",
         "is_gap": true,
         "mode": "PATCH_ALLOWED",
-        "files_touched": ["orwell host: D:\\UnrealProjects\\AntWorldProjection (NEW, host-side)", "tools/ant-hive-world/unreal-export/README.md (NEW)"]
+        "files_touched": [
+          "orwell host: D:\\UnrealProjects\\AntWorldProjection (NEW, host-side)",
+          "tools/ant-hive-world/unreal-export/README.md (NEW)"
+        ]
       },
       {
         "step_id": "S3",
-        "title": "Timelapse consumption wiring (importer-only — REVISED per codex review 20260804T212131Z)",
-        "description": "Unreal consumes ONLY named, immutable post-turn harvest manifests (HARVEST-MANIFEST.txt-verified directories under the staging-out root). A watch on the import directory advances the scene when a new verified turn lands. This plan does NOT invoke run-job, harvest, or CANCEL surfaces — turn/harvest/cancellation orchestration and the short-turn timelapse cadence remain owned by ant-world-orwell-live-dashboard; the cadence parameter is recorded there. Producer contract bound in S0: turn_id, absolute_day, run id, payload hash, and boundary receipt fields are explicit, with provenance receipts checked before a turn is rendered.",
+        "title": "Timelapse consumption wiring (importer-only \u2014 REVISED per codex review 20260804T212131Z)",
+        "description": "Unreal consumes ONLY named, immutable post-turn harvest manifests (HARVEST-MANIFEST.txt-verified directories under the staging-out root). A watch on the import directory advances the scene when a new verified turn lands. This plan does NOT invoke run-job, harvest, or CANCEL surfaces \u2014 turn/harvest/cancellation orchestration and the short-turn timelapse cadence remain owned by ant-world-orwell-live-dashboard; the cadence parameter is recorded there. Producer contract bound in S0: turn_id, absolute_day, run id, payload hash, and boundary receipt fields are explicit, with provenance receipts checked before a turn is rendered.",
         "is_gap": true,
         "mode": "PATCH_ALLOWED",
-        "files_touched": ["tools/ant-hive-world/unreal-export/watch-imports.js (NEW, read-only consumer)"]
+        "files_touched": [
+          "tools/ant-hive-world/unreal-export/watch-imports.js (NEW, read-only consumer)"
+        ]
       },
       {
         "step_id": "S4",
@@ -72,34 +83,29 @@
         "description": "Evidence: schema-validation receipts for importer output, a recorded multi-turn timelapse session (screen capture or turn-sequence screenshots), zero-NIC/membrane checks unchanged before and after, distinct-family review of the full slice bound to exact commits, run debrief.",
         "is_gap": false,
         "mode": "REVIEW_ONLY",
-        "files_touched": ["_dev/reports/analysis/run-debrief__unreal-world-projection__<date>.md (NEW)"]
+        "files_touched": [
+          "_dev/reports/analysis/run-debrief__unreal-world-projection__<date>.md (NEW)"
+        ]
       }
     ],
     "required_gates": [
       {
         "gate_id": "G-ORWELL-UNREAL-INSTALL",
-        "status": "pending",
-        "decision": "Operator approves the FULL enumerated host footprint before S2 begins (codex finding: an install gate must enumerate adjacent actions): Unreal Engine 5.x + Epic Games Launcher (or source build), VC++ redistributables/DirectX prerequisites, estimated 60-120 GB disk on D:, the D:\\UnrealProjects\\AntWorldProjection project dir, any node/watch service used by S3, and all file transfers to orwell. Rollback: uninstall UE + launcher, delete project dir and watch service. No VM, seed, golden, or courier surface is touched by any of it."
+        "status": "residual_only",
+        "decision": "Engine install NOT needed: UE 5.7.4 and 5.8 already installed at C:\\Program Files\\Epic Games with Epic Launcher and DirectXRedist (read-only probe transcript 20260804T2335Z, operator-confirmed). Residual approvals delegated by operator 2026-08-04T23:37Z with reversible defaults taken: project dir D:\\UnrealProjects\\AntWorldProjection, S3 watch-service files, engine version UE 5.8. Rollback: delete project dir + watch service. No VM, seed, golden, or courier surface is touched."
       }
     ],
-    "scope_identity": {
-      "owned_artifacts": [
-        "tools/ant-hive-world/unreal-export/ (schema.json, import-turn.js, watch-imports.js, README.md)",
-        "orwell host: D:\\UnrealProjects\\AntWorldProjection",
-        "_dev/reports/analysis/run-debrief__unreal-world-projection__<date>.md"
-      ]
-    },
     "expected_outcomes": [
       "A 3D Unreal scene on the orwell desktop showing the hive world building itself turn-over-turn in timelapse",
       "UnrealImport/1.0 schema + importer producing deterministic per-turn files from harvested projections",
       "Membrane unchanged: zero-NIC, courier-only I/O, post-turn projections only"
     ],
     "risk_notes": [
-      "Unreal install is a large host-side mutation on a fleet machine — gated, reversible by uninstall, but disk/driver footprint is real",
+      "Unreal install is a large host-side mutation on a fleet machine \u2014 gated, reversible by uninstall, but disk/driver footprint is real",
       "Timelapse cadence multiplies turn count; watchdog and golden-revert surfaces must behave identically at higher frequency",
       "Escalation triggers: ANY proposed change to VM config, seed, golden, courier contract, or any live channel into a running guest -> stop, operator + destination review (same triggers as the owning plan)"
     ],
-    "hardening_opportunity": "If the importer+watch-loop shape proves out, the same UnrealImport schema can serve other sims (crow-world, future worlds) — candidate for reusable-template-extractor AFTER >=3 verified runs, not before."
+    "hardening_opportunity": "If the importer+watch-loop shape proves out, the same UnrealImport schema can serve other sims (crow-world, future worlds) \u2014 candidate for reusable-template-extractor AFTER >=3 verified runs, not before."
   },
   "routing_expectations": {
     "risk_tier": "medium",
@@ -112,11 +118,22 @@
     ]
   },
   "operator_gates": [
-    { "gate_id": "G-ORWELL-UNREAL-INSTALL", "status": "pending", "decision": "Approve Unreal Engine install on orwell host" }
+    {
+      "gate_id": "G-ORWELL-UNREAL-INSTALL",
+      "status": "residual_only",
+      "decision": "Engine install NOT needed: UE 5.7.4 and 5.8 already installed at C:\\Program Files\\Epic Games (read-only probe 2026-08-04T23:35Z, operator-confirmed). Residual approvals delegated by operator 2026-08-04T23:37Z with reversible defaults taken: project dir D:\\UnrealProjects\\AntWorldProjection, S3 watch-service files, engine version UE 5.8."
+    }
   ],
   "dart_writeback": null,
   "artifacts": [
     "_dev/reports/analysis/task-plans/unreal-world-projection__plan.json",
     "_dev/reports/analysis/task-plans/unreal-world-projection__plan.md"
-  ]
+  ],
+  "scope_identity": {
+    "owned_artifacts": [
+      "tools/ant-hive-world/unreal-export/ (schema.json, import-turn.js, watch-imports.js, README.md)",
+      "orwell host: D:\\UnrealProjects\\AntWorldProjection",
+      "_dev/reports/analysis/run-debrief__unreal-world-projection__<date>.md"
+    ]
+  }
 }

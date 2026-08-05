@@ -22,6 +22,7 @@
 //                         [--checkpoint-root <dir>] [--resume-from <generation-id>]
 //                         [--root-seed <int>] [--run-name <name>]
 //                         [--status-path <file>] [--no-checkpoint]
+//                         [--freeze-world-learning]
 //
 // --forever: keep running until the process receives SIGINT/SIGTERM (Ctrl-C
 // or `kill <pid>`) -- operator (2026-07-16): "just leave it running see what
@@ -51,8 +52,12 @@ const crypto = require('node:crypto');
 const { setupHives, restoreHives, tick } = require('./harness.js');
 const { generateBlankHiveSeed } = require('./generate-blank-hive-seed.js');
 const { createNetwork } = require('./untrained-network.js');
-const { createWorldMind, decideWorld, applyWorldVerb, WORLD_VERB_ORDER } = require('./world-mind.js');
-const { readWorldState, writeWorldState } = require('./world-state.js');
+const {
+  createWorldMind, decideWorld, applyWorldVerb, trainWorldMind, encodeWorldState, WORLD_VERB_ORDER,
+  assessMaskedCoordinateLiveness
+} = require('./world-mind.js');
+const { readWorldState, writeWorldState, summarizeHives } = require('./world-state.js');
+const { WORLD_LOSS_MASK } = require('./world-train.js');
 const { trainTick } = require('./train-tick.js');
 const { readLiveConfig, writeLiveConfig } = require('./live-config.js');
 const { createEventContext, decorateEvent, processEventContext } = require('./event-schema.js');
@@ -79,6 +84,14 @@ const DECISION_STREAM_PATH = path.join(SANDBOX_ROOT, 'decision-stream.jsonl');
 const CONFIG_PATH = path.join(SANDBOX_ROOT, 'live-config.json');
 const ARM_ID = argVal('--arm', 'uninstructed');
 const NO_CHECKPOINT = hasFlag('--no-checkpoint');
+// FROZEN-MIND CONTROL (plan ant-world-mind-learning-path, S2 criterion (e)).
+// With this flag the world block still encodes the world, still carries
+// prev_features, and still COMPUTES and reports the masked prediction loss --
+// it simply writes no parameter. Identical code path, identical reads, zero
+// parameter motion, so the measured delta between a learning arm and a frozen
+// one isolates the update itself rather than any incidental difference. Default
+// off; recorded in provenance rather than inferred from silence.
+const FREEZE_WORLD_LEARNING = hasFlag('--freeze-world-learning');
 
 // job.env is the guest's job spec, sourced into the runner's environment before
 // the driver is invoked. A CLI flag always wins over the environment: the flag
@@ -199,6 +212,21 @@ function resolveResumeOrFreshStart(env) {
     process.exit(1);
   }
 
+  // CheckpointManifest/1.1 provenance WARNs. A training-config mismatch (or an
+  // UNKNOWN from a 1.0 manifest) does NOT refuse the resume -- the restore is
+  // valid -- but it does mean metrics from before and after the boundary are
+  // not comparable, and that must be said out loud rather than left for a
+  // summarizer to pool silently.
+  for (const w of validation.warnings || []) {
+    process.stderr.write(`WARN [${w.code}] ${w.detail} (manifest=${w.manifest_value} live=${w.live_value})\n`);
+  }
+  if (validation.hash_provenance) {
+    process.stdout.write(
+      `resume: hash provenance source=${validation.hash_provenance.source} ` +
+      `shape_hash=${String(validation.hash_provenance.shape_hash).slice(0, 12)} ` +
+      `training_config_hash=${String(validation.hash_provenance.training_config_hash).slice(0, 12)}\n`
+    );
+  }
   process.stdout.write(
     `resume: validated ${id} -- all ${validation.stages_passed.length} stages passed ` +
     `(${validation.stages_passed.join(' -> ')})\n` +
@@ -384,6 +412,9 @@ process.stdout.write(`Sandbox: ${SANDBOX_ROOT}\n`);
 process.stdout.write(`Checkpoint root: ${resolution.checkpointRoot}\n`);
 process.stdout.write(`Shared resources at start: ${JSON.stringify(RESOURCE_POOL)}\n`);
 process.stdout.write(`Mind: untrained-network.js (from-scratch REINFORCE, no pretraining, no LLM).\n`);
+process.stdout.write(`World-mind learning: ${FREEZE_WORLD_LEARNING
+  ? 'FROZEN (--freeze-world-learning) -- loss is measured and reported, no parameter is written'
+  : 'ACTIVE -- masked one-step prediction error (world-train.js); W2/b2 never written'}\n`);
 process.stdout.write(FOREVER
   ? `Running until stopped (SIGINT/SIGTERM), ${TICK_INTERVAL_MS}ms between rounds. Run log: ${RUN_LOG_PATH}\n`
   : `Running ${TICKS} ticks per hive from absolute tick ${startTick}. Run log: ${RUN_LOG_PATH}\n`);
@@ -450,6 +481,7 @@ function commitCheckpoint(absoluteTick) {
       root_seed: rootSeed,
       root_seed_source: rootSeedSource,
       fresh_start: resolution.fresh_start,
+      world_learning_frozen: FREEZE_WORLD_LEARNING,
       parent_run_id: parentRunId,
       parent_episode_id: parentEpisodeId
     },
@@ -457,6 +489,32 @@ function commitCheckpoint(absoluteTick) {
     inputPacket: currentInputPacket(),
     goal: null
   });
+}
+
+// --- MASKED-COORDINATE LIVENESS ACCUMULATOR (plan S1b) ----------------------
+//
+// The defect S1b repairs produced arithmetically correct encodings whose masked
+// coordinates were zero for an entire run. No single-state check can see that,
+// so the driver accumulates the encodings it actually trained on and reports,
+// at run end, whether each masked coordinate ever left zero. The samples are
+// capped so an unbounded --forever run cannot grow this without limit; the cap
+// and whether it was hit are both reported, because a liveness claim over a
+// truncated sample must say so.
+const LIVENESS_SAMPLE_CAP = 5000;
+const livenessSamples = [];
+let livenessSamplesSeen = 0;
+function recordEncodingForLiveness(features) {
+  livenessSamplesSeen += 1;
+  if (livenessSamples.length < LIVENESS_SAMPLE_CAP) livenessSamples.push(features.slice());
+}
+function livenessReport() {
+  const report = assessMaskedCoordinateLiveness(livenessSamples, WORLD_LOSS_MASK);
+  return {
+    ...report,
+    ticks_encoded: livenessSamplesSeen,
+    sample_cap: LIVENESS_SAMPLE_CAP,
+    samples_truncated: livenessSamplesSeen > livenessSamples.length
+  };
 }
 
 async function runTicks() {
@@ -467,8 +525,14 @@ async function runTicks() {
     // to modify variables in this dashboard." No restart needed; the
     // dashboard's /config POST writes this same file.
     const liveConfig = readLiveConfig(CONFIG_PATH);
+    // The per-hive states this round produced, held in memory for the world
+    // block's hives summary (plan ant-world-mind-learning-path, S1b). trainTick
+    // already returns the post-tick hive state, so this costs one reference per
+    // hive per round and reads no file that was not already read.
+    const roundHiveStates = {};
     for (const id of HIVE_IDS) {
       const result = trainTick(hives[id], WORLD_STATE_PATH, networks[id], rngs[id], liveConfig, i, controllers[id]);
+      roundHiveStates[id] = result.hiveState;
       process.stdout.write(`[tick ${i + 1}] ${id} -> ${result.action} applied=${result.applied} starved=${result.starved} reward=${result.reward} entropy=${result.policy_entropy?.toFixed(3)}${result.forced_exploration ? ' [forced]' : ''}${result.entropy_controller_active ? ' [ctl]' : ''}\n`);
       appendRunLog({
         tick: i + 1,
@@ -518,6 +582,41 @@ async function runTicks() {
     // hive's decision (no-godmode/carriage doctrine). Logged as observations.
     const worldStateNow = readWorldState(WORLD_STATE_PATH);
     if (worldStateNow) {
+      // --- WORLD-MIND LEARNING STEP (plan ant-world-mind-learning-path, S1) --
+      // Tick order, per the S0 memo section 3.4, in this exact sequence:
+      //   1. read the world state (above), after both hives have acted
+      //   2. encode it ONCE
+      //   3. if prev_features is set, re-form the prediction from it under the
+      //      CURRENT parameters and apply the masked one-step update, with
+      //      THIS tick's encoding as the target
+      //   4. decide (the decision therefore reads the UPDATED representation)
+      //   5. apply the verb and write the world
+      //   6. carry this tick's encoding forward as prev_features
+      //
+      // Step 3 sits BEFORE step 4 so that no decision is ever informed by an
+      // observation from its own future. The update draws ZERO random values
+      // and reads no clock, so the world RNG stream's state after a tick is
+      // exactly what it was before the learning path existed.
+      // Step 1b (plan ant-world-mind-learning-path, S1b): publish the hives
+      // summary into the shared world-state BEFORE encoding it. This is the
+      // encoder/state coupling repair. Two coordinates of the encoder --
+      // 4 (hive count) and 7 (starvation pressure) -- are derived from
+      // worldState.hives, and the shared file never carried that key, so both
+      // read a structural zero on every tick of every live run and two of the
+      // three masked loss coordinates were dead. The numbers come from
+      // roundHiveStates, which this round's hive loop just produced in memory:
+      // no per-hive file is re-read, and no per-hive internals cross into the
+      // shared file beyond the two aggregates the encoder reads.
+      //
+      // It is attached before the encode rather than relied upon from the file
+      // so that the value the mind sees is THIS round's, never the previous
+      // round's; writeWorldState below persists it for the dashboard and the
+      // export path.
+      worldStateNow.hives = summarizeHives(roundHiveStates);
+      const worldFeaturesNow = encodeWorldState(worldStateNow);
+      recordEncodingForLiveness(worldFeaturesNow);
+      const learn = trainWorldMind(worldMind, worldFeaturesNow, { freeze: FREEZE_WORLD_LEARNING });
+
       let wm = null;
       let source = 'harness';
       try {
@@ -532,14 +631,21 @@ async function runTicks() {
       }
       const applied = applyWorldVerb(worldStateNow, wm, worldRng);
       writeWorldState(WORLD_STATE_PATH, worldStateNow);
-      process.stdout.write(`[tick ${i + 1}] world -> ${wm.verb} source=${source} applied=${applied.applied} (${applied.note})\n`);
+      // Step 6: carry THIS tick's encoding (taken before the verb was applied)
+      // forward as the lag. prev_features is the only carrier of the one-tick
+      // lag, which is why it lives on the mind and travels in the checkpoint.
+      worldMind.prev_features = worldFeaturesNow;
+      process.stdout.write(`[tick ${i + 1}] world -> ${wm.verb} source=${source} applied=${applied.applied} (${applied.note})${learn.updated ? ` learn_loss=${learn.loss.toFixed(6)}` : ''}\n`);
       appendRunLog({
         tick: i + 1,
         hive: 'world',
         action: wm.verb,
         source,
         applied: applied.applied,
-        note: applied.note
+        note: applied.note,
+        world_learning_updated: learn.updated,
+        world_learning_frozen: Boolean(learn.frozen),
+        world_prediction_loss: learn.loss
       });
       appendDecision({
         t: i,
@@ -552,8 +658,31 @@ async function runTicks() {
         // divergence and not just to a verb divergence.
         note: applied.note,
         prob: wm.prob,
-        entropy: wm.entropy
+        entropy: wm.entropy,
+        // The masked prediction loss and the update flag are decision-stream
+        // fields on purpose: they are functions of the learning state, so a
+        // resumed run that lost prev_features or the prediction head diverges
+        // HERE, visibly, instead of drifting silently for a hundred ticks.
+        wloss: learn.loss,
+        wupd: learn.updated,
+        // The FULL encoder output this tick (plan S1b). Recorded per row
+        // because the S1b defect was invisible in every aggregate: the loss,
+        // the entropy and the verb distribution all looked plausible while two
+        // of the three trained coordinates were structurally zero. Recording
+        // the whole vector rather than only the masked coordinates also makes
+        // the learning trajectory replayable offline -- the update is a pure
+        // deterministic function of (parameters, x_t, x_{t+1}), so a reviewer
+        // can reconstruct every step from theta_0 and this column and check the
+        // replay against the checkpointed parameters.
+        wx: worldFeaturesNow
       });
+    } else {
+      // SKIPPED WORLD BLOCK. prev_features must be RESET, not left in place:
+      // leaving it would silently stretch the lag to two ticks and the signal
+      // would become something other than what the memo describes. Resetting to
+      // null also makes the NEXT world block's update a no-op, which is the
+      // second half of the same rule.
+      worldMind.prev_features = null;
     }
     i += 1;
     const intervalMs = liveConfig.tick_interval_ms ?? TICK_INTERVAL_MS;
@@ -562,6 +691,21 @@ async function runTicks() {
   if (FOREVER && stopRequested) {
     appendRunLog({ event: 'run-stopped', tick: i, reason: 'signal' });
   }
+  // Reported, not thrown: a run that has already happened is evidence, and
+  // destroying it at the last line would leave the reviewer with less than the
+  // finding itself. The harness that grades a run turns this same report into a
+  // pass/fail verdict.
+  // Printed rather than appended to the run log: run-log rows carry a contract
+  // (event-schema.js) that a diagnostic summary row would violate, and the
+  // durable record of the same fact is already stronger -- every world row in
+  // the decision stream carries `wmx`, the masked coordinates' actual values on
+  // that tick. The harness recomputes this report from those rows.
+  const liveness = livenessReport();
+  process.stdout.write(
+    `\nMasked-coordinate liveness over ${liveness.samples} sampled world ticks: ` +
+    `${liveness.live ? 'LIVE' : `DEAD-ZERO at ${JSON.stringify(liveness.dead_zero_coordinates)}`} ` +
+    `(effective dimensionality ${liveness.effective_dimensionality} of ${WORLD_LOSS_MASK.length})\n`
+  );
   process.stdout.write(`\nDone after ${i - startTick} rounds (absolute tick ${startTick} -> ${i}). Final world-state: ${WORLD_STATE_PATH}\nRun log: ${RUN_LOG_PATH}\n`);
   return i;
 }

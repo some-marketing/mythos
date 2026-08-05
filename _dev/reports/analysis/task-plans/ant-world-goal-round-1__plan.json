@@ -1,0 +1,134 @@
+{
+  "schema": "TaskIntake/1.0",
+  "task_id": "ant-world-goal-round-1",
+  "title": "Goal round 1 \u2014 resume-chained survival pressure with the LEARNING mind (continuity AND food/water, both)",
+  "timestamp": "2026-08-05T04:44:00.000Z",
+  "requested_by": "operator",
+  "source": "operator 2026-08-05T04:41Z: 'we can do both. do the continuity AND the food and water pressure' \u2014 the learning-mind deployment decision plus the convene-ratified goal content",
+  "scope_type": "system",
+  "storage_root": "_dev/reports/analysis/task-plans",
+  "description": "The first goal-directed round: resume-chained short turns on Orwell (continuity, proven machinery) running the LEARNING mind (world-train.js, G-MIND-LEARNING-REVIEW cleared) under a food/water survival-pressure goal packet with an independently evaluable predicate and deadline, thresholds DERIVED from the continuity-control and baseline data. Expected side effect (the convergence): genuine scarcity brings encoder coord 7 (starvation pressure) alive, completing the mind's masked curriculum \u2014 the ecology and the education are the same event.",
+  "overlap_disposition": {
+    "checked_at": "2026-08-05T04:44Z",
+    "owning_candidate": "ant-world-orwell-live-dashboard (deployment/turn contract) + ant-world-mind-learning-path (the mind)",
+    "decision": "new plan (a round definition), riding both owners' cleared gates",
+    "stated_reason": "Both prerequisite plans are complete and gate-cleared; this plan defines ONE round's goal packet + turn sequence and adds no new engine or contract surface."
+  },
+  "context": {
+    "hard_constraints": [
+      "Goal packet per convene synthesis: independently evaluable predicate + explicit deadline; thresholds derived from observed data (cc turns + baselines), never invented",
+      "Resume-chained turns (the proven -ResumeFrom lineage); halt-for-repair law unchanged",
+      "Zero-NIC membrane, courier contract, sanitized-projection-only harvests unchanged",
+      "Mirror-safety: the goal evaluator reads STOCKPILE/ecology numbers only \u2014 never build coordinates or feature positions (the goal must not bribe the mirror any more than the learning signal may)",
+      "watch-turn-health beside every turn; confound test runs on every harvest with the D1 applicability predicate",
+      "ONE-WAY EVALUATOR ISOLATION (codex F1): the goal evaluator's output flows ONLY to reports/projection \u2014 by construction it runs in the post-tick REPORTING path of run-live.js, after all decisions and updates for the tick are complete, and NOTHING in the world-mind, hive, or world-train call graphs reads its output (verified by call-graph audit in S1 evidence). Hunger may change behavior through the WORLD (stockpiles the mind already perceives); the goal's evaluation may not. This is what makes hunger-driven building emergence rather than evaluator-induced confounding."
+    ]
+  },
+  "bounded_plan": {
+    "steps": [
+      {
+        "step_id": "S0",
+        "title": "Goal packet design (thresholds from data)",
+        "description": "Derive the predicate from the record: baselines show food ~0-4.7, water ~3.8-15.6, wood 0, prey ~0.5-1.7, both hives alive with stockpiles above zero. Draft goal packet: schema GoalPacket/1.0 {goal_id, predicate (machine-evaluable over the sanitized world-state: e.g. combined food stockpile >= F AND water >= W AND both hives non-extinct at deadline), deadline_absolute_day, safety_bounds (no new verb powers; evaluator read-only), evaluator_version, derivation (each threshold cites the observed datum it derives from)}. The evaluator is a small pure function over world-state.json shipped in the payload; its output joins the sanitized projection. F/W thresholds: challenging but reachable per the observed dynamics \u2014 derivation shown, reviewed, not asserted. NUMERIC DERIVATION CONTRACT (codex F2): every threshold ships as {value, units, formula, source_field (exact world-state path), aggregation_scope (per-hive vs combined; which ticks), derivation_datum (the observed number and its artifact)} \u2014 and a REACHABILITY test: the S1 rehearsal must demonstrate measurable progress toward (not necessarily attainment of) each threshold under the no-goal control dynamics, or the threshold is re-derived. GoalPacket/1.0 carries sha256 of the packet body; the evaluator ships with its own version + hash. Checkpoint generations during goal turns carry the goal identity (goal_id + packet hash) in the manifest's goal fields \u2014 no more goal:null on goal-directed runs (codex r2).",
+        "is_gap": true,
+        "mode": "PATCH_ALLOWED",
+        "files_touched": [
+          "tools/ant-hive-world/goal-evaluator.js (NEW)",
+          "tools/ant-hive-world/goal-packet-schema.json (NEW)",
+          "_dev/sim-runs/vm/orwell/run-job.ps1 (goal-packet passthrough via job.env, validated shape)"
+        ]
+      },
+      {
+        "step_id": "S1",
+        "title": "Local goal-round rehearsal",
+        "description": "Full local rehearsal before Orwell: 3 resume-chained 150-tick turns with the learning mind + goal packet in the sandbox. Verify: goal evaluator runs and reports honestly (met/unmet with the measured values); coord 7 liveness ACTIVATES if any hive crosses the stockpile line (the convergence made measurable \u2014 report whether it did); learning continues across resumes (loss trajectory spans turns); contamination alarm stays quiet; mirror confound test clean. Evidence: goal-round-rehearsal-evidence.json. REHEARSAL CONTRACT (codex F4): arms = GOAL (3 chained turns with packet) vs CONTROL (3 chained turns, no packet, same seeds) \u2014 the behavioral delta IS the goal's measured effect; evaluator TRACE recorded per tick (inputs read, output, proof it ran post-decision); TAMPER probe (packet hash mismatch -> refusal before boot); passthrough validation (job.env goal fields regex-validated host-side); evidence as GoalRoundRehearsalEvidence/1.0 {arms, evaluator_trace_digest, isolation_call_graph_audit, tamper_result, coord7_events, lineage_chain, confound_results, overall_verdict}. COORD-7 OPERATIONALIZED (codex F5): activation = coord 7 nonzero on >= 1 tick (i.e., any hive_state.stockpile <= 0 event, the encoder's own predicate); the activation window and per-tick series are recorded; activation is an ECOLOGY measurement enabling future learning on that coordinate \u2014 explicitly NOT itself a learning or convergence claim.",
+        "is_gap": false,
+        "mode": "RUN_ONLY",
+        "files_touched": [
+          "_dev/state/goal-round-rehearsal/ (evidence)",
+          "tools/ant-hive-world/goal-rehearsal-evidence-schema.json (NEW, machine-readable per codex F9)"
+        ]
+      },
+      {
+        "step_id": "S2",
+        "title": "Codex trial + operator packet",
+        "description": "Distinct trial of goal evaluator + packet + rehearsal evidence (G-GOAL-ROUND-REVIEW). Then the G-REMOTE-MUTATION packet for the operator's fresh stamp (recorded conditional stamp below covers it if conditions hold): payload rebuild (learning mind + evaluator), deploy via the hardened path, 3+ resume-chained 150-tick goal turns on Orwell, per-turn harvest -> dashboard + Unreal imports, watch-turn-health throughout.",
+        "is_gap": false,
+        "mode": "REVIEW_ONLY",
+        "files_touched": [
+          "_dev/reports/analysis/g-remote-mutation-packet__goal-round-1__<date>.md"
+        ]
+      },
+      {
+        "step_id": "S3",
+        "title": "Run, harvest, debrief \u2014 then /meditate",
+        "description": "Execute on Orwell under the stamp; harvest every turn; the science readout: goal progress, coord-7 activation, loss trajectory across resumes, mirror-p trajectory WITH confound checks, behavioral divergence vs the frozen-mind cc turns. Debrief. Per the standing cadence, this round's completion triggers a /meditate over everything the minds' actions taught.",
+        "is_gap": false,
+        "mode": "COORDINATOR",
+        "files_touched": [
+          "_dev/reports/analysis/run-debrief__ant-world-goal-round-1__<date>.md",
+          "_dev/reports/analysis/meditation__<date>.md (successor trigger)"
+        ]
+      }
+    ],
+    "required_gates": [
+      {
+        "gate_id": "G-GOAL-ROUND-REVIEW",
+        "status": "pending",
+        "decision": "S2 codex trial must clear before the deployment packet is assembled."
+      }
+    ],
+    "expected_outcomes": [
+      "First goal-directed, resume-chained, learning-mind round on Orwell",
+      "Coord-7 activation measured (the convergence tested, not assumed)",
+      "Goal predicate evaluated by machine, thresholds traceable to data",
+      "Mirror gate protected: evaluator reads ecology only; confound test on every harvest"
+    ],
+    "risk_notes": [
+      "Survival pressure may kill a hive \u2014 that is a legitimate experimental outcome, recorded, not prevented by evaluator design; safety_bounds forbid new powers, not failure",
+      "Escalation: any evaluator input touching build/feature coordinates; any packet field crossing the courier beyond the sanitized surfaces"
+    ]
+  },
+  "operator_conditional_stamp": {
+    "recorded_at": "2026-08-05T04:44Z",
+    "operator_words": "we can do both. do the continuity AND the food and water pressure",
+    "covers": "Deployment of the LEARNING mind to Orwell for goal round 1, conditional on ALL of (codex F3 complete set): G-GOAL-ROUND-REVIEW cleared; S1 rehearsal overall_verdict PASS (incl. control arm, isolation audit, tamper probe); GoalPacket + evaluator + schema hashes pinned in the deployment packet and verified at load; job.env passthrough regex-validated host-side; one-way isolation evidence attached; DETERMINISTIC EXTINCTION RULE: if any hive count reaches 0, the round runs to its deadline unmodified, the outcome is recorded, no mid-round intervention \u2014 extinction is data; payload hash fresh; hardened deploy path; halt-for-repair and confound-flag halts unchanged; membrane checks per turn.",
+    "not_covered": "Any subsequent goal round; any evaluator redesign; any courier/membrane change."
+  },
+  "routing_expectations": {
+    "risk_tier": "high",
+    "review_lane": "operator-gate",
+    "review_lane_rationale": "Live remote round with a learning mind under a goal \u2014 the program's first real experiment; conditional stamp recorded, packet still assembled explicitly.",
+    "escalation_triggers": [
+      "evaluator touching spatial/build data",
+      "confound flag on any harvest",
+      "resume refusal",
+      "hive extinction (report immediately, continue only if the packet's bounds say so)"
+    ]
+  },
+  "artifacts": [
+    "_dev/reports/analysis/task-plans/ant-world-goal-round-1__plan.json",
+    "_dev/reports/analysis/task-plans/ant-world-goal-round-1__plan.md"
+  ],
+  "scope_identity": {
+    "owned_artifacts": [
+      "tools/ant-hive-world/goal-evaluator.js",
+      "tools/ant-hive-world/goal-packet-schema.json",
+      "tools/ant-hive-world/run-live.js (post-tick reporting-path evaluator call only)",
+      "_dev/sim-runs/vm/orwell/run-job.ps1 (goal passthrough)",
+      "_dev/state/goal-round-rehearsal/",
+      "_dev/reports/analysis/g-remote-mutation-packet__goal-round-1__<date>.md",
+      "_dev/reports/analysis/run-debrief__ant-world-goal-round-1__<date>.md"
+    ]
+  },
+  "amendment_r1": {
+    "at": "2026-08-05T04:56Z",
+    "per": "codex review 20260805T044843Z (CHANGES_REQUIRED: 4 MAJOR + 1 MEDIUM + 1 MINOR, all applied)",
+    "key_ruling": "F1 one-way evaluator isolation is the emergence-vs-confound boundary"
+  },
+  "amendment_r2_disposition": {
+    "at": "2026-08-05T05:01Z",
+    "per": "codex r2 20260805T045605Z (CHANGES_REQUIRED: F7 CRITICAL implementation-drift, F8 no rehearsal evidence, F9 prose-only schemas)",
+    "disposition": "F7/F8 are plan-time vs execution-time altitude: 'r1 closure' meant the PLAN-TEXT findings closed; run-live.js goal support, evaluator, traces, and rehearsal evidence are S0/S1's deliverables (owned artifacts are planned-NEW, not missing). The findings' substance \u2014 build it, don't amend it \u2014 is satisfied by executing S0/S1 now. F9 adopted concretely: S0 emits MACHINE-READABLE schemas as files (goal-packet-schema.json incl. the per-threshold derivation object shape, plus goal-rehearsal-evidence-schema.json for GoalRoundRehearsalEvidence/1.0) so S2's trial can schema-compare instead of prose-compare. G-GOAL-ROUND-REVIEW stays PENDING until the S2 trial of the actual implementation + rehearsal evidence \u2014 codex's own requirement list (packet validation, report-only execution, hashed checkpoint goal identity, call-graph isolation evidence) is the S2 trial's checklist verbatim."
+  }
+}

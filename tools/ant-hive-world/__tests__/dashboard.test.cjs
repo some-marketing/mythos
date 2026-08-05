@@ -77,6 +77,21 @@ test('computeSnapshot handles a not-yet-initialized world gracefully', () => {
   assert.deepEqual(snapshot.colonies, []);
 });
 
+test('dashboard declares the culture builds container before rendering the mirror panel', () => {
+  const source = fs.readFileSync(path.join(__dirname, '..', 'dashboard.js'), 'utf8');
+  const renderStart = source.indexOf('function renderCulture(data)');
+  const renderEnd = source.indexOf('// --- Wiki view', renderStart);
+  assert.ok(renderStart >= 0, 'renderCulture client function should exist');
+  assert.ok(renderEnd > renderStart, 'renderCulture client function should have a bounded body');
+
+  const renderBody = source.slice(renderStart, renderEnd);
+  const buildsDeclaration = renderBody.indexOf("const buildsEl = document.getElementById('culture-builds');");
+  const mirrorBranch = renderBody.indexOf('const mirror = culture.mirror;');
+  assert.ok(buildsDeclaration >= 0, 'renderCulture should declare culture-builds');
+  assert.ok(mirrorBranch >= 0, 'renderCulture should retain the optional mirror panel');
+  assert.ok(buildsDeclaration < mirrorBranch, 'culture-builds must be declared before mirror rendering');
+});
+
 test('discoverHives finds N colonies including one added after initial setup', () => {
   const { addHive } = require('../harness.js');
   const root = freshSandbox();

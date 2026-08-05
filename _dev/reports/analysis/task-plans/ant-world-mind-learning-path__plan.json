@@ -44,22 +44,34 @@
       {
         "step_id": "S1",
         "title": "Implement the reviewed signal + update path",
-        "description": "Wire the chosen learning signal and weight-update path for the world-mind (deterministic under fixed seeds; every new mutable state \u2014 optimizer accumulators, reward traces \u2014 added to the checkpoint generation, state-inventory.md updated with a dated addition, serialization + manifest coverage extended, CheckpointManifest/1.1 (codex r1 MAJOR 1): the current single architecture hash cannot separate shape from training state \u2014 S1 versions the schema to 1.1 splitting it into shape_hash (network dims + encoder feature count; mismatch = version-stage refusal) and training_config_hash (optimizer/hyperparameters; mismatch = WARN in provenance, not refusal). checkpoint.js validation honors both; 1.0 manifests remain readable (shape_hash falls back to the legacy arch hash); the schema bump + fallback rule is itself part of the S3 trial surface). Construction-time assertions extended to the new state.",
+        "description": "Wire the chosen learning signal and weight-update path for the world-mind (deterministic under fixed seeds; every new mutable state \u2014 optimizer accumulators, reward traces \u2014 added to the checkpoint generation, state-inventory.md updated with a dated addition, serialization + manifest coverage extended, CheckpointManifest/1.1 (codex r1 MAJOR 1): the current single architecture hash cannot separate shape from training state \u2014 S1 versions the schema to 1.1 splitting it into shape_hash (network dims + encoder feature count; mismatch = version-stage refusal) and training_config_hash (optimizer/hyperparameters; mismatch = WARN in provenance, not refusal). checkpoint.js validation honors both; 1.0 manifests remain readable (shape_hash falls back to the legacy arch hash); the schema bump + fallback rule is itself part of the S3 trial surface). Construction-time assertions extended to the new state. CALL SITE ADOPTED (design review 20260805T034254Z): the world-train call site is run-live.js's world block (L509-557); train-tick.js is hive-only and stays UNTOUCHED (removed from files_touched). CheckpointManifest/1.1 DOMAINS SPECIFIED: shape_hash covers network dims, encoder feature count, AND the prediction head shape (Wp, bp dimensions); training_config_hash covers learning rate, loss mask E={0,1,2,3,5}, and update-rule identifiers. NEW CHECKPOINTED STATE: Wp, bp (prediction head params) and prev_features (the lazy-prediction 8-float carry) join the generation; the lazy-prediction invariant gets a construction-time assertion; SKIPPED-BLOCK RESET: when a tick skips the world block, prev_features resets to null and the next update skips (no stale-lag training) \u2014 encoded as testable behavior. 1.0 manifests report training_config_hash UNKNOWN, never 'matches'.",
         "is_gap": true,
         "mode": "PATCH_ALLOWED",
         "files_touched": [
           "tools/ant-hive-world/world-mind.js",
-          "tools/ant-hive-world/world-train.js (NEW \u2014 decided: separate module, not a train-tick.js extension; train-tick.js gains only the call site)",
-          "tools/ant-hive-world/train-tick.js (call site only)",
           "tools/ant-hive-world/checkpoint.js (state coverage + 1.1 validation)",
+          "tools/ant-hive-world/run-live.js (world-train call site in the world block L509-557)",
           "tools/ant-hive-world/checkpoint-schema.json (1.1: shape_hash + training_config_hash split, 1.0 fallback)",
           "_dev/state/checkpoint-continuity-test/state-inventory.md (dated addition)"
         ]
       },
       {
+        "step_id": "S1b",
+        "title": "Encoder/state coupling repair (F1) + re-measure (b'')",
+        "description": "S3-trial-confirmed F1 (codex 20260805T041202Z, world-mind.js:90-108): encodeWorldState derives coords 4 (hive count) and 7 (starvation pressure) from worldState.hives, absent from the live shared world-state.json \u2014 masked loss effectively one-dimensional. REPAIR: the shared world-state writer (run-live's world block) adds a hives summary {count, starvation_pressure} derived from the per-hive state it already holds in memory at write time (no new file reads, no membrane impact, schema_version bump on world-state, dashboard/importer unaffected structurally \u2014 verify both read paths tolerate the added key). encodeWorldState then reads real values; construction assertion extended (encoder coords 4/7 non-degenerate over a live-run fixture \u2014 dead-zero coordinates become detectable). THEN RE-MEASURE (b'') on the repaired coupling, SAME contract-hashed learning rate (0.05 \u2014 tuning to pass remains forbidden): if displacement > 0.05 with the frozen control at 0, (b'') PASSES as originally specified; if it still falls short, the live-data respecification question returns to the gate WITH the two-dimensional measurement in hand \u2014 never silently.",
+        "is_gap": true,
+        "mode": "PATCH_ALLOWED",
+        "files_touched": [
+          "tools/ant-hive-world/run-live.js (shared world-state writer: hives summary)",
+          "tools/ant-hive-world/world-state.js (if the writer lives there)",
+          "tools/ant-hive-world/world-mind.js (assertion extension only)",
+          "_dev/state/mind-learning-test/ (re-measured evidence)"
+        ]
+      },
+      {
         "step_id": "S2",
         "title": "Prove it LEARNS (relative criteria)",
-        "description": "Evidence contract WorldMindLearning/1.0: (a) weights CHANGE across a 300-tick run (checksums differ) and change DETERMINISTICALLY (same seed twice -> byte-identical final weights); (b) RELATIVE liveness recalibration per the repair worker's probe data \u2014 the respecified (b')/(d') criteria: post-learning policy diverges from its own initialization by L2 exceeding 10x the initialization-noise floor measured in mind-repair-evidence.json, and entropy trajectory shows monotone-ish departure from ln(5) (report the curve, threshold = departure exceeding 3x the frozen-mind fluctuation band); (c) learning IMPROVES the signal it optimizes (objective metric trends, n=2 seeds); (d) checkpoint round-trip mid-learning: save at tick 150, resume, continue to 300 -> byte-identical to uninterrupted across the FULL generation (weights AND optimizer state AND RNG state AND world state AND checkpoint bytes \u2014 codex r1 MINOR: not weights alone) (the A/A-prime standard now WITH moving weights \u2014 the true continuity-of-learning proof the convene wanted); (e) frozen-mind control run confirming the delta is the learning path, not incidental drift.",
+        "description": "Evidence contract WorldMindLearning/1.0: (a) weights CHANGE across a 300-tick run (checksums differ) and change DETERMINISTICALLY (same seed twice -> byte-identical final weights); (b) RELATIVE liveness recalibration per the repair worker's probe data \u2014 the respecified (b')/(d') criteria: post-learning policy diverges from its own initialization by L2 exceeding 10x the initialization-noise floor measured in mind-repair-evidence.json, and entropy trajectory shows monotone-ish departure from ln(5) (report the curve, threshold = departure exceeding 3x the frozen-mind fluctuation band); (c) learning IMPROVES the signal it optimizes (objective metric trends, n=2 seeds); (d) checkpoint round-trip mid-learning: save at tick 150, resume, continue to 300 -> byte-identical to uninterrupted across the FULL generation (weights AND optimizer state AND RNG state AND world state AND checkpoint bytes \u2014 codex r1 MINOR: not weights alone) (the A/A-prime standard now WITH moving weights \u2014 the true continuity-of-learning proof the convene wanted); (e) frozen-mind control run confirming the delta is the learning path, not incidental drift. CRITERIA ADOPTED (design review): (b-double-prime) relative parameter displacement > 0.05 vs a frozen control at exactly 0 is the PASS criterion (measured headroom 0.2146); (b-triple-prime) policy-L2 is DEMOTED to an inverted contamination alarm \u2014 under signal (c), policy displacement exceeding 10x the measured init-noise floor (0.012275) raises a contamination flag and fails the run pending diagnosis. The memo's two measured constants (floor 0.012275; frozen band width 1.2291e-6) are the S2 constants, provenance in the memo. Confound-test provenance is DETERMINISTIC: shuffle permutation seeded from turn_id, seed + permutation recorded in WorldMindLearning/1.0. D1 FORMALIZED (S3 trial ruling): the confound test's binding verdict applies ONLY when an actual mirror claim exists (mirror-detector's own thresholds: p < 0.05 AND >= 4 distinct build tiles); confounded_literal_rule is always reported verbatim alongside. A confound flag on a run with no mirror claim is diagnostic output, not a failure.",
         "is_gap": false,
         "mode": "RUN_ONLY",
         "files_touched": [
@@ -134,6 +146,27 @@
       "MAJORs 3-4 -> bound as REQUIRED S0 memo deliverables with quantified definitions + designed confound test (encoded)",
       "MINOR A/A-prime full-state comparison (encoded)",
       "MINOR module choice: world-train.js decided (encoded)"
+    ]
+  },
+  "amendment_r2": {
+    "at": "2026-08-05T03:49Z",
+    "per": "design review codex-cli-run__20260805T034254Z (memo substance PASSED \u2014 candidate (c) supported; findings were plan-adoption drift)",
+    "adopted": [
+      "run-live.js call site; train-tick.js untouched",
+      "(b'') displacement pass + (b''') inverted alarm with measured constants",
+      "1.1 hash domains + Wp/bp/prev_features checkpointing + skipped-block reset",
+      "deterministic confound provenance"
+    ],
+    "note": "stale .json.warning sidecar acknowledged as tooling artifact"
+  },
+  "amendment_s3": {
+    "at": "2026-08-05T04:17Z",
+    "per": "S3 trial codex-cli-run__20260805T041202Z (NEEDS_AMENDMENT; F1 independently confirmed from code)",
+    "disposition": [
+      "S1b inserted: coupling repair + honest re-measure, rate untouched",
+      "D1 applicability predicate formalized into S2",
+      "nine passing criteria + checkpoint/determinism contracts retained",
+      "debrief due at slice close"
     ]
   }
 }

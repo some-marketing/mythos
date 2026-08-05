@@ -1,8 +1,49 @@
 # NEXT SESSION HANDOFF
 
 > Scope: system
-> Date: 2026-08-04 (updated 20:59Z — custody granted to session 2a3e83da this turn)
+> Date: 2026-08-05 (updated 03:30Z — session 2a3e83da custody)
 > Supersedes: the 2026-08-04 shutdown-cascade version (PR #12 state preserved below)
+
+## MILESTONE 2026-08-05T03:26Z — FIRST CONTINUITY CONTROL PASSED ON ORWELL
+
+The resume chain is real: cc-turn1 (fresh, gen-150) → cc-turn2 (FIRST RESUMED TURN,
+all 7 gate stages, gen-300) → cc-turn3 (gen-450, lineage depth 2). Payload
+a8245cfe… verified every hop; membrane clean every turn; no refusal/stall/deviation
+under the operator's conditional pre-stamp
+(g-remote-mutation-prestamp__continuity-control__20260805T0306Z.md). Evidence:
+_dev/state/continuity-control-orwell/cc-evidence.json. Infrastructure continuity
+proven — NOT learning (frozen mind by design, disclosed).
+
+Slices committed this session (local branch; snapshot to PR #13 branch in flight):
+- 8285c6e76 checkpoint loader (G-CHECKPOINT-REVIEW cleared; 7-stage resume gate;
+  A/A′ byte-equal proof; 4 plan rounds + trial + fixes)
+- 8cb706dd5 world-mind network repair (state-reading mind; inert-weights bug dead;
+  invalidation proven with pre-fix control; thinks-but-cannot-learn successor gap)
+- continuity-control evidence + all three turns imported for the Unreal timelapse
+
+## MILESTONE 2026-08-05T04:38Z — THE WORLD-MIND LEARNS (learning path COMPLETE)
+
+world-train.js landed and G-MIND-LEARNING-REVIEW cleared (codex final ruling
+20260805T043204Z): prediction-error learning (mirror-unbribable by measurement —
+the mind's seed verbs author 87% of the detector's features), loss improves
+27×/2,318×, byte-deterministic, MID-LEARNING checkpoint round-trip byte-identical,
+(b″) PASS incl. head params (raw trunk FAIL preserved), coord 7 = nonblocking
+world-statistic precondition. Four-discovery chain closed: inert weights →
+no-update-path → dead loss coordinates → parameter-set specification. Commits:
+local branch through the learning slice; SNAPSHOT TO PR #13 BRANCH IS THE FIRST
+MORNING TASK (the 6ef4004 snapshot predates the mind-repair/learning slices).
+
+## MORNING QUEUE (operator)
+
+1. Snapshot the final slices to feat/go-skill-orwell-boot-fix-20260804 (mechanical).
+2. DECISION: deploy the LEARNING mind to Orwell (fresh stamp — outside all
+   pre-stamps). With it: the goal round design (food/water survival pressure —
+   which ALSO brings coord 7 alive; ecology and curriculum converge).
+3. Cosmetic: HUD faces backward in the Unreal level (one-line yaw in
+   build_world.py); custody follow-up: pull-results.sh + dashboard.test.cjs
+   excluded from snapshot by custody gate.
+4. Residue ledger unchanged (phantom F dir, courier marker, inbound-push
+   manifest-contract gap, trunk-plan branch quarantine).
 
 ## COMPLETED THIS SESSION (2a3e83da, Fable 5)
 
@@ -35,7 +76,33 @@
   packet `g-remote-mutation-packet__ant-world-orwell-live-dashboard__20260804T2023Z.md`
   (Phase 1 results embedded; operator stamped Phase 2 via /goal directive).
 
-## IN FLIGHT AT WRITE TIME (updated 22:59Z)
+## COMPLETED SINCE (updated 2026-08-05T00:45Z — full pipeline landed)
+
+- **Baseline EXECUTED twice** (r6, r7: 3,000 ticks each, STATUS 0, manifests +
+  membrane clean) after the boot-defect chain was fully root-caused (ordering cycle
+  ×2 → oneshot deadlock → one-boot-lag → job.env discriminator runner, all
+  codex-trialed, all fixes execution-verified). Dashboard live at localhost:4173.
+- **unreal-world-projection plan review-CLEARED** (six codex rounds) and EXECUTED
+  through S3: UnrealImport/1.0 schema + importer (codex-trialed, 3 MAJORs fixed,
+  journal/lock/manifest-order fail-closed, deterministic mirror p=0.704/0.233);
+  UE 5.8 project scaffold headless-verified ON ORWELL (ANTWORLD_OK, 170 actors,
+  idempotent; engine was already installed — gate dissolved to residual, operator
+  delegated defaults); S3 watch loop execution-verified (no-op + new-turn paths;
+  --deploy reserved for operator's first timelapse session). S4 final codex trial
+  in flight at write time.
+- **All work on the remote**: clean branch feat/go-skill-orwell-boot-fix-20260804
+  (snapshot slices e3cc86c81 → 4ca140ce → 004d46e56 → S3 slice in flight), PR #13
+  open. Local branch remains 3,939 commits ahead with .cache blobs — trunk-plan
+  S2/S3 territory, do NOT try to push it wholesale.
+- Operator instruction to open the world on orwell's desktop:
+  `& "C:\Program Files\Epic Games\UE_5.8\Engine\Binaries\Win64\UnrealEditor.exe" "D:\UnrealProjects\AntWorldProjection\AntWorldProjection.uproject"`
+  Visual appearance is written-not-verified (nullrhi builds) — first open is the
+  visual check. Rebuild never auto-fires on editor open (explicit act by design).
+- New host residue (owned, documented): D:\UnrealProjects\AntWorldProjection
+  (155.6 MB, approved footprint). Prior residue items unchanged (phantom F dir,
+  courier marker, inbound-push manifest-contract gap).
+
+## SUPERSEDED (kept for context — resolved above)
 
 - **Baseline turn blocked by a chain of guest boot defects, root-caused one by one
   from the guest journal** (WSL ext4 read-only mount of the OS avhdx — working

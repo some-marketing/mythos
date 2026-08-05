@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://mythos.local/schemas/ant-hive-world/CheckpointManifest/1.0",
-  "title": "CheckpointManifest/1.0",
+  "$id": "https://mythos.local/schemas/ant-hive-world/CheckpointManifest/1.1",
+  "title": "CheckpointManifest/1.1",
   "description": "Generation-level checkpoint manifest for ant-hive-world. A checkpoint is ONE generation directory, gen-<absolute_day>-<run_name>/, staged in full before any commit signal: all authoritative state files are written into a staging directory, each file's sha256 is recorded here, everything is fsynced, and THIS FILE is renamed into place last. The arrival of a checksum-valid manifest at <generation>/manifest.json IS the single authoritative commit token -- there is no separate marker file. A generation directory without a checksum-valid manifest is uncommitted, is invalid by definition, and is swept on next start. The newest committed generation is last-known-good and is NEVER auto-deleted. A generation id that already names a committed generation is a fail-closed refusal (STATUS=checkpoint-collision:<id>): never overwrite, never auto-suffix.",
   "type": "object",
   "additionalProperties": false,
@@ -22,12 +22,12 @@
   ],
   "properties": {
     "schema": {
-      "const": "CheckpointManifest/1.0",
-      "description": "Frozen schema identifier. A resume whose manifest carries any other value fails at validation stage 3 (version compatibility)."
+      "enum": ["CheckpointManifest/1.1", "CheckpointManifest/1.0"],
+      "description": "Schema identifier. 1.1 is what this engine writes. 1.0 is accepted as READABLE so that a pre-learning-path generation produces an honest shape-mismatch refusal at validation stage 3 rather than a schema-shaped one; readable is not resumable."
     },
     "schema_version": {
-      "const": "1.0",
-      "description": "Major.minor of this manifest contract. The loader accepts an exact major match; a differing major is a stage-3 refusal."
+      "enum": ["1.1", "1.0"],
+      "description": "Major.minor of this manifest contract. 1.1 splits the single 1.0 architecture hash into shape_hash (mismatch = stage-3 refusal) and training_config_hash (mismatch = provenance WARN). A 1.0 manifest has neither: its legacy architecture.hash is read as the shape_hash fallback, and its training_config_hash is reported UNKNOWN -- never as matching."
     },
     "code_version": {
       "type": "string",
@@ -89,9 +89,26 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["hash", "hive", "world_mind", "verbs"],
-      "description": "Architecture and action-space descriptor. `hash` is a sha256 over a canonical serialization of this whole object; a resume whose restored architecture hash differs from the running engine's is a stage-3 refusal, because restoring an [8][9] weight matrix into a differently-shaped network is silent corruption, not continuity.",
+      "description": "Architecture, training-configuration and action-space descriptor. Under 1.1 there are TWO authoritative hashes with two different consequences. `shape_hash` covers layer dims, the shape the engine actually builds, the prediction-head dims, the prev_features arity and verb ORDER -- a mismatch is a stage-3 REFUSAL, because restoring parameters into a differently-shaped mind is silent corruption, not continuity. `training_config_hash` covers learning rates, the loss mask, the loss form and lag convention, the head seed-derivation constant and the resource normalizers -- a mismatch is a provenance WARN and never a refusal, because the restore is valid but the metrics are not comparable. `hash` is the sha256 over this whole object, retained for provenance and for comparison against 1.0 manifests; it is no longer the refusal criterion.",
       "properties": {
         "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "shape_hash": { "type": "string", "pattern": "^[a-f0-9]{64}$", "description": "1.1 only. Mismatch against the running engine is a stage-3 refusal. Absent on 1.0 manifests, where the legacy `hash` is read as the fallback." },
+        "training_config_hash": { "type": "string", "pattern": "^[a-f0-9]{64}$", "description": "1.1 only. Mismatch is a WARN recorded in provenance, never a refusal. Absent on 1.0 manifests, where it is reported UNKNOWN -- 'no value' and 'same value' are different facts." },
+        "world_learning": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["learning_rate", "resource_norm_k", "contract_version", "loss_form", "loss_mask", "lag_convention", "head_seed_derivation_constant"],
+          "description": "1.1 only. The world mind's learning contract, in full, so a reader can see what training_config_hash is a hash OF without recomputing it. Every field here is inside training_config_hash and none is inside shape_hash.",
+          "properties": {
+            "learning_rate": { "type": "number" },
+            "resource_norm_k": { "type": "number" },
+            "contract_version": { "type": "integer" },
+            "loss_form": { "type": "string" },
+            "loss_mask": { "type": "array", "items": { "type": "integer" }, "description": "Sorted list of the encoder feature coordinates the loss is computed over. Every coordinate NOT listed contributes exactly zero gradient at the head's output -- that is what the mirror-safety exclusion means mechanically." },
+            "lag_convention": { "type": "string" },
+            "head_seed_derivation_constant": { "type": "integer" }
+          }
+        },
         "hive": {
           "type": "object",
           "additionalProperties": false,
@@ -117,7 +134,7 @@
               "type": "object",
               "additionalProperties": false,
               "required": ["w1_rows", "w1_cols", "w2_rows", "w2_cols", "matches_declared"],
-              "description": "The parameter shape createWorldMind() ACTUALLY builds, probed at load time. It does not currently match the declared sizes above (see the defect note in world-mind.js: createWorldMind delegates to the hive network's createNetwork, so W1 is [8][9] while encodeWorldState emits 8 features, which makes the world mind's weights inert and its policy exactly uniform). Both declared and actual are hashed, so a future repair correctly invalidates old checkpoints rather than loading weights into a re-shaped network.",
+              "description": "The parameter shape createWorldMind() ACTUALLY builds, probed at load time. Post-repair (plan ant-world-mind-network-repair) the declared sizes and the built shape agree, and matches_declared is true; the probe stays pointed at reality rather than at the constants, because that is what would catch a future divergence instead of assuming one cannot happen. Both declared and actual are inside shape_hash.",
               "properties": {
                 "w1_rows": { "type": "integer" },
                 "w1_cols": { "type": "integer" },
@@ -125,6 +142,21 @@
                 "w2_cols": { "type": "integer" },
                 "matches_declared": { "type": "boolean" }
               }
+            },
+            "prediction_head": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["wp_rows", "wp_cols", "bp_length"],
+              "description": "1.1 only. The world mind's learning-path prediction head (Wp: [feature count][hidden width], bp: [feature count]). Inside shape_hash: restoring a generation with no head, or a head of a different width, is silent corruption exactly as a mismatched W1 would be.",
+              "properties": {
+                "wp_rows": { "type": "integer" },
+                "wp_cols": { "type": "integer" },
+                "bp_length": { "type": "integer" }
+              }
+            },
+            "prev_features_arity": {
+              "type": "integer",
+              "description": "1.1 only. Width of the one-tick lag carrier (prev_features). Inside shape_hash so a resize of the encoder cannot restore a stale-width lag vector."
             }
           }
         },

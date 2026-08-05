@@ -18,7 +18,42 @@
 const fs = require('fs');
 const path = require('path');
 
-const SCHEMA_VERSION = '1.0.0';
+// 1.1.0 (plan ant-world-mind-learning-path, S1b): ADDITIVE only -- the shared
+// world-state may now carry a `hives` summary, `{ count, starvation_pressure }`,
+// written by the driver's world block from the per-hive state it already holds
+// in memory. Every 1.0.0 field keeps its meaning and its type, so a 1.0.0 reader
+// that ignores unknown keys reads a 1.1.0 file correctly; the version moves
+// because a consumer that WANTS the summary needs a way to know whether its
+// absence means "old file" or "no hives".
+//
+// WHY THE SUMMARY AND NOT THE PER-HIVE STATES: the hive states live in their own
+// per-hive files behind their own isolation boundary, and copying them into the
+// shared file would put one hive's internals in the other hive's read path. The
+// summary is the two aggregate numbers the world mind's encoder actually reads
+// (see world-mind.js encodeWorldState coordinates 4 and 7) and nothing else.
+const SCHEMA_VERSION = '1.1.0';
+
+// Derive the shared world-state's `hives` summary from per-hive states. The
+// definition of "starving" is NOT invented here: it is exactly the predicate
+// world-mind.js's encodeWorldState already applied when it derived coordinate 7
+// from a per-hive map -- a hive whose stockpile is present and at or below zero.
+// `starvation_pressure` is therefore a COUNT of starving hives (not a ratio),
+// because that count is what the encoder normalizes with normalizeWorldResource.
+// Pure: reads only the object it is handed, touches no file.
+function summarizeHives(hiveStates) {
+  const ids = Object.keys(hiveStates || {});
+  let starving = 0;
+  for (const id of ids) {
+    const entry = hiveStates[id];
+    // Accepts either the per-hive state object ({ hive_state: { stockpile } })
+    // or an already-unwrapped hive_state, since run-live holds the first and
+    // checkpoint.js holds the second.
+    const inner = entry && entry.hive_state ? entry.hive_state : entry;
+    const stock = inner && inner.stockpile;
+    if (stock !== undefined && stock <= 0) starving += 1;
+  }
+  return { count: ids.length, starvation_pressure: starving };
+}
 
 function readWorldState(statePath) {
   try {
@@ -487,6 +522,7 @@ module.exports = {
   readWorldState,
   initialWorldState,
   writeWorldState,
+  summarizeHives,
   foodSourceCoords,
   claimResource,
   appendGeometry,

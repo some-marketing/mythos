@@ -7,6 +7,7 @@
 - [Memory system: active persistence ratified](memory-system-active-persistence-ratified.md) — shutdown→/remember leg + recall phase-2 direction ratified 2026-08-03; convene draft at _dev/concepts/memory-surface-declaration.md
 
 - [Bare drive letter writes go phantom](bare-drive-letter-writes-go-phantom.md) — Orwell root cause: "F" is CWD-relative; in-place hash verification proves self-consistency, not delivery; verify targets through an independent reader
+- [GO is the standing posture](go-is-the-standing-posture.md) — 2026-08-04: /go (Global Orchestrator) or blueprint loop is HOW work happens, regardless of follow-ups; main-chain never collapses into the worker
 - [/go is cascade-down bubble-up review](go-is-cascade-down-bubble-up-review.md) — 2026-08-04: at each fold the parent does contract check + integration; acceptance-grade judgment trials land on a distinct family, never the parent
 - [No mind is pigeonholed to a role](no-mind-is-pigeonholed-to-a-role.md) — 2026-08-04: assign minds by fit per dispatch; strengths are hints, only distinct-family review + PII/PRC constraints bind
 - [Memory saves are triple-writes](memory-saves-are-triple-writes.md) — every memory save also runs /remember: repo mirror + Mythos Memories vault, report all three legs
@@ -45,3 +46,8 @@
 - [meta-ads run-with-op is live mode](meta-ads-run-with-op-is-live-mode.md) — the wrapper sets META_ADS_DRY_RUN=false; scripts mutate live on first run, set dry-run explicitly and verify the printed dryRun= line
 - [op service-account token precedence](op-service-account-token-precedence.md) — a globally exported OP_SERVICE_ACCOUNT_TOKEN breaks wrappers on other 1P service accounts; scope per command; launchd has bare PATH and no desktop 1P session
 - [launchd op desktop-fallback prompts](launchd-op-desktop-fallback-prompts.md) — every missing op field falls back to desktop auth and raises an unanswerable macOS Automation prompt in scheduled jobs; disable desktop integration and pre-set unused fields
+- [Run-learn-meditate-improve cadence](run-learn-meditate-improve-cadence.md) — 2026-08-05: sim rounds feed /meditate; improvements route through blueprint→review→/go; Perplexity is the outward lens
+- [Text operator after runs and meditations](text-operator-after-runs-and-meditations.md) — 2026-08-05: iMessage after every sim round + meditation; improved / learned / next, layman's terms
+- [mind-rotation-capabilities-matrix](mind-rotation-capabilities-matrix.md) — Operator 2026-08-05 — deliberately rotate/test mind AND harness combinations to build an evidence-based capabilities matrix; frontiers own planning-tier judgment; DeepSeek joins the FRONTIER rotation; never lock into fixed minds or harnesses
+- [Variety is the spice of capability](variety-is-the-spice-of-capability.md) — 2026-08-05 verbatim philosophy: novelty reveals capability; prefer the untested lane when verification holds it accountable
+- [commit-to-remote-as-we-grow](commit-to-remote-as-we-grow.md) — "Operator 2026-08-05 — committing to the remote is a STANDING operation as work accumulates, not an end-of-session act; the clean-branch snapshot pattern is the vehicle"

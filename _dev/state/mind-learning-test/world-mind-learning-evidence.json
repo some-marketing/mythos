@@ -1,0 +1,5355 @@
+{
+  "schema": "WorldMindLearning/1.0",
+  "plan": "ant-world-mind-learning-path",
+  "step": "S1b -- re-measurement of the S2 arm suite after the encoder/state coupling repair",
+  "measurement_round": 2,
+  "supersedes": "the first S2 round, whose (b'') number was measured with two of the three masked coordinates structurally dead (see findings.F1)",
+  "generated_at": "2026-08-05T04:28:44.030Z",
+  "node_version": "v24.10.0",
+  "overall_verdict": "FAIL",
+  "signal": {
+    "candidate": "(c) one-step masked prediction error on a hidden-layer prediction head",
+    "design_authority": "_dev/reports/analysis/world-mind-learning-signal-memo__20260805.md",
+    "module": "tools/ant-hive-world/world-train.js",
+    "call_site": "tools/ant-hive-world/run-live.js world block (before decideWorld)",
+    "learning_rate": 0.05,
+    "loss_form": "masked-mse-onestep",
+    "loss_mask_M": [
+      4,
+      6,
+      7
+    ],
+    "loss_excluded_E": [
+      0,
+      1,
+      2,
+      3,
+      5
+    ],
+    "lag_convention": "prev-input-t, target-t+1, update-before-decide",
+    "contract_version": 1,
+    "head_seed_derivation_constant": 2654435761
+  },
+  "checkpoint_contract": {
+    "schema": "CheckpointManifest/1.1",
+    "schema_version": "1.1",
+    "code_version": "ant-hive-world-checkpoint-1.1.0",
+    "accepted_schema_versions": [
+      "1.1",
+      "1.0"
+    ],
+    "live_shape_hash": "22ebdb6837f129b6977c21a0c92d4bfaf9bad61429cfe54321e67b82ac1037e9",
+    "live_training_config_hash": "355cfabf26d3ed97c215156d0b36712e1dd286ff24f6d665b236bcf55bb09971",
+    "shape_domain": {
+      "hive": {
+        "input_size": 9,
+        "hidden_size": 8,
+        "output_size": 5
+      },
+      "world_mind": {
+        "input_size": 8,
+        "hidden_size": 8,
+        "output_size": 5,
+        "actual_shape": {
+          "w1_rows": 8,
+          "w1_cols": 8,
+          "w2_rows": 5,
+          "w2_cols": 8,
+          "matches_declared": true
+        },
+        "prediction_head": {
+          "wp_rows": 8,
+          "wp_cols": 8,
+          "bp_length": 8
+        },
+        "prev_features_arity": 8
+      },
+      "verbs": {
+        "hive_verb_order": [
+          "gather-food",
+          "gather-wood",
+          "build",
+          "claim-territory",
+          "idle"
+        ],
+        "harness_verbs": [
+          "gather",
+          "build",
+          "claim-territory",
+          "idle"
+        ],
+        "world_verb_order": [
+          "seed-wood",
+          "seed-stone",
+          "signal-food",
+          "relax-decay",
+          "idle"
+        ]
+      }
+    },
+    "training_config_domain": {
+      "hive": {
+        "learning_rate": 0.05,
+        "resource_norm_k": 20
+      },
+      "world_mind": {
+        "learning_rate": 0.05,
+        "resource_norm_k": 40,
+        "contract_version": 1,
+        "loss_form": "masked-mse-onestep",
+        "loss_mask": [
+          4,
+          6,
+          7
+        ],
+        "lag_convention": "prev-input-t, target-t+1, update-before-decide",
+        "head_seed_derivation_constant": 2654435761
+      }
+    }
+  },
+  "constants": {
+    "init_noise_floor": 0.012274953713908984,
+    "init_noise_floor_provenance": "world-mind-learning-signal-memo__20260805.md section 5.1 (45,000 comparisons, 10 fresh seeds, repair fixture seed 20260805)",
+    "frozen_entropy_band_width": 0.0000012291423880927965,
+    "frozen_max_departure_from_ln5": 0.0000017306619535251144,
+    "frozen_band_provenance": "world-mind-learning-signal-memo__20260805.md section 5.2 (300-tick frozen run, generation gen-300-frozenband)",
+    "displacement_bar": 0.05,
+    "contamination_alarm": 0.12274953713908984
+  },
+  "design": {
+    "ticks_per_leg": 150,
+    "ticks_total": 300,
+    "root_seeds": [
+      20260805,
+      20260806
+    ],
+    "arms": {
+      "L-rep0": "learning, 300 ticks, seed 20260805",
+      "L-rep0-repeat": "learning, 300 ticks, seed 20260805 -- determinism repeat",
+      "L-rep1": "learning, 300 ticks, seed 20260806",
+      "F-rep0": "frozen control (--freeze-world-learning), 300 ticks, seed 20260805",
+      "F-rep1": "frozen control, 300 ticks, seed 20260806",
+      "RT-rep0": "learning, 150 ticks -> commit -> resume -> 150 ticks, seed 20260805"
+    },
+    "frozen_inputs": "no arm writes world-mind-decision.json, so the world mind's own RNG draw is never bypassed and the prediction signal trains on every tick"
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "status": "REPAIRED in S1b -- this record is retained, not deleted, because the first measurement round was recorded under the defect and a reader of that evidence needs to find this note",
+      "severity": "material -- it invalidated the first (b'') measurement",
+      "title": "Two of the three masked loss coordinates were identically zero on every tick of a live run",
+      "as_found": "encodeWorldState derived coordinate 4 (hive count) and coordinate 7 (starvation pressure) from worldState.hives. run-live.js's shared world-state.json had no `hives` key at all -- the hive states live in their own per-hive files -- so both coordinates read 0 on every tick of every live run. The memo anticipated coordinate 4 contributing about zero gradient (\"near-constant at 2 in real runs\") but expected coordinate 7 to be \"the substantive, mirror-orthogonal\" target alongside coordinate 6. In practice the effective loss was one-dimensional: total pheromone strength.",
+      "repair": "the shared world-state WRITER now publishes a `hives` summary -- { count, starvation_pressure } -- computed by world-state.js summarizeHives from the per-hive state run-live.js already holds in memory at write time (no new file reads, no per-hive internals beyond the two aggregates the encoder reads). world-state schema_version 1.0.0 -> 1.1.0, additive. encodeWorldState reads the summary, and still reads the per-hive map shape used by the repair fixture and the checkpoint world payload, with the summary defined so both shapes encode identically.",
+      "detection_added": "world-mind.js gained (1) a module-load coupling probe that throws if the encoder stops responding to the summary the writer writes, or if the two accepted shapes disagree about the same world, and (2) assessMaskedCoordinateLiveness / assertMaskedCoordinatesLive, a run-level check that a masked coordinate is never zero on every tick. run-live.js records the full encoder output per world tick (`wx` in the decision stream) and prints a liveness line at run end; this harness turns the same report into verdict g_masked_coordinate_liveness. The bug class -- a masked coordinate that is structurally dead while the contract claims it is trained -- is now a failing verdict rather than an inference from a missing key.",
+      "measured_after_repair": {
+        "world_state_has_hives_key": true,
+        "world_state_hives_summary": {
+          "count": 2,
+          "starvation_pressure": 0
+        },
+        "world_state_schema_version": "1.1.0",
+        "masked_coordinate_values_at_final_state": {
+          "4": 0.047619047619047616,
+          "6": 0.013665475120674972,
+          "7": 0
+        },
+        "run_liveness": {
+          "samples": 300,
+          "mask": [
+            4,
+            6,
+            7
+          ],
+          "per_coordinate": {
+            "4": {
+              "name": "hive_count",
+              "samples": 300,
+              "ticks_non_zero": 300,
+              "min": 0.047619047619047616,
+              "max": 0.047619047619047616,
+              "distinct_values_seen": 1,
+              "dead_zero": false,
+              "constant": true
+            },
+            "6": {
+              "name": "pheromone_signal_strength",
+              "samples": 300,
+              "ticks_non_zero": 93,
+              "min": 0,
+              "max": 0.08426403533385252,
+              "distinct_values_seen": 64,
+              "dead_zero": false,
+              "constant": false
+            },
+            "7": {
+              "name": "starvation_pressure",
+              "samples": 300,
+              "ticks_non_zero": 0,
+              "min": 0,
+              "max": 0,
+              "distinct_values_seen": 1,
+              "dead_zero": true,
+              "constant": true
+            }
+          },
+          "dead_zero_coordinates": [
+            7
+          ],
+          "constant_coordinates": [
+            4,
+            7
+          ],
+          "live": false,
+          "effective_dimensionality": 1,
+          "standard": "every masked coordinate must take a non-zero value on at least one tick of the run; a masked coordinate that is zero on every tick is a dead training dimension, not a small gradient"
+        },
+        "hidden_units_relu_active": "2 of 8",
+        "loss_decomposition": {
+          "steps": 299,
+          "replayed_theta_checksum": "7c1677275706a086cf8005b7bde525eb05b6e13d4934ba206b0770a6d76e0880",
+          "checkpoint_theta_checksum": "7c1677275706a086cf8005b7bde525eb05b6e13d4934ba206b0770a6d76e0880",
+          "replay_matches_checkpoint": true,
+          "replay_note": "the replay reconstructs theta_0 from the root seed and re-applies the recorded (x_t, x_t+1) pairs; matching the committed checkpoint proves the decomposition below describes the run that actually happened",
+          "mean_masked_loss": 0.00012335311835936835,
+          "per_coordinate": {
+            "4": {
+              "name": "hive_count",
+              "mean_squared_error": 0.00010698905086691572,
+              "mean_squared_error_first_50": 0.0006158925438637472,
+              "mean_squared_error_last_50": 6.414820165756671e-7,
+              "share_of_total_loss": 0.28911321764676007,
+              "carries_gradient": true
+            },
+            "6": {
+              "name": "pheromone_signal_strength",
+              "mean_squared_error": 0.0002627446174368111,
+              "mean_squared_error_first_50": 0.0009911565679013173,
+              "mean_squared_error_last_50": 0.00005879094531372409,
+              "share_of_total_loss": 0.7100066890117027,
+              "carries_gradient": true
+            },
+            "7": {
+              "name": "starvation_pressure",
+              "mean_squared_error": 3.2568677437779914e-7,
+              "mean_squared_error_first_50": 0.0000014508113029162284,
+              "mean_squared_error_last_50": 1.8231864860954492e-7,
+              "share_of_total_loss": 0.000880093341537224,
+              "carries_gradient": true
+            }
+          },
+          "coordinates_carrying_gradient": [
+            4,
+            6,
+            7
+          ],
+          "coordinates_carrying_no_gradient": []
+        }
+      },
+      "still_not_changed": "the loss mask M, the learning rate, and the encoder's feature list are untouched -- changing any of them is a design decision belonging to the memo and the G-LEARNING-SIGNAL-DESIGN gate, and would move training_config_hash. S1b repaired the coupling between the writer and the reader; it did not re-specify the signal."
+    }
+  ],
+  "deviations_from_memo_and_plan": [
+    {
+      "id": "D1",
+      "subject": "confound-test fail rule (memo section 4.3, plan S2)",
+      "memo_or_plan_says": "binding: median shuffled mirror-p <= unshuffled mirror-p means confounded, and the run fails",
+      "as_implemented": "the literal comparison is computed and reported verbatim as confounded_literal_rule; the BINDING verdict additionally requires that a mirror claim be present at all (unshuffled p < 0.05 and at least 4 distinct build tiles, mirror-detector.js's own thresholds)",
+      "why": "measured, not argued: at root seed 20260806 the FROZEN control -- a mind that by construction never updated a single parameter -- trips the literal rule identically to the learning arm at the same seed (F-rep1 and L-rep1 both show unshuffled p near 0.78 against a median shuffled p near 0.55). A rule that flags a mind which cannot learn is measuring the seed, not the signal. The rule's stated purpose is to adjudicate whether an APPARENT MIRROR is a density artifact; where there is no apparent mirror there is nothing to adjudicate. Letter versus intent: intent preserved, letter reported.",
+      "surfaced_to": "S3 trial and the G-MIND-LEARNING-REVIEW gate -- this is a memo-amendment request, not a silent re-route"
+    },
+    {
+      "id": "D2",
+      "subject": "frozen-mind control mechanism (plan S2 criterion (e))",
+      "memo_or_plan_says": "a frozen-mind control run confirming the delta is the learning path, not incidental drift -- without specifying how the freeze is effected",
+      "as_implemented": "a new run-live.js flag --freeze-world-learning. The world block still encodes, still carries prev_features, and still COMPUTES and reports the masked loss; it simply writes no parameter. Recorded in identity.json as world_learning_frozen, never inferred from silence.",
+      "why": "after S1 there is no longer an un-learning code path to use as a control, so one had to exist. Computing the loss in the frozen arm makes the control strictly more informative: the two arms share every read and differ only in whether the update lands."
+    },
+    {
+      "id": "D3",
+      "subject": "confound-test permutation seed provenance (plan amendment r2: \"shuffle permutation seeded from turn_id\")",
+      "memo_or_plan_says": "deterministic permutation seeded from turn_id, seed and permutation recorded",
+      "as_implemented": "turn_id is taken to be the arm's committed generation id (e.g. gen-300-L-rep0), which is the stable per-turn identity the checkpoint lineage already carries. The seed is fnv1a32(turn_id); the seed, the first permutation in full, and a sha256 over all 200 permutations are recorded.",
+      "why": "the plan names turn_id without defining it in this engine. The generation id is the one per-turn identifier that is stable, recorded and reproducible from the evidence alone."
+    },
+    {
+      "id": "D4",
+      "subject": "deterministic mirror statistic",
+      "memo_or_plan_says": "use mirror-detector.js's statistic",
+      "as_implemented": "mirror-detector.js's meanNearest/featureCoords/buildCoords are reused unchanged; only its permutationTest is replaced with a seeded equivalent inside this harness",
+      "why": "mirror-detector.js draws its null from Math.random, which cannot carry reproducible evidence. That module is outside this plan's write set and was not modified."
+    },
+    {
+      "id": "D6",
+      "subject": "the S2 evidence contract gained two verdicts (plan S1b)",
+      "memo_or_plan_says": "S2 lists criteria (a) through (f) plus the reported density guard, the checkpoint-schema contract and RNG parity -- ten verdicts",
+      "as_implemented": "eleven and twelve: g_masked_coordinate_liveness (binding) and loss_decomposition_reported (binding only on the replay reproducing the committed checkpoint). The original ten are unchanged in standard and in threshold.",
+      "why": "S1b requires that dead-zero masked coordinates over a live run become DETECTABLE. A detector that is not a verdict is a comment. The decomposition exists because S1b requires reporting which coordinates carry gradient when the bar is missed, and a decomposition nobody can check against the run that produced it is an assertion -- hence the replay-versus-checkpoint falsifier."
+    },
+    {
+      "id": "D7",
+      "subject": "decision-stream columns (plan S1b)",
+      "memo_or_plan_says": "nothing about the decision stream beyond what S1 established",
+      "as_implemented": "world rows carry `wx`, the full encoder output for that tick. Cross-round byte comparisons against the FIRST measurement round are therefore invalid; all determinism and round-trip comparisons in this bundle are within-round, arm against arm, which is what they always were.",
+      "why": "the S1b defect was invisible in every aggregate the stream already carried. Recording the training inputs themselves is what makes the liveness verdict a measurement and the loss decomposition a replay rather than a reconstruction."
+    },
+    {
+      "id": "D5",
+      "subject": "W1 gradient loop bound (memo section 3.3 writes \"for k in 0..F-1\")",
+      "memo_or_plan_says": "the inner W1 loop runs over F, the encoder feature count",
+      "as_implemented": "the loop runs over W1[j].length, the actual input width",
+      "why": "the two are equal here (input width IS the encoder feature count, 8) so no arithmetic differs; reading the width from the matrix rather than from a constant is the same discipline WORLD_INPUT_SIZE already applies."
+    }
+  ],
+  "verdicts": {
+    "a_weights_change_and_deterministically": {
+      "standard": "weights differ from theta_0 after 300 ticks AND two runs at the same seed are byte-identical",
+      "pass": true,
+      "detail": {
+        "weights_changed": {
+          "L-rep0": true,
+          "L-rep1": true
+        },
+        "determinism": {
+          "standard": "the same root seed run twice must produce byte-identical mind.json (weights, prediction head, prev_features) and byte-identical rng.json",
+          "mind_json_left": "5fd02ac67798880fc808cb61fb3c89f6973db670131f09ff731691cbaa0c33ba",
+          "mind_json_right": "5fd02ac67798880fc808cb61fb3c89f6973db670131f09ff731691cbaa0c33ba",
+          "rng_json_left": "64571098f6ccfba7aaecd80e6a7ef31f7bbb760f67a021ea5a7af47c824f74d1",
+          "rng_json_right": "64571098f6ccfba7aaecd80e6a7ef31f7bbb760f67a021ea5a7af47c824f74d1",
+          "decision_stream": {
+            "window": [
+              0,
+              300
+            ],
+            "rows_left": 900,
+            "rows_right": 900,
+            "identical": true,
+            "differing_rows": 0,
+            "first_divergences": [],
+            "left_sha256": "7428790b52d615c4fffa348b95827105abfe925460f5d3475f6ae15869d3885b",
+            "right_sha256": "7428790b52d615c4fffa348b95827105abfe925460f5d3475f6ae15869d3885b"
+          },
+          "mind_identical": true,
+          "rng_identical": true
+        }
+      }
+    },
+    "b2_relative_parameter_displacement": {
+      "standard": "relative parameter displacement over (W1,b1,W2,b2) > 0.05, with the frozen control at exactly 0",
+      "pass": false,
+      "detail": {
+        "learning": {
+          "L-rep0": 0.01469237703019979,
+          "L-rep1": 0.00970042765542562
+        },
+        "frozen": {
+          "F-rep0": 0,
+          "F-rep1": 0
+        },
+        "bar": 0.05,
+        "memo_feasibility_value": 0.2146,
+        "memo_feasibility_caveat": "memo section 5.5: the 0.2146 that calibrated this bar was measured by driving the update with the repair fixture's IID world states, NOT a real trajectory. The memo states plainly that \"S2 must re-measure all of it on the real run.\" This is that re-measurement.",
+        "measurement_round": "second -- re-measured after the S1b encoder/state coupling repair, at the UNCHANGED contract-hashed learning rate 0.05",
+        "learning_rate_used": 0.05,
+        "learning_rate_note": "identical to the first measurement round. The memo binds a rate change to a NEW contract version with its own hash, and tuning a constant until a criterion passes is fitting the mind to the test, so the rate was not touched.",
+        "first_round_values": {
+          "L-rep0": 0.010458101249467815,
+          "L-rep1": 0.0039042831955191223,
+          "provenance": "_dev/reports/analysis/codex-cli-run__20260805T041202Z__world-mind-learning-s3-trial.md, which quotes the pre-repair evidence bundle verbatim (that bundle has since been regenerated in place by this round)",
+          "note": "measured with two of the three masked coordinates structurally dead; the effective loss was one-dimensional"
+        },
+        "change_since_first_round": {
+          "L-rep0": {
+            "before": 0.010458101249467815,
+            "after": 0.01469237703019979,
+            "ratio": 1.404879975793641
+          },
+          "L-rep1": {
+            "before": 0.0039042831955191223,
+            "after": 0.00970042765542562,
+            "ratio": 2.48456046081868
+          }
+        },
+        "masked_loss_scale_first_50": {
+          "L-rep0": 0.0005361666410226601,
+          "L-rep1": 0.0006475753883655154
+        },
+        "per_coordinate_gradient_carriers": {
+          "L-rep0": [
+            4,
+            6,
+            7
+          ],
+          "L-rep1": [
+            4,
+            6,
+            7
+          ]
+        },
+        "see_also": "findings.F1 (the coupling defect and its repair), verdicts.g_masked_coordinate_liveness (whether the masked coordinates are live on this run), and verdicts.loss_decomposition_reported (which coordinates carry the gradient now)"
+      }
+    },
+    "b3_policy_contamination_alarm": {
+      "standard": "INVERTED: policy L2 from own initialization must NOT exceed 0.12274953713908984 (10 x the measured init-noise floor). Exceeding it flags contamination and FAILS the run pending diagnosis.",
+      "pass": true,
+      "detail": {
+        "policy_l2_max": {
+          "L-rep0": 0.0002244315455204192,
+          "L-rep1": 0.00019204647068927003
+        },
+        "init_noise_floor": 0.012274953713908984,
+        "alarm_threshold": 0.12274953713908984,
+        "verb_weights_untouched": {
+          "L-rep0": true,
+          "L-rep1": true
+        }
+      }
+    },
+    "c_prediction_loss_improves": {
+      "standard": "masked prediction loss falls from the first 50 updated ticks to the last 50, on n=2 seeds",
+      "pass": true,
+      "detail": {
+        "L-rep0": {
+          "ticks_with_loss": 299,
+          "ticks_updated": 299,
+          "mean_first_50": 0.0005361666410226601,
+          "mean_last_50": 0.00001987158199296977,
+          "ratio_first_over_last": 26.98157807528091,
+          "improved": true,
+          "min": 2.3906302142571226e-9,
+          "max": 0.0022939551267395935
+        },
+        "L-rep1": {
+          "ticks_with_loss": 299,
+          "ticks_updated": 299,
+          "mean_first_50": 0.0006475753883655154,
+          "mean_last_50": 2.793688244675767e-7,
+          "ratio_first_over_last": 2317.9944634111184,
+          "improved": true,
+          "min": 5.867845807198157e-9,
+          "max": 0.001854254476503932
+        }
+      }
+    },
+    "d_mid_learning_round_trip": {
+      "standard": "save at tick 150, resume, continue to 300 -> byte-identical to the uninterrupted run across the FULL generation, not weights alone",
+      "pass": true,
+      "detail": {
+        "standard": "save at tick 150, resume, continue to 300 -> byte-identical to the uninterrupted run across the FULL generation, not weights alone",
+        "generation_comparison": {
+          "per_state_file": {
+            "mind.json": {
+              "left": "5fd02ac67798880fc808cb61fb3c89f6973db670131f09ff731691cbaa0c33ba",
+              "right": "5fd02ac67798880fc808cb61fb3c89f6973db670131f09ff731691cbaa0c33ba",
+              "identical": true
+            },
+            "rng.json": {
+              "left": "64571098f6ccfba7aaecd80e6a7ef31f7bbb760f67a021ea5a7af47c824f74d1",
+              "right": "64571098f6ccfba7aaecd80e6a7ef31f7bbb760f67a021ea5a7af47c824f74d1",
+              "identical": true
+            },
+            "world.json": {
+              "left": "c1949126411a89fad72ddb4dad13104e1ada54c15436a3f9210b43c1ecb0023d",
+              "right": "5c804ad5627680ba3b8d8e5505b112c377adae73aba9c80b10b3a0c9ba2ddedd",
+              "identical": false
+            },
+            "identity.json": {
+              "left": "159c23acb559e1ef0533a656dbad8563d54d79b2b644622091f59d1b9c50257f",
+              "right": "ba2b102ce46eb1c8fd101240d1fe92815c23d841fc3d02a790ac6e427048212a",
+              "identical": false
+            }
+          },
+          "mind_bytes_identical": true,
+          "rng_bytes_identical": true,
+          "world_tiers": {
+            "tiers": [
+              {
+                "tier": 1,
+                "name": "raw",
+                "fields_removed_at_this_tier": [],
+                "reason": null,
+                "identical": false
+              },
+              {
+                "tier": 2,
+                "name": "minus wall-clock and run identity",
+                "fields_removed_at_this_tier": [
+                  "world_state.written_at",
+                  "world_state.geometry_log[].at",
+                  "world_state.geometry_log[].run_id",
+                  "world_state.geometry_log[].episode_id",
+                  "world_state.geometry_log[].tick_key",
+                  "world_state.geometry_log[].arm_id"
+                ],
+                "reason": "wall-clock stamps and per-process run identity; encodeState reads only the COUNT of geometry entries, never their fields",
+                "identical": false
+              },
+              {
+                "tier": 3,
+                "name": "minus the world-file write counter",
+                "fields_removed_at_this_tier": [
+                  "world_state.seq"
+                ],
+                "reason": "counts writes to the world-state FILE. A resume performs one genuine extra write when it materialises the checkpointed world into the sandbox, so a resumed lineage runs exactly one ahead. Produced only; no consumer in the tick path.",
+                "identical": false
+              },
+              {
+                "tier": 4,
+                "name": "minus hive genesis stamps",
+                "fields_removed_at_this_tier": [
+                  "hives[].hive_state.provenance.when"
+                ],
+                "reason": "genesis wall-clock stamp written once at fresh start and carried verbatim through the checkpoint, so the resumed lineage keeps the ORIGINAL value while the uninterrupted run has its own. Read by nothing.",
+                "identical": false
+              },
+              {
+                "tier": 5,
+                "name": "minus append-only log cursors",
+                "fields_removed_at_this_tier": [
+                  "log_cursors"
+                ],
+                "reason": "byte lengths of the append-only logs IN THE SANDBOX THIS LEG WROTE. The resumed leg2 writes into a fresh sandbox, so its logs hold 150 ticks where the uninterrupted run's hold 300. This measures bytes on disk, not sim state, and feeds no decision -- it is consumed only by applyLogCursors on the next resume.",
+                "identical": true
+              }
+            ],
+            "identical_from_tier": 5
+          },
+          "world_state_identical": true,
+          "world_identical_after_stripping_volatile": true,
+          "identity_behavioral_fields_identical": true,
+          "identity_known_divergences": [
+            "run_name",
+            "event_context.run_id",
+            "event_context.episode_id",
+            "event_context.arm_id",
+            "turn_index",
+            "fresh_start",
+            "root_seed_source",
+            "parent_run_id",
+            "parent_episode_id"
+          ],
+          "manifest_known_divergences": [
+            "created_at (provenance-only wall-clock)",
+            "generation_id / run_name (a resumed leg is a distinct generation by construction)",
+            "parent linkage (the resumed leg has a parent; the uninterrupted run is a lineage root)"
+          ]
+        },
+        "decision_stream_post_resume": {
+          "window": [
+            150,
+            300
+          ],
+          "rows_left": 450,
+          "rows_right": 450,
+          "identical": true,
+          "differing_rows": 0,
+          "first_divergences": [],
+          "left_sha256": "289431e477f58d22a6aa7234ec1a594f035b8cb28de60e957756bc6ae2a76d49",
+          "right_sha256": "289431e477f58d22a6aa7234ec1a594f035b8cb28de60e957756bc6ae2a76d49"
+        },
+        "decision_stream_pre_checkpoint": {
+          "window": [
+            0,
+            150
+          ],
+          "rows_left": 450,
+          "rows_right": 450,
+          "identical": true,
+          "differing_rows": 0,
+          "first_divergences": [],
+          "left_sha256": "0d51fc620c4568679406558ad41f1a01d5e90faa119818cc868b5be745adb4e8",
+          "right_sha256": "0d51fc620c4568679406558ad41f1a01d5e90faa119818cc868b5be745adb4e8"
+        }
+      }
+    },
+    "e_frozen_control_isolates_the_delta": {
+      "standard": "the frozen control moves no parameter (checksum unchanged, displacement exactly 0) while still reporting a loss over the same ticks",
+      "pass": true,
+      "detail": {
+        "F-rep0": {
+          "weights_changed": false,
+          "displacement": 0,
+          "loss": {
+            "ticks_with_loss": 299,
+            "ticks_updated": 0,
+            "mean_first_50": 0.0016753669972018582,
+            "mean_last_50": 0.0007261127972759599,
+            "ratio_first_over_last": 2.307309557808459,
+            "improved": true,
+            "min": 0.0006692300378828949,
+            "max": 0.0031752981720379737
+          }
+        },
+        "F-rep1": {
+          "weights_changed": false,
+          "displacement": 0,
+          "loss": {
+            "ticks_with_loss": 299,
+            "ticks_updated": 0,
+            "mean_first_50": 0.001750312913081141,
+            "mean_last_50": 0.00062524322170889,
+            "ratio_first_over_last": 2.7994112567862075,
+            "improved": true,
+            "min": 0.0006173010093510401,
+            "max": 0.003855747622477085
+          }
+        }
+      }
+    },
+    "f_confound_test": {
+      "standard": "permuting feature positions must make mirror-p WORSE. If the median shuffled p is <= the unshuffled p, the apparent mirror is a density/arrangement artifact the world mind's verbs control -- the signal is confounded and FAILS.",
+      "pass": true,
+      "detail": {
+        "L-rep0": {
+          "confounded_literal_rule": false,
+          "mirror_claim_present": false,
+          "distinct_build_tiles": 12,
+          "mirror_claim_thresholds": {
+            "p_below": 0.05,
+            "min_distinct_build_tiles": 4,
+            "source": "mirror-detector.js detect() verdict thresholds"
+          },
+          "not_applicable_reason": "unshuffled p = 0.241 is not a mirror claim (mirror-detector verdict would be null-consistent/approaching-null), so there is no apparent mirror for feature density to explain",
+          "turn_id": "gen-300-L-rep0",
+          "permutation_seed": 2723881662,
+          "permutation_seed_derivation": "fnv1a32(turn_id); Fisher-Yates-free uniform re-placement over the 10x10 grid via mulberry32(seed)",
+          "permutations_run": 200,
+          "null_shuffles_per_p": 1000,
+          "first_permutation": [
+            [
+              1,
+              0
+            ],
+            [
+              5,
+              7
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              8,
+              7
+            ],
+            [
+              9,
+              1
+            ],
+            [
+              6,
+              5
+            ],
+            [
+              4,
+              2
+            ],
+            [
+              0,
+              7
+            ],
+            [
+              4,
+              8
+            ],
+            [
+              1,
+              0
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              1,
+              9
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              1,
+              8
+            ],
+            [
+              5,
+              3
+            ],
+            [
+              1,
+              9
+            ],
+            [
+              6,
+              5
+            ],
+            [
+              5,
+              0
+            ],
+            [
+              6,
+              8
+            ],
+            [
+              9,
+              5
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              2,
+              3
+            ],
+            [
+              3,
+              8
+            ],
+            [
+              7,
+              7
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              7,
+              9
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              8,
+              3
+            ],
+            [
+              1,
+              8
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              7,
+              8
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              5,
+              4
+            ],
+            [
+              0,
+              7
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              8,
+              2
+            ],
+            [
+              5,
+              8
+            ],
+            [
+              1,
+              7
+            ],
+            [
+              2,
+              1
+            ],
+            [
+              2,
+              0
+            ],
+            [
+              0,
+              8
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              0,
+              7
+            ]
+          ],
+          "permutations_sha256": "e9a65a2870643433b38472c8a840f4dc9b58d48f23e77ed4436e7e39cec3c24c",
+          "unshuffled_p": 0.241,
+          "unshuffled_observed_mean_nearest": 0.5714285714285714,
+          "n_builds": 14,
+          "n_features": 46,
+          "median_shuffled_p": 0.5485,
+          "fraction_shuffled_at_least_as_extreme": 0.205,
+          "confounded": false,
+          "fail_rule_literal": "median shuffled p <= unshuffled p  =>  confounded => FAIL (memo section 4.3, verbatim)",
+          "fail_rule_as_applied": "mirror claim present (p < 0.05 and >= 4 distinct build tiles) AND median shuffled p <= unshuffled p  =>  confounded => FAIL",
+          "secondary_reported_rule": "a MIRROR CLAIM would additionally require fewer than 5% of position-permutations reaching a p as extreme as the observed one; reported, not binding, since no arm here makes a mirror claim"
+        },
+        "L-rep1": {
+          "confounded_literal_rule": true,
+          "mirror_claim_present": false,
+          "distinct_build_tiles": 14,
+          "mirror_claim_thresholds": {
+            "p_below": 0.05,
+            "min_distinct_build_tiles": 4,
+            "source": "mirror-detector.js detect() verdict thresholds"
+          },
+          "not_applicable_reason": "unshuffled p = 0.794 is not a mirror claim (mirror-detector verdict would be null-consistent/approaching-null), so there is no apparent mirror for feature density to explain",
+          "turn_id": "gen-300-L-rep1",
+          "permutation_seed": 2740659281,
+          "permutation_seed_derivation": "fnv1a32(turn_id); Fisher-Yates-free uniform re-placement over the 10x10 grid via mulberry32(seed)",
+          "permutations_run": 200,
+          "null_shuffles_per_p": 1000,
+          "first_permutation": [
+            [
+              9,
+              7
+            ],
+            [
+              7,
+              5
+            ],
+            [
+              5,
+              2
+            ],
+            [
+              7,
+              1
+            ],
+            [
+              5,
+              7
+            ],
+            [
+              2,
+              7
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              6,
+              7
+            ],
+            [
+              0,
+              8
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              2,
+              7
+            ],
+            [
+              9,
+              6
+            ],
+            [
+              4,
+              2
+            ],
+            [
+              6,
+              9
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              6,
+              6
+            ],
+            [
+              8,
+              1
+            ],
+            [
+              7,
+              5
+            ],
+            [
+              5,
+              3
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              5,
+              0
+            ],
+            [
+              3,
+              1
+            ],
+            [
+              6,
+              6
+            ],
+            [
+              9,
+              4
+            ],
+            [
+              8,
+              5
+            ],
+            [
+              8,
+              3
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              3,
+              8
+            ],
+            [
+              6,
+              1
+            ],
+            [
+              7,
+              1
+            ],
+            [
+              7,
+              1
+            ],
+            [
+              0,
+              4
+            ],
+            [
+              7,
+              6
+            ],
+            [
+              7,
+              5
+            ],
+            [
+              5,
+              3
+            ],
+            [
+              4,
+              2
+            ],
+            [
+              5,
+              8
+            ],
+            [
+              8,
+              0
+            ],
+            [
+              5,
+              7
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              0,
+              8
+            ],
+            [
+              8,
+              5
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              3,
+              2
+            ],
+            [
+              4,
+              9
+            ],
+            [
+              5,
+              9
+            ]
+          ],
+          "permutations_sha256": "6753d7593d7ab10bbdb21700f664697f3b8cc01f201037ca670d2107709d2899",
+          "unshuffled_p": 0.794,
+          "unshuffled_observed_mean_nearest": 0.7609475708248731,
+          "n_builds": 15,
+          "n_features": 47,
+          "median_shuffled_p": 0.5095000000000001,
+          "fraction_shuffled_at_least_as_extreme": 0.775,
+          "confounded": false,
+          "fail_rule_literal": "median shuffled p <= unshuffled p  =>  confounded => FAIL (memo section 4.3, verbatim)",
+          "fail_rule_as_applied": "mirror claim present (p < 0.05 and >= 4 distinct build tiles) AND median shuffled p <= unshuffled p  =>  confounded => FAIL",
+          "secondary_reported_rule": "a MIRROR CLAIM would additionally require fewer than 5% of position-permutations reaching a p as extreme as the observed one; reported, not binding, since no arm here makes a mirror claim"
+        },
+        "F-rep0": {
+          "confounded_literal_rule": false,
+          "mirror_claim_present": false,
+          "distinct_build_tiles": 12,
+          "mirror_claim_thresholds": {
+            "p_below": 0.05,
+            "min_distinct_build_tiles": 4,
+            "source": "mirror-detector.js detect() verdict thresholds"
+          },
+          "not_applicable_reason": "unshuffled p = 0.24 is not a mirror claim (mirror-detector verdict would be null-consistent/approaching-null), so there is no apparent mirror for feature density to explain",
+          "turn_id": "gen-300-F-rep0",
+          "permutation_seed": 1635731436,
+          "permutation_seed_derivation": "fnv1a32(turn_id); Fisher-Yates-free uniform re-placement over the 10x10 grid via mulberry32(seed)",
+          "permutations_run": 200,
+          "null_shuffles_per_p": 1000,
+          "first_permutation": [
+            [
+              1,
+              1
+            ],
+            [
+              6,
+              6
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              6,
+              6
+            ],
+            [
+              1,
+              7
+            ],
+            [
+              1,
+              9
+            ],
+            [
+              9,
+              1
+            ],
+            [
+              6,
+              1
+            ],
+            [
+              8,
+              1
+            ],
+            [
+              2,
+              7
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              5,
+              4
+            ],
+            [
+              8,
+              5
+            ],
+            [
+              5,
+              4
+            ],
+            [
+              7,
+              3
+            ],
+            [
+              5,
+              3
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              5,
+              3
+            ],
+            [
+              9,
+              3
+            ],
+            [
+              8,
+              3
+            ],
+            [
+              5,
+              9
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              0
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              2,
+              2
+            ],
+            [
+              0,
+              5
+            ],
+            [
+              6,
+              6
+            ],
+            [
+              6,
+              6
+            ],
+            [
+              4,
+              2
+            ],
+            [
+              9,
+              5
+            ],
+            [
+              1,
+              7
+            ],
+            [
+              1,
+              8
+            ],
+            [
+              8,
+              3
+            ],
+            [
+              7,
+              1
+            ],
+            [
+              6,
+              1
+            ],
+            [
+              0,
+              8
+            ],
+            [
+              1,
+              3
+            ],
+            [
+              7,
+              7
+            ],
+            [
+              8,
+              2
+            ],
+            [
+              6,
+              7
+            ],
+            [
+              6,
+              7
+            ],
+            [
+              9,
+              0
+            ],
+            [
+              8,
+              8
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              0,
+              7
+            ]
+          ],
+          "permutations_sha256": "0f33f1ae6c771d0195183ff8a41730c41e28fe72ae479f14ba4ee19c6710e001",
+          "unshuffled_p": 0.24,
+          "unshuffled_observed_mean_nearest": 0.5714285714285714,
+          "n_builds": 14,
+          "n_features": 46,
+          "median_shuffled_p": 0.588,
+          "fraction_shuffled_at_least_as_extreme": 0.21,
+          "confounded": false,
+          "fail_rule_literal": "median shuffled p <= unshuffled p  =>  confounded => FAIL (memo section 4.3, verbatim)",
+          "fail_rule_as_applied": "mirror claim present (p < 0.05 and >= 4 distinct build tiles) AND median shuffled p <= unshuffled p  =>  confounded => FAIL",
+          "secondary_reported_rule": "a MIRROR CLAIM would additionally require fewer than 5% of position-permutations reaching a p as extreme as the observed one; reported, not binding, since no arm here makes a mirror claim"
+        },
+        "F-rep1": {
+          "confounded_literal_rule": true,
+          "mirror_claim_present": false,
+          "distinct_build_tiles": 14,
+          "mirror_claim_thresholds": {
+            "p_below": 0.05,
+            "min_distinct_build_tiles": 4,
+            "source": "mirror-detector.js detect() verdict thresholds"
+          },
+          "not_applicable_reason": "unshuffled p = 0.767 is not a mirror claim (mirror-detector verdict would be null-consistent/approaching-null), so there is no apparent mirror for feature density to explain",
+          "turn_id": "gen-300-F-rep1",
+          "permutation_seed": 1652509055,
+          "permutation_seed_derivation": "fnv1a32(turn_id); Fisher-Yates-free uniform re-placement over the 10x10 grid via mulberry32(seed)",
+          "permutations_run": 200,
+          "null_shuffles_per_p": 1000,
+          "first_permutation": [
+            [
+              4,
+              3
+            ],
+            [
+              4,
+              8
+            ],
+            [
+              9,
+              5
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              1,
+              7
+            ],
+            [
+              3,
+              8
+            ],
+            [
+              6,
+              2
+            ],
+            [
+              4,
+              2
+            ],
+            [
+              5,
+              4
+            ],
+            [
+              2,
+              7
+            ],
+            [
+              6,
+              3
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              8,
+              1
+            ],
+            [
+              0,
+              6
+            ],
+            [
+              3,
+              2
+            ],
+            [
+              6,
+              7
+            ],
+            [
+              2,
+              2
+            ],
+            [
+              2,
+              2
+            ],
+            [
+              2,
+              1
+            ],
+            [
+              8,
+              9
+            ],
+            [
+              5,
+              7
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              2,
+              3
+            ],
+            [
+              9,
+              1
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              6,
+              3
+            ],
+            [
+              3,
+              7
+            ],
+            [
+              2,
+              5
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              5,
+              9
+            ],
+            [
+              8,
+              2
+            ],
+            [
+              6,
+              0
+            ],
+            [
+              9,
+              0
+            ],
+            [
+              2,
+              7
+            ],
+            [
+              8,
+              4
+            ],
+            [
+              6,
+              3
+            ],
+            [
+              2,
+              5
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              1,
+              0
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              5,
+              7
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              5,
+              0
+            ],
+            [
+              2,
+              9
+            ],
+            [
+              9,
+              2
+            ]
+          ],
+          "permutations_sha256": "f7fdf7944145b231808300d2f7e5a068c77d91a9adf70a3ef3e4d5a31243bc24",
+          "unshuffled_p": 0.767,
+          "unshuffled_observed_mean_nearest": 0.7609475708248731,
+          "n_builds": 15,
+          "n_features": 47,
+          "median_shuffled_p": 0.5805,
+          "fraction_shuffled_at_least_as_extreme": 0.72,
+          "confounded": false,
+          "fail_rule_literal": "median shuffled p <= unshuffled p  =>  confounded => FAIL (memo section 4.3, verbatim)",
+          "fail_rule_as_applied": "mirror claim present (p < 0.05 and >= 4 distinct build tiles) AND median shuffled p <= unshuffled p  =>  confounded => FAIL",
+          "secondary_reported_rule": "a MIRROR CLAIM would additionally require fewer than 5% of position-permutations reaching a p as extreme as the observed one; reported, not binding, since no arm here makes a mirror claim"
+        }
+      }
+    },
+    "density_parity_guard": {
+      "standard": "REPORTED, not a pass/fail gate (memo 4.4): if the arms differ materially in feature density, cross-arm mirror comparisons are contaminated regardless of what the confound test returns",
+      "pass": true,
+      "detail": {
+        "L-rep0": {
+          "per_family": {
+            "food_sources": 0,
+            "wood_sources": 20,
+            "stone_sources": 20,
+            "clay_sources": 2,
+            "water_sources": 2,
+            "ore_sources": 1,
+            "fiber_sources": 1
+          },
+          "total_feature_tiles": 46,
+          "distinct_cells": 41,
+          "grid_saturation": 0.41
+        },
+        "L-rep1": {
+          "per_family": {
+            "food_sources": 0,
+            "wood_sources": 20,
+            "stone_sources": 20,
+            "clay_sources": 3,
+            "water_sources": 2,
+            "ore_sources": 1,
+            "fiber_sources": 1
+          },
+          "total_feature_tiles": 47,
+          "distinct_cells": 38,
+          "grid_saturation": 0.38
+        },
+        "F-rep0": {
+          "per_family": {
+            "food_sources": 0,
+            "wood_sources": 20,
+            "stone_sources": 20,
+            "clay_sources": 2,
+            "water_sources": 2,
+            "ore_sources": 1,
+            "fiber_sources": 1
+          },
+          "total_feature_tiles": 46,
+          "distinct_cells": 41,
+          "grid_saturation": 0.41
+        },
+        "F-rep1": {
+          "per_family": {
+            "food_sources": 0,
+            "wood_sources": 20,
+            "stone_sources": 20,
+            "clay_sources": 3,
+            "water_sources": 2,
+            "ore_sources": 1,
+            "fiber_sources": 1
+          },
+          "total_feature_tiles": 47,
+          "distinct_cells": 38,
+          "grid_saturation": 0.38
+        }
+      }
+    },
+    "checkpoint_schema_1_1_contract": {
+      "standard": "shape_hash mismatch REFUSES; training_config_hash mismatch WARNS and resumes; a 1.0 manifest is readable, falls back to the legacy hash for shape, reports training_config_hash UNKNOWN, and therefore refuses at the shape stage; a manifest declaring 1.1 without the split hashes refuses",
+      "pass": true,
+      "detail": {
+        "probes": [
+          {
+            "probe": "legacy-1.0-manifest-falls-back-and-refuses-at-shape",
+            "expectation": "ok=false, stage=version, reason=shape-hash-mismatch-1.0-fallback -- readable but not resumable, exactly the intended breakage",
+            "ok": false,
+            "stage": "version",
+            "reason": "shape-hash-mismatch-1.0-fallback",
+            "status": "resume-failed-halt:version:shape-hash-mismatch-1.0-fallback",
+            "warnings": null,
+            "hash_provenance": null
+          },
+          {
+            "probe": "declared-1.1-without-split-hashes-refuses",
+            "expectation": "ok=false, stage=version, reason=architecture-split-hashes-absent-under-declared-1.1",
+            "ok": false,
+            "stage": "version",
+            "reason": "architecture-split-hashes-absent-under-declared-1.1",
+            "status": "resume-failed-halt:version:architecture-split-hashes-absent-under-declared-1.1",
+            "warnings": null,
+            "hash_provenance": null
+          },
+          {
+            "probe": "shape-hash-mismatch-refuses",
+            "expectation": "ok=false, stage=version, reason=shape-hash-mismatch",
+            "ok": false,
+            "stage": "version",
+            "reason": "shape-hash-mismatch",
+            "status": "resume-failed-halt:version:shape-hash-mismatch",
+            "warnings": null,
+            "hash_provenance": null
+          },
+          {
+            "probe": "training-config-hash-mismatch-warns-but-does-not-refuse",
+            "expectation": "ok=true with a training-config-hash-mismatch warning -- the restore is valid; only comparability is lost",
+            "ok": true,
+            "stage": null,
+            "reason": null,
+            "status": null,
+            "warnings": [
+              {
+                "code": "training-config-hash-mismatch",
+                "detail": "the restore is valid, but metrics from this generation are NOT comparable with metrics produced under the running training configuration",
+                "manifest_value": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+                "live_value": "355cfabf26d3ed97c215156d0b36712e1dd286ff24f6d665b236bcf55bb09971"
+              }
+            ],
+            "hash_provenance": {
+              "source": "1.1",
+              "shape_hash": "22ebdb6837f129b6977c21a0c92d4bfaf9bad61429cfe54321e67b82ac1037e9",
+              "training_config_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+            }
+          },
+          {
+            "probe": "unmutated-1.1-generation-validates-clean",
+            "expectation": "ok=true, zero warnings, hash provenance source 1.1",
+            "ok": true,
+            "stage": null,
+            "reason": null,
+            "status": null,
+            "warnings": [],
+            "hash_provenance": {
+              "source": "1.1",
+              "shape_hash": "22ebdb6837f129b6977c21a0c92d4bfaf9bad61429cfe54321e67b82ac1037e9",
+              "training_config_hash": "355cfabf26d3ed97c215156d0b36712e1dd286ff24f6d665b236bcf55bb09971"
+            }
+          }
+        ],
+        "pass": true
+      }
+    },
+    "rng_parity": {
+      "pass": true,
+      "detail": {
+        "ok": true,
+        "seeds": [
+          0,
+          1,
+          12345,
+          2166136261,
+          4294967295
+        ],
+        "draws": 4096
+      }
+    },
+    "g_masked_coordinate_liveness": {
+      "standard": "every coordinate in the loss mask M must take a non-zero value on at least one tick of every arm; a masked coordinate that is zero on every tick is a dead training dimension, and the effective dimensionality of the loss is reported alongside",
+      "pass": false,
+      "detail": {
+        "cause_classification": {
+          "L-rep0": {
+            "7": {
+              "name": "starvation_pressure",
+              "world_state_publishes_source": true,
+              "encoder_coupled_to_source": true,
+              "cause": "coupled writer and reader; the coordinate was genuinely zero for every tick of this run -- a world statistic, not a wiring defect"
+            }
+          },
+          "L-rep1": {
+            "7": {
+              "name": "starvation_pressure",
+              "world_state_publishes_source": true,
+              "encoder_coupled_to_source": true,
+              "cause": "coupled writer and reader; the coordinate was genuinely zero for every tick of this run -- a world statistic, not a wiring defect"
+            }
+          },
+          "F-rep0": {
+            "7": {
+              "name": "starvation_pressure",
+              "world_state_publishes_source": true,
+              "encoder_coupled_to_source": true,
+              "cause": "coupled writer and reader; the coordinate was genuinely zero for every tick of this run -- a world statistic, not a wiring defect"
+            }
+          },
+          "F-rep1": {
+            "7": {
+              "name": "starvation_pressure",
+              "world_state_publishes_source": true,
+              "encoder_coupled_to_source": true,
+              "cause": "coupled writer and reader; the coordinate was genuinely zero for every tick of this run -- a world statistic, not a wiring defect"
+            }
+          }
+        },
+        "per_arm": {
+          "L-rep0": {
+            "live": false,
+            "samples": 300,
+            "dead_zero_coordinates": [
+              7
+            ],
+            "constant_coordinates": [
+              4,
+              7
+            ],
+            "effective_dimensionality": 1,
+            "per_coordinate": {
+              "4": {
+                "name": "hive_count",
+                "samples": 300,
+                "ticks_non_zero": 300,
+                "min": 0.047619047619047616,
+                "max": 0.047619047619047616,
+                "distinct_values_seen": 1,
+                "dead_zero": false,
+                "constant": true
+              },
+              "6": {
+                "name": "pheromone_signal_strength",
+                "samples": 300,
+                "ticks_non_zero": 93,
+                "min": 0,
+                "max": 0.08426403533385252,
+                "distinct_values_seen": 64,
+                "dead_zero": false,
+                "constant": false
+              },
+              "7": {
+                "name": "starvation_pressure",
+                "samples": 300,
+                "ticks_non_zero": 0,
+                "min": 0,
+                "max": 0,
+                "distinct_values_seen": 1,
+                "dead_zero": true,
+                "constant": true
+              }
+            },
+            "world_state_hives_summary": {
+              "count": 2,
+              "starvation_pressure": 0
+            },
+            "world_state_schema_version": "1.1.0"
+          },
+          "L-rep1": {
+            "live": false,
+            "samples": 300,
+            "dead_zero_coordinates": [
+              7
+            ],
+            "constant_coordinates": [
+              4,
+              7
+            ],
+            "effective_dimensionality": 1,
+            "per_coordinate": {
+              "4": {
+                "name": "hive_count",
+                "samples": 300,
+                "ticks_non_zero": 300,
+                "min": 0.047619047619047616,
+                "max": 0.047619047619047616,
+                "distinct_values_seen": 1,
+                "dead_zero": false,
+                "constant": true
+              },
+              "6": {
+                "name": "pheromone_signal_strength",
+                "samples": 300,
+                "ticks_non_zero": 82,
+                "min": 0,
+                "max": 0.09917801950054717,
+                "distinct_values_seen": 64,
+                "dead_zero": false,
+                "constant": false
+              },
+              "7": {
+                "name": "starvation_pressure",
+                "samples": 300,
+                "ticks_non_zero": 0,
+                "min": 0,
+                "max": 0,
+                "distinct_values_seen": 1,
+                "dead_zero": true,
+                "constant": true
+              }
+            },
+            "world_state_hives_summary": {
+              "count": 2,
+              "starvation_pressure": 0
+            },
+            "world_state_schema_version": "1.1.0"
+          },
+          "F-rep0": {
+            "live": false,
+            "samples": 300,
+            "dead_zero_coordinates": [
+              7
+            ],
+            "constant_coordinates": [
+              4,
+              7
+            ],
+            "effective_dimensionality": 1,
+            "per_coordinate": {
+              "4": {
+                "name": "hive_count",
+                "samples": 300,
+                "ticks_non_zero": 300,
+                "min": 0.047619047619047616,
+                "max": 0.047619047619047616,
+                "distinct_values_seen": 1,
+                "dead_zero": false,
+                "constant": true
+              },
+              "6": {
+                "name": "pheromone_signal_strength",
+                "samples": 300,
+                "ticks_non_zero": 93,
+                "min": 0,
+                "max": 0.08426403533385252,
+                "distinct_values_seen": 64,
+                "dead_zero": false,
+                "constant": false
+              },
+              "7": {
+                "name": "starvation_pressure",
+                "samples": 300,
+                "ticks_non_zero": 0,
+                "min": 0,
+                "max": 0,
+                "distinct_values_seen": 1,
+                "dead_zero": true,
+                "constant": true
+              }
+            },
+            "world_state_hives_summary": {
+              "count": 2,
+              "starvation_pressure": 0
+            },
+            "world_state_schema_version": "1.1.0"
+          },
+          "F-rep1": {
+            "live": false,
+            "samples": 300,
+            "dead_zero_coordinates": [
+              7
+            ],
+            "constant_coordinates": [
+              4,
+              7
+            ],
+            "effective_dimensionality": 1,
+            "per_coordinate": {
+              "4": {
+                "name": "hive_count",
+                "samples": 300,
+                "ticks_non_zero": 300,
+                "min": 0.047619047619047616,
+                "max": 0.047619047619047616,
+                "distinct_values_seen": 1,
+                "dead_zero": false,
+                "constant": true
+              },
+              "6": {
+                "name": "pheromone_signal_strength",
+                "samples": 300,
+                "ticks_non_zero": 82,
+                "min": 0,
+                "max": 0.09917801950054717,
+                "distinct_values_seen": 64,
+                "dead_zero": false,
+                "constant": false
+              },
+              "7": {
+                "name": "starvation_pressure",
+                "samples": 300,
+                "ticks_non_zero": 0,
+                "min": 0,
+                "max": 0,
+                "distinct_values_seen": 1,
+                "dead_zero": true,
+                "constant": true
+              }
+            },
+            "world_state_hives_summary": {
+              "count": 2,
+              "starvation_pressure": 0
+            },
+            "world_state_schema_version": "1.1.0"
+          }
+        },
+        "encoder_coupling_probe": {
+          "hive_count_index": 4,
+          "starvation_index": 7,
+          "encoded_from_summary": [
+            0,
+            0,
+            0,
+            0,
+            0.047619047619047616,
+            0,
+            0,
+            0.024390243902439025
+          ],
+          "encoded_from_map": [
+            0,
+            0,
+            0,
+            0,
+            0.047619047619047616,
+            0,
+            0,
+            0.024390243902439025
+          ],
+          "shapes_agree": true
+        },
+        "probe_note": "the coupling probe runs at world-mind.js module load: it throws if the encoder stops responding to the hives summary the writer emits, or if the summary and per-hive-map shapes ever disagree about the same world"
+      }
+    },
+    "loss_decomposition_reported": {
+      "standard": "REPORTED, not a gate: per-coordinate share of the masked loss, from an offline replay of the run from theta_0. The replay must reproduce the committed checkpoint parameters, and that reproduction IS a pass/fail claim.",
+      "pass": true,
+      "detail": {
+        "L-rep0": {
+          "steps": 299,
+          "replayed_theta_checksum": "7c1677275706a086cf8005b7bde525eb05b6e13d4934ba206b0770a6d76e0880",
+          "checkpoint_theta_checksum": "7c1677275706a086cf8005b7bde525eb05b6e13d4934ba206b0770a6d76e0880",
+          "replay_matches_checkpoint": true,
+          "replay_note": "the replay reconstructs theta_0 from the root seed and re-applies the recorded (x_t, x_t+1) pairs; matching the committed checkpoint proves the decomposition below describes the run that actually happened",
+          "mean_masked_loss": 0.00012335311835936835,
+          "per_coordinate": {
+            "4": {
+              "name": "hive_count",
+              "mean_squared_error": 0.00010698905086691572,
+              "mean_squared_error_first_50": 0.0006158925438637472,
+              "mean_squared_error_last_50": 6.414820165756671e-7,
+              "share_of_total_loss": 0.28911321764676007,
+              "carries_gradient": true
+            },
+            "6": {
+              "name": "pheromone_signal_strength",
+              "mean_squared_error": 0.0002627446174368111,
+              "mean_squared_error_first_50": 0.0009911565679013173,
+              "mean_squared_error_last_50": 0.00005879094531372409,
+              "share_of_total_loss": 0.7100066890117027,
+              "carries_gradient": true
+            },
+            "7": {
+              "name": "starvation_pressure",
+              "mean_squared_error": 3.2568677437779914e-7,
+              "mean_squared_error_first_50": 0.0000014508113029162284,
+              "mean_squared_error_last_50": 1.8231864860954492e-7,
+              "share_of_total_loss": 0.000880093341537224,
+              "carries_gradient": true
+            }
+          },
+          "coordinates_carrying_gradient": [
+            4,
+            6,
+            7
+          ],
+          "coordinates_carrying_no_gradient": []
+        },
+        "L-rep1": {
+          "steps": 299,
+          "replayed_theta_checksum": "0a564560ce63e4c54c089b967617bdac2d4458801d4d5d744383c7820edb8e95",
+          "checkpoint_theta_checksum": "0a564560ce63e4c54c089b967617bdac2d4458801d4d5d744383c7820edb8e95",
+          "replay_matches_checkpoint": true,
+          "replay_note": "the replay reconstructs theta_0 from the root seed and re-applies the recorded (x_t, x_t+1) pairs; matching the committed checkpoint proves the decomposition below describes the run that actually happened",
+          "mean_masked_loss": 0.00013529825138031278,
+          "per_coordinate": {
+            "4": {
+              "name": "hive_count",
+              "mean_squared_error": 0.00011345274612233592,
+              "mean_squared_error_first_50": 0.0006594304800196834,
+              "mean_squared_error_last_50": 4.038232110589741e-7,
+              "share_of_total_loss": 0.2795127184199621,
+              "carries_gradient": true
+            },
+            "6": {
+              "name": "pheromone_signal_strength",
+              "mean_squared_error": 0.0002912254834116644,
+              "mean_squared_error_first_50": 0.0012764974225125333,
+              "mean_squared_error_last_50": 3.434579445059888e-7,
+              "share_of_total_loss": 0.7174901386149534,
+              "carries_gradient": true
+            },
+            "7": {
+              "name": "starvation_pressure",
+              "mean_squared_error": 0.0000012165246069382277,
+              "mean_squared_error_first_50": 0.000006798262564329699,
+              "mean_squared_error_last_50": 9.082531783776723e-8,
+              "share_of_total_loss": 0.002997142965084527,
+              "carries_gradient": true
+            }
+          },
+          "coordinates_carrying_gradient": [
+            4,
+            6,
+            7
+          ],
+          "coordinates_carrying_no_gradient": []
+        },
+        "F-rep0": {
+          "steps": 299,
+          "replayed_theta_checksum": "5018a9c2a1767fc90f46dbe2beb4cbcff52f184a82797a30fb85427cbeea5191",
+          "checkpoint_theta_checksum": "5018a9c2a1767fc90f46dbe2beb4cbcff52f184a82797a30fb85427cbeea5191",
+          "replay_matches_checkpoint": true,
+          "replay_note": "the replay reconstructs theta_0 from the root seed and re-applies the recorded (x_t, x_t+1) pairs; matching the committed checkpoint proves the decomposition below describes the run that actually happened",
+          "mean_masked_loss": 0.0009106935365616351,
+          "per_coordinate": {
+            "4": {
+              "name": "hive_count",
+              "mean_squared_error": 0.002148527374818176,
+              "mean_squared_error_first_50": 0.0021157584808017046,
+              "mean_squared_error_last_50": 0.002110459113386827,
+              "share_of_total_loss": 0.7864070215212171,
+              "carries_gradient": true
+            },
+            "6": {
+              "name": "pheromone_signal_strength",
+              "mean_squared_error": 0.0005828996236526742,
+              "mean_squared_error_first_50": 0.0029072220790050786,
+              "mean_squared_error_last_50": 0.00006765528522917259,
+              "share_of_total_loss": 0.21335374277990327,
+              "carries_gradient": true
+            },
+            "7": {
+              "name": "starvation_pressure",
+              "mean_squared_error": 6.536112140535318e-7,
+              "mean_squared_error_first_50": 0.0000031204317987924846,
+              "mean_squared_error_last_50": 2.239932118805554e-7,
+              "share_of_total_loss": 0.00023923569887965865,
+              "carries_gradient": true
+            }
+          },
+          "coordinates_carrying_gradient": [
+            4,
+            6,
+            7
+          ],
+          "coordinates_carrying_no_gradient": []
+        },
+        "F-rep1": {
+          "steps": 299,
+          "replayed_theta_checksum": "fbb9cd941591a455a1f56fa59b0d50af312ad218e035bfb17b20f127a0807224",
+          "checkpoint_theta_checksum": "fbb9cd941591a455a1f56fa59b0d50af312ad218e035bfb17b20f127a0807224",
+          "replay_matches_checkpoint": true,
+          "replay_note": "the replay reconstructs theta_0 from the root seed and re-applies the recorded (x_t, x_t+1) pairs; matching the committed checkpoint proves the decomposition below describes the run that actually happened",
+          "mean_masked_loss": 0.000860098659946361,
+          "per_coordinate": {
+            "4": {
+              "name": "hive_count",
+              "mean_squared_error": 0.001990408708755628,
+              "mean_squared_error_first_50": 0.002206193231492397,
+              "mean_squared_error_last_50": 0.0018554939059383943,
+              "share_of_total_loss": 0.7713877494316596,
+              "carries_gradient": true
+            },
+            "6": {
+              "name": "pheromone_signal_strength",
+              "mean_squared_error": 0.0005793772412766864,
+              "mean_squared_error_first_50": 0.0030279811235937636,
+              "mean_squared_error_last_50": 0.000010092997608343648,
+              "share_of_total_loss": 0.22453906288410327,
+              "carries_gradient": true
+            },
+            "7": {
+              "name": "starvation_pressure",
+              "mean_squared_error": 0.000010510029806767373,
+              "mean_squared_error_first_50": 0.000016764384157261246,
+              "mean_squared_error_last_50": 0.000010142761579932023,
+              "share_of_total_loss": 0.004073187684237226,
+              "carries_gradient": true
+            }
+          },
+          "coordinates_carrying_gradient": [
+            4,
+            6,
+            7
+          ],
+          "coordinates_carrying_no_gradient": []
+        }
+      }
+    },
+    "overall_pass": false
+  },
+  "measurements": {
+    "L-rep0": {
+      "arm": "L-rep0",
+      "root_seed": 20260805,
+      "world_construction_seed": 21260808,
+      "generation": "gen-300-L-rep0",
+      "checkpoint_manifest_checksum": "1c8073c974b1f90d125ea1ace398e34ad2bc5faf437a62ed69e083db57354b54",
+      "schema_version": "1.1",
+      "hash_provenance": {
+        "source": "1.1",
+        "shape_hash": "22ebdb6837f129b6977c21a0c92d4bfaf9bad61429cfe54321e67b82ac1037e9",
+        "training_config_hash": "355cfabf26d3ed97c215156d0b36712e1dd286ff24f6d665b236bcf55bb09971"
+      },
+      "resume_warnings": [],
+      "world_learning_frozen": false,
+      "theta0_checksum": "5018a9c2a1767fc90f46dbe2beb4cbcff52f184a82797a30fb85427cbeea5191",
+      "theta300_checksum": "7c1677275706a086cf8005b7bde525eb05b6e13d4934ba206b0770a6d76e0880",
+      "weights_changed": true,
+      "relative_parameter_displacement": 0.01469237703019979,
+      "relative_parameter_displacement_incl_head": 0.06452384037789967,
+      "verb_weights_untouched": true,
+      "prev_features_at_checkpoint": [
+        0,
+        0,
+        0.2727272727272727,
+        0,
+        0.047619047619047616,
+        0.7014925373134329,
+        0.013665475120674972,
+        0
+      ],
+      "policy_l2": {
+        "max": 0.0002244315455204192,
+        "argmax_fixture_state": 979,
+        "fixture_seed": 20260805,
+        "fixture_count": 1000
+      },
+      "init_noise_floor": 0.012274953713908984,
+      "contamination_alarm_threshold": 0.12274953713908984,
+      "prediction_loss": {
+        "ticks_with_loss": 299,
+        "ticks_updated": 299,
+        "mean_first_50": 0.0005361666410226601,
+        "mean_last_50": 0.00001987158199296977,
+        "ratio_first_over_last": 26.98157807528091,
+        "improved": true,
+        "min": 2.3906302142571226e-9,
+        "max": 0.0022939551267395935
+      },
+      "entropy": {
+        "n": 300,
+        "entropy_min": 1.6094359536793517,
+        "entropy_max": 1.6094374509310536,
+        "ln5": 1.6094379124341003,
+        "departure_at_tick_150": 6.661884199843371e-7,
+        "departure_at_tick_300": 8.36957549044115e-7,
+        "max_departure": 0.000001958754748621061,
+        "frozen_band_width": 0.0000012291423880927965,
+        "frozen_max_departure": 0.0000017306619535251144,
+        "bar_3x_band_width": 0.0000036874271642783896,
+        "bar_3x_max_departure": 0.000005191985860575343
+      },
+      "feature_density": {
+        "per_family": {
+          "food_sources": 0,
+          "wood_sources": 20,
+          "stone_sources": 20,
+          "clay_sources": 2,
+          "water_sources": 2,
+          "ore_sources": 1,
+          "fiber_sources": 1
+        },
+        "total_feature_tiles": 46,
+        "distinct_cells": 41,
+        "grid_saturation": 0.41
+      },
+      "encoder_signal": {
+        "final_state_encoding": [
+          0,
+          0,
+          0.2727272727272727,
+          0,
+          0.047619047619047616,
+          0.7014925373134329,
+          0.013665475120674972,
+          0
+        ],
+        "feature_names": [
+          "total_food",
+          "total_wood",
+          "total_stone",
+          "food_source_count",
+          "hive_count",
+          "territory_count",
+          "pheromone_signal_strength",
+          "starvation_pressure"
+        ],
+        "world_state_has_hives_key": true,
+        "world_state_hives_summary": {
+          "count": 2,
+          "starvation_pressure": 0
+        },
+        "world_state_schema_version": "1.1.0",
+        "world_state_top_level_keys": [
+          "clay_sources",
+          "complete",
+          "discovered_types",
+          "fiber_sources",
+          "food_source_coords",
+          "food_sources",
+          "geometry_log",
+          "hives",
+          "ore_sources",
+          "pheromones",
+          "predator_population",
+          "prey_population",
+          "resources",
+          "schema_version",
+          "seq",
+          "stone_sources",
+          "territory",
+          "water_sources",
+          "wood_sources",
+          "writer",
+          "written_at"
+        ],
+        "masked_coordinates": [
+          4,
+          6,
+          7
+        ],
+        "masked_coordinate_values_at_final_state": {
+          "4": 0.047619047619047616,
+          "6": 0.013665475120674972,
+          "7": 0
+        },
+        "run_liveness": {
+          "samples": 300,
+          "mask": [
+            4,
+            6,
+            7
+          ],
+          "per_coordinate": {
+            "4": {
+              "name": "hive_count",
+              "samples": 300,
+              "ticks_non_zero": 300,
+              "min": 0.047619047619047616,
+              "max": 0.047619047619047616,
+              "distinct_values_seen": 1,
+              "dead_zero": false,
+              "constant": true
+            },
+            "6": {
+              "name": "pheromone_signal_strength",
+              "samples": 300,
+              "ticks_non_zero": 93,
+              "min": 0,
+              "max": 0.08426403533385252,
+              "distinct_values_seen": 64,
+              "dead_zero": false,
+              "constant": false
+            },
+            "7": {
+              "name": "starvation_pressure",
+              "samples": 300,
+              "ticks_non_zero": 0,
+              "min": 0,
+              "max": 0,
+              "distinct_values_seen": 1,
+              "dead_zero": true,
+              "constant": true
+            }
+          },
+          "dead_zero_coordinates": [
+            7
+          ],
+          "constant_coordinates": [
+            4,
+            7
+          ],
+          "live": false,
+          "effective_dimensionality": 1,
+          "standard": "every masked coordinate must take a non-zero value on at least one tick of the run; a masked coordinate that is zero on every tick is a dead training dimension, not a small gradient"
+        },
+        "dead_zero_masked_coordinates": [
+          7
+        ],
+        "constant_masked_coordinates": [
+          4,
+          7
+        ],
+        "hidden_units_relu_active_at_final_state": 2,
+        "hidden_units_total": 8,
+        "encoder_coupling_probe": {
+          "hive_count_index": 4,
+          "starvation_index": 7,
+          "encoded_from_summary": [
+            0,
+            0,
+            0,
+            0,
+            0.047619047619047616,
+            0,
+            0,
+            0.024390243902439025
+          ],
+          "encoded_from_map": [
+            0,
+            0,
+            0,
+            0,
+            0.047619047619047616,
+            0,
+            0,
+            0.024390243902439025
+          ],
+          "shapes_agree": true
+        }
+      },
+      "loss_decomposition": {
+        "steps": 299,
+        "replayed_theta_checksum": "7c1677275706a086cf8005b7bde525eb05b6e13d4934ba206b0770a6d76e0880",
+        "checkpoint_theta_checksum": "7c1677275706a086cf8005b7bde525eb05b6e13d4934ba206b0770a6d76e0880",
+        "replay_matches_checkpoint": true,
+        "replay_note": "the replay reconstructs theta_0 from the root seed and re-applies the recorded (x_t, x_t+1) pairs; matching the committed checkpoint proves the decomposition below describes the run that actually happened",
+        "mean_masked_loss": 0.00012335311835936835,
+        "per_coordinate": {
+          "4": {
+            "name": "hive_count",
+            "mean_squared_error": 0.00010698905086691572,
+            "mean_squared_error_first_50": 0.0006158925438637472,
+            "mean_squared_error_last_50": 6.414820165756671e-7,
+            "share_of_total_loss": 0.28911321764676007,
+            "carries_gradient": true
+          },
+          "6": {
+            "name": "pheromone_signal_strength",
+            "mean_squared_error": 0.0002627446174368111,
+            "mean_squared_error_first_50": 0.0009911565679013173,
+            "mean_squared_error_last_50": 0.00005879094531372409,
+            "share_of_total_loss": 0.7100066890117027,
+            "carries_gradient": true
+          },
+          "7": {
+            "name": "starvation_pressure",
+            "mean_squared_error": 3.2568677437779914e-7,
+            "mean_squared_error_first_50": 0.0000014508113029162284,
+            "mean_squared_error_last_50": 1.8231864860954492e-7,
+            "share_of_total_loss": 0.000880093341537224,
+            "carries_gradient": true
+          }
+        },
+        "coordinates_carrying_gradient": [
+          4,
+          6,
+          7
+        ],
+        "coordinates_carrying_no_gradient": []
+      },
+      "confound_test": {
+        "confounded_literal_rule": false,
+        "mirror_claim_present": false,
+        "distinct_build_tiles": 12,
+        "mirror_claim_thresholds": {
+          "p_below": 0.05,
+          "min_distinct_build_tiles": 4,
+          "source": "mirror-detector.js detect() verdict thresholds"
+        },
+        "not_applicable_reason": "unshuffled p = 0.241 is not a mirror claim (mirror-detector verdict would be null-consistent/approaching-null), so there is no apparent mirror for feature density to explain",
+        "turn_id": "gen-300-L-rep0",
+        "permutation_seed": 2723881662,
+        "permutation_seed_derivation": "fnv1a32(turn_id); Fisher-Yates-free uniform re-placement over the 10x10 grid via mulberry32(seed)",
+        "permutations_run": 200,
+        "null_shuffles_per_p": 1000,
+        "first_permutation": [
+          [
+            1,
+            0
+          ],
+          [
+            5,
+            7
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            8,
+            7
+          ],
+          [
+            9,
+            1
+          ],
+          [
+            6,
+            5
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            4,
+            8
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            1,
+            9
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            1,
+            8
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            1,
+            9
+          ],
+          [
+            6,
+            5
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            6,
+            8
+          ],
+          [
+            9,
+            5
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            8
+          ],
+          [
+            7,
+            7
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            7,
+            9
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            8,
+            3
+          ],
+          [
+            1,
+            8
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            7,
+            8
+          ],
+          [
+            8,
+            8
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            8,
+            2
+          ],
+          [
+            5,
+            8
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            0,
+            8
+          ],
+          [
+            8,
+            8
+          ],
+          [
+            0,
+            7
+          ]
+        ],
+        "permutations_sha256": "e9a65a2870643433b38472c8a840f4dc9b58d48f23e77ed4436e7e39cec3c24c",
+        "unshuffled_p": 0.241,
+        "unshuffled_observed_mean_nearest": 0.5714285714285714,
+        "n_builds": 14,
+        "n_features": 46,
+        "median_shuffled_p": 0.5485,
+        "fraction_shuffled_at_least_as_extreme": 0.205,
+        "confounded": false,
+        "fail_rule_literal": "median shuffled p <= unshuffled p  =>  confounded => FAIL (memo section 4.3, verbatim)",
+        "fail_rule_as_applied": "mirror claim present (p < 0.05 and >= 4 distinct build tiles) AND median shuffled p <= unshuffled p  =>  confounded => FAIL",
+        "secondary_reported_rule": "a MIRROR CLAIM would additionally require fewer than 5% of position-permutations reaching a p as extreme as the observed one; reported, not binding, since no arm here makes a mirror claim"
+      }
+    },
+    "L-rep0-repeat": {
+      "arm": "L-rep0-repeat",
+      "root_seed": 20260805,
+      "world_construction_seed": 21260808,
+      "generation": "gen-300-L-rep0-repeat",
+      "checkpoint_manifest_checksum": "cee3409c5610c9053dcc299efe62375546e36517d9c87ed823b4d67471449a11",
+      "schema_version": "1.1",
+      "hash_provenance": {
+        "source": "1.1",
+        "shape_hash": "22ebdb6837f129b6977c21a0c92d4bfaf9bad61429cfe54321e67b82ac1037e9",
+        "training_config_hash": "355cfabf26d3ed97c215156d0b36712e1dd286ff24f6d665b236bcf55bb09971"
+      },
+      "resume_warnings": [],
+      "world_learning_frozen": false,
+      "theta0_checksum": "5018a9c2a1767fc90f46dbe2beb4cbcff52f184a82797a30fb85427cbeea5191",
+      "theta300_checksum": "7c1677275706a086cf8005b7bde525eb05b6e13d4934ba206b0770a6d76e0880",
+      "weights_changed": true,
+      "relative_parameter_displacement": 0.01469237703019979,
+      "relative_parameter_displacement_incl_head": 0.06452384037789967,
+      "verb_weights_untouched": true,
+      "prev_features_at_checkpoint": [
+        0,
+        0,
+        0.2727272727272727,
+        0,
+        0.047619047619047616,
+        0.7014925373134329,
+        0.013665475120674972,
+        0
+      ],
+      "policy_l2": {
+        "max": 0.0002244315455204192,
+        "argmax_fixture_state": 979,
+        "fixture_seed": 20260805,
+        "fixture_count": 1000
+      },
+      "init_noise_floor": 0.012274953713908984,
+      "contamination_alarm_threshold": 0.12274953713908984,
+      "prediction_loss": {
+        "ticks_with_loss": 299,
+        "ticks_updated": 299,
+        "mean_first_50": 0.0005361666410226601,
+        "mean_last_50": 0.00001987158199296977,
+        "ratio_first_over_last": 26.98157807528091,
+        "improved": true,
+        "min": 2.3906302142571226e-9,
+        "max": 0.0022939551267395935
+      },
+      "entropy": {
+        "n": 300,
+        "entropy_min": 1.6094359536793517,
+        "entropy_max": 1.6094374509310536,
+        "ln5": 1.6094379124341003,
+        "departure_at_tick_150": 6.661884199843371e-7,
+        "departure_at_tick_300": 8.36957549044115e-7,
+        "max_departure": 0.000001958754748621061,
+        "frozen_band_width": 0.0000012291423880927965,
+        "frozen_max_departure": 0.0000017306619535251144,
+        "bar_3x_band_width": 0.0000036874271642783896,
+        "bar_3x_max_departure": 0.000005191985860575343
+      },
+      "feature_density": {
+        "per_family": {
+          "food_sources": 0,
+          "wood_sources": 20,
+          "stone_sources": 20,
+          "clay_sources": 2,
+          "water_sources": 2,
+          "ore_sources": 1,
+          "fiber_sources": 1
+        },
+        "total_feature_tiles": 46,
+        "distinct_cells": 41,
+        "grid_saturation": 0.41
+      },
+      "encoder_signal": {
+        "final_state_encoding": [
+          0,
+          0,
+          0.2727272727272727,
+          0,
+          0.047619047619047616,
+          0.7014925373134329,
+          0.013665475120674972,
+          0
+        ],
+        "feature_names": [
+          "total_food",
+          "total_wood",
+          "total_stone",
+          "food_source_count",
+          "hive_count",
+          "territory_count",
+          "pheromone_signal_strength",
+          "starvation_pressure"
+        ],
+        "world_state_has_hives_key": true,
+        "world_state_hives_summary": {
+          "count": 2,
+          "starvation_pressure": 0
+        },
+        "world_state_schema_version": "1.1.0",
+        "world_state_top_level_keys": [
+          "clay_sources",
+          "complete",
+          "discovered_types",
+          "fiber_sources",
+          "food_source_coords",
+          "food_sources",
+          "geometry_log",
+          "hives",
+          "ore_sources",
+          "pheromones",
+          "predator_population",
+          "prey_population",
+          "resources",
+          "schema_version",
+          "seq",
+          "stone_sources",
+          "territory",
+          "water_sources",
+          "wood_sources",
+          "writer",
+          "written_at"
+        ],
+        "masked_coordinates": [
+          4,
+          6,
+          7
+        ],
+        "masked_coordinate_values_at_final_state": {
+          "4": 0.047619047619047616,
+          "6": 0.013665475120674972,
+          "7": 0
+        },
+        "run_liveness": {
+          "samples": 300,
+          "mask": [
+            4,
+            6,
+            7
+          ],
+          "per_coordinate": {
+            "4": {
+              "name": "hive_count",
+              "samples": 300,
+              "ticks_non_zero": 300,
+              "min": 0.047619047619047616,
+              "max": 0.047619047619047616,
+              "distinct_values_seen": 1,
+              "dead_zero": false,
+              "constant": true
+            },
+            "6": {
+              "name": "pheromone_signal_strength",
+              "samples": 300,
+              "ticks_non_zero": 93,
+              "min": 0,
+              "max": 0.08426403533385252,
+              "distinct_values_seen": 64,
+              "dead_zero": false,
+              "constant": false
+            },
+            "7": {
+              "name": "starvation_pressure",
+              "samples": 300,
+              "ticks_non_zero": 0,
+              "min": 0,
+              "max": 0,
+              "distinct_values_seen": 1,
+              "dead_zero": true,
+              "constant": true
+            }
+          },
+          "dead_zero_coordinates": [
+            7
+          ],
+          "constant_coordinates": [
+            4,
+            7
+          ],
+          "live": false,
+          "effective_dimensionality": 1,
+          "standard": "every masked coordinate must take a non-zero value on at least one tick of the run; a masked coordinate that is zero on every tick is a dead training dimension, not a small gradient"
+        },
+        "dead_zero_masked_coordinates": [
+          7
+        ],
+        "constant_masked_coordinates": [
+          4,
+          7
+        ],
+        "hidden_units_relu_active_at_final_state": 2,
+        "hidden_units_total": 8,
+        "encoder_coupling_probe": {
+          "hive_count_index": 4,
+          "starvation_index": 7,
+          "encoded_from_summary": [
+            0,
+            0,
+            0,
+            0,
+            0.047619047619047616,
+            0,
+            0,
+            0.024390243902439025
+          ],
+          "encoded_from_map": [
+            0,
+            0,
+            0,
+            0,
+            0.047619047619047616,
+            0,
+            0,
+            0.024390243902439025
+          ],
+          "shapes_agree": true
+        }
+      },
+      "loss_decomposition": {
+        "steps": 299,
+        "replayed_theta_checksum": "7c1677275706a086cf8005b7bde525eb05b6e13d4934ba206b0770a6d76e0880",
+        "checkpoint_theta_checksum": "7c1677275706a086cf8005b7bde525eb05b6e13d4934ba206b0770a6d76e0880",
+        "replay_matches_checkpoint": true,
+        "replay_note": "the replay reconstructs theta_0 from the root seed and re-applies the recorded (x_t, x_t+1) pairs; matching the committed checkpoint proves the decomposition below describes the run that actually happened",
+        "mean_masked_loss": 0.00012335311835936835,
+        "per_coordinate": {
+          "4": {
+            "name": "hive_count",
+            "mean_squared_error": 0.00010698905086691572,
+            "mean_squared_error_first_50": 0.0006158925438637472,
+            "mean_squared_error_last_50": 6.414820165756671e-7,
+            "share_of_total_loss": 0.28911321764676007,
+            "carries_gradient": true
+          },
+          "6": {
+            "name": "pheromone_signal_strength",
+            "mean_squared_error": 0.0002627446174368111,
+            "mean_squared_error_first_50": 0.0009911565679013173,
+            "mean_squared_error_last_50": 0.00005879094531372409,
+            "share_of_total_loss": 0.7100066890117027,
+            "carries_gradient": true
+          },
+          "7": {
+            "name": "starvation_pressure",
+            "mean_squared_error": 3.2568677437779914e-7,
+            "mean_squared_error_first_50": 0.0000014508113029162284,
+            "mean_squared_error_last_50": 1.8231864860954492e-7,
+            "share_of_total_loss": 0.000880093341537224,
+            "carries_gradient": true
+          }
+        },
+        "coordinates_carrying_gradient": [
+          4,
+          6,
+          7
+        ],
+        "coordinates_carrying_no_gradient": []
+      },
+      "confound_test": {
+        "confounded_literal_rule": false,
+        "mirror_claim_present": false,
+        "distinct_build_tiles": 12,
+        "mirror_claim_thresholds": {
+          "p_below": 0.05,
+          "min_distinct_build_tiles": 4,
+          "source": "mirror-detector.js detect() verdict thresholds"
+        },
+        "not_applicable_reason": "unshuffled p = 0.249 is not a mirror claim (mirror-detector verdict would be null-consistent/approaching-null), so there is no apparent mirror for feature density to explain",
+        "turn_id": "gen-300-L-rep0-repeat",
+        "permutation_seed": 1210137878,
+        "permutation_seed_derivation": "fnv1a32(turn_id); Fisher-Yates-free uniform re-placement over the 10x10 grid via mulberry32(seed)",
+        "permutations_run": 200,
+        "null_shuffles_per_p": 1000,
+        "first_permutation": [
+          [
+            9,
+            5
+          ],
+          [
+            8,
+            3
+          ],
+          [
+            8,
+            8
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            2,
+            8
+          ],
+          [
+            9,
+            0
+          ],
+          [
+            2,
+            9
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            9,
+            4
+          ],
+          [
+            3,
+            8
+          ],
+          [
+            9,
+            7
+          ],
+          [
+            7,
+            6
+          ],
+          [
+            2,
+            8
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            9,
+            2
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            7,
+            5
+          ],
+          [
+            8,
+            0
+          ],
+          [
+            6,
+            9
+          ],
+          [
+            4,
+            9
+          ],
+          [
+            7,
+            2
+          ],
+          [
+            6,
+            9
+          ],
+          [
+            4,
+            8
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            6,
+            2
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            7,
+            4
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            6,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            9,
+            8
+          ],
+          [
+            9,
+            3
+          ],
+          [
+            5,
+            9
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            8,
+            4
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            9,
+            4
+          ],
+          [
+            9,
+            8
+          ],
+          [
+            7,
+            5
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            1,
+            7
+          ]
+        ],
+        "permutations_sha256": "1344bad43c8f84c5f65f1c8380df572c89ac37d12239db0aa03e8d4e691ab417",
+        "unshuffled_p": 0.249,
+        "unshuffled_observed_mean_nearest": 0.5714285714285714,
+        "n_builds": 14,
+        "n_features": 46,
+        "median_shuffled_p": 0.5385,
+        "fraction_shuffled_at_least_as_extreme": 0.26,
+        "confounded": false,
+        "fail_rule_literal": "median shuffled p <= unshuffled p  =>  confounded => FAIL (memo section 4.3, verbatim)",
+        "fail_rule_as_applied": "mirror claim present (p < 0.05 and >= 4 distinct build tiles) AND median shuffled p <= unshuffled p  =>  confounded => FAIL",
+        "secondary_reported_rule": "a MIRROR CLAIM would additionally require fewer than 5% of position-permutations reaching a p as extreme as the observed one; reported, not binding, since no arm here makes a mirror claim"
+      }
+    },
+    "L-rep1": {
+      "arm": "L-rep1",
+      "root_seed": 20260806,
+      "world_construction_seed": 21260809,
+      "generation": "gen-300-L-rep1",
+      "checkpoint_manifest_checksum": "8fe881ea7724cf1de1bf9551d9870a4369e405924f36bcdadb42f83762eef3e8",
+      "schema_version": "1.1",
+      "hash_provenance": {
+        "source": "1.1",
+        "shape_hash": "22ebdb6837f129b6977c21a0c92d4bfaf9bad61429cfe54321e67b82ac1037e9",
+        "training_config_hash": "355cfabf26d3ed97c215156d0b36712e1dd286ff24f6d665b236bcf55bb09971"
+      },
+      "resume_warnings": [],
+      "world_learning_frozen": false,
+      "theta0_checksum": "fbb9cd941591a455a1f56fa59b0d50af312ad218e035bfb17b20f127a0807224",
+      "theta300_checksum": "0a564560ce63e4c54c089b967617bdac2d4458801d4d5d744383c7820edb8e95",
+      "weights_changed": true,
+      "relative_parameter_displacement": 0.00970042765542562,
+      "relative_parameter_displacement_incl_head": 0.05815768596630779,
+      "verb_weights_untouched": true,
+      "prev_features_at_checkpoint": [
+        0,
+        0,
+        0.2727272727272727,
+        0,
+        0.047619047619047616,
+        0.7058823529411765,
+        0,
+        0
+      ],
+      "policy_l2": {
+        "max": 0.00019204647068927003,
+        "argmax_fixture_state": 940,
+        "fixture_seed": 20260805,
+        "fixture_count": 1000
+      },
+      "init_noise_floor": 0.012274953713908984,
+      "contamination_alarm_threshold": 0.12274953713908984,
+      "prediction_loss": {
+        "ticks_with_loss": 299,
+        "ticks_updated": 299,
+        "mean_first_50": 0.0006475753883655154,
+        "mean_last_50": 2.793688244675767e-7,
+        "ratio_first_over_last": 2317.9944634111184,
+        "improved": true,
+        "min": 5.867845807198157e-9,
+        "max": 0.001854254476503932
+      },
+      "entropy": {
+        "n": 300,
+        "entropy_min": 1.609420578737692,
+        "entropy_max": 1.6094345942213089,
+        "ln5": 1.6094379124341003,
+        "departure_at_tick_150": 0.000013329318184984729,
+        "departure_at_tick_300": 0.000017332504244071956,
+        "max_departure": 0.000017333696408217136,
+        "frozen_band_width": 0.0000012291423880927965,
+        "frozen_max_departure": 0.0000017306619535251144,
+        "bar_3x_band_width": 0.0000036874271642783896,
+        "bar_3x_max_departure": 0.000005191985860575343
+      },
+      "feature_density": {
+        "per_family": {
+          "food_sources": 0,
+          "wood_sources": 20,
+          "stone_sources": 20,
+          "clay_sources": 3,
+          "water_sources": 2,
+          "ore_sources": 1,
+          "fiber_sources": 1
+        },
+        "total_feature_tiles": 47,
+        "distinct_cells": 38,
+        "grid_saturation": 0.38
+      },
+      "encoder_signal": {
+        "final_state_encoding": [
+          0,
+          0,
+          0.2727272727272727,
+          0,
+          0.047619047619047616,
+          0.7058823529411765,
+          0,
+          0
+        ],
+        "feature_names": [
+          "total_food",
+          "total_wood",
+          "total_stone",
+          "food_source_count",
+          "hive_count",
+          "territory_count",
+          "pheromone_signal_strength",
+          "starvation_pressure"
+        ],
+        "world_state_has_hives_key": true,
+        "world_state_hives_summary": {
+          "count": 2,
+          "starvation_pressure": 0
+        },
+        "world_state_schema_version": "1.1.0",
+        "world_state_top_level_keys": [
+          "clay_sources",
+          "complete",
+          "discovered_types",
+          "fiber_sources",
+          "food_source_coords",
+          "food_sources",
+          "geometry_log",
+          "hives",
+          "ore_sources",
+          "pheromones",
+          "predator_population",
+          "prey_population",
+          "resources",
+          "schema_version",
+          "seq",
+          "stone_sources",
+          "territory",
+          "water_sources",
+          "wood_sources",
+          "writer",
+          "written_at"
+        ],
+        "masked_coordinates": [
+          4,
+          6,
+          7
+        ],
+        "masked_coordinate_values_at_final_state": {
+          "4": 0.047619047619047616,
+          "6": 0,
+          "7": 0
+        },
+        "run_liveness": {
+          "samples": 300,
+          "mask": [
+            4,
+            6,
+            7
+          ],
+          "per_coordinate": {
+            "4": {
+              "name": "hive_count",
+              "samples": 300,
+              "ticks_non_zero": 300,
+              "min": 0.047619047619047616,
+              "max": 0.047619047619047616,
+              "distinct_values_seen": 1,
+              "dead_zero": false,
+              "constant": true
+            },
+            "6": {
+              "name": "pheromone_signal_strength",
+              "samples": 300,
+              "ticks_non_zero": 82,
+              "min": 0,
+              "max": 0.09917801950054717,
+              "distinct_values_seen": 64,
+              "dead_zero": false,
+              "constant": false
+            },
+            "7": {
+              "name": "starvation_pressure",
+              "samples": 300,
+              "ticks_non_zero": 0,
+              "min": 0,
+              "max": 0,
+              "distinct_values_seen": 1,
+              "dead_zero": true,
+              "constant": true
+            }
+          },
+          "dead_zero_coordinates": [
+            7
+          ],
+          "constant_coordinates": [
+            4,
+            7
+          ],
+          "live": false,
+          "effective_dimensionality": 1,
+          "standard": "every masked coordinate must take a non-zero value on at least one tick of the run; a masked coordinate that is zero on every tick is a dead training dimension, not a small gradient"
+        },
+        "dead_zero_masked_coordinates": [
+          7
+        ],
+        "constant_masked_coordinates": [
+          4,
+          7
+        ],
+        "hidden_units_relu_active_at_final_state": 3,
+        "hidden_units_total": 8,
+        "encoder_coupling_probe": {
+          "hive_count_index": 4,
+          "starvation_index": 7,
+          "encoded_from_summary": [
+            0,
+            0,
+            0,
+            0,
+            0.047619047619047616,
+            0,
+            0,
+            0.024390243902439025
+          ],
+          "encoded_from_map": [
+            0,
+            0,
+            0,
+            0,
+            0.047619047619047616,
+            0,
+            0,
+            0.024390243902439025
+          ],
+          "shapes_agree": true
+        }
+      },
+      "loss_decomposition": {
+        "steps": 299,
+        "replayed_theta_checksum": "0a564560ce63e4c54c089b967617bdac2d4458801d4d5d744383c7820edb8e95",
+        "checkpoint_theta_checksum": "0a564560ce63e4c54c089b967617bdac2d4458801d4d5d744383c7820edb8e95",
+        "replay_matches_checkpoint": true,
+        "replay_note": "the replay reconstructs theta_0 from the root seed and re-applies the recorded (x_t, x_t+1) pairs; matching the committed checkpoint proves the decomposition below describes the run that actually happened",
+        "mean_masked_loss": 0.00013529825138031278,
+        "per_coordinate": {
+          "4": {
+            "name": "hive_count",
+            "mean_squared_error": 0.00011345274612233592,
+            "mean_squared_error_first_50": 0.0006594304800196834,
+            "mean_squared_error_last_50": 4.038232110589741e-7,
+            "share_of_total_loss": 0.2795127184199621,
+            "carries_gradient": true
+          },
+          "6": {
+            "name": "pheromone_signal_strength",
+            "mean_squared_error": 0.0002912254834116644,
+            "mean_squared_error_first_50": 0.0012764974225125333,
+            "mean_squared_error_last_50": 3.434579445059888e-7,
+            "share_of_total_loss": 0.7174901386149534,
+            "carries_gradient": true
+          },
+          "7": {
+            "name": "starvation_pressure",
+            "mean_squared_error": 0.0000012165246069382277,
+            "mean_squared_error_first_50": 0.000006798262564329699,
+            "mean_squared_error_last_50": 9.082531783776723e-8,
+            "share_of_total_loss": 0.002997142965084527,
+            "carries_gradient": true
+          }
+        },
+        "coordinates_carrying_gradient": [
+          4,
+          6,
+          7
+        ],
+        "coordinates_carrying_no_gradient": []
+      },
+      "confound_test": {
+        "confounded_literal_rule": true,
+        "mirror_claim_present": false,
+        "distinct_build_tiles": 14,
+        "mirror_claim_thresholds": {
+          "p_below": 0.05,
+          "min_distinct_build_tiles": 4,
+          "source": "mirror-detector.js detect() verdict thresholds"
+        },
+        "not_applicable_reason": "unshuffled p = 0.794 is not a mirror claim (mirror-detector verdict would be null-consistent/approaching-null), so there is no apparent mirror for feature density to explain",
+        "turn_id": "gen-300-L-rep1",
+        "permutation_seed": 2740659281,
+        "permutation_seed_derivation": "fnv1a32(turn_id); Fisher-Yates-free uniform re-placement over the 10x10 grid via mulberry32(seed)",
+        "permutations_run": 200,
+        "null_shuffles_per_p": 1000,
+        "first_permutation": [
+          [
+            9,
+            7
+          ],
+          [
+            7,
+            5
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            5,
+            7
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            0,
+            8
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            9,
+            6
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            6,
+            9
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            6,
+            6
+          ],
+          [
+            8,
+            1
+          ],
+          [
+            7,
+            5
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            6,
+            6
+          ],
+          [
+            9,
+            4
+          ],
+          [
+            8,
+            5
+          ],
+          [
+            8,
+            3
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            3,
+            8
+          ],
+          [
+            6,
+            1
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            7,
+            6
+          ],
+          [
+            7,
+            5
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            5,
+            8
+          ],
+          [
+            8,
+            0
+          ],
+          [
+            5,
+            7
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            0,
+            8
+          ],
+          [
+            8,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            9
+          ],
+          [
+            5,
+            9
+          ]
+        ],
+        "permutations_sha256": "6753d7593d7ab10bbdb21700f664697f3b8cc01f201037ca670d2107709d2899",
+        "unshuffled_p": 0.794,
+        "unshuffled_observed_mean_nearest": 0.7609475708248731,
+        "n_builds": 15,
+        "n_features": 47,
+        "median_shuffled_p": 0.5095000000000001,
+        "fraction_shuffled_at_least_as_extreme": 0.775,
+        "confounded": false,
+        "fail_rule_literal": "median shuffled p <= unshuffled p  =>  confounded => FAIL (memo section 4.3, verbatim)",
+        "fail_rule_as_applied": "mirror claim present (p < 0.05 and >= 4 distinct build tiles) AND median shuffled p <= unshuffled p  =>  confounded => FAIL",
+        "secondary_reported_rule": "a MIRROR CLAIM would additionally require fewer than 5% of position-permutations reaching a p as extreme as the observed one; reported, not binding, since no arm here makes a mirror claim"
+      }
+    },
+    "F-rep0": {
+      "arm": "F-rep0",
+      "root_seed": 20260805,
+      "world_construction_seed": 21260808,
+      "generation": "gen-300-F-rep0",
+      "checkpoint_manifest_checksum": "c3b29a0051807085ae7db71ccdba4072b5fff656f45787783b8daea66eabd8b7",
+      "schema_version": "1.1",
+      "hash_provenance": {
+        "source": "1.1",
+        "shape_hash": "22ebdb6837f129b6977c21a0c92d4bfaf9bad61429cfe54321e67b82ac1037e9",
+        "training_config_hash": "355cfabf26d3ed97c215156d0b36712e1dd286ff24f6d665b236bcf55bb09971"
+      },
+      "resume_warnings": [],
+      "world_learning_frozen": true,
+      "theta0_checksum": "5018a9c2a1767fc90f46dbe2beb4cbcff52f184a82797a30fb85427cbeea5191",
+      "theta300_checksum": "5018a9c2a1767fc90f46dbe2beb4cbcff52f184a82797a30fb85427cbeea5191",
+      "weights_changed": false,
+      "relative_parameter_displacement": 0,
+      "relative_parameter_displacement_incl_head": 0,
+      "verb_weights_untouched": true,
+      "prev_features_at_checkpoint": [
+        0,
+        0,
+        0.2727272727272727,
+        0,
+        0.047619047619047616,
+        0.7014925373134329,
+        0.013665475120674972,
+        0
+      ],
+      "policy_l2": {
+        "max": 0,
+        "argmax_fixture_state": -1,
+        "fixture_seed": 20260805,
+        "fixture_count": 1000
+      },
+      "init_noise_floor": 0.012274953713908984,
+      "contamination_alarm_threshold": 0.12274953713908984,
+      "prediction_loss": {
+        "ticks_with_loss": 299,
+        "ticks_updated": 0,
+        "mean_first_50": 0.0016753669972018582,
+        "mean_last_50": 0.0007261127972759599,
+        "ratio_first_over_last": 2.307309557808459,
+        "improved": true,
+        "min": 0.0006692300378828949,
+        "max": 0.0031752981720379737
+      },
+      "entropy": {
+        "n": 300,
+        "entropy_min": 1.609436183346571,
+        "entropy_max": 1.6094374687793116,
+        "ln5": 1.6094379124341003,
+        "departure_at_tick_150": 7.811400335455687e-7,
+        "departure_at_tick_300": 9.72314272207342e-7,
+        "max_departure": 0.0000017290875293785035,
+        "frozen_band_width": 0.0000012291423880927965,
+        "frozen_max_departure": 0.0000017306619535251144,
+        "bar_3x_band_width": 0.0000036874271642783896,
+        "bar_3x_max_departure": 0.000005191985860575343
+      },
+      "feature_density": {
+        "per_family": {
+          "food_sources": 0,
+          "wood_sources": 20,
+          "stone_sources": 20,
+          "clay_sources": 2,
+          "water_sources": 2,
+          "ore_sources": 1,
+          "fiber_sources": 1
+        },
+        "total_feature_tiles": 46,
+        "distinct_cells": 41,
+        "grid_saturation": 0.41
+      },
+      "encoder_signal": {
+        "final_state_encoding": [
+          0,
+          0,
+          0.2727272727272727,
+          0,
+          0.047619047619047616,
+          0.7014925373134329,
+          0.013665475120674972,
+          0
+        ],
+        "feature_names": [
+          "total_food",
+          "total_wood",
+          "total_stone",
+          "food_source_count",
+          "hive_count",
+          "territory_count",
+          "pheromone_signal_strength",
+          "starvation_pressure"
+        ],
+        "world_state_has_hives_key": true,
+        "world_state_hives_summary": {
+          "count": 2,
+          "starvation_pressure": 0
+        },
+        "world_state_schema_version": "1.1.0",
+        "world_state_top_level_keys": [
+          "clay_sources",
+          "complete",
+          "discovered_types",
+          "fiber_sources",
+          "food_source_coords",
+          "food_sources",
+          "geometry_log",
+          "hives",
+          "ore_sources",
+          "pheromones",
+          "predator_population",
+          "prey_population",
+          "resources",
+          "schema_version",
+          "seq",
+          "stone_sources",
+          "territory",
+          "water_sources",
+          "wood_sources",
+          "writer",
+          "written_at"
+        ],
+        "masked_coordinates": [
+          4,
+          6,
+          7
+        ],
+        "masked_coordinate_values_at_final_state": {
+          "4": 0.047619047619047616,
+          "6": 0.013665475120674972,
+          "7": 0
+        },
+        "run_liveness": {
+          "samples": 300,
+          "mask": [
+            4,
+            6,
+            7
+          ],
+          "per_coordinate": {
+            "4": {
+              "name": "hive_count",
+              "samples": 300,
+              "ticks_non_zero": 300,
+              "min": 0.047619047619047616,
+              "max": 0.047619047619047616,
+              "distinct_values_seen": 1,
+              "dead_zero": false,
+              "constant": true
+            },
+            "6": {
+              "name": "pheromone_signal_strength",
+              "samples": 300,
+              "ticks_non_zero": 93,
+              "min": 0,
+              "max": 0.08426403533385252,
+              "distinct_values_seen": 64,
+              "dead_zero": false,
+              "constant": false
+            },
+            "7": {
+              "name": "starvation_pressure",
+              "samples": 300,
+              "ticks_non_zero": 0,
+              "min": 0,
+              "max": 0,
+              "distinct_values_seen": 1,
+              "dead_zero": true,
+              "constant": true
+            }
+          },
+          "dead_zero_coordinates": [
+            7
+          ],
+          "constant_coordinates": [
+            4,
+            7
+          ],
+          "live": false,
+          "effective_dimensionality": 1,
+          "standard": "every masked coordinate must take a non-zero value on at least one tick of the run; a masked coordinate that is zero on every tick is a dead training dimension, not a small gradient"
+        },
+        "dead_zero_masked_coordinates": [
+          7
+        ],
+        "constant_masked_coordinates": [
+          4,
+          7
+        ],
+        "hidden_units_relu_active_at_final_state": 2,
+        "hidden_units_total": 8,
+        "encoder_coupling_probe": {
+          "hive_count_index": 4,
+          "starvation_index": 7,
+          "encoded_from_summary": [
+            0,
+            0,
+            0,
+            0,
+            0.047619047619047616,
+            0,
+            0,
+            0.024390243902439025
+          ],
+          "encoded_from_map": [
+            0,
+            0,
+            0,
+            0,
+            0.047619047619047616,
+            0,
+            0,
+            0.024390243902439025
+          ],
+          "shapes_agree": true
+        }
+      },
+      "loss_decomposition": {
+        "steps": 299,
+        "replayed_theta_checksum": "5018a9c2a1767fc90f46dbe2beb4cbcff52f184a82797a30fb85427cbeea5191",
+        "checkpoint_theta_checksum": "5018a9c2a1767fc90f46dbe2beb4cbcff52f184a82797a30fb85427cbeea5191",
+        "replay_matches_checkpoint": true,
+        "replay_note": "the replay reconstructs theta_0 from the root seed and re-applies the recorded (x_t, x_t+1) pairs; matching the committed checkpoint proves the decomposition below describes the run that actually happened",
+        "mean_masked_loss": 0.0009106935365616351,
+        "per_coordinate": {
+          "4": {
+            "name": "hive_count",
+            "mean_squared_error": 0.002148527374818176,
+            "mean_squared_error_first_50": 0.0021157584808017046,
+            "mean_squared_error_last_50": 0.002110459113386827,
+            "share_of_total_loss": 0.7864070215212171,
+            "carries_gradient": true
+          },
+          "6": {
+            "name": "pheromone_signal_strength",
+            "mean_squared_error": 0.0005828996236526742,
+            "mean_squared_error_first_50": 0.0029072220790050786,
+            "mean_squared_error_last_50": 0.00006765528522917259,
+            "share_of_total_loss": 0.21335374277990327,
+            "carries_gradient": true
+          },
+          "7": {
+            "name": "starvation_pressure",
+            "mean_squared_error": 6.536112140535318e-7,
+            "mean_squared_error_first_50": 0.0000031204317987924846,
+            "mean_squared_error_last_50": 2.239932118805554e-7,
+            "share_of_total_loss": 0.00023923569887965865,
+            "carries_gradient": true
+          }
+        },
+        "coordinates_carrying_gradient": [
+          4,
+          6,
+          7
+        ],
+        "coordinates_carrying_no_gradient": []
+      },
+      "confound_test": {
+        "confounded_literal_rule": false,
+        "mirror_claim_present": false,
+        "distinct_build_tiles": 12,
+        "mirror_claim_thresholds": {
+          "p_below": 0.05,
+          "min_distinct_build_tiles": 4,
+          "source": "mirror-detector.js detect() verdict thresholds"
+        },
+        "not_applicable_reason": "unshuffled p = 0.24 is not a mirror claim (mirror-detector verdict would be null-consistent/approaching-null), so there is no apparent mirror for feature density to explain",
+        "turn_id": "gen-300-F-rep0",
+        "permutation_seed": 1635731436,
+        "permutation_seed_derivation": "fnv1a32(turn_id); Fisher-Yates-free uniform re-placement over the 10x10 grid via mulberry32(seed)",
+        "permutations_run": 200,
+        "null_shuffles_per_p": 1000,
+        "first_permutation": [
+          [
+            1,
+            1
+          ],
+          [
+            6,
+            6
+          ],
+          [
+            8,
+            8
+          ],
+          [
+            6,
+            6
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            1,
+            9
+          ],
+          [
+            9,
+            1
+          ],
+          [
+            6,
+            1
+          ],
+          [
+            8,
+            1
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            8,
+            5
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            7,
+            3
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            9,
+            3
+          ],
+          [
+            8,
+            3
+          ],
+          [
+            5,
+            9
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            0,
+            5
+          ],
+          [
+            6,
+            6
+          ],
+          [
+            6,
+            6
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            9,
+            5
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            1,
+            8
+          ],
+          [
+            8,
+            3
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            6,
+            1
+          ],
+          [
+            0,
+            8
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            7,
+            7
+          ],
+          [
+            8,
+            2
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            9,
+            0
+          ],
+          [
+            8,
+            8
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            0,
+            7
+          ]
+        ],
+        "permutations_sha256": "0f33f1ae6c771d0195183ff8a41730c41e28fe72ae479f14ba4ee19c6710e001",
+        "unshuffled_p": 0.24,
+        "unshuffled_observed_mean_nearest": 0.5714285714285714,
+        "n_builds": 14,
+        "n_features": 46,
+        "median_shuffled_p": 0.588,
+        "fraction_shuffled_at_least_as_extreme": 0.21,
+        "confounded": false,
+        "fail_rule_literal": "median shuffled p <= unshuffled p  =>  confounded => FAIL (memo section 4.3, verbatim)",
+        "fail_rule_as_applied": "mirror claim present (p < 0.05 and >= 4 distinct build tiles) AND median shuffled p <= unshuffled p  =>  confounded => FAIL",
+        "secondary_reported_rule": "a MIRROR CLAIM would additionally require fewer than 5% of position-permutations reaching a p as extreme as the observed one; reported, not binding, since no arm here makes a mirror claim"
+      }
+    },
+    "F-rep1": {
+      "arm": "F-rep1",
+      "root_seed": 20260806,
+      "world_construction_seed": 21260809,
+      "generation": "gen-300-F-rep1",
+      "checkpoint_manifest_checksum": "3165c6057f74719b0cdc6bd319daf99c0e756b1025340a0a7df0be41dfcdc778",
+      "schema_version": "1.1",
+      "hash_provenance": {
+        "source": "1.1",
+        "shape_hash": "22ebdb6837f129b6977c21a0c92d4bfaf9bad61429cfe54321e67b82ac1037e9",
+        "training_config_hash": "355cfabf26d3ed97c215156d0b36712e1dd286ff24f6d665b236bcf55bb09971"
+      },
+      "resume_warnings": [],
+      "world_learning_frozen": true,
+      "theta0_checksum": "fbb9cd941591a455a1f56fa59b0d50af312ad218e035bfb17b20f127a0807224",
+      "theta300_checksum": "fbb9cd941591a455a1f56fa59b0d50af312ad218e035bfb17b20f127a0807224",
+      "weights_changed": false,
+      "relative_parameter_displacement": 0,
+      "relative_parameter_displacement_incl_head": 0,
+      "verb_weights_untouched": true,
+      "prev_features_at_checkpoint": [
+        0,
+        0,
+        0.2727272727272727,
+        0,
+        0.047619047619047616,
+        0.7058823529411765,
+        0,
+        0
+      ],
+      "policy_l2": {
+        "max": 0,
+        "argmax_fixture_state": -1,
+        "fixture_seed": 20260805,
+        "fixture_count": 1000
+      },
+      "init_noise_floor": 0.012274953713908984,
+      "contamination_alarm_threshold": 0.12274953713908984,
+      "prediction_loss": {
+        "ticks_with_loss": 299,
+        "ticks_updated": 0,
+        "mean_first_50": 0.001750312913081141,
+        "mean_last_50": 0.00062524322170889,
+        "ratio_first_over_last": 2.7994112567862075,
+        "improved": true,
+        "min": 0.0006173010093510401,
+        "max": 0.003855747622477085
+      },
+      "entropy": {
+        "n": 300,
+        "entropy_min": 1.6094222539713392,
+        "entropy_max": 1.6094345942213089,
+        "ln5": 1.6094379124341003,
+        "departure_at_tick_150": 0.000011922055935364995,
+        "departure_at_tick_300": 0.000015658462761081182,
+        "max_departure": 0.000015658462761081182,
+        "frozen_band_width": 0.0000012291423880927965,
+        "frozen_max_departure": 0.0000017306619535251144,
+        "bar_3x_band_width": 0.0000036874271642783896,
+        "bar_3x_max_departure": 0.000005191985860575343
+      },
+      "feature_density": {
+        "per_family": {
+          "food_sources": 0,
+          "wood_sources": 20,
+          "stone_sources": 20,
+          "clay_sources": 3,
+          "water_sources": 2,
+          "ore_sources": 1,
+          "fiber_sources": 1
+        },
+        "total_feature_tiles": 47,
+        "distinct_cells": 38,
+        "grid_saturation": 0.38
+      },
+      "encoder_signal": {
+        "final_state_encoding": [
+          0,
+          0,
+          0.2727272727272727,
+          0,
+          0.047619047619047616,
+          0.7058823529411765,
+          0,
+          0
+        ],
+        "feature_names": [
+          "total_food",
+          "total_wood",
+          "total_stone",
+          "food_source_count",
+          "hive_count",
+          "territory_count",
+          "pheromone_signal_strength",
+          "starvation_pressure"
+        ],
+        "world_state_has_hives_key": true,
+        "world_state_hives_summary": {
+          "count": 2,
+          "starvation_pressure": 0
+        },
+        "world_state_schema_version": "1.1.0",
+        "world_state_top_level_keys": [
+          "clay_sources",
+          "complete",
+          "discovered_types",
+          "fiber_sources",
+          "food_source_coords",
+          "food_sources",
+          "geometry_log",
+          "hives",
+          "ore_sources",
+          "pheromones",
+          "predator_population",
+          "prey_population",
+          "resources",
+          "schema_version",
+          "seq",
+          "stone_sources",
+          "territory",
+          "water_sources",
+          "wood_sources",
+          "writer",
+          "written_at"
+        ],
+        "masked_coordinates": [
+          4,
+          6,
+          7
+        ],
+        "masked_coordinate_values_at_final_state": {
+          "4": 0.047619047619047616,
+          "6": 0,
+          "7": 0
+        },
+        "run_liveness": {
+          "samples": 300,
+          "mask": [
+            4,
+            6,
+            7
+          ],
+          "per_coordinate": {
+            "4": {
+              "name": "hive_count",
+              "samples": 300,
+              "ticks_non_zero": 300,
+              "min": 0.047619047619047616,
+              "max": 0.047619047619047616,
+              "distinct_values_seen": 1,
+              "dead_zero": false,
+              "constant": true
+            },
+            "6": {
+              "name": "pheromone_signal_strength",
+              "samples": 300,
+              "ticks_non_zero": 82,
+              "min": 0,
+              "max": 0.09917801950054717,
+              "distinct_values_seen": 64,
+              "dead_zero": false,
+              "constant": false
+            },
+            "7": {
+              "name": "starvation_pressure",
+              "samples": 300,
+              "ticks_non_zero": 0,
+              "min": 0,
+              "max": 0,
+              "distinct_values_seen": 1,
+              "dead_zero": true,
+              "constant": true
+            }
+          },
+          "dead_zero_coordinates": [
+            7
+          ],
+          "constant_coordinates": [
+            4,
+            7
+          ],
+          "live": false,
+          "effective_dimensionality": 1,
+          "standard": "every masked coordinate must take a non-zero value on at least one tick of the run; a masked coordinate that is zero on every tick is a dead training dimension, not a small gradient"
+        },
+        "dead_zero_masked_coordinates": [
+          7
+        ],
+        "constant_masked_coordinates": [
+          4,
+          7
+        ],
+        "hidden_units_relu_active_at_final_state": 3,
+        "hidden_units_total": 8,
+        "encoder_coupling_probe": {
+          "hive_count_index": 4,
+          "starvation_index": 7,
+          "encoded_from_summary": [
+            0,
+            0,
+            0,
+            0,
+            0.047619047619047616,
+            0,
+            0,
+            0.024390243902439025
+          ],
+          "encoded_from_map": [
+            0,
+            0,
+            0,
+            0,
+            0.047619047619047616,
+            0,
+            0,
+            0.024390243902439025
+          ],
+          "shapes_agree": true
+        }
+      },
+      "loss_decomposition": {
+        "steps": 299,
+        "replayed_theta_checksum": "fbb9cd941591a455a1f56fa59b0d50af312ad218e035bfb17b20f127a0807224",
+        "checkpoint_theta_checksum": "fbb9cd941591a455a1f56fa59b0d50af312ad218e035bfb17b20f127a0807224",
+        "replay_matches_checkpoint": true,
+        "replay_note": "the replay reconstructs theta_0 from the root seed and re-applies the recorded (x_t, x_t+1) pairs; matching the committed checkpoint proves the decomposition below describes the run that actually happened",
+        "mean_masked_loss": 0.000860098659946361,
+        "per_coordinate": {
+          "4": {
+            "name": "hive_count",
+            "mean_squared_error": 0.001990408708755628,
+            "mean_squared_error_first_50": 0.002206193231492397,
+            "mean_squared_error_last_50": 0.0018554939059383943,
+            "share_of_total_loss": 0.7713877494316596,
+            "carries_gradient": true
+          },
+          "6": {
+            "name": "pheromone_signal_strength",
+            "mean_squared_error": 0.0005793772412766864,
+            "mean_squared_error_first_50": 0.0030279811235937636,
+            "mean_squared_error_last_50": 0.000010092997608343648,
+            "share_of_total_loss": 0.22453906288410327,
+            "carries_gradient": true
+          },
+          "7": {
+            "name": "starvation_pressure",
+            "mean_squared_error": 0.000010510029806767373,
+            "mean_squared_error_first_50": 0.000016764384157261246,
+            "mean_squared_error_last_50": 0.000010142761579932023,
+            "share_of_total_loss": 0.004073187684237226,
+            "carries_gradient": true
+          }
+        },
+        "coordinates_carrying_gradient": [
+          4,
+          6,
+          7
+        ],
+        "coordinates_carrying_no_gradient": []
+      },
+      "confound_test": {
+        "confounded_literal_rule": true,
+        "mirror_claim_present": false,
+        "distinct_build_tiles": 14,
+        "mirror_claim_thresholds": {
+          "p_below": 0.05,
+          "min_distinct_build_tiles": 4,
+          "source": "mirror-detector.js detect() verdict thresholds"
+        },
+        "not_applicable_reason": "unshuffled p = 0.767 is not a mirror claim (mirror-detector verdict would be null-consistent/approaching-null), so there is no apparent mirror for feature density to explain",
+        "turn_id": "gen-300-F-rep1",
+        "permutation_seed": 1652509055,
+        "permutation_seed_derivation": "fnv1a32(turn_id); Fisher-Yates-free uniform re-placement over the 10x10 grid via mulberry32(seed)",
+        "permutations_run": 200,
+        "null_shuffles_per_p": 1000,
+        "first_permutation": [
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            8
+          ],
+          [
+            9,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            3,
+            8
+          ],
+          [
+            6,
+            2
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            8,
+            1
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            8,
+            9
+          ],
+          [
+            5,
+            7
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            9,
+            1
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            3,
+            7
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            5,
+            9
+          ],
+          [
+            8,
+            2
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            9,
+            0
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            8,
+            4
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            5,
+            7
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            2,
+            9
+          ],
+          [
+            9,
+            2
+          ]
+        ],
+        "permutations_sha256": "f7fdf7944145b231808300d2f7e5a068c77d91a9adf70a3ef3e4d5a31243bc24",
+        "unshuffled_p": 0.767,
+        "unshuffled_observed_mean_nearest": 0.7609475708248731,
+        "n_builds": 15,
+        "n_features": 47,
+        "median_shuffled_p": 0.5805,
+        "fraction_shuffled_at_least_as_extreme": 0.72,
+        "confounded": false,
+        "fail_rule_literal": "median shuffled p <= unshuffled p  =>  confounded => FAIL (memo section 4.3, verbatim)",
+        "fail_rule_as_applied": "mirror claim present (p < 0.05 and >= 4 distinct build tiles) AND median shuffled p <= unshuffled p  =>  confounded => FAIL",
+        "secondary_reported_rule": "a MIRROR CLAIM would additionally require fewer than 5% of position-permutations reaching a p as extreme as the observed one; reported, not binding, since no arm here makes a mirror claim"
+      }
+    },
+    "RT-rep0": {
+      "arm": "RT-rep0",
+      "root_seed": 20260805,
+      "world_construction_seed": 21260808,
+      "generation": "gen-300-RT-rep0b",
+      "checkpoint_manifest_checksum": "fdedb2c6d6998e5fd4ad5a8115cef46b433ca577ecf1268b69c3293c5739250a",
+      "schema_version": "1.1",
+      "hash_provenance": {
+        "source": "1.1",
+        "shape_hash": "22ebdb6837f129b6977c21a0c92d4bfaf9bad61429cfe54321e67b82ac1037e9",
+        "training_config_hash": "355cfabf26d3ed97c215156d0b36712e1dd286ff24f6d665b236bcf55bb09971"
+      },
+      "resume_warnings": [],
+      "world_learning_frozen": false,
+      "theta0_checksum": "5018a9c2a1767fc90f46dbe2beb4cbcff52f184a82797a30fb85427cbeea5191",
+      "theta300_checksum": "7c1677275706a086cf8005b7bde525eb05b6e13d4934ba206b0770a6d76e0880",
+      "weights_changed": true,
+      "relative_parameter_displacement": 0.01469237703019979,
+      "relative_parameter_displacement_incl_head": 0.06452384037789967,
+      "verb_weights_untouched": true,
+      "prev_features_at_checkpoint": [
+        0,
+        0,
+        0.2727272727272727,
+        0,
+        0.047619047619047616,
+        0.7014925373134329,
+        0.013665475120674972,
+        0
+      ],
+      "policy_l2": {
+        "max": 0.0002244315455204192,
+        "argmax_fixture_state": 979,
+        "fixture_seed": 20260805,
+        "fixture_count": 1000
+      },
+      "init_noise_floor": 0.012274953713908984,
+      "contamination_alarm_threshold": 0.12274953713908984,
+      "prediction_loss": {
+        "ticks_with_loss": 299,
+        "ticks_updated": 299,
+        "mean_first_50": 0.0005361666410226601,
+        "mean_last_50": 0.00001987158199296977,
+        "ratio_first_over_last": 26.98157807528091,
+        "improved": true,
+        "min": 2.3906302142571226e-9,
+        "max": 0.0022939551267395935
+      },
+      "entropy": {
+        "n": 300,
+        "entropy_min": 1.6094359536793517,
+        "entropy_max": 1.6094374509310536,
+        "ln5": 1.6094379124341003,
+        "departure_at_tick_150": 6.661884199843371e-7,
+        "departure_at_tick_300": 8.36957549044115e-7,
+        "max_departure": 0.000001958754748621061,
+        "frozen_band_width": 0.0000012291423880927965,
+        "frozen_max_departure": 0.0000017306619535251144,
+        "bar_3x_band_width": 0.0000036874271642783896,
+        "bar_3x_max_departure": 0.000005191985860575343
+      },
+      "feature_density": {
+        "per_family": {
+          "food_sources": 0,
+          "wood_sources": 20,
+          "stone_sources": 20,
+          "clay_sources": 2,
+          "water_sources": 2,
+          "ore_sources": 1,
+          "fiber_sources": 1
+        },
+        "total_feature_tiles": 46,
+        "distinct_cells": 41,
+        "grid_saturation": 0.41
+      },
+      "encoder_signal": {
+        "final_state_encoding": [
+          0,
+          0,
+          0.2727272727272727,
+          0,
+          0.047619047619047616,
+          0.7014925373134329,
+          0.013665475120674972,
+          0
+        ],
+        "feature_names": [
+          "total_food",
+          "total_wood",
+          "total_stone",
+          "food_source_count",
+          "hive_count",
+          "territory_count",
+          "pheromone_signal_strength",
+          "starvation_pressure"
+        ],
+        "world_state_has_hives_key": true,
+        "world_state_hives_summary": {
+          "count": 2,
+          "starvation_pressure": 0
+        },
+        "world_state_schema_version": "1.1.0",
+        "world_state_top_level_keys": [
+          "clay_sources",
+          "complete",
+          "discovered_types",
+          "fiber_sources",
+          "food_source_coords",
+          "food_sources",
+          "geometry_log",
+          "hives",
+          "ore_sources",
+          "pheromones",
+          "predator_population",
+          "prey_population",
+          "resources",
+          "schema_version",
+          "seq",
+          "stone_sources",
+          "territory",
+          "water_sources",
+          "wood_sources",
+          "writer",
+          "written_at"
+        ],
+        "masked_coordinates": [
+          4,
+          6,
+          7
+        ],
+        "masked_coordinate_values_at_final_state": {
+          "4": 0.047619047619047616,
+          "6": 0.013665475120674972,
+          "7": 0
+        },
+        "run_liveness": {
+          "samples": 300,
+          "mask": [
+            4,
+            6,
+            7
+          ],
+          "per_coordinate": {
+            "4": {
+              "name": "hive_count",
+              "samples": 300,
+              "ticks_non_zero": 300,
+              "min": 0.047619047619047616,
+              "max": 0.047619047619047616,
+              "distinct_values_seen": 1,
+              "dead_zero": false,
+              "constant": true
+            },
+            "6": {
+              "name": "pheromone_signal_strength",
+              "samples": 300,
+              "ticks_non_zero": 93,
+              "min": 0,
+              "max": 0.08426403533385252,
+              "distinct_values_seen": 64,
+              "dead_zero": false,
+              "constant": false
+            },
+            "7": {
+              "name": "starvation_pressure",
+              "samples": 300,
+              "ticks_non_zero": 0,
+              "min": 0,
+              "max": 0,
+              "distinct_values_seen": 1,
+              "dead_zero": true,
+              "constant": true
+            }
+          },
+          "dead_zero_coordinates": [
+            7
+          ],
+          "constant_coordinates": [
+            4,
+            7
+          ],
+          "live": false,
+          "effective_dimensionality": 1,
+          "standard": "every masked coordinate must take a non-zero value on at least one tick of the run; a masked coordinate that is zero on every tick is a dead training dimension, not a small gradient"
+        },
+        "dead_zero_masked_coordinates": [
+          7
+        ],
+        "constant_masked_coordinates": [
+          4,
+          7
+        ],
+        "hidden_units_relu_active_at_final_state": 2,
+        "hidden_units_total": 8,
+        "encoder_coupling_probe": {
+          "hive_count_index": 4,
+          "starvation_index": 7,
+          "encoded_from_summary": [
+            0,
+            0,
+            0,
+            0,
+            0.047619047619047616,
+            0,
+            0,
+            0.024390243902439025
+          ],
+          "encoded_from_map": [
+            0,
+            0,
+            0,
+            0,
+            0.047619047619047616,
+            0,
+            0,
+            0.024390243902439025
+          ],
+          "shapes_agree": true
+        }
+      },
+      "loss_decomposition": {
+        "steps": 299,
+        "replayed_theta_checksum": "7c1677275706a086cf8005b7bde525eb05b6e13d4934ba206b0770a6d76e0880",
+        "checkpoint_theta_checksum": "7c1677275706a086cf8005b7bde525eb05b6e13d4934ba206b0770a6d76e0880",
+        "replay_matches_checkpoint": true,
+        "replay_note": "the replay reconstructs theta_0 from the root seed and re-applies the recorded (x_t, x_t+1) pairs; matching the committed checkpoint proves the decomposition below describes the run that actually happened",
+        "mean_masked_loss": 0.00012335311835936835,
+        "per_coordinate": {
+          "4": {
+            "name": "hive_count",
+            "mean_squared_error": 0.00010698905086691572,
+            "mean_squared_error_first_50": 0.0006158925438637472,
+            "mean_squared_error_last_50": 6.414820165756671e-7,
+            "share_of_total_loss": 0.28911321764676007,
+            "carries_gradient": true
+          },
+          "6": {
+            "name": "pheromone_signal_strength",
+            "mean_squared_error": 0.0002627446174368111,
+            "mean_squared_error_first_50": 0.0009911565679013173,
+            "mean_squared_error_last_50": 0.00005879094531372409,
+            "share_of_total_loss": 0.7100066890117027,
+            "carries_gradient": true
+          },
+          "7": {
+            "name": "starvation_pressure",
+            "mean_squared_error": 3.2568677437779914e-7,
+            "mean_squared_error_first_50": 0.0000014508113029162284,
+            "mean_squared_error_last_50": 1.8231864860954492e-7,
+            "share_of_total_loss": 0.000880093341537224,
+            "carries_gradient": true
+          }
+        },
+        "coordinates_carrying_gradient": [
+          4,
+          6,
+          7
+        ],
+        "coordinates_carrying_no_gradient": []
+      },
+      "confound_test": {
+        "confounded_literal_rule": false,
+        "mirror_claim_present": false,
+        "distinct_build_tiles": 12,
+        "mirror_claim_thresholds": {
+          "p_below": 0.05,
+          "min_distinct_build_tiles": 4,
+          "source": "mirror-detector.js detect() verdict thresholds"
+        },
+        "not_applicable_reason": "unshuffled p = 0.27 is not a mirror claim (mirror-detector verdict would be null-consistent/approaching-null), so there is no apparent mirror for feature density to explain",
+        "turn_id": "gen-300-RT-rep0b",
+        "permutation_seed": 617141078,
+        "permutation_seed_derivation": "fnv1a32(turn_id); Fisher-Yates-free uniform re-placement over the 10x10 grid via mulberry32(seed)",
+        "permutations_run": 200,
+        "null_shuffles_per_p": 1000,
+        "first_permutation": [
+          [
+            9,
+            7
+          ],
+          [
+            6,
+            8
+          ],
+          [
+            8,
+            8
+          ],
+          [
+            9,
+            9
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            0,
+            7
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            8,
+            6
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            6,
+            4
+          ],
+          [
+            8,
+            1
+          ],
+          [
+            7,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            8,
+            5
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            0,
+            9
+          ],
+          [
+            9,
+            8
+          ],
+          [
+            8,
+            9
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            8,
+            5
+          ],
+          [
+            3,
+            5
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            4,
+            7
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            9,
+            9
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            9,
+            7
+          ],
+          [
+            0,
+            8
+          ],
+          [
+            7,
+            2
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            8,
+            0
+          ],
+          [
+            6,
+            1
+          ],
+          [
+            6,
+            9
+          ],
+          [
+            7,
+            6
+          ],
+          [
+            9,
+            2
+          ],
+          [
+            2,
+            6
+          ]
+        ],
+        "permutations_sha256": "09608877cfcf03e88bda4645b4260cf39ac4a084005b2896ed444a349d25ccdf",
+        "unshuffled_p": 0.27,
+        "unshuffled_observed_mean_nearest": 0.5714285714285714,
+        "n_builds": 14,
+        "n_features": 46,
+        "median_shuffled_p": 0.5525,
+        "fraction_shuffled_at_least_as_extreme": 0.295,
+        "confounded": false,
+        "fail_rule_literal": "median shuffled p <= unshuffled p  =>  confounded => FAIL (memo section 4.3, verbatim)",
+        "fail_rule_as_applied": "mirror claim present (p < 0.05 and >= 4 distinct build tiles) AND median shuffled p <= unshuffled p  =>  confounded => FAIL",
+        "secondary_reported_rule": "a MIRROR CLAIM would additionally require fewer than 5% of position-permutations reaching a p as extreme as the observed one; reported, not binding, since no arm here makes a mirror claim"
+      }
+    }
+  },
+  "determinism": {
+    "standard": "the same root seed run twice must produce byte-identical mind.json (weights, prediction head, prev_features) and byte-identical rng.json",
+    "mind_json_left": "5fd02ac67798880fc808cb61fb3c89f6973db670131f09ff731691cbaa0c33ba",
+    "mind_json_right": "5fd02ac67798880fc808cb61fb3c89f6973db670131f09ff731691cbaa0c33ba",
+    "rng_json_left": "64571098f6ccfba7aaecd80e6a7ef31f7bbb760f67a021ea5a7af47c824f74d1",
+    "rng_json_right": "64571098f6ccfba7aaecd80e6a7ef31f7bbb760f67a021ea5a7af47c824f74d1",
+    "decision_stream": {
+      "window": [
+        0,
+        300
+      ],
+      "rows_left": 900,
+      "rows_right": 900,
+      "identical": true,
+      "differing_rows": 0,
+      "first_divergences": [],
+      "left_sha256": "7428790b52d615c4fffa348b95827105abfe925460f5d3475f6ae15869d3885b",
+      "right_sha256": "7428790b52d615c4fffa348b95827105abfe925460f5d3475f6ae15869d3885b"
+    },
+    "mind_identical": true,
+    "rng_identical": true
+  },
+  "round_trip": {
+    "standard": "save at tick 150, resume, continue to 300 -> byte-identical to the uninterrupted run across the FULL generation, not weights alone",
+    "generation_comparison": {
+      "per_state_file": {
+        "mind.json": {
+          "left": "5fd02ac67798880fc808cb61fb3c89f6973db670131f09ff731691cbaa0c33ba",
+          "right": "5fd02ac67798880fc808cb61fb3c89f6973db670131f09ff731691cbaa0c33ba",
+          "identical": true
+        },
+        "rng.json": {
+          "left": "64571098f6ccfba7aaecd80e6a7ef31f7bbb760f67a021ea5a7af47c824f74d1",
+          "right": "64571098f6ccfba7aaecd80e6a7ef31f7bbb760f67a021ea5a7af47c824f74d1",
+          "identical": true
+        },
+        "world.json": {
+          "left": "c1949126411a89fad72ddb4dad13104e1ada54c15436a3f9210b43c1ecb0023d",
+          "right": "5c804ad5627680ba3b8d8e5505b112c377adae73aba9c80b10b3a0c9ba2ddedd",
+          "identical": false
+        },
+        "identity.json": {
+          "left": "159c23acb559e1ef0533a656dbad8563d54d79b2b644622091f59d1b9c50257f",
+          "right": "ba2b102ce46eb1c8fd101240d1fe92815c23d841fc3d02a790ac6e427048212a",
+          "identical": false
+        }
+      },
+      "mind_bytes_identical": true,
+      "rng_bytes_identical": true,
+      "world_tiers": {
+        "tiers": [
+          {
+            "tier": 1,
+            "name": "raw",
+            "fields_removed_at_this_tier": [],
+            "reason": null,
+            "identical": false
+          },
+          {
+            "tier": 2,
+            "name": "minus wall-clock and run identity",
+            "fields_removed_at_this_tier": [
+              "world_state.written_at",
+              "world_state.geometry_log[].at",
+              "world_state.geometry_log[].run_id",
+              "world_state.geometry_log[].episode_id",
+              "world_state.geometry_log[].tick_key",
+              "world_state.geometry_log[].arm_id"
+            ],
+            "reason": "wall-clock stamps and per-process run identity; encodeState reads only the COUNT of geometry entries, never their fields",
+            "identical": false
+          },
+          {
+            "tier": 3,
+            "name": "minus the world-file write counter",
+            "fields_removed_at_this_tier": [
+              "world_state.seq"
+            ],
+            "reason": "counts writes to the world-state FILE. A resume performs one genuine extra write when it materialises the checkpointed world into the sandbox, so a resumed lineage runs exactly one ahead. Produced only; no consumer in the tick path.",
+            "identical": false
+          },
+          {
+            "tier": 4,
+            "name": "minus hive genesis stamps",
+            "fields_removed_at_this_tier": [
+              "hives[].hive_state.provenance.when"
+            ],
+            "reason": "genesis wall-clock stamp written once at fresh start and carried verbatim through the checkpoint, so the resumed lineage keeps the ORIGINAL value while the uninterrupted run has its own. Read by nothing.",
+            "identical": false
+          },
+          {
+            "tier": 5,
+            "name": "minus append-only log cursors",
+            "fields_removed_at_this_tier": [
+              "log_cursors"
+            ],
+            "reason": "byte lengths of the append-only logs IN THE SANDBOX THIS LEG WROTE. The resumed leg2 writes into a fresh sandbox, so its logs hold 150 ticks where the uninterrupted run's hold 300. This measures bytes on disk, not sim state, and feeds no decision -- it is consumed only by applyLogCursors on the next resume.",
+            "identical": true
+          }
+        ],
+        "identical_from_tier": 5
+      },
+      "world_state_identical": true,
+      "world_identical_after_stripping_volatile": true,
+      "identity_behavioral_fields_identical": true,
+      "identity_known_divergences": [
+        "run_name",
+        "event_context.run_id",
+        "event_context.episode_id",
+        "event_context.arm_id",
+        "turn_index",
+        "fresh_start",
+        "root_seed_source",
+        "parent_run_id",
+        "parent_episode_id"
+      ],
+      "manifest_known_divergences": [
+        "created_at (provenance-only wall-clock)",
+        "generation_id / run_name (a resumed leg is a distinct generation by construction)",
+        "parent linkage (the resumed leg has a parent; the uninterrupted run is a lineage root)"
+      ]
+    },
+    "decision_stream_post_resume": {
+      "window": [
+        150,
+        300
+      ],
+      "rows_left": 450,
+      "rows_right": 450,
+      "identical": true,
+      "differing_rows": 0,
+      "first_divergences": [],
+      "left_sha256": "289431e477f58d22a6aa7234ec1a594f035b8cb28de60e957756bc6ae2a76d49",
+      "right_sha256": "289431e477f58d22a6aa7234ec1a594f035b8cb28de60e957756bc6ae2a76d49"
+    },
+    "decision_stream_pre_checkpoint": {
+      "window": [
+        0,
+        150
+      ],
+      "rows_left": 450,
+      "rows_right": 450,
+      "identical": true,
+      "differing_rows": 0,
+      "first_divergences": [],
+      "left_sha256": "0d51fc620c4568679406558ad41f1a01d5e90faa119818cc868b5be745adb4e8",
+      "right_sha256": "0d51fc620c4568679406558ad41f1a01d5e90faa119818cc868b5be745adb4e8"
+    }
+  },
+  "transcripts": [
+    {
+      "label": "L-rep0",
+      "argv": [
+        "--ticks",
+        "300",
+        "--tick-interval-ms",
+        "0",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep0/sandbox",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep0/checkpoints",
+        "--run-name",
+        "L-rep0",
+        "--root-seed",
+        "20260805",
+        "--arm",
+        "L-rep0"
+      ],
+      "env_overrides": {},
+      "exit_code": 0,
+      "duration_ms": 527,
+      "stdout_head": [
+        "resume: none requested -- explicit FRESH START (fresh_start=true)",
+        "Early minds this run: root_seed=20260805 (arg), hive-a seed=20260805, hive-b seed=20365534, world seed=21260808.",
+        "ant-hive-world attended run starting (fresh_start).",
+        "Sandbox: /Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep0/sandbox",
+        "Checkpoint root: /Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep0/checkpoints",
+        "Shared resources at start: {\"food\":40,\"wood\":30,\"stone\":15}",
+        "Mind: untrained-network.js (from-scratch REINFORCE, no pretraining, no LLM).",
+        "World-mind learning: ACTIVE -- masked one-step prediction error (world-train.js); W2/b2 never written",
+        "Running 300 ticks per hive from absolute tick 0. Run log: /Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep0/sandbox/run-log.jsonl",
+        "Config file (live-tunable via the dashboard): /Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep0/sandbox/live-config.json"
+      ],
+      "stdout_tail": [
+        "Done after 300 rounds (absolute tick 0 -> 300). Final world-state: /Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep0/sandbox/shared/world-state.json",
+        "Run log: /Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep0/sandbox/run-log.jsonl",
+        "checkpoint committed: /Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep0/checkpoints/gen-300-L-rep0",
+        "  generation gen-300-L-rep0 day=300 tick=300 depth=0",
+        "  files mind.json:5fd02ac67798 rng.json:64571098f6cc world.json:5c804ad56276 identity.json:ba2b102ce46e",
+        "  manifest 1c8073c974b1f90d125ea1ace398e34ad2bc5faf437a62ed69e083db57354b54"
+      ],
+      "stderr": []
+    },
+    {
+      "label": "L-rep0-repeat",
+      "argv": [
+        "--ticks",
+        "300",
+        "--tick-interval-ms",
+        "0",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep0-repeat/sandbox",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep0-repeat/checkpoints",
+        "--run-name",
+        "L-rep0-repeat",
+        "--root-seed",
+        "20260805",
+        "--arm",
+        "L-rep0-repeat"
+      ],
+      "env_overrides": {},
+      "exit_code": 0,
+      "duration_ms": 488,
+      "stdout_head": [
+        "resume: none requested -- explicit FRESH START (fresh_start=true)",
+        "Early minds this run: root_seed=20260805 (arg), hive-a seed=20260805, hive-b seed=20365534, world seed=21260808.",
+        "ant-hive-world attended run starting (fresh_start).",
+        "Sandbox: /Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep0-repeat/sandbox",
+        "Checkpoint root: /Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep0-repeat/checkpoints",
+        "Shared resources at start: {\"food\":40,\"wood\":30,\"stone\":15}",
+        "Mind: untrained-network.js (from-scratch REINFORCE, no pretraining, no LLM).",
+        "World-mind learning: ACTIVE -- masked one-step prediction error (world-train.js); W2/b2 never written",
+        "Running 300 ticks per hive from absolute tick 0. Run log: /Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep0-repeat/sandbox/run-log.jsonl",
+        "Config file (live-tunable via the dashboard): /Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep0-repeat/sandbox/live-config.json"
+      ],
+      "stdout_tail": [
+        "Done after 300 rounds (absolute tick 0 -> 300). Final world-state: /Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep0-repeat/sandbox/shared/world-state.json",
+        "Run log: /Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep0-repeat/sandbox/run-log.jsonl",
+        "checkpoint committed: /Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep0-repeat/checkpoints/gen-300-L-rep0-repeat",
+        "  generation gen-300-L-rep0-repeat day=300 tick=300 depth=0",
+        "  files mind.json:5fd02ac67798 rng.json:64571098f6cc world.json:f916d381133e identity.json:4894a3bbfc16",
+        "  manifest cee3409c5610c9053dcc299efe62375546e36517d9c87ed823b4d67471449a11"
+      ],
+      "stderr": []
+    },
+    {
+      "label": "L-rep1",
+      "argv": [
+        "--ticks",
+        "300",
+        "--tick-interval-ms",
+        "0",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep1/sandbox",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep1/checkpoints",
+        "--run-name",
+        "L-rep1",
+        "--root-seed",
+        "20260806",
+        "--arm",
+        "L-rep1"
+      ],
+      "env_overrides": {},
+      "exit_code": 0,
+      "duration_ms": 499,
+      "stdout_head": [
+        "resume: none requested -- explicit FRESH START (fresh_start=true)",
+        "Early minds this run: root_seed=20260806 (arg), hive-a seed=20260806, hive-b seed=20365535, world seed=21260809.",
+        "ant-hive-world attended run starting (fresh_start).",
+        "Sandbox: /Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep1/sandbox",
+        "Checkpoint root: /Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep1/checkpoints",
+        "Shared resources at start: {\"food\":40,\"wood\":30,\"stone\":15}",
+        "Mind: untrained-network.js (from-scratch REINFORCE, no pretraining, no LLM).",
+        "World-mind learning: ACTIVE -- masked one-step prediction error (world-train.js); W2/b2 never written",
+        "Running 300 ticks per hive from absolute tick 0. Run log: /Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep1/sandbox/run-log.jsonl",
+        "Config file (live-tunable via the dashboard): /Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep1/sandbox/live-config.json"
+      ],
+      "stdout_tail": [
+        "Done after 300 rounds (absolute tick 0 -> 300). Final world-state: /Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep1/sandbox/shared/world-state.json",
+        "Run log: /Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep1/sandbox/run-log.jsonl",
+        "checkpoint committed: /Users/admin/mythos/_dev/state/mind-learning-test/runs/L-rep1/checkpoints/gen-300-L-rep1",
+        "  generation gen-300-L-rep1 day=300 tick=300 depth=0",
+        "  files mind.json:bcff5ec32a76 rng.json:ead490749d0a world.json:8cbe522ca54a identity.json:6ea2c6c6d2ff",
+        "  manifest 8fe881ea7724cf1de1bf9551d9870a4369e405924f36bcdadb42f83762eef3e8"
+      ],
+      "stderr": []
+    },
+    {
+      "label": "F-rep0",
+      "argv": [
+        "--ticks",
+        "300",
+        "--tick-interval-ms",
+        "0",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/mind-learning-test/runs/F-rep0/sandbox",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/mind-learning-test/runs/F-rep0/checkpoints",
+        "--run-name",
+        "F-rep0",
+        "--root-seed",
+        "20260805",
+        "--arm",
+        "F-rep0",
+        "--freeze-world-learning"
+      ],
+      "env_overrides": {},
+      "exit_code": 0,
+      "duration_ms": 514,
+      "stdout_head": [
+        "resume: none requested -- explicit FRESH START (fresh_start=true)",
+        "Early minds this run: root_seed=20260805 (arg), hive-a seed=20260805, hive-b seed=20365534, world seed=21260808.",
+        "ant-hive-world attended run starting (fresh_start).",
+        "Sandbox: /Users/admin/mythos/_dev/state/mind-learning-test/runs/F-rep0/sandbox",
+        "Checkpoint root: /Users/admin/mythos/_dev/state/mind-learning-test/runs/F-rep0/checkpoints",
+        "Shared resources at start: {\"food\":40,\"wood\":30,\"stone\":15}",
+        "Mind: untrained-network.js (from-scratch REINFORCE, no pretraining, no LLM).",
+        "World-mind learning: FROZEN (--freeze-world-learning) -- loss is measured and reported, no parameter is written",
+        "Running 300 ticks per hive from absolute tick 0. Run log: /Users/admin/mythos/_dev/state/mind-learning-test/runs/F-rep0/sandbox/run-log.jsonl",
+        "Config file (live-tunable via the dashboard): /Users/admin/mythos/_dev/state/mind-learning-test/runs/F-rep0/sandbox/live-config.json"
+      ],
+      "stdout_tail": [
+        "Done after 300 rounds (absolute tick 0 -> 300). Final world-state: /Users/admin/mythos/_dev/state/mind-learning-test/runs/F-rep0/sandbox/shared/world-state.json",
+        "Run log: /Users/admin/mythos/_dev/state/mind-learning-test/runs/F-rep0/sandbox/run-log.jsonl",
+        "checkpoint committed: /Users/admin/mythos/_dev/state/mind-learning-test/runs/F-rep0/checkpoints/gen-300-F-rep0",
+        "  generation gen-300-F-rep0 day=300 tick=300 depth=0",
+        "  files mind.json:38d6b949d47f rng.json:64571098f6cc world.json:8cd8e8bff057 identity.json:c25ec293eb05",
+        "  manifest c3b29a0051807085ae7db71ccdba4072b5fff656f45787783b8daea66eabd8b7"
+      ],
+      "stderr": []
+    },
+    {
+      "label": "F-rep1",
+      "argv": [
+        "--ticks",
+        "300",
+        "--tick-interval-ms",
+        "0",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/mind-learning-test/runs/F-rep1/sandbox",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/mind-learning-test/runs/F-rep1/checkpoints",
+        "--run-name",
+        "F-rep1",
+        "--root-seed",
+        "20260806",
+        "--arm",
+        "F-rep1",
+        "--freeze-world-learning"
+      ],
+      "env_overrides": {},
+      "exit_code": 0,
+      "duration_ms": 508,
+      "stdout_head": [
+        "resume: none requested -- explicit FRESH START (fresh_start=true)",
+        "Early minds this run: root_seed=20260806 (arg), hive-a seed=20260806, hive-b seed=20365535, world seed=21260809.",
+        "ant-hive-world attended run starting (fresh_start).",
+        "Sandbox: /Users/admin/mythos/_dev/state/mind-learning-test/runs/F-rep1/sandbox",
+        "Checkpoint root: /Users/admin/mythos/_dev/state/mind-learning-test/runs/F-rep1/checkpoints",
+        "Shared resources at start: {\"food\":40,\"wood\":30,\"stone\":15}",
+        "Mind: untrained-network.js (from-scratch REINFORCE, no pretraining, no LLM).",
+        "World-mind learning: FROZEN (--freeze-world-learning) -- loss is measured and reported, no parameter is written",
+        "Running 300 ticks per hive from absolute tick 0. Run log: /Users/admin/mythos/_dev/state/mind-learning-test/runs/F-rep1/sandbox/run-log.jsonl",
+        "Config file (live-tunable via the dashboard): /Users/admin/mythos/_dev/state/mind-learning-test/runs/F-rep1/sandbox/live-config.json"
+      ],
+      "stdout_tail": [
+        "Done after 300 rounds (absolute tick 0 -> 300). Final world-state: /Users/admin/mythos/_dev/state/mind-learning-test/runs/F-rep1/sandbox/shared/world-state.json",
+        "Run log: /Users/admin/mythos/_dev/state/mind-learning-test/runs/F-rep1/sandbox/run-log.jsonl",
+        "checkpoint committed: /Users/admin/mythos/_dev/state/mind-learning-test/runs/F-rep1/checkpoints/gen-300-F-rep1",
+        "  generation gen-300-F-rep1 day=300 tick=300 depth=0",
+        "  files mind.json:2f690150698c rng.json:ead490749d0a world.json:8f12090eee10 identity.json:d2315c3cdfdf",
+        "  manifest 3165c6057f74719b0cdc6bd319daf99c0e756b1025340a0a7df0be41dfcdc778"
+      ],
+      "stderr": []
+    },
+    {
+      "label": "RT-rep0 leg1",
+      "argv": [
+        "--ticks",
+        "150",
+        "--tick-interval-ms",
+        "0",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/mind-learning-test/runs/RT-rep0/leg1",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/mind-learning-test/runs/RT-rep0/checkpoints",
+        "--run-name",
+        "RT-rep0",
+        "--root-seed",
+        "20260805",
+        "--arm",
+        "RT-rep0-leg1"
+      ],
+      "env_overrides": {},
+      "exit_code": 0,
+      "duration_ms": 288,
+      "stdout_head": [
+        "resume: none requested -- explicit FRESH START (fresh_start=true)",
+        "Early minds this run: root_seed=20260805 (arg), hive-a seed=20260805, hive-b seed=20365534, world seed=21260808.",
+        "ant-hive-world attended run starting (fresh_start).",
+        "Sandbox: /Users/admin/mythos/_dev/state/mind-learning-test/runs/RT-rep0/leg1",
+        "Checkpoint root: /Users/admin/mythos/_dev/state/mind-learning-test/runs/RT-rep0/checkpoints",
+        "Shared resources at start: {\"food\":40,\"wood\":30,\"stone\":15}",
+        "Mind: untrained-network.js (from-scratch REINFORCE, no pretraining, no LLM).",
+        "World-mind learning: ACTIVE -- masked one-step prediction error (world-train.js); W2/b2 never written",
+        "Running 150 ticks per hive from absolute tick 0. Run log: /Users/admin/mythos/_dev/state/mind-learning-test/runs/RT-rep0/leg1/run-log.jsonl",
+        "Config file (live-tunable via the dashboard): /Users/admin/mythos/_dev/state/mind-learning-test/runs/RT-rep0/leg1/live-config.json"
+      ],
+      "stdout_tail": [
+        "Done after 150 rounds (absolute tick 0 -> 150). Final world-state: /Users/admin/mythos/_dev/state/mind-learning-test/runs/RT-rep0/leg1/shared/world-state.json",
+        "Run log: /Users/admin/mythos/_dev/state/mind-learning-test/runs/RT-rep0/leg1/run-log.jsonl",
+        "checkpoint committed: /Users/admin/mythos/_dev/state/mind-learning-test/runs/RT-rep0/checkpoints/gen-150-RT-rep0",
+        "  generation gen-150-RT-rep0 day=150 tick=150 depth=0",
+        "  files mind.json:1378f429858e rng.json:35f1fc0ba939 world.json:1c4e77dcbc30 identity.json:dd5a8fc4b46d",
+        "  manifest 9d2f86317668411bbfcf136f32a7160ae6aa1c649520015c6a0080f57374bd02"
+      ],
+      "stderr": []
+    },
+    {
+      "label": "RT-rep0 leg2 (resume)",
+      "argv": [
+        "--ticks",
+        "150",
+        "--tick-interval-ms",
+        "0",
+        "--sandbox-root",
+        "/Users/admin/mythos/_dev/state/mind-learning-test/runs/RT-rep0/leg2",
+        "--checkpoint-root",
+        "/Users/admin/mythos/_dev/state/mind-learning-test/runs/RT-rep0/checkpoints",
+        "--run-name",
+        "RT-rep0b",
+        "--arm",
+        "RT-rep0-leg2"
+      ],
+      "env_overrides": {
+        "RESUME_FROM": "gen-150-RT-rep0"
+      },
+      "exit_code": 0,
+      "duration_ms": 302,
+      "stdout_head": [
+        "sweep exempted (resume target): gen-150-RT-rep0",
+        "resume: requested generation gen-150-RT-rep0 from /Users/admin/mythos/_dev/state/mind-learning-test/runs/RT-rep0/checkpoints",
+        "resume: hash provenance source=1.1 shape_hash=22ebdb6837f1 training_config_hash=355cfabf26d3",
+        "resume: validated gen-150-RT-rep0 -- all 7 stages passed (exists -> committed -> identity -> version -> checksums -> input-packet -> lineage)",
+        "resume: continuing at absolute tick 150 (day 150, lineage depth 0, turn 0)",
+        "resume: log cursors [{\"path\":\"decision-stream.jsonl\",\"cursor\":119854,\"action\":\"absent\"},{\"path\":\"hive-a/audit-log.jsonl\",\"cursor\":92947,\"action\":\"absent\"},{\"path\":\"hive-b/audit-log.jsonl\",\"cursor\":91110,\"action\":\"absent\"},{\"path\":\"run-log.jsonl\",\"cursor\":273950,\"action\":\"absent\"}]",
+        "Resumed minds: hive-a/hive-b/world networks, controllers and all three RNG streams restored from gen-150-RT-rep0; root seed 20260805 (restored).",
+        "ant-hive-world attended run starting (resume).",
+        "Sandbox: /Users/admin/mythos/_dev/state/mind-learning-test/runs/RT-rep0/leg2",
+        "Checkpoint root: /Users/admin/mythos/_dev/state/mind-learning-test/runs/RT-rep0/checkpoints"
+      ],
+      "stdout_tail": [
+        "Done after 150 rounds (absolute tick 150 -> 300). Final world-state: /Users/admin/mythos/_dev/state/mind-learning-test/runs/RT-rep0/leg2/shared/world-state.json",
+        "Run log: /Users/admin/mythos/_dev/state/mind-learning-test/runs/RT-rep0/leg2/run-log.jsonl",
+        "checkpoint committed: /Users/admin/mythos/_dev/state/mind-learning-test/runs/RT-rep0/checkpoints/gen-300-RT-rep0b",
+        "  generation gen-300-RT-rep0b day=300 tick=300 depth=1",
+        "  files mind.json:5fd02ac67798 rng.json:64571098f6cc world.json:c1949126411a identity.json:159c23acb559",
+        "  manifest fdedb2c6d6998e5fd4ad5a8115cef46b433ca577ecf1268b69c3293c5739250a"
+      ],
+      "stderr": []
+    }
+  ]
+}

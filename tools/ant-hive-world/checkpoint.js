@@ -49,6 +49,10 @@ const {
   WORLD_INPUT_SIZE, WORLD_HIDDEN_SIZE, WORLD_OUTPUT_SIZE, WORLD_VERB_ORDER,
   WORLD_MIND_RESOURCE_NORM_K, ACTUAL_WORLD_MIND_SHAPE, serializeWorldMind, restoreWorldMind
 } = require('./world-mind.js');
+const {
+  WORLD_LEARNING_RATE, WORLD_LOSS_MASK, WORLD_LEARNING_CONTRACT_VERSION,
+  WORLD_LOSS_FORM, WORLD_LAG_CONVENTION, WORLD_HEAD_SEED_DERIVATION_CONSTANT
+} = require('./world-train.js');
 const CHECKPOINT_SCHEMA = require('./checkpoint-schema.json');
 
 // draft-07 (matches checkpoint-schema.json's $schema); same pattern as
@@ -57,13 +61,30 @@ const CHECKPOINT_SCHEMA = require('./checkpoint-schema.json');
 const ajv = new Ajv({ allErrors: true, strict: true });
 const validateManifestShape = ajv.compile(CHECKPOINT_SCHEMA);
 
-const SCHEMA = 'CheckpointManifest/1.0';
-const SCHEMA_VERSION = '1.0';
+// SCHEMA 1.1 (plan ant-world-mind-learning-path, S1; codex r1 MAJOR 1). The
+// single `architecture.hash` of 1.0 could not separate SHAPE from TRAINING
+// CONFIGURATION -- it hashed hive.learning_rate alongside world_mind.input_size
+// and refused on any mismatch of either. The world mind's learning path makes
+// that conflation bite: adding a prediction head is a shape change (restoring
+// across it is silent corruption, so it must REFUSE), while changing the loss
+// mask or the learning rate is a comparability change (the restore is perfectly
+// valid, so it must WARN). 1.1 splits the hash accordingly.
+const SCHEMA = 'CheckpointManifest/1.1';
+const SCHEMA_VERSION = '1.1';
+// 1.0 manifests remain READABLE. They are not, in general, resumable -- the
+// prediction head changes shape_hash, so every generation committed before S1
+// correctly fails the VERSION stage (memo section 6: "expected and intended
+// breakage", exactly like the network repair's invalidation). What the fallback
+// buys is an honest refusal instead of a schema-shaped one, and an honest
+// UNKNOWN instead of a fabricated match.
+const LEGACY_SCHEMAS = Object.freeze({ 'CheckpointManifest/1.0': '1.0' });
+const ACCEPTED_SCHEMA_VERSIONS = Object.freeze(['1.1', '1.0']);
 // Bump whenever the MEANING of any state file's fields changes. Compared for
 // exact equality at validation stage 3: a checkpoint written by different
 // serialization code is not resumable, because the field-by-field meaning of
-// the state files is exactly what changed.
-const CHECKPOINT_CODE_VERSION = 'ant-hive-world-checkpoint-1.0.0';
+// the state files is exactly what changed. Bumped to 1.1.0 because
+// mind.json's world_mind.network now carries prediction_head and prev_features.
+const CHECKPOINT_CODE_VERSION = 'ant-hive-world-checkpoint-1.1.0';
 
 const MANIFEST_NAME = 'manifest.json';
 const STATE_FILES = ['mind.json', 'rng.json', 'world.json', 'identity.json'];
@@ -173,36 +194,49 @@ function sha256File(filePath) {
 // Restoring an [8][9] weight matrix into a differently-shaped network is silent
 // corruption, not continuity -- and verb ORDER is just as load-bearing as
 // shape, since a network's output index means a verb only by position.
-function architectureDescriptor() {
-  const desc = {
+//
+// TWO DOMAINS, TWO HASHES, TWO CONSEQUENCES (1.1):
+//
+//   shape_hash            mismatch => VERSION-stage REFUSAL. Everything whose
+//                         mismatch makes a restore SILENT CORRUPTION: layer
+//                         dims, the shape the engine actually builds, the
+//                         prediction-head dims, the prev_features arity, and
+//                         verb ORDER (a network's output index means a verb
+//                         only by position).
+//   training_config_hash  mismatch => WARN in provenance, NEVER a refusal.
+//                         Everything that changes what the numbers MEAN without
+//                         breaking the restore: learning rates, the loss mask,
+//                         the loss form and lag convention, the head's seed
+//                         derivation constant, the resource normalizers.
+//
+// The two domain objects below are separate PROJECTIONS of the same constants,
+// not separate copies of them -- each field is read from exactly one source.
+function shapeDomain() {
+  return {
     hive: {
       input_size: INPUT_SIZE,
       hidden_size: HIDDEN_SIZE,
-      output_size: OUTPUT_SIZE,
-      // LEARNING_RATE is not exported by untrained-network.js; it is pinned
-      // here as the value that module ships (0.05). A drift between the two is
-      // caught by the architecture hash only if this constant is maintained --
-      // recorded as a known limitation in the S3 verdict rather than hidden.
-      learning_rate: 0.05,
-      resource_norm_k: RESOURCE_NORM_K
+      output_size: OUTPUT_SIZE
     },
     world_mind: {
       input_size: WORLD_INPUT_SIZE,
       hidden_size: WORLD_HIDDEN_SIZE,
       output_size: WORLD_OUTPUT_SIZE,
-      resource_norm_k: WORLD_MIND_RESOURCE_NORM_K,
-      // The DECLARED sizes above and the shape the engine actually builds do
-      // not currently agree -- see the defect note in world-mind.js. Both are
-      // hashed, so the architecture hash catches drift in either one, and a
-      // future repair of the defect correctly invalidates old checkpoints
-      // instead of silently loading weights into a re-shaped network.
       actual_shape: {
         w1_rows: ACTUAL_WORLD_MIND_SHAPE.w1_rows,
         w1_cols: ACTUAL_WORLD_MIND_SHAPE.w1_cols,
         w2_rows: ACTUAL_WORLD_MIND_SHAPE.w2_rows,
         w2_cols: ACTUAL_WORLD_MIND_SHAPE.w2_cols,
         matches_declared: ACTUAL_WORLD_MIND_SHAPE.matches_declared
-      }
+      },
+      // Prediction head + lag carrier. `prev_features_arity` is hashed so a
+      // resize of the encoder cannot restore a stale-width lag vector.
+      prediction_head: {
+        wp_rows: ACTUAL_WORLD_MIND_SHAPE.wp_rows,
+        wp_cols: ACTUAL_WORLD_MIND_SHAPE.wp_cols,
+        bp_length: ACTUAL_WORLD_MIND_SHAPE.bp_length
+      },
+      prev_features_arity: ACTUAL_WORLD_MIND_SHAPE.prev_features_arity
     },
     verbs: {
       hive_verb_order: VERB_ORDER.slice(),
@@ -210,8 +244,86 @@ function architectureDescriptor() {
       world_verb_order: WORLD_VERB_ORDER.slice()
     }
   };
+}
+
+function trainingConfigDomain() {
+  return {
+    hive: {
+      // LEARNING_RATE is not exported by untrained-network.js; it is pinned
+      // here as the value that module ships (0.05). A drift between the two is
+      // caught only if this constant is maintained -- recorded as a known
+      // limitation rather than hidden. Under 1.1 that drift is a WARN, not a
+      // refusal, which is the honest tier for a value this file cannot read.
+      learning_rate: 0.05,
+      resource_norm_k: RESOURCE_NORM_K
+    },
+    world_mind: {
+      learning_rate: WORLD_LEARNING_RATE,
+      resource_norm_k: WORLD_MIND_RESOURCE_NORM_K,
+      contract_version: WORLD_LEARNING_CONTRACT_VERSION,
+      loss_form: WORLD_LOSS_FORM,
+      // The mask belongs HERE, not in shape_hash: changing it restores fine and
+      // trains differently. Explicit sorted index list, so the hash moves when
+      // any coordinate enters or leaves the loss.
+      loss_mask: WORLD_LOSS_MASK.slice().sort((a, b) => a - b),
+      lag_convention: WORLD_LAG_CONVENTION,
+      // Affects reproduction of a FRESH mind (prove-alive.js's
+      // reconstruct-and-compare), not a restore.
+      head_seed_derivation_constant: WORLD_HEAD_SEED_DERIVATION_CONSTANT
+    }
+  };
+}
+
+function architectureDescriptor() {
+  const shape = shapeDomain();
+  const training = trainingConfigDomain();
+  const desc = {
+    hive: {
+      ...shape.hive,
+      learning_rate: training.hive.learning_rate,
+      resource_norm_k: training.hive.resource_norm_k
+    },
+    world_mind: {
+      ...shape.world_mind,
+      resource_norm_k: training.world_mind.resource_norm_k
+    },
+    verbs: shape.verbs,
+    world_learning: training.world_mind,
+    shape_hash: sha256Hex(canonicalJson(shape)),
+    training_config_hash: sha256Hex(canonicalJson(training))
+  };
+  // `hash` is retained as the sha256 over the WHOLE descriptor. It is no longer
+  // the refusal criterion (shape_hash is), and it is kept for provenance and
+  // for readable comparison against 1.0 manifests, which have nothing else.
   desc.hash = sha256Hex(canonicalJson(desc));
   return desc;
+}
+
+// Resolve the two hashes a manifest actually carries, honoring the 1.0
+// fallback. "No value" and "same value" are different facts, and collapsing
+// them is the kind of quiet lie the whole checkpoint design exists to prevent
+// -- so a 1.0 manifest reports training_config_hash as UNKNOWN and can never
+// report it as matching.
+function resolveManifestHashes(manifest) {
+  const arch = manifest.architecture || {};
+  if (manifest.schema_version === SCHEMA_VERSION) {
+    return {
+      source: SCHEMA_VERSION,
+      shape_hash: arch.shape_hash || null,
+      training_config_hash: arch.training_config_hash || null,
+      training_config_known: typeof arch.training_config_hash === 'string'
+    };
+  }
+  return {
+    // 1.0 fallback: shape_hash falls back to the legacy combined hash, which is
+    // computed over a different object and therefore will not match the live
+    // shape hash. That refusal is correct and intended -- a pre-learning-path
+    // generation has no prediction head to restore.
+    source: '1.0-fallback',
+    shape_hash: arch.hash || null,
+    training_config_hash: null,
+    training_config_known: false
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -269,7 +381,10 @@ function readManifest(generationDir) {
   } catch {
     return { committed: false, reason: 'manifest-unparseable', manifest: null };
   }
-  if (!manifest || manifest.schema !== SCHEMA) {
+  // 1.0 manifests are READABLE (LEGACY_SCHEMAS) so the refusal that follows can
+  // name the real defect -- a shape mismatch -- rather than a schema-shaped one.
+  // Readable is not resumable: stage 3 still decides that.
+  if (!manifest || (manifest.schema !== SCHEMA && !(manifest.schema in LEGACY_SCHEMAS))) {
     return { committed: false, reason: 'manifest-schema-mismatch', manifest };
   }
   const declared = manifest.manifest_self_checksum;
@@ -522,6 +637,14 @@ function commitGeneration(checkpointRoot, state) {
     root_seed: state.identity.root_seed,
     root_seed_source: state.identity.root_seed_source,
     fresh_start: state.identity.fresh_start,
+    // Invocation knob, recorded rather than inferred from silence (plan
+    // ant-world-mind-learning-path, S2 criterion (e)): whether the world
+    // mind's learning path was frozen for this run. It lives in identity.json
+    // and NOT in the manifest's architecture hashes, because it is a property
+    // of how this run was invoked, not of the mind's shape or its training
+    // contract -- a frozen arm and a learning arm are the same architecture
+    // trained (or not) under the same configuration.
+    world_learning_frozen: Boolean(state.identity.world_learning_frozen),
     parent_run_id: state.identity.parent_run_id === undefined ? null : state.identity.parent_run_id,
     parent_episode_id: state.identity.parent_episode_id === undefined ? null : state.identity.parent_episode_id,
     hives: Object.fromEntries(hiveIds.map((hid) => [hid, {
@@ -661,15 +784,57 @@ function validateGeneration(checkpointRoot, id, opts = {}) {
   }
 
   // STAGE 3 -- schema / code / architecture compatibility
-  if (manifest.schema_version !== SCHEMA_VERSION) {
-    return fail(STAGES.VERSION, `schema-version-${manifest.schema_version}-expected-${SCHEMA_VERSION}`);
+  const warnings = [];
+  if (!ACCEPTED_SCHEMA_VERSIONS.includes(manifest.schema_version)) {
+    return fail(STAGES.VERSION, `schema-version-${manifest.schema_version}-expected-${ACCEPTED_SCHEMA_VERSIONS.join('-or-')}`);
   }
   if (manifest.code_version !== CHECKPOINT_CODE_VERSION) {
     return fail(STAGES.VERSION, `code-version-mismatch-${manifest.code_version}`);
   }
   const liveArchitecture = architectureDescriptor();
-  if (!manifest.architecture || manifest.architecture.hash !== liveArchitecture.hash) {
-    return fail(STAGES.VERSION, 'architecture-hash-mismatch');
+  if (!manifest.architecture) {
+    return fail(STAGES.VERSION, 'architecture-absent');
+  }
+  // A manifest that DECLARES 1.1 must actually carry the split hashes. This is
+  // enforced here rather than in checkpoint-schema.json because the requirement
+  // is conditional on schema_version, and ajv's strict mode will not accept a
+  // conditional `required` on a nested object without redeclaring its whole
+  // property set -- which would fork the schema into two drifting copies. One
+  // check, in the mechanism that already refuses.
+  if (manifest.schema_version === SCHEMA_VERSION
+    && (typeof manifest.architecture.shape_hash !== 'string'
+      || typeof manifest.architecture.training_config_hash !== 'string')) {
+    return fail(STAGES.VERSION, 'architecture-split-hashes-absent-under-declared-1.1');
+  }
+  const carried = resolveManifestHashes(manifest);
+  // SHAPE: mismatch is a refusal. Restoring parameters into a differently
+  // shaped mind is silent corruption, and silent corruption that still runs is
+  // worse than a halt.
+  if (carried.shape_hash !== liveArchitecture.shape_hash) {
+    return fail(
+      STAGES.VERSION,
+      carried.source === '1.0-fallback' ? 'shape-hash-mismatch-1.0-fallback' : 'shape-hash-mismatch'
+    );
+  }
+  // TRAINING CONFIG: mismatch is a WARN, never a refusal -- the restore is
+  // valid, but the numbers it produces are not comparable with the ones the
+  // generation was written under. The WARN is load-bearing, not decorative:
+  // train-tick.js:50-54 already establishes that a summarizer pooling rows must
+  // reject mixed or missing contract versions, and the same rule binds here.
+  if (!carried.training_config_known) {
+    warnings.push({
+      code: 'training-config-hash-unknown',
+      detail: `manifest schema_version ${manifest.schema_version} carries no training_config_hash; reported UNKNOWN, never "matches"`,
+      manifest_value: 'UNKNOWN',
+      live_value: liveArchitecture.training_config_hash
+    });
+  } else if (carried.training_config_hash !== liveArchitecture.training_config_hash) {
+    warnings.push({
+      code: 'training-config-hash-mismatch',
+      detail: 'the restore is valid, but metrics from this generation are NOT comparable with metrics produced under the running training configuration',
+      manifest_value: carried.training_config_hash,
+      live_value: liveArchitecture.training_config_hash
+    });
   }
 
   // STAGE 4 -- per-file checksums, both directions
@@ -758,7 +923,18 @@ function validateGeneration(checkpointRoot, id, opts = {}) {
   const stagesPassed = Object.values(STAGES).filter(
     (s) => s !== STAGES.INPUT_PACKET || opts.currentInputPacket !== undefined
   );
-  return { ok: true, manifest, dir, stages_passed: stagesPassed };
+  return {
+    ok: true,
+    manifest,
+    dir,
+    stages_passed: stagesPassed,
+    warnings,
+    hash_provenance: {
+      source: carried.source,
+      shape_hash: carried.shape_hash,
+      training_config_hash: carried.training_config_known ? carried.training_config_hash : 'UNKNOWN'
+    }
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -799,6 +975,8 @@ function loadGeneration(checkpointRoot, id, opts = {}) {
     manifest,
     dir,
     generation_id: id,
+    warnings: validation.warnings || [],
+    hash_provenance: validation.hash_provenance || null,
     networks,
     controllers,
     worldMind: restoreWorldMind(mind.world_mind.network),
@@ -815,7 +993,12 @@ function loadGeneration(checkpointRoot, id, opts = {}) {
 module.exports = {
   SCHEMA,
   SCHEMA_VERSION,
+  LEGACY_SCHEMAS,
+  ACCEPTED_SCHEMA_VERSIONS,
   CHECKPOINT_CODE_VERSION,
+  shapeDomain,
+  trainingConfigDomain,
+  resolveManifestHashes,
   MANIFEST_NAME,
   STATE_FILES,
   STAGES,

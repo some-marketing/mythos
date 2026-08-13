@@ -12,6 +12,7 @@
     "url": "https://github.com/some-marketing/mythos/issues"
   },
   "scripts": {
+    "verify:scratch-leak": "node tools/verify/scratch-leak-check.cjs",
     "instructions:generate": "node tools/instructions/generate.js",
     "instructions:generate:preview": "node tools/instructions/generate.js --preview-claude",
     "instructions:validate": "node tools/instructions/validate.js",

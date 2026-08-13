@@ -1,0 +1,4 @@
+[
+  { "path": "/tmp/deliberately-transient/exempt-output.json", "at": "2026-08-12T00:00:00Z", "tool": "Write" },
+  { "path": "_dev/reports/analysis/control-review.md", "at": "2026-08-12T00:01:00Z", "tool": "Write" }
+]

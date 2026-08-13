@@ -1,4 +1,14 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(npm:*)",
+      "Bash(node:*)",
+      "Bash(git status*)",
+      "Bash(git log*)",
+      "Bash(git diff*)",
+      "Bash(git branch*)"
+    ]
+  },
   "hooks": {
     "PreToolUse": [
       {
@@ -7,6 +17,28 @@
           {
             "type": "command",
             "command": "node \"${CLAUDE_PROJECT_DIR}/tools/kernel/hooks/dispatch-pretool.cjs\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PROJECT_DIR}/tools/kernel/hooks/dispatch-stop.cjs\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PROJECT_DIR}/tools/kernel/hooks/dispatch-userprompt.cjs\"",
             "timeout": 15
           }
         ]
@@ -24,60 +56,9 @@
         ]
       }
     ],
-    "PostToolUseFailure": [
-      {
-        "matcher": ".*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"${CLAUDE_PROJECT_DIR}/tools/kernel/hooks/dispatch-posttoolfailure.cjs\"",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "PermissionDenied": [
-      {
-        "matcher": ".*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"${CLAUDE_PROJECT_DIR}/tools/kernel/hooks/dispatch-permissiondenied.cjs\"",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"${CLAUDE_PROJECT_DIR}/tools/kernel/hooks/dispatch-userprompt.cjs\"",
-            "timeout": 15
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"${CLAUDE_PROJECT_DIR}/tools/kernel/hooks/dispatch-stop.cjs\"",
-            "timeout": 5
-          }
-        ]
-      }
-    ],
     "SessionStart": [
       {
         "hooks": [
-          {
-            "type": "command",
-            "command": "node ${CLAUDE_PROJECT_DIR}/tools/user/inject-mirror.cjs",
-            "timeout": 5
-          },
           {
             "type": "command",
             "command": "node \"${CLAUDE_PROJECT_DIR}/tools/kernel/hooks/dispatch-session-start.cjs\"",
@@ -85,7 +66,13 @@
           },
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PROJECT_DIR}/hooks/session-lifecycle/session-start-brief.cjs\"",
+            "command": "node \"${CLAUDE_PROJECT_DIR}/tools/hooks/session-lifecycle/session-start-brief.cjs\"",
+            "timeout": 10,
+            "statusMessage": "Loading Mythos session brief"
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PROJECT_DIR}/tools/user/inject-mirror.cjs\"",
             "timeout": 5
           }
         ]
@@ -96,8 +83,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PROJECT_DIR}/hooks/session-lifecycle/session-end-close.cjs\"",
-            "timeout": 10
+            "command": "node \"${CLAUDE_PROJECT_DIR}/tools/hooks/session-lifecycle/session-end-close.cjs\"",
+            "timeout": 60
           },
           {
             "type": "command",
@@ -117,7 +104,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PROJECT_DIR}/.claude/hooks/subagent-telemetry-writer.cjs\""
+            "command": "node \"${CLAUDE_PROJECT_DIR}/.claude/hooks/subagent-telemetry-writer.cjs\"",
+            "timeout": 5
           }
         ]
       }

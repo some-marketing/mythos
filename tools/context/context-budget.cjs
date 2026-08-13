@@ -209,12 +209,19 @@ function buildProxySignals(proxy = {}) {
     }
   ];
 
-  return {
+  const summary = {
     signals,
     active_count: signals.filter((signal) => signal.active).length,
     explicit_operator_cross_session_request: Boolean(proxy.explicitOperatorCrossSessionRequest || proxy.explicit_operator_cross_session_request),
     cannot_complete_shutdown: Boolean(proxy.cannotCompleteShutdown || proxy.cannot_complete_shutdown || proxy.contextExhausted || proxy.context_exhausted)
   };
+  // Informational only — never a signal, never affects lifecycle_state.
+  // Present when git enumeration ran (null = attempted but failed); absent
+  // entirely under the includeGitDirtyCount:false opt-out.
+  if (proxy.globalDirtyFileCount !== undefined || proxy.global_dirty_file_count !== undefined) {
+    summary.global_dirty_file_count = toNumber(proxy.globalDirtyFileCount ?? proxy.global_dirty_file_count);
+  }
+  return summary;
 }
 
 function proxyState(proxySummary) {
@@ -322,14 +329,90 @@ function recommendationForState(state, bridge) {
   return 'Continue normal loop.';
 }
 
-function gitDirtyCount(projectRoot) {
-  const result = spawnSync('git', ['status', '--short'], {
+// Normalize a candidate repo-relative path for custody comparison.
+// Returns the normalized forward-slash path, or null when the value is
+// malformed, absolute, or escapes the repository after resolution.
+function normalizeRepoRelPath(value) {
+  if (typeof value !== 'string' || value.length === 0) return null;
+  let candidate = value.replace(/\\/g, '/');
+  if (path.isAbsolute(candidate) || /^[A-Za-z]:\//.test(candidate)) return null;
+  const parts = [];
+  for (const segment of candidate.split('/')) {
+    if (segment === '' || segment === '.') continue;
+    if (segment === '..') {
+      if (parts.length === 0) return null;
+      parts.pop();
+      continue;
+    }
+    parts.push(segment);
+  }
+  if (parts.length === 0) return null;
+  return parts.join('/');
+}
+
+// Enumerate dirty paths machine-readably: porcelain v1, NUL-terminated (no
+// quoting), untracked files fully expanded. Rename/copy records contribute
+// the NEW path and consume the following ORIG-path record. Returns a Set of
+// distinct normalized repo-relative paths, or null when enumeration fails —
+// failure is deliberately distinguishable from a clean empty tree.
+function enumerateDirtyPaths(projectRoot) {
+  const result = spawnSync('git', ['status', '--porcelain=v1', '-z', '--untracked-files=all'], {
     cwd: projectRoot,
     encoding: 'utf8',
-    timeout: 5000
+    timeout: 5000,
+    maxBuffer: 64 * 1024 * 1024
   });
   if (result.error || result.status !== 0) return null;
-  return String(result.stdout || '').split('\n').filter(Boolean).length;
+  const records = String(result.stdout || '').split('\0');
+  const paths = new Set();
+  for (let i = 0; i < records.length; i += 1) {
+    const record = records[i];
+    if (!record || record.length < 4) continue;
+    const status = record.slice(0, 2);
+    const normalized = normalizeRepoRelPath(record.slice(3));
+    if (normalized) paths.add(normalized);
+    // Rename/copy: the next NUL-separated record is the ORIG path — consume it.
+    if (status[0] === 'R' || status[0] === 'C' || status[1] === 'R' || status[1] === 'C') i += 1;
+  }
+  return paths;
+}
+
+// Read this session's write ledger (the same custody source of truth the
+// git-custody gate uses). Tolerant of absence and malformation: any failure
+// yields an empty set — a session that has written nothing has no dirty-tree
+// pressure. Entries that are absolute, repository-escaping, or malformed are
+// rejected from the custody intersection.
+function sessionWriteLedgerPaths(projectRoot, sessionId) {
+  const paths = new Set();
+  if (!sessionId) return paths;
+  const ledgerFile = path.join(projectRoot, '_dev', 'state', 'active-sessions', slug(sessionId), 'write_log.json');
+  let parsed = null;
+  try {
+    parsed = JSON.parse(fs.readFileSync(ledgerFile, 'utf8'));
+  } catch {
+    return paths;
+  }
+  const entries = parsed && Array.isArray(parsed.paths) ? parsed.paths : [];
+  for (const entry of entries) {
+    const normalized = normalizeRepoRelPath(entry && entry.path);
+    if (normalized) paths.add(normalized);
+  }
+  return paths;
+}
+
+// Custody-scoped dirty counts: own_count is |dirty ∩ session write ledger|
+// (0 when no ledger — foreign dirt is context, not ownership, mirroring the
+// git-custody gate); global_count is the distinct normalized dirty-path count.
+// Both are null when git enumeration fails.
+function custodyScopedDirtyCount(projectRoot, sessionId) {
+  const dirty = enumerateDirtyPaths(projectRoot);
+  if (dirty === null) return { own_count: null, global_count: null };
+  const ledger = sessionWriteLedgerPaths(projectRoot, sessionId);
+  let own = 0;
+  for (const ledgerPath of ledger) {
+    if (dirty.has(ledgerPath)) own += 1;
+  }
+  return { own_count: own, global_count: dirty.size };
 }
 
 function buildChildScopeArtifacts({ parentScope = 'system', childScope = '', runId = '' } = {}) {
@@ -355,9 +438,19 @@ function buildChildScopeArtifacts({ parentScope = 'system', childScope = '', run
 function buildContextBudgetReport(projectRoot, opts = {}) {
   const sessionId = opts.sessionId || process.env.MYTHOS_SESSION_ID || process.env.CLAUDE_SESSION_ID || process.env.CODEX_SESSION_ID || `session-${Date.now()}`;
   const proxy = { ...(opts.proxy || {}) };
-  if (proxy.dirtyFileCount === undefined && proxy.dirty_file_count === undefined && opts.includeGitDirtyCount !== false) {
-    const dirtyCount = gitDirtyCount(projectRoot);
-    if (dirtyCount !== null) proxy.dirtyFileCount = dirtyCount;
+  // includeGitDirtyCount === false is the stronger opt-out: no git process is
+  // spawned and global_dirty_file_count is omitted entirely. Otherwise git
+  // enumeration always runs to populate the informational global count (null
+  // on failure — never a fabricated 0), while an explicit caller-supplied
+  // dirty count remains the sole lifecycle-driving value.
+  if (opts.includeGitDirtyCount !== false) {
+    const counts = custodyScopedDirtyCount(projectRoot, sessionId);
+    if (proxy.dirtyFileCount === undefined && proxy.dirty_file_count === undefined && counts.own_count !== null) {
+      proxy.dirtyFileCount = counts.own_count;
+    }
+    if (proxy.globalDirtyFileCount === undefined && proxy.global_dirty_file_count === undefined) {
+      proxy.globalDirtyFileCount = counts.global_count;
+    }
   }
   const classification = classifyContextBudget({
     role: opts.role || 'actor',
@@ -470,6 +563,10 @@ module.exports = {
   buildChildScopeArtifacts,
   buildContextBudgetReport,
   classifyContextBudget,
+  custodyScopedDirtyCount,
+  enumerateDirtyPaths,
+  normalizeRepoRelPath,
+  sessionWriteLedgerPaths,
   classifyFocusedLines,
   deriveMeasuredUsage,
   formatContextBudgetSummary,

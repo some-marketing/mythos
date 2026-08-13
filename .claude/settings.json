@@ -88,13 +88,13 @@
           },
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PROJECT_DIR}/tools/sessions/session-end-boundary-log.cjs\"",
-            "timeout": 5
+            "command": "node \"${CLAUDE_PROJECT_DIR}/tools/context/repo-awareness-closeout.cjs\" --source session-end",
+            "timeout": 10
           },
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PROJECT_DIR}/tools/context/repo-awareness-closeout.cjs\" --source session-end",
-            "timeout": 10
+            "command": "node \"${CLAUDE_PROJECT_DIR}/tools/sessions/session-end-boundary-log.cjs\"",
+            "timeout": 5
           }
         ]
       }

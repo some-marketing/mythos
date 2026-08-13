@@ -1,6 +1,0 @@
-# Simulated content of a launch surface NOT in the tool's named external-surface
-# list (e.g. a hypothetical CI runner config or a new automation manifest format
-# added after this tool was written). It embeds a template-prefixed reference
-# into the shadow tree, in the same style the .claude/settings.json case proved
-# a plain path-literal regex misses (character class excluding $ { }).
-run: node "${CLAUDE_PROJECT_DIR}/lib/canonical-root.cjs" --check

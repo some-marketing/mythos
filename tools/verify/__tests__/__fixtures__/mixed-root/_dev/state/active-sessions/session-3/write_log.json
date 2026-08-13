@@ -1,0 +1,14 @@
+{
+  "paths": [
+    {
+      "path": "/private/tmp/claude-501/-Users-admin-mythos/0d05f52d-3c8d-4a7f-96ac-c6f5f120e04b/scratchpad/reviewer-notes.json",
+      "at": "2026-08-12T00:02:00Z",
+      "tool": "Bash",
+      "mechanism": "redirect",
+      "confidence": "high"
+    },
+    { "opaque": true, "at": "2026-08-12T00:02:01Z", "tool": "Bash", "reasons": ["dynamic-target"] },
+    { "truncated_entries": true, "at": "2026-08-12T00:02:02Z", "tool": "Bash", "dropped": 5 }
+  ],
+  "updated_at": "2026-08-12T00:02:02Z"
+}

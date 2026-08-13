@@ -3,6 +3,7 @@
 const { spawnSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const { resolveCanonicalRoot } = require('../../lib/canonical-root.cjs');
 
 const VALID_WORKLOADS = Object.freeze(['low', 'medium', 'high']);
 
@@ -107,10 +108,30 @@ const ACTOR_REGISTRY = Object.freeze({
     cost_rank: 1,
     batching: 'good',
     preferred_for: Object.freeze(['breadth', 'lateral', 'second-mind-review']),
+    // Pinned 2026-08-11 per tools/signals/lib/bridge-target-policy.js's gemini
+    // local-cli policy and a distinct-family codex review of the tiering choice
+    // (dispatch-bridge scope
+    // codex-decide-the-correct-gemini-model_defaults-pin-for-tools-signals-lib-actor,
+    // 20260811T170558Z): Flash for low/medium, Pro for high — mirroring the
+    // bridge policy's own scope-tier selector (flash for narrow/low-risk work,
+    // pro otherwise).
+    //
+    // EMPIRICAL CORRECTION (2026-08-11, live probes against the installed
+    // gemini CLI v0.50.0, observed via ~/.gemini/tmp/mythos/chats/*.jsonl):
+    // `--model gemini-3-flash-preview` ran exactly as requested (verified
+    // match). `--model gemini-3-pro-preview` — the value bridge-target-policy.js
+    // declares as default/current (checked_at 2026-04-22) — was SILENTLY
+    // substituted by the CLI to `gemini-3.1-pro-preview`; no warning was
+    // printed to stdout/stderr. Requesting `gemini-3.1-pro-preview` directly
+    // ran as itself (verified match, repeated). The high tier is pinned to the
+    // value that actually holds, not the value the (now-stale) bridge policy
+    // names — bridge-target-policy.js's gemini current_models/default_model
+    // need a fresh docs pass; reported to the operator, not fixed here (out of
+    // this change's scope).
     model_defaults: Object.freeze({
-      low: '',
-      medium: '',
-      high: ''
+      low: 'gemini-3-flash-preview',
+      medium: 'gemini-3-flash-preview',
+      high: 'gemini-3.1-pro-preview'
     }),
     supports: Object.freeze({
       read_only: true,
@@ -227,6 +248,7 @@ function chooseClaudeModel(workload = 'low') {
 
 function chooseActorModel(actorId, workload = 'low', explicitModel = '') {
   let chosen;
+  let wasDefaulted = false;
   if (String(explicitModel || '').trim()) {
     chosen = String(explicitModel).trim();
   } else {
@@ -235,6 +257,31 @@ function chooseActorModel(actorId, workload = 'low', explicitModel = '') {
     chosen = actor.id === 'claude'
       ? chooseClaudeModel(workload)
       : actor.model_defaults[normalizeWorkload(workload) || 'low'] || '';
+    wasDefaulted = true;
+  }
+
+  // PIN VISIBILITY (2026-08-05). A roster-pinned review lane was dispatched
+  // without an explicit model and silently resolved to the 'low' default —
+  // haiku — while the charter pinned claude-opus-5. Nothing reported the
+  // divergence; it was visible only because the runner echoes its command line
+  // into the run report. Had it not, that lane would have been recorded as a
+  // clean frontier review, and a gate would have cleared on a claim about
+  // scrutiny that never happened.
+  //
+  // This does NOT change the choice. Defaulting to a cheap tier is correct
+  // policy for mechanical work — the defect was never that haiku ran, it was
+  // that the record could not distinguish a deliberate cheap lane from an
+  // accidental one. So the resolution is announced on stderr whenever it was
+  // DEFAULTED rather than requested, which is exactly when a caller who
+  // believed they had a pin does not have one.
+  if (wasDefaulted && !process.env.MYTHOS_SUPPRESS_MODEL_NOTICE) {
+    try {
+      process.stderr.write(
+        `[actor-registry] NOTICE: no explicit model for actor "${actorId}" — `
+        + `defaulted to "${chosen}" via workload "${normalizeWorkload(workload) || 'low'}". `
+        + `If a roster pins this lane, pass --model explicitly; a defaulted model is NOT a verified pin.\n`
+      );
+    } catch { /* a notice must never break dispatch */ }
   }
 
   // S3 adaptive-mind-router SHADOW MODE (R1): log the static model choice so
@@ -362,10 +409,53 @@ function resolveGrantedCapabilities(actorId, projectRoot) {
 }
 
 /**
- * Resolve the project root. Uses process.cwd() and walks up to find CLAUDE.md.
+ * Resolve the project root used to locate actor scorecards.
+ *
+ * Capability tier (harness-runtime-contract terms): ADVISORY. This resolver
+ * prefers the canonical root and warns on a genuine mismatch; nothing stops a
+ * caller from passing its own `projectRoot` and bypassing the check entirely.
+ *
+ * History: this was a bare `process.cwd()` walk looking for CLAUDE.md, with
+ * `process.cwd()` itself as the silent fallback. Both failure modes answer
+ * confidently with the wrong root — a cwd inside a git worktree finds that
+ * worktree's CLAUDE.md, and a cwd outside any checkout falls through to the
+ * cwd itself. Either way the caller then reads
+ * `<root>/_dev/reports/analysis/actor-scorecards/...`, finds nothing, and
+ * silently downgrades the actor to `no_scorecard` / zero granted
+ * capabilities. A missing-evidence answer that is really a wrong-path answer
+ * is the failure this check exists to make audible.
+ *
+ * canonical-root.cjs resolves `__dirname`-relative, so it is unaffected by
+ * cwd and is the trusted answer whenever it passes anchor validation. The
+ * cwd walk is kept only as the fallback for when it does not.
+ *
  * @returns {string}
  */
 function resolveProjectRoot() {
+  const walked = walkForProjectRoot();
+
+  let canonical;
+  try {
+    canonical = resolveCanonicalRoot({ mode: 'hard' });
+  } catch (err) {
+    // Anchor validation failed. hard mode throws ECANONROOT WITHOUT writing
+    // any stderr of its own (only circuit-breaker mode does that) — so this
+    // catch is the only place that failure becomes audible. Nothing
+    // trustworthy to compare against, so use the cwd walk rather than
+    // refusing outright — a missing scorecard is a soft downgrade, not a
+    // write — but the fallback must not be silent.
+    warnCanonicalRootFallback(err, walked);
+    return walked;
+  }
+
+  if (walked !== canonical) {
+    warnProjectRootMismatch(walked, canonical);
+  }
+  return canonical;
+}
+
+/** The legacy cwd walk, retained as the fallback path. */
+function walkForProjectRoot() {
   let dir = process.cwd();
   for (let i = 0; i < 10; i++) {
     if (fs.existsSync(path.join(dir, 'CLAUDE.md'))) return dir;
@@ -374,6 +464,32 @@ function resolveProjectRoot() {
     dir = parent;
   }
   return process.cwd();
+}
+
+let mismatchWarned = false;
+
+/** Warn once per process; a per-call warn would flood any batch resolver. */
+function warnProjectRootMismatch(walked, canonical) {
+  if (mismatchWarned) return;
+  mismatchWarned = true;
+  process.stderr.write(
+    `[actor-registry] project-root mismatch: cwd-derived root ${walked} ` +
+      `disagrees with the canonical root ${canonical} (cwd: ${process.cwd()}). ` +
+      'Trusting the canonical root; scorecard lookups under the cwd-derived ' +
+      'root would have read the wrong tree.\n'
+  );
+}
+
+let canonicalRootFallbackWarned = false;
+
+/** Warn once per process; a degraded root should not spam every call. */
+function warnCanonicalRootFallback(err, walked) {
+  if (canonicalRootFallbackWarned) return;
+  canonicalRootFallbackWarned = true;
+  process.stderr.write(
+    `[actor-registry] canonical-root failed (${err.code || 'ERR'}: ${err.message}); `
+    + `falling back to cwd-walk root ${walked}\n`
+  );
 }
 
 /**
@@ -432,6 +548,7 @@ module.exports = {
   getActorRegistry,
   inferWorkload,
   normalizeWorkload,
+  resolveProjectRoot,
   resolveGrantedCapabilities,
   hasGrantedCapability,
   selectActorForMaintenance

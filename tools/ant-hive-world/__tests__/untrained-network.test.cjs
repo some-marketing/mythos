@@ -459,22 +459,7 @@ test('trainTick adds policy_entropy_post_update as a NEW, distinct field without
 // fails loudly rather than silently trusting a possibly-drifted fixture.
 
 function loadFrozenFixtureJson() {
-  const amendmentPath = path.join(
-    __dirname, '..', '..', '..',
-    '_dev', 'reports', 'analysis', 'task-plans',
-    'ant-hive-world-exploration-fix-hiveb-collapse__amendment__20260718T181836Z.json'
-  );
-  const amendmentRaw = fs.readFileSync(amendmentPath, 'utf8');
-  const amendment = JSON.parse(amendmentRaw);
-  const gate = (amendment.operator_gates || []).find((g) => g.id === 's0-candidate-choice');
-  assert.ok(gate, 'expected the resolved s0-candidate-choice operator gate in the amendment');
-  assert.equal(gate.status, 'resolved', 'S1 (and this S3 test) may not run while the gate is still open');
-  const resolution = gate.resolution;
-  const marker = 'pre-parse): ';
-  const markerIdx = resolution.indexOf(marker);
-  assert.ok(markerIdx !== -1, 'expected the "...pre-parse): {fixture_json}" convention in the resolution text');
-  // The literal fixture_json string runs to the end of the resolution field.
-  return resolution.slice(markerIdx + marker.length);
+  return fs.readFileSync(path.join(__dirname, 'fixtures', 'fixture-v1.json'), 'utf8');
 }
 
 const FROZEN_FIXTURE_SHA256 = '44ad0a4ab6e87523ec047b7512f159e0b6bd4e00796bc7232798220e7e63e9c5';
@@ -706,23 +691,7 @@ test('S3 EARLY WINDOW (ticks 0-20): CANDIDATE (b)+(c) (decaying schedule + updat
 // JSON.parse(), same discipline as the v1 loader above.
 
 function loadFrozenFixtureV2Json() {
-  const memoPath = path.join(
-    __dirname, '..', '..', '..',
-    '_dev', 'reports', 'analysis',
-    'ant-hive-world-exploration-fix-hiveb-collapse-candidate-comparison.md'
-  );
-  const memoText = fs.readFileSync(memoPath, 'utf8');
-  const sectionIdx = memoText.indexOf('## 8. Fixture v2');
-  assert.ok(sectionIdx !== -1, 'expected a "## 8. Fixture v2" section in the comparison memo');
-  const afterSection = memoText.slice(sectionIdx);
-  const headingIdx = afterSection.indexOf('Literal `fixture_json`');
-  assert.ok(headingIdx !== -1, 'expected a "Literal `fixture_json`" heading in the fixture v2 section');
-  const fenceStart = afterSection.indexOf('```\n{', headingIdx);
-  assert.ok(fenceStart !== -1, 'expected a fenced ```\\n{...} code block containing the literal fixture v2 JSON');
-  const contentStart = fenceStart + 4; // skip the opening "```\n"
-  const fenceEnd = afterSection.indexOf('\n```', contentStart);
-  assert.ok(fenceEnd !== -1, 'expected a closing fence for the fixture v2 JSON block');
-  return afterSection.slice(contentStart, fenceEnd);
+  return fs.readFileSync(path.join(__dirname, 'fixtures', 'fixture-v2.json'), 'utf8');
 }
 
 const FROZEN_FIXTURE_V2_SHA256 = 'f8ee5b840b4bb17c8bb10f15e921409fd8479cbc5cb86f693e277157a98de969';

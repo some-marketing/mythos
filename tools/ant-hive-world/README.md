@@ -36,8 +36,13 @@ stripped -- what ships here is the mechanism, not the story.
   entropy-bonus schedule and a reactive entropy controller: both exist to
   counteract policy collapse (a network locking onto one action and never
   exploring again), a real failure mode this project hit and fixed.
-  Both mechanisms are fully inert by default (opt-in via config) so the
-  base training loop is unaffected unless explicitly enabled.
+  Both mechanisms are ACTIVE BY DEFAULT: `live-config.js` ships
+  `entropy_bonus_weight_initial: 3` decaying to the standing
+  `entropy_bonus_weight: 0.3` over `entropy_bonus_decay_ticks: 75`, plus
+  `entropy_controller_enabled: 1` (trigger 0.9 / release 1.2 / boost 3).
+  Each is fully disableable by setting the relevant field to 0 (or
+  removing it) in `live-config.js` -- `train-tick.js` treats absent/0 as
+  fully inert, which is also what the isolation control tests rely on.
 - **`run-live.js`** -- an attended run driver: sets up N hives, gives each a
   fresh network, and drives ticks to a durable JSONL run log. `--arm` records
   experimental-arm membership and defaults to `uninstructed`.
@@ -81,26 +86,39 @@ stripped -- what ships here is the mechanism, not the story.
 
 ## The "fresh minds" pattern (worth calling out)
 
-This project enforces a specific, deliberate discipline: **every run
-creates a genuinely fresh mind. Nothing is ever persisted or loaded from a
-previous run.**
+This project enforces a specific, deliberate discipline: **a fresh run
+(no `--resume-from`) creates a genuinely fresh mind.** No pretrained model
+and no hand-authored strategy is ever shipped with the engine: there is no
+`loadNetwork()` that reads a bundled artifact, and nothing "learned" in
+one run leaks into the next unless a resume is explicitly requested.
 
 Concretely:
 
 - `createNetwork(seed)` in `untrained-network.js` always initializes small,
-  near-uniform random weights from a seed. There is no `loadNetwork()`,
-  no checkpoint file, no saved-weights path anywhere in this codebase.
-- `run-live.js` derives its seeds from `Date.now()` by default (offset per
-  hive so the two minds are never identical to each other), and documents
-  explicitly why: an earlier version of this file hardcoded fixed seeds,
+  near-uniform random weights from a seed. No engine code path loads a
+  pretrained weight bundle -- the only network state that can cross runs
+  is what `run-live.js` deliberately persists and restores (below).
+- `run-live.js` seeds each fresh run from an explicit root seed
+  (`--root-seed`, or the `ROOT_SEED` env var), or -- when nothing supplies
+  one -- from the OS CSPRNG, and records it in run provenance and in every
+  checkpoint so any run can be replayed. The base seed is never derived
+  from `Date.now()`: an earlier version of this file hardcoded fixed seeds,
   which meant "starting fresh" silently replayed the exact same initial
   weights every time -- not a new mind at all. That was treated as a bug
-  and fixed; reproducible fixed seeds are still supported, but only via an
-  explicit `--seed-a`/`--seed-b` override, never as the default.
+  and fixed. Reproducible seeds are explicit: `--root-seed` for the base,
+  and `--seed-a`/`--seed-b` for deliberate single-run overrides.
+- Persistence is opt-in and explicit, not a silent default: `run-live.js`
+  commits one checkpoint generation at the end of its ticks under
+  `--checkpoint-root` (default `<sandbox-root>/checkpoints`;
+  `--no-checkpoint` disables it), and `--resume-from <generation-id>`
+  restores that generation's networks, controllers, RNG streams and world
+  state -- so continuity across runs is a deliberate choice, never an
+  accident.
 - Per-hive entropy-controller state (`{ active, prev_post_update_entropy }`
   in `run-live.js`) is created fresh at process start and passed explicitly
   through the call chain -- never a module-level global (which could leak
-  state between hives) and never written to disk.
+  state between hives) and never written to disk (except via the
+  checkpointed controller state above when a resume is in play).
 - `normalizeResource()` in `untrained-network.js` is called out in its own
   comments as "fresh-minds compliant": a pure, stateless function of its
   input with no cross-tick or cross-run memory.
@@ -154,7 +172,7 @@ that's supposed to demonstrate learning from scratch. Baking in a
 
 ## Tests
 
-`__tests__/` (13 files; 138 self-contained tests pass, while the 10 historical
+`__tests__/` (12 files; 131 self-contained tests pass, while the 10 historical
 fixture-dependent tests described above report their missing inputs):
 harness/tick mechanics, world-state resource/territory/pheromone/ecosystem/
 material dynamics, the untrained network's init/decide/train contracts, the

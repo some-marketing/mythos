@@ -21,7 +21,7 @@ const {
   UPKEEP_COST,
   chooseForageTile
 } = require('../untrained-network.js');
-const { initialWorldState, depositPheromone } = require('../world-state.js');
+const { initialWorldState, depositPheromone, strongestTrail } = require('../world-state.js');
 const { trainTick, computeEntropyBonusWeight, computeControllerWeight } = require('../train-tick.js');
 const { setupTwoHives } = require('../harness.js');
 const { generateBlankHiveSeed } = require('../generate-blank-hive-seed.js');
@@ -148,7 +148,7 @@ test('encodeState senses the shared pheromone trail field, normalized and capped
   assert.equal(features[8], 0.4); // 4 / 10
 });
 
-test('chooseForageTile explores a fresh tile when no trail exists yet -- nothing scripted to follow', () => {
+test('chooseForageTile(food) with no trail returns a well-formed tile id (shape check only -- see the food_sources-targeting and empty-fallback tests below for the behavioral contract)', () => {
   const worldState = initialWorldState({});
   const rng = mulberry32(42);
   const tileId = chooseForageTile(worldState, 'food', rng);
@@ -164,6 +164,93 @@ test('chooseForageTile exploits the strongest known trail most of the time once 
     if (chooseForageTile(worldState, 'food', rng) === 'tile-99') followed++;
   }
   assert.ok(followed > 25, `expected trail-following to dominate over exploration, got ${followed}/50`);
+});
+
+test('chooseForageTile(food) with no trail draws only from known food_sources tiles -- fixes the bootstrap deadlock', () => {
+  const worldState = initialWorldState({});
+  const activeSources = new Set(Object.keys(worldState.food_sources || {}));
+  assert.ok(activeSources.size > 0, 'test fixture assumption: initialWorldState seeds food_sources');
+  const rng = mulberry32(3);
+  for (let i = 0; i < 100; i++) {
+    const tileId = chooseForageTile(worldState, 'food', rng);
+    assert.ok(activeSources.has(tileId), `expected a known food tile, got ${tileId}`);
+  }
+});
+
+test('chooseForageTile(food) falls back to the full uniform draw when food_sources is empty', () => {
+  const worldState = { ...initialWorldState({}), food_sources: {} };
+  const rng = mulberry32(5);
+  const seen = new Set();
+  for (let i = 0; i < 200; i++) {
+    seen.add(chooseForageTile(worldState, 'food', rng));
+  }
+  assert.ok(seen.size > 5, `expected exploration across many tiles with no food_sources, got ${seen.size} distinct`);
+});
+
+test('chooseForageTile(food) ignores malformed food_sources entries -- zero/negative amounts and an empty-string key are never drawn', () => {
+  const worldState = {
+    ...initialWorldState({}),
+    food_sources: { 'tile-3': 0, 'tile-4': -1, '': 5, 'tile-7': 6 }
+  };
+  const rng = mulberry32(11);
+  for (let i = 0; i < 100; i++) {
+    const tileId = chooseForageTile(worldState, 'food', rng);
+    assert.equal(tileId, 'tile-7', `expected only the single valid positive entry to be drawn, got ${tileId}`);
+  }
+});
+
+test('chooseForageTile(food) falls back to the full uniform draw when every food_sources entry is malformed', () => {
+  const worldState = {
+    ...initialWorldState({}),
+    food_sources: { 'tile-3': 0, 'tile-4': -1, '': 5, 'tile-9': NaN }
+  };
+  const rng = mulberry32(13);
+  const seen = new Set();
+  for (let i = 0; i < 200; i++) {
+    seen.add(chooseForageTile(worldState, 'food', rng));
+  }
+  assert.ok(seen.size > 5, `expected exploration across many tiles when all food_sources entries are invalid, got ${seen.size} distinct`);
+});
+
+test('chooseForageTile(wood) is UNCHANGED by the food-targeting fix -- still a uniform 100-tile draw, ignores food_sources', () => {
+  // This is the review's main concern: chooseForageTile is shared between food
+  // and wood, and only food has fixed physical source tiles. Prove wood keeps
+  // drawing from the full tile space even when food_sources is populated and
+  // would (for food) constrain the draw.
+  const worldState = initialWorldState({});
+  assert.ok(Object.keys(worldState.food_sources || {}).length > 0);
+
+  // Pre-fix chooseForageTile, replicated exactly (same two rng draws per
+  // call: one for the trail-follow probability check, one for tile
+  // selection) so the draw sequence lines up 1:1 with the live function.
+  function preFixChooseForageTile(ws, kind, rng, trailFollowProb) {
+    const followProb = trailFollowProb === undefined ? 0.8 : trailFollowProb;
+    const draw = rng();
+    const trail = strongestTrail(ws, kind);
+    if (trail.tileId && draw < followProb) return trail.tileId;
+    return `tile-${Math.floor(rng() * 100)}`;
+  }
+
+  const rngBefore = mulberry32(9);
+  const before = [];
+  for (let i = 0; i < 20; i++) before.push(preFixChooseForageTile(worldState, 'wood', rngBefore));
+
+  const rngAfter = mulberry32(9);
+  const after = [];
+  for (let i = 0; i < 20; i++) after.push(chooseForageTile(worldState, 'wood', rngAfter));
+
+  assert.deepEqual(after, before, 'wood targeting draw sequence must match the pre-fix uniform draw exactly');
+});
+
+test('trail-following still takes precedence over the food_sources fallback when a trail exists', () => {
+  let worldState = initialWorldState({});
+  worldState = depositPheromone(worldState, 'food', 'tile-99', 10); // tile-99 is not necessarily in food_sources
+  const rng = mulberry32(7); // same seed as the existing trail-dominance test above
+  let followed = 0;
+  for (let i = 0; i < 50; i++) {
+    if (chooseForageTile(worldState, 'food', rng) === 'tile-99') followed++;
+  }
+  assert.ok(followed > 25, `expected trail-following to still dominate, got ${followed}/50`);
 });
 
 test('decide returns a tileId for gather actions so harness.tick can deposit a trail there', () => {
@@ -987,4 +1074,77 @@ test('healthy convergence above the floor remains possible with the controller o
   const probs = [0.75, 0.0625, 0.0625, 0.0625, 0.0625];
   const H = computeEntropy(probs);
   assert.ok(H >= 0.85 && H < 1.1, `sanity: dominant-action entropy ~${H.toFixed(3)} nats sits at/above the trigger region`);
+});
+
+// --- AC7 (plan world-mind-dream-communication, S4): zero-vector
+// dreamFeatures produce a byte-identical forward pass, AND the expansion's
+// initialization is bit-identical to a pre-v7 9-input network for the
+// original-shape parameters. Both proofs are required -- (i) alone could
+// mask a drifted RNG stream that happens to still produce equal forward
+// output by coincidence; (ii) is the proof that never happens by accident.
+
+test('AC7(i): forward(expandedNetwork, encodeState(..., ZERO_DREAM_VECTOR)) is byte-identical to forward(preV7Network, encodeState(...)) for the same seed/state', () => {
+  const seed = 8675309;
+  const hiveState = goldenHiveState({ hive_state: { stockpile: { food: 5, wood: 3 } } });
+  const worldState = goldenWorldState({ resources: { food: 40, wood: 30, stone: 15 } });
+
+  const preV7Network = createNetwork(seed, { inputSize: 9 }); // baseInputSize defaults to inputSize=9 -- the old bare shape
+  const expandedNetwork = createNetwork(seed); // new default: 18-wide, 9 drawn + 9 zero-appended
+
+  const preV7Output = forward(preV7Network, encodeState(hiveState, worldState));
+  const expandedOutput = forward(expandedNetwork, encodeState(hiveState, worldState));
+
+  assert.deepEqual(expandedOutput.probs, preV7Output.probs, 'forward().probs must be byte-identical');
+  assert.deepEqual(expandedOutput.hidden, preV7Output.hidden, 'forward().hidden must be byte-identical');
+  assert.deepEqual(expandedOutput.logits, preV7Output.logits, 'forward().logits must be byte-identical');
+});
+
+test('AC7(ii): the expanded network\'s OLD-slot weights are bit-identical to a same-seed pre-v7 network\'s weights -- not merely coincidentally-equal forward output', () => {
+  const seed = 24681012;
+  const preV7Network = createNetwork(seed, { inputSize: 9 });
+  const expandedNetwork = createNetwork(seed);
+
+  assert.equal(expandedNetwork.W1[0].length, 18, 'the expanded network\'s W1 rows must actually be 18 wide');
+  const oldSlots = expandedNetwork.W1.map((row) => row.slice(0, 9));
+  assert.deepEqual(oldSlots, preV7Network.W1, 'W1\'s original 9 columns must be bit-identical to the pre-v7 network\'s W1');
+  assert.deepEqual(expandedNetwork.b1, preV7Network.b1, 'b1 must be bit-identical (drawn in the same RNG position either way)');
+  assert.deepEqual(expandedNetwork.W2, preV7Network.W2, 'W2 must be bit-identical -- proves W1\'s new columns drew ZERO extra RNG values');
+  assert.deepEqual(expandedNetwork.b2, preV7Network.b2, 'b2 must be bit-identical');
+
+  const newSlots = expandedNetwork.W1.map((row) => row.slice(9));
+  for (const row of newSlots) {
+    for (const w of row) assert.equal(w, 0, 'every new W1 column must be literal 0.0, never RNG-drawn');
+  }
+});
+
+test('AC7: encodeState() defaults to ZERO_DREAM_VECTOR and returns 18 features', () => {
+  const hiveState = goldenHiveState();
+  const worldState = goldenWorldState();
+  const features = encodeState(hiveState, worldState);
+  assert.equal(features.length, 18);
+  assert.deepEqual(features.slice(9), new Array(9).fill(0));
+});
+
+test('AC7: a non-zero dreamFeatures vector actually changes the forward pass once the new columns have been trained (proves the attachment point is live, not dead code)', () => {
+  // A freshly created network's new W1 columns are ZERO-INITIALIZED (the
+  // pinned-order expansion, above) -- multiplying any dreamFeatures value
+  // against a zero weight always contributes 0, by design. That proves
+  // inertness at t=0, not liveness. To prove the attachment point is a real,
+  // live input (not vestigial dead code), train it once with a non-zero
+  // dreamFeatures so trainStep()'s W1 update loop (which iterates the full
+  // INPUT_SIZE=18, including the new columns) actually moves them off zero,
+  // then show the forward pass differs from the zero-dream case.
+  const seed = 111222333;
+  const net = createNetwork(seed);
+  const hiveState = goldenHiveState({ hive_state: { stockpile: { food: 5, wood: 3 } } });
+  const worldState = goldenWorldState({ resources: { food: 40, wood: 30, stone: 15 } });
+  const dreamFeatures = [1, 1, 0, 1, 0, 0, 0, 0, 0.8]; // dream_present, lane_darkness, gather-food one-hot, authority
+
+  trainStep(net, hiveState, worldState, 0, 1, 0.1, undefined, {}, undefined, dreamFeatures);
+  const newSlotsAfterTraining = net.W1.map((row) => row.slice(9));
+  assert.ok(newSlotsAfterTraining.some((row) => row.some((w) => w !== 0)), 'sanity: training must have actually moved at least one new-slot weight off zero');
+
+  const zeroOutput = forward(net, encodeState(hiveState, worldState, new Array(9).fill(0)));
+  const dreamOutput = forward(net, encodeState(hiveState, worldState, dreamFeatures));
+  assert.notDeepEqual(dreamOutput.probs, zeroOutput.probs, 'a non-zero dream signal must actually move the forward pass once the attachment point has been trained -- the expanded columns are live inputs, not vestigial');
 });

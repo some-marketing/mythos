@@ -1,0 +1,83 @@
+{
+  "schema": "RepoAwarenessCloseout/1.0",
+  "scope": "system",
+  "session_id": "78e29ecc-36ea-483a-99ba-dc06d5945444",
+  "generated_at": "2026-08-11T20:41:40.294Z",
+  "source": "session-end",
+  "handoff_path": "",
+  "recommended_next_command": "/whats-next",
+  "cache_status": {
+    "improve_this": {
+      "status": "missing",
+      "updated_at": null,
+      "closeout_instruction": "validate or refresh on next boot before actor dispatch"
+    },
+    "plan_visibility": {
+      "status": "missing",
+      "message": "No generated system model found. Run npm run plans:dashboard.",
+      "recommended_refresh_command": "npm run plans:dashboard"
+    }
+  },
+  "git": {
+    "available": true,
+    "dirty": true,
+    "changed_count": 7229,
+    "sample": [
+      " M ../../Mythos-memories/memory/MEMORY.md",
+      " M ../../Mythos-memories/memory/corrections-do-not-propagate-themselves.md",
+      " M ../../SM_OS",
+      " M ../../_dev/logs/archive.jsonl",
+      " M ../../_dev/logs/bridge-lifecycle-trace.jsonl",
+      " M ../../_dev/logs/cost-routing-decisions.jsonl",
+      " M ../../_dev/reports/analysis/codex-run-active.json",
+      " M ../../_dev/reports/analysis/session-learnings__20260811T1__auto-runs.md",
+      " M ../../_dev/reports/lifecycle/claude-hook-events.jsonl",
+      " M ../../_dev/reports/lifecycle/plan-diagram-publication-hook.jsonl",
+      " M ../../_dev/reports/signals/verify-framework__wordpress_qa.signal.json",
+      " M ../../_dev/reports/telemetry/cascade-spans.jsonl",
+      " M ../../_dev/reports/telemetry/dispatches.jsonl",
+      " M ../../_dev/state/active-sessions/f8a6ebeb-1ce6-4486-95b1-c0ffd3339d1c/write_log.json",
+      " M ../../_dev/state/context-budget/latest.json",
+      " M ../../_dev/state/delesign-asset-sweep/state.json",
+      " M ../../_dev/state/delesign-poll/launchd-runs.jsonl",
+      " M ../../_dev/state/delesign-poll/launchd.stdout.log",
+      " M ../../_dev/state/memory-db/dream-report.md",
+      " M ../../_dev/state/memory-db/dream-seen.json",
+      " M ../../_dev/state/memory-db/memory.sqlite",
+      " M ../../_dev/state/mind-matrix/shadow-decisions.jsonl",
+      " M ../../_dev/state/obsidian-vault-sync/launchd.stdout.log",
+      " M ../../_dev/state/remote-mutation-stamps/audit.jsonl",
+      " M ../../_dev/state/repo-awareness/latest.json",
+      " M ../../_dev/state/session-boundary-log.jsonl",
+      " M ../../_dev/state/tier-gate-soak/mutation-plan-gate.jsonl",
+      " M ../../clients/SDAS/projects/ads-approval-portal/app/data/BMF-review-data.json",
+      " M ../../clients/SDAS/projects/ads-approval-portal/app/data/BMF-review-media.json",
+      " M ../../clients/SDAS/projects/ads-approval-portal/app/data/YARMAZ-review-data.json",
+      " M ../../clients/SDAS/projects/ads-approval-portal/app/data/YARMAZ-review-media.json",
+      " M ../../clients/SDAS/projects/ads-approval-portal/app/data/ingest-ledger.json",
+      " M ../../clients/SDAS/projects/ads-approval-portal/app/public/lib/reviews-bmf.gen.php",
+      " M ../../clients/SDAS/projects/ads-approval-portal/app/public/lib/reviews-yarmaz.gen.php",
+      " M ../../creative/configs/delesign-delivered-2026-08.json",
+      "?? ../../.agents/",
+      "?? ../../.codewhale-worktrees/",
+      "?? ../../.codewhale/",
+      "?? ../../.codex/",
+      "?? ../../.playwright-mcp/page-2026-07-31T14-13-52-695Z.yml"
+    ]
+  },
+  "session_delta": {
+    "note": "Bounded automatic closeout delta. This is not a full /shutdown replacement and does not promote memory.",
+    "completed": [],
+    "blocked": [],
+    "recommended_next_command": "/whats-next"
+  },
+  "authority_order": [
+    "direct operator instruction",
+    "local AGENTS.md and canonical command specs",
+    "actual source files",
+    "task plans, amendments, reviews, and signals",
+    "next-session handoff and repo-awareness closeout delta",
+    ".improve-this derived cache",
+    "chat memory or compacted context"
+  ]
+}

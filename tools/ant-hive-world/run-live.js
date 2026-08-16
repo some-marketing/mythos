@@ -17,7 +17,13 @@
 // same --sandbox-root separately; not spawned from here so the operator can
 // stop/restart the dashboard independently of the run).
 //
-// Usage: node run-live.js [--ticks N] [--forever] [--tick-interval-ms N] [--sandbox-root <dir>] [--arm <name>]
+// Usage: node run-live.js [--ticks N] [--forever] [--tick-interval-ms N]
+//                         [--sandbox-root <dir>] [--arm <name>]
+//                         [--checkpoint-root <dir>] [--resume-from <generation-id>]
+//                         [--root-seed <int>] [--run-name <name>]
+//                         [--status-path <file>] [--no-checkpoint]
+//                         [--freeze-world-learning] [--freeze-hive-learning]
+//                         [--goal-packet <file>]
 //
 // --forever: keep running until the process receives SIGINT/SIGTERM (Ctrl-C
 // or `kill <pid>`) -- operator (2026-07-16): "just leave it running see what
@@ -28,17 +34,75 @@
 // so the dashboard visibly progresses in real wall-clock time instead of
 // finishing in under a second -- there is no in-sim notion of elapsed time
 // otherwise.
+//
+// CHECKPOINTING (plan ant-world-checkpoint-loader, S0-S2). Every run commits
+// one generation at the end of its ticks, atomically, under --checkpoint-root
+// (default <sandbox-root>/checkpoints; the guest runner passes the shared
+// guest-local /opt/antworld/_dev/state/checkpoints explicitly). Checkpoints
+// never cross the courier. --resume-from names a generation to continue; absent, the
+// run is an explicit fresh start, recorded as fresh_start=true in provenance
+// rather than assumed by silence. A resume that fails ANY of the five
+// validation stages halts: STATUS=resume-failed-halt:<stage>:<reason>, nonzero
+// exit, and zero state constructed. There is no silent fresh-start fallback,
+// by construction rather than by discipline -- the gate returns before the
+// state-construction block can run at all.
+//
+// GOALS (plan ant-world-goal-round-1, S0). --goal-packet (or GOAL_PACKET in
+// job.env) names a GoalPacket/1.0 file. It is loaded, shape-validated and
+// hash-verified in the ARGUMENT-PARSING section below -- before the resume
+// gate, before any state exists -- so a tampered or malformed packet refuses
+// the run rather than being noticed halfway through it.
+//
+// ONE-WAY EVALUATOR ISOLATION is the whole design of the goal path here, and it
+// is worth stating where the code lives rather than only in the plan:
+//   * the evaluator is called ONCE per round, in the world block, AFTER both
+//     hives have decided and acted, after the world mind has learned, decided
+//     and applied its verb, and after the world state has been written. There
+//     is no earlier call site;
+//   * its return value is assigned to exactly two things -- a trace row in a
+//     DEDICATED file, and `lastGoalEvaluation`, which feeds the end-of-run
+//     goal-result projection and the checkpoint manifest's goal identity;
+//   * it is never read by a decision, a reward, a parameter update, a verb
+//     application or a world write.
+// The trace deliberately does NOT go into decision-stream.jsonl. That stream is
+// the continuity-evidence surface, and a goal row in it would make a GOAL arm's
+// stream differ from a CONTROL arm's by construction -- destroying the one
+// comparison that can actually falsify this isolation claim.
 
 const fs = require('fs');
 const path = require('path');
-const { setupHives, tick } = require('./harness.js');
+const crypto = require('node:crypto');
+const { setupHives, restoreHives, tick } = require('./harness.js');
 const { generateBlankHiveSeed } = require('./generate-blank-hive-seed.js');
-const { createNetwork, mulberry32 } = require('./untrained-network.js');
-const { createWorldMind, decideWorld, applyWorldVerb, WORLD_VERB_ORDER } = require('./world-mind.js');
-const { readWorldState, writeWorldState } = require('./world-state.js');
-const { trainTick } = require('./train-tick.js');
-const { readLiveConfig, writeLiveConfig } = require('./live-config.js');
+const { createNetwork } = require('./untrained-network.js');
+const {
+  createWorldMind, decideWorld, applyWorldVerb, trainWorldMind, encodeWorldState, WORLD_VERB_ORDER,
+  assessMaskedCoordinateLiveness
+} = require('./world-mind.js');
+const { readWorldState, writeWorldState, summarizeHives } = require('./world-state.js');
+const { WORLD_LOSS_MASK } = require('./world-train.js');
+const { trainTick, REWARD_CONTRACT_VERSION } = require('./train-tick.js');
+const {
+  readLiveConfig, writeLiveConfig, extractRewardSemantics, diffRewardSemantics
+} = require('./live-config.js');
 const { createEventContext, decorateEvent, processEventContext } = require('./event-schema.js');
+const checkpoint = require('./checkpoint.js');
+// Plan world-mind-dream-communication, S1: the durable dream memory vault.
+// VAULT_PATH is fixed and repo-relative (not under SANDBOX_ROOT) -- the vault
+// is durable ACROSS checkpoint lineages, not scoped to one run's sandbox.
+// The wiring below is a guarded no-op whenever the vault has never been
+// scaffolded (dreamMemory.seedVault() is never called from here), so a
+// stock run that has never written to the vault produces zero vault
+// activity -- see commitGenerationEntries()/reconcileOnResume()'s own
+// existence guards.
+const dreamMemory = require('./dream/dream-memory.js');
+const VAULT_PATH = path.join(__dirname, '..', '..', '_dev', 'state', 'ant-world-mind-memory', 'dream-memory.jsonl');
+// Required HERE and nowhere else in the simulation. The isolation audit greps
+// for `goal-evaluator` across tools/ant-hive-world/: this driver is the only
+// hit outside the module's own tests and the rehearsal harness, which is what
+// makes "no mind, hive or training code reads the evaluator" checkable by
+// mechanism rather than by reading intentions.
+const goalEvaluator = require('./goal-evaluator.js');
 
 function argVal(flag, def) {
   const i = process.argv.indexOf(flag);
@@ -48,19 +112,188 @@ function hasFlag(flag) {
   return process.argv.indexOf(flag) !== -1;
 }
 
+// ---------------------------------------------------------------------------
+// 0. STRICT ARGV VALIDATION (rider T4, plan srd2-boundary-crossing-trial) --
+// the FIRST thing this driver does with argv, before anything below touches
+// the filesystem. An unknown flag, an unknown positional argument, or a
+// value-taking flag with a missing/flag-shaped value refuses HERE -- usage
+// printed, non-zero exit -- strictly before writeStatus is ever called,
+// before the goal gate, and before the resume gate's mkdirSync. --help is
+// the canonical case this closes: on HEAD it was simply an unrecognized
+// token nothing rejected, so `node run-live.js --help` silently started a
+// full 300-tick run (the gen-2 stray-run defect) instead of printing usage.
+//
+// The allowlist below is generated from this file's own recognized flags
+// (every argVal()/hasFlag() call site below), not invented separately, so
+// a new flag added to the driver without being added here fails LOUD (the
+// new flag itself gets refused as unrecognized) rather than silently
+// bypassing the gate.
+// ---------------------------------------------------------------------------
+const USAGE = `Usage: node run-live.js [--ticks N] [--forever] [--tick-interval-ms N]
+                        [--sandbox-root <dir>] [--arm <name>]
+                        [--checkpoint-root <dir>] [--resume-from <generation-id>]
+                        [--root-seed <int>] [--run-name <name>]
+                        [--status-path <file>] [--no-checkpoint]
+                        [--freeze-world-learning] [--freeze-hive-learning]
+                        [--goal-packet <file>] [--seed-a <int>] [--seed-b <int>]
+                        [--shuffle-streams <order>] [--help]
+
+This driver takes no positional arguments -- every input is a named flag.
+`;
+
+const BOOLEAN_FLAGS = new Set([
+  '--forever', '--no-checkpoint', '--freeze-world-learning', '--freeze-hive-learning', '--help'
+]);
+const VALUE_FLAGS = new Set([
+  '--ticks', '--tick-interval-ms', '--sandbox-root', '--arm', '--checkpoint-root',
+  '--resume-from', '--root-seed', '--run-name', '--status-path', '--goal-packet',
+  '--seed-a', '--seed-b', '--shuffle-streams'
+]);
+
+function looksLikeFlagToken(token) {
+  return typeof token === 'string' && token.startsWith('--') && !/^--\d/.test(token);
+}
+
+// Pure function of argv -- returns a list of human-readable error strings,
+// empty when argv is entirely valid. No side effect, so it is safe to call
+// before any refusal decision is made.
+function validateArgv(argv) {
+  const args = argv.slice(2);
+  const errors = [];
+  for (let i = 0; i < args.length; i++) {
+    const token = args[i];
+    if (BOOLEAN_FLAGS.has(token)) continue;
+    if (VALUE_FLAGS.has(token)) {
+      const value = args[i + 1];
+      if (value === undefined) {
+        errors.push(`flag ${token} requires a value but none was given (end of arguments)`);
+      } else if (looksLikeFlagToken(value)) {
+        errors.push(`flag ${token} requires a value but the next token '${value}' looks like a flag`);
+      } else {
+        i += 1; // consume the value only when it validated as a real value
+      }
+      continue;
+    }
+    if (token.startsWith('--')) {
+      errors.push(`unrecognized flag '${token}'`);
+    } else {
+      errors.push(`unrecognized positional argument '${token}' (this driver takes no positional arguments)`);
+    }
+  }
+  return errors;
+}
+
+const ARGV_ERRORS = validateArgv(process.argv);
+if (ARGV_ERRORS.length > 0) {
+  process.stderr.write(USAGE);
+  process.stderr.write(`\nARGV REFUSED:\n${ARGV_ERRORS.map((e) => `  - ${e}\n`).join('')}`);
+  process.exit(2);
+}
+if (hasFlag('--help')) {
+  process.stdout.write(USAGE);
+  process.exit(0);
+}
+
+// ---------------------------------------------------------------------------
+// 1. ARGUMENT / job.env PARSING -- the only thing that happens before the gate
+// ---------------------------------------------------------------------------
 const FOREVER = hasFlag('--forever');
 const TICKS = parseInt(argVal('--ticks', '300'), 10);
 const TICK_INTERVAL_MS = parseInt(argVal('--tick-interval-ms', '0'), 10);
 const SANDBOX_ROOT = argVal('--sandbox-root', path.join(__dirname, '..', '..', '_dev', 'state', 'ant-hive-world-run'));
 const WORLD_STATE_PATH = path.join(SANDBOX_ROOT, 'shared', 'world-state.json');
 const RUN_LOG_PATH = path.join(SANDBOX_ROOT, 'run-log.jsonl');
+const DECISION_STREAM_PATH = path.join(SANDBOX_ROOT, 'decision-stream.jsonl');
 const CONFIG_PATH = path.join(SANDBOX_ROOT, 'live-config.json');
+// The goal evaluator's per-tick trace. A file of its own, NOT a column on the
+// decision stream -- see the GOALS note in the header comment: the decision
+// stream has to stay byte-comparable between a goal arm and a no-goal control,
+// or the isolation claim has no falsifier left.
+const GOAL_TRACE_PATH = path.join(SANDBOX_ROOT, 'goal-evaluator-trace.jsonl');
+// The goal's sanitized projection surface. It lives under shared/ beside
+// world-state.json because that is the directory the guest runner already
+// copies to the courier -- the goal result therefore crosses the membrane on
+// the existing sanitized surface, adding no new courier path.
+const GOAL_RESULT_PATH = path.join(SANDBOX_ROOT, 'shared', 'goal-result.json');
 const ARM_ID = argVal('--arm', 'uninstructed');
-const EVENT_CONTEXT = createEventContext({
-  armId: ARM_ID,
-  runId: processEventContext.run_id,
-  episodeId: processEventContext.episode_id
-});
+const NO_CHECKPOINT = hasFlag('--no-checkpoint');
+// FROZEN-MIND CONTROL (plan ant-world-mind-learning-path, S2 criterion (e)).
+// With this flag the world block still encodes the world, still carries
+// prev_features, and still COMPUTES and reports the masked prediction loss --
+// it simply writes no parameter. Identical code path, identical reads, zero
+// parameter motion, so the measured delta between a learning arm and a frozen
+// one isolates the update itself rather than any incidental difference. Default
+// off; recorded in provenance rather than inferred from silence.
+const FREEZE_WORLD_LEARNING = hasFlag('--freeze-world-learning');
+// FROZEN-HIVE CONTROL (review finding F1 on the /ticktock benchmark colony).
+// The world mind had a freeze; the two HIVE networks did not, and their
+// REINFORCE update ran at a hard-coded 0.05 with no way to switch it off. That
+// made "learning OFF" a claim the engine could not honor: the benchmark colony
+// was reproducible under a fixed seed, which is a different property from being
+// frozen. With this flag the hives still decide, still act, still take upkeep
+// damage and still get scored -- and their weights do not move. Default off, so
+// every existing invocation behaves exactly as before.
+const FREEZE_HIVE_LEARNING = hasFlag('--freeze-hive-learning');
+
+// job.env is the guest's job spec, sourced into the runner's environment before
+// the driver is invoked. A CLI flag always wins over the environment: the flag
+// is what a local operator typed this minute, the environment is what a job
+// spec said when it was written.
+const jobEnv = {
+  RESUME_FROM: argVal('--resume-from', process.env.RESUME_FROM || null),
+  ROOT_SEED: argVal('--root-seed', process.env.ROOT_SEED || null),
+  RUN_NAME: argVal('--run-name', process.env.RUN_NAME || ARM_ID),
+  // Default is SANDBOX-LOCAL, deliberately. An earlier draft defaulted to
+  // <sandbox>/../checkpoints to mirror the guest's shared
+  // /opt/antworld/_dev/state/checkpoints, and that immediately produced a real
+  // defect: every sandbox under _dev/state/ shared one lineage directory, so
+  // two unrelated local runs with the same run name collided and refused. The
+  // collision rule was right; the default was wrong. The guest keeps its shared
+  // root by passing --checkpoint-root explicitly from the runner, where run
+  // names are unique per turn and a shared lineage is the point.
+  CHECKPOINT_ROOT: argVal('--checkpoint-root', process.env.CHECKPOINT_ROOT
+    || path.join(SANDBOX_ROOT, 'checkpoints')),
+  STATUS_PATH: argVal('--status-path', process.env.STATUS_PATH || null),
+  GOAL_PACKET: argVal('--goal-packet', process.env.GOAL_PACKET || null)
+};
+
+// ---------------------------------------------------------------------------
+// 1b. THE GOAL GATE -- load, shape-validate and hash-verify before anything
+// ---------------------------------------------------------------------------
+// Placed here, above the resume gate, for the same reason the resume gate sits
+// above state construction: a refusal must happen while there is still nothing
+// to undo. A packet whose recomputed sha256 does not match its packet_sha256
+// field is the TAMPER case, and it refuses here -- no sandbox written, no world
+// seeded, no network allocated, no checkpoint touched.
+//
+// Absent packet is not an error and not a silent default: it is recorded as an
+// explicit no-goal run, the same way an absent --resume-from is recorded as an
+// explicit fresh start.
+let GOAL_PACKET = null;
+let GOAL_PACKET_PATH = null;
+if (jobEnv.GOAL_PACKET) {
+  GOAL_PACKET_PATH = path.resolve(jobEnv.GOAL_PACKET);
+  try {
+    const loaded = goalEvaluator.loadGoalPacket(GOAL_PACKET_PATH);
+    GOAL_PACKET = loaded.packet;
+    process.stdout.write(
+      `goal: packet ${GOAL_PACKET.goal_id} loaded from ${GOAL_PACKET_PATH}\n` +
+      `goal: packet_sha256=${GOAL_PACKET.packet_sha256} evaluator=${goalEvaluator.EVALUATOR_VERSION} ` +
+      `deadline_absolute_tick=${GOAL_PACKET.deadline.absolute_tick}\n` +
+      GOAL_PACKET.conditions.map((c) =>
+        `goal:   ${c.condition_id}: ${c.threshold.source_field} ${c.comparator} ${c.threshold.value} ${c.threshold.units}\n`).join('')
+    );
+  } catch (e) {
+    process.stderr.write(
+      `GOAL PACKET REFUSED: ${e.reason || e.message}\n` +
+      `No state was constructed. Halt-for-repair: this driver will not run a goal turn with an unverified packet.\n`
+    );
+    writeStatus(e.status || 'goal-packet-invalid');
+    process.exit(1);
+  }
+} else {
+  process.stdout.write('goal: no packet supplied -- explicit NO-GOAL run (goal identity will be null)\n');
+}
 
 let stopRequested = false;
 function requestStop(signal) {
@@ -78,71 +311,371 @@ const HIVE_IDS = ['hive-a', 'hive-b'];
 const RESOURCE_POOL = { food: 40, wood: 30, stone: 15 };
 const AUTHORED_BY = 'ant-hive-world/run-live.js -- untrained-network, no pretraining, early-minds generation';
 
-const seeds = HIVE_IDS.map((id) => generateBlankHiveSeed(id, AUTHORED_BY, new Date().toISOString()));
-const hives = setupHives(SANDBOX_ROOT, seeds, WORLD_STATE_PATH, RESOURCE_POOL, EVENT_CONTEXT);
+// STATUS is the runner's existing refusal channel (the guest runner writes
+// $COURIER/out/STATUS). The driver writes to --status-path when given one and
+// to <sandbox>/STATUS otherwise, and always echoes the token on stderr. This
+// adds no courier surface: it writes to the file the runner already publishes.
+function writeStatus(status) {
+  const target = jobEnv.STATUS_PATH || path.join(SANDBOX_ROOT, 'STATUS');
+  try {
+    fs.mkdirSync(path.dirname(target), { recursive: true });
+    fs.writeFileSync(target, `${status}\n`);
+  } catch (e) {
+    process.stderr.write(`could not write STATUS to ${target}: ${e.message}\n`);
+  }
+  process.stderr.write(`STATUS=${status}\n`);
+}
 
-// Seed the live-config file from CLI args so the dashboard's initial form
-// reflects what this run actually started with, not just internal defaults.
-writeLiveConfig(CONFIG_PATH, { tick_interval_ms: TICK_INTERVAL_MS });
+// ---------------------------------------------------------------------------
+// 2. THE RESUME GATE -- the FIRST act after parsing
+// ---------------------------------------------------------------------------
+// Returns either an explicit fresh-start token or a validated restore handle.
+// It NEVER returns on failure: it writes STATUS and exits nonzero from inside
+// the gate, with no state object constructed, no sandbox written, no world
+// seeded, no network allocated. That ordering is the whole mechanism -- a
+// fallback cannot be taken accidentally if the code that would fall back has
+// not run yet.
+function resolveResumeOrFreshStart(env) {
+  const checkpointRoot = path.resolve(env.CHECKPOINT_ROOT);
 
-// "Early minds" -- operator (2026-07-16): "delete the old minds we ran in
-// the ant sim and create new neural networks... to start fresh." Networks
-// are never persisted to disk (they only ever live in this process's
-// memory), so there was nothing to delete on disk -- but the PREVIOUS
-// version of this file hardcoded fixed seeds (20260716/20260717), which
-// meant re-running it would have replayed the exact same initial random
-// weights every time, not a genuinely new mind. Seeds now default to
-// fresh, never-repeating values (Date.now()-derived, offset per hive so
-// the two minds are never identical to each other either) -- overridable
-// via --seed-a/--seed-b only for deliberate, explicit reproducibility
-// (e.g. debugging one specific run), never as the default.
+  // RECOVERY RULE, applied before anything reads the directory: uncommitted
+  // generations and staging residue are swept on start. Committed generations
+  // are never touched, including the last-known-good one.
+  // The requested generation is exempted from the sweep so that, if it is
+  // itself uncommitted, the refusal names the real defect (stage 2) instead of
+  // deleting the evidence and then reporting stage 1 "absent".
+  fs.mkdirSync(checkpointRoot, { recursive: true });
+  const sweep = checkpoint.sweepUncommitted(checkpointRoot, {
+    exempt: env.RESUME_FROM ? [String(env.RESUME_FROM).trim()] : []
+  });
+  for (const s of sweep.swept) {
+    process.stdout.write(`swept uncommitted checkpoint ${s.name} (${s.reason})\n`);
+  }
+  if (sweep.exempted.length) {
+    process.stdout.write(`sweep exempted (resume target): ${sweep.exempted.join(', ')}\n`);
+  }
+
+  if (!env.RESUME_FROM) {
+    process.stdout.write(`resume: none requested -- explicit FRESH START (fresh_start=true)\n`);
+    return { mode: 'fresh_start', fresh_start: true, checkpointRoot, restored: null };
+  }
+
+  const id = String(env.RESUME_FROM).trim();
+  process.stdout.write(`resume: requested generation ${id} from ${checkpointRoot}\n`);
+  // FROZEN INPUT ENFORCEMENT: the manifest records the input packet (or its
+  // explicit absence) that was in force when the generation was written. A
+  // resume must be validated against THIS run's current packet -- computed
+  // here, before the gate, so a mismatch (or a presence/absence flip) halts
+  // exactly like every other stage: named status, zero state constructed.
+  // currentInputPacket() only reads SANDBOX_ROOT, which is set at argument
+  // parse time above the gate, so this is safe to call this early.
+  const currentPacket = currentInputPacket();
+  const validation = checkpoint.validateGeneration(checkpointRoot, id, { currentInputPacket: currentPacket });
+  if (!validation.ok) {
+    process.stderr.write(
+      `RESUME REFUSED at stage '${validation.stage}': ${validation.reason}\n` +
+      `No state was constructed. Last-known-good generations are retained for manual recovery:\n` +
+      checkpoint.listCommittedGenerations(checkpointRoot)
+        .map((g) => `  ${g.generation_id} (day ${g.absolute_day})\n`).join('') +
+      `Halt-for-repair: this driver will not fall back to a fresh start.\n`
+    );
+    writeStatus(validation.status);
+    process.exit(1);
+  }
+
+  let restored;
+  try {
+    restored = checkpoint.loadGeneration(checkpointRoot, id, { currentInputPacket: currentPacket });
+  } catch (e) {
+    // Only reachable if the generation changed on disk between validation and
+    // load. Same refusal shape: named stage, no state, nonzero exit.
+    writeStatus(`resume-failed-halt:${checkpoint.STAGES.CHECKSUMS}:load-race-${e.message.replace(/[^A-Za-z0-9.-]+/g, '-')}`);
+    process.exit(1);
+  }
+
+  // CheckpointManifest/1.1 provenance WARNs. A training-config mismatch (or an
+  // UNKNOWN from a 1.0 manifest) does NOT refuse the resume -- the restore is
+  // valid -- but it does mean metrics from before and after the boundary are
+  // not comparable, and that must be said out loud rather than left for a
+  // summarizer to pool silently.
+  for (const w of validation.warnings || []) {
+    process.stderr.write(`WARN [${w.code}] ${w.detail} (manifest=${w.manifest_value} live=${w.live_value})\n`);
+  }
+  if (validation.hash_provenance) {
+    process.stdout.write(
+      `resume: hash provenance source=${validation.hash_provenance.source} ` +
+      `shape_hash=${String(validation.hash_provenance.shape_hash).slice(0, 12)} ` +
+      `training_config_hash=${String(validation.hash_provenance.training_config_hash).slice(0, 12)}\n`
+    );
+  }
+  process.stdout.write(
+    `resume: validated ${id} -- all ${validation.stages_passed.length} stages passed ` +
+    `(${validation.stages_passed.join(' -> ')})\n` +
+    `resume: continuing at absolute tick ${restored.identity.absolute_tick} ` +
+    `(day ${restored.manifest.absolute_day}, lineage depth ${restored.manifest.parent.lineage_depth}, ` +
+    `turn ${restored.identity.turn_index})\n`
+  );
+  return { mode: 'resume', fresh_start: false, checkpointRoot, restored };
+}
+
+const resolution = resolveResumeOrFreshStart(jobEnv);
+
+// ---------------------------------------------------------------------------
+// 3. GATED STATE CONSTRUCTION -- reachable only via the gate's return
+// ---------------------------------------------------------------------------
+
+// Falsifier for "the serializable RNG is mulberry32": if this throws, every
+// continuity claim downstream is void, so it throws rather than warns. Runs
+// after the gate (a refusal must reach STATUS before anything else can fail)
+// and before any state exists.
+checkpoint.assertRngParity();
+
+// Root seed. The former `Date.now()` base seed is GONE (plan S3 clause (a)):
+// wall-clock seeding meant no run was reproducible and no two arms could be
+// given "the same seeds", which makes a continuity claim untestable. The seed
+// is now explicit, or -- when nothing supplies one -- drawn from the OS CSPRNG,
+// which is still never-repeating (the fresh-minds property that motivated
+// Date.now()) but is not a function of invocation time. Either way it is
+// recorded in provenance and in every checkpoint, so any run can be replayed.
+
+// A2 (plan sim-foundation-repairs, S6): the previous guard was dead code --
+// `parseInt(raw, 10) >>> 0` coerces NaN to 0 and any finite Number to a
+// uint32, so `!Number.isFinite(...)` could never fire: `--root-seed abc`
+// silently became seed 0 and the run proceeded (violating the documented
+// "never-repeating unless explicit" property). Validate the RAW STRING against
+// /^\d+$/ (digits only -- no sign, no exponent, no hex) BEFORE any numeric
+// coercion, and require the value to fit uint32 so an overflowing seed cannot
+// silently wrap either. Any invalid seed input -- root or per-stream override
+// -- writes STATUS=invalid-root-seed and exits 1, the path the dead guard was
+// always intended to take.
+const UINT32_MAX = 4294967295;
+function parseSeed(raw) {
+  if (typeof raw !== 'string' || !/^\d+$/.test(raw)) return null;
+  const n = Number(raw);
+  if (!Number.isSafeInteger(n) || n > UINT32_MAX) return null;
+  return n >>> 0;
+}
+function requireValidSeed(raw) {
+  const seed = parseSeed(raw);
+  if (seed === null) {
+    writeStatus('invalid-root-seed');
+    process.exit(1);
+  }
+  return seed;
+}
+
+let rootSeed;
+let rootSeedSource;
+if (resolution.mode === 'resume') {
+  rootSeed = resolution.restored.identity.root_seed;
+  rootSeedSource = 'restored';
+} else if (jobEnv.ROOT_SEED !== null && jobEnv.ROOT_SEED !== '') {
+  rootSeed = requireValidSeed(jobEnv.ROOT_SEED);
+  rootSeedSource = process.argv.includes('--root-seed') ? 'arg' : 'env';
+} else {
+  rootSeed = crypto.randomInt(0, 4294967296);
+  rootSeedSource = 'generated';
+}
+
+// Derivation is unchanged in form from the pre-checkpoint driver (a prime
+// offset per stream so no two streams are ever identical); only the base
+// changed from wall-clock to the explicit root seed. --seed-a/--seed-b still
+// override, for deliberate single-run reproducibility.
 const seedAOverride = argVal('--seed-a', null);
 const seedBOverride = argVal('--seed-b', null);
-const baseSeed = Date.now();
-const seedA = seedAOverride !== null ? parseInt(seedAOverride, 10) : (baseSeed >>> 0);
-const seedB = seedBOverride !== null ? parseInt(seedBOverride, 10) : ((baseSeed + 104729) >>> 0); // + a prime offset, never identical to seedA
+const seedA = seedAOverride !== null ? requireValidSeed(seedAOverride) : (rootSeed >>> 0);
+const seedB = seedBOverride !== null ? requireValidSeed(seedBOverride) : ((rootSeed + 104729) >>> 0);
+const seedW = (rootSeed + 1000003) >>> 0; // distinct prime offset from hive seeds
 
-const networks = {
-  'hive-a': createNetwork(seedA),
-  'hive-b': createNetwork(seedB)
-};
-process.stdout.write(`Early minds this run: hive-a seed=${seedA}, hive-b seed=${seedB} (fresh, never-repeating unless --seed-a/--seed-b explicitly overridden).\n`);
-// Decision-sampling rngs also default to fresh seeds, offset from the
-// network-init seeds so all four random streams (2 network inits, 2
-// decision-samplers) are independent of each other.
-const rngs = {
-  'hive-a': mulberry32((seedA + 12345) >>> 0),
-  'hive-b': mulberry32((seedB + 12345) >>> 0)
-};
+// Per-stream seed assignment, named so arm C (shuffled-RNG control) can permute
+// the ASSIGNMENT while holding the root seed fixed -- which is what isolates
+// "state carries behavior" from "seeds carry behavior".
+const STREAM_ORDER = ['hive-a', 'hive-b', 'world'];
+const streamSeedOffsets = { 'hive-a': 12345, 'hive-b': 12345, world: 12345 };
+const streamBaseSeeds = { 'hive-a': seedA, 'hive-b': seedB, world: seedW };
+const shuffleSpec = argVal('--shuffle-streams', null); // e.g. "world,hive-a,hive-b"
+if (shuffleSpec) {
+  const perm = shuffleSpec.split(',').map((s) => s.trim());
+  if (perm.length !== STREAM_ORDER.length || !STREAM_ORDER.every((s) => perm.includes(s))) {
+    writeStatus('invalid-shuffle-streams');
+    process.exit(1);
+  }
+  const bases = STREAM_ORDER.map((s) => streamBaseSeeds[s]);
+  perm.forEach((streamId, idx) => { streamBaseSeeds[streamId] = bases[idx]; });
+  process.stdout.write(`stream seed assignment permuted: ${STREAM_ORDER.join(',')} -> ${perm.join(',')}\n`);
+}
 
-// World mind (operator 2026-08-03) — a fresh, untrained network one level
-// above the hive minds, reading the full shared world-state and emitting
-// world-level coordination verbs (environmental/signaling, never hive
-// commands — no-godmode/carriage doctrine). Fresh seed, fresh weights, in
-// process memory only; dies with the process. Never persisted.
-const seedW = (baseSeed + 1000003) >>> 0; // distinct prime offset from hive seeds
-const worldMind = createWorldMind(seedW);
-const worldRng = mulberry32((seedW + 12345) >>> 0);
-process.stdout.write(`World mind: seed=${seedW} (fresh, coordination-only, environmental verbs).\n`);
+const EVENT_CONTEXT = createEventContext({
+  armId: ARM_ID,
+  runId: processEventContext.run_id,
+  episodeId: processEventContext.episode_id
+});
 
-// Reactive-entropy-controller state, ONE object per hive (resolved
-// s4-reactive-controller gate): each controller reads only its OWN hive's
-// last measured policy_entropy_post_update, threaded explicitly through
-// trainTick -- never a module global (which could leak the feedback signal
-// between hives) and never persisted (fresh-minds rule: created fresh here,
-// dies with the process).
-const controllers = {
-  'hive-a': { active: false, prev_post_update_entropy: undefined },
-  'hive-b': { active: false, prev_post_update_entropy: undefined }
-};
+let hives;
+let networks;
+let worldMind;
+let controllers;
+let startTick;
+let turnIndex;
+let parentLink;
+let parentRunId = null;
+let parentEpisodeId = null;
+const rngs = {};
+let worldRng;
 
-process.stdout.write(`ant-hive-world S3 first attended run starting.\n`);
+if (resolution.mode === 'resume') {
+  const r = resolution.restored;
+  hives = restoreHives(SANDBOX_ROOT, r.hiveStates, WORLD_STATE_PATH, r.worldState, EVENT_CONTEXT);
+  for (const [id, hive] of Object.entries(hives)) {
+    const saved = r.identity.hives && r.identity.hives[id];
+    if (saved && Number.isInteger(saved.next_event_tick)) hive.nextEventTick = saved.next_event_tick;
+  }
+  // Append-only logs: truncate back to the recorded cursor so a resume into a
+  // reused sandbox cannot double-append. Into a fresh sandbox this is a no-op
+  // that reports 'absent', which is itself worth recording.
+  const cursorReport = checkpoint.applyLogCursors(SANDBOX_ROOT, r.logCursors);
+  process.stdout.write(`resume: log cursors ${JSON.stringify(cursorReport)}\n`);
+
+  // Plan world-mind-dream-communication, S1, RESUME RECONCILIATION: mirrors
+  // the log-cursor rollback above. A guarded no-op when the vault has never
+  // been scaffolded (dreamMemory.reconcileOnResume checks existence first).
+  // r.manifest (this resumed generation's own manifest) is passed so
+  // reconciliation can verify ACTIVE-LINEAGE MEMBERSHIP via the parent
+  // chain, not merely committed-manifest existence (codex fold review,
+  // MINOR fix -- a manifest can exist on disk for an abandoned branch).
+  const dreamReconcile = dreamMemory.reconcileOnResume(VAULT_PATH, resolution.checkpointRoot, checkpoint, r.manifest);
+  if (dreamReconcile.promoted.length || dreamReconcile.quarantined.length) {
+    process.stdout.write(`resume: dream vault reconciliation ${JSON.stringify(dreamReconcile)}\n`);
+  }
+
+  // The checkpointed live config is restored so operator tuning survives the
+  // turn boundary; tick_interval_ms is deliberately re-applied from the CLI
+  // because it is an invocation knob (how fast to run in wall-clock), not a
+  // property of the world.
+  writeLiveConfig(CONFIG_PATH, { ...r.liveConfig, tick_interval_ms: TICK_INTERVAL_MS });
+
+  networks = r.networks;
+  worldMind = r.worldMind;
+  controllers = r.controllers;
+  for (const id of STREAM_ORDER) {
+    const saved = r.rngStates[id];
+    if (!saved) {
+      writeStatus(`resume-failed-halt:${checkpoint.STAGES.CHECKSUMS}:rng-stream-missing-${id}`);
+      process.exit(1);
+    }
+    const stream = checkpoint.createSerializableRng(saved.seed);
+    stream.setState(saved.state);
+    if (id === 'world') worldRng = stream; else rngs[id] = stream;
+  }
+  startTick = r.identity.absolute_tick;
+  turnIndex = r.identity.turn_index + 1;
+  parentLink = {
+    generation_id: r.manifest.generation_id,
+    manifest_checksum: r.manifest.manifest_self_checksum,
+    lineage_depth: r.manifest.parent.lineage_depth
+  };
+  parentRunId = r.identity.event_context.run_id;
+  parentEpisodeId = r.identity.event_context.episode_id;
+  process.stdout.write(
+    `Resumed minds: hive-a/hive-b/world networks, controllers and all three RNG streams ` +
+    `restored from ${r.generation_id}; root seed ${rootSeed} (restored).\n`
+  );
+} else {
+  const seeds = HIVE_IDS.map((id) => generateBlankHiveSeed(id, AUTHORED_BY, new Date().toISOString()));
+  hives = setupHives(SANDBOX_ROOT, seeds, WORLD_STATE_PATH, RESOURCE_POOL, EVENT_CONTEXT);
+
+  // Seed the live-config file from CLI args so the dashboard's initial form
+  // reflects what this run actually started with, not just internal defaults.
+  writeLiveConfig(CONFIG_PATH, { tick_interval_ms: TICK_INTERVAL_MS });
+
+  // "Early minds" -- operator (2026-07-16): "delete the old minds we ran in
+  // the ant sim and create new neural networks... to start fresh." A fresh
+  // start still builds every mind from random weights; what changed is only
+  // WHERE the randomness comes from (see the root-seed block above).
+  networks = {
+    'hive-a': createNetwork(seedA),
+    'hive-b': createNetwork(seedB)
+  };
+  // World mind (operator 2026-08-03) — a fresh, untrained network one level
+  // above the hive minds, reading the full shared world-state and emitting
+  // world-level coordination verbs (environmental/signaling, never hive
+  // commands — no-godmode/carriage doctrine).
+  worldMind = createWorldMind(seedW);
+  // Reactive-entropy-controller state, ONE object per hive (resolved
+  // s4-reactive-controller gate): each controller reads only its OWN hive's
+  // last measured policy_entropy_post_update, threaded explicitly through
+  // trainTick -- never a module global (which could leak the feedback signal
+  // between hives).
+  controllers = {
+    'hive-a': { active: false, prev_post_update_entropy: undefined },
+    'hive-b': { active: false, prev_post_update_entropy: undefined }
+  };
+  for (const id of STREAM_ORDER) {
+    const stream = checkpoint.createSerializableRng((streamBaseSeeds[id] + streamSeedOffsets[id]) >>> 0);
+    if (id === 'world') worldRng = stream; else rngs[id] = stream;
+  }
+  startTick = 0;
+  turnIndex = 0;
+  parentLink = null;
+  process.stdout.write(
+    `Early minds this run: root_seed=${rootSeed} (${rootSeedSource}), hive-a seed=${seedA}, ` +
+    `hive-b seed=${seedB}, world seed=${seedW}.\n`
+  );
+}
+
+// --- REWARD-SEMANTICS SNAPSHOT (plan ant-sim-reward-specification-repair, S4,
+// hole (b)) -------------------------------------------------------------------
+// Taken HERE: after the resume path has restored the checkpointed live config
+// and after a fresh start has seeded it, so the snapshot is the table this run
+// actually begins with -- and before the first tick, so there is no window in
+// which a round is scored against a table nobody recorded.
+//
+// It is PRINTED and written to a durable per-run manifest beside the run log,
+// because a terminal scrolls away: a reviewer asking "which reward table
+// produced these rows" must be able to answer it from the sandbox alone.
+//
+// A FILE OF ITS OWN, not a run-log row, for the same reason the goal trace is a
+// file of its own: run-log rows carry the event-schema contract (one row per
+// actor per tick), and a manifest row is not that shape. Adding one would have
+// changed the run log's row-per-tick arithmetic for every existing reader.
+const REWARD_SEMANTICS_PATH = path.join(SANDBOX_ROOT, 'reward-semantics.json');
+const REWARD_SEMANTICS_SNAPSHOT = extractRewardSemantics(readLiveConfig(CONFIG_PATH));
+function writeRewardSemanticsManifest(halted) {
+  fs.mkdirSync(SANDBOX_ROOT, { recursive: true });
+  fs.writeFileSync(REWARD_SEMANTICS_PATH, `${JSON.stringify({
+    schema: 'RewardSemanticsManifest/1.0',
+    reward_contract_version: REWARD_CONTRACT_VERSION,
+    run_id: EVENT_CONTEXT.run_id,
+    episode_id: EVENT_CONTEXT.episode_id,
+    arm_id: ARM_ID,
+    snapshot_at_absolute_tick: startTick,
+    frozen_keys: Object.keys(REWARD_SEMANTICS_SNAPSHOT),
+    reward_semantics: REWARD_SEMANTICS_SNAPSHOT,
+    halted: halted || null
+  }, null, 2)}\n`);
+}
+writeRewardSemanticsManifest(null);
+
+process.stdout.write(`ant-hive-world attended run starting (${resolution.mode}).\n`);
+process.stdout.write(
+  `Reward semantics FROZEN for this run (contract v${REWARD_CONTRACT_VERSION}): ` +
+  `${JSON.stringify(REWARD_SEMANTICS_SNAPSHOT)}\n` +
+  `  Ecology keys stay hot-editable; a mid-run change to any reward key above HALTS the run.\n` +
+  `  Manifest: ${REWARD_SEMANTICS_PATH}\n`
+);
 process.stdout.write(`Sandbox: ${SANDBOX_ROOT}\n`);
+process.stdout.write(`Checkpoint root: ${resolution.checkpointRoot}\n`);
 process.stdout.write(`Shared resources at start: ${JSON.stringify(RESOURCE_POOL)}\n`);
 process.stdout.write(`Mind: untrained-network.js (from-scratch REINFORCE, no pretraining, no LLM).\n`);
+process.stdout.write(`World-mind learning: ${FREEZE_WORLD_LEARNING
+  ? 'FROZEN (--freeze-world-learning) -- loss is measured and reported, no parameter is written'
+  : 'ACTIVE -- masked one-step prediction error (world-train.js); W2/b2 never written'}\n`);
+process.stdout.write(`Hive-mind learning: ${FREEZE_HIVE_LEARNING
+  ? 'FROZEN (--freeze-hive-learning) -- reward is computed and reported, no weight is written'
+  : `ACTIVE -- REINFORCE at LEARNING_RATE=0.05 (untrained-network.js trainStep)`}\n`);
 process.stdout.write(FOREVER
   ? `Running until stopped (SIGINT/SIGTERM), ${TICK_INTERVAL_MS}ms between rounds. Run log: ${RUN_LOG_PATH}\n`
-  : `Running ${TICKS} ticks per hive (alternating). Run log: ${RUN_LOG_PATH}\n`);
+  : `Running ${TICKS} ticks per hive from absolute tick ${startTick}. Run log: ${RUN_LOG_PATH}\n`);
 process.stdout.write(`Config file (live-tunable via the dashboard): ${CONFIG_PATH}\n`);
 process.stdout.write(`Event identity: run=${EVENT_CONTEXT.run_id} episode=${EVENT_CONTEXT.episode_id} arm=${EVENT_CONTEXT.arm_id}\n`);
 process.stdout.write(`Start the dashboard separately to watch live: node tools/ant-hive-world/dashboard.js --sandbox-root ${SANDBOX_ROOT}\n\n`);
@@ -152,21 +685,243 @@ function appendRunLog(entry) {
   fs.appendFileSync(RUN_LOG_PATH, JSON.stringify({ ts: new Date().toISOString(), ...row }) + '\n');
 }
 
+// The decision stream is the continuity evidence surface: one line per actor
+// per tick, keyed on the ABSOLUTE tick, carrying only quantities that a
+// decision actually depends on. Deliberately excludes every wall-clock field
+// (run-log `ts`, geometry `at`, world-state `written_at`) and every identity
+// field (run_id/episode_id/tick_key), because those differ between a resumed
+// run and an uninterrupted one WITHOUT any behavioral difference -- including
+// them would guarantee a false divergence and destroy the test's meaning.
+// Writing it consumes no RNG and takes no branch, so its presence cannot
+// change behavior.
+function appendDecision(row) {
+  fs.appendFileSync(DECISION_STREAM_PATH, JSON.stringify(row) + '\n');
+}
+
+// The goal evaluator's trace: one row per round on which the evaluator ran.
+// It records what the evaluator READ, what it returned, and the proof-of-order
+// fields (`phase` and `post_decision`) that say where in the tick it ran. A
+// reviewer checking the isolation claim reads this file against the decision
+// stream: every trace row's tick must already have its hive and world decision
+// rows written.
+let lastGoalEvaluation = null;
+let goalTraceRows = 0;
+function appendGoalTrace(evaluation, decisionStreamTick) {
+  goalTraceRows += 1;
+  fs.appendFileSync(GOAL_TRACE_PATH, `${JSON.stringify({
+    t: evaluation.evaluated_at_tick,
+    decision_stream_tick: decisionStreamTick,
+    goal_id: evaluation.goal_id,
+    packet_sha256: evaluation.packet_sha256,
+    evaluator_version: evaluation.evaluator_version,
+    phase: 'post-tick-reporting',
+    post_decision: true,
+    inputs_read: evaluation.inputs_read,
+    met: evaluation.met,
+    at_or_past_deadline: evaluation.at_or_past_deadline,
+    met_at_deadline: evaluation.met_at_deadline,
+    per_condition: evaluation.per_condition.map((p) => ({
+      condition: p.condition,
+      measured: p.measured,
+      threshold: p.threshold,
+      satisfied: p.satisfied,
+      source_field_present: p.source_field_present
+    }))
+  })}\n`);
+}
+
+function currentInputPacket() {
+  const packetPath = path.join(SANDBOX_ROOT, 'world-mind-decision.json');
+  try {
+    const buf = fs.readFileSync(packetPath);
+    return { present: true, sha256: checkpoint.sha256Hex(buf) };
+  } catch {
+    return { present: false, sha256: null };
+  }
+}
+
+function commitCheckpoint(absoluteTick) {
+  const runName = jobEnv.RUN_NAME;
+  const hiveStates = {};
+  for (const id of HIVE_IDS) {
+    hiveStates[id] = JSON.parse(fs.readFileSync(hives[id].hiveStatePath, 'utf8'));
+  }
+  const rngStates = {};
+  for (const id of STREAM_ORDER) {
+    const stream = id === 'world' ? worldRng : rngs[id];
+    rngStates[id] = { seed: stream.seed, state: stream.getState() };
+  }
+  const commitResult = checkpoint.commitGeneration(resolution.checkpointRoot, {
+    runName,
+    absoluteTick,
+    absoluteDay: absoluteTick, // one tick is one simulated day (MODE=turn contract)
+    networks,
+    worldMind,
+    controllers,
+    rngStates,
+    constructionSeeds: { 'hive-a': seedA, 'hive-b': seedB, world: seedW, root: rootSeed },
+    worldState: readWorldState(WORLD_STATE_PATH),
+    hiveStates,
+    liveConfig: readLiveConfig(CONFIG_PATH),
+    logCursors: checkpoint.captureLogCursors(SANDBOX_ROOT, HIVE_IDS),
+    nextEventTicks: Object.fromEntries(HIVE_IDS.map((id) => [id, hives[id].nextEventTick])),
+    identity: {
+      event_context: EVENT_CONTEXT,
+      turn_index: turnIndex,
+      root_seed: rootSeed,
+      root_seed_source: rootSeedSource,
+      fresh_start: resolution.fresh_start,
+      world_learning_frozen: FREEZE_WORLD_LEARNING,
+      hive_learning_frozen: FREEZE_HIVE_LEARNING,
+      parent_run_id: parentRunId,
+      parent_episode_id: parentEpisodeId
+    },
+    parent: parentLink,
+    inputPacket: currentInputPacket(),
+    // GOAL IDENTITY IN THE MANIFEST (codex r2). The literal `goal: null` that
+    // used to sit here was correct for a goal-free continuity control and wrong
+    // for anything else: a goal-bearing lineage could resume, chain and be
+    // harvested with no record anywhere in the checkpoint that a goal was in
+    // force. It now carries the goal id, the packet hash, the evaluator version
+    // and the final verdict -- identity and outcome, never the packet body, so
+    // the checkpoint does not become a second copy of the packet.
+    goal: GOAL_PACKET ? goalEvaluator.goalIdentity(GOAL_PACKET, lastGoalEvaluation) : null
+  });
+
+  // Plan world-mind-dream-communication, S1, COMMIT WIRING: invoked
+  // immediately after checkpoint.commitGeneration() returns successfully,
+  // same run-end sequence, same function. Flips pending->committed for
+  // every vault entry carrying this run's now-committed generation_id. A
+  // guarded no-op when the vault has never been scaffolded.
+  const dreamCommit = dreamMemory.commitGenerationEntries(VAULT_PATH, commitResult.generation_id);
+  if (dreamCommit.flipped.length) {
+    process.stdout.write(`dream vault: committed ${dreamCommit.flipped.length} entr${dreamCommit.flipped.length === 1 ? 'y' : 'ies'} for generation ${commitResult.generation_id}\n`);
+  }
+
+  return commitResult;
+}
+
+// The goal's sanitized projection. Written beside world-state.json under
+// shared/, which is the tree the guest runner already copies to the courier, so
+// the goal result reaches the dashboard/harvest surface without opening a new
+// membrane path. Contains the verdict and the measured values only -- no packet
+// body, no spatial data, no mind state.
+function writeGoalResult(absoluteTick) {
+  const payload = {
+    schema: 'GoalResult/1.0',
+    goal_id: GOAL_PACKET.goal_id,
+    packet_sha256: GOAL_PACKET.packet_sha256,
+    packet_path: GOAL_PACKET_PATH,
+    evaluator_version: goalEvaluator.EVALUATOR_VERSION,
+    run_name: jobEnv.RUN_NAME,
+    arm_id: ARM_ID,
+    turn_index: turnIndex,
+    absolute_tick: absoluteTick,
+    deadline_absolute_tick: GOAL_PACKET.deadline.absolute_tick,
+    reached_deadline: absoluteTick >= GOAL_PACKET.deadline.absolute_tick,
+    evaluator_ticks_traced: goalTraceRows,
+    final_evaluation: lastGoalEvaluation
+  };
+  fs.mkdirSync(path.dirname(GOAL_RESULT_PATH), { recursive: true });
+  fs.writeFileSync(GOAL_RESULT_PATH, `${JSON.stringify(payload, null, 2)}\n`);
+  return payload;
+}
+
+// --- MASKED-COORDINATE LIVENESS ACCUMULATOR (plan S1b) ----------------------
+//
+// The defect S1b repairs produced arithmetically correct encodings whose masked
+// coordinates were zero for an entire run. No single-state check can see that,
+// so the driver accumulates the encodings it actually trained on and reports,
+// at run end, whether each masked coordinate ever left zero. The samples are
+// capped so an unbounded --forever run cannot grow this without limit; the cap
+// and whether it was hit are both reported, because a liveness claim over a
+// truncated sample must say so.
+const LIVENESS_SAMPLE_CAP = 5000;
+const livenessSamples = [];
+let livenessSamplesSeen = 0;
+function recordEncodingForLiveness(features) {
+  livenessSamplesSeen += 1;
+  if (livenessSamples.length < LIVENESS_SAMPLE_CAP) livenessSamples.push(features.slice());
+}
+function livenessReport() {
+  const report = assessMaskedCoordinateLiveness(livenessSamples, WORLD_LOSS_MASK);
+  return {
+    ...report,
+    ticks_encoded: livenessSamplesSeen,
+    sample_cap: LIVENESS_SAMPLE_CAP,
+    samples_truncated: livenessSamplesSeen > livenessSamples.length
+  };
+}
+
 async function runTicks() {
-  let i = 0;
-  while (FOREVER ? !stopRequested : i < TICKS) {
+  let i = startTick;
+  const endTick = startTick + TICKS;
+  while (FOREVER ? !stopRequested : i < endTick) {
     // Read fresh every round -- operator (2026-07-16): "i need to be able
     // to modify variables in this dashboard." No restart needed; the
     // dashboard's /config POST writes this same file.
     const liveConfig = readLiveConfig(CONFIG_PATH);
+    // ...but the REWARD keys within it are frozen (plan S4, hole (b)). Ecology
+    // is what the operator hot-edits and ecology stays hot-editable; the reward
+    // table is the definition of the measurement, and changing it mid-run would
+    // score the first half of this run under one table and the rest under
+    // another while every row still stamps the same reward_contract_version.
+    //
+    // REFUSING is deliberately preferred over recording: a recorded split still
+    // produces a run whose cumulative reward means nothing, and the operator's
+    // reason for hot-editing (preserving in-memory network weights across an
+    // ecology tweak) is not served by a reward edit at all. Checked BEFORE the
+    // round's first trainTick, so the changed table never scores a single tick.
+    const rewardChanges = diffRewardSemantics(REWARD_SEMANTICS_SNAPSHOT, liveConfig);
+    if (rewardChanges.length > 0) {
+      const named = rewardChanges
+        .map((c) => `  ${c.key}: ${JSON.stringify(c.from)} -> ${JSON.stringify(c.to)}`).join('\n');
+      process.stderr.write(
+        `REWARD SEMANTICS CHANGED MID-RUN -- halting before tick ${i + 1}.\n${named}\n` +
+        `Reward weights and gather_yield_food are frozen for the life of a run: a mid-run change\n` +
+        `splits this run's reward semantics with no contract-version bump, and every row already\n` +
+        `written claims contract v${REWARD_CONTRACT_VERSION}. Ecology keys remain hot-editable.\n` +
+        `To use the new table, restore the frozen values and start a NEW run.\n`
+      );
+      writeRewardSemanticsManifest({
+        at_absolute_tick: i,
+        at: new Date().toISOString(),
+        changes: rewardChanges
+      });
+      writeStatus(`reward-semantics-changed-halt:${rewardChanges[0].key}`);
+      process.exit(1);
+    }
+    // The per-hive states this round produced, held in memory for the world
+    // block's hives summary (plan ant-world-mind-learning-path, S1b). trainTick
+    // already returns the post-tick hive state, so this costs one reference per
+    // hive per round and reads no file that was not already read.
+    const roundHiveStates = {};
     for (const id of HIVE_IDS) {
-      const result = trainTick(hives[id], WORLD_STATE_PATH, networks[id], rngs[id], liveConfig, i, controllers[id]);
+      const result = trainTick(hives[id], WORLD_STATE_PATH, networks[id], rngs[id], liveConfig, i, controllers[id], { freezeHiveLearning: FREEZE_HIVE_LEARNING });
+      roundHiveStates[id] = result.hiveState;
       process.stdout.write(`[tick ${i + 1}] ${id} -> ${result.action} applied=${result.applied} starved=${result.starved} reward=${result.reward} entropy=${result.policy_entropy?.toFixed(3)}${result.forced_exploration ? ' [forced]' : ''}${result.entropy_controller_active ? ' [ctl]' : ''}\n`);
       appendRunLog({
         tick: i + 1,
         hive: id,
         action: result.action,
+        // The gather lane ('food' | 'wood'), null on every non-gather verb.
+        // A FIELD on the existing row, not a new row -- the run log's
+        // one-row-per-actor-per-tick arithmetic is unchanged. Without it a
+        // reader cannot separate the two gather actions v3 scores differently.
+        resource_key: result.resource_key,
         applied: result.applied,
+        // plan ant-sim-reward-specification-repair, S2. Persisted per row
+        // because `applied` alone can no longer answer the question that
+        // matters: a re-assertion of an already-held tile is still applied
+        // (it did not fail), so the raw claim-territory applied count will NOT
+        // fall even with the free-reward pump fully closed. The only way the
+        // new semantics are measurable is on their own terms -- which of the
+        // three outcomes actually occurred, and what the territory component
+        // of this tick's reward was IN ISOLATION (the total also carries the
+        // -2 exhaustion penalty, so the total can never prove the component
+        // was zero). 'not_applicable' / 0 for every non-territory verb.
+        territory_outcome: result.territory_outcome,
+        territory_reward_contribution: result.territory_reward_contribution,
         starved: result.starved,
         food_exhausted: result.food_exhausted,
         reward: result.reward,
@@ -180,7 +935,36 @@ async function runTicks() {
         forced_exploration: result.forced_exploration,
         entropy_controller_active: result.entropy_controller_active,
         effective_entropy_bonus_weight: result.effective_entropy_bonus_weight,
-        stockpile: result.hiveState.hive_state.stockpile
+        hive_learning_frozen: result.hive_learning_frozen,
+        stockpile: result.hiveState.hive_state.stockpile,
+        // RUN-LOG MARKER (plan world-mind-dream-communication, S4, AC2/AC12):
+        // ADDITIVE on this hive's own normal row -- trainTick() already
+        // computes these explicitly (null/false when no dream signal fired
+        // this tick, never inferred from field absence); persisted here
+        // because appendRunLog builds its row from named `result.*` fields
+        // rather than a spread, so a field trainTick() returns is not
+        // written unless named here. The 3-rows-per-tick invariant
+        // (event-schema.test.cjs) is unaffected -- no row is added or
+        // removed, only new fields on the row that was always written.
+        lane: result.lane,
+        dream_lane: result.dream_lane,
+        dream_trigger_class: result.dream_trigger_class,
+        dream_forecast_authority: result.dream_forecast_authority
+      });
+      appendDecision({
+        t: i,
+        actor: id,
+        action: result.action,
+        applied: result.applied,
+        reward: result.reward,
+        pe: result.policy_entropy,
+        peu: result.policy_entropy_post_update,
+        fe: Boolean(result.forced_exploration),
+        ctl: Boolean(result.entropy_controller_active),
+        w: result.effective_entropy_bonus_weight,
+        starved: result.starved,
+        exhausted: result.food_exhausted,
+        stock: result.hiveState.hive_state.stockpile
       });
     }
     // World mind (operator 2026-08-03): one world-level decision per round,
@@ -195,6 +979,41 @@ async function runTicks() {
     // hive's decision (no-godmode/carriage doctrine). Logged as observations.
     const worldStateNow = readWorldState(WORLD_STATE_PATH);
     if (worldStateNow) {
+      // --- WORLD-MIND LEARNING STEP (plan ant-world-mind-learning-path, S1) --
+      // Tick order, per the S0 memo section 3.4, in this exact sequence:
+      //   1. read the world state (above), after both hives have acted
+      //   2. encode it ONCE
+      //   3. if prev_features is set, re-form the prediction from it under the
+      //      CURRENT parameters and apply the masked one-step update, with
+      //      THIS tick's encoding as the target
+      //   4. decide (the decision therefore reads the UPDATED representation)
+      //   5. apply the verb and write the world
+      //   6. carry this tick's encoding forward as prev_features
+      //
+      // Step 3 sits BEFORE step 4 so that no decision is ever informed by an
+      // observation from its own future. The update draws ZERO random values
+      // and reads no clock, so the world RNG stream's state after a tick is
+      // exactly what it was before the learning path existed.
+      // Step 1b (plan ant-world-mind-learning-path, S1b): publish the hives
+      // summary into the shared world-state BEFORE encoding it. This is the
+      // encoder/state coupling repair. Two coordinates of the encoder --
+      // 4 (hive count) and 7 (starvation pressure) -- are derived from
+      // worldState.hives, and the shared file never carried that key, so both
+      // read a structural zero on every tick of every live run and two of the
+      // three masked loss coordinates were dead. The numbers come from
+      // roundHiveStates, which this round's hive loop just produced in memory:
+      // no per-hive file is re-read, and no per-hive internals cross into the
+      // shared file beyond the two aggregates the encoder reads.
+      //
+      // It is attached before the encode rather than relied upon from the file
+      // so that the value the mind sees is THIS round's, never the previous
+      // round's; writeWorldState below persists it for the dashboard and the
+      // export path.
+      worldStateNow.hives = summarizeHives(roundHiveStates);
+      const worldFeaturesNow = encodeWorldState(worldStateNow);
+      recordEncodingForLiveness(worldFeaturesNow);
+      const learn = trainWorldMind(worldMind, worldFeaturesNow, { freeze: FREEZE_WORLD_LEARNING });
+
       let wm = null;
       let source = 'harness';
       try {
@@ -209,15 +1028,80 @@ async function runTicks() {
       }
       const applied = applyWorldVerb(worldStateNow, wm, worldRng);
       writeWorldState(WORLD_STATE_PATH, worldStateNow);
-      process.stdout.write(`[tick ${i + 1}] world -> ${wm.verb} source=${source} applied=${applied.applied} (${applied.note})\n`);
+      // Step 6: carry THIS tick's encoding (taken before the verb was applied)
+      // forward as the lag. prev_features is the only carrier of the one-tick
+      // lag, which is why it lives on the mind and travels in the checkpoint.
+      worldMind.prev_features = worldFeaturesNow;
+      process.stdout.write(`[tick ${i + 1}] world -> ${wm.verb} source=${source} applied=${applied.applied} (${applied.note})${learn.updated ? ` learn_loss=${learn.loss.toFixed(6)}` : ''}\n`);
       appendRunLog({
         tick: i + 1,
         hive: 'world',
         action: wm.verb,
         source,
         applied: applied.applied,
-        note: applied.note
+        note: applied.note,
+        world_learning_updated: learn.updated,
+        world_learning_frozen: Boolean(learn.frozen),
+        world_prediction_loss: learn.loss
       });
+      appendDecision({
+        t: i,
+        actor: 'world',
+        action: wm.verb,
+        source,
+        applied: applied.applied,
+        // The note carries the RNG-drawn tile id for seed-wood/seed-stone/
+        // signal-food, which is what makes this line sensitive to a world-RNG
+        // divergence and not just to a verb divergence.
+        note: applied.note,
+        prob: wm.prob,
+        entropy: wm.entropy,
+        // The masked prediction loss and the update flag are decision-stream
+        // fields on purpose: they are functions of the learning state, so a
+        // resumed run that lost prev_features or the prediction head diverges
+        // HERE, visibly, instead of drifting silently for a hundred ticks.
+        wloss: learn.loss,
+        wupd: learn.updated,
+        // The FULL encoder output this tick (plan S1b). Recorded per row
+        // because the S1b defect was invisible in every aggregate: the loss,
+        // the entropy and the verb distribution all looked plausible while two
+        // of the three trained coordinates were structurally zero. Recording
+        // the whole vector rather than only the masked coordinates also makes
+        // the learning trajectory replayable offline -- the update is a pure
+        // deterministic function of (parameters, x_t, x_{t+1}), so a reviewer
+        // can reconstruct every step from theta_0 and this column and check the
+        // replay against the checkpointed parameters.
+        wx: worldFeaturesNow
+      });
+
+      // --- POST-TICK REPORTING PATH: GOAL EVALUATION -----------------------
+      // THE LAST THING THAT HAPPENS IN THE ROUND, and deliberately so. Every
+      // hive decision, every hive state write, the world mind's learning step,
+      // its decision, its verb application and the world-state write have all
+      // completed above. The evaluator reads the world state that this round
+      // produced and returns a verdict that goes to the trace file and to the
+      // end-of-run projection -- and to nothing else. Removing this block would
+      // change no behavior anywhere in the sim, which is exactly the property
+      // the one-way isolation constraint asks for.
+      //
+      // TICK LABELLING: the evaluation is labelled with the COMPLETED-tick
+      // count (i + 1), which is the same absolute clock the run log and the
+      // checkpoint's absolute_tick use -- so a 450-tick deadline is reached
+      // exactly when the third turn's checkpoint says day 450. The decision
+      // stream's 0-based `t` for the same round is carried alongside as
+      // decision_stream_tick so the two files can be joined without arithmetic.
+      if (GOAL_PACKET) {
+        const evaluation = goalEvaluator.evaluateGoal(GOAL_PACKET, worldStateNow, i + 1);
+        appendGoalTrace(evaluation, i);
+        lastGoalEvaluation = evaluation;
+      }
+    } else {
+      // SKIPPED WORLD BLOCK. prev_features must be RESET, not left in place:
+      // leaving it would silently stretch the lag to two ticks and the signal
+      // would become something other than what the memo describes. Resetting to
+      // null also makes the NEXT world block's update a no-op, which is the
+      // second half of the same rule.
+      worldMind.prev_features = null;
     }
     i += 1;
     const intervalMs = liveConfig.tick_interval_ms ?? TICK_INTERVAL_MS;
@@ -226,10 +1110,71 @@ async function runTicks() {
   if (FOREVER && stopRequested) {
     appendRunLog({ event: 'run-stopped', tick: i, reason: 'signal' });
   }
-  process.stdout.write(`\nDone after ${i} rounds. Final world-state: ${WORLD_STATE_PATH}\nRun log: ${RUN_LOG_PATH}\n`);
+  // Reported, not thrown: a run that has already happened is evidence, and
+  // destroying it at the last line would leave the reviewer with less than the
+  // finding itself. The harness that grades a run turns this same report into a
+  // pass/fail verdict.
+  // Printed rather than appended to the run log: run-log rows carry a contract
+  // (event-schema.js) that a diagnostic summary row would violate, and the
+  // durable record of the same fact is already stronger -- every world row in
+  // the decision stream carries `wmx`, the masked coordinates' actual values on
+  // that tick. The harness recomputes this report from those rows.
+  const liveness = livenessReport();
+  process.stdout.write(
+    `\nMasked-coordinate liveness over ${liveness.samples} sampled world ticks: ` +
+    `${liveness.live ? 'LIVE' : `DEAD-ZERO at ${JSON.stringify(liveness.dead_zero_coordinates)}`} ` +
+    `(effective dimensionality ${liveness.effective_dimensionality} of ${WORLD_LOSS_MASK.length})\n`
+  );
+  if (GOAL_PACKET) {
+    const result = writeGoalResult(i);
+    const verdict = result.reached_deadline
+      ? `DEADLINE REACHED -- goal ${result.final_evaluation && result.final_evaluation.met ? 'MET' : 'NOT MET'}`
+      : 'deadline not yet reached (partial round)';
+    process.stdout.write(
+      `\nGoal ${result.goal_id} (${result.packet_sha256.slice(0, 12)}): ${verdict}\n` +
+      (result.final_evaluation
+        ? result.final_evaluation.per_condition.map((p) =>
+          `  ${p.satisfied ? 'PASS' : 'FAIL'} ${p.condition}: measured ${p.measured} ${p.comparator} ${p.threshold} ${p.units}` +
+          `${p.source_field_present ? '' : ' [source field ABSENT from world-state -- measured as 0]'}\n`).join('')
+        : '  no evaluation ran (no world block completed)\n') +
+      `  evaluator trace: ${GOAL_TRACE_PATH} (${goalTraceRows} rows)\n` +
+      `  goal result: ${GOAL_RESULT_PATH}\n`
+    );
+  }
+  process.stdout.write(`\nDone after ${i - startTick} rounds (absolute tick ${startTick} -> ${i}). Final world-state: ${WORLD_STATE_PATH}\nRun log: ${RUN_LOG_PATH}\n`);
+  return i;
 }
 
-runTicks().catch((e) => {
-  process.stderr.write(`run-live.js error: ${e.message}\n`);
-  process.exit(1);
-});
+runTicks()
+  .then((absoluteTick) => {
+    if (NO_CHECKPOINT) {
+      process.stdout.write('checkpoint skipped (--no-checkpoint)\n');
+      return;
+    }
+    // The generation is committed AFTER the ticks, from the state as it stands
+    // at the boundary. This REPLACES the turn runner's former shell-level
+    // checkpoint block outright: mind state, RNG lineage and world state now
+    // commit together or not at all, which is the lockstep the shell copy could
+    // never provide (it copied the run tree and wrote
+    // "mind_state": "process-local-not-checkpointed").
+    const committed = commitCheckpoint(absoluteTick);
+    process.stdout.write(
+      `checkpoint committed: ${committed.dir}\n` +
+      `  generation ${committed.manifest.generation_id} day=${committed.manifest.absolute_day} ` +
+      `tick=${committed.manifest.absolute_tick} depth=${committed.manifest.parent.lineage_depth}\n` +
+      `  files ${committed.manifest.files.map((f) => `${f.path}:${f.sha256.slice(0, 12)}`).join(' ')}\n` +
+      `  manifest ${committed.manifest.manifest_self_checksum}\n`
+    );
+  })
+  .catch((e) => {
+    if (e instanceof checkpoint.CheckpointCollisionError) {
+      process.stderr.write(
+        `CHECKPOINT REFUSED: generation ${e.generationId} already exists and is committed.\n` +
+        `Never overwritten, never auto-suffixed -- choose a new run name.\n`
+      );
+      writeStatus(e.status);
+      process.exit(1);
+    }
+    process.stderr.write(`run-live.js error: ${e.message}\n${e.stack}\n`);
+    process.exit(1);
+  });

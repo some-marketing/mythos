@@ -1,0 +1,6 @@
+{
+  "schema": "TaskPlan/1.0",
+  "task_id": "fixture-leaky-plan",
+  "artifact_path": "/private/tmp/claude-501/-Users-admin-mythos/0d05f52d-3c8d-4a7f-96ac-c6f5f120e04b/scratchpad/reviewer-notes.json",
+  "notes": "review lane wrote its output to the scratchpad instead of _dev/state"
+}

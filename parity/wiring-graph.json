@@ -2809,14 +2809,14 @@
       "id": "file:.claude/project-claude.yml",
       "type": "file",
       "path": ".claude/project-claude.yml",
-      "sha256": "78bf27ec83c5fa1a7c7baae0dbc40df2df17ae229240740536f941aa11978109",
+      "sha256": "6786368b527bca263075bbc1f153928133460de2f49fb62e51402d60bfd99ba9",
       "mode": 420
     },
     {
       "id": "file:.claude/settings.json",
       "type": "file",
       "path": ".claude/settings.json",
-      "sha256": "6042890a5299561bb6d1a1aeff947362a5e12c1fb2f9fc850a1631695ecd6042",
+      "sha256": "2f5ace5b3552ef13dc51a0e9fbdb1b80ed9e7f26cfaff793ee84eae904f85207",
       "mode": 420
     },
     {
@@ -2907,7 +2907,7 @@
       "id": "file:.claude/skills/dlx/SKILL.md",
       "type": "file",
       "path": ".claude/skills/dlx/SKILL.md",
-      "sha256": "e444011399d41f889245f0fe8d355e8f95d6e78f80f8da098afa9bc27c17c765",
+      "sha256": "9eaf13821a5c904fb692a230094518672ab11265b96d013721ac61a5e32961b1",
       "mode": 420
     },
     {
@@ -2978,6 +2978,13 @@
       "type": "file",
       "path": ".claude/skills/github-auth/SKILL.md",
       "sha256": "856d73a6379cd74f6aa10b480e92a8f6c8e1ae7dc31a1ca0bcd0c31f62df7837",
+      "mode": 420
+    },
+    {
+      "id": "file:.claude/skills/go/SKILL.md",
+      "type": "file",
+      "path": ".claude/skills/go/SKILL.md",
+      "sha256": "c9cdb2579148f6ffdb8bd399223ae1f469031b03b41e93e38197a6ce7ca1a8aa",
       "mode": 420
     },
     {
@@ -9039,7 +9046,7 @@
       "id": "file:package.json",
       "type": "file",
       "path": "package.json",
-      "sha256": "4c27ab2493e2c0bb938875af277ca73469726594bc0c2d43923a2a9fa31fdd20",
+      "sha256": "a355d08171297472c9cc554f703dc7d3dc42d654a419acdf2aca31a7c3a0baa7",
       "mode": 420
     },
     {
@@ -11272,7 +11279,7 @@
       "id": "file:tools/context/context-budget.cjs",
       "type": "file",
       "path": "tools/context/context-budget.cjs",
-      "sha256": "4765a19a2b0b7c63b5e2497a4df56de26dd5be631f88e911d96a4eaed8c3e050",
+      "sha256": "810ed0e8ceabeddfef54bd35cee4e258ad05a26337ece65742319d5216452ad1",
       "mode": 420
     },
     {
@@ -13201,6 +13208,13 @@
       "mode": 420
     },
     {
+      "id": "file:tools/kernel/hooks/__tests__/bash-write-extract.test.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/__tests__/bash-write-extract.test.cjs",
+      "sha256": "ea9278818ee61efbb5619a689e260fa66181812431f0507b752912c662880621",
+      "mode": 420
+    },
+    {
       "id": "file:tools/kernel/hooks/__tests__/delegation-altitude-breaker.test.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/__tests__/delegation-altitude-breaker.test.cjs",
@@ -13226,6 +13240,13 @@
       "type": "file",
       "path": "tools/kernel/hooks/__tests__/once-per-session.test.cjs",
       "sha256": "d9a9cb4bc34f11cf3fd52d77abe9c929ca2a1fe69582e58324f3c677419356f9",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/kernel/hooks/__tests__/posttool-write-ledger.bash.test.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/__tests__/posttool-write-ledger.bash.test.cjs",
+      "sha256": "ec1dbfb24ae3dcf90933c6208848f91de86c4d2e3665e233546721ac203c5175",
       "mode": 420
     },
     {
@@ -13376,6 +13397,13 @@
       "mode": 420
     },
     {
+      "id": "file:tools/kernel/hooks/lib/bash-write-extract.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/lib/bash-write-extract.cjs",
+      "sha256": "fa5aeeab0a1f313c087149771c3964fddb10732d39433e9a22262b0fbfb32938",
+      "mode": 420
+    },
+    {
       "id": "file:tools/kernel/hooks/lib/compat-dispatch.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/lib/compat-dispatch.cjs",
@@ -13414,7 +13442,7 @@
       "id": "file:tools/kernel/hooks/posttool-write-ledger.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/posttool-write-ledger.cjs",
-      "sha256": "61f2221247701d47e364ad018394c6cda9600128bfecde3ea554e553700ed40d",
+      "sha256": "aa76672084427cc26763e1e8cf107da74d3cc862f3c317f69b0f85ab39122c9b",
       "mode": 420
     },
     {
@@ -14174,6 +14202,20 @@
       "mode": 420
     },
     {
+      "id": "file:tools/lib/__tests__/canonical-root.test.cjs",
+      "type": "file",
+      "path": "tools/lib/__tests__/canonical-root.test.cjs",
+      "sha256": "76195c4a13561871ceec3696c355287b414f6679cb59a9745126ca555186afdf",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/lib/__tests__/durable-artifact.test.cjs",
+      "type": "file",
+      "path": "tools/lib/__tests__/durable-artifact.test.cjs",
+      "sha256": "794cc7d36cb02993f122cc629f4fd7252f3964f95d92eb46eaa454e8e118cccd",
+      "mode": 420
+    },
+    {
       "id": "file:tools/lib/canonical-root.cjs",
       "type": "file",
       "path": "tools/lib/canonical-root.cjs",
@@ -14185,6 +14227,13 @@
       "type": "file",
       "path": "tools/lib/creds.config.schema.json",
       "sha256": "e57c1f6ddc6c1fc055815b638655eb901af37fe2bee479f43d38c220cc1fc35d",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/lib/durable-artifact.cjs",
+      "type": "file",
+      "path": "tools/lib/durable-artifact.cjs",
+      "sha256": "6cad7f085b113f8c4e34a73ec5cfbe2635fc4d4f719d8d5fba45f2d9d4c4e2a4",
       "mode": 420
     },
     {
@@ -15805,6 +15854,13 @@
       "mode": 420
     },
     {
+      "id": "file:tools/parity/surgical-baseline-repair.cjs",
+      "type": "file",
+      "path": "tools/parity/surgical-baseline-repair.cjs",
+      "sha256": "b8658b58e77af2c964f2a6e097f3ce0d4ba74f68b1743a74d3b3739750152d24",
+      "mode": 420
+    },
+    {
       "id": "file:tools/parity/validate-host-activation.cjs",
       "type": "file",
       "path": "tools/parity/validate-host-activation.cjs",
@@ -16827,6 +16883,13 @@
       "mode": 420
     },
     {
+      "id": "file:tools/sessions/__tests__/session-end-boundary-log.test.cjs",
+      "type": "file",
+      "path": "tools/sessions/__tests__/session-end-boundary-log.test.cjs",
+      "sha256": "5f304c4d0012f12eee3281fa0e91e5651b24a383fcdd22e52a6f4e0cd02f371d",
+      "mode": 420
+    },
+    {
       "id": "file:tools/sessions/__tests__/session-end-crash-floor.test.cjs",
       "type": "file",
       "path": "tools/sessions/__tests__/session-end-crash-floor.test.cjs",
@@ -16879,7 +16942,7 @@
       "id": "file:tools/sessions/lib/__tests__/active-session-registry-filter.test.js",
       "type": "file",
       "path": "tools/sessions/lib/__tests__/active-session-registry-filter.test.js",
-      "sha256": "c0821ba0c336939a738b61d81f50e851d10337e5017f7c65dd5f5d360921fc0e",
+      "sha256": "d2c8e40fe5ea585f78e4726c02baf490da2d26649163d3d284cafd7aad278b3c",
       "mode": 420
     },
     {
@@ -16921,8 +16984,8 @@
       "id": "file:tools/sessions/session-end-boundary-log.cjs",
       "type": "file",
       "path": "tools/sessions/session-end-boundary-log.cjs",
-      "sha256": "a9f9b6f62e2f7d90ba483b6a85f1d8790c2fca8feff5b2c715dcbf4ffa82973b",
-      "mode": 493
+      "sha256": "b4abbcd90f1001b414ac5e29e9b338c59cef77496317a257054d9742e00d38ca",
+      "mode": 420
     },
     {
       "id": "file:tools/sessions/session-start-cross-session-consumer.cjs",
@@ -17320,7 +17383,7 @@
       "id": "file:tools/signals/lib/actor-registry.js",
       "type": "file",
       "path": "tools/signals/lib/actor-registry.js",
-      "sha256": "99c3c333b22910aafa8662ec0c0295d232f141ce341d52418e46baa9c24be49d",
+      "sha256": "a5bf95b13b0dc4cb151eb40936defb1d66d4652401c1745b18782a51825d4e4c",
       "mode": 420
     },
     {
@@ -18388,6 +18451,55 @@
       "mode": 420
     },
     {
+      "id": "file:tools/verify/__tests__/__fixtures__/clean-root/_dev/state/task-plan-reviews/clean-plan.json",
+      "type": "file",
+      "path": "tools/verify/__tests__/__fixtures__/clean-root/_dev/state/task-plan-reviews/clean-plan.json",
+      "sha256": "a6396ea03bb523cd3f948519c695ea3aa41dafacc6bd83bdda3e8d789fd56ba9",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/active-sessions/session-1/write_log.json",
+      "type": "file",
+      "path": "tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/active-sessions/session-1/write_log.json",
+      "sha256": "a12ccd795989417bca0aa0d050e9369fed7691f5975fa3f337b080112bef2336",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/active-sessions/session-2/write_log.json",
+      "type": "file",
+      "path": "tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/active-sessions/session-2/write_log.json",
+      "sha256": "cfbe0af982008de3ec59b8560869c6575ea06e9254b5e134d9cded5773159b79",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/active-sessions/session-3/write_log.json",
+      "type": "file",
+      "path": "tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/active-sessions/session-3/write_log.json",
+      "sha256": "3e3d024fb969b42912da79a48acd30214c3746918e2d23bb6dcf22fd764973c2",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/task-plan-reviews/control-plan.json",
+      "type": "file",
+      "path": "tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/task-plan-reviews/control-plan.json",
+      "sha256": "83a5650e0a6cf8dda67cdeb18e490ce2994a975c83138bef9b2746f4480f67a6",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/task-plan-reviews/exempt-plan.json",
+      "type": "file",
+      "path": "tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/task-plan-reviews/exempt-plan.json",
+      "sha256": "6a98fc82fb71064e5ac908f58f747f11c27ccf65e1debe937fb5b8dba2f235cb",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/task-plan-reviews/leaky-plan.json",
+      "type": "file",
+      "path": "tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/task-plan-reviews/leaky-plan.json",
+      "sha256": "3bf34a75f8aadb6b8ad1a9a6926a92b467d6781802e7934148cccec95ff8319d",
+      "mode": 420
+    },
+    {
       "id": "file:tools/verify/__tests__/build-sovereign-core-final-receipt.test.cjs",
       "type": "file",
       "path": "tools/verify/__tests__/build-sovereign-core-final-receipt.test.cjs",
@@ -18420,6 +18532,13 @@
       "type": "file",
       "path": "tools/verify/__tests__/run-sovereign-core-validation.test.cjs",
       "sha256": "dcccb9be0414a2dae556562711dea15499931f66af985ef7fe648f6299da4c4b",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/verify/__tests__/scratch-leak-check.test.cjs",
+      "type": "file",
+      "path": "tools/verify/__tests__/scratch-leak-check.test.cjs",
+      "sha256": "a863c7956c158f58cf7a2853d4c7ea10267136781496e013fd0ec917195d8fd5",
       "mode": 420
     },
     {
@@ -18805,6 +18924,13 @@
       "type": "file",
       "path": "tools/verify/schemas/verification-signal-v1.1.schema.json",
       "sha256": "a7b6256416beddc30f4dde525ce4226e5a65692a7294946244f68ecd732655b6",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/verify/scratch-leak-check.cjs",
+      "type": "file",
+      "path": "tools/verify/scratch-leak-check.cjs",
+      "sha256": "4c2ce30bda9e18282fe45fd64a437175dd1670be3e0153735868dec973e536eb",
       "mode": 420
     },
     {
@@ -19877,67 +20003,67 @@
       "name": "wordpress/seo-validation"
     },
     {
-      "id": "hook:PostToolUse:616",
+      "id": "hook:PostToolUse:618",
       "type": "hook",
       "event": "PostToolUse",
       "command_sha256": "e395bd31a35362065002007d044e98d86e484bf829d16ebe2027da8a928db52c"
     },
     {
-      "id": "hook:PreToolUse:613",
+      "id": "hook:PreToolUse:615",
       "type": "hook",
       "event": "PreToolUse",
       "command_sha256": "ce97f4fd7eb07f52a0e9c6352fab2ce0e803f0920ef184d8f42261a46580103b"
     },
     {
-      "id": "hook:SessionEnd:620",
-      "type": "hook",
-      "event": "SessionEnd",
-      "command_sha256": "4ee05b68abff34325a3950761939e20cf2391c7b29d640b29b95233d29943fd4"
-    },
-    {
-      "id": "hook:SessionEnd:621",
+      "id": "hook:SessionEnd:622",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "35974852e367c31bae49591ac0aa4afd518ec624f233743462e37c4c3863b1ed"
     },
     {
-      "id": "hook:SessionEnd:622",
+      "id": "hook:SessionEnd:623",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "519f522b04afb8471aa7e7ca117deb8af91976de62b5c1f5f4f6f9f60c8c217f"
     },
     {
-      "id": "hook:SessionStart:617",
+      "id": "hook:SessionEnd:624",
       "type": "hook",
-      "event": "SessionStart",
-      "command_sha256": "26962e5976f5c689361f18050bb4e718d507df72590fbbc620e356cde47cf86b"
-    },
-    {
-      "id": "hook:SessionStart:618",
-      "type": "hook",
-      "event": "SessionStart",
-      "command_sha256": "00253242784e7853b94e1125e7c69f31085961b2dd7b3d1fcb6b4c79d94e9baf"
+      "event": "SessionEnd",
+      "command_sha256": "4ee05b68abff34325a3950761939e20cf2391c7b29d640b29b95233d29943fd4"
     },
     {
       "id": "hook:SessionStart:619",
       "type": "hook",
       "event": "SessionStart",
+      "command_sha256": "26962e5976f5c689361f18050bb4e718d507df72590fbbc620e356cde47cf86b"
+    },
+    {
+      "id": "hook:SessionStart:620",
+      "type": "hook",
+      "event": "SessionStart",
+      "command_sha256": "00253242784e7853b94e1125e7c69f31085961b2dd7b3d1fcb6b4c79d94e9baf"
+    },
+    {
+      "id": "hook:SessionStart:621",
+      "type": "hook",
+      "event": "SessionStart",
       "command_sha256": "c738ce0e54e375f17b97f1186b95e5fd1125c0675d2f3e9238e872062f5b7076"
     },
     {
-      "id": "hook:Stop:614",
+      "id": "hook:Stop:616",
       "type": "hook",
       "event": "Stop",
       "command_sha256": "c0c0282a10c1ff35c525d7786ceb380c853b678494f400dbf1fc178cdddcbb19"
     },
     {
-      "id": "hook:SubagentStop:623",
+      "id": "hook:SubagentStop:625",
       "type": "hook",
       "event": "SubagentStop",
       "command_sha256": "4ca0f2529c8dd4023ade83508a1e40a1728dbdcfa35aadf9ea953cf8ac9a587d"
     },
     {
-      "id": "hook:UserPromptSubmit:615",
+      "id": "hook:UserPromptSubmit:617",
       "type": "hook",
       "event": "UserPromptSubmit",
       "command_sha256": "d647b60c73e5962cae00cf1cf2bd11d28472fdb8c47074a2e62cabf0e7e89545"
@@ -21098,6 +21224,11 @@
       "id": "manifest-path:.claude/skills/github-auth/SKILL.md",
       "type": "manifest-registration",
       "declared_target": ".claude/skills/github-auth/SKILL.md"
+    },
+    {
+      "id": "manifest-path:.claude/skills/go/SKILL.md",
+      "type": "manifest-registration",
+      "declared_target": ".claude/skills/go/SKILL.md"
     },
     {
       "id": "manifest-path:.claude/skills/google-ads-mcp/SKILL.md",
@@ -23226,6 +23357,12 @@
       "command_sha256": "39ba178cbd78c323b52981baecaa52bfb71ef6e0f02c43257cf31831ac6d2462"
     },
     {
+      "id": "package-script:verify:scratch-leak",
+      "type": "package-script",
+      "name": "verify:scratch-leak",
+      "command_sha256": "1d30b952bbb4f0c10707caea310f35e7581d97740e984ed43484b619599345f8"
+    },
+    {
       "id": "package-script:verify:site-audit",
       "type": "package-script",
       "name": "verify:site-audit",
@@ -23986,6 +24123,11 @@
       "name": "github-auth"
     },
     {
+      "id": "skill-definition:go",
+      "type": "skill-definition",
+      "name": "go"
+    },
+    {
       "id": "skill-definition:google-ads-mcp",
       "type": "skill-definition",
       "name": "google-ads-mcp"
@@ -24239,6 +24381,16 @@
       "resolution": "tracked"
     },
     {
+      "id": "010876cb845f35566878388ce954b78793a623b94a4f14f61c4e8bccc1a304cc",
+      "type": "hook-target",
+      "from": "hook:SessionStart:621",
+      "to": "file:tools/user/inject-mirror.cjs",
+      "target": "tools/user/inject-mirror.cjs",
+      "required": true,
+      "declared_target": "tools/user/inject-mirror.cjs",
+      "event": "SessionStart"
+    },
+    {
       "id": "010b30cc4fc72e0a32d1a8eeb743fc9727def556ce07ba0f75086bc91f020b4f",
       "type": "mcp-server",
       "from": "mcp:google-ads",
@@ -24345,6 +24497,15 @@
       "target": "tools/context/context-budget.cjs",
       "required": true,
       "specifier": "./context-budget.cjs"
+    },
+    {
+      "id": "01e42f5a8905175d57f2c8f2a25fefa229a0a12a853a127aba40d60036c63c87",
+      "type": "static-import",
+      "from": "file:tools/sessions/__tests__/session-end-boundary-log.test.cjs",
+      "to": "file:tools/sessions/session-end-boundary-log.cjs",
+      "target": "tools/sessions/session-end-boundary-log.cjs",
+      "required": true,
+      "specifier": "../session-end-boundary-log.cjs"
     },
     {
       "id": "01e4391a87b1b090edcfc179aa6d4a57dc104142b508c3d525d3b8ecce777b06",
@@ -24454,16 +24615,6 @@
       "required": true,
       "declared_target": "tools/preflight/host-state.cjs",
       "resolution": "tracked"
-    },
-    {
-      "id": "032652b5807e818e520336e31111255ec351ead520390074e8df788307e16e44",
-      "type": "hook-target",
-      "from": "hook:SessionStart:619",
-      "to": "file:tools/user/inject-mirror.cjs",
-      "target": "tools/user/inject-mirror.cjs",
-      "required": true,
-      "declared_target": "tools/user/inject-mirror.cjs",
-      "event": "SessionStart"
     },
     {
       "id": "03383245624918fafd9c46678ba987d1dad6aa28f9919f2b7557679e5362d43f",
@@ -26387,6 +26538,15 @@
       "specifier": "./append-ledger-entry.cjs"
     },
     {
+      "id": "1844229e3a8fb887cade77d91bbdd317549b4642bf841881dbeb85ba2fb49fe1",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/posttool-write-ledger.bash.test.cjs",
+      "to": "file:tools/kernel/hooks/pretool-git-custody-gate.cjs",
+      "target": "tools/kernel/hooks/pretool-git-custody-gate.cjs",
+      "required": true,
+      "specifier": "../pretool-git-custody-gate.cjs"
+    },
+    {
       "id": "18492496f67a95712583bd9fc9126fbb39b0fd42e9027427120b4de8575d6104",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/gemini-self-help.md",
@@ -26457,16 +26617,6 @@
       "target": "tools/parity/lib.cjs",
       "required": true,
       "specifier": "../lib.cjs"
-    },
-    {
-      "id": "1909cc17103b08eed700ee849752a52708ccbd25773256d7e24db1976c9d1c53",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:620",
-      "to": "file:tools/sessions/session-end-boundary-log.cjs",
-      "target": "tools/sessions/session-end-boundary-log.cjs",
-      "required": true,
-      "declared_target": "tools/sessions/session-end-boundary-log.cjs",
-      "event": "SessionEnd"
     },
     {
       "id": "191445d53a553bb0a802ece9dfb0e31082d4999bbe485d46fb3c07cb6f4c724d",
@@ -27000,16 +27150,6 @@
       "target": "frameworks/deliverables/version-reconciliation/.claude/skills/version-reconciliation",
       "required": true,
       "declared_target": "frameworks/deliverables/version-reconciliation/.claude/skills/version-reconciliation"
-    },
-    {
-      "id": "1e78926a99aeac3bae4afe089ad424d2534c8ce4bc2ca05cfc7b9d7506c5b65e",
-      "type": "hook-target",
-      "from": "hook:Stop:614",
-      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
-      "target": "tools/kernel/hooks/dispatch-stop.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-stop.cjs",
-      "event": "Stop"
     },
     {
       "id": "1e7c7dfed14c2424a756e8c3b2a8093dce4bccf045c6eb880e3edcbe9e1592cb",
@@ -28635,6 +28775,15 @@
       "specifier": "../../claude/lib/hook-telemetry.cjs"
     },
     {
+      "id": "30a956de284a552fe624d99f03fb6e5a7e641afaf1a2b4d8fa14aaf9b7b42453",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/posttool-write-ledger.bash.test.cjs",
+      "to": "file:tools/context/context-budget.cjs",
+      "target": "tools/context/context-budget.cjs",
+      "required": true,
+      "specifier": "../../../context/context-budget.cjs"
+    },
+    {
       "id": "30ba502cb40f26b4ce8d4233557ccdad630efb549d4e10912049c3d8037300ff",
       "type": "manifest-target",
       "from": "manifest-path:.claude/skills/state-reconciliation-preamble/SKILL.md",
@@ -29471,6 +29620,16 @@
       "target": "tools/signals/lib/signal-lifecycle.js",
       "required": true,
       "specifier": "./lib/signal-lifecycle.js"
+    },
+    {
+      "id": "3898743addae021125ffd83b4e179a7aa179469f975f5e7826eba36bb6a64490",
+      "type": "hook-target",
+      "from": "hook:SubagentStop:625",
+      "to": "file:.claude/hooks/subagent-telemetry-writer.cjs",
+      "target": ".claude/hooks/subagent-telemetry-writer.cjs",
+      "required": true,
+      "declared_target": ".claude/hooks/subagent-telemetry-writer.cjs",
+      "event": "SubagentStop"
     },
     {
       "id": "389af8c09ddcf5918dd0128a09bd3bec58b34ea19cd4093eec7c0d3b4e0bdb1b",
@@ -30613,6 +30772,15 @@
       "specifier": "../../verify/lib/paste-target-prompt.cjs"
     },
     {
+      "id": "43e9c5aa7258c6ad72071de54d3a6efe2c7e0369661329b3f1da159e9d6c44b1",
+      "type": "static-import",
+      "from": "file:tools/verify/__tests__/scratch-leak-check.test.cjs",
+      "to": "file:tools/verify/scratch-leak-check.cjs",
+      "target": "tools/verify/scratch-leak-check.cjs",
+      "required": true,
+      "specifier": "../scratch-leak-check.cjs"
+    },
+    {
       "id": "43ee438114b4f49da7ade18ba1c6c8bb351eb5dde24de37ec3f72de41cac8f8c",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/orchestrate.md",
@@ -30647,6 +30815,15 @@
       "target": ".claude/commands/discord-access.md",
       "required": true,
       "declared_target": ".claude/commands/discord-access.md"
+    },
+    {
+      "id": "443ea9b941d7b5aba13259a11bae8def9f88bdedc28d04a37860720f8ec2be38",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/posttool-write-ledger.bash.test.cjs",
+      "to": "file:tools/kernel/hooks/posttool-write-ledger.cjs",
+      "target": "tools/kernel/hooks/posttool-write-ledger.cjs",
+      "required": true,
+      "specifier": "../posttool-write-ledger.cjs"
     },
     {
       "id": "447e2668498bc989b63af9b47c967680d4646bdfe02019d9f8310dc5be254c5a",
@@ -31217,6 +31394,16 @@
       "target": "tools/kernel/hooks/pretool-mutation-plan-gate.cjs",
       "required": true,
       "specifier": "./pretool-mutation-plan-gate.cjs"
+    },
+    {
+      "id": "4a69ed07bd29f06e426d1b2403f1c6ed5c650a88d8d4bd7aa4c00470bfa5199f",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:623",
+      "to": "file:tools/context/repo-awareness-closeout.cjs",
+      "target": "tools/context/repo-awareness-closeout.cjs",
+      "required": true,
+      "declared_target": "tools/context/repo-awareness-closeout.cjs",
+      "event": "SessionEnd"
     },
     {
       "id": "4a93eac1a376004015b9691bae752e2d10c1406553f7771721ea7a8fd54b1386",
@@ -32634,6 +32821,16 @@
       "declared_target": "instructions/canonical/commands/new-framework.yaml"
     },
     {
+      "id": "59720247cd9aa4505470b0b65d6d2571e1a979e801a270fc30c19ae3db4e9e2a",
+      "type": "hook-target",
+      "from": "hook:UserPromptSubmit:617",
+      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
+      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "event": "UserPromptSubmit"
+    },
+    {
       "id": "59a947778fe4d3ee88e566d21127a1d72557d7acd45ac676bfd239ac632153ab",
       "type": "static-import",
       "from": "file:tools/mcp/delesign/client.js",
@@ -33199,16 +33396,6 @@
       "resolution": "tracked"
     },
     {
-      "id": "5fbc4412c7c4769d01433fecf3bab6135107b23b772f57e377e7b80f49a2305c",
-      "type": "hook-target",
-      "from": "hook:SessionStart:618",
-      "to": "file:tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "required": true,
-      "declared_target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "event": "SessionStart"
-    },
-    {
       "id": "5fbe99239bbba3690e23b2585db4f419337e61bc61b0e3bd74f1168c68c571a9",
       "type": "static-import",
       "from": "file:tools/kernel/enforcement-home/validate-enforcement-home.cjs",
@@ -33289,6 +33476,15 @@
       "target": "tools/planning/lib/resolve-task-plan.js",
       "required": true,
       "specifier": "../planning/lib/resolve-task-plan"
+    },
+    {
+      "id": "607d1f7122688650593e2edf97e49755852501259f390d3e0f86e0970b26cbb2",
+      "type": "static-import",
+      "from": "file:tools/lib/__tests__/durable-artifact.test.cjs",
+      "to": "file:tools/lib/durable-artifact.cjs",
+      "target": "tools/lib/durable-artifact.cjs",
+      "required": true,
+      "specifier": "../durable-artifact.cjs"
     },
     {
       "id": "609a481858ad5fc2dad45834db0a2403a3aa35125366a0f1c37b571bbbb01f3a",
@@ -34099,6 +34295,15 @@
       "specifier": "./lib/fs"
     },
     {
+      "id": "69caa7b90e2572ebeb86fdee84e061c8f7e1935114b56460a2dbd1d740c48899",
+      "type": "skill-definition-file",
+      "from": "skill-definition:go",
+      "to": "file:.claude/skills/go/SKILL.md",
+      "target": ".claude/skills/go/SKILL.md",
+      "required": true,
+      "declared_target": ".claude/skills/go/SKILL.md"
+    },
+    {
       "id": "6a0864e3e3017f910bccc0dd1c41b13230c768878650f68d383eb48e99bbff91",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/cross-session.md",
@@ -34445,6 +34650,16 @@
       "target": "tools/kernel/hooks/posttool-write-ledger.cjs",
       "required": true,
       "specifier": "../posttool-write-ledger.cjs"
+    },
+    {
+      "id": "6d00d4ee85d43a86503c1d70ffb236c552b82dfc3dc788880531feb158ffb8e6",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:622",
+      "to": "file:tools/hooks/session-lifecycle/session-end-close.cjs",
+      "target": "tools/hooks/session-lifecycle/session-end-close.cjs",
+      "required": true,
+      "declared_target": "tools/hooks/session-lifecycle/session-end-close.cjs",
+      "event": "SessionEnd"
     },
     {
       "id": "6d0272d6f7e6f08fe3965bce188ec3804dfd4e41a7492e16f3c48ac0a8f9a498",
@@ -35899,6 +36114,16 @@
       "target": "tools/ant-hive-world/harness.js",
       "required": true,
       "specifier": "../harness.js"
+    },
+    {
+      "id": "7bdb05ea8533d3cdc97faaec135096cedb3295e7f03810fba777ffe743461f51",
+      "type": "hook-target",
+      "from": "hook:SessionStart:620",
+      "to": "file:tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "required": true,
+      "declared_target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "event": "SessionStart"
     },
     {
       "id": "7c099639a7af92e5b3d9e2a4f98fa01e7d3c5463d3ac6c9994a2b4def8acde93",
@@ -38154,6 +38379,15 @@
       "specifier": "./lib/actor-auto"
     },
     {
+      "id": "9435a5acc31a6c9f06903afaf73be008ba91e9c3b5caf3e3d2f366e61f2db380",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/posttool-write-ledger.cjs",
+      "to": "file:tools/kernel/hooks/lib/bash-write-extract.cjs",
+      "target": "tools/kernel/hooks/lib/bash-write-extract.cjs",
+      "required": true,
+      "specifier": "./lib/bash-write-extract.cjs"
+    },
+    {
       "id": "943967af6aa5f06fc02205adac24fb0e4f2f2b9785866708917538e1a90ba114",
       "type": "command-alias-authority",
       "from": "command-definition:spellbook",
@@ -38317,16 +38551,6 @@
       "specifier": "../loop-protocol/policy"
     },
     {
-      "id": "95fec4b5370c4d71cff4c9f5cc319092aed92940355e2026c14df8480e7ce65a",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:621",
-      "to": "file:tools/hooks/session-lifecycle/session-end-close.cjs",
-      "target": "tools/hooks/session-lifecycle/session-end-close.cjs",
-      "required": true,
-      "declared_target": "tools/hooks/session-lifecycle/session-end-close.cjs",
-      "event": "SessionEnd"
-    },
-    {
       "id": "9603dfcbe3fdca4404af73fadbd6331c8ef047fe70affb1cc3188d977e87ed33",
       "type": "manifest-target",
       "from": "manifest-path:.claude/agents/new-export-target-agent.md",
@@ -38469,6 +38693,15 @@
       "target": "tools/ai-bridge/lib/dispatch-contract.js",
       "required": true,
       "specifier": "./dispatch-contract"
+    },
+    {
+      "id": "97a590f6dfc8dcbca3cc1b34eb2ccb1b83dc5a6fbd2bf8cda6ef21f5e91258c6",
+      "type": "manifest-target",
+      "from": "manifest-path:.claude/skills/go/SKILL.md",
+      "to": "file:.claude/skills/go/SKILL.md",
+      "target": ".claude/skills/go/SKILL.md",
+      "required": true,
+      "declared_target": ".claude/skills/go/SKILL.md"
     },
     {
       "id": "97c3de57744d2645f3192454937402443976d47f983c9ce5a8095b881bcc5781",
@@ -38679,16 +38912,6 @@
       "target": "tools/ai-bridge/adapters/openai-compatible.js",
       "required": true,
       "specifier": "../../ai-bridge/adapters/openai-compatible"
-    },
-    {
-      "id": "9a0427a29ee8e81ab9f3036ba8fc32e47f58563f9a816f36aec478dd3cd01e01",
-      "type": "hook-target",
-      "from": "hook:SubagentStop:623",
-      "to": "file:.claude/hooks/subagent-telemetry-writer.cjs",
-      "target": ".claude/hooks/subagent-telemetry-writer.cjs",
-      "required": true,
-      "declared_target": ".claude/hooks/subagent-telemetry-writer.cjs",
-      "event": "SubagentStop"
     },
     {
       "id": "9a11190ac8ce51732d94d70a098b39d6c15d87f7084dbe96c2b2a4a2475f84ce",
@@ -39518,6 +39741,15 @@
       "specifier": "../planning/lib/resolve-task-plan"
     },
     {
+      "id": "a10b8b45eb1e1793185ccf7a32ff1075096afd2cc0fe4563943bcce1dde455e9",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/bash-write-extract.test.cjs",
+      "to": "file:tools/kernel/hooks/lib/bash-write-extract.cjs",
+      "target": "tools/kernel/hooks/lib/bash-write-extract.cjs",
+      "required": true,
+      "specifier": "../lib/bash-write-extract.cjs"
+    },
+    {
       "id": "a1776166484cc1221bb5030ffdf7f81e225870ff8f3220555e361d83ed038b0d",
       "type": "command-definition-file",
       "from": "command-definition:arc-rest",
@@ -39839,6 +40071,16 @@
       "specifier": "../world-state.js"
     },
     {
+      "id": "a5754924edf1c8c5be543147e686d47ce1e64d28634537bfbd6b654061001de4",
+      "type": "package-script-target",
+      "from": "package-script:verify:scratch-leak",
+      "to": "file:tools/verify/scratch-leak-check.cjs",
+      "target": "tools/verify/scratch-leak-check.cjs",
+      "required": true,
+      "declared_target": "tools/verify/scratch-leak-check.cjs",
+      "resolution": "tracked"
+    },
+    {
       "id": "a581c9f9e5d26b334d7ef2f231af72b81f5f7e398b3954b71eca5f0f43db98b9",
       "type": "static-import",
       "from": "file:tools/signals/watch-codex-bridge.js",
@@ -40003,14 +40245,14 @@
       "specifier": "../../reconciliation/lib/normalized-content-hash.cjs"
     },
     {
-      "id": "a793f2318060efdabc78f59e3c8422aabe10c2bf635f0b2f148017cd52445bbf",
+      "id": "a73cba37b5d3bcf6692a838e1c010e32aac89531fe7f055ce424af8a54b5bbb3",
       "type": "hook-target",
-      "from": "hook:PostToolUse:616",
-      "to": "file:tools/kernel/hooks/dispatch-posttool.cjs",
-      "target": "tools/kernel/hooks/dispatch-posttool.cjs",
+      "from": "hook:SessionEnd:624",
+      "to": "file:tools/sessions/session-end-boundary-log.cjs",
+      "target": "tools/sessions/session-end-boundary-log.cjs",
       "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-posttool.cjs",
-      "event": "PostToolUse"
+      "declared_target": "tools/sessions/session-end-boundary-log.cjs",
+      "event": "SessionEnd"
     },
     {
       "id": "a7a3283534d10e3a2a5638f4f9429c82348a3831c36ee3f2fa1926f541809563",
@@ -40020,6 +40262,16 @@
       "target": ".claude/commands/scry.md",
       "required": true,
       "declared_target": ".claude/commands/scry.md"
+    },
+    {
+      "id": "a7a460041535a987d121a417b308e5a3f548b5e755d71bbf13022fc0d8bfe448",
+      "type": "hook-target",
+      "from": "hook:Stop:616",
+      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
+      "target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "event": "Stop"
     },
     {
       "id": "a7be0bf0272974b419b9976895e2ba496de178fb47641c071605fb92af8a3554",
@@ -40561,6 +40813,15 @@
       "required": true,
       "declared_target": "tools/instructions/validate-manifest.js",
       "resolution": "tracked"
+    },
+    {
+      "id": "ad7434ac898a6823da36cd28efee7806df1ee9e7bba46b382572138d165da687",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/posttool-write-ledger.bash.test.cjs",
+      "to": "file:tools/kernel/hooks/lib/bash-write-extract.cjs",
+      "target": "tools/kernel/hooks/lib/bash-write-extract.cjs",
+      "required": true,
+      "specifier": "../lib/bash-write-extract.cjs"
     },
     {
       "id": "ad74f89bc3e8661462d3ac8b88e07d7a004758764a73948e1e9189cf1c065dd2",
@@ -41146,16 +41407,6 @@
       "specifier": "../../verify/lib/signal.cjs"
     },
     {
-      "id": "b2d51e4900de768e06a07ca9be6967b71706830550084637da2b2f259ad02ee2",
-      "type": "hook-target",
-      "from": "hook:UserPromptSubmit:615",
-      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
-      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-userprompt.cjs",
-      "event": "UserPromptSubmit"
-    },
-    {
       "id": "b2e88b1e1c4d4462cffac621167688535604905840c756a595acdeca7dac50f0",
       "type": "static-import",
       "from": "file:tools/planning/capture-outcome-delta.js",
@@ -41209,6 +41460,15 @@
       "target": "tools/signals/schemas/recursive-actor-work-order.schema.json",
       "required": true,
       "specifier": "tools/signals/schemas/recursive-actor-work-order.schema.json"
+    },
+    {
+      "id": "b39af63c753d1208690e09c2aabd6dcd8a62f6627b6a840122d807425bfbbad4",
+      "type": "static-import",
+      "from": "file:tools/signals/lib/actor-registry.js",
+      "to": "file:tools/lib/canonical-root.cjs",
+      "target": "tools/lib/canonical-root.cjs",
+      "required": true,
+      "specifier": "../../lib/canonical-root.cjs"
     },
     {
       "id": "b3c878670ff5a99f9b4783ea81fd01d5f546861cfb58dacab92215081bc63db1",
@@ -43647,16 +43907,6 @@
       "specifier": "tools/kernel/work-custody/actor-work-lease.schema.json"
     },
     {
-      "id": "cd707e1de09bcbb22c16e4eb0434aa135be3fc122387a249161f481af2ad5569",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:622",
-      "to": "file:tools/context/repo-awareness-closeout.cjs",
-      "target": "tools/context/repo-awareness-closeout.cjs",
-      "required": true,
-      "declared_target": "tools/context/repo-awareness-closeout.cjs",
-      "event": "SessionEnd"
-    },
-    {
       "id": "cd74e1ef9bb7fc9874e21e77e371859a52268eb991b2a03912a3f89aad2f33be",
       "type": "operation-canonical",
       "from": "operation:clean-house",
@@ -44112,6 +44362,16 @@
       "declared_target": ".claude/commands/route.md"
     },
     {
+      "id": "d2bf50ad880cf88f1a6e3aeea8e4400edf3ec6396af559ca8d82f3998e253aa0",
+      "type": "hook-target",
+      "from": "hook:PostToolUse:618",
+      "to": "file:tools/kernel/hooks/dispatch-posttool.cjs",
+      "target": "tools/kernel/hooks/dispatch-posttool.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-posttool.cjs",
+      "event": "PostToolUse"
+    },
+    {
       "id": "d2c83857e6f1794e65f75aadd6efaad3667549bac541221d8a7ec5d832ac2692",
       "type": "static-import",
       "from": "file:tools/mcp/delesign/config.js",
@@ -44119,6 +44379,15 @@
       "target": "tools/mcp/shared/env.js",
       "required": true,
       "specifier": "../shared/env"
+    },
+    {
+      "id": "d30e7dc2373c655e5bf20d023b7594f1322c1b9b9c315da0c51e5e1ed1acb35d",
+      "type": "static-import",
+      "from": "file:tools/parity/surgical-baseline-repair.cjs",
+      "to": "file:tools/parity/lib.cjs",
+      "target": "tools/parity/lib.cjs",
+      "required": true,
+      "specifier": "./lib.cjs"
     },
     {
       "id": "d314292870b89894da668e7a3336d6dd2f24cad3b8f14d950924a45056bfa6d4",
@@ -45632,6 +45901,16 @@
       "resolution": "tracked"
     },
     {
+      "id": "e21840f6ff7aacac1a776c3853c7b11d142bde244098b46fdb96865f2451c98d",
+      "type": "hook-target",
+      "from": "hook:PreToolUse:615",
+      "to": "file:tools/kernel/hooks/dispatch-pretool.cjs",
+      "target": "tools/kernel/hooks/dispatch-pretool.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-pretool.cjs",
+      "event": "PreToolUse"
+    },
+    {
       "id": "e238aa3df00f3b1d9156cef8f10067189627e200904f8980dfd77294c1237f6f",
       "type": "manifest-target",
       "from": "manifest-path:.claude/skills/canonical-path-authority-gate/SKILL.md",
@@ -46414,16 +46693,6 @@
       "authority": "rank-up"
     },
     {
-      "id": "ea9e82f601729eacb5eecfedaffa0a4e4a0784611d6dc8a85eb055e48d4264dc",
-      "type": "hook-target",
-      "from": "hook:PreToolUse:613",
-      "to": "file:tools/kernel/hooks/dispatch-pretool.cjs",
-      "target": "tools/kernel/hooks/dispatch-pretool.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-pretool.cjs",
-      "event": "PreToolUse"
-    },
-    {
       "id": "eaa3746c7079d5d6bf2a35d2b684aaec4c2bd6b3194389224f8cd3de9dda2f83",
       "type": "schema-consumer",
       "from": "file:tools/autonomy/actor-registry.example.json",
@@ -46708,6 +46977,16 @@
       "resolution": "tracked"
     },
     {
+      "id": "ed5cc2c555d88e14fc038e8157ff344bd9d9482f83048ad10113828a48c37731",
+      "type": "hook-target",
+      "from": "hook:SessionStart:619",
+      "to": "file:tools/kernel/hooks/dispatch-session-start.cjs",
+      "target": "tools/kernel/hooks/dispatch-session-start.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-session-start.cjs",
+      "event": "SessionStart"
+    },
+    {
       "id": "ed5d7e52fc999f49e6328d98a4484d5c95a69055856d9c4abf86a918c244dfb3",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/concept-dispatch.md",
@@ -46898,16 +47177,6 @@
       "target": "tools/bundle/lib/schema-validator.js",
       "required": true,
       "specifier": "./lib/schema-validator.js"
-    },
-    {
-      "id": "ef417ca371722e78f48c2c741c224f8dd44a2e88aeeac6f83d8882d2470c7f04",
-      "type": "hook-target",
-      "from": "hook:SessionStart:617",
-      "to": "file:tools/kernel/hooks/dispatch-session-start.cjs",
-      "target": "tools/kernel/hooks/dispatch-session-start.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-session-start.cjs",
-      "event": "SessionStart"
     },
     {
       "id": "ef44e87961538dab9cea45ab2de82cd59808ade12350bf0a01f75d2b48330838",
@@ -48492,6 +48761,15 @@
       "specifier": "../../../signals/lib/signal-normalization-proposal"
     },
     {
+      "id": "fd087368cd12b9b5472f18353128ba1a43772c4f187c938aac378d46c6159ca6",
+      "type": "static-import",
+      "from": "file:tools/lib/__tests__/canonical-root.test.cjs",
+      "to": "file:tools/lib/canonical-root.cjs",
+      "target": "tools/lib/canonical-root.cjs",
+      "required": true,
+      "specifier": "../canonical-root.cjs"
+    },
+    {
       "id": "fd2339268873453b7e5a29c6a3ba29f31cada839b95d9183f7cfc9a5790eb825",
       "type": "operation-canonical",
       "from": "operation:execute-plan",
@@ -48803,8 +49081,8 @@
     }
   ],
   "counts": {
-    "nodes": 3705,
-    "edges": 2715,
+    "nodes": 3726,
+    "edges": 2730,
     "unresolved": 0
   }
 }

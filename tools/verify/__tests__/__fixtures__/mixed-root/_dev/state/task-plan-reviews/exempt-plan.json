@@ -1,0 +1,7 @@
+{
+  "schema": "TaskPlan/1.0",
+  "task_id": "fixture-exempt-plan",
+  "scratch_allowed": true,
+  "artifact_path": "/tmp/deliberately-transient/exempt-output.json",
+  "notes": "explicit escape hatch: this artifact intentionally cites a transient path"
+}

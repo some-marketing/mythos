@@ -1,0 +1,6 @@
+{
+  "schema": "TaskPlan/1.0",
+  "task_id": "fixture-clean-plan",
+  "artifact_path": "_dev/state/task-plan-reviews/clean-plan.json",
+  "related_artifact": "_dev/reports/analysis/clean-review.md"
+}

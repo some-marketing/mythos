@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "3b504f315157737cec6c48316ecdcdfa5aff1afa0fc73a395dc28e83e6fe20e7",
+    "expected_tree_sha256": "d088f6260d9075f99c8361097dbc86b4247da31e4d476153108449a5157ac8e8",
     "expected_files": [
       {
         "path": ".claude/agents/aside.md",
@@ -1057,12 +1057,12 @@
       },
       {
         "path": ".claude/project-claude.yml",
-        "sha256": "78bf27ec83c5fa1a7c7baae0dbc40df2df17ae229240740536f941aa11978109",
+        "sha256": "6786368b527bca263075bbc1f153928133460de2f49fb62e51402d60bfd99ba9",
         "mode": 420
       },
       {
         "path": ".claude/settings.json",
-        "sha256": "6042890a5299561bb6d1a1aeff947362a5e12c1fb2f9fc850a1631695ecd6042",
+        "sha256": "2f5ace5b3552ef13dc51a0e9fbdb1b80ed9e7f26cfaff793ee84eae904f85207",
         "mode": 420
       },
       {
@@ -1127,7 +1127,7 @@
       },
       {
         "path": ".claude/skills/dlx/SKILL.md",
-        "sha256": "e444011399d41f889245f0fe8d355e8f95d6e78f80f8da098afa9bc27c17c765",
+        "sha256": "9eaf13821a5c904fb692a230094518672ab11265b96d013721ac61a5e32961b1",
         "mode": 420
       },
       {
@@ -1178,6 +1178,11 @@
       {
         "path": ".claude/skills/github-auth/SKILL.md",
         "sha256": "856d73a6379cd74f6aa10b480e92a8f6c8e1ae7dc31a1ca0bcd0c31f62df7837",
+        "mode": 420
+      },
+      {
+        "path": ".claude/skills/go/SKILL.md",
+        "sha256": "c9cdb2579148f6ffdb8bd399223ae1f469031b03b41e93e38197a6ce7ca1a8aa",
         "mode": 420
       },
       {
@@ -5507,7 +5512,7 @@
       },
       {
         "path": "package.json",
-        "sha256": "4c27ab2493e2c0bb938875af277ca73469726594bc0c2d43923a2a9fa31fdd20",
+        "sha256": "a355d08171297472c9cc554f703dc7d3dc42d654a419acdf2aca31a7c3a0baa7",
         "mode": 420
       },
       {
@@ -5537,7 +5542,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "9168f114996062ab7552e824e253b61e34f151a8b235966b72066a52544a98aa",
+        "sha256": "4497b4b23720d3e6818cbd4243f8a07c287bdf315001f04b3ded4fa118b4e2c6",
         "mode": 420
       },
       {
@@ -7107,7 +7112,7 @@
       },
       {
         "path": "tools/context/context-budget.cjs",
-        "sha256": "4765a19a2b0b7c63b5e2497a4df56de26dd5be631f88e911d96a4eaed8c3e050",
+        "sha256": "810ed0e8ceabeddfef54bd35cee4e258ad05a26337ece65742319d5216452ad1",
         "mode": 420
       },
       {
@@ -8486,6 +8491,11 @@
         "mode": 420
       },
       {
+        "path": "tools/kernel/hooks/__tests__/bash-write-extract.test.cjs",
+        "sha256": "ea9278818ee61efbb5619a689e260fa66181812431f0507b752912c662880621",
+        "mode": 420
+      },
+      {
         "path": "tools/kernel/hooks/__tests__/delegation-altitude-breaker.test.cjs",
         "sha256": "4076672ad041bd076eaea7da274f599926f52dc952ac7d5b192b8e3b1589a750",
         "mode": 420
@@ -8503,6 +8513,11 @@
       {
         "path": "tools/kernel/hooks/__tests__/once-per-session.test.cjs",
         "sha256": "d9a9cb4bc34f11cf3fd52d77abe9c929ca2a1fe69582e58324f3c677419356f9",
+        "mode": 420
+      },
+      {
+        "path": "tools/kernel/hooks/__tests__/posttool-write-ledger.bash.test.cjs",
+        "sha256": "ec1dbfb24ae3dcf90933c6208848f91de86c4d2e3665e233546721ac203c5175",
         "mode": 420
       },
       {
@@ -8611,6 +8626,11 @@
         "mode": 420
       },
       {
+        "path": "tools/kernel/hooks/lib/bash-write-extract.cjs",
+        "sha256": "fa5aeeab0a1f313c087149771c3964fddb10732d39433e9a22262b0fbfb32938",
+        "mode": 420
+      },
+      {
         "path": "tools/kernel/hooks/lib/compat-dispatch.cjs",
         "sha256": "51ba7f6df865d020e40059233afcc365069376ba6659948c0b6a574fa4d1ccac",
         "mode": 420
@@ -8637,7 +8657,7 @@
       },
       {
         "path": "tools/kernel/hooks/posttool-write-ledger.cjs",
-        "sha256": "61f2221247701d47e364ad018394c6cda9600128bfecde3ea554e553700ed40d",
+        "sha256": "aa76672084427cc26763e1e8cf107da74d3cc862f3c317f69b0f85ab39122c9b",
         "mode": 420
       },
       {
@@ -9181,6 +9201,16 @@
         "mode": 420
       },
       {
+        "path": "tools/lib/__tests__/canonical-root.test.cjs",
+        "sha256": "76195c4a13561871ceec3696c355287b414f6679cb59a9745126ca555186afdf",
+        "mode": 420
+      },
+      {
+        "path": "tools/lib/__tests__/durable-artifact.test.cjs",
+        "sha256": "794cc7d36cb02993f122cc629f4fd7252f3964f95d92eb46eaa454e8e118cccd",
+        "mode": 420
+      },
+      {
         "path": "tools/lib/canonical-root.cjs",
         "sha256": "6c0aa832432ed30f2ff778675b42ca4e57b3d774163119aaaebce2b1959e5442",
         "mode": 420
@@ -9188,6 +9218,11 @@
       {
         "path": "tools/lib/creds.config.schema.json",
         "sha256": "e57c1f6ddc6c1fc055815b638655eb901af37fe2bee479f43d38c220cc1fc35d",
+        "mode": 420
+      },
+      {
+        "path": "tools/lib/durable-artifact.cjs",
+        "sha256": "6cad7f085b113f8c4e34a73ec5cfbe2635fc4d4f719d8d5fba45f2d9d4c4e2a4",
         "mode": 420
       },
       {
@@ -10346,6 +10381,11 @@
         "mode": 420
       },
       {
+        "path": "tools/parity/surgical-baseline-repair.cjs",
+        "sha256": "b8658b58e77af2c964f2a6e097f3ce0d4ba74f68b1743a74d3b3739750152d24",
+        "mode": 420
+      },
+      {
         "path": "tools/parity/validate-host-activation.cjs",
         "sha256": "09afd4bce8265b006e21e301aa73d07983f000bc97456b4b811c27c343b817ba",
         "mode": 420
@@ -11076,6 +11116,11 @@
         "mode": 420
       },
       {
+        "path": "tools/sessions/__tests__/session-end-boundary-log.test.cjs",
+        "sha256": "5f304c4d0012f12eee3281fa0e91e5651b24a383fcdd22e52a6f4e0cd02f371d",
+        "mode": 420
+      },
+      {
         "path": "tools/sessions/__tests__/session-end-crash-floor.test.cjs",
         "sha256": "2b1880d4c35dd32bb27225a811439ac52f4f8dca2c61b7da5005b8d5f3af55b4",
         "mode": 420
@@ -11112,7 +11157,7 @@
       },
       {
         "path": "tools/sessions/lib/__tests__/active-session-registry-filter.test.js",
-        "sha256": "c0821ba0c336939a738b61d81f50e851d10337e5017f7c65dd5f5d360921fc0e",
+        "sha256": "d2c8e40fe5ea585f78e4726c02baf490da2d26649163d3d284cafd7aad278b3c",
         "mode": 420
       },
       {
@@ -11142,8 +11187,8 @@
       },
       {
         "path": "tools/sessions/session-end-boundary-log.cjs",
-        "sha256": "a9f9b6f62e2f7d90ba483b6a85f1d8790c2fca8feff5b2c715dcbf4ffa82973b",
-        "mode": 493
+        "sha256": "b4abbcd90f1001b414ac5e29e9b338c59cef77496317a257054d9742e00d38ca",
+        "mode": 420
       },
       {
         "path": "tools/sessions/session-start-cross-session-consumer.cjs",
@@ -11427,7 +11472,7 @@
       },
       {
         "path": "tools/signals/lib/actor-registry.js",
-        "sha256": "99c3c333b22910aafa8662ec0c0295d232f141ce341d52418e46baa9c24be49d",
+        "sha256": "a5bf95b13b0dc4cb151eb40936defb1d66d4652401c1745b18782a51825d4e4c",
         "mode": 420
       },
       {
@@ -12191,6 +12236,41 @@
         "mode": 420
       },
       {
+        "path": "tools/verify/__tests__/__fixtures__/clean-root/_dev/state/task-plan-reviews/clean-plan.json",
+        "sha256": "a6396ea03bb523cd3f948519c695ea3aa41dafacc6bd83bdda3e8d789fd56ba9",
+        "mode": 420
+      },
+      {
+        "path": "tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/active-sessions/session-1/write_log.json",
+        "sha256": "a12ccd795989417bca0aa0d050e9369fed7691f5975fa3f337b080112bef2336",
+        "mode": 420
+      },
+      {
+        "path": "tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/active-sessions/session-2/write_log.json",
+        "sha256": "cfbe0af982008de3ec59b8560869c6575ea06e9254b5e134d9cded5773159b79",
+        "mode": 420
+      },
+      {
+        "path": "tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/active-sessions/session-3/write_log.json",
+        "sha256": "3e3d024fb969b42912da79a48acd30214c3746918e2d23bb6dcf22fd764973c2",
+        "mode": 420
+      },
+      {
+        "path": "tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/task-plan-reviews/control-plan.json",
+        "sha256": "83a5650e0a6cf8dda67cdeb18e490ce2994a975c83138bef9b2746f4480f67a6",
+        "mode": 420
+      },
+      {
+        "path": "tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/task-plan-reviews/exempt-plan.json",
+        "sha256": "6a98fc82fb71064e5ac908f58f747f11c27ccf65e1debe937fb5b8dba2f235cb",
+        "mode": 420
+      },
+      {
+        "path": "tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/task-plan-reviews/leaky-plan.json",
+        "sha256": "3bf34a75f8aadb6b8ad1a9a6926a92b467d6781802e7934148cccec95ff8319d",
+        "mode": 420
+      },
+      {
         "path": "tools/verify/__tests__/build-sovereign-core-final-receipt.test.cjs",
         "sha256": "1e1df803b566ac5af618642426f9220321721faaed0fde307e4c8e8c45a66d32",
         "mode": 420
@@ -12213,6 +12293,11 @@
       {
         "path": "tools/verify/__tests__/run-sovereign-core-validation.test.cjs",
         "sha256": "dcccb9be0414a2dae556562711dea15499931f66af985ef7fe648f6299da4c4b",
+        "mode": 420
+      },
+      {
+        "path": "tools/verify/__tests__/scratch-leak-check.test.cjs",
+        "sha256": "a863c7956c158f58cf7a2853d4c7ea10267136781496e013fd0ec917195d8fd5",
         "mode": 420
       },
       {
@@ -12488,6 +12573,11 @@
       {
         "path": "tools/verify/schemas/verification-signal-v1.1.schema.json",
         "sha256": "a7b6256416beddc30f4dde525ce4226e5a65692a7294946244f68ecd732655b6",
+        "mode": 420
+      },
+      {
+        "path": "tools/verify/scratch-leak-check.cjs",
+        "sha256": "4c2ce30bda9e18282fe45fd64a437175dd1670be3e0153735868dec973e536eb",
         "mode": 420
       },
       {
@@ -13206,12 +13296,12 @@
     ]
   },
   "wiring": {
-    "package_script_count": 203,
+    "package_script_count": 204,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "9168f114996062ab7552e824e253b61e34f151a8b235966b72066a52544a98aa",
-    "graph_nodes": 3705,
-    "graph_edges": 2715
+    "graph_sha256": "4497b4b23720d3e6818cbd4243f8a07c287bdf315001f04b3ded4fa118b4e2c6",
+    "graph_nodes": 3726,
+    "graph_edges": 2730
   },
   "runtime_exclusions": [
     ".git/**",
@@ -13313,9 +13403,6 @@
     ],
     "d5078f1ab80e9c7dfb4b1b31b22ddf60ac4d15f9da999d963741bf7e9c4027e3": [
       "tools/export-public/config/denylist-mythos.json"
-    ],
-    "aea9ab15a7a5f286ba5340437cd23ecd8e7ea414fce90165594414490f380946": [
-      "tools/sessions/lib/__tests__/active-session-registry-filter.test.js"
     ]
   },
   "security_evidence_artifacts": [
@@ -13329,6 +13416,11 @@
       "tools/kernel/lib/__tests__/data-sensitivity-classifier.test.js",
       "tools/signals/lib/__tests__/run-openrouter-bridge.test.js",
       "tools/signals/run-openrouter-bridge.js"
+    ],
+    "/Users/": [
+      "tools/lib/__tests__/canonical-root.test.cjs",
+      "tools/lib/__tests__/durable-artifact.test.cjs",
+      "tools/lib/durable-artifact.cjs"
     ]
   },
   "amendment_required_for_update": "mythos-full-parity-port"

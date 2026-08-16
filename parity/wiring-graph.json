@@ -10873,7 +10873,7 @@
       "id": "file:tools/codex/prompt-system/claude-prompt-pack-artifact-retention-and-compaction.md",
       "type": "file",
       "path": "tools/codex/prompt-system/claude-prompt-pack-artifact-retention-and-compaction.md",
-      "sha256": "23dd481ba431bdc058ed5f22e666d18fc5098bb67ce7081b7b20d5d17f10eecd",
+      "sha256": "88b0200eb6b6fa286a116f8f7bdd10e90e8cdd48b8058211da0c07ca24b6435e",
       "mode": 420
     },
     {
@@ -10887,7 +10887,7 @@
       "id": "file:tools/codex/prompt-system/claude-prompt-pack-claude-code-features-integration.md",
       "type": "file",
       "path": "tools/codex/prompt-system/claude-prompt-pack-claude-code-features-integration.md",
-      "sha256": "8b2a1fe03d03977400a0c6911a09e5032d3baee1a1d3e24ae5be7b34c17978ab",
+      "sha256": "30dd4125554d09e6d4951b3df3904e8299d510a17706c6254bc68d2ece10cfdf",
       "mode": 420
     },
     {
@@ -10915,21 +10915,21 @@
       "id": "file:tools/codex/prompt-system/claude-prompt-pack-framework-learning-loop-enforcement.md",
       "type": "file",
       "path": "tools/codex/prompt-system/claude-prompt-pack-framework-learning-loop-enforcement.md",
-      "sha256": "6a3656685b9ea9e08ce81b64c90c2b802ec707957e387f480f5f632757ad5bc9",
+      "sha256": "9f376289b310041a9d47a6e801fe1e7abf07f4cce8b54c8bf2f0fb5df43a92a2",
       "mode": 420
     },
     {
       "id": "file:tools/codex/prompt-system/claude-prompt-pack-framework-post-workflow-hooks.md",
       "type": "file",
       "path": "tools/codex/prompt-system/claude-prompt-pack-framework-post-workflow-hooks.md",
-      "sha256": "b22f580c3b5c85098b7bb19ed4171faf551e1ab42283707fa0fb9bfc0d1fcfa6",
+      "sha256": "9c04c20cde72c35b46d629d37a13b48d90098f6879621872f1bc47ba82b54bfc",
       "mode": 420
     },
     {
       "id": "file:tools/codex/prompt-system/claude-prompt-pack-harness-capability-abstraction.md",
       "type": "file",
       "path": "tools/codex/prompt-system/claude-prompt-pack-harness-capability-abstraction.md",
-      "sha256": "7e19d6db2c47a1e42f9772e1c792ac70ef2d984bb114c0f53e775ae81fcd9738",
+      "sha256": "a342abc21ac87cadce94aecbf677f64ec0cf52422b17fc3919ec132795e6be0b",
       "mode": 420
     },
     {

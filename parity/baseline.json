@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "af5684a26152a1dd989b6db737725f8edcd25220513ef888592854c728531620",
+    "expected_tree_sha256": "3b504f315157737cec6c48316ecdcdfa5aff1afa0fc73a395dc28e83e6fe20e7",
     "expected_files": [
       {
         "path": ".claude/agents/aside.md",
@@ -5537,7 +5537,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "1943f8368508fd580f27c9d5c627762dab5ec975ab62da68749a3d5d53ff5c37",
+        "sha256": "9168f114996062ab7552e824e253b61e34f151a8b235966b72066a52544a98aa",
         "mode": 420
       },
       {
@@ -6822,7 +6822,7 @@
       },
       {
         "path": "tools/codex/prompt-system/claude-prompt-pack-artifact-retention-and-compaction.md",
-        "sha256": "23dd481ba431bdc058ed5f22e666d18fc5098bb67ce7081b7b20d5d17f10eecd",
+        "sha256": "88b0200eb6b6fa286a116f8f7bdd10e90e8cdd48b8058211da0c07ca24b6435e",
         "mode": 420
       },
       {
@@ -6832,7 +6832,7 @@
       },
       {
         "path": "tools/codex/prompt-system/claude-prompt-pack-claude-code-features-integration.md",
-        "sha256": "8b2a1fe03d03977400a0c6911a09e5032d3baee1a1d3e24ae5be7b34c17978ab",
+        "sha256": "30dd4125554d09e6d4951b3df3904e8299d510a17706c6254bc68d2ece10cfdf",
         "mode": 420
       },
       {
@@ -6852,17 +6852,17 @@
       },
       {
         "path": "tools/codex/prompt-system/claude-prompt-pack-framework-learning-loop-enforcement.md",
-        "sha256": "6a3656685b9ea9e08ce81b64c90c2b802ec707957e387f480f5f632757ad5bc9",
+        "sha256": "9f376289b310041a9d47a6e801fe1e7abf07f4cce8b54c8bf2f0fb5df43a92a2",
         "mode": 420
       },
       {
         "path": "tools/codex/prompt-system/claude-prompt-pack-framework-post-workflow-hooks.md",
-        "sha256": "b22f580c3b5c85098b7bb19ed4171faf551e1ab42283707fa0fb9bfc0d1fcfa6",
+        "sha256": "9c04c20cde72c35b46d629d37a13b48d90098f6879621872f1bc47ba82b54bfc",
         "mode": 420
       },
       {
         "path": "tools/codex/prompt-system/claude-prompt-pack-harness-capability-abstraction.md",
-        "sha256": "7e19d6db2c47a1e42f9772e1c792ac70ef2d984bb114c0f53e775ae81fcd9738",
+        "sha256": "a342abc21ac87cadce94aecbf677f64ec0cf52422b17fc3919ec132795e6be0b",
         "mode": 420
       },
       {
@@ -13209,7 +13209,7 @@
     "package_script_count": 203,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "1943f8368508fd580f27c9d5c627762dab5ec975ab62da68749a3d5d53ff5c37",
+    "graph_sha256": "9168f114996062ab7552e824e253b61e34f151a8b235966b72066a52544a98aa",
     "graph_nodes": 3705,
     "graph_edges": 2715
   },

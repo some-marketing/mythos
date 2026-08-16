@@ -7,7 +7,7 @@
     "default": "Resolve the argument as a task plan, prompt plan id, signal scope, signal path, review artifact path, or active workstream scope before choosing a route",
     "arguments": {
       "<task-id>": "Resolve through the shared task-plan resolver used by /run-plan and /orchestrate",
-      "<prompt-plan-id>": "Resolve through _dev/prompts/prompt-plan-registry.json, preserving child task plans as leaf authority",
+      "<prompt-plan-id>": "Resolve through tools/codex/prompt-system/prompt-plan-registry.json, preserving child task plans as leaf authority",
       "<signal-scope>": "Resolve the latest live HandoffSignal/1.0 for the scope, then route through /follow-signal if it is executable",
       "<path>": "Inspect the artifact type directly: task plan, prompt plan, signal, review artifact, debrief, or unsupported artifact",
       "active-workstreams": "Use /review-active-workstreams and /normalize-signals as the truth surface before choosing a next workstream"

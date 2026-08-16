@@ -22,7 +22,7 @@ const path = require('path');
 const REPO_ROOT = path.resolve(__dirname, '../../..');
 
 const INCLUDE_GLOBS = [
-  '_dev/prompts/*.md',
+  'tools/codex/prompt-system/*.md',
   '_dev/reports/analysis/*-bridge-prompt__*.md',
   '_dev/reports/bridge-prompts/*.md',
   '*handoff*.md',
@@ -39,7 +39,7 @@ const EXCLUDE_GLOBS = [
   '**/archive/**',
   'framework_candidates/**',
   'frameworks/**/.claude/**',
-  '_dev/prompts/templates/**',
+  'tools/codex/prompt-system/templates/**',
   'node_modules/**',
   '.git/**'
 ];

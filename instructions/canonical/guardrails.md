@@ -461,7 +461,7 @@ Each major sequence closeout must produce at minimum:
 2. **Validation evidence** (`_dev/reports/analysis/closeout-validation__<sequence-id>.json`)
 3. **Clear-readiness signal** (`_dev/reports/signals/clear-readiness__<sequence-id>.json`)
 
-See `_dev/prompts/claude-master-run-order.md` for the full artifact contract schema.
+See `tools/codex/prompt-system/claude-master-run-order.md` for the full artifact contract schema.
 
 ### Intermodel Coordination Artifacts
 

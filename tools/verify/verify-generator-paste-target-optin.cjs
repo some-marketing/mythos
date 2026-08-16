@@ -578,7 +578,7 @@ function resolveTargetExpression(expr, source, callOffset, depth) {
     // future writer like:
     //   const filePath = '_dev/state/x.json';
     //   function write(filePath) { fs.writeFileSync(filePath, body); }
-    //   write('_dev/prompts/foo.md');
+    //   write('tools/codex/prompt-system/foo.md');
     // would resolve to the safe outer var instead of the call-site arg.
     const enclosing = findEnclosingFunction(source, callOffset);
     if (enclosing && enclosing.params.includes(head)) {

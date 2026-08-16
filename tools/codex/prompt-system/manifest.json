@@ -1,0 +1,695 @@
+{
+  "name": "guild-spellwright-prompts",
+  "version": "0.1.0",
+  "description": "The spellwright's bench: reusable dev-time prompt packs, the registry, and the master run order \u2014 the exemplar machinery for authoring and sequencing a guild's own prompt system.",
+  "owner": "_dev/prompts",
+  "prompts": [
+    {
+      "id": "claude-health-remediation-playbook",
+      "title": "Claude Health Remediation Playbook",
+      "path": "tools/codex/prompt-system/claude-health-remediation-playbook.md",
+      "purpose": "Meta playbook defining the audit gap categories and recommended execution order for the four remediation sub-packs (semantic verification, project health alignment, candidate replay hardening, semantic output audit).",
+      "inputs": {
+        "primary_evidence": [
+          "frameworks/wordpress/design-research/manifest.json",
+          "frameworks/wordpress/qa/manifest.json",
+          "tools/verify/verify-framework.cjs",
+          "tools/workspace/validate-workspace.js",
+          "tools/workspace/replay-candidate.js",
+          "tools/workspace/scaffold-candidate.js",
+          "tools/workspace/validate-output.js",
+          "tools/workspace/lib/output-contract.js",
+          "package.json",
+          "_dev/reports/analysis/CODEX_REVIEW_RESPONSE.md"
+        ]
+      },
+      "outputs": {
+        "primary_goal": "Bring Mythos from structurally healthy to meaningfully auditable by closing verifier, health, replay, and output blind spots",
+        "required_evidence": [
+          "gap_categories_defined",
+          "execution_order_defined",
+          "sub_pack_linkage_verified"
+        ]
+      }
+    },
+    {
+      "id": "claude-semantic-verification",
+      "title": "Semantic Verification And Framework Coverage",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-semantic-verification.md",
+      "purpose": "Fix verifier blind spots around prompt-chain resolution and incomplete framework coverage so semantic drift is mechanically detected.",
+      "inputs": {
+        "playbook": "tools/codex/prompt-system/claude-health-remediation-playbook.md",
+        "required_repo_files": [
+          "tools/verify/verify-framework.cjs",
+          "package.json",
+          "frameworks/wordpress/design-research/manifest.json",
+          "frameworks/wordpress/qa/manifest.json",
+          "tests/instructions/framework-manifest-schema.test.js"
+        ]
+      },
+      "outputs": {
+        "primary_goal": "Framework verification that fails on unresolved prompt_chain references and covers all registered frameworks",
+        "required_evidence": [
+          "verifier_detects_unresolved_prompts",
+          "verify_all_covers_all_frameworks",
+          "design_research_drift_fixed",
+          "tests_added",
+          "validation_results"
+        ]
+      }
+    },
+    {
+      "id": "claude-project-health-alignment",
+      "title": "Project Health And Runtime Alignment",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-project-health-alignment.md",
+      "purpose": "Fix project/workspace health checks that rely on generic assumptions instead of framework contracts and runtime reality.",
+      "inputs": {
+        "playbook": "tools/codex/prompt-system/claude-health-remediation-playbook.md",
+        "required_repo_files": [
+          "tools/workspace/validate-workspace.js",
+          "tools/workspace/scaffold-project.js",
+          "tools/workspace/validate-output.js",
+          "tools/workspace/lib/output-contract.js",
+          ".claude/commands/project-status.md",
+          ".claude/commands/system-status.md"
+        ]
+      },
+      "outputs": {
+        "primary_goal": "Health checks aligned to framework-specific runtime and output contracts",
+        "required_evidence": [
+          "generic_assumptions_reduced",
+          "runtime_alignment_improved",
+          "status_commands_aligned",
+          "validation_results"
+        ]
+      }
+    },
+    {
+      "id": "claude-candidate-replay-hardening",
+      "title": "Candidate Replay And Promotion Hardening",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-candidate-replay-hardening.md",
+      "purpose": "Turn candidate replay from a readiness stub into a more trustworthy promotion gate with stronger evidence quality.",
+      "inputs": {
+        "playbook": "tools/codex/prompt-system/claude-health-remediation-playbook.md",
+        "required_repo_files": [
+          "tools/workspace/replay-candidate.js",
+          "tools/workspace/scaffold-candidate.js",
+          "tools/workspace/lib/capture-candidate.js",
+          "tools/workspace/promote-candidate.js",
+          "guides/framework-promotion.md"
+        ]
+      },
+      "outputs": {
+        "primary_goal": "Replay and promotion readiness based on evidence rather than placeholders and weak heuristics",
+        "required_evidence": [
+          "replay_gate_hardened",
+          "promotion_evidence_improved",
+          "honest_about_true_replay_limits",
+          "validation_results"
+        ]
+      }
+    },
+    {
+      "id": "claude-semantic-output-audit",
+      "title": "Semantic Output Audit Hardening",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-semantic-output-audit.md",
+      "purpose": "Improve output review beyond pure file existence and schema checks while staying honest about the limits of deterministic validation.",
+      "inputs": {
+        "playbook": "tools/codex/prompt-system/claude-health-remediation-playbook.md",
+        "required_repo_files": [
+          "tools/workspace/validate-output.js",
+          "tools/workspace/lib/output-contract.js",
+          ".claude/skills/execute-framework/workflows/review.md",
+          ".claude/agents/output-reviewer.md",
+          ".claude/agents/completion-auditor.md"
+        ]
+      },
+      "outputs": {
+        "primary_goal": "Explicit mechanical/semantic validation boundary with stronger evidence from review outputs",
+        "required_evidence": [
+          "validation_boundary_explicit",
+          "review_expectations_strengthened",
+          "evidence_requirements_improved",
+          "validation_results"
+        ]
+      }
+    },
+    {
+      "id": "claude-master-run-order",
+      "title": "Claude Master Run Order",
+      "path": "tools/codex/prompt-system/claude-master-run-order.md",
+      "purpose": "Master orchestration document for the current prompt-system model. It defines the canonical top-level workflow and supporting classifications, but it is not itself a reusable prompt pack.",
+      "inputs": {
+        "canonical_main_workflow": "tools/codex/prompt-system/claude-prompt-pack-master-loop-closure.md",
+        "bounded_child_workflow": "tools/codex/prompt-system/claude-prompt-pack-operational-loop-closure.md",
+        "planning_support_pack": "tools/codex/prompt-system/claude-prompt-pack-multiagent-planning-and-compliance.md",
+        "planning_truth": "_dev/reports/analysis/plan-pipeline.md",
+        "active_workstream_truth": "_dev/reports/analysis/plan-active-workstreams.md",
+        "repo_direction": "whats-next.md"
+      },
+      "outputs": {
+        "primary_goal": "Truthful top-level orchestration and classification of the current prompt-system workflow model",
+        "required_evidence": [
+          "canonical_main_workflow_declared",
+          "supporting_vs_historical_classification",
+          "stop_rules",
+          "current_state_truth"
+        ]
+      }
+    },
+    {
+      "id": "claude-subagent-autonomy-and-template-efficiency",
+      "title": "Subagent Autonomy & Template Efficiency",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-subagent-autonomy-and-template-efficiency.md",
+      "purpose": "Two-track optimization: (A) expand autonomous subagent usage to reduce interactive friction across framework lifecycle, and (B) extract coded templates from scaffold tools to reduce Claude token consumption on predictable boilerplate.",
+      "inputs": {
+        "already_complete": [
+          ".claude/guardrails.md (subagent autonomy policy added)",
+          ".claude/skills/execute-framework/workflows/execute.md (mode auto added)",
+          ".claude/skills/execute-framework/workflows/review.md (mode auto added)"
+        ],
+        "primary_targets": [
+          "tools/workspace/scaffold-candidate.js",
+          "tools/workspace/scaffold-project.js",
+          "tools/workspace/scaffold-workspace.js",
+          "tools/workspace/lib/workspace.js",
+          ".claude/skills/manage-frameworks/workflows/audit-framework.md",
+          ".claude/skills/manage-frameworks/workflows/scaffold-framework.md",
+          ".claude/skills/manage-frameworks/workflows/replay-framework.md",
+          ".claude/skills/extract-skill/SKILL.md"
+        ]
+      },
+      "outputs": {
+        "primary_goal": "70% token reduction on scaffold operations, 65-90% faster validation via parallel subagents, 67% fewer user interaction gates in capture-to-promote pipeline",
+        "required_evidence": [
+          "template_files_created",
+          "scaffold_output_byte_identical",
+          "parallel_subagent_spawn_verified",
+          "command_registration_verified",
+          "friction_reduction_measured"
+        ]
+      }
+    },
+    {
+      "id": "claude-meta-staged-remediation-framework",
+      "title": "Dev-Only Meta Staged Remediation Framework",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-meta-staged-remediation-framework.md",
+      "purpose": "Extract the current prompt-system orchestration into a deterministic dev-only `meta` framework candidate that can execute one bounded remediation stage at a time with explicit artifacts and go/no-go decisions.",
+      "inputs": {
+        "source_of_truth": "tools/codex/prompt-system/claude-master-run-order.md",
+        "supporting_playbook": "tools/codex/prompt-system/claude-health-remediation-playbook.md",
+        "first_stage_pack": "tools/codex/prompt-system/claude-prompt-pack-semantic-verification.md",
+        "framework_model": "frameworks/meta/execution-normalization/manifest.json",
+        "framework_references": [
+          ".claude/skills/manage-frameworks/references/framework-anatomy.md",
+          ".claude/skills/manage-frameworks/references/prompt-chain-patterns.md",
+          "guides/framework-promotion.md"
+        ]
+      },
+      "outputs": {
+        "primary_goal": "Dev-only staged-remediation framework candidate with deterministic Stage 1 execution slice and explicit artifact contracts",
+        "required_evidence": [
+          "candidate_root_created",
+          "framework_contract_defined",
+          "stage_1_pilot_defined",
+          "dev_only_restriction_preserved",
+          "validation_results"
+        ]
+      }
+    },
+    {
+      "id": "claude-framework-learning-loop-enforcement",
+      "title": "Framework Learning Loop Enforcement",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-framework-learning-loop-enforcement.md",
+      "purpose": "Make explicit user-feedback and system-signal learning mandatory across framework capture, candidate, replay, promotion, and automation-offloading flows.",
+      "inputs": {
+        "doctrine": "_dev/concepts/LEARNING_AND_AUTOMATION_DOCTRINE.md",
+        "architecture": "_dev/FRAMEWORK_LEARNING_LOOP_ARCHITECTURE.md",
+        "implementation_plan": "_dev/FRAMEWORK_LEARNING_LOOP_IMPLEMENTATION_PLAN.md",
+        "primary_guide": "guides/framework-promotion.md",
+        "required_repo_files": [
+          "tools/workspace/capture-task.js",
+          "tools/workspace/normalize-capture.js",
+          "tools/workspace/scaffold-candidate.js",
+          "tools/workspace/replay-candidate.js",
+          "tools/workspace/candidate-status.js",
+          "tools/workspace/promote-candidate.js",
+          "tools/workspace/lib/capture-candidate.js",
+          "tools/workspace/schemas/"
+        ]
+      },
+      "outputs": {
+        "primary_goal": "Framework lifecycle that records learning explicitly and gates promotion/automation on evidence",
+        "required_evidence": [
+          "feedback_artifacts_added",
+          "learning_ledger_defined",
+          "promotion_gate_extended",
+          "docs_updated",
+          "validation_results"
+        ]
+      }
+    },
+    {
+      "id": "claude-framework-post-workflow-hooks",
+      "title": "Framework Post-Workflow Hooks",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-framework-post-workflow-hooks.md",
+      "purpose": "Implement automatic deterministic tail hooks for framework lifecycle workflows so manifests, validations, lifecycle state, and audit artifacts stay current without auto-promoting changes.",
+      "inputs": {
+        "architecture": "_dev/FRAMEWORK_POST_WORKFLOW_HOOKS_ARCHITECTURE.md",
+        "implementation_plan": "_dev/FRAMEWORK_POST_WORKFLOW_HOOKS_IMPLEMENTATION_PLAN.md",
+        "doctrine": "_dev/concepts/LEARNING_AND_AUTOMATION_DOCTRINE.md",
+        "required_repo_files": [
+          ".claude/commands/new-framework.md",
+          ".claude/commands/scaffold-framework.md",
+          ".claude/commands/improve-framework.md",
+          ".claude/commands/promote-framework.md",
+          ".claude/skills/manage-frameworks/workflows/create-framework.md",
+          ".claude/skills/manage-frameworks/workflows/scaffold-framework.md",
+          ".claude/skills/manage-frameworks/workflows/improve-framework.md",
+          ".claude/skills/manage-frameworks/workflows/promote-framework.md"
+        ]
+      },
+      "outputs": {
+        "primary_goal": "Centralized deterministic post-workflow hooks for framework lifecycle commands",
+        "required_evidence": [
+          "hook_profiles_added",
+          "lifecycle_docs_updated",
+          "automatic_tail_defined",
+          "promotion_gate_preserved",
+          "validation_results"
+        ]
+      }
+    },
+    {
+      "id": "claude-code-features-integration",
+      "title": "Claude Code Features Integration",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-claude-code-features-integration.md",
+      "purpose": "Integrate recent Claude Code harness features into Mythos through tracked settings, thin hooks, governance subagents, and truthful status surfaces without turning Claude memory into the operational ledger.",
+      "inputs": {
+        "architecture": "_dev/CLAUDE_CODE_FEATURES_FOR_Mythos.md",
+        "implementation_plan": "_dev/CLAUDE_CODE_FEATURES_IMPLEMENTATION_PLAN.md",
+        "doctrine": "_dev/concepts/LEARNING_AND_AUTOMATION_DOCTRINE.md",
+        "required_repo_files": [
+          ".claude/CLAUDE.md",
+          ".claude/settings.local.json",
+          ".claude/agents/",
+          ".claude/commands/project-status.md"
+        ]
+      },
+      "outputs": {
+        "primary_goal": "Claude harness layer with tracked policy, safe hook integration, and explicit governance roles",
+        "required_evidence": [
+          "tracked_settings_added_or_updated",
+          "local_settings_boundary_preserved",
+          "hook_policy_defined",
+          "subagent_roles_defined",
+          "validation_results"
+        ]
+      }
+    },
+    {
+      "id": "claude-harness-capability-abstraction",
+      "title": "Harness Capability Abstraction",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-harness-capability-abstraction.md",
+      "purpose": "Extend Mythos from instruction-format harness adapters into provider-neutral capability adapters so useful harness features can be mapped or emulated across Claude, Codex, and generic targets.",
+      "inputs": {
+        "architecture": "_dev/HARNESS_CAPABILITY_ABSTRACTION.md",
+        "implementation_plan": "_dev/HARNESS_ADAPTER_IMPLEMENTATION_PLAN.md",
+        "required_repo_files": [
+          "instructions/adapters/claude.yaml",
+          "instructions/adapters/codex.yaml",
+          "instructions/adapters/generic.yaml",
+          "tools/instructions/lib/engine.js",
+          "tools/instructions/generate.js",
+          "tools/instructions/validate.js"
+        ]
+      },
+      "outputs": {
+        "primary_goal": "Capability-aware harness adapter model with truthful provider mappings and supporting engine validation",
+        "required_evidence": [
+          "adapter_model_extended",
+          "capability_fields_defined",
+          "engine_updated",
+          "docs_updated",
+          "validation_results"
+        ]
+      }
+    },
+    {
+      "id": "claude-command-surface-normalization",
+      "title": "Command Surface Normalization",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-command-surface-normalization.md",
+      "purpose": "Normalize Mythos command behavior into harness-neutral command specs with Claude-native wrappers and truthful Codex fallback resolution.",
+      "inputs": {
+        "architecture": "_dev/HARNESS_COMMAND_SURFACE_ABSTRACTION.md",
+        "implementation_plan": "_dev/HARNESS_COMMAND_SURFACE_IMPLEMENTATION_PLAN.md",
+        "required_repo_files": [
+          "instructions/canonical/system.yaml",
+          "instructions/adapters/claude.yaml",
+          "instructions/adapters/codex.yaml",
+          "tools/instructions/lib/engine.js",
+          "tools/instructions/validate.js",
+          "tools/verify/verify-system.cjs",
+          "AGENTS.md",
+          ".claude/commands/"
+        ]
+      },
+      "outputs": {
+        "primary_goal": "Harness-neutral command-spec layer with explicit adapter rendering and fallback coverage",
+        "required_evidence": [
+          "canonical_command_specs_added",
+          "claude_render_path_defined",
+          "codex_resolution_defined",
+          "validation_coverage_added",
+          "validation_results"
+        ]
+      }
+    },
+    {
+      "id": "claude-multi-step-orchestration-abstraction",
+      "title": "Multi-Step Orchestration Abstraction",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-multi-step-orchestration-abstraction.md",
+      "purpose": "Extract the reusable execution pattern discovered in advance-pipeline into system policy plus a reusable orchestration primitive.",
+      "inputs": {
+        "consideration": "_dev/concepts/multi-step-orchestration-abstraction.md",
+        "implementation_plan": "_dev/MULTI_STEP_ORCHESTRATION_IMPLEMENTATION_PLAN.md",
+        "required_repo_files": [
+          "tools/codex/prompt-system/claude-master-run-order.md",
+          ".claude/commands/advance-pipeline.md",
+          "instructions/canonical/guardrails.md",
+          "tools/verify/verify-system.cjs"
+        ]
+      },
+      "outputs": {
+        "primary_goal": "Reusable orchestration contract with mandatory verification and less command-local drift",
+        "required_evidence": [
+          "orchestration_policy_extracted",
+          "plan_contract_defined",
+          "executor_slice_added_or_planned",
+          "validation_coverage_added",
+          "validation_results"
+        ]
+      }
+    },
+    {
+      "id": "claude-master-prompt-and-operator-ux-hardening",
+      "title": "Master Prompt And Operator UX Hardening",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-master-prompt-and-operator-ux-hardening.md",
+      "purpose": "Convert session interaction lessons into durable prompt-pack standards, clearer command flow, and more truthful operator-facing master-prompt guidance.",
+      "inputs": {
+        "session_review": "_dev/concepts/SESSION_INTERACTION_AND_SYSTEMIZATION_REVIEW__2026-03-27.md",
+        "implementation_plan": "_dev/MASTER_PROMPT_AND_OPERATOR_UX_IMPLEMENTATION_PLAN.md",
+        "required_repo_files": [
+          "tools/codex/prompt-system/claude-master-run-order.md",
+          ".claude/commands/review-progress.md",
+          ".claude/commands/author-prompt-system.md",
+          ".claude/commands/assemble-prompt-system.md",
+          ".claude/commands/plan-pipeline.md",
+          ".claude/skills/manage-frameworks/references/framework-anatomy.md",
+          ".claude/skills/manage-frameworks/references/prompt-chain-patterns.md"
+        ]
+      },
+      "outputs": {
+        "primary_goal": "Stronger prompt-pack methodology and clearer operator-facing command flow grounded in real interaction lessons",
+        "required_evidence": [
+          "prompt_pack_standard_hardened",
+          "command_flow_clarified",
+          "harness_truth_language_hardened",
+          "master_prompt_guidance_updated",
+          "validation_or_review_results"
+        ]
+      }
+    },
+    {
+      "id": "claude-source-material-qa-and-promotion",
+      "title": "Source Material QA And Promotion",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-source-material-qa-and-promotion.md",
+      "purpose": "Introduce a staged QA system that evaluates when _dev documents are mature enough to become prompt packs, system rules, or other durable operating guidance.",
+      "inputs": {
+        "session_review": "_dev/concepts/SESSION_INTERACTION_AND_SYSTEMIZATION_REVIEW__2026-03-27.md",
+        "implementation_plan": "_dev/SOURCE_MATERIAL_QA_AND_PROMOTION_IMPLEMENTATION_PLAN.md",
+        "required_repo_files": [
+          "tools/codex/prompt-system/claude-master-run-order.md",
+          ".claude/commands/author-prompt-system.md",
+          ".claude/commands/assemble-prompt-system.md",
+          "instructions/canonical/guardrails.md",
+          "_dev/concepts/multi-step-orchestration-abstraction.md",
+          "_dev/concepts/cross-ai-dispatch-design-brief.md"
+        ]
+      },
+      "outputs": {
+        "primary_goal": "Source-readiness model with prompt-led QA now and an incremental path toward structural/code validation later",
+        "required_evidence": [
+          "source_status_ladder_defined",
+          "minimum_source_contract_defined",
+          "prompt_led_qa_defined",
+          "curated_pilot_scope_defined",
+          "automation_roadmap_defined"
+        ]
+      }
+    },
+    {
+      "id": "claude-artifact-retention-and-compaction",
+      "title": "Artifact Retention And Compaction",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-artifact-retention-and-compaction.md",
+      "purpose": "Introduce logging, retention, compaction, and archive policy so Mythos artifact growth remains bounded without losing high-value evidence.",
+      "inputs": {
+        "architecture": "_dev/ARTIFACT_RETENTION_AND_COMPACTION_ARCHITECTURE.md",
+        "implementation_plan": "_dev/ARTIFACT_RETENTION_AND_COMPACTION_IMPLEMENTATION_PLAN.md",
+        "required_repo_files": [
+          ".claude/commands/project-status.md",
+          "tools/workspace/candidate-status.js",
+          "_dev/reports/",
+          "clients/"
+        ]
+      },
+      "outputs": {
+        "primary_goal": "Bounded artifact-growth model with safe compaction and truthful status surfaces",
+        "required_evidence": [
+          "retention_policy_defined",
+          "status_tooling_added",
+          "first_compaction_target_handled",
+          "status_surfaces_aligned",
+          "validation_results"
+        ]
+      }
+    },
+    {
+      "id": "claude-command-adherence-and-validation-hardening",
+      "title": "Command Adherence And Validation Hardening",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-command-adherence-and-validation-hardening.md",
+      "purpose": "Harden command behavior and watcher logic using production lessons, and add lightweight validation for repeated adherence failures.",
+      "inputs": {
+        "implementation_plan": "_dev/COMMAND_ADHERENCE_AND_VALIDATION_HARDENING_IMPLEMENTATION_PLAN.md",
+        "task_map": "_dev/reports/analysis/command-adherence-and-validation-task-map.md",
+        "required_repo_files": [
+          "_dev/reports/analysis/session-learnings__2026-03-28__pipeline-completion.md",
+          "_dev/reports/analysis/review-progress__advance-pipeline.md",
+                    ".claude/commands/advance-pipeline.md",
+          ".claude/commands/review-progress.md",
+          ".claude/commands/plan-pipeline.md",
+          "tools/signals/lib/pipeline-loop.js",
+          "tests/lifecycle/pipeline-loop-watch.test.js"
+        ]
+      },
+      "outputs": {
+        "primary_goal": "Tighter command adherence and lightweight executable validation for repeated workflow drift cases",
+        "required_evidence": [
+          "changed_command_rules",
+          "validation_results",
+          "drift_case_hardened",
+          "deferred_items_listed"
+        ]
+      }
+    },
+    {
+      "id": "claude-operational-loop-closure",
+      "title": "Operational Loop Closure",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-operational-loop-closure.md",
+      "purpose": "Close the loop between current planning state, live signals, lessons reconciliation, and meta-framework/autonomy truth after a substantial implementation cycle.",
+      "inputs": {
+        "primary_sources": [
+          "whats-next.md",
+          "_dev/reports/analysis/review-progress__repo.md",
+          "_dev/reports/analysis/review-active-workstreams.md",
+          "_dev/reports/analysis/plan-active-workstreams.md",
+          "_dev/LESSONS_RECONCILIATION_LOOP_IMPLEMENTATION_PLAN.md",
+          "_dev/COMMAND_ADHERENCE_AND_VALIDATION_HARDENING_IMPLEMENTATION_PLAN.md",
+          "frameworks/meta/execution-normalization/manifest.json"
+        ],
+        "required_repo_files": [
+          "_dev/reports/signals/",
+                    "tools/signals/lib/pipeline-loop.js",
+          "tools/autonomy/complete-task.cjs",
+          "frameworks/meta/execution-normalization/prompts/README.md"
+        ]
+      },
+      "outputs": {
+        "primary_goal": "Truthful closure of current-state planning, signal, lessons, and maturity surfaces with a concrete next command",
+        "required_evidence": [
+          "planning_truth_refreshed",
+          "signal_truth_refreshed",
+          "lessons_loop_hardened_or_explicitly_gated",
+          "meta_framework_or_autonomy_truth_refreshed",
+          "validation_results",
+          "exact_next_command"
+        ]
+      }
+    },
+    {
+      "id": "claude-master-loop-closure",
+      "title": "Master Loop Closure Workflow",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-master-loop-closure.md",
+      "purpose": "Top-level master prompt pack for current-state Mythos work that selects one truthful loop-closure slice, delegates to the operational loop-closure pack, and forces validation plus completion audit before closeout.",
+      "inputs": {
+        "primary_sources": [
+          "tools/codex/prompt-system/claude-master-run-order.md",
+          "tools/codex/prompt-system/claude-prompt-pack-operational-loop-closure.md",
+          "whats-next.md",
+          "_dev/reports/analysis/plan-pipeline.md",
+          "_dev/reports/analysis/plan-active-workstreams.md",
+          "_dev/reports/analysis/review-active-workstreams.md",
+          "_dev/reports/analysis/review-progress__repo.md"
+        ],
+        "required_repo_files": [
+          "_dev/reports/analysis/prompt-system-assembly.md",
+          "_dev/reports/signals/",
+          "_dev/LESSONS_RECONCILIATION_LOOP_IMPLEMENTATION_PLAN.md",
+          "_dev/COMMAND_ADHERENCE_AND_VALIDATION_HARDENING_IMPLEMENTATION_PLAN.md",
+          "frameworks/meta/execution-normalization/manifest.json",
+          "tools/autonomy/complete-task.cjs"
+        ]
+      },
+      "outputs": {
+        "primary_goal": "One truthful top-level master workflow that picks the right bounded current-state slice and closes with validation, audit, and exact next command",
+        "required_evidence": [
+          "bounded_slice_selected",
+          "child_workflow_used",
+          "changed_files",
+          "validation_results",
+          "completion_audit_verdict",
+          "exact_next_command"
+        ]
+      }
+    },
+    {
+      "id": "claude-multiagent-planning-and-compliance",
+      "title": "Multiagent Planning And Compliance",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-multiagent-planning-and-compliance.md",
+      "purpose": "Build detailed execution plans with parallel read-only subagents, explicit workstream boundaries, and code-level verification matrices before implementation starts.",
+      "inputs": {
+        "primary_sources": [
+          "_dev/concepts/SESSION_INTERACTION_AND_SYSTEMIZATION_REVIEW__2026-03-27.md",
+          "_dev/concepts/multi-step-orchestration-abstraction.md",
+          "tools/codex/prompt-system/claude-prompt-pack-subagent-autonomy-and-template-efficiency.md",
+          "tools/codex/prompt-system/claude-prompt-pack-master-prompt-and-operator-ux-hardening.md",
+          "tools/codex/prompt-system/claude-master-run-order.md"
+        ],
+        "required_repo_files": [
+          "_dev/reports/analysis/",
+          "tests/",
+          "tools/",
+          "instructions/canonical/commands/",
+          "frameworks/"
+        ]
+      },
+      "outputs": {
+        "primary_goal": "Detailed execution plans that can be handed to Claude Code workers with explicit subagent scopes and code-level verification requirements",
+        "required_evidence": [
+          "repo_truth_inventory",
+          "architecture_inventory",
+          "verification_inventory",
+          "bounded_first_slice",
+          "verification_matrix",
+          "execution_handoff_packet"
+        ]
+      }
+    },
+    {
+      "id": "claude-local-model-verification-lane",
+      "title": "Local Model Verification Lane",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-local-model-verification-lane.md",
+      "purpose": "Turn imported local-model research into a bounded Claude workflow that defines benchmark, routing, escalation, and continuous-fitness artifacts for a first-pass Mythos verifier pilot on the current M3 Pro machine.",
+      "inputs": {
+        "primary_sources": [
+          "_dev/concepts/local-model-verification-lane.md",
+          "_dev/research/local-model-verification-lane/00_intake_summary.md",
+          "_dev/research/local-model-verification-lane/01_perplexity_prompt_and_report.md",
+          "_dev/research/local-model-verification-lane/02_mythos_local_model_verification_lane_design_report.md",
+          "_dev/research/local-model-verification-lane/03_continuous_model_fitness_assessment_for_local_llms_on_apple_silicon.md",
+          "_dev/concepts/local-model-tool-broker-and-claude-code-capability-parity.md",
+          "_dev/concepts/simpleminions-local-routing-and-distributed-execution-integration.md",
+          "_dev/reports/analysis/lessons-reconciliation__2026-03-30.md",
+          "_dev/research/competitive/2026-03-29-openclaw-nemoclaw-mythos/06_aspirational_crossref.md"
+        ],
+        "required_repo_files": [
+          "instructions/canonical/guardrails.md",
+          "tools/ai-bridge/",
+          "tools/verify/",
+          "_dev/reports/analysis/"
+        ]
+      },
+      "outputs": {
+        "primary_goal": "Repo-native research, benchmark, routing-policy, and fitness-operations artifacts for a bounded local-first verification lane",
+        "required_evidence": [
+          "model_shortlist_defined",
+          "benchmark_scope_defined",
+          "escalation_policy_defined",
+          "fitness_loop_defined",
+          "changed_files",
+          "exact_next_command"
+        ]
+      }
+    },
+    {
+      "id": "claude-cost-controlled-slice-execution",
+      "title": "Cost-Controlled Slice Execution",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-cost-controlled-slice-execution.md",
+      "purpose": "Keep model spend down by defaulting to Claude-only bounded slice execution, scoped local verification, mandatory debrief closeout, and second-reviewer escalation only when contradictions or higher-risk review requirements remain.",
+      "inputs": {
+        "primary_sources": [
+          "instructions/canonical/commands/run-plan.yaml",
+          "instructions/canonical/commands/debrief-run.yaml",
+          "instructions/canonical/commands/execute-plan.yaml"
+        ],
+        "required_repo_files": [
+          "tools/codex/prompt-system/claude-prompt-pack-cost-controlled-slice-execution.md",
+          "_dev/reports/analysis/",
+          "_dev/reports/signals/",
+          "tests/"
+        ]
+      },
+      "outputs": {
+        "primary_goal": "A reusable low-cost execution and review loop for bounded Mythos slices",
+        "required_evidence": [
+          "bounded_slice_prompt",
+          "debrief_prompt",
+          "cheap_truth_check_prompt",
+          "second_reviewer_escalation_prompt",
+          "escalation_criteria"
+        ]
+      }
+    },
+    {
+      "id": "claude-cost-controlled-slice-execution-flowchart",
+      "title": "Cost-Controlled Slice Execution Flowchart",
+      "path": "tools/codex/prompt-system/claude-cost-controlled-slice-execution-flowchart.md",
+      "purpose": "One-glance operator flowchart for deciding when to use Claude alone, when to debrief, and when to escalate to a second reviewer.",
+      "inputs": {
+        "primary_sources": [
+          "tools/codex/prompt-system/claude-prompt-pack-cost-controlled-slice-execution.md",
+          "instructions/canonical/commands/run-plan.yaml",
+          "instructions/canonical/commands/debrief-run.yaml"
+        ]
+      },
+      "outputs": {
+        "primary_goal": "Fast operator decision support for low-cost bounded-slice execution",
+        "required_evidence": [
+          "flowchart_exists",
+          "debrief_gate_visible",
+          "escalation_conditions_visible"
+        ]
+      }
+    }
+  ]
+}

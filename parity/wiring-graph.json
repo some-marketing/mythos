@@ -1392,671 +1392,6 @@
       "path": "frameworks/wordpress/seo-validation/.claude/skills/seo-validation"
     },
     {
-      "id": "file:_dev/commands/.gitkeep",
-      "type": "file",
-      "path": "_dev/commands/.gitkeep",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/commands/audit-project.md",
-      "type": "file",
-      "path": "_dev/commands/audit-project.md",
-      "sha256": "641b2335a7ad4420bace4535cea3ce5c57812b68ac1dd2c6cdab73c6937cee7e",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/commands/README.md",
-      "type": "file",
-      "path": "_dev/commands/README.md",
-      "sha256": "6fcf3715315a762cd28c4888986b8fe5a662669642e461cc57ce2a26286fbcc3",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/concepts/_policy.md",
-      "type": "file",
-      "path": "_dev/concepts/_policy.md",
-      "sha256": "1380bcbaade863b9e166486d87da635bd2335edcedae97b2d631ac972f101fd1",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/concepts/_README.md",
-      "type": "file",
-      "path": "_dev/concepts/_README.md",
-      "sha256": "06da29c9e40b88483003de7c2a9339d7ffd923ba2836ef57b6a6bafdc6998cc3",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/concepts/ant-world-operator-console.md",
-      "type": "file",
-      "path": "_dev/concepts/ant-world-operator-console.md",
-      "sha256": "1bfaa626561551f45505106679c6e2ea5d47fa9ed841688f8c2fe354ecf6fc18",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/concepts/growing-dashboard-mind-legibility.md",
-      "type": "file",
-      "path": "_dev/concepts/growing-dashboard-mind-legibility.md",
-      "sha256": "4bdb5f9fbc86c9645fc806c427e65c652ae231248e78d338cb629327af9b5dcc",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/concepts/simulation-scale-and-boundary-doctrine.md",
-      "type": "file",
-      "path": "_dev/concepts/simulation-scale-and-boundary-doctrine.md",
-      "sha256": "65e8dc0c785bf9162a01ec074d3eb8f9239fe96a737d8adc1edd5ba30ed855bb",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/config/harness-protocol-propagation.json",
-      "type": "file",
-      "path": "_dev/config/harness-protocol-propagation.json",
-      "sha256": "14727506cf9a45c36695913005bd3eb5a4f8e73f4ad7ba78460286f5a916b4a5",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/config/README.md",
-      "type": "file",
-      "path": "_dev/config/README.md",
-      "sha256": "4cf039834fb00f4b12651960a98ff77bb8b0e3f38baa1e4939a380fcdb5e8675",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/config/remote-hosts.schema.json",
-      "type": "file",
-      "path": "_dev/config/remote-hosts.schema.json",
-      "sha256": "d7914c37b8ae93d405d42f5dc4eef0e21f47c5e44bf7f4fef5af30408c36fb7a",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/design/.gitkeep",
-      "type": "file",
-      "path": "_dev/design/.gitkeep",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/design/README.md",
-      "type": "file",
-      "path": "_dev/design/README.md",
-      "sha256": "5fe4af9281cb517d48afe0d2e04e1dbee2d5b640e9603b2331766a4f45657e1c",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/docs/.gitkeep",
-      "type": "file",
-      "path": "_dev/docs/.gitkeep",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/docs/README.md",
-      "type": "file",
-      "path": "_dev/docs/README.md",
-      "sha256": "d66ae16e74446c8c3ef14d341c8363a170ed27f4fb8ede8b6075d33abc8bfc0a",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/drafts/.gitkeep",
-      "type": "file",
-      "path": "_dev/drafts/.gitkeep",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/drafts/README.md",
-      "type": "file",
-      "path": "_dev/drafts/README.md",
-      "sha256": "4eb141c1f8c0be756e9153a350739df4d2024b9289a179d30c4440bd5b566b84",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/framework-candidates/iron-rank-worked-example/candidate.json",
-      "type": "file",
-      "path": "_dev/framework-candidates/iron-rank-worked-example/candidate.json",
-      "sha256": "5eee6079ed6f9a47f7e184b866fc0a441e1b03ab66ed2f7eec45e5cc14d07215",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/framework-candidates/iron-rank-worked-example/evidence/source-material.json",
-      "type": "file",
-      "path": "_dev/framework-candidates/iron-rank-worked-example/evidence/source-material.json",
-      "sha256": "dceb59e059d20391a5c833e67d381addd9c93fb69126828d1aab289a98486d78",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/docs/EXECUTION_ARTIFACTS.md",
-      "type": "file",
-      "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/docs/EXECUTION_ARTIFACTS.md",
-      "sha256": "4da3edda73b9f06f886601198a7c4b9400d850630d31d42f1d2e54031f8dc827",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/docs/FRAMEWORK_SCOPE.md",
-      "type": "file",
-      "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/docs/FRAMEWORK_SCOPE.md",
-      "sha256": "4f2d0f26bdb81e79f4a9abc8fe7adb736c5c05e77186b48f521f0b3901601cfd",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/docs/STAGE_MODEL.md",
-      "type": "file",
-      "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/docs/STAGE_MODEL.md",
-      "sha256": "b45437f94079a4ee205d3f6d9dbf83f2b82e5b11ebf7d93bd74b086da0eb3605",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/guardrails.md",
-      "type": "file",
-      "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/guardrails.md",
-      "sha256": "43a467731bd5a6f6910ff2701f3fe092a60638916378072ba6f6d0864d041cf0",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/manifest.json",
-      "type": "file",
-      "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/manifest.json",
-      "sha256": "5e7c63b80e4723ccfcd562450fb69c945e742b67f41a939e12b8856c8ac86649",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/prompts/01_STAGE_SELECTION_AND_PRECHECK.md",
-      "type": "file",
-      "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/prompts/01_STAGE_SELECTION_AND_PRECHECK.md",
-      "sha256": "115483e6503cfcf9146e8d6f94545bb7d53cce419653af4f670c9fc8fda0228b",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/prompts/02_STAGE_1_SEMANTIC_VERIFICATION_IMPLEMENTATION.md",
-      "type": "file",
-      "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/prompts/02_STAGE_1_SEMANTIC_VERIFICATION_IMPLEMENTATION.md",
-      "sha256": "db1ae6cfc0d392c3a3d8837d45dd756845e796db1c43926b7f9a50e6849bd351",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/prompts/03_STAGE_1_VALIDATION_AND_SIGNAL_REVIEW.md",
-      "type": "file",
-      "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/prompts/03_STAGE_1_VALIDATION_AND_SIGNAL_REVIEW.md",
-      "sha256": "e8a0a407b314e856bf62e6f41559d22d0411123403263c851f9432574c32b46a",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/prompts/04_STAGE_1_COMPLETION_AUDIT_AND_NEXT_STAGE_DECISION.md",
-      "type": "file",
-      "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/prompts/04_STAGE_1_COMPLETION_AUDIT_AND_NEXT_STAGE_DECISION.md",
-      "sha256": "9cd6af2f8045e4f7040b9875431fd2b38e3224f4501956fe3a7341bc2740fd22",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/prompts/README.md",
-      "type": "file",
-      "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/prompts/README.md",
-      "sha256": "26110965090a3e97b6a7b4377d69746ae2a5e13d6e0661c4aa1d94d962bfe3c3",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/next-stage-decision.schema.json",
-      "type": "file",
-      "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/next-stage-decision.schema.json",
-      "sha256": "cd8e19586891de19f470eef25d36cc4c54d308cc9bf9e61372d12a934c2f11ee",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/stage-definition.schema.json",
-      "type": "file",
-      "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/stage-definition.schema.json",
-      "sha256": "d8569d6045846cea0f199813fa698e4c1124231780486b2f8f8c40fee14644cd",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/stage-status.schema.json",
-      "type": "file",
-      "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/stage-status.schema.json",
-      "sha256": "068617a423415b5e51b438ffea7300b208a292cd442955f35b4381d861e6d087",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/validation-results.schema.json",
-      "type": "file",
-      "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/validation-results.schema.json",
-      "sha256": "d63af3c5ba1ec991c73e0b5e48707d5a966a84328d175bfdf5b21b58dd8c641b",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/templates/COMPLETION_AUDIT.template.md",
-      "type": "file",
-      "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/templates/COMPLETION_AUDIT.template.md",
-      "sha256": "5d8faa0092a546aea6d4b0abafbf5a8b37593d3b91dd869cd0c34104e7680cff",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/templates/STAGE_REPORT.template.md",
-      "type": "file",
-      "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/templates/STAGE_REPORT.template.md",
-      "sha256": "5da1f8689440727cb3a5fd05739ee489ab847d7eb5ed8b176e3b1b50c8d028bf",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/framework-candidates/iron-rank-worked-example/README.md",
-      "type": "file",
-      "path": "_dev/framework-candidates/iron-rank-worked-example/README.md",
-      "sha256": "381e38fc76a9ab5ece246f8c9c9476e5bed97e19e6ddbe25866be84773237fad",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/framework-candidates/iron-rank-worked-example/replay_cases/stage1-semantic-verification/case.json",
-      "type": "file",
-      "path": "_dev/framework-candidates/iron-rank-worked-example/replay_cases/stage1-semantic-verification/case.json",
-      "sha256": "25c622436dda142136ffa7d5a3a8f0a330d8392a22d84fdff025976ee6783b59",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/framework-candidates/iron-rank-worked-example/replay_cases/stage1-semantic-verification/inputs/stage-definition.json",
-      "type": "file",
-      "path": "_dev/framework-candidates/iron-rank-worked-example/replay_cases/stage1-semantic-verification/inputs/stage-definition.json",
-      "sha256": "9231a5762bdc5353596dae6fd66a303f13706ac0542fe44c58baca0146004ed1",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/framework-candidates/iron-rank-worked-example/replay_cases/stage1-semantic-verification/notes.md",
-      "type": "file",
-      "path": "_dev/framework-candidates/iron-rank-worked-example/replay_cases/stage1-semantic-verification/notes.md",
-      "sha256": "63cf6ce30cf8de5f06cdbec4124b0499653caaba37af7fa27927073ac2e74aea",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/framework-candidates/README.md",
-      "type": "file",
-      "path": "_dev/framework-candidates/README.md",
-      "sha256": "a2a612f22cf123c6e69950484b41ec307ecc8771de4309e468ecbc579fe8aa15",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/handoffs/.gitkeep",
-      "type": "file",
-      "path": "_dev/handoffs/.gitkeep",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/handoffs/INDEX.md",
-      "type": "file",
-      "path": "_dev/handoffs/INDEX.md",
-      "sha256": "853129b3eeabe75327e70dc8dbac9c828b34a2664dc5dea5b3998b226c0cfd29",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/handoffs/README.md",
-      "type": "file",
-      "path": "_dev/handoffs/README.md",
-      "sha256": "f18d5c2beb6383e6a63b5e3f4476492e875182fdf4010d3c23b8819f2ed3276f",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/intake/.gitkeep",
-      "type": "file",
-      "path": "_dev/intake/.gitkeep",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/intake/README.md",
-      "type": "file",
-      "path": "_dev/intake/README.md",
-      "sha256": "b383356960e717b40bb369ba2ce9d168b487b88f07f52d32019745cf3cffc9b5",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/loops/_template.md",
-      "type": "file",
-      "path": "_dev/loops/_template.md",
-      "sha256": "c2aa941686c24f46028c7a3b35dc8d813f1012cc7a6eb758018d6c04f808267c",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/loops/homebrew-grimoire-improve-loop.md",
-      "type": "file",
-      "path": "_dev/loops/homebrew-grimoire-improve-loop.md",
-      "sha256": "d57ea76b8407ce0dba3c4a509064da9bc65299e7a05adab2c5a527269059e10e",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/loops/README.md",
-      "type": "file",
-      "path": "_dev/loops/README.md",
-      "sha256": "8e86fa1924e476d4ba661dd0aa987344f74beca1f8430649e9f5b2a1ae43f32f",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/plans/inbox/.gitkeep",
-      "type": "file",
-      "path": "_dev/plans/inbox/.gitkeep",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/plans/inbox/README.md",
-      "type": "file",
-      "path": "_dev/plans/inbox/README.md",
-      "sha256": "0bf47a3d1ecad3165b592215484e2d05de5425b68ae21927b61cb0b2bb8f5f9e",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/policies/command-follow-through-policy.md",
-      "type": "file",
-      "path": "_dev/policies/command-follow-through-policy.md",
-      "sha256": "b97ad65960cf530c06c4bb3b726666243f5bb81f7ecff1ca693d552d260a3d6d",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/policies/data-handling.md",
-      "type": "file",
-      "path": "_dev/policies/data-handling.md",
-      "sha256": "ac1b5b45e854eaaab9a0914fe0f39bca227adcf67dc763045321bca063183800",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/policies/maintenance-check-matrix.md",
-      "type": "file",
-      "path": "_dev/policies/maintenance-check-matrix.md",
-      "sha256": "ed464bdf1ff20d387451a371c1b93f9fde0218feb840432a053c6018593e5796",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/policies/plan-contract.md",
-      "type": "file",
-      "path": "_dev/policies/plan-contract.md",
-      "sha256": "eeb085b7d82c5916989cccde7ed197446a166dd42c1834a5a90d75ef47603e00",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/policies/prompt-pack-contract.md",
-      "type": "file",
-      "path": "_dev/policies/prompt-pack-contract.md",
-      "sha256": "9058e499785ca5c92ce8ca21796c134c27c66dc95eacee9707a50614b684a3c9",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/policies/source-material-qa.md",
-      "type": "file",
-      "path": "_dev/policies/source-material-qa.md",
-      "sha256": "c97e57d7aba043a6649e4a91ce0de791a9295dfd11a4626816ebc03d50358491",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/claude-cost-controlled-slice-execution-flowchart.md",
-      "type": "file",
-      "path": "_dev/prompts/claude-cost-controlled-slice-execution-flowchart.md",
-      "sha256": "3f26e85d6855e0b207ae40dc762f26c3da17fd424af32b68d76e9ef5dd6c7d91",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/claude-health-remediation-playbook.md",
-      "type": "file",
-      "path": "_dev/prompts/claude-health-remediation-playbook.md",
-      "sha256": "6dcb1cd5e437da589a6739050eb9d01ad5cd5512e5f51094ef0c8a7c0a6e7f50",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/claude-master-run-order.md",
-      "type": "file",
-      "path": "_dev/prompts/claude-master-run-order.md",
-      "sha256": "c28a4134c927ee0c720080bd7793234d2c14acd1c6ce29f4bad8c320ea39de10",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/claude-prompt-pack-artifact-retention-and-compaction.md",
-      "type": "file",
-      "path": "_dev/prompts/claude-prompt-pack-artifact-retention-and-compaction.md",
-      "sha256": "23dd481ba431bdc058ed5f22e666d18fc5098bb67ce7081b7b20d5d17f10eecd",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/claude-prompt-pack-candidate-replay-hardening.md",
-      "type": "file",
-      "path": "_dev/prompts/claude-prompt-pack-candidate-replay-hardening.md",
-      "sha256": "79870abcaee7d0de15a3b0840d2d960f04a516aa6128ea0825e520fe8b878442",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/claude-prompt-pack-claude-code-features-integration.md",
-      "type": "file",
-      "path": "_dev/prompts/claude-prompt-pack-claude-code-features-integration.md",
-      "sha256": "8b2a1fe03d03977400a0c6911a09e5032d3baee1a1d3e24ae5be7b34c17978ab",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/claude-prompt-pack-command-adherence-and-validation-hardening.md",
-      "type": "file",
-      "path": "_dev/prompts/claude-prompt-pack-command-adherence-and-validation-hardening.md",
-      "sha256": "2483c19690912e2a0896de301b0eefbb0785f59c513645a135571617c2e8a1f4",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/claude-prompt-pack-command-surface-normalization.md",
-      "type": "file",
-      "path": "_dev/prompts/claude-prompt-pack-command-surface-normalization.md",
-      "sha256": "c765e838545e6cf705de841eb3dba4673dbeb1aa2a9986646df1dffdc14791c9",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/claude-prompt-pack-cost-controlled-slice-execution.md",
-      "type": "file",
-      "path": "_dev/prompts/claude-prompt-pack-cost-controlled-slice-execution.md",
-      "sha256": "bce6b89b946b2d057663ee76cac0e07cbf216748b9ae30d6dd08c577d6b85e48",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/claude-prompt-pack-framework-learning-loop-enforcement.md",
-      "type": "file",
-      "path": "_dev/prompts/claude-prompt-pack-framework-learning-loop-enforcement.md",
-      "sha256": "6a3656685b9ea9e08ce81b64c90c2b802ec707957e387f480f5f632757ad5bc9",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/claude-prompt-pack-framework-post-workflow-hooks.md",
-      "type": "file",
-      "path": "_dev/prompts/claude-prompt-pack-framework-post-workflow-hooks.md",
-      "sha256": "b22f580c3b5c85098b7bb19ed4171faf551e1ab42283707fa0fb9bfc0d1fcfa6",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/claude-prompt-pack-harness-capability-abstraction.md",
-      "type": "file",
-      "path": "_dev/prompts/claude-prompt-pack-harness-capability-abstraction.md",
-      "sha256": "7e19d6db2c47a1e42f9772e1c792ac70ef2d984bb114c0f53e775ae81fcd9738",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/claude-prompt-pack-local-model-verification-lane.md",
-      "type": "file",
-      "path": "_dev/prompts/claude-prompt-pack-local-model-verification-lane.md",
-      "sha256": "80714349dcd064e3d4d21292199c3f0976e0b62ec185cd497a3264fc956edb09",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/claude-prompt-pack-master-loop-closure.md",
-      "type": "file",
-      "path": "_dev/prompts/claude-prompt-pack-master-loop-closure.md",
-      "sha256": "28a5eb346abe9dac847adce0d35b450d742d40b8a50556461e89729afe0ce3d8",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/claude-prompt-pack-master-prompt-and-operator-ux-hardening.md",
-      "type": "file",
-      "path": "_dev/prompts/claude-prompt-pack-master-prompt-and-operator-ux-hardening.md",
-      "sha256": "3717d5ca3ddb6599bdc7c3b076a27827fc228cddfd758515355c8572c3ff2f12",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/claude-prompt-pack-meta-staged-remediation-framework.md",
-      "type": "file",
-      "path": "_dev/prompts/claude-prompt-pack-meta-staged-remediation-framework.md",
-      "sha256": "cb6b287fdf269ef6b786f6302bd411c9c28e129f2d122502548a7f6b2fc8a543",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/claude-prompt-pack-multi-step-orchestration-abstraction.md",
-      "type": "file",
-      "path": "_dev/prompts/claude-prompt-pack-multi-step-orchestration-abstraction.md",
-      "sha256": "fdc48853aa2b0b5b0b9a699aaf72e0b190d11a8d4f1b85d3229feb1b24a8e576",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/claude-prompt-pack-multiagent-planning-and-compliance.md",
-      "type": "file",
-      "path": "_dev/prompts/claude-prompt-pack-multiagent-planning-and-compliance.md",
-      "sha256": "3b3a078c75ebcfc9fdc8368d3f33918f51fc84ea171345ef8cbfae3918cc3407",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/claude-prompt-pack-operational-loop-closure.md",
-      "type": "file",
-      "path": "_dev/prompts/claude-prompt-pack-operational-loop-closure.md",
-      "sha256": "90b0b603454c5865fe7759f41a011c54357811c446b1db8ec797ad5675b29d1f",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/claude-prompt-pack-project-health-alignment.md",
-      "type": "file",
-      "path": "_dev/prompts/claude-prompt-pack-project-health-alignment.md",
-      "sha256": "58750d4afdf522f6dc7be9e8f503548955529b463098cf25de4d9d72dc1ec9f7",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/claude-prompt-pack-semantic-output-audit.md",
-      "type": "file",
-      "path": "_dev/prompts/claude-prompt-pack-semantic-output-audit.md",
-      "sha256": "6f8d7a73ff931e0c5ba8bf063155623b8d484300294f3963f995290cc6020e40",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/claude-prompt-pack-semantic-verification.md",
-      "type": "file",
-      "path": "_dev/prompts/claude-prompt-pack-semantic-verification.md",
-      "sha256": "f57a052548049ded55d802414b3c89dd49d2ae63d69f6176aad5bfc8b2c79531",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/claude-prompt-pack-source-material-qa-and-promotion.md",
-      "type": "file",
-      "path": "_dev/prompts/claude-prompt-pack-source-material-qa-and-promotion.md",
-      "sha256": "a2f709b329c3da988cff1bd11e16ddfcb2e43a1755385611c5ebde93f7edf60b",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/claude-prompt-pack-subagent-autonomy-and-template-efficiency.md",
-      "type": "file",
-      "path": "_dev/prompts/claude-prompt-pack-subagent-autonomy-and-template-efficiency.md",
-      "sha256": "2bf0f6008712f35841cbb7892cc430a01d8caeb4284ebbdb222c9f2a679a1003",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/claude-run-debrief-and-clear-readiness.md",
-      "type": "file",
-      "path": "_dev/prompts/claude-run-debrief-and-clear-readiness.md",
-      "sha256": "03946b37db7f9e22cd6d5b548c2fd1f8ebcb2b3b6602ffe0d5763b41687e8602",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/manifest.json",
-      "type": "file",
-      "path": "_dev/prompts/manifest.json",
-      "sha256": "beb40dfbbc058722bde78d547a8cc180e7d3d7d0c28c804e5cc3fa57ab3ab191",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/prompt-plan-registry.json",
-      "type": "file",
-      "path": "_dev/prompts/prompt-plan-registry.json",
-      "sha256": "f2da6fb0d91739fafd705dcaa658450a2a72979dd2c9b1bc90efff539cdb957c",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/prompts/README.md",
-      "type": "file",
-      "path": "_dev/prompts/README.md",
-      "sha256": "59b9f3934fd7c118ef1a3026e682c5dadb91bb1f8fced5e6eded989d7e903368",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/README.md",
-      "type": "file",
-      "path": "_dev/README.md",
-      "sha256": "f506b28bc7b76c43fda917cda5d54898bf99a2b7df2564bc0653d78cc1eb25a7",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/research/.gitkeep",
-      "type": "file",
-      "path": "_dev/research/.gitkeep",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/research/README.md",
-      "type": "file",
-      "path": "_dev/research/README.md",
-      "sha256": "5aade4ba8c680fc630ed9519f721624c2c7f51d3aebb69ef36ca1be7620452b4",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/scripts/.gitkeep",
-      "type": "file",
-      "path": "_dev/scripts/.gitkeep",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/scripts/README.md",
-      "type": "file",
-      "path": "_dev/scripts/README.md",
-      "sha256": "f23b1fcddbf6f9fc9232655d0ae3818bd21c69e213d6754c3876c879dc88a427",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/staging/agents/finding-repair-loop-agent.md",
-      "type": "file",
-      "path": "_dev/staging/agents/finding-repair-loop-agent.md",
-      "sha256": "bc6c8b1a8612bcb641ee3696e48a070df5da5b5b997d7a29c135af43c69fb4d1",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/staging/commands/finding-repair-loop.md",
-      "type": "file",
-      "path": "_dev/staging/commands/finding-repair-loop.md",
-      "sha256": "3986937b0787f6b1e23f1d0eb875df60e4943498fa65ae253a57384afc09ca5b",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/staging/README.md",
-      "type": "file",
-      "path": "_dev/staging/README.md",
-      "sha256": "ce2d04b3d35a673a0762f63973c3ff29da6d498450564206ffa222aae7887cac",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/staging/skills/finding-repair-loop/PROMOTION.md",
-      "type": "file",
-      "path": "_dev/staging/skills/finding-repair-loop/PROMOTION.md",
-      "sha256": "40770b3c1754a8689be36395f98fd07a5840ce78843c4b43f9a22b7a665da26b",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/staging/skills/finding-repair-loop/SKILL.md",
-      "type": "file",
-      "path": "_dev/staging/skills/finding-repair-loop/SKILL.md",
-      "sha256": "bd080b83d834000fc6c48e751f73f3b77234673bc40937f29ed661a68376734a",
-      "mode": 420
-    },
-    {
-      "id": "file:_dev/staging/skills/finding-repair-loop/verify-finding-repair-loop.cjs",
-      "type": "file",
-      "path": "_dev/staging/skills/finding-repair-loop/verify-finding-repair-loop.cjs",
-      "sha256": "41368b1a899e12b8bffd9fcc212e59ea4a86386ef18eb923d5ee6b683c01b3fa",
-      "mode": 420
-    },
-    {
       "id": "file:.claude/agents/aside.md",
       "type": "file",
       "path": ".claude/agents/aside.md",
@@ -2186,7 +1521,7 @@
       "id": "file:.claude/commands/advance-pipeline.md",
       "type": "file",
       "path": ".claude/commands/advance-pipeline.md",
-      "sha256": "3d14357d18d3ef90732151521d430a65ab78f6067825d0375c767558b2208c94",
+      "sha256": "e9f58524f497d06e7c6ef56d5428ae6ea1fc4ed0539c879b6e72a722f7470280",
       "mode": 420
     },
     {
@@ -2249,7 +1584,7 @@
       "id": "file:.claude/commands/assemble-prompt-system.md",
       "type": "file",
       "path": ".claude/commands/assemble-prompt-system.md",
-      "sha256": "c708d757fef8cbab6886e23f64c1999b9e686c05ed5939ab351a076bbddd19dd",
+      "sha256": "6128d5bec87caaa7a74eab4a8673fa3146435fb64915db8b4e9f3c8169a53ba2",
       "mode": 420
     },
     {
@@ -2291,7 +1626,7 @@
       "id": "file:.claude/commands/author-prompt-system.md",
       "type": "file",
       "path": ".claude/commands/author-prompt-system.md",
-      "sha256": "42981f7c8d5170cd82b555ddae90d35a371a307440de063a844f477505608248",
+      "sha256": "fef3e9c9a21c7af33f6136356724e4b38a2866d55d67469ae41bb051d202f202",
       "mode": 420
     },
     {
@@ -2669,7 +2004,7 @@
       "id": "file:.claude/commands/execute-plan.md",
       "type": "file",
       "path": ".claude/commands/execute-plan.md",
-      "sha256": "387cab9c395d5a8ac9b11db8cd7732d3151e1ec9989a105c60594db7a4d6cca6",
+      "sha256": "b2e2ba3e66d10fdd5dc983c262fef1bcff40cc4f9b0b462327c1ab891b2037a1",
       "mode": 420
     },
     {
@@ -3138,7 +2473,7 @@
       "id": "file:.claude/commands/plan-pipeline.md",
       "type": "file",
       "path": ".claude/commands/plan-pipeline.md",
-      "sha256": "1e4bd32ae6a9f9963a415cf11855843e7c4c7ec60739373521d3a8efc6dda3b0",
+      "sha256": "39e7cc4bae76e82bb0c72da3ffa39e159a61b42b298123cf32db82ad9d81f8aa",
       "mode": 420
     },
     {
@@ -3271,7 +2606,7 @@
       "id": "file:.claude/commands/review-progress.md",
       "type": "file",
       "path": ".claude/commands/review-progress.md",
-      "sha256": "7243d533c76b12c8223aa6d754bc9ac1b8428d39495fdb07d40cc0a9b337df22",
+      "sha256": "78c9ffecee8ed3ffb52beb19f40f31eec9dd433ba4bdd1d5eae1c1fc893bb9cc",
       "mode": 420
     },
     {
@@ -3306,7 +2641,7 @@
       "id": "file:.claude/commands/run-plan.md",
       "type": "file",
       "path": ".claude/commands/run-plan.md",
-      "sha256": "a48faa9852d70a48c1e01fb5ae25126d373f766b08039b32c1c43073e6333e89",
+      "sha256": "0e4a91b7c71a6cec32c02b473e7bcf943e486fae7bcee319ca108cf67ebadc62",
       "mode": 420
     },
     {
@@ -3460,7 +2795,7 @@
       "id": "file:.claude/guardrails.md",
       "type": "file",
       "path": ".claude/guardrails.md",
-      "sha256": "33f18f7fa0fd5fea63972db49eccbb7173f2c8f8b39970fbd88ed3fe73a2f555",
+      "sha256": "028de2152a2b9f3af5ea9a750c38910572e4651f2456d664888f5f039c6b09e7",
       "mode": 420
     },
     {
@@ -3474,14 +2809,14 @@
       "id": "file:.claude/project-claude.yml",
       "type": "file",
       "path": ".claude/project-claude.yml",
-      "sha256": "78bf27ec83c5fa1a7c7baae0dbc40df2df17ae229240740536f941aa11978109",
+      "sha256": "6786368b527bca263075bbc1f153928133460de2f49fb62e51402d60bfd99ba9",
       "mode": 420
     },
     {
       "id": "file:.claude/settings.json",
       "type": "file",
       "path": ".claude/settings.json",
-      "sha256": "6042890a5299561bb6d1a1aeff947362a5e12c1fb2f9fc850a1631695ecd6042",
+      "sha256": "2f5ace5b3552ef13dc51a0e9fbdb1b80ed9e7f26cfaff793ee84eae904f85207",
       "mode": 420
     },
     {
@@ -3572,7 +2907,7 @@
       "id": "file:.claude/skills/dlx/SKILL.md",
       "type": "file",
       "path": ".claude/skills/dlx/SKILL.md",
-      "sha256": "e444011399d41f889245f0fe8d355e8f95d6e78f80f8da098afa9bc27c17c765",
+      "sha256": "9eaf13821a5c904fb692a230094518672ab11265b96d013721ac61a5e32961b1",
       "mode": 420
     },
     {
@@ -3646,6 +2981,13 @@
       "mode": 420
     },
     {
+      "id": "file:.claude/skills/go/SKILL.md",
+      "type": "file",
+      "path": ".claude/skills/go/SKILL.md",
+      "sha256": "c9cdb2579148f6ffdb8bd399223ae1f469031b03b41e93e38197a6ce7ca1a8aa",
+      "mode": 420
+    },
+    {
       "id": "file:.claude/skills/google-ads-mcp/SKILL.md",
       "type": "file",
       "path": ".claude/skills/google-ads-mcp/SKILL.md",
@@ -3698,7 +3040,7 @@
       "id": "file:.claude/skills/manage-frameworks/references/framework-anatomy.md",
       "type": "file",
       "path": ".claude/skills/manage-frameworks/references/framework-anatomy.md",
-      "sha256": "71f2729bfe64d83f960aec858ca3ed587ab368974728246b820d7f9a1ea2f6ea",
+      "sha256": "386902a0369ff991a69bb995ff5ff7786bfa6bddad46eae0fcd6991c16d891be",
       "mode": 420
     },
     {
@@ -3845,7 +3187,7 @@
       "id": "file:.claude/skills/mythos-operating-mechanics/SKILL.md",
       "type": "file",
       "path": ".claude/skills/mythos-operating-mechanics/SKILL.md",
-      "sha256": "dc4cd830b52219746bb55ea52d60b4c29098e802b9423659fea8b7fec83ab24f",
+      "sha256": "f48853b1f31de3351d568f2a303efa97237c0b87ff63366e618fc3e6191e1d22",
       "mode": 420
     },
     {
@@ -8339,7 +7681,7 @@
       "id": "file:instructions/canonical/commands/advance-pipeline.yaml",
       "type": "file",
       "path": "instructions/canonical/commands/advance-pipeline.yaml",
-      "sha256": "0809366e523344a21393d03def056ec83e393cb911a0553fb2924532426edf7f",
+      "sha256": "c0b0eebbeea434c024aacdced4166c6794af1e38922867503abf9bee8e66bcf5",
       "mode": 420
     },
     {
@@ -8395,7 +7737,7 @@
       "id": "file:instructions/canonical/commands/assemble-prompt-system.yaml",
       "type": "file",
       "path": "instructions/canonical/commands/assemble-prompt-system.yaml",
-      "sha256": "09c2c29f5557ad49d090a62a8a9e2f0de50f893539a634e9c1b387d1ac040818",
+      "sha256": "ccb88c6fadc4c9435aaf84133dbd1535182c51ef6693037c5f9891b7fa0fcd94",
       "mode": 420
     },
     {
@@ -8409,7 +7751,7 @@
       "id": "file:instructions/canonical/commands/author-prompt-system.yaml",
       "type": "file",
       "path": "instructions/canonical/commands/author-prompt-system.yaml",
-      "sha256": "2de23f5380caa147d0e97c82872c0e0ff058b02dea288dec8701d7a04377027f",
+      "sha256": "04989c5320226329bf3e9db9cef207198b83c16d211e653ae1d65cbfbc49240b",
       "mode": 420
     },
     {
@@ -8640,7 +7982,7 @@
       "id": "file:instructions/canonical/commands/execute-plan.yaml",
       "type": "file",
       "path": "instructions/canonical/commands/execute-plan.yaml",
-      "sha256": "73c338035486394f0ff9d35b27fac34dd1a87da1e7b7a36651b6ebaafc409f55",
+      "sha256": "743bda1bf937242cfa4fecf2cd88deafeffa8bad3357e82e39e376082ee353bf",
       "mode": 420
     },
     {
@@ -8976,7 +8318,7 @@
       "id": "file:instructions/canonical/commands/orchestrate-loop.yaml",
       "type": "file",
       "path": "instructions/canonical/commands/orchestrate-loop.yaml",
-      "sha256": "ef2d00b308f36bf3cf1c90d26b6547c79b038f5de88f0b9886026c2103948450",
+      "sha256": "472c7407214460ed3efb7d90d4533aa7e4524268c649ce2be2060d711ebc77de",
       "mode": 420
     },
     {
@@ -9011,7 +8353,7 @@
       "id": "file:instructions/canonical/commands/plan-pipeline.yaml",
       "type": "file",
       "path": "instructions/canonical/commands/plan-pipeline.yaml",
-      "sha256": "f7fabc0aaddb05c5fa26f38a90ef490e6c33c9f183c9344622a39191441da093",
+      "sha256": "b0ddd0416b64c47dcddd99de50d7c1c0032c90e1a65cab1d3594ab39358ea1e4",
       "mode": 420
     },
     {
@@ -9109,7 +8451,7 @@
       "id": "file:instructions/canonical/commands/review-progress.yaml",
       "type": "file",
       "path": "instructions/canonical/commands/review-progress.yaml",
-      "sha256": "ccde44d59a0d851d7dbc88eb0b1452755cb9cd2c5028f7d6c2dd90c747522fdd",
+      "sha256": "c2c741039aa5020d66e6f95ac6567bd67c5c08883800c1aabdd53aea2fc67d07",
       "mode": 420
     },
     {
@@ -9144,7 +8486,7 @@
       "id": "file:instructions/canonical/commands/run-plan.yaml",
       "type": "file",
       "path": "instructions/canonical/commands/run-plan.yaml",
-      "sha256": "feb073f11dd0b41bfb947f42350607d94d93a2825e48d9b1dc72b509364835e2",
+      "sha256": "55b9a44e6444eceb8fd007a4a28a63403bbf24d73b8c4dbf1bbddeea7b8451f9",
       "mode": 420
     },
     {
@@ -9298,7 +8640,7 @@
       "id": "file:instructions/canonical/contracts/reference-laws/plan-housing-laws.yaml",
       "type": "file",
       "path": "instructions/canonical/contracts/reference-laws/plan-housing-laws.yaml",
-      "sha256": "5131b4c92ea0af199611d3db1a76305cee8b106169330fab9b09153c0583dff3",
+      "sha256": "0f67c3844cd668f926cded0092ae0c5acce1192f79a3e3377745a0deb06851a7",
       "mode": 420
     },
     {
@@ -9466,7 +8808,7 @@
       "id": "file:instructions/canonical/guardrails.md",
       "type": "file",
       "path": "instructions/canonical/guardrails.md",
-      "sha256": "d1cfc7bd8e9615e5f308a242e990c1d287c4bbbca6ce6264201120f4e6f61be1",
+      "sha256": "173c8cd9e50c6fd8a84fb6172239bc41edbf721a6eddfafff0d1015ce63f9e38",
       "mode": 420
     },
     {
@@ -9627,7 +8969,7 @@
       "id": "file:instructions/canonical/system.yaml",
       "type": "file",
       "path": "instructions/canonical/system.yaml",
-      "sha256": "1e96697bedfd4996213a83f0ab5bc03c0ab3c35a239e78bab819c08fd965a4ce",
+      "sha256": "b8d1391f0014efdbb28c875fdefede1a03713dea0e9d5f77cf76334809030d06",
       "mode": 420
     },
     {
@@ -9655,7 +8997,7 @@
       "id": "file:instructions/generated/claude/.claude.guardrails.md",
       "type": "file",
       "path": "instructions/generated/claude/.claude.guardrails.md",
-      "sha256": "33f18f7fa0fd5fea63972db49eccbb7173f2c8f8b39970fbd88ed3fe73a2f555",
+      "sha256": "028de2152a2b9f3af5ea9a750c38910572e4651f2456d664888f5f039c6b09e7",
       "mode": 420
     },
     {
@@ -9704,7 +9046,7 @@
       "id": "file:package.json",
       "type": "file",
       "path": "package.json",
-      "sha256": "4c27ab2493e2c0bb938875af277ca73469726594bc0c2d43923a2a9fa31fdd20",
+      "sha256": "a355d08171297472c9cc554f703dc7d3dc42d654a419acdf2aca31a7c3a0baa7",
       "mode": 420
     },
     {
@@ -9900,7 +9242,7 @@
       "id": "file:tools/ai-bridge/docs/RESEARCH_WORKFLOW.md",
       "type": "file",
       "path": "tools/ai-bridge/docs/RESEARCH_WORKFLOW.md",
-      "sha256": "82954e8ae574ddace84c627655421eecda540ccfb9fb5b558e783693bbae207c",
+      "sha256": "f111073845dc541852bb3f1a338385d188170501872fa0927f8c2180aab0e0df",
       "mode": 420
     },
     {
@@ -11514,6 +10856,209 @@
       "mode": 420
     },
     {
+      "id": "file:tools/codex/prompt-system/claude-cost-controlled-slice-execution-flowchart.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/claude-cost-controlled-slice-execution-flowchart.md",
+      "sha256": "3f26e85d6855e0b207ae40dc762f26c3da17fd424af32b68d76e9ef5dd6c7d91",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/claude-health-remediation-playbook.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/claude-health-remediation-playbook.md",
+      "sha256": "6dcb1cd5e437da589a6739050eb9d01ad5cd5512e5f51094ef0c8a7c0a6e7f50",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/claude-master-run-order.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/claude-master-run-order.md",
+      "sha256": "6f6a0ad392623b61ea3c77e6364e0423c3d1eb1b94e10d81edcdb3b99d27363b",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/claude-prompt-pack-artifact-retention-and-compaction.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-artifact-retention-and-compaction.md",
+      "sha256": "88b0200eb6b6fa286a116f8f7bdd10e90e8cdd48b8058211da0c07ca24b6435e",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/claude-prompt-pack-candidate-replay-hardening.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-candidate-replay-hardening.md",
+      "sha256": "0385e6f69ef66ae9cfb48132037c04f7385f3c3b5ab8860e91d37f7b18285e77",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/claude-prompt-pack-claude-code-features-integration.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-claude-code-features-integration.md",
+      "sha256": "30dd4125554d09e6d4951b3df3904e8299d510a17706c6254bc68d2ece10cfdf",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/claude-prompt-pack-command-adherence-and-validation-hardening.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-command-adherence-and-validation-hardening.md",
+      "sha256": "2483c19690912e2a0896de301b0eefbb0785f59c513645a135571617c2e8a1f4",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/claude-prompt-pack-command-surface-normalization.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-command-surface-normalization.md",
+      "sha256": "c765e838545e6cf705de841eb3dba4673dbeb1aa2a9986646df1dffdc14791c9",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/claude-prompt-pack-cost-controlled-slice-execution.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-cost-controlled-slice-execution.md",
+      "sha256": "bce6b89b946b2d057663ee76cac0e07cbf216748b9ae30d6dd08c577d6b85e48",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/claude-prompt-pack-framework-learning-loop-enforcement.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-framework-learning-loop-enforcement.md",
+      "sha256": "9f376289b310041a9d47a6e801fe1e7abf07f4cce8b54c8bf2f0fb5df43a92a2",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/claude-prompt-pack-framework-post-workflow-hooks.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-framework-post-workflow-hooks.md",
+      "sha256": "9c04c20cde72c35b46d629d37a13b48d90098f6879621872f1bc47ba82b54bfc",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/claude-prompt-pack-harness-capability-abstraction.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-harness-capability-abstraction.md",
+      "sha256": "a342abc21ac87cadce94aecbf677f64ec0cf52422b17fc3919ec132795e6be0b",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/claude-prompt-pack-local-model-verification-lane.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-local-model-verification-lane.md",
+      "sha256": "80714349dcd064e3d4d21292199c3f0976e0b62ec185cd497a3264fc956edb09",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/claude-prompt-pack-master-loop-closure.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-master-loop-closure.md",
+      "sha256": "24d3ce01c0bcf0a02068d668d497605b661da0d2bf6c188c8e0ec13d53d4d9ab",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/claude-prompt-pack-master-prompt-and-operator-ux-hardening.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-master-prompt-and-operator-ux-hardening.md",
+      "sha256": "6fe5b90a8313ab3088fa80404ff8b82b071c537656b7e054e9c06d006120cc8a",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/claude-prompt-pack-meta-staged-remediation-framework.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-meta-staged-remediation-framework.md",
+      "sha256": "7d3bc581e900006079b3924d12fa040bb32786b0fe2630de8587af69cfe8787e",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/claude-prompt-pack-multi-step-orchestration-abstraction.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-multi-step-orchestration-abstraction.md",
+      "sha256": "ecc215d6d835d9e68af9850f5980481bba5b98850f99732418b31110fe40abc1",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/claude-prompt-pack-multiagent-planning-and-compliance.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-multiagent-planning-and-compliance.md",
+      "sha256": "ebd8cc671edcc85a2318234ab2a71c3757d8f1bcf78d6c51d4311799fdfc0244",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/claude-prompt-pack-operational-loop-closure.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-operational-loop-closure.md",
+      "sha256": "90b0b603454c5865fe7759f41a011c54357811c446b1db8ec797ad5675b29d1f",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/claude-prompt-pack-project-health-alignment.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-project-health-alignment.md",
+      "sha256": "8ad0debb9bd3b01432f249d7acb68692421d4b826adadd914e5c4cb6abba58a3",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/claude-prompt-pack-semantic-output-audit.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-semantic-output-audit.md",
+      "sha256": "6611c9e57a04052e4c6dc1dfe97a1d5959ea72d337f944e5739b6b951c6001dc",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/claude-prompt-pack-semantic-verification.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-semantic-verification.md",
+      "sha256": "c720bae31a537c66172ce7acce4f61455a227f94baf60b56abe37af68317dead",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/claude-prompt-pack-source-material-qa-and-promotion.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-source-material-qa-and-promotion.md",
+      "sha256": "941c86186ef299bfb92fa37db13d5578802f8131c6dacfacdc1e57ba239f3b82",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/claude-prompt-pack-subagent-autonomy-and-template-efficiency.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/claude-prompt-pack-subagent-autonomy-and-template-efficiency.md",
+      "sha256": "5ac2bffd22084a2e3e641a8fd9f30f810e51df916f21485beaf59714a30e4611",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/claude-run-debrief-and-clear-readiness.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/claude-run-debrief-and-clear-readiness.md",
+      "sha256": "2c7efe0715ce2d602b5c6f0a0e5ef066ca954c22b52013afcf3dc00690bd8f5a",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/manifest.json",
+      "type": "file",
+      "path": "tools/codex/prompt-system/manifest.json",
+      "sha256": "57cd2b29c94096c110b5bf0963543d02135a634dec9b8ee6992a28322e8dfbe4",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/plan-contract.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/plan-contract.md",
+      "sha256": "66764298f673c607a817f405909af542645b10efae4fbd331801e3d24bf02ba7",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/prompt-plan-registry.json",
+      "type": "file",
+      "path": "tools/codex/prompt-system/prompt-plan-registry.json",
+      "sha256": "47587a8027ee09ca210e2345e0483c34dba38a38852687005c4a5caa1c641691",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/codex/prompt-system/README.md",
+      "type": "file",
+      "path": "tools/codex/prompt-system/README.md",
+      "sha256": "59b9f3934fd7c118ef1a3026e682c5dadb91bb1f8fced5e6eded989d7e903368",
+      "mode": 420
+    },
+    {
       "id": "file:tools/codex/prompts/review-task-plan.md",
       "type": "file",
       "path": "tools/codex/prompts/review-task-plan.md",
@@ -11580,7 +11125,7 @@
       "id": "file:tools/commands/handlers/review-progress-adapters.cjs",
       "type": "file",
       "path": "tools/commands/handlers/review-progress-adapters.cjs",
-      "sha256": "d498bdaca099fa536f8ae92806a1f79894924a77e83ddad5f607ba12ac34c905",
+      "sha256": "558d24d47cea3416da34edef23a074e43dcd0a69e722fc04f8196a1e128dc919",
       "mode": 420
     },
     {
@@ -11734,7 +11279,7 @@
       "id": "file:tools/context/context-budget.cjs",
       "type": "file",
       "path": "tools/context/context-budget.cjs",
-      "sha256": "4765a19a2b0b7c63b5e2497a4df56de26dd5be631f88e911d96a4eaed8c3e050",
+      "sha256": "810ed0e8ceabeddfef54bd35cee4e258ad05a26337ece65742319d5216452ad1",
       "mode": 420
     },
     {
@@ -13001,7 +12546,7 @@
       "id": "file:tools/hygiene/auto-commit.js",
       "type": "file",
       "path": "tools/hygiene/auto-commit.js",
-      "sha256": "e50a7f97f92054c4994c81dcd3ea9af09c93a977eb9ec1fb0c0ff722ec945062",
+      "sha256": "60d4b4fbb64eda0337f28570c720009ca6d1f7acbcda6cded7b75231fe52aaf1",
       "mode": 493
     },
     {
@@ -13663,6 +13208,13 @@
       "mode": 420
     },
     {
+      "id": "file:tools/kernel/hooks/__tests__/bash-write-extract.test.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/__tests__/bash-write-extract.test.cjs",
+      "sha256": "ea9278818ee61efbb5619a689e260fa66181812431f0507b752912c662880621",
+      "mode": 420
+    },
+    {
       "id": "file:tools/kernel/hooks/__tests__/delegation-altitude-breaker.test.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/__tests__/delegation-altitude-breaker.test.cjs",
@@ -13688,6 +13240,13 @@
       "type": "file",
       "path": "tools/kernel/hooks/__tests__/once-per-session.test.cjs",
       "sha256": "d9a9cb4bc34f11cf3fd52d77abe9c929ca2a1fe69582e58324f3c677419356f9",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/kernel/hooks/__tests__/posttool-write-ledger.bash.test.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/__tests__/posttool-write-ledger.bash.test.cjs",
+      "sha256": "ec1dbfb24ae3dcf90933c6208848f91de86c4d2e3665e233546721ac203c5175",
       "mode": 420
     },
     {
@@ -13838,6 +13397,13 @@
       "mode": 420
     },
     {
+      "id": "file:tools/kernel/hooks/lib/bash-write-extract.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/lib/bash-write-extract.cjs",
+      "sha256": "fa5aeeab0a1f313c087149771c3964fddb10732d39433e9a22262b0fbfb32938",
+      "mode": 420
+    },
+    {
       "id": "file:tools/kernel/hooks/lib/compat-dispatch.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/lib/compat-dispatch.cjs",
@@ -13876,7 +13442,7 @@
       "id": "file:tools/kernel/hooks/posttool-write-ledger.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/posttool-write-ledger.cjs",
-      "sha256": "61f2221247701d47e364ad018394c6cda9600128bfecde3ea554e553700ed40d",
+      "sha256": "aa76672084427cc26763e1e8cf107da74d3cc862f3c317f69b0f85ab39122c9b",
       "mode": 420
     },
     {
@@ -14636,6 +14202,20 @@
       "mode": 420
     },
     {
+      "id": "file:tools/lib/__tests__/canonical-root.test.cjs",
+      "type": "file",
+      "path": "tools/lib/__tests__/canonical-root.test.cjs",
+      "sha256": "76195c4a13561871ceec3696c355287b414f6679cb59a9745126ca555186afdf",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/lib/__tests__/durable-artifact.test.cjs",
+      "type": "file",
+      "path": "tools/lib/__tests__/durable-artifact.test.cjs",
+      "sha256": "794cc7d36cb02993f122cc629f4fd7252f3964f95d92eb46eaa454e8e118cccd",
+      "mode": 420
+    },
+    {
       "id": "file:tools/lib/canonical-root.cjs",
       "type": "file",
       "path": "tools/lib/canonical-root.cjs",
@@ -14647,6 +14227,13 @@
       "type": "file",
       "path": "tools/lib/creds.config.schema.json",
       "sha256": "e57c1f6ddc6c1fc055815b638655eb901af37fe2bee479f43d38c220cc1fc35d",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/lib/durable-artifact.cjs",
+      "type": "file",
+      "path": "tools/lib/durable-artifact.cjs",
+      "sha256": "6cad7f085b113f8c4e34a73ec5cfbe2635fc4d4f719d8d5fba45f2d9d4c4e2a4",
       "mode": 420
     },
     {
@@ -17296,6 +16883,13 @@
       "mode": 420
     },
     {
+      "id": "file:tools/sessions/__tests__/session-end-boundary-log.test.cjs",
+      "type": "file",
+      "path": "tools/sessions/__tests__/session-end-boundary-log.test.cjs",
+      "sha256": "5f304c4d0012f12eee3281fa0e91e5651b24a383fcdd22e52a6f4e0cd02f371d",
+      "mode": 420
+    },
+    {
       "id": "file:tools/sessions/__tests__/session-end-crash-floor.test.cjs",
       "type": "file",
       "path": "tools/sessions/__tests__/session-end-crash-floor.test.cjs",
@@ -17390,8 +16984,8 @@
       "id": "file:tools/sessions/session-end-boundary-log.cjs",
       "type": "file",
       "path": "tools/sessions/session-end-boundary-log.cjs",
-      "sha256": "a9f9b6f62e2f7d90ba483b6a85f1d8790c2fca8feff5b2c715dcbf4ffa82973b",
-      "mode": 493
+      "sha256": "b4abbcd90f1001b414ac5e29e9b338c59cef77496317a257054d9742e00d38ca",
+      "mode": 420
     },
     {
       "id": "file:tools/sessions/session-start-cross-session-consumer.cjs",
@@ -17789,7 +17383,7 @@
       "id": "file:tools/signals/lib/actor-registry.js",
       "type": "file",
       "path": "tools/signals/lib/actor-registry.js",
-      "sha256": "99c3c333b22910aafa8662ec0c0295d232f141ce341d52418e46baa9c24be49d",
+      "sha256": "a5bf95b13b0dc4cb151eb40936defb1d66d4652401c1745b18782a51825d4e4c",
       "mode": 420
     },
     {
@@ -17845,7 +17439,7 @@
       "id": "file:tools/signals/lib/codex-bridge.js",
       "type": "file",
       "path": "tools/signals/lib/codex-bridge.js",
-      "sha256": "79e98ec9f6081aa06c3bb6b57b1783fddec33444db4772ca436bd3049f30dbcd",
+      "sha256": "191309feb96498d0e220fd36fc37131e0896eb217a033bfa4e8faecbbe46ae11",
       "mode": 420
     },
     {
@@ -18857,6 +18451,55 @@
       "mode": 420
     },
     {
+      "id": "file:tools/verify/__tests__/__fixtures__/clean-root/_dev/state/task-plan-reviews/clean-plan.json",
+      "type": "file",
+      "path": "tools/verify/__tests__/__fixtures__/clean-root/_dev/state/task-plan-reviews/clean-plan.json",
+      "sha256": "a6396ea03bb523cd3f948519c695ea3aa41dafacc6bd83bdda3e8d789fd56ba9",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/active-sessions/session-1/write_log.json",
+      "type": "file",
+      "path": "tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/active-sessions/session-1/write_log.json",
+      "sha256": "a12ccd795989417bca0aa0d050e9369fed7691f5975fa3f337b080112bef2336",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/active-sessions/session-2/write_log.json",
+      "type": "file",
+      "path": "tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/active-sessions/session-2/write_log.json",
+      "sha256": "cfbe0af982008de3ec59b8560869c6575ea06e9254b5e134d9cded5773159b79",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/active-sessions/session-3/write_log.json",
+      "type": "file",
+      "path": "tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/active-sessions/session-3/write_log.json",
+      "sha256": "3e3d024fb969b42912da79a48acd30214c3746918e2d23bb6dcf22fd764973c2",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/task-plan-reviews/control-plan.json",
+      "type": "file",
+      "path": "tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/task-plan-reviews/control-plan.json",
+      "sha256": "83a5650e0a6cf8dda67cdeb18e490ce2994a975c83138bef9b2746f4480f67a6",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/task-plan-reviews/exempt-plan.json",
+      "type": "file",
+      "path": "tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/task-plan-reviews/exempt-plan.json",
+      "sha256": "6a98fc82fb71064e5ac908f58f747f11c27ccf65e1debe937fb5b8dba2f235cb",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/task-plan-reviews/leaky-plan.json",
+      "type": "file",
+      "path": "tools/verify/__tests__/__fixtures__/mixed-root/_dev/state/task-plan-reviews/leaky-plan.json",
+      "sha256": "3bf34a75f8aadb6b8ad1a9a6926a92b467d6781802e7934148cccec95ff8319d",
+      "mode": 420
+    },
+    {
       "id": "file:tools/verify/__tests__/build-sovereign-core-final-receipt.test.cjs",
       "type": "file",
       "path": "tools/verify/__tests__/build-sovereign-core-final-receipt.test.cjs",
@@ -18889,6 +18532,13 @@
       "type": "file",
       "path": "tools/verify/__tests__/run-sovereign-core-validation.test.cjs",
       "sha256": "dcccb9be0414a2dae556562711dea15499931f66af985ef7fe648f6299da4c4b",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/verify/__tests__/scratch-leak-check.test.cjs",
+      "type": "file",
+      "path": "tools/verify/__tests__/scratch-leak-check.test.cjs",
+      "sha256": "a863c7956c158f58cf7a2853d4c7ea10267136781496e013fd0ec917195d8fd5",
       "mode": 420
     },
     {
@@ -19007,7 +18657,7 @@
       "id": "file:tools/verify/lib/__tests__/paste-target-prompt-coverage.test.cjs",
       "type": "file",
       "path": "tools/verify/lib/__tests__/paste-target-prompt-coverage.test.cjs",
-      "sha256": "9d57fb2a3d014af7f1b663609473f4117d1199e372df5300855cc4ab2a9c256d",
+      "sha256": "2b138b47eba1726b64e99043dcd83efbfeab1768d748de3fe53c430f6d522ba2",
       "mode": 420
     },
     {
@@ -19070,14 +18720,14 @@
       "id": "file:tools/verify/lib/paste-target-prompt.cjs",
       "type": "file",
       "path": "tools/verify/lib/paste-target-prompt.cjs",
-      "sha256": "d61232fb80e15fee600f712170673549d3bfe41c1b1fb85e50856dbb2aca0cef",
+      "sha256": "47bd71eecf95f312f4f91c198450e4132148556386d3d504c9426e2961cf3b36",
       "mode": 420
     },
     {
       "id": "file:tools/verify/lib/prompt-contract.cjs",
       "type": "file",
       "path": "tools/verify/lib/prompt-contract.cjs",
-      "sha256": "9c8f70f4c1a93a060bffe83c0d86c401d55663b4f7dd6ce16b31274ac65c963c",
+      "sha256": "989016e8400bbb7b58d3fe516e2a6702d3bec0bb9216885a7a794b05a6dc8fbc",
       "mode": 420
     },
     {
@@ -19277,6 +18927,13 @@
       "mode": 420
     },
     {
+      "id": "file:tools/verify/scratch-leak-check.cjs",
+      "type": "file",
+      "path": "tools/verify/scratch-leak-check.cjs",
+      "sha256": "4c2ce30bda9e18282fe45fd64a437175dd1670be3e0153735868dec973e536eb",
+      "mode": 420
+    },
+    {
       "id": "file:tools/verify/signal-schema.json",
       "type": "file",
       "path": "tools/verify/signal-schema.json",
@@ -19350,7 +19007,7 @@
       "id": "file:tools/verify/verify-generator-paste-target-optin.cjs",
       "type": "file",
       "path": "tools/verify/verify-generator-paste-target-optin.cjs",
-      "sha256": "a34a71cd91381f90b3e6eacb7d599db422e59ed339bb5a88c17f9c809510d0e6",
+      "sha256": "d34b9500103198bef544c73dcab36aab5df0f381b58a6337630a51110eeb0948",
       "mode": 420
     },
     {
@@ -19378,7 +19035,7 @@
       "id": "file:tools/verify/verify-paste-target-prompts.cjs",
       "type": "file",
       "path": "tools/verify/verify-paste-target-prompts.cjs",
-      "sha256": "a1964749f9117bff272960e143ea3502057af075e66d56b8a5ef2e1bda09a807",
+      "sha256": "2c5ef00e919a8af65475ee81d26a785abe84409cd8da5ed7a81cb3005b9f9943",
       "mode": 420
     },
     {
@@ -20346,67 +20003,67 @@
       "name": "wordpress/seo-validation"
     },
     {
-      "id": "hook:PostToolUse:621",
+      "id": "hook:PostToolUse:618",
       "type": "hook",
       "event": "PostToolUse",
       "command_sha256": "e395bd31a35362065002007d044e98d86e484bf829d16ebe2027da8a928db52c"
     },
     {
-      "id": "hook:PreToolUse:618",
+      "id": "hook:PreToolUse:615",
       "type": "hook",
       "event": "PreToolUse",
       "command_sha256": "ce97f4fd7eb07f52a0e9c6352fab2ce0e803f0920ef184d8f42261a46580103b"
     },
     {
-      "id": "hook:SessionEnd:625",
-      "type": "hook",
-      "event": "SessionEnd",
-      "command_sha256": "4ee05b68abff34325a3950761939e20cf2391c7b29d640b29b95233d29943fd4"
-    },
-    {
-      "id": "hook:SessionEnd:626",
+      "id": "hook:SessionEnd:622",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "35974852e367c31bae49591ac0aa4afd518ec624f233743462e37c4c3863b1ed"
     },
     {
-      "id": "hook:SessionEnd:627",
+      "id": "hook:SessionEnd:623",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "519f522b04afb8471aa7e7ca117deb8af91976de62b5c1f5f4f6f9f60c8c217f"
     },
     {
-      "id": "hook:SessionStart:622",
+      "id": "hook:SessionEnd:624",
+      "type": "hook",
+      "event": "SessionEnd",
+      "command_sha256": "4ee05b68abff34325a3950761939e20cf2391c7b29d640b29b95233d29943fd4"
+    },
+    {
+      "id": "hook:SessionStart:619",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "26962e5976f5c689361f18050bb4e718d507df72590fbbc620e356cde47cf86b"
     },
     {
-      "id": "hook:SessionStart:623",
+      "id": "hook:SessionStart:620",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "00253242784e7853b94e1125e7c69f31085961b2dd7b3d1fcb6b4c79d94e9baf"
     },
     {
-      "id": "hook:SessionStart:624",
+      "id": "hook:SessionStart:621",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "c738ce0e54e375f17b97f1186b95e5fd1125c0675d2f3e9238e872062f5b7076"
     },
     {
-      "id": "hook:Stop:619",
+      "id": "hook:Stop:616",
       "type": "hook",
       "event": "Stop",
       "command_sha256": "c0c0282a10c1ff35c525d7786ceb380c853b678494f400dbf1fc178cdddcbb19"
     },
     {
-      "id": "hook:SubagentStop:628",
+      "id": "hook:SubagentStop:625",
       "type": "hook",
       "event": "SubagentStop",
       "command_sha256": "4ca0f2529c8dd4023ade83508a1e40a1728dbdcfa35aadf9ea953cf8ac9a587d"
     },
     {
-      "id": "hook:UserPromptSubmit:620",
+      "id": "hook:UserPromptSubmit:617",
       "type": "hook",
       "event": "UserPromptSubmit",
       "command_sha256": "d647b60c73e5962cae00cf1cf2bd11d28472fdb8c47074a2e62cabf0e7e89545"
@@ -21567,6 +21224,11 @@
       "id": "manifest-path:.claude/skills/github-auth/SKILL.md",
       "type": "manifest-registration",
       "declared_target": ".claude/skills/github-auth/SKILL.md"
+    },
+    {
+      "id": "manifest-path:.claude/skills/go/SKILL.md",
+      "type": "manifest-registration",
+      "declared_target": ".claude/skills/go/SKILL.md"
     },
     {
       "id": "manifest-path:.claude/skills/google-ads-mcp/SKILL.md",
@@ -23695,6 +23357,12 @@
       "command_sha256": "39ba178cbd78c323b52981baecaa52bfb71ef6e0f02c43257cf31831ac6d2462"
     },
     {
+      "id": "package-script:verify:scratch-leak",
+      "type": "package-script",
+      "name": "verify:scratch-leak",
+      "command_sha256": "1d30b952bbb4f0c10707caea310f35e7581d97740e984ed43484b619599345f8"
+    },
+    {
       "id": "package-script:verify:site-audit",
       "type": "package-script",
       "name": "verify:site-audit",
@@ -23813,31 +23481,6 @@
       "type": "package-script",
       "name": "workspace:validate",
       "command_sha256": "fc01cbb73a7ad9914e6bcf8c78ebf66b9f3a5f2cede214cf363204012ef941b3"
-    },
-    {
-      "id": "schema-definition:_dev/config/remote-hosts.schema.json",
-      "type": "schema-definition",
-      "name": "_dev/config/remote-hosts.schema.json"
-    },
-    {
-      "id": "schema-definition:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/next-stage-decision.schema.json",
-      "type": "schema-definition",
-      "name": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/next-stage-decision.schema.json"
-    },
-    {
-      "id": "schema-definition:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/stage-definition.schema.json",
-      "type": "schema-definition",
-      "name": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/stage-definition.schema.json"
-    },
-    {
-      "id": "schema-definition:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/stage-status.schema.json",
-      "type": "schema-definition",
-      "name": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/stage-status.schema.json"
-    },
-    {
-      "id": "schema-definition:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/validation-results.schema.json",
-      "type": "schema-definition",
-      "name": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/validation-results.schema.json"
     },
     {
       "id": "schema-definition:frameworks/deliverables/presentation-review/schemas/intake.schema.json",
@@ -24480,6 +24123,11 @@
       "name": "github-auth"
     },
     {
+      "id": "skill-definition:go",
+      "type": "skill-definition",
+      "name": "go"
+    },
+    {
       "id": "skill-definition:google-ads-mcp",
       "type": "skill-definition",
       "name": "google-ads-mcp"
@@ -24733,6 +24381,16 @@
       "resolution": "tracked"
     },
     {
+      "id": "010876cb845f35566878388ce954b78793a623b94a4f14f61c4e8bccc1a304cc",
+      "type": "hook-target",
+      "from": "hook:SessionStart:621",
+      "to": "file:tools/user/inject-mirror.cjs",
+      "target": "tools/user/inject-mirror.cjs",
+      "required": true,
+      "declared_target": "tools/user/inject-mirror.cjs",
+      "event": "SessionStart"
+    },
+    {
       "id": "010b30cc4fc72e0a32d1a8eeb743fc9727def556ce07ba0f75086bc91f020b4f",
       "type": "mcp-server",
       "from": "mcp:google-ads",
@@ -24839,6 +24497,15 @@
       "target": "tools/context/context-budget.cjs",
       "required": true,
       "specifier": "./context-budget.cjs"
+    },
+    {
+      "id": "01e42f5a8905175d57f2c8f2a25fefa229a0a12a853a127aba40d60036c63c87",
+      "type": "static-import",
+      "from": "file:tools/sessions/__tests__/session-end-boundary-log.test.cjs",
+      "to": "file:tools/sessions/session-end-boundary-log.cjs",
+      "target": "tools/sessions/session-end-boundary-log.cjs",
+      "required": true,
+      "specifier": "../session-end-boundary-log.cjs"
     },
     {
       "id": "01e4391a87b1b090edcfc179aa6d4a57dc104142b508c3d525d3b8ecce777b06",
@@ -25284,16 +24951,6 @@
       "target": ".claude/skills/fable5-rederive/SKILL.md",
       "required": true,
       "declared_target": ".claude/skills/fable5-rederive/SKILL.md"
-    },
-    {
-      "id": "06d223ddf2bf7fb680d6fd0037d9531d97528545742f0c2d7df7981075fa0443",
-      "type": "hook-target",
-      "from": "hook:SubagentStop:628",
-      "to": "file:.claude/hooks/subagent-telemetry-writer.cjs",
-      "target": ".claude/hooks/subagent-telemetry-writer.cjs",
-      "required": true,
-      "declared_target": ".claude/hooks/subagent-telemetry-writer.cjs",
-      "event": "SubagentStop"
     },
     {
       "id": "06e8cb5e9494c72d678df63d07e02262381afeadbc6d1b8efd17ae083632e9ac",
@@ -26879,6 +26536,15 @@
       "target": "tools/kernel/tier-ledger/append-ledger-entry.cjs",
       "required": true,
       "specifier": "./append-ledger-entry.cjs"
+    },
+    {
+      "id": "1844229e3a8fb887cade77d91bbdd317549b4642bf841881dbeb85ba2fb49fe1",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/posttool-write-ledger.bash.test.cjs",
+      "to": "file:tools/kernel/hooks/pretool-git-custody-gate.cjs",
+      "target": "tools/kernel/hooks/pretool-git-custody-gate.cjs",
+      "required": true,
+      "specifier": "../pretool-git-custody-gate.cjs"
     },
     {
       "id": "18492496f67a95712583bd9fc9126fbb39b0fd42e9027427120b4de8575d6104",
@@ -29109,6 +28775,15 @@
       "specifier": "../../claude/lib/hook-telemetry.cjs"
     },
     {
+      "id": "30a956de284a552fe624d99f03fb6e5a7e641afaf1a2b4d8fa14aaf9b7b42453",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/posttool-write-ledger.bash.test.cjs",
+      "to": "file:tools/context/context-budget.cjs",
+      "target": "tools/context/context-budget.cjs",
+      "required": true,
+      "specifier": "../../../context/context-budget.cjs"
+    },
+    {
       "id": "30ba502cb40f26b4ce8d4233557ccdad630efb549d4e10912049c3d8037300ff",
       "type": "manifest-target",
       "from": "manifest-path:.claude/skills/state-reconciliation-preamble/SKILL.md",
@@ -29473,15 +29148,6 @@
       "declared_target": "tools/workspace/schemas/loop-grade-record.schema.json"
     },
     {
-      "id": "3434ed173f04dbb2a8210e8276e6de4e59316efab11468bdd0a70e16d806a085",
-      "type": "schema-definition-file",
-      "from": "schema-definition:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/stage-definition.schema.json",
-      "to": "file:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/stage-definition.schema.json",
-      "target": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/stage-definition.schema.json",
-      "required": true,
-      "declared_target": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/stage-definition.schema.json"
-    },
-    {
       "id": "3461110f4a02da69bed0ad7fb0c60cda29f747410b6b8889799ca271586c8a90",
       "type": "static-import",
       "from": "file:tools/signals/run-remote-ssh-bridge.js",
@@ -29810,15 +29476,6 @@
       "specifier": "./lib/dart-api"
     },
     {
-      "id": "37129bd9d76655c53bd5d176c67a633396f0edbe29a18681b1c87a1dfa165e6d",
-      "type": "schema-definition-file",
-      "from": "schema-definition:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/next-stage-decision.schema.json",
-      "to": "file:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/next-stage-decision.schema.json",
-      "target": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/next-stage-decision.schema.json",
-      "required": true,
-      "declared_target": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/next-stage-decision.schema.json"
-    },
-    {
       "id": "371c008eb96871e6ef8f6b06606213f6cfc2624d6caf6e816f5c0b849f050b59",
       "type": "static-import",
       "from": "file:tools/verify/verify-harnesses.cjs",
@@ -29963,6 +29620,16 @@
       "target": "tools/signals/lib/signal-lifecycle.js",
       "required": true,
       "specifier": "./lib/signal-lifecycle.js"
+    },
+    {
+      "id": "3898743addae021125ffd83b4e179a7aa179469f975f5e7826eba36bb6a64490",
+      "type": "hook-target",
+      "from": "hook:SubagentStop:625",
+      "to": "file:.claude/hooks/subagent-telemetry-writer.cjs",
+      "target": ".claude/hooks/subagent-telemetry-writer.cjs",
+      "required": true,
+      "declared_target": ".claude/hooks/subagent-telemetry-writer.cjs",
+      "event": "SubagentStop"
     },
     {
       "id": "389af8c09ddcf5918dd0128a09bd3bec58b34ea19cd4093eec7c0d3b4e0bdb1b",
@@ -30493,16 +30160,6 @@
       "specifier": "../../planning/lib/repair-vs-amend-classifier"
     },
     {
-      "id": "3dbc5a9b7c2a960e5b804532bfd0a1a27cee09e10fcbeeaf8513990053d5fb89",
-      "type": "hook-target",
-      "from": "hook:PreToolUse:618",
-      "to": "file:tools/kernel/hooks/dispatch-pretool.cjs",
-      "target": "tools/kernel/hooks/dispatch-pretool.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-pretool.cjs",
-      "event": "PreToolUse"
-    },
-    {
       "id": "3dc768e40bd13eb5741fb465d13022fcf23c2948b1400aa6b268c5f14d83de15",
       "type": "static-import",
       "from": "file:tools/workspace/validate-output.js",
@@ -31003,16 +30660,6 @@
       "specifier": "../../ai-bridge/adapters/openai-compatible.js"
     },
     {
-      "id": "428e6b03c7d4e14132e9a008b92f6ebea913f3803a84ec12d77928d3c7943e48",
-      "type": "hook-target",
-      "from": "hook:SessionStart:623",
-      "to": "file:tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "required": true,
-      "declared_target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "event": "SessionStart"
-    },
-    {
       "id": "4296568584b46f670bb5bd9fa4ad3b1572641e7973fa08b2bb6cad75107d40ad",
       "type": "alias-resolution",
       "from": "alias:help-me-route",
@@ -31125,6 +30772,15 @@
       "specifier": "../../verify/lib/paste-target-prompt.cjs"
     },
     {
+      "id": "43e9c5aa7258c6ad72071de54d3a6efe2c7e0369661329b3f1da159e9d6c44b1",
+      "type": "static-import",
+      "from": "file:tools/verify/__tests__/scratch-leak-check.test.cjs",
+      "to": "file:tools/verify/scratch-leak-check.cjs",
+      "target": "tools/verify/scratch-leak-check.cjs",
+      "required": true,
+      "specifier": "../scratch-leak-check.cjs"
+    },
+    {
       "id": "43ee438114b4f49da7ade18ba1c6c8bb351eb5dde24de37ec3f72de41cac8f8c",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/orchestrate.md",
@@ -31159,6 +30815,15 @@
       "target": ".claude/commands/discord-access.md",
       "required": true,
       "declared_target": ".claude/commands/discord-access.md"
+    },
+    {
+      "id": "443ea9b941d7b5aba13259a11bae8def9f88bdedc28d04a37860720f8ec2be38",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/posttool-write-ledger.bash.test.cjs",
+      "to": "file:tools/kernel/hooks/posttool-write-ledger.cjs",
+      "target": "tools/kernel/hooks/posttool-write-ledger.cjs",
+      "required": true,
+      "specifier": "../posttool-write-ledger.cjs"
     },
     {
       "id": "447e2668498bc989b63af9b47c967680d4646bdfe02019d9f8310dc5be254c5a",
@@ -31731,6 +31396,16 @@
       "specifier": "./pretool-mutation-plan-gate.cjs"
     },
     {
+      "id": "4a69ed07bd29f06e426d1b2403f1c6ed5c650a88d8d4bd7aa4c00470bfa5199f",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:623",
+      "to": "file:tools/context/repo-awareness-closeout.cjs",
+      "target": "tools/context/repo-awareness-closeout.cjs",
+      "required": true,
+      "declared_target": "tools/context/repo-awareness-closeout.cjs",
+      "event": "SessionEnd"
+    },
+    {
       "id": "4a93eac1a376004015b9691bae752e2d10c1406553f7771721ea7a8fd54b1386",
       "type": "agent-definition-file",
       "from": "agent-definition:framework-auditor",
@@ -31756,16 +31431,6 @@
       "target": ".claude/commands/shutdown.md",
       "required": true,
       "declared_target": ".claude/commands/shutdown.md"
-    },
-    {
-      "id": "4af209f006619314aa166555adc788cbec5417f7ed2c2b02520bd6c4b77415e5",
-      "type": "hook-target",
-      "from": "hook:UserPromptSubmit:620",
-      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
-      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-userprompt.cjs",
-      "event": "UserPromptSubmit"
     },
     {
       "id": "4b09b8081ccb7c9c4b519bb5c8a428091aa60aab6e1cdd065c39423f1397f606",
@@ -33156,6 +32821,16 @@
       "declared_target": "instructions/canonical/commands/new-framework.yaml"
     },
     {
+      "id": "59720247cd9aa4505470b0b65d6d2571e1a979e801a270fc30c19ae3db4e9e2a",
+      "type": "hook-target",
+      "from": "hook:UserPromptSubmit:617",
+      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
+      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "event": "UserPromptSubmit"
+    },
+    {
       "id": "59a947778fe4d3ee88e566d21127a1d72557d7acd45ac676bfd239ac632153ab",
       "type": "static-import",
       "from": "file:tools/mcp/delesign/client.js",
@@ -33801,6 +33476,15 @@
       "target": "tools/planning/lib/resolve-task-plan.js",
       "required": true,
       "specifier": "../planning/lib/resolve-task-plan"
+    },
+    {
+      "id": "607d1f7122688650593e2edf97e49755852501259f390d3e0f86e0970b26cbb2",
+      "type": "static-import",
+      "from": "file:tools/lib/__tests__/durable-artifact.test.cjs",
+      "to": "file:tools/lib/durable-artifact.cjs",
+      "target": "tools/lib/durable-artifact.cjs",
+      "required": true,
+      "specifier": "../durable-artifact.cjs"
     },
     {
       "id": "609a481858ad5fc2dad45834db0a2403a3aa35125366a0f1c37b571bbbb01f3a",
@@ -34611,6 +34295,15 @@
       "specifier": "./lib/fs"
     },
     {
+      "id": "69caa7b90e2572ebeb86fdee84e061c8f7e1935114b56460a2dbd1d740c48899",
+      "type": "skill-definition-file",
+      "from": "skill-definition:go",
+      "to": "file:.claude/skills/go/SKILL.md",
+      "target": ".claude/skills/go/SKILL.md",
+      "required": true,
+      "declared_target": ".claude/skills/go/SKILL.md"
+    },
+    {
       "id": "6a0864e3e3017f910bccc0dd1c41b13230c768878650f68d383eb48e99bbff91",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/cross-session.md",
@@ -34959,6 +34652,16 @@
       "specifier": "../posttool-write-ledger.cjs"
     },
     {
+      "id": "6d00d4ee85d43a86503c1d70ffb236c552b82dfc3dc788880531feb158ffb8e6",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:622",
+      "to": "file:tools/hooks/session-lifecycle/session-end-close.cjs",
+      "target": "tools/hooks/session-lifecycle/session-end-close.cjs",
+      "required": true,
+      "declared_target": "tools/hooks/session-lifecycle/session-end-close.cjs",
+      "event": "SessionEnd"
+    },
+    {
       "id": "6d0272d6f7e6f08fe3965bce188ec3804dfd4e41a7492e16f3c48ac0a8f9a498",
       "type": "manifest-target",
       "from": "manifest-path:.claude/skills/dl/SKILL.md",
@@ -35095,16 +34798,6 @@
       "target": "tools/ai-bridge/lib/verification-contract.js",
       "required": true,
       "specifier": "./lib/verification-contract"
-    },
-    {
-      "id": "6e6cb83906f54796f125bb3149fae17611070410b89d4f4686dfee4c980277fb",
-      "type": "hook-target",
-      "from": "hook:PostToolUse:621",
-      "to": "file:tools/kernel/hooks/dispatch-posttool.cjs",
-      "target": "tools/kernel/hooks/dispatch-posttool.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-posttool.cjs",
-      "event": "PostToolUse"
     },
     {
       "id": "6e81aa1519ddaef3c64ec30f3afc239c60a8657c431d2ee355262d92019725b6",
@@ -35295,15 +34988,6 @@
       "target": "tools/signals/lib/codex-auto.js",
       "required": true,
       "specifier": "./lib/codex-auto"
-    },
-    {
-      "id": "6fdc85f22fa0a160827c28a6f8eb9cdfc12f567e4ef0a85027f60554ea1ed36a",
-      "type": "schema-definition-file",
-      "from": "schema-definition:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/validation-results.schema.json",
-      "to": "file:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/validation-results.schema.json",
-      "target": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/validation-results.schema.json",
-      "required": true,
-      "declared_target": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/validation-results.schema.json"
     },
     {
       "id": "6ffd6e38560f5c1ab786c9994b54f524a9d9c36309043277cdfa88154889d554",
@@ -36252,16 +35936,6 @@
       "specifier": "./lib/actor-registry"
     },
     {
-      "id": "79b89202d7f5d63bb403d15443d7349a81dba8066327d816994029cefee6b799",
-      "type": "hook-target",
-      "from": "hook:Stop:619",
-      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
-      "target": "tools/kernel/hooks/dispatch-stop.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-stop.cjs",
-      "event": "Stop"
-    },
-    {
       "id": "79f7826e3a8cef0b399742d8c1f3f3bfd174cd2dcad4ccf7df174d0ede6da7e2",
       "type": "static-import",
       "from": "file:tools/telemetry/dispatches/verify-p3a-cascade-render.mjs",
@@ -36332,16 +36006,6 @@
       "target": "tools/signals/lib/tier-routing.cjs",
       "required": true,
       "specifier": "../../signals/lib/tier-routing.cjs"
-    },
-    {
-      "id": "7abe976cd3ae0a65ae2b6d5e4dae807175f9c8438d1e9aa7493123f332e89f7f",
-      "type": "hook-target",
-      "from": "hook:SessionStart:622",
-      "to": "file:tools/kernel/hooks/dispatch-session-start.cjs",
-      "target": "tools/kernel/hooks/dispatch-session-start.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-session-start.cjs",
-      "event": "SessionStart"
     },
     {
       "id": "7ac2af0301b2b06c8b4c85e199264344c9d1a1645ac35ae3231b19e26b20ccd3",
@@ -36450,6 +36114,16 @@
       "target": "tools/ant-hive-world/harness.js",
       "required": true,
       "specifier": "../harness.js"
+    },
+    {
+      "id": "7bdb05ea8533d3cdc97faaec135096cedb3295e7f03810fba777ffe743461f51",
+      "type": "hook-target",
+      "from": "hook:SessionStart:620",
+      "to": "file:tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "required": true,
+      "declared_target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "event": "SessionStart"
     },
     {
       "id": "7c099639a7af92e5b3d9e2a4f98fa01e7d3c5463d3ac6c9994a2b4def8acde93",
@@ -38587,15 +38261,6 @@
       "declared_target": ".claude/commands/owl.md"
     },
     {
-      "id": "931805563554e084a86eb6990144e177640d6b26236139e3c44f4cf68ec0ca78",
-      "type": "schema-definition-file",
-      "from": "schema-definition:_dev/config/remote-hosts.schema.json",
-      "to": "file:_dev/config/remote-hosts.schema.json",
-      "target": "_dev/config/remote-hosts.schema.json",
-      "required": true,
-      "declared_target": "_dev/config/remote-hosts.schema.json"
-    },
-    {
       "id": "9326b4b8c7f0ecef9bd9706b085921960bde1788057aae1eaf7e4060761dfe31",
       "type": "operation-command",
       "from": "operation:normalize-capture",
@@ -38712,6 +38377,15 @@
       "target": "tools/signals/lib/actor-auto.js",
       "required": true,
       "specifier": "./lib/actor-auto"
+    },
+    {
+      "id": "9435a5acc31a6c9f06903afaf73be008ba91e9c3b5caf3e3d2f366e61f2db380",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/posttool-write-ledger.cjs",
+      "to": "file:tools/kernel/hooks/lib/bash-write-extract.cjs",
+      "target": "tools/kernel/hooks/lib/bash-write-extract.cjs",
+      "required": true,
+      "specifier": "./lib/bash-write-extract.cjs"
     },
     {
       "id": "943967af6aa5f06fc02205adac24fb0e4f2f2b9785866708917538e1a90ba114",
@@ -38931,16 +38605,6 @@
       "declared_target": "tools/verify/schemas/mcp-requirement.schema.json"
     },
     {
-      "id": "966720a1bc3b9a818c65df168cc47ba2a901b7671c42de946790948ecc594757",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:626",
-      "to": "file:tools/hooks/session-lifecycle/session-end-close.cjs",
-      "target": "tools/hooks/session-lifecycle/session-end-close.cjs",
-      "required": true,
-      "declared_target": "tools/hooks/session-lifecycle/session-end-close.cjs",
-      "event": "SessionEnd"
-    },
-    {
       "id": "968b53f33fd662aa11196809b47fbfd5d1595b9c78b871fcd0817e46d94f2b2c",
       "type": "static-import",
       "from": "file:tools/planning/lib/__tests__/plan-run-gate.test.js",
@@ -39029,6 +38693,15 @@
       "target": "tools/ai-bridge/lib/dispatch-contract.js",
       "required": true,
       "specifier": "./dispatch-contract"
+    },
+    {
+      "id": "97a590f6dfc8dcbca3cc1b34eb2ccb1b83dc5a6fbd2bf8cda6ef21f5e91258c6",
+      "type": "manifest-target",
+      "from": "manifest-path:.claude/skills/go/SKILL.md",
+      "to": "file:.claude/skills/go/SKILL.md",
+      "target": ".claude/skills/go/SKILL.md",
+      "required": true,
+      "declared_target": ".claude/skills/go/SKILL.md"
     },
     {
       "id": "97c3de57744d2645f3192454937402443976d47f983c9ce5a8095b881bcc5781",
@@ -40068,6 +39741,15 @@
       "specifier": "../planning/lib/resolve-task-plan"
     },
     {
+      "id": "a10b8b45eb1e1793185ccf7a32ff1075096afd2cc0fe4563943bcce1dde455e9",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/bash-write-extract.test.cjs",
+      "to": "file:tools/kernel/hooks/lib/bash-write-extract.cjs",
+      "target": "tools/kernel/hooks/lib/bash-write-extract.cjs",
+      "required": true,
+      "specifier": "../lib/bash-write-extract.cjs"
+    },
+    {
       "id": "a1776166484cc1221bb5030ffdf7f81e225870ff8f3220555e361d83ed038b0d",
       "type": "command-definition-file",
       "from": "command-definition:arc-rest",
@@ -40389,6 +40071,16 @@
       "specifier": "../world-state.js"
     },
     {
+      "id": "a5754924edf1c8c5be543147e686d47ce1e64d28634537bfbd6b654061001de4",
+      "type": "package-script-target",
+      "from": "package-script:verify:scratch-leak",
+      "to": "file:tools/verify/scratch-leak-check.cjs",
+      "target": "tools/verify/scratch-leak-check.cjs",
+      "required": true,
+      "declared_target": "tools/verify/scratch-leak-check.cjs",
+      "resolution": "tracked"
+    },
+    {
       "id": "a581c9f9e5d26b334d7ef2f231af72b81f5f7e398b3954b71eca5f0f43db98b9",
       "type": "static-import",
       "from": "file:tools/signals/watch-codex-bridge.js",
@@ -40553,6 +40245,16 @@
       "specifier": "../../reconciliation/lib/normalized-content-hash.cjs"
     },
     {
+      "id": "a73cba37b5d3bcf6692a838e1c010e32aac89531fe7f055ce424af8a54b5bbb3",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:624",
+      "to": "file:tools/sessions/session-end-boundary-log.cjs",
+      "target": "tools/sessions/session-end-boundary-log.cjs",
+      "required": true,
+      "declared_target": "tools/sessions/session-end-boundary-log.cjs",
+      "event": "SessionEnd"
+    },
+    {
       "id": "a7a3283534d10e3a2a5638f4f9429c82348a3831c36ee3f2fa1926f541809563",
       "type": "command-definition-file",
       "from": "command-definition:scry",
@@ -40560,6 +40262,16 @@
       "target": ".claude/commands/scry.md",
       "required": true,
       "declared_target": ".claude/commands/scry.md"
+    },
+    {
+      "id": "a7a460041535a987d121a417b308e5a3f548b5e755d71bbf13022fc0d8bfe448",
+      "type": "hook-target",
+      "from": "hook:Stop:616",
+      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
+      "target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "event": "Stop"
     },
     {
       "id": "a7be0bf0272974b419b9976895e2ba496de178fb47641c071605fb92af8a3554",
@@ -40740,16 +40452,6 @@
       "target": "tools/telemetry/dispatches/lib/trace-context.cjs",
       "required": true,
       "specifier": "./trace-context.cjs"
-    },
-    {
-      "id": "a96de5e9b19a9e1937004e680c7a6733d15354f5fd3034b133af37271bb2c992",
-      "type": "hook-target",
-      "from": "hook:SessionStart:624",
-      "to": "file:tools/user/inject-mirror.cjs",
-      "target": "tools/user/inject-mirror.cjs",
-      "required": true,
-      "declared_target": "tools/user/inject-mirror.cjs",
-      "event": "SessionStart"
     },
     {
       "id": "a9728ef68a8061a2f77c5f318a8c13a9bb27697903aee2b77fda923b78a123e4",
@@ -41111,6 +40813,15 @@
       "required": true,
       "declared_target": "tools/instructions/validate-manifest.js",
       "resolution": "tracked"
+    },
+    {
+      "id": "ad7434ac898a6823da36cd28efee7806df1ee9e7bba46b382572138d165da687",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/posttool-write-ledger.bash.test.cjs",
+      "to": "file:tools/kernel/hooks/lib/bash-write-extract.cjs",
+      "target": "tools/kernel/hooks/lib/bash-write-extract.cjs",
+      "required": true,
+      "specifier": "../lib/bash-write-extract.cjs"
     },
     {
       "id": "ad74f89bc3e8661462d3ac8b88e07d7a004758764a73948e1e9189cf1c065dd2",
@@ -41749,6 +41460,15 @@
       "target": "tools/signals/schemas/recursive-actor-work-order.schema.json",
       "required": true,
       "specifier": "tools/signals/schemas/recursive-actor-work-order.schema.json"
+    },
+    {
+      "id": "b39af63c753d1208690e09c2aabd6dcd8a62f6627b6a840122d807425bfbbad4",
+      "type": "static-import",
+      "from": "file:tools/signals/lib/actor-registry.js",
+      "to": "file:tools/lib/canonical-root.cjs",
+      "target": "tools/lib/canonical-root.cjs",
+      "required": true,
+      "specifier": "../../lib/canonical-root.cjs"
     },
     {
       "id": "b3c878670ff5a99f9b4783ea81fd01d5f546861cfb58dacab92215081bc63db1",
@@ -44050,15 +43770,6 @@
       "specifier": "../../../kernel/hooks/session-start-tier-stamp.cjs"
     },
     {
-      "id": "cc69433d197ed6bb27e8e68095422cd676c18a7e3cee3f8479fb01803c70b89a",
-      "type": "schema-consumer",
-      "from": "file:_dev/config/README.md",
-      "to": "file:_dev/config/remote-hosts.schema.json",
-      "target": "_dev/config/remote-hosts.schema.json",
-      "required": true,
-      "specifier": "remote-hosts.schema.json"
-    },
-    {
       "id": "cc8dcc9e7913d5cccd587bac60917a623a77f24ad5e6d80e989ee8ec3dbd9bb9",
       "type": "static-import",
       "from": "file:tools/kernel/fire-reflex.cjs",
@@ -44651,6 +44362,16 @@
       "declared_target": ".claude/commands/route.md"
     },
     {
+      "id": "d2bf50ad880cf88f1a6e3aeea8e4400edf3ec6396af559ca8d82f3998e253aa0",
+      "type": "hook-target",
+      "from": "hook:PostToolUse:618",
+      "to": "file:tools/kernel/hooks/dispatch-posttool.cjs",
+      "target": "tools/kernel/hooks/dispatch-posttool.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-posttool.cjs",
+      "event": "PostToolUse"
+    },
+    {
       "id": "d2c83857e6f1794e65f75aadd6efaad3667549bac541221d8a7ec5d832ac2692",
       "type": "static-import",
       "from": "file:tools/mcp/delesign/config.js",
@@ -44896,16 +44617,6 @@
       "target": "frameworks/wordpress/qa/schemas/output/summary-json.schema.json",
       "required": true,
       "declared_target": "frameworks/wordpress/qa/schemas/output/summary-json.schema.json"
-    },
-    {
-      "id": "d57a60c92dc804b242c1ba01dd234c381fbe13db81fa0dc7f8e176fef0e7249f",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:627",
-      "to": "file:tools/context/repo-awareness-closeout.cjs",
-      "target": "tools/context/repo-awareness-closeout.cjs",
-      "required": true,
-      "declared_target": "tools/context/repo-awareness-closeout.cjs",
-      "event": "SessionEnd"
     },
     {
       "id": "d583bb997ca12f760873dead02b5616a2f5339b41fbc79ceba7ca405ba595fbb",
@@ -46190,6 +45901,16 @@
       "resolution": "tracked"
     },
     {
+      "id": "e21840f6ff7aacac1a776c3853c7b11d142bde244098b46fdb96865f2451c98d",
+      "type": "hook-target",
+      "from": "hook:PreToolUse:615",
+      "to": "file:tools/kernel/hooks/dispatch-pretool.cjs",
+      "target": "tools/kernel/hooks/dispatch-pretool.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-pretool.cjs",
+      "event": "PreToolUse"
+    },
+    {
       "id": "e238aa3df00f3b1d9156cef8f10067189627e200904f8980dfd77294c1237f6f",
       "type": "manifest-target",
       "from": "manifest-path:.claude/skills/canonical-path-authority-gate/SKILL.md",
@@ -47254,6 +46975,16 @@
       "required": true,
       "declared_target": "tools/voice/smoke-discord-voice.py",
       "resolution": "tracked"
+    },
+    {
+      "id": "ed5cc2c555d88e14fc038e8157ff344bd9d9482f83048ad10113828a48c37731",
+      "type": "hook-target",
+      "from": "hook:SessionStart:619",
+      "to": "file:tools/kernel/hooks/dispatch-session-start.cjs",
+      "target": "tools/kernel/hooks/dispatch-session-start.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-session-start.cjs",
+      "event": "SessionStart"
     },
     {
       "id": "ed5d7e52fc999f49e6328d98a4484d5c95a69055856d9c4abf86a918c244dfb3",
@@ -48868,16 +48599,6 @@
       "authority": "evidence-loop"
     },
     {
-      "id": "fb6ac5cf4a29f1481e60c630044cc2475c4c37c1a3a57082c1b5aee782b195eb",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:625",
-      "to": "file:tools/sessions/session-end-boundary-log.cjs",
-      "target": "tools/sessions/session-end-boundary-log.cjs",
-      "required": true,
-      "declared_target": "tools/sessions/session-end-boundary-log.cjs",
-      "event": "SessionEnd"
-    },
-    {
       "id": "fb872ca135397343cb1965338de6e528a162d620ccd0016c27e22159a4843c76",
       "type": "static-import",
       "from": "file:tools/ant-hive-world/__tests__/dashboard.test.cjs",
@@ -49038,6 +48759,15 @@
       "target": "tools/signals/lib/signal-normalization-proposal.js",
       "required": true,
       "specifier": "../../../signals/lib/signal-normalization-proposal"
+    },
+    {
+      "id": "fd087368cd12b9b5472f18353128ba1a43772c4f187c938aac378d46c6159ca6",
+      "type": "static-import",
+      "from": "file:tools/lib/__tests__/canonical-root.test.cjs",
+      "to": "file:tools/lib/canonical-root.cjs",
+      "target": "tools/lib/canonical-root.cjs",
+      "required": true,
+      "specifier": "../canonical-root.cjs"
     },
     {
       "id": "fd2339268873453b7e5a29c6a3ba29f31cada839b95d9183f7cfc9a5790eb825",
@@ -49323,15 +49053,6 @@
       "specifier": "./lib/active-session-registry.js"
     },
     {
-      "id": "ff98a5b95bbeed3336e05972fbce10b1548dd66990bb9803a25f7937d915182d",
-      "type": "schema-definition-file",
-      "from": "schema-definition:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/stage-status.schema.json",
-      "to": "file:_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/stage-status.schema.json",
-      "target": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/stage-status.schema.json",
-      "required": true,
-      "declared_target": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/stage-status.schema.json"
-    },
-    {
       "id": "ffb3d45b92aa0b1869c788431e5aac6192a7bf882167957827c14af5b28d5377",
       "type": "static-import",
       "from": "file:tools/workspace/lib/run-state.js",
@@ -49360,8 +49081,8 @@
     }
   ],
   "counts": {
-    "nodes": 3777,
-    "edges": 2722,
+    "nodes": 3726,
+    "edges": 2730,
     "unresolved": 0
   }
 }

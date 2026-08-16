@@ -61,7 +61,7 @@ Execution path: `.claude/commands/fw-<category>-<name>.md` are thin COORDINATOR 
 ## Plans, signals, sessions
 
 Plan surfaces (note: `_dev/plans/` holds only a draft `inbox/` — it is not the registry):
-- Registry: `_dev/prompts/prompt-plan-registry.json`; contract: `_dev/policies/plan-contract.md`; run order: `_dev/prompts/claude-master-run-order.md`.
+- Registry: `tools/codex/prompt-system/prompt-plan-registry.json`; contract: `tools/codex/prompt-system/plan-contract.md`; run order: `tools/codex/prompt-system/claude-master-run-order.md`.
 - `/plan-task` (**plan-task** skill) writes `_dev/reports/analysis/task-plans/{task-id}__plan.json` + `.md`, conforming to `tools/planning/task-intake.schema.json`; client plans go to `clients/{CODE}/plans/`.
 
 `/execute-plan` (`.claude/commands/execute-plan.md`) drives execution: resolve the plan id in the registry, verify the plan contract, then run ONE incomplete stage at a time through the seven-step pattern (Plan, Build, Verify, Fix, Lessons Capture, Codex Review, Gate). Hard requirements from that command:

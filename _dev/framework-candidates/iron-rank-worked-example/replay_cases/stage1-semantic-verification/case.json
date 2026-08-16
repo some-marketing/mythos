@@ -1,9 +1,0 @@
-{
-  "case_id": "stage1-semantic-verification",
-  "name": "Stage 1 semantic verification pilot",
-  "source": "Replay-oriented example for executing the Stage 1 pilot contract against the current repo state.",
-  "variant_type": "baseline",
-  "ready": true,
-  "expected_success": true
-}
-

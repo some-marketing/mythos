@@ -44,6 +44,8 @@ required_skills:
       name: fable5-rederive
     - path: .claude/skills/github-auth/SKILL.md
       name: github-auth
+    - path: .claude/skills/go/SKILL.md
+      name: go
     - path: .claude/skills/google-ads-mcp/SKILL.md
       name: google-ads-mcp
     - path: .claude/skills/lint-attributions/SKILL.md

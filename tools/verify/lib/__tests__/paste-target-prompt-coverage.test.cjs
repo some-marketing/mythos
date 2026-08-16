@@ -31,7 +31,7 @@ function uniqueSuffix() {
 }
 
 // Use a path inside the repo that matches isPromptTargetPath INCLUDE_GLOBS.
-// Avoid _dev/prompts/ per amendment guard. The pattern
+// Avoid tools/codex/prompt-system/ per amendment guard. The pattern
 // `_dev/reports/analysis/*-bridge-prompt__*.md` is in INCLUDE_GLOBS.
 function makePasteTargetPath(label) {
   const name = `__coverage-fixture-${label}-${uniqueSuffix()}-bridge-prompt__test.md`;

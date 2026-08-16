@@ -46,7 +46,7 @@ Claude Code integration: skills/, commands/, agents/
 
 ## Prompt Pack Anatomy
 
-A prompt pack is a reusable prompt system that drives a multi-step implementation or analysis workflow. Prompt packs live under `_dev/prompts/` and are registered in `_dev/prompts/manifest.json`.
+A prompt pack is a reusable prompt system that drives a multi-step implementation or analysis workflow. Prompt packs live under `tools/codex/prompt-system/` and are registered in `tools/codex/prompt-system/manifest.json`.
 
 Unlike framework prompt chains (which are numbered execution prompts within a framework directory), prompt packs are system-level task systems that orchestrate work across the Mythos repo itself.
 
@@ -107,8 +107,8 @@ The pack's concrete prompt definitions, typically including:
 
 | Aspect | Prompt Pack | Framework Prompt Chain |
 |---|---|---|
-| Location | `_dev/prompts/claude-prompt-pack-*.md` | `frameworks/{service}/{name}/prompts/` |
+| Location | `tools/codex/prompt-system/claude-prompt-pack-*.md` | `frameworks/{service}/{name}/prompts/` |
 | Scope | System-level Mythos development work | Client-facing task execution |
-| Registration | `_dev/prompts/manifest.json` | `frameworks/{service}/{name}/manifest.json` |
-| Sequencing | `_dev/prompts/claude-master-run-order.md` | Framework manifest `prompt_chain` array |
+| Registration | `tools/codex/prompt-system/manifest.json` | `frameworks/{service}/{name}/manifest.json` |
+| Sequencing | `tools/codex/prompt-system/claude-master-run-order.md` | Framework manifest `prompt_chain` array |
 | Audience | Mythos operators and developers | Framework executors working on client projects |

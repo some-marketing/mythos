@@ -352,8 +352,8 @@
         "instructions/canonical/commands/review-task-plan.yaml",
         "instructions/canonical/commands/run-plan.yaml",
         "instructions/canonical/commands/execute-plan.yaml",
-        "_dev/policies/plan-contract.md",
-        "_dev/prompts/prompt-plan-registry.json",
+        "tools/codex/prompt-system/plan-contract.md",
+        "tools/codex/prompt-system/prompt-plan-registry.json",
         "tools/verify/lib/prompt-plan-housing.cjs"
       ]
     },

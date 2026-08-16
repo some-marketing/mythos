@@ -1,0 +1,20 @@
+{
+  "schema": "PromptPlanRegistry/1.0",
+  "updated_at": "2026-07-22T00:00:00Z",
+  "contract_path": "tools/codex/prompt-system/plan-contract.md",
+  "_comment": "This is the spellwright's registry ledger, reduced to its schema shape plus ONE worked example entry. A guild running its own prompt system grows this array — one entry per active or historical run-order plan, each pointing at a durable plan file and its planning artifacts.",
+  "plans": [
+    {
+      "id": "master",
+      "title": "Canonical Master Workflow",
+      "path": "tools/codex/prompt-system/claude-master-run-order.md",
+      "description": "Top-level current-state workflow plan. Uses the single canonical main workflow model — the run order that names which prompt pack is active, which are supporting, and which are historical.",
+      "status": "active",
+      "executor_artifact_prefix": "advance-pipeline",
+      "planning_artifacts": [
+        "_dev/reports/analysis/plan-pipeline.md",
+        "_dev/reports/analysis/plan-pipeline.next-step.json"
+      ]
+    }
+  ]
+}

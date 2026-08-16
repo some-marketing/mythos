@@ -8,9 +8,9 @@ Resolve a compatible prompt plan, list available plans when asked, or execute th
 </objective>
 
 <process>
-- Read _dev/prompts/prompt-plan-registry.json and _dev/policies/plan-contract.md first.
+- Read tools/codex/prompt-system/prompt-plan-registry.json and tools/codex/prompt-system/plan-contract.md first.
 - If the argument is empty or 'list', return the available compatible prompt plans with id, title, path, status, and short description. Do not execute anything.
-- If the argument is 'master', resolve _dev/prompts/claude-master-run-order.md.
+- If the argument is 'master', resolve tools/codex/prompt-system/claude-master-run-order.md.
 - If the argument matches a plan id in the registry, resolve that plan path.
 - If the argument is a path, use that path directly.
 - Before executing, verify the resolved plan satisfies the minimum plan contract: ordered stages, observable exit criteria, prompt or workflow references where applicable, and a status surface.

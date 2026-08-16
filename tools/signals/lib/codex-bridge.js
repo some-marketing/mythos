@@ -391,7 +391,7 @@ function buildPromptFromPlan(planArtifactPath, activeWorkstreamsArtifactPath = '
   } else {
     lines.push('- `_dev/reports/analysis/plan-pipeline.md`');
   }
-  lines.push('- `_dev/prompts/claude-master-run-order.md`');
+  lines.push('- `tools/codex/prompt-system/claude-master-run-order.md`');
   lines.push('');
   lines.push('Task:');
   lines.push('- verify whether the planning artifact is still coherent with the current source of truth');

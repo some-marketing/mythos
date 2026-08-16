@@ -43,658 +43,8 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "d728eeca94871132c77c56b47e089b4a8ed2274b56c67b55ae2a08e07fa25176",
+    "expected_tree_sha256": "af5684a26152a1dd989b6db737725f8edcd25220513ef888592854c728531620",
     "expected_files": [
-      {
-        "path": "_dev/commands/.gitkeep",
-        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "mode": 420
-      },
-      {
-        "path": "_dev/commands/audit-project.md",
-        "sha256": "641b2335a7ad4420bace4535cea3ce5c57812b68ac1dd2c6cdab73c6937cee7e",
-        "mode": 420
-      },
-      {
-        "path": "_dev/commands/README.md",
-        "sha256": "6fcf3715315a762cd28c4888986b8fe5a662669642e461cc57ce2a26286fbcc3",
-        "mode": 420
-      },
-      {
-        "path": "_dev/concepts/_policy.md",
-        "sha256": "1380bcbaade863b9e166486d87da635bd2335edcedae97b2d631ac972f101fd1",
-        "mode": 420
-      },
-      {
-        "path": "_dev/concepts/_README.md",
-        "sha256": "06da29c9e40b88483003de7c2a9339d7ffd923ba2836ef57b6a6bafdc6998cc3",
-        "mode": 420
-      },
-      {
-        "path": "_dev/concepts/ant-world-operator-console.md",
-        "sha256": "1bfaa626561551f45505106679c6e2ea5d47fa9ed841688f8c2fe354ecf6fc18",
-        "mode": 420
-      },
-      {
-        "path": "_dev/concepts/growing-dashboard-mind-legibility.md",
-        "sha256": "4bdb5f9fbc86c9645fc806c427e65c652ae231248e78d338cb629327af9b5dcc",
-        "mode": 420
-      },
-      {
-        "path": "_dev/concepts/simulation-scale-and-boundary-doctrine.md",
-        "sha256": "65e8dc0c785bf9162a01ec074d3eb8f9239fe96a737d8adc1edd5ba30ed855bb",
-        "mode": 420
-      },
-      {
-        "path": "_dev/config/harness-protocol-propagation.json",
-        "sha256": "14727506cf9a45c36695913005bd3eb5a4f8e73f4ad7ba78460286f5a916b4a5",
-        "mode": 420
-      },
-      {
-        "path": "_dev/config/README.md",
-        "sha256": "4cf039834fb00f4b12651960a98ff77bb8b0e3f38baa1e4939a380fcdb5e8675",
-        "mode": 420
-      },
-      {
-        "path": "_dev/config/remote-hosts.schema.json",
-        "sha256": "d7914c37b8ae93d405d42f5dc4eef0e21f47c5e44bf7f4fef5af30408c36fb7a",
-        "mode": 420
-      },
-      {
-        "path": "_dev/design/.gitkeep",
-        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "mode": 420
-      },
-      {
-        "path": "_dev/design/README.md",
-        "sha256": "5fe4af9281cb517d48afe0d2e04e1dbee2d5b640e9603b2331766a4f45657e1c",
-        "mode": 420
-      },
-      {
-        "path": "_dev/docs/.gitkeep",
-        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "mode": 420
-      },
-      {
-        "path": "_dev/docs/README.md",
-        "sha256": "d66ae16e74446c8c3ef14d341c8363a170ed27f4fb8ede8b6075d33abc8bfc0a",
-        "mode": 420
-      },
-      {
-        "path": "_dev/drafts/.gitkeep",
-        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "mode": 420
-      },
-      {
-        "path": "_dev/drafts/README.md",
-        "sha256": "4eb141c1f8c0be756e9153a350739df4d2024b9289a179d30c4440bd5b566b84",
-        "mode": 420
-      },
-      {
-        "path": "_dev/framework-candidates/iron-rank-worked-example/candidate.json",
-        "sha256": "5eee6079ed6f9a47f7e184b866fc0a441e1b03ab66ed2f7eec45e5cc14d07215",
-        "mode": 420
-      },
-      {
-        "path": "_dev/framework-candidates/iron-rank-worked-example/evidence/source-material.json",
-        "sha256": "dceb59e059d20391a5c833e67d381addd9c93fb69126828d1aab289a98486d78",
-        "mode": 420
-      },
-      {
-        "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/docs/EXECUTION_ARTIFACTS.md",
-        "sha256": "4da3edda73b9f06f886601198a7c4b9400d850630d31d42f1d2e54031f8dc827",
-        "mode": 420
-      },
-      {
-        "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/docs/FRAMEWORK_SCOPE.md",
-        "sha256": "4f2d0f26bdb81e79f4a9abc8fe7adb736c5c05e77186b48f521f0b3901601cfd",
-        "mode": 420
-      },
-      {
-        "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/docs/STAGE_MODEL.md",
-        "sha256": "b45437f94079a4ee205d3f6d9dbf83f2b82e5b11ebf7d93bd74b086da0eb3605",
-        "mode": 420
-      },
-      {
-        "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/guardrails.md",
-        "sha256": "43a467731bd5a6f6910ff2701f3fe092a60638916378072ba6f6d0864d041cf0",
-        "mode": 420
-      },
-      {
-        "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/manifest.json",
-        "sha256": "5e7c63b80e4723ccfcd562450fb69c945e742b67f41a939e12b8856c8ac86649",
-        "mode": 420
-      },
-      {
-        "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/prompts/01_STAGE_SELECTION_AND_PRECHECK.md",
-        "sha256": "115483e6503cfcf9146e8d6f94545bb7d53cce419653af4f670c9fc8fda0228b",
-        "mode": 420
-      },
-      {
-        "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/prompts/02_STAGE_1_SEMANTIC_VERIFICATION_IMPLEMENTATION.md",
-        "sha256": "db1ae6cfc0d392c3a3d8837d45dd756845e796db1c43926b7f9a50e6849bd351",
-        "mode": 420
-      },
-      {
-        "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/prompts/03_STAGE_1_VALIDATION_AND_SIGNAL_REVIEW.md",
-        "sha256": "e8a0a407b314e856bf62e6f41559d22d0411123403263c851f9432574c32b46a",
-        "mode": 420
-      },
-      {
-        "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/prompts/04_STAGE_1_COMPLETION_AUDIT_AND_NEXT_STAGE_DECISION.md",
-        "sha256": "9cd6af2f8045e4f7040b9875431fd2b38e3224f4501956fe3a7341bc2740fd22",
-        "mode": 420
-      },
-      {
-        "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/prompts/README.md",
-        "sha256": "26110965090a3e97b6a7b4377d69746ae2a5e13d6e0661c4aa1d94d962bfe3c3",
-        "mode": 420
-      },
-      {
-        "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/next-stage-decision.schema.json",
-        "sha256": "cd8e19586891de19f470eef25d36cc4c54d308cc9bf9e61372d12a934c2f11ee",
-        "mode": 420
-      },
-      {
-        "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/stage-definition.schema.json",
-        "sha256": "d8569d6045846cea0f199813fa698e4c1124231780486b2f8f8c40fee14644cd",
-        "mode": 420
-      },
-      {
-        "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/stage-status.schema.json",
-        "sha256": "068617a423415b5e51b438ffea7300b208a292cd442955f35b4381d861e6d087",
-        "mode": 420
-      },
-      {
-        "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/schemas/validation-results.schema.json",
-        "sha256": "d63af3c5ba1ec991c73e0b5e48707d5a966a84328d175bfdf5b21b58dd8c641b",
-        "mode": 420
-      },
-      {
-        "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/templates/COMPLETION_AUDIT.template.md",
-        "sha256": "5d8faa0092a546aea6d4b0abafbf5a8b37593d3b91dd869cd0c34104e7680cff",
-        "mode": 420
-      },
-      {
-        "path": "_dev/framework-candidates/iron-rank-worked-example/proposed_framework/templates/STAGE_REPORT.template.md",
-        "sha256": "5da1f8689440727cb3a5fd05739ee489ab847d7eb5ed8b176e3b1b50c8d028bf",
-        "mode": 420
-      },
-      {
-        "path": "_dev/framework-candidates/iron-rank-worked-example/README.md",
-        "sha256": "381e38fc76a9ab5ece246f8c9c9476e5bed97e19e6ddbe25866be84773237fad",
-        "mode": 420
-      },
-      {
-        "path": "_dev/framework-candidates/iron-rank-worked-example/replay_cases/stage1-semantic-verification/case.json",
-        "sha256": "25c622436dda142136ffa7d5a3a8f0a330d8392a22d84fdff025976ee6783b59",
-        "mode": 420
-      },
-      {
-        "path": "_dev/framework-candidates/iron-rank-worked-example/replay_cases/stage1-semantic-verification/inputs/stage-definition.json",
-        "sha256": "9231a5762bdc5353596dae6fd66a303f13706ac0542fe44c58baca0146004ed1",
-        "mode": 420
-      },
-      {
-        "path": "_dev/framework-candidates/iron-rank-worked-example/replay_cases/stage1-semantic-verification/notes.md",
-        "sha256": "63cf6ce30cf8de5f06cdbec4124b0499653caaba37af7fa27927073ac2e74aea",
-        "mode": 420
-      },
-      {
-        "path": "_dev/framework-candidates/README.md",
-        "sha256": "a2a612f22cf123c6e69950484b41ec307ecc8771de4309e468ecbc579fe8aa15",
-        "mode": 420
-      },
-      {
-        "path": "_dev/handoffs/.gitkeep",
-        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "mode": 420
-      },
-      {
-        "path": "_dev/handoffs/INDEX.md",
-        "sha256": "853129b3eeabe75327e70dc8dbac9c828b34a2664dc5dea5b3998b226c0cfd29",
-        "mode": 420
-      },
-      {
-        "path": "_dev/handoffs/README.md",
-        "sha256": "f18d5c2beb6383e6a63b5e3f4476492e875182fdf4010d3c23b8819f2ed3276f",
-        "mode": 420
-      },
-      {
-        "path": "_dev/intake/.gitkeep",
-        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "mode": 420
-      },
-      {
-        "path": "_dev/intake/README.md",
-        "sha256": "b383356960e717b40bb369ba2ce9d168b487b88f07f52d32019745cf3cffc9b5",
-        "mode": 420
-      },
-      {
-        "path": "_dev/loops/_template.md",
-        "sha256": "c2aa941686c24f46028c7a3b35dc8d813f1012cc7a6eb758018d6c04f808267c",
-        "mode": 420
-      },
-      {
-        "path": "_dev/loops/homebrew-grimoire-improve-loop.md",
-        "sha256": "d57ea76b8407ce0dba3c4a509064da9bc65299e7a05adab2c5a527269059e10e",
-        "mode": 420
-      },
-      {
-        "path": "_dev/loops/README.md",
-        "sha256": "8e86fa1924e476d4ba661dd0aa987344f74beca1f8430649e9f5b2a1ae43f32f",
-        "mode": 420
-      },
-      {
-        "path": "_dev/plans/inbox/.gitkeep",
-        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "mode": 420
-      },
-      {
-        "path": "_dev/plans/inbox/README.md",
-        "sha256": "0bf47a3d1ecad3165b592215484e2d05de5425b68ae21927b61cb0b2bb8f5f9e",
-        "mode": 420
-      },
-      {
-        "path": "_dev/policies/command-follow-through-policy.md",
-        "sha256": "b97ad65960cf530c06c4bb3b726666243f5bb81f7ecff1ca693d552d260a3d6d",
-        "mode": 420
-      },
-      {
-        "path": "_dev/policies/data-handling.md",
-        "sha256": "ac1b5b45e854eaaab9a0914fe0f39bca227adcf67dc763045321bca063183800",
-        "mode": 420
-      },
-      {
-        "path": "_dev/policies/maintenance-check-matrix.md",
-        "sha256": "ed464bdf1ff20d387451a371c1b93f9fde0218feb840432a053c6018593e5796",
-        "mode": 420
-      },
-      {
-        "path": "_dev/policies/plan-contract.md",
-        "sha256": "eeb085b7d82c5916989cccde7ed197446a166dd42c1834a5a90d75ef47603e00",
-        "mode": 420
-      },
-      {
-        "path": "_dev/policies/prompt-pack-contract.md",
-        "sha256": "9058e499785ca5c92ce8ca21796c134c27c66dc95eacee9707a50614b684a3c9",
-        "mode": 420
-      },
-      {
-        "path": "_dev/policies/source-material-qa.md",
-        "sha256": "c97e57d7aba043a6649e4a91ce0de791a9295dfd11a4626816ebc03d50358491",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/claude-cost-controlled-slice-execution-flowchart.md",
-        "sha256": "3f26e85d6855e0b207ae40dc762f26c3da17fd424af32b68d76e9ef5dd6c7d91",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/claude-health-remediation-playbook.md",
-        "sha256": "6dcb1cd5e437da589a6739050eb9d01ad5cd5512e5f51094ef0c8a7c0a6e7f50",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/claude-master-run-order.md",
-        "sha256": "c28a4134c927ee0c720080bd7793234d2c14acd1c6ce29f4bad8c320ea39de10",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/claude-prompt-pack-artifact-retention-and-compaction.md",
-        "sha256": "23dd481ba431bdc058ed5f22e666d18fc5098bb67ce7081b7b20d5d17f10eecd",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/claude-prompt-pack-candidate-replay-hardening.md",
-        "sha256": "79870abcaee7d0de15a3b0840d2d960f04a516aa6128ea0825e520fe8b878442",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/claude-prompt-pack-claude-code-features-integration.md",
-        "sha256": "8b2a1fe03d03977400a0c6911a09e5032d3baee1a1d3e24ae5be7b34c17978ab",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/claude-prompt-pack-command-adherence-and-validation-hardening.md",
-        "sha256": "2483c19690912e2a0896de301b0eefbb0785f59c513645a135571617c2e8a1f4",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/claude-prompt-pack-command-surface-normalization.md",
-        "sha256": "c765e838545e6cf705de841eb3dba4673dbeb1aa2a9986646df1dffdc14791c9",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/claude-prompt-pack-cost-controlled-slice-execution.md",
-        "sha256": "bce6b89b946b2d057663ee76cac0e07cbf216748b9ae30d6dd08c577d6b85e48",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/claude-prompt-pack-framework-learning-loop-enforcement.md",
-        "sha256": "6a3656685b9ea9e08ce81b64c90c2b802ec707957e387f480f5f632757ad5bc9",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/claude-prompt-pack-framework-post-workflow-hooks.md",
-        "sha256": "b22f580c3b5c85098b7bb19ed4171faf551e1ab42283707fa0fb9bfc0d1fcfa6",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/claude-prompt-pack-harness-capability-abstraction.md",
-        "sha256": "7e19d6db2c47a1e42f9772e1c792ac70ef2d984bb114c0f53e775ae81fcd9738",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/claude-prompt-pack-local-model-verification-lane.md",
-        "sha256": "80714349dcd064e3d4d21292199c3f0976e0b62ec185cd497a3264fc956edb09",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/claude-prompt-pack-master-loop-closure.md",
-        "sha256": "28a5eb346abe9dac847adce0d35b450d742d40b8a50556461e89729afe0ce3d8",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/claude-prompt-pack-master-prompt-and-operator-ux-hardening.md",
-        "sha256": "3717d5ca3ddb6599bdc7c3b076a27827fc228cddfd758515355c8572c3ff2f12",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/claude-prompt-pack-meta-staged-remediation-framework.md",
-        "sha256": "cb6b287fdf269ef6b786f6302bd411c9c28e129f2d122502548a7f6b2fc8a543",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/claude-prompt-pack-multi-step-orchestration-abstraction.md",
-        "sha256": "fdc48853aa2b0b5b0b9a699aaf72e0b190d11a8d4f1b85d3229feb1b24a8e576",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/claude-prompt-pack-multiagent-planning-and-compliance.md",
-        "sha256": "3b3a078c75ebcfc9fdc8368d3f33918f51fc84ea171345ef8cbfae3918cc3407",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/claude-prompt-pack-operational-loop-closure.md",
-        "sha256": "90b0b603454c5865fe7759f41a011c54357811c446b1db8ec797ad5675b29d1f",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/claude-prompt-pack-project-health-alignment.md",
-        "sha256": "58750d4afdf522f6dc7be9e8f503548955529b463098cf25de4d9d72dc1ec9f7",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/claude-prompt-pack-semantic-output-audit.md",
-        "sha256": "6f8d7a73ff931e0c5ba8bf063155623b8d484300294f3963f995290cc6020e40",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/claude-prompt-pack-semantic-verification.md",
-        "sha256": "f57a052548049ded55d802414b3c89dd49d2ae63d69f6176aad5bfc8b2c79531",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/claude-prompt-pack-source-material-qa-and-promotion.md",
-        "sha256": "a2f709b329c3da988cff1bd11e16ddfcb2e43a1755385611c5ebde93f7edf60b",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/claude-prompt-pack-subagent-autonomy-and-template-efficiency.md",
-        "sha256": "2bf0f6008712f35841cbb7892cc430a01d8caeb4284ebbdb222c9f2a679a1003",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/claude-run-debrief-and-clear-readiness.md",
-        "sha256": "03946b37db7f9e22cd6d5b548c2fd1f8ebcb2b3b6602ffe0d5763b41687e8602",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/manifest.json",
-        "sha256": "beb40dfbbc058722bde78d547a8cc180e7d3d7d0c28c804e5cc3fa57ab3ab191",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/prompt-plan-registry.json",
-        "sha256": "f2da6fb0d91739fafd705dcaa658450a2a72979dd2c9b1bc90efff539cdb957c",
-        "mode": 420
-      },
-      {
-        "path": "_dev/prompts/README.md",
-        "sha256": "59b9f3934fd7c118ef1a3026e682c5dadb91bb1f8fced5e6eded989d7e903368",
-        "mode": 420
-      },
-      {
-        "path": "_dev/README.md",
-        "sha256": "f506b28bc7b76c43fda917cda5d54898bf99a2b7df2564bc0653d78cc1eb25a7",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/.gitkeep",
-        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/.gitkeep",
-        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/convene-runs/.gitkeep",
-        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/convene-runs/20260803T002158Z-pheromone-carriage-confound-fix/codex.md",
-        "sha256": "dddaeaa0ab8e77c7e7be19299890f1b90221587268e9c25818f6b44df0143dc3",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/convene-runs/20260803T002158Z-pheromone-carriage-confound-fix/gemini.md",
-        "sha256": "9c60f7775f9fcc4e311c3912729fd5d93ec61ba09c0a9ca1245c6645d6175649",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/convene-runs/20260803T002158Z-pheromone-carriage-confound-fix/manifest.json",
-        "sha256": "fc79785d9e0b500ffe6f97003a417fdda6ac54458c40dec5d80cd2a153323ebf",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/convene-runs/20260803T002158Z-pheromone-carriage-confound-fix/now__codex.md",
-        "sha256": "dddaeaa0ab8e77c7e7be19299890f1b90221587268e9c25818f6b44df0143dc3",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/convene-runs/20260803T002158Z-pheromone-carriage-confound-fix/omega__gemini.md",
-        "sha256": "9c60f7775f9fcc4e311c3912729fd5d93ec61ba09c0a9ca1245c6645d6175649",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/convene-runs/20260803T002158Z-pheromone-carriage-confound-fix/prompt.md",
-        "sha256": "4e4c60ed076b11b55b724411404487bb6ce3f8bcd6eebd9808eb906249addb2e",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/convene-runs/20260803T002158Z-pheromone-carriage-confound-fix/prompts/now__codex.md",
-        "sha256": "4e4c60ed076b11b55b724411404487bb6ce3f8bcd6eebd9808eb906249addb2e",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/convene-runs/20260803T002158Z-pheromone-carriage-confound-fix/prompts/omega__gemini.md",
-        "sha256": "26d8c8cad516d68ed574b025566d98f6ea8471df31c15aa08909a952c6d06113",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/convene-runs/20260803T002158Z-pheromone-carriage-confound-fix/synthesis.md",
-        "sha256": "2561425ab4b59933ab73bbbdbd30049180140d6865ed8925d4a6bbd47b7ab049",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/convene-runs/20260803T003126Z-growing-dashboard-mind-legibility/codex.md",
-        "sha256": "433f2913e735e0d04fb533368fe8c1d3f4d354797a0bc678decb9056004aa65b",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/convene-runs/20260803T003126Z-growing-dashboard-mind-legibility/gemini.md",
-        "sha256": "b82851ea72604b38a54167f6c22bf6b1f65eb14b80b38c1e299cb8d81fc3f24a",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/convene-runs/20260803T003126Z-growing-dashboard-mind-legibility/manifest.json",
-        "sha256": "e764e14ea0140f0ce66be01ece7e934254dd01fd0cd5e76e13627edbd3ee2181",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/convene-runs/20260803T003126Z-growing-dashboard-mind-legibility/now__codex.md",
-        "sha256": "433f2913e735e0d04fb533368fe8c1d3f4d354797a0bc678decb9056004aa65b",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/convene-runs/20260803T003126Z-growing-dashboard-mind-legibility/omega__gemini.md",
-        "sha256": "b82851ea72604b38a54167f6c22bf6b1f65eb14b80b38c1e299cb8d81fc3f24a",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/convene-runs/20260803T003126Z-growing-dashboard-mind-legibility/prompt.md",
-        "sha256": "5960ffa9744b416b3e62dd8e022511a2ff76b44719d357ceaad4fa3b62accf91",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/convene-runs/20260803T003126Z-growing-dashboard-mind-legibility/prompts/now__codex.md",
-        "sha256": "5960ffa9744b416b3e62dd8e022511a2ff76b44719d357ceaad4fa3b62accf91",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/convene-runs/20260803T003126Z-growing-dashboard-mind-legibility/prompts/omega__gemini.md",
-        "sha256": "32eed05647668eb2545c38f51d510516328fdad1e264245e21041cb695d67d99",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/convene-runs/20260803T005456Z-ant-world-operator-console-plan-review/codex.md",
-        "sha256": "3c9996c2a7c7445350980637fb4947bebd3369b65cbb83a31bfd27e7ebf5cb76",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/convene-runs/20260803T005456Z-ant-world-operator-console-plan-review/manifest.json",
-        "sha256": "81904193857280527b1393fefb15a4b1b4840990d1729b28f9007a91167d40b1",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/convene-runs/20260803T005456Z-ant-world-operator-console-plan-review/prompt.md",
-        "sha256": "3e5d8d49f87d8e239243079225b68e2cc991ed732ad12a006456ccc14ab2110e",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/convene-runs/20260803T005456Z-ant-world-operator-console-plan-review/prompts/truth__codex.md",
-        "sha256": "3e5d8d49f87d8e239243079225b68e2cc991ed732ad12a006456ccc14ab2110e",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/convene-runs/20260803T005456Z-ant-world-operator-console-plan-review/REVIEW-EVIDENCE-SCOPE.md",
-        "sha256": "9f562e30fdbc421bf82b5248a8dc5b8f579984a0c542322be0ea7ab5c9fc3ff0",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/convene-runs/20260803T005456Z-ant-world-operator-console-plan-review/truth__codex.md",
-        "sha256": "3c9996c2a7c7445350980637fb4947bebd3369b65cbb83a31bfd27e7ebf5cb76",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/convene-runs/README.md",
-        "sha256": "3529cc8775488f5b41afc301274a724e657cfeb303a587d633239fa2dc6ab6d6",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/evidence-loop__20260803__growing-dashboard-mind-legibility.md",
-        "sha256": "5a758b0cfb22d190a9a60d551b98684e77fe2636b96836e7cf8a8a7346e062e5",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/README.md",
-        "sha256": "e7245a0ea26c0948e4c4a995331eefafcb776f5a89d6a9344178f24747e17a60",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/research__20260803__growing-dashboard-mind-legibility__perplexity-full-thread.md",
-        "sha256": "2bdc128e27dfc498dde8b1ffb56633dfadd33e7c39144a9b70e832668d2af7d3",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/task-plans/.gitkeep",
-        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/task-plans/ant-world-operator-console__plan.md",
-        "sha256": "1e5aa9571bd10b7465f9b1db399aa7741c8238c29ddaf35a1e3bb66315e72a7f",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/task-plans/mythos-full-parity-port__amendment__20260803T151800Z.json",
-        "sha256": "773d7ec1f302a7d43dfd6e98674f91e2ca515d9ce0db0bf868cfdf52912e6082",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/task-plans/README.md",
-        "sha256": "a31d3daf190a4055acf3753d74f25bee1e6e32629e2f76648f86254398959f65",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/README.md",
-        "sha256": "714a1c0b0fb6cb5e5774d482305ef9ab5a4dec81138ae88bcf933e56112491ae",
-        "mode": 420
-      },
-      {
-        "path": "_dev/research/.gitkeep",
-        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "mode": 420
-      },
-      {
-        "path": "_dev/research/README.md",
-        "sha256": "5aade4ba8c680fc630ed9519f721624c2c7f51d3aebb69ef36ca1be7620452b4",
-        "mode": 420
-      },
-      {
-        "path": "_dev/scripts/.gitkeep",
-        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "mode": 420
-      },
-      {
-        "path": "_dev/scripts/README.md",
-        "sha256": "f23b1fcddbf6f9fc9232655d0ae3818bd21c69e213d6754c3876c879dc88a427",
-        "mode": 420
-      },
-      {
-        "path": "_dev/staging/agents/finding-repair-loop-agent.md",
-        "sha256": "bc6c8b1a8612bcb641ee3696e48a070df5da5b5b997d7a29c135af43c69fb4d1",
-        "mode": 420
-      },
-      {
-        "path": "_dev/staging/commands/finding-repair-loop.md",
-        "sha256": "3986937b0787f6b1e23f1d0eb875df60e4943498fa65ae253a57384afc09ca5b",
-        "mode": 420
-      },
-      {
-        "path": "_dev/staging/README.md",
-        "sha256": "ce2d04b3d35a673a0762f63973c3ff29da6d498450564206ffa222aae7887cac",
-        "mode": 420
-      },
-      {
-        "path": "_dev/staging/skills/finding-repair-loop/PROMOTION.md",
-        "sha256": "40770b3c1754a8689be36395f98fd07a5840ce78843c4b43f9a22b7a665da26b",
-        "mode": 420
-      },
-      {
-        "path": "_dev/staging/skills/finding-repair-loop/SKILL.md",
-        "sha256": "bd080b83d834000fc6c48e751f73f3b77234673bc40937f29ed661a68376734a",
-        "mode": 420
-      },
-      {
-        "path": "_dev/staging/skills/finding-repair-loop/verify-finding-repair-loop.cjs",
-        "sha256": "41368b1a899e12b8bffd9fcc212e59ea4a86386ef18eb923d5ee6b683c01b3fa",
-        "mode": 420
-      },
       {
         "path": ".claude/agents/aside.md",
         "sha256": "602c95ca0e46d76de510251e3e7fee702b5454f9fc06fca9b644b2b5de1c4207",
@@ -787,7 +137,7 @@
       },
       {
         "path": ".claude/commands/advance-pipeline.md",
-        "sha256": "3d14357d18d3ef90732151521d430a65ab78f6067825d0375c767558b2208c94",
+        "sha256": "e9f58524f497d06e7c6ef56d5428ae6ea1fc4ed0539c879b6e72a722f7470280",
         "mode": 420
       },
       {
@@ -832,7 +182,7 @@
       },
       {
         "path": ".claude/commands/assemble-prompt-system.md",
-        "sha256": "c708d757fef8cbab6886e23f64c1999b9e686c05ed5939ab351a076bbddd19dd",
+        "sha256": "6128d5bec87caaa7a74eab4a8673fa3146435fb64915db8b4e9f3c8169a53ba2",
         "mode": 420
       },
       {
@@ -862,7 +212,7 @@
       },
       {
         "path": ".claude/commands/author-prompt-system.md",
-        "sha256": "42981f7c8d5170cd82b555ddae90d35a371a307440de063a844f477505608248",
+        "sha256": "fef3e9c9a21c7af33f6136356724e4b38a2866d55d67469ae41bb051d202f202",
         "mode": 420
       },
       {
@@ -1132,7 +482,7 @@
       },
       {
         "path": ".claude/commands/execute-plan.md",
-        "sha256": "387cab9c395d5a8ac9b11db8cd7732d3151e1ec9989a105c60594db7a4d6cca6",
+        "sha256": "b2e2ba3e66d10fdd5dc983c262fef1bcff40cc4f9b0b462327c1ab891b2037a1",
         "mode": 420
       },
       {
@@ -1467,7 +817,7 @@
       },
       {
         "path": ".claude/commands/plan-pipeline.md",
-        "sha256": "1e4bd32ae6a9f9963a415cf11855843e7c4c7ec60739373521d3a8efc6dda3b0",
+        "sha256": "39e7cc4bae76e82bb0c72da3ffa39e159a61b42b298123cf32db82ad9d81f8aa",
         "mode": 420
       },
       {
@@ -1562,7 +912,7 @@
       },
       {
         "path": ".claude/commands/review-progress.md",
-        "sha256": "7243d533c76b12c8223aa6d754bc9ac1b8428d39495fdb07d40cc0a9b337df22",
+        "sha256": "78c9ffecee8ed3ffb52beb19f40f31eec9dd433ba4bdd1d5eae1c1fc893bb9cc",
         "mode": 420
       },
       {
@@ -1587,7 +937,7 @@
       },
       {
         "path": ".claude/commands/run-plan.md",
-        "sha256": "a48faa9852d70a48c1e01fb5ae25126d373f766b08039b32c1c43073e6333e89",
+        "sha256": "0e4a91b7c71a6cec32c02b473e7bcf943e486fae7bcee319ca108cf67ebadc62",
         "mode": 420
       },
       {
@@ -1697,7 +1047,7 @@
       },
       {
         "path": ".claude/guardrails.md",
-        "sha256": "33f18f7fa0fd5fea63972db49eccbb7173f2c8f8b39970fbd88ed3fe73a2f555",
+        "sha256": "028de2152a2b9f3af5ea9a750c38910572e4651f2456d664888f5f039c6b09e7",
         "mode": 420
       },
       {
@@ -1867,7 +1217,7 @@
       },
       {
         "path": ".claude/skills/manage-frameworks/references/framework-anatomy.md",
-        "sha256": "71f2729bfe64d83f960aec858ca3ed587ab368974728246b820d7f9a1ea2f6ea",
+        "sha256": "386902a0369ff991a69bb995ff5ff7786bfa6bddad46eae0fcd6991c16d891be",
         "mode": 420
       },
       {
@@ -1972,7 +1322,7 @@
       },
       {
         "path": ".claude/skills/mythos-operating-mechanics/SKILL.md",
-        "sha256": "dc4cd830b52219746bb55ea52d60b4c29098e802b9423659fea8b7fec83ab24f",
+        "sha256": "f48853b1f31de3351d568f2a303efa97237c0b87ff63366e618fc3e6191e1d22",
         "mode": 420
       },
       {
@@ -5182,7 +4532,7 @@
       },
       {
         "path": "instructions/canonical/commands/advance-pipeline.yaml",
-        "sha256": "0809366e523344a21393d03def056ec83e393cb911a0553fb2924532426edf7f",
+        "sha256": "c0b0eebbeea434c024aacdced4166c6794af1e38922867503abf9bee8e66bcf5",
         "mode": 420
       },
       {
@@ -5222,7 +4572,7 @@
       },
       {
         "path": "instructions/canonical/commands/assemble-prompt-system.yaml",
-        "sha256": "09c2c29f5557ad49d090a62a8a9e2f0de50f893539a634e9c1b387d1ac040818",
+        "sha256": "ccb88c6fadc4c9435aaf84133dbd1535182c51ef6693037c5f9891b7fa0fcd94",
         "mode": 420
       },
       {
@@ -5232,7 +4582,7 @@
       },
       {
         "path": "instructions/canonical/commands/author-prompt-system.yaml",
-        "sha256": "2de23f5380caa147d0e97c82872c0e0ff058b02dea288dec8701d7a04377027f",
+        "sha256": "04989c5320226329bf3e9db9cef207198b83c16d211e653ae1d65cbfbc49240b",
         "mode": 420
       },
       {
@@ -5397,7 +4747,7 @@
       },
       {
         "path": "instructions/canonical/commands/execute-plan.yaml",
-        "sha256": "73c338035486394f0ff9d35b27fac34dd1a87da1e7b7a36651b6ebaafc409f55",
+        "sha256": "743bda1bf937242cfa4fecf2cd88deafeffa8bad3357e82e39e376082ee353bf",
         "mode": 420
       },
       {
@@ -5637,7 +4987,7 @@
       },
       {
         "path": "instructions/canonical/commands/orchestrate-loop.yaml",
-        "sha256": "ef2d00b308f36bf3cf1c90d26b6547c79b038f5de88f0b9886026c2103948450",
+        "sha256": "472c7407214460ed3efb7d90d4533aa7e4524268c649ce2be2060d711ebc77de",
         "mode": 420
       },
       {
@@ -5662,7 +5012,7 @@
       },
       {
         "path": "instructions/canonical/commands/plan-pipeline.yaml",
-        "sha256": "f7fabc0aaddb05c5fa26f38a90ef490e6c33c9f183c9344622a39191441da093",
+        "sha256": "b0ddd0416b64c47dcddd99de50d7c1c0032c90e1a65cab1d3594ab39358ea1e4",
         "mode": 420
       },
       {
@@ -5732,7 +5082,7 @@
       },
       {
         "path": "instructions/canonical/commands/review-progress.yaml",
-        "sha256": "ccde44d59a0d851d7dbc88eb0b1452755cb9cd2c5028f7d6c2dd90c747522fdd",
+        "sha256": "c2c741039aa5020d66e6f95ac6567bd67c5c08883800c1aabdd53aea2fc67d07",
         "mode": 420
       },
       {
@@ -5757,7 +5107,7 @@
       },
       {
         "path": "instructions/canonical/commands/run-plan.yaml",
-        "sha256": "feb073f11dd0b41bfb947f42350607d94d93a2825e48d9b1dc72b509364835e2",
+        "sha256": "55b9a44e6444eceb8fd007a4a28a63403bbf24d73b8c4dbf1bbddeea7b8451f9",
         "mode": 420
       },
       {
@@ -5867,7 +5217,7 @@
       },
       {
         "path": "instructions/canonical/contracts/reference-laws/plan-housing-laws.yaml",
-        "sha256": "5131b4c92ea0af199611d3db1a76305cee8b106169330fab9b09153c0583dff3",
+        "sha256": "0f67c3844cd668f926cded0092ae0c5acce1192f79a3e3377745a0deb06851a7",
         "mode": 420
       },
       {
@@ -5987,7 +5337,7 @@
       },
       {
         "path": "instructions/canonical/guardrails.md",
-        "sha256": "d1cfc7bd8e9615e5f308a242e990c1d287c4bbbca6ce6264201120f4e6f61be1",
+        "sha256": "173c8cd9e50c6fd8a84fb6172239bc41edbf721a6eddfafff0d1015ce63f9e38",
         "mode": 420
       },
       {
@@ -6102,7 +5452,7 @@
       },
       {
         "path": "instructions/canonical/system.yaml",
-        "sha256": "1e96697bedfd4996213a83f0ab5bc03c0ab3c35a239e78bab819c08fd965a4ce",
+        "sha256": "b8d1391f0014efdbb28c875fdefede1a03713dea0e9d5f77cf76334809030d06",
         "mode": 420
       },
       {
@@ -6122,7 +5472,7 @@
       },
       {
         "path": "instructions/generated/claude/.claude.guardrails.md",
-        "sha256": "33f18f7fa0fd5fea63972db49eccbb7173f2c8f8b39970fbd88ed3fe73a2f555",
+        "sha256": "028de2152a2b9f3af5ea9a750c38910572e4651f2456d664888f5f039c6b09e7",
         "mode": 420
       },
       {
@@ -6187,7 +5537,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "6de9a2644672dcc38b43a97c792fc2af65ac08e64637a36143654132d5fa2761",
+        "sha256": "1943f8368508fd580f27c9d5c627762dab5ec975ab62da68749a3d5d53ff5c37",
         "mode": 420
       },
       {
@@ -6302,7 +5652,7 @@
       },
       {
         "path": "tools/ai-bridge/docs/RESEARCH_WORKFLOW.md",
-        "sha256": "82954e8ae574ddace84c627655421eecda540ccfb9fb5b558e783693bbae207c",
+        "sha256": "f111073845dc541852bb3f1a338385d188170501872fa0927f8c2180aab0e0df",
         "mode": 420
       },
       {
@@ -6537,7 +5887,7 @@
       },
       {
         "path": "tools/ant-hive-world/__tests__/event-schema.test.cjs",
-        "sha256": "cbf4874a3fa6fffa49afa9ec5b2abef13a0d5e95bdf66c46f38c016b215d38b9",
+        "sha256": "d8e53ff2a450b0600753c1530ce097c32bb4fb80ad221be87c20b94cd8e308a3",
         "mode": 420
       },
       {
@@ -6597,7 +5947,7 @@
       },
       {
         "path": "tools/ant-hive-world/dashboard.js",
-        "sha256": "09a6ee968ab0430ab67e747a93dc8775d679aa7f257e91acb37dcbe12f088cff",
+        "sha256": "d084d46143fde338c0ce01fc927f9e0b314090c1a38afeb7d957b38dc827edf0",
         "mode": 420
       },
       {
@@ -6637,7 +5987,7 @@
       },
       {
         "path": "tools/ant-hive-world/harness.js",
-        "sha256": "75169f7ffd100dff323f8efc02b5a5af8df2eceded941881dcc8b8255bd48ad8",
+        "sha256": "ebde66c096f688ea95976f712e5cfa81d19ecd4ee7199298faad61f8ed913bd7",
         "mode": 420
       },
       {
@@ -6666,6 +6016,11 @@
         "mode": 420
       },
       {
+        "path": "tools/ant-hive-world/mirror-detector.js",
+        "sha256": "37bf9117c5df263bf643bdbab7effb65dd7af1229f42c171201b83e0237a7c23",
+        "mode": 420
+      },
+      {
         "path": "tools/ant-hive-world/README.md",
         "sha256": "3e29f86bd6ecc45351d31531d07a9ae919f7335f86ef15a307571117f3ede92a",
         "mode": 420
@@ -6687,7 +6042,7 @@
       },
       {
         "path": "tools/ant-hive-world/untrained-network.js",
-        "sha256": "a7750d0611c17dea3dea0df7617abf4e0b990766fdb10c211be012a00a40e341",
+        "sha256": "bc9692acf7ff4e3c8c61738af983887629d5bd841553f2672db625f0adb237ce",
         "mode": 420
       },
       {
@@ -6707,7 +6062,7 @@
       },
       {
         "path": "tools/ant-hive-world/world-state.js",
-        "sha256": "05e012ca31c27c33d9ab9eb830f7f1effc1cc11663268d8252b702fd10290d7c",
+        "sha256": "81847138a6171f99da9b8a238e64e58e235ba3c256921420acffc6e80070860d",
         "mode": 420
       },
       {
@@ -7451,6 +6806,151 @@
         "mode": 420
       },
       {
+        "path": "tools/codex/prompt-system/claude-cost-controlled-slice-execution-flowchart.md",
+        "sha256": "3f26e85d6855e0b207ae40dc762f26c3da17fd424af32b68d76e9ef5dd6c7d91",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/claude-health-remediation-playbook.md",
+        "sha256": "6dcb1cd5e437da589a6739050eb9d01ad5cd5512e5f51094ef0c8a7c0a6e7f50",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/claude-master-run-order.md",
+        "sha256": "6f6a0ad392623b61ea3c77e6364e0423c3d1eb1b94e10d81edcdb3b99d27363b",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/claude-prompt-pack-artifact-retention-and-compaction.md",
+        "sha256": "23dd481ba431bdc058ed5f22e666d18fc5098bb67ce7081b7b20d5d17f10eecd",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/claude-prompt-pack-candidate-replay-hardening.md",
+        "sha256": "0385e6f69ef66ae9cfb48132037c04f7385f3c3b5ab8860e91d37f7b18285e77",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/claude-prompt-pack-claude-code-features-integration.md",
+        "sha256": "8b2a1fe03d03977400a0c6911a09e5032d3baee1a1d3e24ae5be7b34c17978ab",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/claude-prompt-pack-command-adherence-and-validation-hardening.md",
+        "sha256": "2483c19690912e2a0896de301b0eefbb0785f59c513645a135571617c2e8a1f4",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/claude-prompt-pack-command-surface-normalization.md",
+        "sha256": "c765e838545e6cf705de841eb3dba4673dbeb1aa2a9986646df1dffdc14791c9",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/claude-prompt-pack-cost-controlled-slice-execution.md",
+        "sha256": "bce6b89b946b2d057663ee76cac0e07cbf216748b9ae30d6dd08c577d6b85e48",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/claude-prompt-pack-framework-learning-loop-enforcement.md",
+        "sha256": "6a3656685b9ea9e08ce81b64c90c2b802ec707957e387f480f5f632757ad5bc9",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/claude-prompt-pack-framework-post-workflow-hooks.md",
+        "sha256": "b22f580c3b5c85098b7bb19ed4171faf551e1ab42283707fa0fb9bfc0d1fcfa6",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/claude-prompt-pack-harness-capability-abstraction.md",
+        "sha256": "7e19d6db2c47a1e42f9772e1c792ac70ef2d984bb114c0f53e775ae81fcd9738",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/claude-prompt-pack-local-model-verification-lane.md",
+        "sha256": "80714349dcd064e3d4d21292199c3f0976e0b62ec185cd497a3264fc956edb09",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/claude-prompt-pack-master-loop-closure.md",
+        "sha256": "24d3ce01c0bcf0a02068d668d497605b661da0d2bf6c188c8e0ec13d53d4d9ab",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/claude-prompt-pack-master-prompt-and-operator-ux-hardening.md",
+        "sha256": "6fe5b90a8313ab3088fa80404ff8b82b071c537656b7e054e9c06d006120cc8a",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/claude-prompt-pack-meta-staged-remediation-framework.md",
+        "sha256": "7d3bc581e900006079b3924d12fa040bb32786b0fe2630de8587af69cfe8787e",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/claude-prompt-pack-multi-step-orchestration-abstraction.md",
+        "sha256": "ecc215d6d835d9e68af9850f5980481bba5b98850f99732418b31110fe40abc1",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/claude-prompt-pack-multiagent-planning-and-compliance.md",
+        "sha256": "ebd8cc671edcc85a2318234ab2a71c3757d8f1bcf78d6c51d4311799fdfc0244",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/claude-prompt-pack-operational-loop-closure.md",
+        "sha256": "90b0b603454c5865fe7759f41a011c54357811c446b1db8ec797ad5675b29d1f",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/claude-prompt-pack-project-health-alignment.md",
+        "sha256": "8ad0debb9bd3b01432f249d7acb68692421d4b826adadd914e5c4cb6abba58a3",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/claude-prompt-pack-semantic-output-audit.md",
+        "sha256": "6611c9e57a04052e4c6dc1dfe97a1d5959ea72d337f944e5739b6b951c6001dc",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/claude-prompt-pack-semantic-verification.md",
+        "sha256": "c720bae31a537c66172ce7acce4f61455a227f94baf60b56abe37af68317dead",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/claude-prompt-pack-source-material-qa-and-promotion.md",
+        "sha256": "941c86186ef299bfb92fa37db13d5578802f8131c6dacfacdc1e57ba239f3b82",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/claude-prompt-pack-subagent-autonomy-and-template-efficiency.md",
+        "sha256": "5ac2bffd22084a2e3e641a8fd9f30f810e51df916f21485beaf59714a30e4611",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/claude-run-debrief-and-clear-readiness.md",
+        "sha256": "2c7efe0715ce2d602b5c6f0a0e5ef066ca954c22b52013afcf3dc00690bd8f5a",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/manifest.json",
+        "sha256": "57cd2b29c94096c110b5bf0963543d02135a634dec9b8ee6992a28322e8dfbe4",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/plan-contract.md",
+        "sha256": "66764298f673c607a817f405909af542645b10efae4fbd331801e3d24bf02ba7",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/prompt-plan-registry.json",
+        "sha256": "47587a8027ee09ca210e2345e0483c34dba38a38852687005c4a5caa1c641691",
+        "mode": 420
+      },
+      {
+        "path": "tools/codex/prompt-system/README.md",
+        "sha256": "59b9f3934fd7c118ef1a3026e682c5dadb91bb1f8fced5e6eded989d7e903368",
+        "mode": 420
+      },
+      {
         "path": "tools/codex/prompts/review-task-plan.md",
         "sha256": "ae8d96cfb42cee720755b7fe943be0584364bf033e716f4e08a3adcb298de7e2",
         "mode": 420
@@ -7492,12 +6992,12 @@
       },
       {
         "path": "tools/commands/handlers/new-session.cjs",
-        "sha256": "48dfe5b628822a09fca1bfc1f822c562a290e35b16324cd4f98e18e86f9a9095",
+        "sha256": "b0daec029400d5ed51e25a96f203f192db27327f81beb3092ab0ef3276447202",
         "mode": 420
       },
       {
         "path": "tools/commands/handlers/review-progress-adapters.cjs",
-        "sha256": "d498bdaca099fa536f8ae92806a1f79894924a77e83ddad5f607ba12ac34c905",
+        "sha256": "558d24d47cea3416da34edef23a074e43dcd0a69e722fc04f8196a1e128dc919",
         "mode": 420
       },
       {
@@ -8512,7 +8012,7 @@
       },
       {
         "path": "tools/hygiene/auto-commit.js",
-        "sha256": "e50a7f97f92054c4994c81dcd3ea9af09c93a977eb9ec1fb0c0ff722ec945062",
+        "sha256": "60d4b4fbb64eda0337f28570c720009ca6d1f7acbcda6cded7b75231fe52aaf1",
         "mode": 493
       },
       {
@@ -9007,7 +8507,7 @@
       },
       {
         "path": "tools/kernel/hooks/__tests__/posttool-write-ledger.test.cjs",
-        "sha256": "343b4a427c341bab9b0b3cf9a7b14dfc6b85128dcfc87f961b3081c914a5867a",
+        "sha256": "1236bdd3e09fd7169aa2368807b756a04050bd688c4310d09cfa9e4c14138dfc",
         "mode": 420
       },
       {
@@ -9137,7 +8637,7 @@
       },
       {
         "path": "tools/kernel/hooks/posttool-write-ledger.cjs",
-        "sha256": "805ba8cebc689506034c43946d26d82e4f809349387cce114f97c6588e616e4a",
+        "sha256": "61f2221247701d47e364ad018394c6cda9600128bfecde3ea554e553700ed40d",
         "mode": 420
       },
       {
@@ -11567,7 +11067,7 @@
       },
       {
         "path": "tools/sessions/__tests__/boundary-markers.test.js",
-        "sha256": "218c2c6e933c781d0bc0b2536ebdd0faf4eb2ec2ad3758e2e976577a7d57b1b0",
+        "sha256": "3d6417f3ee65219cf89ec6ccfc3b351ebef16d9d5eb91f962725dfbb2acfeba9",
         "mode": 420
       },
       {
@@ -11587,7 +11087,7 @@
       },
       {
         "path": "tools/sessions/consume-boundary.cjs",
-        "sha256": "99d1d7a45a1b8adbe60e3487ad5ec9ead66f621b28dcd5cb9379556052e42426",
+        "sha256": "a5adcb9e7106d89a1813655e54d2c7a95c5cece08305bc34e9122f6ddadfef9b",
         "mode": 420
       },
       {
@@ -11611,13 +11111,18 @@
         "mode": 420
       },
       {
+        "path": "tools/sessions/lib/__tests__/active-session-registry-filter.test.js",
+        "sha256": "c0821ba0c336939a738b61d81f50e851d10337e5017f7c65dd5f5d360921fc0e",
+        "mode": 420
+      },
+      {
         "path": "tools/sessions/lib/__tests__/active-session-registry.test.js",
-        "sha256": "0b3e15475180f646e3c6a49d79e818c005ea3f68ba727909ece74a3d1d5c5177",
+        "sha256": "dbdfb05f94e749b980fb61d25a066d6643d1746d195f781bbfa0144cb5253792",
         "mode": 420
       },
       {
         "path": "tools/sessions/lib/active-session-registry.js",
-        "sha256": "ff3020cbc5088b217b92c252c1100939bef38d085c9cb170c6f70927e81bf8d3",
+        "sha256": "041d8aa7b2898b8a7ff941a3bad94419179c66267888e3d6875bd6c6bf311959",
         "mode": 420
       },
       {
@@ -11647,7 +11152,7 @@
       },
       {
         "path": "tools/sessions/session.js",
-        "sha256": "15c2b3965881ff755df0ebb5b8abb3ce9e05ceefcc08ddeb6de680aaa16f11f6",
+        "sha256": "94ec75c740cf1a8002c637179027d33081ec077a717b5df95fe90f14633132ff",
         "mode": 493
       },
       {
@@ -11962,7 +11467,7 @@
       },
       {
         "path": "tools/signals/lib/codex-bridge.js",
-        "sha256": "79e98ec9f6081aa06c3bb6b57b1783fddec33444db4772ca436bd3049f30dbcd",
+        "sha256": "191309feb96498d0e220fd36fc37131e0896eb217a033bfa4e8faecbbe46ae11",
         "mode": 420
       },
       {
@@ -12327,7 +11832,7 @@
       },
       {
         "path": "tools/status/mythos-status.js",
-        "sha256": "e3a1a38c83414c85bb69c20b9460c9441b976e9384aa412d1b70f1a43946f4a3",
+        "sha256": "332b0a0ff54cf5803f45df1dad7f41d9357d3ceb7fe958a10b2e8749ecc16eb7",
         "mode": 420
       },
       {
@@ -12337,7 +11842,7 @@
       },
       {
         "path": "tools/status/status.js",
-        "sha256": "3c4b9e2d45f3bbf9140d3aa227165c01d9c393d597b60760c80145a44c943b63",
+        "sha256": "6068ceee48a2a91e06fd527815e624ac8baad6873293e88dcecad14608f21b30",
         "mode": 420
       },
       {
@@ -12792,7 +12297,7 @@
       },
       {
         "path": "tools/verify/lib/__tests__/paste-target-prompt-coverage.test.cjs",
-        "sha256": "9d57fb2a3d014af7f1b663609473f4117d1199e372df5300855cc4ab2a9c256d",
+        "sha256": "2b138b47eba1726b64e99043dcd83efbfeab1768d748de3fe53c430f6d522ba2",
         "mode": 420
       },
       {
@@ -12837,12 +12342,12 @@
       },
       {
         "path": "tools/verify/lib/paste-target-prompt.cjs",
-        "sha256": "d61232fb80e15fee600f712170673549d3bfe41c1b1fb85e50856dbb2aca0cef",
+        "sha256": "47bd71eecf95f312f4f91c198450e4132148556386d3d504c9426e2961cf3b36",
         "mode": 420
       },
       {
         "path": "tools/verify/lib/prompt-contract.cjs",
-        "sha256": "9c8f70f4c1a93a060bffe83c0d86c401d55663b4f7dd6ce16b31274ac65c963c",
+        "sha256": "989016e8400bbb7b58d3fe516e2a6702d3bec0bb9216885a7a794b05a6dc8fbc",
         "mode": 420
       },
       {
@@ -13037,7 +12542,7 @@
       },
       {
         "path": "tools/verify/verify-generator-paste-target-optin.cjs",
-        "sha256": "a34a71cd91381f90b3e6eacb7d599db422e59ed339bb5a88c17f9c809510d0e6",
+        "sha256": "d34b9500103198bef544c73dcab36aab5df0f381b58a6337630a51110eeb0948",
         "mode": 420
       },
       {
@@ -13057,7 +12562,7 @@
       },
       {
         "path": "tools/verify/verify-paste-target-prompts.cjs",
-        "sha256": "a1964749f9117bff272960e143ea3502057af075e66d56b8a5ef2e1bda09a807",
+        "sha256": "2c5ef00e919a8af65475ee81d26a785abe84409cd8da5ed7a81cb3005b9f9943",
         "mode": 420
       },
       {
@@ -13704,9 +13209,9 @@
     "package_script_count": 203,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "6de9a2644672dcc38b43a97c792fc2af65ac08e64637a36143654132d5fa2761",
-    "graph_nodes": 3774,
-    "graph_edges": 2716
+    "graph_sha256": "1943f8368508fd580f27c9d5c627762dab5ec975ab62da68749a3d5d53ff5c37",
+    "graph_nodes": 3705,
+    "graph_edges": 2715
   },
   "runtime_exclusions": [
     ".git/**",
@@ -13808,6 +13313,9 @@
     ],
     "d5078f1ab80e9c7dfb4b1b31b22ddf60ac4d15f9da999d963741bf7e9c4027e3": [
       "tools/export-public/config/denylist-mythos.json"
+    ],
+    "aea9ab15a7a5f286ba5340437cd23ecd8e7ea414fce90165594414490f380946": [
+      "tools/sessions/lib/__tests__/active-session-registry-filter.test.js"
     ]
   },
   "security_evidence_artifacts": [

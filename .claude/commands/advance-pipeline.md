@@ -9,7 +9,7 @@ Preserve backward compatibility for operators who still invoke advance-pipeline,
 
 <process>
 - Treat advance-pipeline as a compatibility wrapper, not an independent workflow definition.
-- Read instructions/canonical/commands/execute-plan.yaml and _dev/prompts/prompt-plan-registry.json first.
+- Read instructions/canonical/commands/execute-plan.yaml and tools/codex/prompt-system/prompt-plan-registry.json first.
 - If the argument is empty or 'master', execute the canonical master plan exactly as execute-plan master would.
 - If the argument is 'list', list compatible prompt plans exactly as execute-plan list would and do not execute anything.
 - If any other argument is provided, stop and direct the operator to run-plan <plan-id|task-id|path> for general plan execution, or execute-plan <plan-id> for specialist prompt-plan execution.

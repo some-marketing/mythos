@@ -8,7 +8,7 @@ Plan the next pipeline move from the master run order, identify the next eligibl
 </objective>
 
 <process>
-- Read _dev/prompts/claude-master-run-order.md as the source of truth.
+- Read tools/codex/prompt-system/claude-master-run-order.md as the source of truth.
 - Inspect current repo evidence relevant to stage eligibility: referenced prompt packs and docs, stage status notes in the master doc, _dev/reports/analysis/, _dev/reports/lifecycle/, and _dev/reports/signals/ when relevant to a stage's gate criteria.
 - Determine: the next eligible main stage (if any), any cross-cutting infrastructure track that should be run now or in parallel, any blocker, human gate, or deferral that prevents advancement, and whether the master pipeline is already complete so active-workstream planning should take over.
 - Write two artifacts: planning report to _dev/reports/analysis/plan-pipeline.md and planning signal to _dev/reports/analysis/plan-pipeline.next-step.json.

@@ -9,7 +9,7 @@ const { scanLiveHandoffSignals } = require('../../signals/lib/pipeline-loop');
 const { buildStatus } = require('../../status/mythos-status');
 
 const PIPELINE_SOURCES = Object.freeze([
-  '_dev/prompts/claude-master-run-order.md',
+  'tools/codex/prompt-system/claude-master-run-order.md',
   '_dev/reports/analysis/plan-pipeline.next-step.json'
 ]);
 const ACTIVE_WORKSTREAM_SOURCES = Object.freeze([

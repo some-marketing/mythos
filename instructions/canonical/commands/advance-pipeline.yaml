@@ -4,7 +4,7 @@
   "mode": "COORDINATOR",
   "objective": "Preserve backward compatibility for operators who still invoke advance-pipeline, but resolve that request through the canonical master plan executor instead of maintaining a separate execution contract.",
   "scope_resolution": {
-    "default": "Alias to execute-plan master using _dev/prompts/claude-master-run-order.md",
+    "default": "Alias to execute-plan master using tools/codex/prompt-system/claude-master-run-order.md",
     "arguments": {
       "empty": "Alias to execute-plan master",
       "list": "Redirect to execute-plan list",
@@ -14,7 +14,7 @@
   },
   "process": [
     "Treat advance-pipeline as a compatibility wrapper, not an independent workflow definition.",
-    "Read instructions/canonical/commands/execute-plan.yaml and _dev/prompts/prompt-plan-registry.json first.",
+    "Read instructions/canonical/commands/execute-plan.yaml and tools/codex/prompt-system/prompt-plan-registry.json first.",
     "If the argument is empty or 'master', execute the canonical master plan exactly as execute-plan master would.",
     "If the argument is 'list', list compatible prompt plans exactly as execute-plan list would and do not execute anything.",
     "If any other argument is provided, stop and direct the operator to run-plan <plan-id|task-id|path> for general plan execution, or execute-plan <plan-id> for specialist prompt-plan execution.",
@@ -40,7 +40,7 @@
     "blocker_or_suspicious_success": "review-progress pipeline"
   },
   "artifacts": [
-    "_dev/prompts/prompt-plan-registry.json",
+    "tools/codex/prompt-system/prompt-plan-registry.json",
     "_dev/reports/analysis/advance-pipeline__<stage-id-safe>.md",
     "_dev/reports/analysis/advance-pipeline__<stage-id-safe>.expectation-failures.json",
     "_dev/reports/analysis/plan-pipeline.md",

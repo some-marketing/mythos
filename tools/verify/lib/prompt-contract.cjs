@@ -45,7 +45,7 @@ const executePlanRules = [
 const promptContracts = [
   {
     id: 'master_loop_closure',
-    relPath: '_dev/prompts/claude-prompt-pack-master-loop-closure.md',
+    relPath: 'tools/codex/prompt-system/claude-prompt-pack-master-loop-closure.md',
     rules: [
       {
         pattern: /Keep the main thread thin/i,
@@ -79,7 +79,7 @@ const promptContracts = [
   },
   {
     id: 'operational_loop_closure',
-    relPath: '_dev/prompts/claude-prompt-pack-operational-loop-closure.md',
+    relPath: 'tools/codex/prompt-system/claude-prompt-pack-operational-loop-closure.md',
     rules: [
       {
         pattern: /Launch exactly two read-only subagents in parallel/i,
@@ -109,7 +109,7 @@ const promptContracts = [
   },
   {
     id: 'multiagent_planning_and_compliance',
-    relPath: '_dev/prompts/claude-prompt-pack-multiagent-planning-and-compliance.md',
+    relPath: 'tools/codex/prompt-system/claude-prompt-pack-multiagent-planning-and-compliance.md',
     rules: [
       {
         pattern: /Keep the main thread thin/i,
@@ -139,7 +139,7 @@ const promptContracts = [
   },
   {
     id: 'debrief_and_clear_readiness',
-    relPath: '_dev/prompts/claude-run-debrief-and-clear-readiness.md',
+    relPath: 'tools/codex/prompt-system/claude-run-debrief-and-clear-readiness.md',
     rules: [
       {
         pattern: /Required output order:[\s\S]*Debrief packet[\s\S]*Lessons summary[\s\S]*Uncodified action items[\s\S]*Code-validation summary[\s\S]*Clear-readiness decision/i,

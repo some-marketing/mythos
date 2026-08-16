@@ -41,7 +41,7 @@ const PATH_RULES = [
   { prefix: 'Mythos-memories/.smart-env/',   group: 'disposable-cache' },
   { prefix: 'Mythos-memories/.obsidian/',    group: 'disposable-cache' },
   { prefix: '_dev/archive/',                 group: 'dev-archive' },
-  { prefix: '_dev/prompts/',                 group: 'dev-prompts' },
+  { prefix: 'tools/codex/prompt-system/',                 group: 'dev-prompts' },
   { prefix: '_dev/research/',                group: 'dev-research' },
   { prefix: 'docs/',                         group: 'docs' },
   { prefix: '.mcp.json',                     group: 'mythos-infrastructure' },

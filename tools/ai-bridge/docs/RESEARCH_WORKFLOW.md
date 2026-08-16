@@ -108,7 +108,7 @@ The following are explicitly not implemented yet:
 
 2. **Research-specific validators**: The validation checks described above exist only as a contract. No `research-validator.js` module exists yet.
 
-3. **Research prompt templates**: Template files for research prompts are not yet in the dispatch system. Research prompts are currently authored ad hoc or via `_dev/prompts/` prompt packs.
+3. **Research prompt templates**: Template files for research prompts are not yet in the dispatch system. Research prompts are currently authored ad hoc or via `tools/codex/prompt-system/` prompt packs.
 
 4. **Depth budget management**: Perplexity Deep Research has a ~5/day limit. Budget tracking and auto-prioritization are not implemented.
 
@@ -141,7 +141,7 @@ No changes to the shared foundation are needed.
 
 Until automated dispatch is built, the recommended first research path is:
 
-1. **Context packaging**: Claude Code gathers project context and builds a research prompt using existing prompt packs in `_dev/prompts/`
+1. **Context packaging**: Claude Code gathers project context and builds a research prompt using existing prompt packs in `tools/codex/prompt-system/`
 2. **Manual dispatch**: The operator pastes the prompt into Perplexity (fresh window, isolation instruction included)
 3. **Manual intake**: The operator downloads results and places them in the project's research directory
 4. **System validation**: Claude Code reads the results and applies the shared validation base (response exists, is parseable, has expected structure)

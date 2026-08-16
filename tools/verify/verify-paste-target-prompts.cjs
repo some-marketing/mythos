@@ -28,7 +28,7 @@ const SKIP_DIRS = new Set([
 const SKIP_REL_DIRS = new Set([
   '_dev/archive',
   '_dev/reports/analysis/convene-runs',
-  '_dev/prompts/templates',
+  'tools/codex/prompt-system/templates',
   'framework_candidates'
 ]);
 

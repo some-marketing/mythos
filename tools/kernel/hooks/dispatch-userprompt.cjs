@@ -87,31 +87,39 @@ function logContractOverrides(payload) {
   }
 }
 
-function main() {
-  const payload = readPayload();
-  writeDiscordDeliveryReceipts(payload);
-  logContractOverrides(payload);
-  require('../../transcripts/snapshot-current-session.cjs').snapshotCurrentSession(payload);
-  // Lazy tier re-stamp: SessionStart fires before a fresh session's transcript
-  // exists, so its stamp can land model:unknown → scaffold (inert frontier
-  // shedding). By first prompt the transcript answers; must run BEFORE the
-  // ambient router consults the tier.
-  require('./session-start-tier-stamp.cjs').ensureSessionTier(payload);
-  const ambientNotice = require('./userpromptsubmit-ambient-router.cjs').noticeForPayload(payload);
-  if (ambientNotice) process.stdout.write(ambientNotice + '\n');
-  // tier-s2b-injection-consumers: owl-altitude framing, add-gated via the
-  // ProcessTierRule/1.1 add_registry (owl-altitude-injection). Inert for
-  // sessions not carrying the add; per-add operator kill-switch honored.
-  const owlNotice = require('./userprompt-owl-altitude.cjs').noticeForPayload(payload);
-  if (owlNotice) process.stdout.write(owlNotice + '\n');
+function main(opts = {}) {
+  const finishHook = opts.finish || finish;
+  const writeError = opts.writeError || ((message) => process.stderr.write(message));
+  try {
+    const payload = opts.payload || readPayload();
+    writeDiscordDeliveryReceipts(payload);
+    logContractOverrides(payload);
+    (opts.snapshotCurrentSession || require('../../transcripts/snapshot-current-session.cjs').snapshotCurrentSession)(payload);
+    // Lazy tier re-stamp: SessionStart fires before a fresh session's transcript
+    // exists, so its stamp can land model:unknown → scaffold (inert frontier
+    // shedding). By first prompt the transcript answers; must run BEFORE the
+    // ambient router consults the tier.
+    (opts.ensureSessionTier || require('./session-start-tier-stamp.cjs').ensureSessionTier)(payload);
+    const ambientNotice = (opts.ambientNoticeForPayload || require('./userpromptsubmit-ambient-router.cjs').noticeForPayload)(payload);
+    if (ambientNotice) process.stdout.write(ambientNotice + '\n');
+    // tier-s2b-injection-consumers: owl-altitude framing, add-gated via the
+    // ProcessTierRule/1.1 add_registry (owl-altitude-injection). Inert for
+    // sessions not carrying the add; per-add operator kill-switch honored.
+    const owlNotice = (opts.owlNoticeForPayload || require('./userprompt-owl-altitude.cjs').noticeForPayload)(payload);
+    if (owlNotice) process.stdout.write(owlNotice + '\n');
 
-  const planGate = require('./userprompt-plan-review-gate.cjs');
-  const prompt = String(payload.prompt || '');
-  if (planGate.parsePrompt(prompt).matched) {
-    const result = planGate.evaluateGate(prompt, process.env.CLAUDE_PROJECT_DIR || process.cwd(), payload.session_id || null);
-    if (result.action === 'inject' && result.text) process.stdout.write(result.text + '\n');
+    const planGate = opts.planGate || require('./userprompt-plan-review-gate.cjs');
+    const prompt = String(payload.prompt || '');
+    if (planGate.parsePrompt(prompt).matched) {
+      const result = planGate.evaluateGate(prompt, process.env.CLAUDE_PROJECT_DIR || process.cwd(), payload.session_id || null);
+      if (result.action === 'inject' && result.text) process.stdout.write(result.text + '\n');
+    }
+  } catch (err) {
+    // UserPromptSubmit is advisory. An injected helper must never reject the
+    // operator's prompt because a local lifecycle artifact was unavailable.
+    writeError(`[userprompt-dispatch] ${err && err.message ? err.message : 'unexpected hook failure'}\n`);
   }
-  finish(0);
+  finishHook(0);
 }
 
 if (require.main === module) {
@@ -120,6 +128,7 @@ if (require.main === module) {
 
 module.exports = {
   extractDiscordChannelReceipts,
+  main,
   writeDiscordDeliveryReceipts,
   receiptDir,
   isReceiptDisabled

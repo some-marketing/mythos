@@ -21,6 +21,7 @@ const PROJECT_ROOT = path.resolve(__dirname, '../..');
 const { resolveNextStep, listActiveTaskPlans, listCompletedTaskPlans } = require('../signals/lib/decision-tree');
 const { scanLiveHandoffSignals } = require('../signals/lib/pipeline-loop');
 const { listAllTaskPlans } = require('../planning/lib/resolve-task-plan');
+const { getReviewClosure, formatText: formatReviewClosure } = require('./review-closure');
 
 let analyzeAndApplyCloseoutMaintenance;
 try {
@@ -430,7 +431,8 @@ function buildStatus(projectRoot = PROJECT_ROOT) {
     harness_capabilities: getHarnessCapabilitySummary(projectRoot),
     trinity: getTrinityAlignment(projectRoot),
     live_ads: getLiveAdsSummary(projectRoot),
-    inventory: getSystemInventory(projectRoot)
+    inventory: getSystemInventory(projectRoot),
+    review_closure: getReviewClosure(projectRoot)
   };
 }
 
@@ -589,6 +591,10 @@ function formatText(status) {
   // Inventory
   const inv = status.inventory;
   lines.push(`Inventory: ${inv.frameworks} frameworks, ${inv.clients} clients, ${inv.commands} commands`);
+  if (status.review_closure) {
+    lines.push('');
+    lines.push(formatReviewClosure(status.review_closure));
+  }
 
   return lines.join('\n');
 }

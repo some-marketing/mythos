@@ -137,6 +137,11 @@ function resolveSessionId(projectRoot) {
   return { session_id: null, session_id_source: 'unavailable' };
 }
 
+function assertSessionIdentityForNewSession(projectRoot) {
+  return require('../../sessions/lib/resolve-session-id.cjs')
+    .assertAuthoritativeSessionIdentity(projectRoot, 'new-session step 0');
+}
+
 // Read a plan-visibility freshness verdict out of repo-awareness-init --json.
 // Returns 'stale' | 'fresh' | 'unknown'. Tolerant of the two shapes the
 // snapshot has carried (nested freshness object vs. flattened status).
@@ -269,6 +274,20 @@ function runNewSessionInner(projectRoot, opts) {
       packet: null,
       stdout: '',
       stderr: `${renderDriftReport(drift, { specPath: SPEC_REL_PATH })}\n${FALLBACK_NOTE}`
+    };
+  }
+
+  // Identity is an execution precondition, not a SessionStart registration
+  // precondition. Enforce it immediately before step 0 so no mechanical work
+  // can run under a guessed or unavailable identity.
+  try {
+    assertSessionIdentityForNewSession(projectRoot);
+  } catch (err) {
+    return {
+      exitCode: 2,
+      packet: null,
+      stdout: '',
+      stderr: `${err.message}\n${FALLBACK_NOTE}`
     };
   }
 

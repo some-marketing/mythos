@@ -469,33 +469,37 @@ check('a run-004 spec instantiated from the template covers the full gen-2 write
   });
   const run004 = charterMod.createCharter(run004Spec);
 
-  const repoRoot = path.resolve(__dirname, '..', '..');
   const surfaceMatches = (relPath) => run004.allowed_write_surfaces.some((s) => {
     const prefix = s.replace(/\*+$/, '');
     return relPath.startsWith(prefix);
   });
 
-  // The real gen-2 write inventory this oracle checks: every journal + its
-  // head anchor under _dev/state/ticktock/journals/ (the run-history surface
-  // gen-2 actually wrote to), and every file under
-  // tools/ant-hive-world/unreal-export/ that is NOT the module's own source
-  // (import-index.jsonl and the unreal-import__*.json payloads -- the
-  // projection surface gen-1's charter omitted).
-  const inventory = [];
-  const journalsDir = path.join(repoRoot, '_dev', 'state', 'ticktock', 'journals');
-  if (fs.existsSync(journalsDir)) {
-    for (const f of fs.readdirSync(journalsDir)) inventory.push(path.join('_dev', 'state', 'ticktock', 'journals', f));
-  }
-  const unrealDir = path.join(repoRoot, 'tools', 'ant-hive-world', 'unreal-export');
-  if (fs.existsSync(unrealDir)) {
-    for (const f of fs.readdirSync(unrealDir)) {
-      if (f === 'watch-imports.js' || f === 'README.md' || f === '__tests__' || f === 'ue') continue;
-      const abs = path.join(unrealDir, f);
-      if (fs.statSync(abs).isFile()) inventory.push(path.join('tools', 'ant-hive-world', 'unreal-export', f));
-    }
-  }
+  // The gen-2 write inventory this oracle checks against the charter's
+  // allowed_write_surfaces: every journal + its head anchor under
+  // _dev/state/ticktock/journals/ (the run-history surface gen-2 actually
+  // wrote to), and every non-source file under
+  // tools/ant-hive-world/unreal-export/ (import-index.jsonl and the
+  // unreal-import__*.json payloads -- the projection surface gen-1's charter
+  // omitted).
+  //
+  // This used to enumerate those two directories LIVE off disk. That made
+  // the oracle non-hermetic: a clean checkout of this repo (a fresh clone, a
+  // CI runner, or an exported/graft target) has neither directory populated
+  // -- both are operational run state, correctly never checked in -- so the
+  // "inventory must be non-empty" assertion failed before the surface-match
+  // check ever ran, on every environment except whichever machine happened
+  // to have live /tt run history on disk. Replaced with an explicit fixture
+  // inventory naming the same real shapes this oracle is meant to prove
+  // coverage for; the tradeoff (fixture drift vs. whatever real files exist
+  // right now) is worth paying for portability, per codex review 2026-08-17
+  // (scope tt-foundation-pr20-full-review, finding F1).
+  const inventory = [
+    path.join('_dev', 'state', 'ticktock', 'journals', 'run-004.jsonl'),
+    path.join('_dev', 'state', 'ticktock', 'journals', 'run-004.head-anchor.json'),
+    path.join('tools', 'ant-hive-world', 'unreal-export', 'import-index.jsonl'),
+    path.join('tools', 'ant-hive-world', 'unreal-export', 'unreal-import__20260812T000000Z.json'),
+  ];
 
-  assert(inventory.length > 0, 'the gen-2 write inventory must be non-empty for this oracle to prove anything');
   const outOfSurface = inventory.filter((p) => !surfaceMatches(p));
   assert(outOfSurface.length === 0, `every gen-2 write-inventory path must fall inside the run-004 charter's allowed_write_surfaces; out-of-surface: ${JSON.stringify(outOfSurface)}`);
 });

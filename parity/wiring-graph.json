@@ -9624,6 +9624,20 @@
       "mode": 420
     },
     {
+      "id": "file:tools/ant-hive-world/__tests__/fixtures/fixture-v1.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/fixtures/fixture-v1.json",
+      "sha256": "44ad0a4ab6e87523ec047b7512f159e0b6bd4e00796bc7232798220e7e63e9c5",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/fixtures/fixture-v2.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/fixtures/fixture-v2.json",
+      "sha256": "f8ee5b840b4bb17c8bb10f15e921409fd8479cbc5cb86f693e277157a98de969",
+      "mode": 420
+    },
+    {
       "id": "file:tools/ant-hive-world/__tests__/gather-yield.test.cjs",
       "type": "file",
       "path": "tools/ant-hive-world/__tests__/gather-yield.test.cjs",
@@ -9753,7 +9767,7 @@
       "id": "file:tools/ant-hive-world/__tests__/untrained-network.test.cjs",
       "type": "file",
       "path": "tools/ant-hive-world/__tests__/untrained-network.test.cjs",
-      "sha256": "fd4ddfbb63bf6d59c4f882eabe4945d6361d5eb3dd71acf2b35245cf0a61c843",
+      "sha256": "260424f45f00caffb0117da7f75376a550ed6514a1198342283bf4a19ea8c066",
       "mode": 420
     },
     {
@@ -51260,7 +51274,7 @@
     }
   ],
   "counts": {
-    "nodes": 3846,
+    "nodes": 3848,
     "edges": 2879,
     "unresolved": 0
   }

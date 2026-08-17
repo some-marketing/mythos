@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "bce5141ca1738501dd54dbff1fc2b0cee2db89b51e6b7fb0cc1064f8b5795beb",
+    "expected_tree_sha256": "850014a870f9e6720f2eb940cffb5304362878f20ef9cb45eb63327170ce8b6a",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -5557,7 +5557,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "e20993f1009aedbb26476d90d2bf309522e53d18621d7fb3eb168dd2b49aef5f",
+        "sha256": "9abf7370c45a52ed349219ca3ff538a04bccc4f86d64b5d3941166a20ce7d3f1",
         "mode": 420
       },
       {
@@ -5941,6 +5941,16 @@
         "mode": 420
       },
       {
+        "path": "tools/ant-hive-world/__tests__/fixtures/fixture-v1.json",
+        "sha256": "44ad0a4ab6e87523ec047b7512f159e0b6bd4e00796bc7232798220e7e63e9c5",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/fixtures/fixture-v2.json",
+        "sha256": "f8ee5b840b4bb17c8bb10f15e921409fd8479cbc5cb86f693e277157a98de969",
+        "mode": 420
+      },
+      {
         "path": "tools/ant-hive-world/__tests__/gather-yield.test.cjs",
         "sha256": "aaf96cc8dcd981f840df1ba09845f539e7941cd0888daa2d1283df6a9d899ea7",
         "mode": 420
@@ -6032,7 +6042,7 @@
       },
       {
         "path": "tools/ant-hive-world/__tests__/untrained-network.test.cjs",
-        "sha256": "fd4ddfbb63bf6d59c4f882eabe4945d6361d5eb3dd71acf2b35245cf0a61c843",
+        "sha256": "260424f45f00caffb0117da7f75376a550ed6514a1198342283bf4a19ea8c066",
         "mode": 420
       },
       {
@@ -13894,8 +13904,8 @@
     "package_script_count": 204,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "e20993f1009aedbb26476d90d2bf309522e53d18621d7fb3eb168dd2b49aef5f",
-    "graph_nodes": 3846,
+    "graph_sha256": "9abf7370c45a52ed349219ca3ff538a04bccc4f86d64b5d3941166a20ce7d3f1",
+    "graph_nodes": 3848,
     "graph_edges": 2879
   },
   "runtime_exclusions": [

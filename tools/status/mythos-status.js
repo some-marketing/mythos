@@ -84,7 +84,8 @@ function getMaintenanceSummary(projectRoot = PROJECT_ROOT) {
       execute: false,
       scope: 'latest',
       ageDays: 7,
-      emitDispatch: false
+      emitDispatch: false,
+      report: false
     });
     return {
       available: true,

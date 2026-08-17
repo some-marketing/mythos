@@ -18431,14 +18431,14 @@
       "id": "file:tools/ticktock/__fixtures__/run-002r2-merge-not-clean.jsonl",
       "type": "file",
       "path": "tools/ticktock/__fixtures__/run-002r2-merge-not-clean.jsonl",
-      "sha256": "3c44b7dc826d1ae9da4ff72e7abefee9e4b2ed9149c91f86d5b9d958c1eb067f",
+      "sha256": "f0181452226e98b5463dccee60307b79d88349192573f608bc0ccbddf1147d00",
       "mode": 420
     },
     {
       "id": "file:tools/ticktock/__fixtures__/run-002r2-merge-not-clean.jsonl.anchor.json",
       "type": "file",
       "path": "tools/ticktock/__fixtures__/run-002r2-merge-not-clean.jsonl.anchor.json",
-      "sha256": "1699a1413d623c64196244801bd232a3654b773fbe6b690f840f7320b9bbe064",
+      "sha256": "206b4f97fdf049be8dcfcc492381f7608e1ebe75ff201784b83c9621d3541faa",
       "mode": 420
     },
     {
@@ -18599,7 +18599,7 @@
       "id": "file:tools/ticktock/test-ceilings.cjs",
       "type": "file",
       "path": "tools/ticktock/test-ceilings.cjs",
-      "sha256": "f9eafb8520cd59944c2ef1044d70eb7d5290835835eb27b3a63613d2fb380941",
+      "sha256": "021fcc1c4f019eb5403558c96188361695a5f076bbfdacef9601bb4b0b1c3b81",
       "mode": 420
     },
     {

@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "08a8f27139b96a3aff6b3f042917b34da55f839ca955b58e2455e401ccb063d4",
+    "expected_tree_sha256": "d67b03b4ba6be0dc12bdf48ae70e4d421467cc50e8779a6df870a139d5f3e7df",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -5562,7 +5562,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "25ac1654b956f3e982e69c599f1113246170daa895c7c555b24d253c20fbc959",
+        "sha256": "9d67edc07d9a3cde2f17b500520093fca3cff7c97833691e2ef0d235404dd583",
         "mode": 420
       },
       {
@@ -12217,12 +12217,12 @@
       },
       {
         "path": "tools/ticktock/__fixtures__/run-002r2-merge-not-clean.jsonl",
-        "sha256": "3c44b7dc826d1ae9da4ff72e7abefee9e4b2ed9149c91f86d5b9d958c1eb067f",
+        "sha256": "f0181452226e98b5463dccee60307b79d88349192573f608bc0ccbddf1147d00",
         "mode": 420
       },
       {
         "path": "tools/ticktock/__fixtures__/run-002r2-merge-not-clean.jsonl.anchor.json",
-        "sha256": "1699a1413d623c64196244801bd232a3654b773fbe6b690f840f7320b9bbe064",
+        "sha256": "206b4f97fdf049be8dcfcc492381f7608e1ebe75ff201784b83c9621d3541faa",
         "mode": 420
       },
       {
@@ -12337,7 +12337,7 @@
       },
       {
         "path": "tools/ticktock/test-ceilings.cjs",
-        "sha256": "f9eafb8520cd59944c2ef1044d70eb7d5290835835eb27b3a63613d2fb380941",
+        "sha256": "021fcc1c4f019eb5403558c96188361695a5f076bbfdacef9601bb4b0b1c3b81",
         "mode": 420
       },
       {
@@ -13539,7 +13539,7 @@
     "package_script_count": 204,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "25ac1654b956f3e982e69c599f1113246170daa895c7c555b24d253c20fbc959",
+    "graph_sha256": "9d67edc07d9a3cde2f17b500520093fca3cff7c97833691e2ef0d235404dd583",
     "graph_nodes": 3776,
     "graph_edges": 2795
   },

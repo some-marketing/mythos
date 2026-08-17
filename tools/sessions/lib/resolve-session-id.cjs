@@ -65,4 +65,18 @@ function resolveSessionId(projectRoot) {
   return { session_id: null, session_id_source: 'unavailable', custody_grade: 'none' };
 }
 
-module.exports = { resolveSessionId, ENV_PRIORITY };
+function assertAuthoritativeSessionIdentity(projectRoot, operation = 'operation') {
+  const identity = resolveSessionId(projectRoot);
+  if (identity.custody_grade === 'authoritative' && identity.session_id) return identity;
+
+  const reason = identity.custody_grade === 'best_effort'
+    ? 'best-effort session identity cannot authorize this operation'
+    : 'authoritative session identity is unavailable';
+  const error = new Error(`SESSION_IDENTITY_BLOCKED: ${operation} requires an authoritative session identity; ${reason}`);
+  error.code = 'SESSION_IDENTITY_BLOCKED';
+  error.identity = identity;
+  error.operation = operation;
+  throw error;
+}
+
+module.exports = { resolveSessionId, assertAuthoritativeSessionIdentity, ENV_PRIORITY };

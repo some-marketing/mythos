@@ -23,6 +23,7 @@ const path = require('path');
 const { readCanonicalCommandIds } = require('../../signals/lib/target-command-policy.cjs');
 const { appendShadowReceipt, buildShadowReceipt, classifyNextStep, digest } = require('../../planning/lib/plan-execution-cursor.js');
 const { sha256Bytes, stableJson } = require('../../verify/lib/run-evidence-index.cjs');
+const { assertAuthoritativeSessionIdentity } = require('../../sessions/lib/resolve-session-id.cjs');
 
 // S5 (plan-execution-autonomy-default-perimeter-gate-and-tracking) — the thin
 // orchestration wiring over the committed S1–S4 + GREENLIGHT pieces. Used ONLY
@@ -229,6 +230,26 @@ function enforceOperatorStampGate(projectRoot, taskId, argsText, options) {
   };
 }
 
+function enforceSessionIdentityGate(projectRoot, operation) {
+  try {
+    assertAuthoritativeSessionIdentity(projectRoot, operation);
+    return null;
+  } catch (err) {
+    const identity = err.identity || {};
+    const grade = identity.custody_grade || 'none';
+    return {
+      exitCode: 2,
+      stdout: [
+        `Managed command blocked: /run-plan ${operation}`,
+        `Blocked reason [session-identity-${grade}]: ${err.message}`,
+        'run-plan requires an authoritative process-scoped session identity before granting execution authority.'
+      ].join('\n'),
+      stderr: '',
+      outputs: []
+    };
+  }
+}
+
 function runPlan(projectRoot, argsText, options = {}) {
   const taskId = (argsText || '').split(/\s+/)[0];
   if (!taskId) {
@@ -275,6 +296,9 @@ function runPlan(projectRoot, argsText, options = {}) {
   }
 
   // 1. Resolve Authority
+  const sessionIdentityBlock = enforceSessionIdentityGate(projectRoot, taskId);
+  if (sessionIdentityBlock) return finish(sessionIdentityBlock, 'blocked');
+
   const decision = resolveAuthority(projectRoot, {
     taskPlan: taskId,
     execute: true
@@ -377,5 +401,6 @@ module.exports = {
   isShadowCursorEnabled,
   emitShadowCursorReceipt,
   assessVerifiedOperatorStamp,
+  enforceSessionIdentityGate,
   collectSharedGate
 };

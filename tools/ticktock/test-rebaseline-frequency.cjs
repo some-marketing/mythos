@@ -1,0 +1,262 @@
+#!/usr/bin/env node
+'use strict';
+
+// tools/ticktock/test-rebaseline-frequency.cjs -- acceptance tests proving the
+// TT-003 rebaseline-frequency guard is ALIVE (plan revive-rebaseline-frequency-
+// guard, from run-001 SHIP correction C-F4b).
+//
+// THE DEFECT THIS REPAIRS. benchmark-fingerprint-v1.json stored `lineage` as a
+// single OBJECT while cycle-driver.cjs coerced any non-array to [] -- so
+// checkRebaselineFrequency always saw an empty window (ratio_computed "0/5"
+// despite the real 2026-08-12T01:37Z rebaseline) and the REBASELINE-FREQUENCY
+// halt was a declared safety state no input could fire. Worse, an object passed
+// to verifyLineageChain returns chain_unbroken:true VACUOUSLY (its walk starts
+// at i=1 and never runs). The repair: the writer records lineage as an
+// append-only array of entries stamped with new_fingerprint_hash; the on-disk
+// fingerprint is migrated to a one-entry array; the reader halts LOUDLY
+// (LINEAGE-CHAIN-BROKEN) on any non-array lineage instead of silently counting
+// zero or vacuously passing.
+//
+// Threshold semantics note (codewhale review 20260812T034951Z, finding 5):
+// checkRebaselineFrequency halts on count > n_threshold. Under the run-001
+// charter defaults (n=2, m=5) a SECOND in-window rebaseline counts but does
+// not halt -- dryrun-s3.cjs's S3-a2 negative control pins that exact case. So
+// C-F4b's "second in-window rebaseline halts" falsifier is discharged with an
+// explicit n_threshold:1 arm (b), and the charter-default halt is proven with
+// three distinct cycles in arm (c).
+//
+// Run: node tools/ticktock/test-rebaseline-frequency.cjs
+
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
+const { execFileSync } = require('child_process');
+
+const bench = require('./run-benchmark.js');
+const charterMod = require('./charter.cjs');
+
+const DRIVER = path.join(__dirname, 'cycle-driver.cjs');
+const REPO_ROOT = path.resolve(__dirname, '..', '..');
+const REAL_FINGERPRINT = path.join(REPO_ROOT, '_dev/state/ticktock/benchmark-fingerprint-v1.json');
+
+let passed = 0;
+let failed = 0;
+
+function check(name, condition, detail) {
+  if (condition) {
+    passed += 1;
+    process.stdout.write(`  PASS  ${name}\n`);
+  } else {
+    failed += 1;
+    process.stdout.write(`  FAIL  ${name}\n        ${detail === undefined ? '' : JSON.stringify(detail)}\n`);
+  }
+}
+function section(title) { process.stdout.write(`\n${title}\n`); }
+
+function writeJson(p, obj) {
+  fs.mkdirSync(path.dirname(p), { recursive: true });
+  fs.writeFileSync(p, JSON.stringify(obj, null, 2) + '\n');
+  return p;
+}
+
+function runNode(script, args, opts) {
+  try {
+    const out = execFileSync('node', [script, ...args], {
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+      cwd: REPO_ROOT,
+      ...opts
+    });
+    return { status: 0, stdout: out };
+  } catch (err) {
+    return { status: err.status === undefined ? null : err.status, stdout: err.stdout || '', stderr: err.stderr || '', error: err };
+  }
+}
+
+const tmpRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'tt-rebaseline-freq-'));
+
+function mkEntry(cycle, opts = {}) {
+  return {
+    prior_fingerprint_hash: opts.prior || 'a'.repeat(64),
+    triggering_cycle: cycle,
+    review_artifact: `_dev/reports/analysis/rebaseline-review-${cycle}.md`,
+    ratification_reference: `operator-stamp-${cycle}`,
+    reason: `fixture rebaseline at cycle ${cycle}`,
+    new_fingerprint_hash: opts.next || 'b'.repeat(64)
+  };
+}
+
+// T1 (tt-charter-template-and-spend-ledger, round-2 coordinator design
+// decision): fixtureCharter() now binds against the permissive
+// __fixtures__/charter-template-test-minimal.json via charter.cjs's opt-in
+// { templatePath } override (see its "Template override" comment), rather
+// than the canonical charter-template-run.json -- so this file's original
+// small fixture ceilings can be restored exactly, even though this file
+// never exercises ceiling-boundary arithmetic itself. Production is
+// unaffected: cycle-driver.cjs's create-charter command never passes opts.
+const MINIMAL_TEMPLATE = path.join(__dirname, '__fixtures__', 'charter-template-test-minimal.json');
+
+function fixtureCharter(id, fingerprintPath) {
+  return charterMod.createCharter({
+    charter_id: id,
+    created_at: '2026-08-12T13:00:00.000Z',
+    target: { description: 'rebaseline-frequency guard fixture', repo_root: REPO_ROOT, subject: 'unit test' },
+    cycle_ceiling: 5,
+    evaluator_versions: { journal: '1.0' },
+    allowed_write_surfaces: ['tools/ticktock/**'],
+    max_cumulative_diff: { lines_changed: 5, files_changed: 2 },
+    max_external_actions: 1,
+    resource_ceilings: { wall_clock_seconds_per_cycle: 60, wall_clock_seconds_total: 600, max_subagent_dispatches: 1 },
+    reviewer_roster: {
+      locked_at: '2026-08-12T13:00:00.000Z',
+      lanes: [
+        { lane_id: 'codex-1', family: 'codex', model_pin: 'gpt-5-codex', assignment_order: 0, role: 'adversarial', availability: { reachable: true, checked_at: '2026-08-12T13:00:00.000Z', check_method: 'bridge-ping' } },
+        { lane_id: 'gemini-1', family: 'gemini', model_pin: 'gemini-2.5-pro', assignment_order: 1, role: 'context', availability: { reachable: true, checked_at: '2026-08-12T13:00:00.000Z', check_method: 'bridge-ping' } }
+      ]
+    },
+    stopping_rules: { until_kind: 'cycle_ceiling', halt_conditions: ['REBASELINE-FREQUENCY', 'LINEAGE-CHAIN-BROKEN'] },
+    benchmark: {
+      // Deliberately nonexistent spec: the lineage checks run BEFORE the colony
+      // comparison, and the halt precedence puts LINEAGE-CHAIN-BROKEN ahead of
+      // BENCHMARK-ERROR -- so the guard is proven through the real command
+      // without paying for a colony run.
+      colony_spec_path: path.join(tmpRoot, 'no-such-spec.json'),
+      colony_spec_version: 'v1',
+      fingerprint_path: fingerprintPath,
+      fingerprint_hash: 'a'.repeat(64),
+      rebaseline_detector: { enabled: true, n_threshold: 2, m_window: 5 }
+    }
+  }, { templatePath: MINIMAL_TEMPLATE });
+}
+
+// ---------------------------------------------------------------------------
+section('(a) the REAL migrated fingerprint counts 1/5 at charter defaults -- the dead guard counted 0');
+// ---------------------------------------------------------------------------
+{
+  const recorded = JSON.parse(fs.readFileSync(REAL_FINGERPRINT, 'utf8'));
+  check('the real fingerprint lineage is an ARRAY post-migration', Array.isArray(recorded.lineage), typeof recorded.lineage);
+  check('it carries exactly the one real (01:37Z) rebaseline entry', Array.isArray(recorded.lineage) && recorded.lineage.length === 1, recorded.lineage);
+  check('the migrated entry is stamped with new_fingerprint_hash == the file\'s own fingerprint_hash',
+    Array.isArray(recorded.lineage) && recorded.lineage[0].new_fingerprint_hash === recorded.fingerprint_hash,
+    recorded.lineage && recorded.lineage[0] && recorded.lineage[0].new_fingerprint_hash);
+
+  const det = bench.checkRebaselineFrequency(recorded.lineage, { n_threshold: 2, m_window: 5, current_cycle_index: 0 });
+  check('ratio_computed is 1/5 -- no longer 0/5', det.ratio_computed === '1/5', det);
+  check('one rebaseline at charter defaults does NOT halt', det.halted_on_threshold === false && det.halt_state === null, det);
+}
+
+// ---------------------------------------------------------------------------
+section('(b) C-F4b falsifier: a second in-window rebaseline halts REBASELINE-FREQUENCY (explicit n_threshold:1)');
+// ---------------------------------------------------------------------------
+{
+  // Distinct triggering_cycle values are REQUIRED (codewhale finding 5): the
+  // count is the Set of cycles in window -- two entries at one cycle count
+  // once and would not halt even at n=1.
+  const lineage = [mkEntry(0), mkEntry(3, { prior: 'b'.repeat(64), next: 'c'.repeat(64) })];
+  const det = bench.checkRebaselineFrequency(lineage, { n_threshold: 1, m_window: 5, current_cycle_index: 3 });
+  check('two distinct-cycle rebaselines in window exceed n=1', det.ratio_computed === '2/5', det);
+  check('the halt fires: halted_on_threshold true', det.halted_on_threshold === true, det);
+  check('the halt state is REBASELINE-FREQUENCY', det.halt_state === 'REBASELINE-FREQUENCY', det);
+  check('a finding is recorded, not just a halt', det.finding_recorded === true && typeof det.finding === 'string' && det.finding.length > 0, det);
+
+  // Negative control at charter defaults (mirrors dryrun-s3 S3-a2): the same
+  // two entries must NOT halt at n=2 -- count > n is the encoded semantics.
+  const atDefaults = bench.checkRebaselineFrequency(lineage, { n_threshold: 2, m_window: 5, current_cycle_index: 3 });
+  check('negative control: 2-in-window does NOT halt at charter default n=2', atDefaults.halted_on_threshold === false, atDefaults);
+}
+
+// ---------------------------------------------------------------------------
+section('(c) three in-window rebaselines (distinct cycles) halt at charter defaults n=2');
+// ---------------------------------------------------------------------------
+{
+  const lineage = [mkEntry(0), mkEntry(2, { prior: 'b'.repeat(64), next: 'c'.repeat(64) }), mkEntry(4, { prior: 'c'.repeat(64), next: 'd'.repeat(64) })];
+  const det = bench.checkRebaselineFrequency(lineage, { n_threshold: 2, m_window: 5, current_cycle_index: 4 });
+  check('three distinct-cycle rebaselines compute 3/5', det.ratio_computed === '3/5', det);
+  check('the charter-default halt fires: REBASELINE-FREQUENCY', det.halt_state === 'REBASELINE-FREQUENCY', det);
+}
+
+// ---------------------------------------------------------------------------
+section('(d) object-form lineage halts LOUDLY through the real cycle-driver commands -- never a silent 0/5, never a vacuous pass');
+// ---------------------------------------------------------------------------
+{
+  const dir = fs.mkdtempSync(path.join(tmpRoot, 'object-form-'));
+  // The pre-migration on-disk shape, verbatim: a single object.
+  const objectFingerprint = writeJson(path.join(dir, 'fingerprint-object.json'), {
+    schema: 'BenchmarkFingerprint/1.0',
+    lineage: {
+      prior_fingerprint_hash: 'a'.repeat(64),
+      triggering_cycle: 0,
+      review_artifact: 'fixture',
+      ratification_reference: 'fixture',
+      reason: 'object-form fixture (the pre-migration shape)'
+    },
+    fingerprint_hash: 'a'.repeat(64)
+  });
+  const charterPath = writeJson(path.join(dir, 'charter.json'), fixtureCharter('rebaseline-freq-object-form', objectFingerprint));
+
+  const benchOut = path.join(dir, 'benchmark-check.json');
+  const result = runNode(DRIVER, ['benchmark', charterPath, benchOut, '0']);
+  let payload = null;
+  try { payload = JSON.parse(fs.readFileSync(benchOut, 'utf8')); } catch { /* handled below */ }
+
+  check('the benchmark command halts (nonzero exit)', result.status !== 0, result.stdout + result.stderr);
+  check('the halt state is LINEAGE-CHAIN-BROKEN', Boolean(payload) && payload.halt_state === 'LINEAGE-CHAIN-BROKEN', payload && payload.halt_state);
+  check('chain_unbroken is FALSE -- the vacuous-true path is closed', Boolean(payload) && payload.lineage_chain.chain_unbroken === false, payload && payload.lineage_chain);
+  check('the error names the unreadable record', Boolean(payload) && /not an array/.test(JSON.stringify(payload.lineage_chain.errors)), payload && payload.lineage_chain);
+
+  const lc = runNode(DRIVER, ['lineage-check', charterPath]);
+  let lcOut = null;
+  try { lcOut = JSON.parse(lc.stdout); } catch { /* handled below */ }
+  check('lineage-check also refuses object-form (nonzero exit)', lc.status !== 0, lc.stdout + lc.stderr);
+  check('lineage-check reports chain_unbroken false, not a vacuous pass', Boolean(lcOut) && lcOut.chain.chain_unbroken === false, lcOut);
+
+  // Differential control: undefined lineage (a genuinely fresh baseline) is
+  // NOT the unreadable case -- it stays [], counts 0, and must not halt on
+  // the lineage checks.
+  const freshFingerprint = writeJson(path.join(dir, 'fingerprint-fresh.json'), {
+    schema: 'BenchmarkFingerprint/1.0',
+    fingerprint_hash: 'a'.repeat(64)
+  });
+  const freshCharter = writeJson(path.join(dir, 'charter-fresh.json'), fixtureCharter('rebaseline-freq-fresh', freshFingerprint));
+  const fresh = runNode(DRIVER, ['lineage-check', freshCharter]);
+  let freshOut = null;
+  try { freshOut = JSON.parse(fresh.stdout); } catch { /* handled below */ }
+  check('fresh-baseline (no lineage field) passes lineage-check with 0 entries', fresh.status === 0 && Boolean(freshOut) && freshOut.lineage_entries === 0 && freshOut.chain.chain_unbroken === true, fresh.stdout + fresh.stderr);
+}
+
+// ---------------------------------------------------------------------------
+section('(e) writer round-trip: a real --record with lineage flags APPENDS to the chain');
+// ---------------------------------------------------------------------------
+{
+  const dir = fs.mkdtempSync(path.join(tmpRoot, 'writer-'));
+  const fpPath = path.join(dir, 'fingerprint.json');
+
+  // Start from the REAL migrated file (1 entry) copied to a temp path, so the
+  // round-trip proves carry-forward against the true on-disk shape.
+  fs.copyFileSync(REAL_FINGERPRINT, fpPath);
+  const before = JSON.parse(fs.readFileSync(fpPath, 'utf8'));
+
+  const rec = runNode(path.join(__dirname, 'run-benchmark.js'), [
+    '--record', '--fingerprint', fpPath,
+    '--prior-fingerprint', before.fingerprint_hash,
+    '--triggering-cycle', '1',
+    '--review-artifact', 'fixture-review.md',
+    '--ratification', 'fixture-ratification',
+    '--reason', 'writer round-trip fixture rebaseline'
+  ]);
+  check('--record with lineage flags completes', rec.status === 0, rec.stdout + rec.stderr);
+
+  const after = JSON.parse(fs.readFileSync(fpPath, 'utf8'));
+  check('lineage grew from 1 entry to 2', Array.isArray(after.lineage) && after.lineage.length === 2, after.lineage && after.lineage.length);
+  check('the appended entry links to the prior fingerprint (prior_fingerprint_hash == old new_fingerprint_hash)',
+    after.lineage && after.lineage[1].prior_fingerprint_hash === before.lineage[0].new_fingerprint_hash, after.lineage);
+  check('the appended entry is stamped with the NEW fingerprint_hash',
+    after.lineage && after.lineage[1].new_fingerprint_hash === after.fingerprint_hash, after.lineage);
+  check('verifyLineageChain walks the 2-entry chain unbroken', bench.verifyLineageChain(after.lineage).chain_unbroken === true, bench.verifyLineageChain(after.lineage));
+  check('the carried-forward first entry is byte-identical', JSON.stringify(after.lineage[0]) === JSON.stringify(before.lineage[0]));
+}
+
+// ---------------------------------------------------------------------------
+fs.rmSync(tmpRoot, { recursive: true, force: true });
+process.stdout.write(`\n${passed} passed, ${failed} failed\n`);
+process.exit(failed === 0 ? 0 : 1);

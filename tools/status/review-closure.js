@@ -77,7 +77,8 @@ function getDeferredMaintenance(projectRoot) {
       execute: false,
       scope: 'latest',
       ageDays: DEFAULT_ARCHIVE_AGE_DAYS,
-      emitDispatch: false
+      emitDispatch: false,
+      report: false
     });
     const conditions = Array.isArray(report.conditions) ? report.conditions : [];
     return { count: conditions.length, ids: conditions.map(condition => condition.id).filter(Boolean), available: true };

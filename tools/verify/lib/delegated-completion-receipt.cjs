@@ -2,6 +2,7 @@
 
 const { validateTestReceipt } = require('./completion-audit-packet.cjs');
 const RECEIPT_SCHEMA = 'DelegatedCompletionReceipt/1.0';
+const COMPLETED_STATUSES = new Set(['complete', 'completed', 'done']);
 const text = value => typeof value === 'string' ? value.trim() : '';
 const list = value => Array.isArray(value) ? value : [];
 const unique = values => [...new Set(values)];
@@ -10,7 +11,7 @@ function validateDelegatedCompletionReceipt(payload, options = {}) {
   const errors = [];
   const receipt = payload && payload.completion_receipt && typeof payload.completion_receipt === 'object' ? payload.completion_receipt : payload;
   const status = text(payload && payload.status) || text(receipt && receipt.status);
-  if (!['complete', 'completed'].includes(status)) return { valid: true, accepted: false, status, errors };
+  if (!COMPLETED_STATUSES.has(status)) return { valid: true, accepted: false, status, errors };
   if (!receipt || typeof receipt !== 'object' || Array.isArray(receipt)) return { valid: false, accepted: false, status, errors: ['completion receipt must be an object'] };
   if (receipt.schema !== RECEIPT_SCHEMA) errors.push('completion receipt schema is missing or unsupported');
   const expectedScope = text(options.parentScope || options.scope), actualScope = text(receipt.scope);
@@ -27,6 +28,12 @@ function validateDelegatedCompletionReceipt(payload, options = {}) {
   const tests = list(receipt.test_results);
   if (!tests.length) errors.push('test_results are missing');
   for (const result of tests) if (!validateTestReceipt(result)) errors.push('test_results contains an unsubstantiated or failing receipt');
+  const producerIds = new Set(tests.map(result => text(result && result.producer && result.producer.actor_id)).filter(Boolean));
+  for (const candidate of [payload && payload.actor_id, payload && payload.producer && payload.producer.actor_id, receipt.producer && receipt.producer.actor_id]) {
+    const actorId = text(candidate);
+    if (actorId) producerIds.add(actorId);
+  }
+  if (parent && producerIds.has(text(parent.actor_id))) errors.push('parent_verification actor must be distinct from the completion producer');
   const criteria = list(options.criteria).length ? list(options.criteria) : list(receipt.acceptance_criteria);
   const expected = unique(criteria.map(item => text(item && (item.criterion_id || item.id))).filter(Boolean));
   const evidence = list(receipt.acceptance_evidence), mapped = evidence.map(item => text(item && item.criterion_id)).filter(Boolean);
@@ -40,4 +47,4 @@ function validateDelegatedCompletionReceipt(payload, options = {}) {
   return { valid: errors.length === 0, accepted: errors.length === 0, status, errors };
 }
 
-module.exports = { RECEIPT_SCHEMA, validateDelegatedCompletionReceipt };
+module.exports = { RECEIPT_SCHEMA, COMPLETED_STATUSES, validateDelegatedCompletionReceipt };

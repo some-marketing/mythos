@@ -577,12 +577,14 @@ function analyzeAndApplyCloseoutMaintenance(projectRoot, opts = {}) {
     report.clearance = 'blocked';
   }
 
-  report.report_paths = reportArtifacts(projectRoot, scope, timestamp.replace(/[-:]/g, '').replace(/\.\d+Z$/, 'Z'));
-  writeMarkdownReport(report.report_paths.markdownPath, report);
-  ensureDir(path.dirname(report.report_paths.jsonPath));
-  fs.writeFileSync(report.report_paths.jsonPath, JSON.stringify(report, null, 2));
+  if (opts.report !== false) {
+    report.report_paths = reportArtifacts(projectRoot, scope, timestamp.replace(/[-:]/g, '').replace(/\.\d+Z$/, 'Z'));
+    writeMarkdownReport(report.report_paths.markdownPath, report);
+    ensureDir(path.dirname(report.report_paths.jsonPath));
+    fs.writeFileSync(report.report_paths.jsonPath, JSON.stringify(report, null, 2));
+  }
 
-  if (report.unresolved_conditions.length > 0 && opts.emitDispatch !== false) {
+  if (opts.report !== false && report.unresolved_conditions.length > 0 && opts.emitDispatch !== false) {
     const dispatch = emitMaintenanceDispatch(projectRoot, report, {
       runtimes: detectInstalledActors()
     });

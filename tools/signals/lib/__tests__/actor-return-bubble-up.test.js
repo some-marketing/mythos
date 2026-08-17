@@ -13,6 +13,22 @@ const ok = {
   next_command: '/debrief-run x',
   parent_impact: 'Parent can close the slice; no residual blocker.',
   bubble_up_gate: 'none',
+  completion_receipt: {
+    schema: 'DelegatedCompletionReceipt/1.0',
+    scope: 'test/actor-return',
+    changed_files: [{ path: 'tools/example.js' }],
+    test_results: [{
+      schema: 'TestExecutionReceipt/1.0', command: 'node --test focused.test.cjs', exit_code: 0, status: 'passed',
+      started_at: '2026-08-17T14:00:00Z', completed_at: '2026-08-17T14:00:01Z',
+      counts: { passed: 1, failed: 0, skipped: 0, todo: 0 }, producer: { actor_id: 'worker', harness_id: 'node' }
+    }],
+    acceptance_criteria: [{ criterion_id: 'AC1' }],
+    acceptance_evidence: [{ criterion_id: 'AC1', evidence: ['test_results[0]'], independently_verified: true }],
+    parent_verification: {
+      observed: true, actor_id: 'parent', changed_files_verified: true,
+      observed_changed_files: ['tools/example.js'], acceptance_criteria_verified: ['AC1']
+    }
+  }
 };
 
 test('contract requires parent_impact + bubble_up_gate', () => {

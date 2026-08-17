@@ -11,7 +11,7 @@ const {
   getScopeTierPolicy,
   resolveRecursiveBridgeRoute
 } = require('./bridge-target-policy');
-const { validateDelegatedCompletionReceipt } = require('../../verify/lib/delegated-completion-receipt.cjs');
+const { COMPLETED_STATUSES, validateDelegatedCompletionReceipt } = require('../../verify/lib/delegated-completion-receipt.cjs');
 
 const DEFAULT_STOP_CONDITIONS = Object.freeze([
   'halt if the child scope is no longer narrower than the parent scope',
@@ -492,7 +492,7 @@ function validateActorReturn(payload, opts = {}) {
     errors.push(`bubble_up_gate must be 'none' or one of: ${GATE_IDS.join(', ')}.`);
   }
 
-  if (payload.status === 'complete' || payload.status === 'completed') {
+  if (COMPLETED_STATUSES.has(String(payload.status || '').trim())) {
     const completion = validateDelegatedCompletionReceipt(payload, {
       parentScope: opts.parentScope || opts.scope,
       criteria: opts.acceptanceCriteria || opts.criteria

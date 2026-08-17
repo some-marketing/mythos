@@ -60,7 +60,7 @@ test('the orwell-flag-capture collision shape is rejected', () => {
     scope: [
       'arp', 'dns-sd', 'ping', 'nmap', 'smb', 'smbclient', 'mount_smbfs', 'scp', 'ssh',
       'cat', 'find', 'ls', 'read', 'open', 'mount', 'umount', 'mkdir',
-      're:.*orwell.*', 're:.*taylor.*', 're:.*flag.*', 're:.*192\\.168\\.2\\..*'
+      're:.*orwell.*', 're:.*operator-placeholder.*', 're:.*flag.*', 're:.*192\\.168\\.2\\..*'
     ]
   };
   assert.ok(stampScopeTooBroad(collisionShape));

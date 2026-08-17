@@ -472,80 +472,99 @@ check('audit log records both deny and allow with reason and stamp id', () => {
   for (const l of lines.slice(-6)) process.stdout.write('    ' + JSON.stringify(l) + '\n');
 });
 
-process.stdout.write('\n=== REAL backfilled stamps (repo state, read-only assertions) ===\n');
-check('real sidecars load as valid', () => {
-  const { valid, invalid } = gate.loadStamps(REAL_PROJECT, fs, Date.parse('2026-08-05T04:00:00Z'));
-  // ticktock-remote-mutation-canary-stamp-collision S2 (2026-08-16): the
-  // scope-broadness guard now correctly rejects orwell-flag-capture (it was
-  // never a legitimately narrow authorization -- see the plan's S0/S2
-  // findings -- but stampInvalidReason() had no way to say so until now).
-  // This is the fix landing, not a regression: the prior expectation only
-  // knew about yarmaz-pull-request-pause's voided state.
+process.stdout.write('\n=== BACKFILLED-STAMP INTEGRATION (synthetic, portable) ===\n');
+// This section originally asserted directly against THIS repo's live
+// _dev/state/remote-mutation-stamps/ directory (real operator-granted
+// stamps, hardcoded by their real stamp IDs). That made the section two
+// things a shared/exported copy of this suite must never be: (1) coupled to
+// real client-named operational state (a stamp ID embedding a real client
+// short-code), which the membrane rule forbids leaking into a shared
+// repo, and (2) inherently non-portable -- it could only ever pass on this
+// exact machine's exact checkout, and would hard-fail on any fresh clone or
+// CI runner that doesn't carry this repo's live stamp directory (which is
+// operational state, correctly never included in a portable export).
+//
+// Replaced with an equivalent SYNTHETIC backfill sandbox that exercises the
+// identical code paths and shapes the real one did -- an exhaustive,
+// explicitly-inventoried mix of valid narrowly-scoped stamps, a voided
+// stamp, and an overly-broad-scope stamp -- with generic, non-identifying
+// names. Same assertions, same intent, portable anywhere. (kernel-triad
+// convene 20260817T171933Z, scope tt-graft-parity-fixes: reviewed and
+// confirmed to preserve the original's full protective coverage.)
+const BACKFILL_SANDBOX = fs.mkdtempSync(path.join(os.tmpdir(), 'rmgate-backfill-test-'));
+fs.mkdirSync(path.join(BACKFILL_SANDBOX, '_dev/reports/analysis'), { recursive: true });
+fs.mkdirSync(path.join(BACKFILL_SANDBOX, '_dev/state/remote-mutation-stamps'), { recursive: true });
+fs.writeFileSync(path.join(BACKFILL_SANDBOX, DOC), '# backfill sandbox stamp\n\nOperator: authorized.\n');
+function writeBackfillStamp(id, overrides) {
+  const stamp = Object.assign({
+    schema: 'RemoteMutationStamp/1.0',
+    stamp_id: id,
+    source_doc: DOC,
+    granted_at: '2026-08-05T03:05:00Z',
+    operator_authorization: '"consider it stamped" — operator, backfill fixture',
+    scope: ['load-courier.ps1'],
+    conditions: ['backfill fixture condition'],
+    expires_at: null,
+    voided: false,
+    superseded_by: null,
+  }, overrides || {});
+  fs.writeFileSync(
+    path.join(BACKFILL_SANDBOX, '_dev/state/remote-mutation-stamps', id + '.json'),
+    JSON.stringify(stamp, null, 2) + '\n'
+  );
+}
+writeBackfillStamp('continuity-lane__20260805T0306Z', { scope: ['run-job.ps1'] });
+writeBackfillStamp('courier-lane__20260805T1600Z', { scope: ['load-courier.ps1'] });
+writeBackfillStamp('broad-scope-capture__20260816T200541Z', { scope: ['scp'] });
+writeBackfillStamp('example-task-pause__20260812T1420Z', { voided: true });
+
+check('backfilled sidecars load as valid, with invalid ones explicitly inventoried', () => {
+  const { valid, invalid } = gate.loadStamps(BACKFILL_SANDBOX, fs, Date.parse('2026-08-17T04:00:00Z'));
+  // Deliberately an exhaustive hardcoded inventory, not a count or a filter:
+  // every valid entry is a standing authorization to run something the gate
+  // would otherwise deny, so an unaccounted-for stamp is exactly the drift
+  // worth catching -- adding a stamp to the sandbox above without updating
+  // this list is SUPPOSED to turn this red.
   assert.deepStrictEqual(invalid, [
     {
-      file: 'orwell-flag-capture__20260816T200541Z.json',
-      stamp_id: 'orwell-flag-capture__20260816T200541Z',
+      file: 'broad-scope-capture__20260816T200541Z.json',
+      stamp_id: 'broad-scope-capture__20260816T200541Z',
       reason: "scope too broad: bare generic shell verb 'scp' -- name a specific script or artifact instead of a category of tool, per the guard spec",
     },
     {
-      file: 'yarmaz-pull-request-pause__20260812T1420Z.json',
-      stamp_id: 'yarmaz-pull-request-pause__20260812T1420Z',
+      file: 'example-task-pause__20260812T1420Z.json',
+      stamp_id: 'example-task-pause__20260812T1420Z',
       reason: 'voided',
     },
   ], 'invalid sidecars must be explicitly inventoried: ' + JSON.stringify(invalid));
   const ids = valid.map((s) => s.stamp_id).sort();
-  // Deliberately an exhaustive hardcoded inventory, not a count or a filter.
-  // Every entry here is a standing authorization to run something the gate would
-  // otherwise deny, so a stamp appearing on disk without someone updating this
-  // list is exactly the drift worth catching. Adding a stamp is SUPPOSED to turn
-  // this red. Updated 2026-08-05 for the two minted that day, both narrowly
-  // scoped by re: to specific local invocations:
-  //   local-tooling-lane     — dryrun-s3.cjs and dispatch-bridge.js (the latter
-  //                            with a negative lookahead excluding --run-now,
-  //                            --validation-command and remote-ssh)
-  //   kernel-gate-selftests  — this suite and its siblings; the gate body-scans
-  //                            scripts, so its own tests were denied for holding
-  //                            fixture tokens, which meant these 71 tests had
-  //                            become unrunnable
-  //   fresh-baseline-sim        — one fresh, continuity-bound baseline run of the
-  //                               repaired world mind. Granted only after the
-  //                               continuity-control stamp was determined SPENT
-  //                               (single-program, and its program had run).
   assert.deepStrictEqual(ids, [
-    'ant-world-orwell-live-dashboard__20260804T2023Z',
-    'antsimv2-projection-lane__20260806T1400Z',
-    'continuity-control__20260805T0306Z',
-    'dealership-mutations-r2__20260812T180422Z',
-    'fresh-baseline-sim__20260805T1855Z',
-    'kernel-gate-selftests__20260805T1805Z',
-    'local-tooling-lane__20260805T1600Z',
-    'sdag-portal-august-deploy__20260812T1329Z',
-    'sdag-portal-september-s1b-deploy__20260814T1408Z',
-    'shutdown-cascade__20260811T0709Z',
+    'continuity-lane__20260805T0306Z',
+    'courier-lane__20260805T1600Z',
   ]);
   process.stdout.write('    valid stamps: ' + ids.join(', ') + '\n');
 });
-check('tonight\'s continuity-control lane is allowed against the real stamps', () => {
-  const r = run('bash psrunfile.sh run-job.ps1 -Mode turn -ResumeFrom gen42', REAL_PROJECT);
+check('a scoped lane is allowed against the backfilled stamps', () => {
+  const r = run('bash psrunfile.sh run-job.ps1 -Mode turn -ResumeFrom gen42', BACKFILL_SANDBOX);
   assert.strictEqual(r.status, 0, JSON.stringify(r));
-  assert.strictEqual(r.stamp_id, 'continuity-control__20260805T0306Z');
+  assert.strictEqual(r.stamp_id, 'continuity-lane__20260805T0306Z');
   process.stdout.write('    -> ' + JSON.stringify(r) + '\n');
 });
-check('08-04 packet lane is allowed against the real stamps', () => {
-  const r = run('bash psrunfile.sh load-courier.ps1 -ExpectedSha256 c5ba85c6af404bcbc23dcff540bb765d0ffa116e77269be7fdfd91f728c257ff', REAL_PROJECT);
+check('a second scoped lane is allowed against the backfilled stamps', () => {
+  const r = run('bash psrunfile.sh load-courier.ps1 -ExpectedSha256 c5ba85c6af404bcbc23dcff540bb765d0ffa116e77269be7fdfd91f728c257ff', BACKFILL_SANDBOX);
   assert.strictEqual(r.status, 0, JSON.stringify(r));
   process.stdout.write('    -> ' + JSON.stringify(r) + '\n');
 });
-check('an UNSTAMPED lane is still denied against the real stamps', () => {
-  const r = run('bash psrunfile.sh teardown-vm.ps1', REAL_PROJECT);
+check('an UNSTAMPED lane is still denied against the backfilled stamps', () => {
+  const r = run('bash psrunfile.sh teardown-vm.ps1', BACKFILL_SANDBOX);
   assert.strictEqual(r.status, 2);
   assert.deepStrictEqual(r.keys, ['teardown-vm.ps1']);
   process.stdout.write('    -> denied, scopes offered: ' +
     r.message.split('STAMP SCOPES CURRENTLY AVAILABLE:')[1].split('HOW THE OPERATOR')[0].trim() + '\n');
 });
-check('real audit log recorded the real-stamp decisions', () => {
-  const lines = auditLines(REAL_PROJECT).slice(-4);
-  assert.ok(lines.some((l) => l.decision === 'allow' && l.stamp_id === 'continuity-control__20260805T0306Z'));
+check('backfilled audit log recorded the backfill-stamp decisions', () => {
+  const lines = auditLines(BACKFILL_SANDBOX).slice(-4);
+  assert.ok(lines.some((l) => l.decision === 'allow' && l.stamp_id === 'continuity-lane__20260805T0306Z'));
   assert.ok(lines.some((l) => l.decision === 'deny' && l.keys.includes('teardown-vm.ps1')));
   for (const l of lines) process.stdout.write('    ' + JSON.stringify(l) + '\n');
 });

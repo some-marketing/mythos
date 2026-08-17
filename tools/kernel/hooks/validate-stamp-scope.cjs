@@ -47,8 +47,8 @@ function scopeEntryTooBroad(entry) {
     // after a '^') with a bare '.*' -- matching ANY text before its real
     // content, i.e. "arbitrary substring anywhere" rather than "this
     // specific fragment". Reject exactly that, evidenced by every
-    // orwell-flag-capture entry (re:.*orwell.*, re:.*taylor.*, re:.*flag.*,
-    // re:.*192\.168\.2\..*) and by nothing in the real, currently-valid
+    // orwell-flag-capture entry (re:.*orwell.*, re:.*operator-placeholder.*,
+    // re:.*flag.*, re:.*192\.168\.2\..*) and by nothing in the real, currently-valid
     // stamp corpus (re-verified against every stamp in
     // _dev/state/remote-mutation-stamps/ before landing this rule).
     const stripped = pattern.startsWith('^') ? pattern.slice(1) : pattern;

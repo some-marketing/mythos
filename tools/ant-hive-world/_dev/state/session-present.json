@@ -1,0 +1,14 @@
+{
+  "schema": "SessionPresent/1.0",
+  "last_reflex_verdict": "warn",
+  "last_reflex_event": "signal-close",
+  "last_reflex_findings_count": 1,
+  "last_updated_by": "claude-code:fire-reflex.cjs:signal-close",
+  "last_updated_at": "2026-08-11T19:46:23.985Z",
+  "writer_attestation": {
+    "writer_harness_id": "claude-code:fire-reflex.cjs:signal-close",
+    "signature_alg": "sha256-harness-concat-v1",
+    "signature": "0d44d9945e3468b71876d337b1ef07a1f02f447a7f3428a386a2d694288660f8",
+    "signed_at": "2026-08-11T19:46:23.985Z"
+  }
+}

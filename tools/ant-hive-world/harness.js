@@ -31,6 +31,7 @@ const {
   depositPheromone,
   decayPheromones,
   maybeSpawnFoodSource,
+  regrowFoodSources,
   applyEcosystemDynamics,
   applyMaterialDynamics,
   tileToCoords,
@@ -52,6 +53,15 @@ const VERBS = ['gather', 'build', 'claim-territory', 'idle'];
 // gathering materials a genuine dependency for building, not just a
 // separately-rewarded action.
 const BUILD_COST = { wood: 2 };
+
+// Extracted (plan ant-sim-nine-mind-harness-triad-architecture, S2) so a
+// VERIFIER lane can call the SAME predicate the harness itself uses to
+// decide whether `build` applies, instead of a second copy that could drift.
+// Pure function, no side effects, byte-identical to the inline check this
+// replaces at the `build` branch below.
+function canAffordBuild(currentStockpile, buildCost) {
+  return Object.entries(buildCost).every(([key, amt]) => (currentStockpile[key] || 0) >= amt);
+}
 
 // Pheromone deposit per successful gather -- operator (2026-07-16): "we
 // wanted an ant based world though an ant based model." A gather deposits
@@ -124,10 +134,20 @@ function tick(hive, worldStatePath, decideFn, liveConfig = {}, rng = Math.random
       stockpile: hiveState.hive_state.stockpile || {}, tile_id: action.tileId || null,
       resource_depleted: null
     }, eventContext, eventTick);
-    return { hiveState, worldState, applied: false };
+    return { hiveState, worldState, applied: false, territory_outcome: 'not_applicable' };
   }
 
   let applied = false;
+  // plan ant-sim-reward-specification-repair, S2: carried alongside `applied`,
+  // NOT folded into it. `applied` keeps mapping from claimTerritory's `ok`
+  // exactly as before -- narrowing a published field to make a downstream
+  // criterion pass is the exact class of defect this plan exists to fix.
+  // plan ant-sim-reward-specification-repair, S5-a3 (codex distinct review
+  // fix): the plan's declared field contract is a four-member enum with NO
+  // null member -- 'not_applicable' is the literal value for every
+  // non-territory verb (gather, build, idle), not null/absent. Only
+  // claim-territory below overwrites this with the real outcome.
+  let territoryOutcome = 'not_applicable';
   let stockpileCredit = null;
   let stockpileDebit = null;
   let actionResourceDepleted = null;
@@ -152,7 +172,7 @@ function tick(hive, worldStatePath, decideFn, liveConfig = {}, rng = Math.random
     }
   } else if (action.verb === 'build') {
     const buildCost = { wood: buildCostWood };
-    const canAfford = Object.entries(buildCost).every(([key, amt]) => (currentStockpile[key] || 0) >= amt);
+    const canAfford = canAffordBuild(currentStockpile, buildCost);
     if (canAfford) {
       // Spatial placement (operator 2026-08-03, three-sided experiment gate):
       // the network decides IF to build, not WHERE. Resolve placement onto a
@@ -194,6 +214,26 @@ function tick(hive, worldStatePath, decideFn, liveConfig = {}, rng = Math.random
   } else if (action.verb === 'claim-territory') {
     const result = claimTerritory(worldState, action.tileId, hiveState.identity);
     applied = result.ok;
+    // plan ant-sim-reward-specification-repair, C2 (codex distinct review:
+    // "dead-code-by-contract is not the same as null-free"): claimTerritory
+    // is contractually guaranteed to return one of the three real outcomes,
+    // but a defensive fallback whose value sits OUTSIDE the enum is a latent
+    // defect -- if that contract ever breaks, this silently emits an invalid
+    // value instead of failing loudly. Coalesce to the valid enum member AND
+    // record the anomaly so it stays visible to the summarizer, instead of
+    // either papering over it with silence (`?? null`) or throwing in this
+    // per-tick hot path of a long-running simulation.
+    if (result.territory_outcome === undefined || result.territory_outcome === null) {
+      territoryOutcome = 'not_applicable';
+      appendAudit(hive.auditLogPath, {
+        event: 'territory-outcome-contract-violation', hive: hiveState.identity,
+        tileId: action.tileId, tile_id: action.tileId || null,
+        detail: 'claimTerritory result missing territory_outcome; coalesced to not_applicable',
+        stockpile: currentStockpile, resource_depleted: null
+      }, eventContext, eventTick);
+    } else {
+      territoryOutcome = result.territory_outcome;
+    }
     worldState = result.state;
     if (!result.ok) {
       appendAudit(hive.auditLogPath, {
@@ -229,6 +269,27 @@ function tick(hive, worldStatePath, decideFn, liveConfig = {}, rng = Math.random
     spawnChance: liveConfig.food_source_spawn_chance,
     spawnAmount: liveConfig.food_source_spawn_amount,
     maxSources: liveConfig.max_food_sources
+  });
+  // Fallow/regrowth (plan sim-replenishment-dynamics, S2) -- beside
+  // maybeSpawnFoodSource, same per-tick environmental-process placement.
+  // Pure function of state, no rng argument: cannot perturb the shared
+  // stream at any rate, inert (no-op) at the default rate 0.
+  //
+  // FALSY-ABSENT PATTERN (S3 falsifier path, AC4): food_source_regrow_rate/
+  // _cap are no longer in DEFAULT_CONFIG (live-config.js) after the S3
+  // ablation's falsifier result. liveConfig.food_source_regrow_rate is
+  // therefore `undefined` on every stock run, which regrowFoodSources reads
+  // as `opts.regrowRate` -- also `undefined` -- and its own default
+  // resolution (`opts.regrowRate === undefined ? DEFAULT_FOOD_SOURCE_REGROW_RATE
+  // : ...`) falls through to 0, then the falsy-rate early return fires
+  // before any patch is touched. This wiring line is deliberately left
+  // exactly as it was written in S2 -- it is what makes "absent" and
+  // "explicitly 0" behave identically without an extra branch here, and it
+  // is why a sandbox's live-config.json can still turn the mechanic on by
+  // supplying the keys, exactly as the ablation tool does.
+  worldState = regrowFoodSources(worldState, {
+    regrowRate: liveConfig.food_source_regrow_rate,
+    regrowCap: liveConfig.food_source_regrow_cap
   });
   worldState = applyEcosystemDynamics(worldState, rng, {
     preyGrowthRate: liveConfig.prey_growth_rate,
@@ -279,7 +340,7 @@ function tick(hive, worldStatePath, decideFn, liveConfig = {}, rng = Math.random
     }, eventContext, eventTick);
   }
 
-  return { hiveState: nextHiveState, worldState: nextWorldState, applied };
+  return { hiveState: nextHiveState, worldState: nextWorldState, applied, territory_outcome: territoryOutcome };
 }
 
 // Set up N isolated hive sandboxes + one shared world-state file. NOT
@@ -309,10 +370,34 @@ function addHive(sandboxRoot, seed, eventContext = processEventContext) {
   return hive;
 }
 
+// Restore hives and the shared world from a checkpoint, instead of seeding them
+// blank (plan ant-world-checkpoint-loader, S1/S2). This is setupHives's exact
+// counterpart and the ONLY other way a live sandbox may come into existence:
+// setupHives writes `initialWorldState(resourcePool)`, which is precisely the
+// thing a resumed run must not do.
+//
+// `hiveStates` is a map identity -> the hive-state object as it was at
+// checkpoint time; `worldState` is the shared world at the same instant. Both
+// are written out verbatim, because a checkpoint that is reinterpreted on the
+// way in is not a checkpoint. The sandbox directories are created if absent and
+// reused if present -- append-only logs in them are the caller's problem to
+// truncate (checkpoint.js's applyLogCursors), since only the caller knows the
+// cursor.
+function restoreHives(sandboxRoot, hiveStates, worldStatePath, worldState, eventContext = processEventContext) {
+  const hives = {};
+  for (const identity of Object.keys(hiveStates).sort()) {
+    const hive = ensureSandbox(sandboxRoot, identity, eventContext);
+    fs.writeFileSync(hive.hiveStatePath, JSON.stringify(hiveStates[identity], null, 2));
+    hives[identity] = hive;
+  }
+  writeWorldState(worldStatePath, worldState);
+  return hives;
+}
+
 // Backward-compatible 2-hive convenience wrapper over setupHives.
 function setupTwoHives(sandboxRoot, seedA, seedB, worldStatePath, resourcePool, eventContext = processEventContext) {
   const hives = setupHives(sandboxRoot, [seedA, seedB], worldStatePath, resourcePool, eventContext);
   return { hiveA: hives[seedA.identity], hiveB: hives[seedB.identity] };
 }
 
-module.exports = { VERBS, ensureSandbox, appendAudit, tick, setupHives, addHive, setupTwoHives };
+module.exports = { VERBS, BUILD_COST, canAffordBuild, ensureSandbox, appendAudit, tick, setupHives, restoreHives, addHive, setupTwoHives };

@@ -1,0 +1,261 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://mythos.local/schemas/ticktock/RunCharter/1.0",
+  "title": "RunCharter/1.0",
+  "description": "The immutable frame a /ticktock run executes inside. Committed BEFORE cycle 1 and never edited by any cycle: a cycle may PROPOSE a charter change as a plan artifact, and only the operator ratifies it into a new charter. Everything a cycle is allowed to spend, touch, or be reviewed by is named here, so that 'the loop cannot move its own frame' is a mechanical property rather than a promise. charter_hash is the sha256 of this document's canonical projection with charter_hash itself removed; it is the identity every journal record and generation manifest binds to, and it is the first term of every EFFECTFUL phase's idempotency key.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "charter_id",
+    "created_at",
+    "target",
+    "cycle_ceiling",
+    "evaluator_versions",
+    "allowed_write_surfaces",
+    "max_cumulative_diff",
+    "max_external_actions",
+    "resource_ceilings",
+    "reviewer_roster",
+    "stopping_rules",
+    "benchmark",
+    "never_authority",
+    "charter_hash"
+  ],
+  "properties": {
+    "schema": {
+      "const": "RunCharter/1.0",
+      "description": "Schema identifier. Exact-match only: an unrecognized schema string is a fail-closed refusal, never a best-effort read."
+    },
+    "charter_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9._-]+$",
+      "description": "Human-facing charter name. Provenance and addressing only; authority belongs to charter_hash, because a name can be reused and a hash cannot."
+    },
+    "created_at": {
+      "type": "string",
+      "description": "ISO-8601 UTC stamp of charter commit. Provenance only -- excluded from no decision path, but included in the hash, so that two otherwise-identical charters committed at different moments are distinct runs."
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["description", "repo_root", "subject"],
+      "description": "What this run is trying to co-evolve.",
+      "properties": {
+        "description": { "type": "string", "minLength": 1 },
+        "repo_root": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Absolute path of the repository the cycle operates on."
+        },
+        "subject": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The system under co-evolution (for example the ant-hive-world simulation plus the Mythos harness around it)."
+        }
+      }
+    },
+    "cycle_ceiling": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Hard maximum number of generations this charter authorizes. Reaching it is a normal stop, not a halt; exceeding it is impossible without a new charter."
+    },
+    "evaluator_versions": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "type": "string", "minLength": 1 },
+      "description": "Exact version string of every evaluator/metric definition this run is judged by, pinned at commit time. A cycle may never change one of these values -- an evaluator that can be edited mid-run cannot support any comparison across generations."
+    },
+    "allowed_write_surfaces": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Glob patterns, relative to target.repo_root, that a cycle may write. A write resolving outside every pattern is refused. This is the charter's own bound; it composes with (never replaces) the harness write-boundary gate."
+    },
+    "max_cumulative_diff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lines_changed", "files_changed"],
+      "description": "Cumulative across the whole run, not per cycle -- a per-cycle-only bound is trivially defeated by running more cycles.",
+      "properties": {
+        "lines_changed": { "type": "integer", "minimum": 0 },
+        "files_changed": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "max_external_actions": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Cumulative ceiling on actions with an effect outside the repository (remote sim turns, messages sent, pushes, API dispatches). Exceeding it halts the cycle with halt_state CEILING-EXCEEDED."
+    },
+    "resource_ceilings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["wall_clock_seconds_per_cycle", "wall_clock_seconds_total", "max_subagent_dispatches"],
+      "properties": {
+        "wall_clock_seconds_per_cycle": { "type": "integer", "minimum": 1 },
+        "wall_clock_seconds_total": { "type": "integer", "minimum": 1 },
+        "max_subagent_dispatches": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "reviewer_roster": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "locked_at",
+        "assignment_mode",
+        "lanes",
+        "lane_binding_hash",
+        "lane_binding_hash_algorithm",
+        "lane_binding_hash_covers",
+        "merge_contract"
+      ],
+      "description": "The LOCKED roster: every distinct reviewer family available at commit time, assigned BEFORE any reviewed artifact exists. Bound into the charter by lane_binding_hash so it cannot be edited mid-run; any mismatch between the recomputed hash and this stored value halts the cycle (halt_state ROSTER-HASH-MISMATCH).",
+      "properties": {
+        "locked_at": { "type": "string", "description": "ISO-8601 UTC stamp at which availability was checked and the roster frozen." },
+        "assignment_mode": {
+          "const": "pre-output",
+          "description": "The only legal value. A roster chosen after outputs exist is a roster chosen to pass, which is why post-output assignment has no representable form here."
+        },
+        "lanes": {
+          "type": "array",
+          "minItems": 1,
+          "description": "One entry per reviewer lane, in assignment order.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["lane_id", "family", "model_pin", "assignment_order", "role", "availability"],
+            "properties": {
+              "lane_id": { "type": "string", "minLength": 1 },
+              "family": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Distinct intelligence family (codex, gemini, hermes, deepseek-via-codewhale, pi-routed, claude-frontier). Same-family lanes are parallel contexts, not distinct minds."
+              },
+              "model_pin": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Exact model/version string this lane must resolve to. Verified AFTER the response returns: a resolved model that silently diverges from its pin is a substitution, and a substitution marks the merge not-clean."
+              },
+              "assignment_order": { "type": "integer", "minimum": 0 },
+              "role": { "type": "string", "minLength": 1 },
+              "availability": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["reachable", "checked_at", "check_method"],
+                "description": "The AVAILABILITY SNAPSHOT: what was actually checked, not what was assumed. An unreachable lane is recorded as unreachable and stays in the roster -- dropping it silently would let an unavailable reviewer look like a satisfied one.",
+                "properties": {
+                  "reachable": { "type": "boolean" },
+                  "checked_at": { "type": "string" },
+                  "check_method": { "type": "string", "minLength": 1 },
+                  "detail": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "lane_binding_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "sha256 over the canonical roster projection. See lane_binding_hash_covers for exactly which fields feed it."
+        },
+        "lane_binding_hash_algorithm": {
+          "const": "sha256(canonical-json(roster-projection))",
+          "description": "Named so a verifier recomputes the hash the same way this writer did, rather than guessing at a serialization."
+        },
+        "lane_binding_hash_covers": {
+          "type": "array",
+          "minItems": 4,
+          "items": { "enum": ["family", "model_pin", "assignment_order", "lane_id", "role", "availability.reachable"] },
+          "description": "The projection's field list. MUST include family, model_pin and assignment_order: a hash over lane names alone would let a substitution inside a 'covered' family pass unnoticed, which is the exact failure this hash exists to catch."
+        },
+        "merge_contract": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["zero_unresolved_findings_required", "not_clean_conditions"],
+          "properties": {
+            "zero_unresolved_findings_required": {
+              "const": true,
+              "description": "Merge requires zero unresolved findings from EVERY locked lane. There is no representable form of a partial-roster merge."
+            },
+            "not_clean_conditions": {
+              "type": "array",
+              "minItems": 3,
+              "items": { "enum": ["timeout", "substitution", "pin_mismatch", "unavailable", "findings", "roster_hash_mismatch"] },
+              "description": "Each condition independently marks the merge not-clean. Timeout, substitution and pin_mismatch are mandatory members: a zero-findings verdict from a lane that timed out, was substituted, or did not resolve to its pin is a validation failure, not a pass."
+            }
+          }
+        }
+      }
+    },
+    "stopping_rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["until_kind", "halt_conditions"],
+      "properties": {
+        "until_kind": {
+          "enum": ["cycle_ceiling", "deterministic_milestone", "none"],
+          "description": "Statistical stopping has no representable value here, by design: a statistical --until lets the run stop when the numbers happen to look good, which is p-hacking with extra steps. Statistics are computed POST-halt under a preregistered contract."
+        },
+        "until_milestone": {
+          "type": ["string", "null"],
+          "description": "Required (non-null) when until_kind is deterministic_milestone: a milestone whose truth is decidable by inspection, not by a test statistic."
+        },
+        "halt_conditions": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 },
+          "description": "Named conditions that stop the run. Benchmark divergence is always one of them."
+        }
+      }
+    },
+    "benchmark": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["colony_spec_path", "colony_spec_version", "fingerprint_path", "fingerprint_hash", "rebaseline_detector"],
+      "description": "The frozen benchmark colony this run is measured against. The fingerprint reference is part of the immutable frame: re-pointing it at a different fingerprint is a re-baseline, and a re-baseline requires a new charter.",
+      "properties": {
+        "colony_spec_path": { "type": "string", "minLength": 1 },
+        "colony_spec_version": { "type": "string", "minLength": 1 },
+        "fingerprint_path": { "type": "string", "minLength": 1 },
+        "fingerprint_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "sha256 of the fingerprint document's canonical projection. Binding the hash and not merely the path is what makes a silent fingerprint edit detectable."
+        },
+        "rebaseline_detector": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["enabled", "n_threshold", "m_window"],
+          "description": "TT-003. If re-baselining occurs in more than n_threshold of the last m_window cycles, that frequency is ITSELF a halt and a finding: the frame is too tight, or the loop is drifting deliberately. Coordinator defaults N=2, M=5; operator-overridable here and nowhere else.",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "n_threshold": { "type": "integer", "minimum": 1 },
+            "m_window": { "type": "integer", "minimum": 2 }
+          }
+        }
+      }
+    },
+    "never_authority": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 },
+      "description": "The irreducible never-authority list: things no cycle may do under any charter (edit canonical safety/gate policy, edit evaluator or metric definitions, accept its own review, delete evidence or checkpoints, fall back silently to fresh state, export credentials or private mind state, merge outside the roster contract). Recorded here so a refusal cites a charter field rather than a recollection."
+    },
+    "charter_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "sha256 of this document's canonical projection with charter_hash removed. Identity of the run. Recomputed and compared at every phase boundary; a mismatch halts with CHARTER-IMMUTABILITY-VIOLATION."
+    },
+    "template_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "T1 (tt-charter-template-and-spend-ledger): the charter-template-run.json template_id this charter was created against. OPTIONAL for backward compatibility -- charters committed before the template existed carry no template_id and remain valid history, unrewritten; createCharter() always stamps it on every charter it emits from this point forward."
+    },
+    "template_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "sha256 of the template's canonical projection (with its 'derivation' metadata field stripped) at the moment this charter was created. Bound alongside template_id so a later template edit is detectable against charters created under the prior version. OPTIONAL for the same backward-compatibility reason as template_id."
+    }
+  }
+}

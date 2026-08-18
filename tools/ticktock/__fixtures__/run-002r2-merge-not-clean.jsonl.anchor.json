@@ -1,0 +1,9 @@
+{
+  "schema": "JournalHeadAnchor/1.0",
+  "journal_basename": "run-002r2.20260812.jsonl",
+  "record_count": 8,
+  "head_record_hash": "d5d717f2087fb5158a45d9b62be92a891ea23c0255c207f35b2274a6c4206c0b",
+  "updated_at": "2026-08-12T16:36:43.405Z",
+  "reconciliations": [],
+  "anchor_hash": "a25a82d461083faf57bb7a731e0fb3f8db4508caa0ab2e7c96c1355d62f80d4d"
+}

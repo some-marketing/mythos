@@ -1,0 +1,1013 @@
+{
+  "schema": "UnrealImport/1.0",
+  "turn_id": "cc-turn1",
+  "source": {
+    "geometry_log": [
+      {
+        "hive": "hive-a",
+        "kind": "chamber",
+        "coords": [
+          0,
+          0,
+          0
+        ],
+        "at": "2026-08-05T03:23:28.200Z",
+        "state_at_event": {
+          "stockpile": {
+            "food": 0,
+            "wood": 1
+          },
+          "tile_id": null,
+          "coords": [
+            0,
+            0,
+            0
+          ],
+          "resource_depleted": false
+        },
+        "schema_name": "ant-hive-world.geometry-event",
+        "schema_version": "1.0.0",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "arm_id": "cc-turn1",
+        "tick": 8,
+        "tick_key": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32:8:hive-a"
+      },
+      {
+        "hive": "hive-b",
+        "kind": "chamber",
+        "coords": [
+          3,
+          5,
+          0
+        ],
+        "at": "2026-08-05T03:23:28.205Z",
+        "state_at_event": {
+          "stockpile": {
+            "wood": 1,
+            "food": 0
+          },
+          "tile_id": "tile-53",
+          "coords": [
+            3,
+            5,
+            0
+          ],
+          "resource_depleted": false
+        },
+        "schema_name": "ant-hive-world.geometry-event",
+        "schema_version": "1.0.0",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "arm_id": "cc-turn1",
+        "tick": 11,
+        "tick_key": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32:11:hive-b"
+      },
+      {
+        "hive": "hive-b",
+        "kind": "chamber",
+        "coords": [
+          1,
+          8,
+          0
+        ],
+        "at": "2026-08-05T03:23:28.216Z",
+        "state_at_event": {
+          "stockpile": {
+            "wood": 0,
+            "food": 0
+          },
+          "tile_id": "tile-81",
+          "coords": [
+            1,
+            8,
+            0
+          ],
+          "resource_depleted": true
+        },
+        "schema_name": "ant-hive-world.geometry-event",
+        "schema_version": "1.0.0",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "arm_id": "cc-turn1",
+        "tick": 21,
+        "tick_key": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32:21:hive-b"
+      },
+      {
+        "hive": "hive-a",
+        "kind": "chamber",
+        "coords": [
+          4,
+          0,
+          0
+        ],
+        "at": "2026-08-05T03:23:28.227Z",
+        "state_at_event": {
+          "stockpile": {
+            "food": 0,
+            "wood": 2
+          },
+          "tile_id": "tile-4",
+          "coords": [
+            4,
+            0,
+            0
+          ],
+          "resource_depleted": false
+        },
+        "schema_name": "ant-hive-world.geometry-event",
+        "schema_version": "1.0.0",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "arm_id": "cc-turn1",
+        "tick": 31,
+        "tick_key": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32:31:hive-a"
+      },
+      {
+        "hive": "hive-a",
+        "kind": "chamber",
+        "coords": [
+          7,
+          2,
+          0
+        ],
+        "at": "2026-08-05T03:23:28.230Z",
+        "state_at_event": {
+          "stockpile": {
+            "food": 0,
+            "wood": 0
+          },
+          "tile_id": "tile-27",
+          "coords": [
+            7,
+            2,
+            0
+          ],
+          "resource_depleted": true
+        },
+        "schema_name": "ant-hive-world.geometry-event",
+        "schema_version": "1.0.0",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "arm_id": "cc-turn1",
+        "tick": 34,
+        "tick_key": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32:34:hive-a"
+      },
+      {
+        "hive": "hive-b",
+        "kind": "chamber",
+        "coords": [
+          0,
+          9,
+          0
+        ],
+        "at": "2026-08-05T03:23:28.245Z",
+        "state_at_event": {
+          "stockpile": {
+            "wood": 2,
+            "food": 0
+          },
+          "tile_id": "tile-90",
+          "coords": [
+            0,
+            9,
+            0
+          ],
+          "resource_depleted": false
+        },
+        "schema_name": "ant-hive-world.geometry-event",
+        "schema_version": "1.0.0",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "arm_id": "cc-turn1",
+        "tick": 46,
+        "tick_key": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32:46:hive-b"
+      },
+      {
+        "hive": "hive-b",
+        "kind": "chamber",
+        "coords": [
+          8,
+          2,
+          0
+        ],
+        "at": "2026-08-05T03:23:28.253Z",
+        "state_at_event": {
+          "stockpile": {
+            "wood": 3,
+            "food": 0
+          },
+          "tile_id": "tile-28",
+          "coords": [
+            8,
+            2,
+            0
+          ],
+          "resource_depleted": false
+        },
+        "schema_name": "ant-hive-world.geometry-event",
+        "schema_version": "1.0.0",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "arm_id": "cc-turn1",
+        "tick": 52,
+        "tick_key": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32:52:hive-b"
+      },
+      {
+        "hive": "hive-b",
+        "kind": "chamber",
+        "coords": [
+          4,
+          3,
+          0
+        ],
+        "at": "2026-08-05T03:23:28.257Z",
+        "state_at_event": {
+          "stockpile": {
+            "wood": 1,
+            "food": 0
+          },
+          "tile_id": "tile-34",
+          "coords": [
+            4,
+            3,
+            0
+          ],
+          "resource_depleted": false
+        },
+        "schema_name": "ant-hive-world.geometry-event",
+        "schema_version": "1.0.0",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "arm_id": "cc-turn1",
+        "tick": 55,
+        "tick_key": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32:55:hive-b"
+      },
+      {
+        "hive": "hive-a",
+        "kind": "chamber",
+        "coords": [
+          9,
+          4,
+          0
+        ],
+        "at": "2026-08-05T03:23:28.267Z",
+        "state_at_event": {
+          "stockpile": {
+            "food": 0,
+            "wood": 2
+          },
+          "tile_id": "tile-49",
+          "coords": [
+            9,
+            4,
+            0
+          ],
+          "resource_depleted": false
+        },
+        "schema_name": "ant-hive-world.geometry-event",
+        "schema_version": "1.0.0",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "arm_id": "cc-turn1",
+        "tick": 65,
+        "tick_key": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32:65:hive-a"
+      },
+      {
+        "hive": "hive-a",
+        "kind": "chamber",
+        "coords": [
+          8,
+          3,
+          0
+        ],
+        "at": "2026-08-05T03:23:28.274Z",
+        "state_at_event": {
+          "stockpile": {
+            "food": 0,
+            "wood": 3
+          },
+          "tile_id": "tile-38",
+          "coords": [
+            8,
+            3,
+            0
+          ],
+          "resource_depleted": false
+        },
+        "schema_name": "ant-hive-world.geometry-event",
+        "schema_version": "1.0.0",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "arm_id": "cc-turn1",
+        "tick": 71,
+        "tick_key": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32:71:hive-a"
+      },
+      {
+        "hive": "hive-b",
+        "kind": "chamber",
+        "coords": [
+          6,
+          4,
+          0
+        ],
+        "at": "2026-08-05T03:23:28.277Z",
+        "state_at_event": {
+          "stockpile": {
+            "wood": 5,
+            "food": 0
+          },
+          "tile_id": "tile-46",
+          "coords": [
+            6,
+            4,
+            0
+          ],
+          "resource_depleted": false
+        },
+        "schema_name": "ant-hive-world.geometry-event",
+        "schema_version": "1.0.0",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "arm_id": "cc-turn1",
+        "tick": 73,
+        "tick_key": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32:73:hive-b"
+      },
+      {
+        "hive": "hive-a",
+        "kind": "chamber",
+        "coords": [
+          1,
+          6,
+          0
+        ],
+        "at": "2026-08-05T03:23:28.281Z",
+        "state_at_event": {
+          "stockpile": {
+            "food": 0,
+            "wood": 1
+          },
+          "tile_id": "tile-61",
+          "coords": [
+            1,
+            6,
+            0
+          ],
+          "resource_depleted": false
+        },
+        "schema_name": "ant-hive-world.geometry-event",
+        "schema_version": "1.0.0",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "arm_id": "cc-turn1",
+        "tick": 77,
+        "tick_key": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32:77:hive-a"
+      },
+      {
+        "hive": "hive-b",
+        "kind": "chamber",
+        "coords": [
+          8,
+          8,
+          0
+        ],
+        "at": "2026-08-05T03:23:28.284Z",
+        "state_at_event": {
+          "stockpile": {
+            "wood": 3,
+            "food": 0
+          },
+          "tile_id": "tile-88",
+          "coords": [
+            8,
+            8,
+            0
+          ],
+          "resource_depleted": false
+        },
+        "schema_name": "ant-hive-world.geometry-event",
+        "schema_version": "1.0.0",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "arm_id": "cc-turn1",
+        "tick": 79,
+        "tick_key": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32:79:hive-b"
+      },
+      {
+        "hive": "hive-b",
+        "kind": "chamber",
+        "coords": [
+          3,
+          9,
+          0
+        ],
+        "at": "2026-08-05T03:23:28.298Z",
+        "state_at_event": {
+          "stockpile": {
+            "wood": 1,
+            "food": 0
+          },
+          "tile_id": "tile-93",
+          "coords": [
+            3,
+            9,
+            0
+          ],
+          "resource_depleted": false
+        },
+        "schema_name": "ant-hive-world.geometry-event",
+        "schema_version": "1.0.0",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "arm_id": "cc-turn1",
+        "tick": 91,
+        "tick_key": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32:91:hive-b"
+      }
+    ],
+    "resources": {
+      "food": 0,
+      "wood": 0,
+      "stone": 15,
+      "clay": 18.901753352764132,
+      "water": 1.8626393050708316,
+      "ore": 22.808114770139447,
+      "fiber": 35.25234713108882,
+      "mud": 46.154658029425335
+    },
+    "prey_population": 0.0029321042308442947,
+    "predator_population": 1.6280806082796592e-9,
+    "territory": {
+      "tile-53": "hive-b",
+      "tile-81": "hive-b",
+      "tile-64": "hive-a",
+      "tile-90": "hive-b",
+      "tile-4": "hive-a",
+      "tile-28": "hive-b",
+      "tile-27": "hive-a",
+      "tile-49": "hive-a",
+      "tile-34": "hive-b",
+      "tile-38": "hive-a",
+      "tile-61": "hive-a",
+      "tile-46": "hive-b",
+      "tile-40": "hive-a",
+      "tile-95": "hive-a",
+      "tile-88": "hive-b",
+      "tile-57": "hive-a",
+      "tile-52": "hive-a",
+      "tile-72": "hive-a",
+      "tile-93": "hive-b",
+      "tile-63": "hive-a",
+      "tile-24": "hive-a",
+      "tile-23": "hive-a",
+      "tile-22": "hive-b",
+      "tile-66": "hive-b",
+      "tile-2": "hive-a",
+      "tile-76": "hive-a",
+      "tile-17": "hive-b",
+      "tile-54": "hive-b",
+      "tile-14": "hive-b",
+      "tile-74": "hive-b",
+      "tile-73": "hive-a",
+      "tile-50": "hive-a",
+      "tile-80": "hive-b",
+      "tile-18": "hive-b",
+      "tile-55": "hive-a",
+      "tile-35": "hive-b",
+      "tile-5": "hive-a",
+      "tile-16": "hive-b",
+      "tile-79": "hive-a",
+      "tile-89": "hive-b",
+      "tile-87": "hive-a",
+      "tile-10": "hive-b",
+      "tile-11": "hive-b",
+      "tile-98": "hive-b",
+      "tile-48": "hive-b",
+      "tile-78": "hive-b",
+      "tile-62": "hive-b",
+      "tile-7": "hive-b",
+      "tile-32": "hive-a",
+      "tile-91": "hive-a",
+      "tile-20": "hive-b",
+      "tile-65": "hive-b",
+      "tile-67": "hive-a",
+      "tile-6": "hive-a",
+      "tile-60": "hive-a",
+      "tile-58": "hive-b",
+      "tile-25": "hive-b",
+      "tile-99": "hive-a",
+      "tile-77": "hive-a",
+      "tile-96": "hive-b"
+    },
+    "food_source_coords": {
+      "tile-0": [
+        0,
+        0,
+        0
+      ],
+      "tile-17": [
+        7,
+        1,
+        0
+      ],
+      "tile-34": [
+        4,
+        3,
+        0
+      ],
+      "tile-51": [
+        1,
+        5,
+        0
+      ],
+      "tile-68": [
+        8,
+        6,
+        0
+      ]
+    },
+    "food_sources": {},
+    "wood_sources": {
+      "wood-tile-69": 4,
+      "wood-tile-30": 4,
+      "wood-tile-52": 4,
+      "wood-tile-96": 4,
+      "wood-tile-26": 4,
+      "wood-tile-24": 4,
+      "wood-tile-12": 4,
+      "wood-tile-89": 4,
+      "wood-tile-3": 4,
+      "wood-tile-43": 4,
+      "wood-tile-57": 4,
+      "wood-tile-88": 4,
+      "wood-tile-7": 4,
+      "wood-tile-66": 4,
+      "wood-tile-42": 4,
+      "wood-tile-22": 4,
+      "wood-tile-90": 4,
+      "wood-tile-53": 4,
+      "wood-tile-19": 4,
+      "wood-tile-25": 4
+    },
+    "stone_sources": {
+      "stone-tile-61": 4,
+      "stone-tile-17": 4,
+      "stone-tile-19": 4,
+      "stone-tile-89": 4,
+      "stone-tile-66": 4,
+      "stone-tile-3": 4,
+      "stone-tile-91": 4,
+      "stone-tile-59": 4,
+      "stone-tile-95": 4,
+      "stone-tile-22": 4,
+      "stone-tile-11": 4,
+      "stone-tile-32": 4,
+      "stone-tile-50": 4,
+      "stone-tile-68": 4,
+      "stone-tile-45": 4,
+      "stone-tile-58": 4,
+      "stone-tile-8": 4,
+      "stone-tile-52": 4,
+      "stone-tile-39": 4,
+      "stone-tile-47": 4
+    },
+    "clay_sources": {
+      "clay-tile-48": 0.8534505428170329
+    },
+    "water_sources": {
+      "water-tile-18": 0.1031868591132475,
+      "water-tile-40": 0.725432961394478,
+      "water-tile-79": 5.1
+    },
+    "ore_sources": {
+      "ore-tile-29": 1.131448546875
+    },
+    "fiber_sources": {
+      "fiber-tile-28": 0.6693729747584569
+    },
+    "seq": 451,
+    "complete": true,
+    "written_at": "2026-08-05T03:23:28.363Z",
+    "schema_version": "1.0.0"
+  },
+  "derived": {
+    "build_ledger": [
+      {
+        "hive": "hive-a",
+        "kind": "chamber",
+        "coords": [
+          0,
+          0,
+          0
+        ],
+        "tick": 8,
+        "at": "2026-08-05T03:23:28.200Z",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "state_at_event": {
+          "stockpile": {
+            "food": 0,
+            "wood": 1
+          },
+          "tile_id": null,
+          "coords": [
+            0,
+            0,
+            0
+          ],
+          "resource_depleted": false
+        }
+      },
+      {
+        "hive": "hive-b",
+        "kind": "chamber",
+        "coords": [
+          3,
+          5,
+          0
+        ],
+        "tick": 11,
+        "at": "2026-08-05T03:23:28.205Z",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "state_at_event": {
+          "stockpile": {
+            "wood": 1,
+            "food": 0
+          },
+          "tile_id": "tile-53",
+          "coords": [
+            3,
+            5,
+            0
+          ],
+          "resource_depleted": false
+        }
+      },
+      {
+        "hive": "hive-b",
+        "kind": "chamber",
+        "coords": [
+          1,
+          8,
+          0
+        ],
+        "tick": 21,
+        "at": "2026-08-05T03:23:28.216Z",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "state_at_event": {
+          "stockpile": {
+            "wood": 0,
+            "food": 0
+          },
+          "tile_id": "tile-81",
+          "coords": [
+            1,
+            8,
+            0
+          ],
+          "resource_depleted": true
+        }
+      },
+      {
+        "hive": "hive-a",
+        "kind": "chamber",
+        "coords": [
+          4,
+          0,
+          0
+        ],
+        "tick": 31,
+        "at": "2026-08-05T03:23:28.227Z",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "state_at_event": {
+          "stockpile": {
+            "food": 0,
+            "wood": 2
+          },
+          "tile_id": "tile-4",
+          "coords": [
+            4,
+            0,
+            0
+          ],
+          "resource_depleted": false
+        }
+      },
+      {
+        "hive": "hive-a",
+        "kind": "chamber",
+        "coords": [
+          7,
+          2,
+          0
+        ],
+        "tick": 34,
+        "at": "2026-08-05T03:23:28.230Z",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "state_at_event": {
+          "stockpile": {
+            "food": 0,
+            "wood": 0
+          },
+          "tile_id": "tile-27",
+          "coords": [
+            7,
+            2,
+            0
+          ],
+          "resource_depleted": true
+        }
+      },
+      {
+        "hive": "hive-b",
+        "kind": "chamber",
+        "coords": [
+          0,
+          9,
+          0
+        ],
+        "tick": 46,
+        "at": "2026-08-05T03:23:28.245Z",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "state_at_event": {
+          "stockpile": {
+            "wood": 2,
+            "food": 0
+          },
+          "tile_id": "tile-90",
+          "coords": [
+            0,
+            9,
+            0
+          ],
+          "resource_depleted": false
+        }
+      },
+      {
+        "hive": "hive-b",
+        "kind": "chamber",
+        "coords": [
+          8,
+          2,
+          0
+        ],
+        "tick": 52,
+        "at": "2026-08-05T03:23:28.253Z",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "state_at_event": {
+          "stockpile": {
+            "wood": 3,
+            "food": 0
+          },
+          "tile_id": "tile-28",
+          "coords": [
+            8,
+            2,
+            0
+          ],
+          "resource_depleted": false
+        }
+      },
+      {
+        "hive": "hive-b",
+        "kind": "chamber",
+        "coords": [
+          4,
+          3,
+          0
+        ],
+        "tick": 55,
+        "at": "2026-08-05T03:23:28.257Z",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "state_at_event": {
+          "stockpile": {
+            "wood": 1,
+            "food": 0
+          },
+          "tile_id": "tile-34",
+          "coords": [
+            4,
+            3,
+            0
+          ],
+          "resource_depleted": false
+        }
+      },
+      {
+        "hive": "hive-a",
+        "kind": "chamber",
+        "coords": [
+          9,
+          4,
+          0
+        ],
+        "tick": 65,
+        "at": "2026-08-05T03:23:28.267Z",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "state_at_event": {
+          "stockpile": {
+            "food": 0,
+            "wood": 2
+          },
+          "tile_id": "tile-49",
+          "coords": [
+            9,
+            4,
+            0
+          ],
+          "resource_depleted": false
+        }
+      },
+      {
+        "hive": "hive-a",
+        "kind": "chamber",
+        "coords": [
+          8,
+          3,
+          0
+        ],
+        "tick": 71,
+        "at": "2026-08-05T03:23:28.274Z",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "state_at_event": {
+          "stockpile": {
+            "food": 0,
+            "wood": 3
+          },
+          "tile_id": "tile-38",
+          "coords": [
+            8,
+            3,
+            0
+          ],
+          "resource_depleted": false
+        }
+      },
+      {
+        "hive": "hive-b",
+        "kind": "chamber",
+        "coords": [
+          6,
+          4,
+          0
+        ],
+        "tick": 73,
+        "at": "2026-08-05T03:23:28.277Z",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "state_at_event": {
+          "stockpile": {
+            "wood": 5,
+            "food": 0
+          },
+          "tile_id": "tile-46",
+          "coords": [
+            6,
+            4,
+            0
+          ],
+          "resource_depleted": false
+        }
+      },
+      {
+        "hive": "hive-a",
+        "kind": "chamber",
+        "coords": [
+          1,
+          6,
+          0
+        ],
+        "tick": 77,
+        "at": "2026-08-05T03:23:28.281Z",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "state_at_event": {
+          "stockpile": {
+            "food": 0,
+            "wood": 1
+          },
+          "tile_id": "tile-61",
+          "coords": [
+            1,
+            6,
+            0
+          ],
+          "resource_depleted": false
+        }
+      },
+      {
+        "hive": "hive-b",
+        "kind": "chamber",
+        "coords": [
+          8,
+          8,
+          0
+        ],
+        "tick": 79,
+        "at": "2026-08-05T03:23:28.284Z",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "state_at_event": {
+          "stockpile": {
+            "wood": 3,
+            "food": 0
+          },
+          "tile_id": "tile-88",
+          "coords": [
+            8,
+            8,
+            0
+          ],
+          "resource_depleted": false
+        }
+      },
+      {
+        "hive": "hive-b",
+        "kind": "chamber",
+        "coords": [
+          3,
+          9,
+          0
+        ],
+        "tick": 91,
+        "at": "2026-08-05T03:23:28.298Z",
+        "run_id": "51a9c138-3cbe-408d-8f76-33a7ab0b0700",
+        "episode_id": "faf37c3e-aff1-4c15-85fd-59e13a9b1f32",
+        "state_at_event": {
+          "stockpile": {
+            "wood": 1,
+            "food": 0
+          },
+          "tile_id": "tile-93",
+          "coords": [
+            3,
+            9,
+            0
+          ],
+          "resource_depleted": false
+        }
+      }
+    ],
+    "mirror": {
+      "observed": 0.743872397312364,
+      "null_mean": 0.6876827350792758,
+      "null_sd": 0.167794702935367,
+      "p_value": 0.666,
+      "n_builds": 14,
+      "n_features": 46,
+      "distinct_tiles": 14,
+      "seed": 1411048488,
+      "shuffles": 1000
+    }
+  },
+  "provenance": {
+    "turn_id": "cc-turn1",
+    "ticks": 150,
+    "absolute_day_start": 6000,
+    "payload_hash": "232bd0e906029d9f56a39d0e9710f5fb1cf5b42d8ec3f94608324ce36edea3d4",
+    "receipts": [
+      {
+        "manifest": "RESULT-MANIFEST.txt",
+        "file": "cc-turn1/world-state.json",
+        "sha256": "26103d6b7da0a5220518ca0386769c1259bd1e80cf0ca4ada48fc6404651f61c"
+      },
+      {
+        "manifest": "HARVEST-MANIFEST.txt",
+        "file": "cc-turn1/world-state.json",
+        "sha256": "26103d6b7da0a5220518ca0386769c1259bd1e80cf0ca4ada48fc6404651f61c"
+      },
+      {
+        "manifest": "PULL-MANIFEST.txt",
+        "file": "cc-turn1/world-state.json",
+        "sha256": "26103d6b7da0a5220518ca0386769c1259bd1e80cf0ca4ada48fc6404651f61c"
+      },
+      {
+        "manifest": "RESULT-MANIFEST.txt",
+        "file": "cc-turn1/turn-projection.json",
+        "sha256": "8a15ba475e57b7a9377700d7532e0563002934a8065daa171f0f7903a12e793f"
+      },
+      {
+        "manifest": "HARVEST-MANIFEST.txt",
+        "file": "cc-turn1/turn-projection.json",
+        "sha256": "8a15ba475e57b7a9377700d7532e0563002934a8065daa171f0f7903a12e793f"
+      },
+      {
+        "manifest": "PULL-MANIFEST.txt",
+        "file": "cc-turn1/turn-projection.json",
+        "sha256": "8a15ba475e57b7a9377700d7532e0563002934a8065daa171f0f7903a12e793f"
+      }
+    ]
+  },
+  "advisory": {
+    "mind_state": "checkpointed-guest-local",
+    "resume_continuity": false
+  }
+}

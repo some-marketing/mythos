@@ -19,6 +19,10 @@
 //    Step 3 (/clean-house) only appears when the dirty-tree count is > 0
 //    (the spec itself scopes step 3 to "only if dirty"); step 5 (kernel
 //    read) always appears — a session open always ends in a kernel read.
+//  - Step 0 (watcher-start) runs FIRST and fail-closed: it executes the
+//    registered watcher-lifecycle.cjs CLI (startWatchers on the coordination
+//    family), halting the cascade on any nonzero exit so a partially-started
+//    watcher set is never left behind.
 //  - No secrets/env values/client payloads in the packet. No commits, no
 //    marker consumption beyond an operator-supplied scope, no handoff prose.
 //  - Never auto-select or fuzzy-consume a scope the caller did not pass:
@@ -50,6 +54,11 @@ const FALLBACK_NOTE = 'mechanical path refused; fall back to YAML spec inference
 // array matches the "Step N — label:" pattern (no free-text preamble or
 // postamble entry), so every coverage entry here is a 'step' kind.
 const SPEC_COVERAGE = Object.freeze([
+  Object.freeze({
+    step_id: '0',
+    label: 'watcher-start',
+    lane: 'mechanical'
+  }),
   Object.freeze({
     step_id: '1',
     label: 'auto-commit (from /boot)',
@@ -84,8 +93,12 @@ const SPEC_COVERAGE = Object.freeze([
   })
 ]);
 
-function defaultCommands() {
+function defaultCommands(projectRoot) {
   return {
+    // Step 0: watcher-start. Executes tools/sessions/watcher-lifecycle.cjs
+    // (startWatchers on DEFAULT_WATCHER_SET, pre-emptive cleanup + partial-
+    // start rollback inside the module). Empty session id -> clean no-op exit 0.
+    '0': [process.execPath, path.join('tools', 'sessions', 'watcher-lifecycle.cjs'), 'start', (resolveSessionId(projectRoot).session_id || ''), '--root', projectRoot],
     // Step 1: auto-commit. Exit 0/2 = continue and record. Exit 1 = HALT.
     '1-auto-commit': [process.execPath, path.join('tools', 'hygiene', 'auto-commit.js'), '--auto', '--foreground'],
     // Step 1: disk quota guard, warn-only by its own contract.
@@ -99,42 +112,20 @@ function defaultCommands() {
     '4-repo-awareness': [process.execPath, path.join('tools', 'context', 'repo-awareness-init.cjs'), '--json'],
     '4-plans-dashboard': [process.execPath, path.join('tools', 'planning', 'build-plan-visibility-dashboard.js')],
     // Step 4: bounded system status + continuity index.
-    '4-status': [process.execPath, path.join('tools', 'status', 'mythos-status.js'), '--json'],
+    '4-status': [process.execPath, path.join('tools', 'status', 'sm-os-status.js'), '--json'],
     '4-continuity': [process.execPath, path.join('tools', 'sessions', 'continuity-index.cjs'), '--json']
   };
 }
 
-// Harness session id, best-effort, for the SessionOpenPacket/1.0 additive
-// `session_id` field. Order: explicit env (the harness sets one of these),
-// then the durable active-session sidecar, then (best-effort) the newest live
-// registered session — so a harness that registered a session but set no env
-// (codewhale) still resolves to its own id and grounds the sidecar. Never
-// fabricated — genuinely unavailable resolves to null with a source note.
+// Harness session id for the SessionOpenPacket/1.0 additive `session_id`
+// field (S2, plan session-lifecycle-mechanical-repairs): delegated to the
+// shared resolver (tools/sessions/lib/resolve-session-id.cjs) so all three
+// consumers agree on identity. The packet is DISPLAY-only — best_effort rungs
+// (registry-liveness-checked sidecar, registry sole/newest-active) are fine
+// here, but the _current-id grounding write below fires ONLY from an
+// authoritative (env-derived) id, never from a best-effort guess.
 function resolveSessionId(projectRoot) {
-  const env = process.env;
-  const fromEnv = env.CLAUDE_SESSION_ID || env.MYTHOS_SESSION_ID || env.CODEX_SESSION_ID || '';
-  if (fromEnv) return { session_id: fromEnv, session_id_source: 'env' };
-  try {
-    const sidecar = path.join(projectRoot, '_dev', 'state', 'active-sessions', '_current-id');
-    const id = fs.readFileSync(sidecar, 'utf8').trim();
-    if (id) return { session_id: id, session_id_source: 'active-session-sidecar' };
-  } catch { /* sidecar absent — fall through to null */ }
-  try {
-    const registry = require(path.join(projectRoot, 'tools', 'sessions', 'lib', 'active-session-registry.js'));
-    const active = registry.listActive({});
-    if (active.length === 1) {
-      return { session_id: active[0].session_id, session_id_source: 'sole-active-session' };
-    }
-    if (active.length > 1) {
-      const newest = active
-        .slice()
-        .sort((a, b) => String(b.last_heartbeat || '').localeCompare(String(a.last_heartbeat || '')))[0];
-      if (newest && newest.session_id) {
-        return { session_id: newest.session_id, session_id_source: 'newest-active-session' };
-      }
-    }
-  } catch { /* registry unreadable — fall through to null */ }
-  return { session_id: null, session_id_source: 'unavailable' };
+  return require('../../sessions/lib/resolve-session-id.cjs').resolveSessionId(projectRoot);
 }
 
 // Read a plan-visibility freshness verdict out of repo-awareness-init --json.
@@ -226,7 +217,7 @@ function gitChangedFiles(projectRoot, exec) {
   return { ok: true, files };
 }
 
-// Bounded extraction from mythos-status.js --json output — summary fields
+// Bounded extraction from sm-os-status.js --json output — summary fields
 // only, never the full status dump (which can carry live-ad and inventory
 // payloads far larger than a session-open packet should carry).
 function extractStatusSummary(parsedStatus) {
@@ -273,7 +264,7 @@ function runNewSessionInner(projectRoot, opts) {
   }
 
   const exec = opts.spawn || spawnSync;
-  const commands = { ...defaultCommands(), ...(opts.commands || {}) };
+  const commands = { ...defaultCommands(projectRoot), ...(opts.commands || {}) };
   const skipSet = new Set((opts.skip || []).map(normalizeSkipToken).filter(Boolean));
   const scopeArg = opts.scope ? String(opts.scope).trim() : '';
 
@@ -323,6 +314,50 @@ function runNewSessionInner(projectRoot, opts) {
       }
       record.status = 'judgment_remaining';
       record.detail = coverage.judgment_summary || 'judgment work remains';
+      stepRecords.push(record);
+      continue;
+    }
+
+    // Step 0: watcher-start. Fail-closed: a nonzero exit (partial-start
+    // rollback already ran inside watcher-lifecycle.cjs, or the pre-emptive
+    // cleanup pass refused an identity-mismatched occupant) halts the
+    // session open — an unrecorded or partially-started set must not be
+    // left behind.
+    if (coverage.step_id === '0') {
+      const argv = commands['0'];
+      if (!Array.isArray(argv) || argv.length === 0) {
+        record.status = 'warn';
+        record.detail = 'no command mapping for watcher-start step 0';
+        stepRecords.push(record);
+        continue;
+      }
+      if (dryRun) {
+        record.status = 'skipped(dry-run)';
+        record.detail = `would run: ${argv.join(' ')}`;
+        stepRecords.push(record);
+        continue;
+      }
+      const watcherStartResult = exec(argv[0], argv.slice(1), { cwd: projectRoot, encoding: 'utf8' });
+      const watcherStartExit = watcherStartResult.status === undefined ? null : watcherStartResult.status;
+      record.exit_code = watcherStartExit;
+      if (watcherStartExit === 0) {
+        record.status = 'complete';
+        record.detail = watcherStartResult.error
+          ? `spawn error: ${watcherStartResult.error.message}`
+          : 'coordination-family watchers started; per-daemon identity recorded in the session registry';
+      } else {
+        record.status = 'failed';
+        record.detail = watcherStartResult.error
+          ? `spawn error: ${watcherStartResult.error.message}`
+          : 'watcher-start exited nonzero (partial-start failure or pre-emptive cleanup refusal); halting session open';
+        halted = true;
+        haltReason = {
+          step_id: coverage.step_id,
+          label: coverage.label,
+          exit_code: watcherStartExit,
+          reason: record.detail
+        };
+      }
       stepRecords.push(record);
       continue;
     }
@@ -428,7 +463,7 @@ function runNewSessionInner(projectRoot, opts) {
     if (coverage.step_id === '4') {
       if (dryRun) {
         record.status = 'skipped(dry-run)';
-        record.detail = 'would run: repo-awareness-init.cjs --json (+ plans:dashboard if stale), mythos-status.js --json, continuity-index.cjs --json';
+        record.detail = 'would run: repo-awareness-init.cjs --json (+ plans:dashboard if stale), sm-os-status.js --json, continuity-index.cjs --json';
         stepRecords.push(record);
         continue;
       }
@@ -506,7 +541,7 @@ function runNewSessionInner(projectRoot, opts) {
 
       record.sub_steps = [
         ...cacheSubSteps,
-        { id: 'mythos-status', exit_code: statusExit, status: statusExit === 0 ? 'complete' : 'warn' },
+        { id: 'sm-os-status', exit_code: statusExit, status: statusExit === 0 ? 'complete' : 'warn' },
         { id: 'continuity-index', exit_code: continuityExit, status: continuityExit === 0 ? 'complete' : 'warn' },
         reaperSub
       ];
@@ -516,7 +551,7 @@ function runNewSessionInner(projectRoot, opts) {
       // 'complete' and 'not_applicable' are clean; any 'warn' warns the parent.
       const anySubWarn = record.sub_steps.some((sub) => sub.status === 'warn');
       record.status = anySubWarn ? 'warn' : 'complete';
-      record.detail = 'repo-awareness + plan-visibility refresh, mythos-status + continuity-index ran; see sub_steps';
+      record.detail = 'repo-awareness + plan-visibility refresh, sm-os-status + continuity-index ran; see sub_steps';
       stepRecords.push(record);
       continue;
     }
@@ -546,9 +581,11 @@ function runNewSessionInner(projectRoot, opts) {
   // Ground the machine-wide current-session sidecar at session open: a harness
   // that registered a session but set no env (codewhale) leaves _current-id
   // absent, which silently orphans its write-ledger and custody set. Writing
-  // it here is idempotent and never fabricates — only a genuinely resolved
-  // session id is grounded.
-  if (sessionInfo.session_id) {
+  // it here is idempotent and never fabricates. S2 (v2): the grounding write
+  // fires ONLY from an authoritative (env-derived) id — never re-grounds the
+  // sidecar from a best-effort guess (the sidecar is a custody input elsewhere,
+  // so a guessed value would be poisoning).
+  if (sessionInfo.session_id && sessionInfo.custody_grade === 'authoritative') {
     try {
       const sidecar = path.join(projectRoot, '_dev', 'state', 'active-sessions', '_current-id');
       fs.mkdirSync(path.dirname(sidecar), { recursive: true });

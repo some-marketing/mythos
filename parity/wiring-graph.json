@@ -2816,7 +2816,7 @@
       "id": "file:.claude/settings.json",
       "type": "file",
       "path": ".claude/settings.json",
-      "sha256": "2f5ace5b3552ef13dc51a0e9fbdb1b80ed9e7f26cfaff793ee84eae904f85207",
+      "sha256": "7f20ab907b9edf9426ad693ca8302b34cc928fe007f61894944abd547830d2bd",
       "mode": 420
     },
     {
@@ -3349,6 +3349,13 @@
       "type": "file",
       "path": ".claude/skills/store-credential/SKILL.md",
       "sha256": "fa0bdb91f8804b755806b3e39b63b24392eb5822fe36d9f06742932a186b13cd",
+      "mode": 420
+    },
+    {
+      "id": "file:.claude/skills/ticktock/SKILL.md",
+      "type": "file",
+      "path": ".claude/skills/ticktock/SKILL.md",
+      "sha256": "5cd28b19d19b8468677c0e83fe5493b68788c41138207afbfa7562ff22462d1a",
       "mode": 420
     },
     {
@@ -8262,7 +8269,7 @@
       "id": "file:instructions/canonical/commands/new-session.yaml",
       "type": "file",
       "path": "instructions/canonical/commands/new-session.yaml",
-      "sha256": "5b6e79d48e8ae94b4ee929c2e4e05ea127f2a6fc6e4b3bfcfca8d0ed2a497b3d",
+      "sha256": "53d7c6886ca4b356e23d32fef9022b33f91458b7a5c6c1f36331b2675841b027",
       "mode": 420
     },
     {
@@ -8514,7 +8521,7 @@
       "id": "file:instructions/canonical/commands/shutdown.yaml",
       "type": "file",
       "path": "instructions/canonical/commands/shutdown.yaml",
-      "sha256": "ec520fad19bbcaba78e3923cf079646b3c5cce27ab82cd3253ea604e615c3ea5",
+      "sha256": "c8c8e2e9ba3519b5ee0f3727fd0178e1c8ba1c51c6b562734fb65e04caac9be6",
       "mode": 420
     },
     {
@@ -9046,7 +9053,7 @@
       "id": "file:package.json",
       "type": "file",
       "path": "package.json",
-      "sha256": "a355d08171297472c9cc554f703dc7d3dc42d654a419acdf2aca31a7c3a0baa7",
+      "sha256": "7b537dae589c8ac17c0fb4665c370028285b3cdc29e13980fbe7725f61d6f03c",
       "mode": 420
     },
     {
@@ -9561,10 +9568,52 @@
       "mode": 420
     },
     {
+      "id": "file:tools/ant-hive-world/__tests__/checkpoint-lane-state.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/checkpoint-lane-state.test.cjs",
+      "sha256": "cff87d2024ee51ac02c2484d449b80e5566fe3fd7a3aad3adb9ba40bbe7a807e",
+      "mode": 420
+    },
+    {
       "id": "file:tools/ant-hive-world/__tests__/dashboard.test.cjs",
       "type": "file",
       "path": "tools/ant-hive-world/__tests__/dashboard.test.cjs",
-      "sha256": "3bec1baadbf811e1898f407cf96abb6fe918bb166b0ae73487f05fee76a21982",
+      "sha256": "8c11e140cbc1ece9e6b554a0b4b17a889200051f4c6ad929ef8299ae593bf0bf",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/dream-calibration.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/dream-calibration.test.cjs",
+      "sha256": "28359a785ce4a54670acc233c2d73047f88b31bd7ab5412d5706ade0e3df363e",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/dream-composer.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/dream-composer.test.cjs",
+      "sha256": "7ef1999b5c12d74aaade0a6f3222b23a067d0961fbe5c55626e7d4270976daa2",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/dream-consequence-ledger.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/dream-consequence-ledger.test.cjs",
+      "sha256": "36d17492003bd84ef651a31be7c29d9ee925b4fe460b0ab47305129bfa51aa24",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/dream-lane.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/dream-lane.test.cjs",
+      "sha256": "25134fe9bcd962b434c7402158a0cbb578db7bd5fa5f4db42de69f69ddda7ce8",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/dream-memory.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/dream-memory.test.cjs",
+      "sha256": "35bb522e61c8e0a3bfd5f3d0fc3734221278b239f74d6ee486ee311123dd99f3",
       "mode": 420
     },
     {
@@ -9572,6 +9621,27 @@
       "type": "file",
       "path": "tools/ant-hive-world/__tests__/event-schema.test.cjs",
       "sha256": "d8e53ff2a450b0600753c1530ce097c32bb4fb80ad221be87c20b94cd8e308a3",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/fixtures/fixture-v1.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/fixtures/fixture-v1.json",
+      "sha256": "44ad0a4ab6e87523ec047b7512f159e0b6bd4e00796bc7232798220e7e63e9c5",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/fixtures/fixture-v2.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/fixtures/fixture-v2.json",
+      "sha256": "f8ee5b840b4bb17c8bb10f15e921409fd8479cbc5cb86f693e277157a98de969",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/gather-yield.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/gather-yield.test.cjs",
+      "sha256": "aaf96cc8dcd981f840df1ba09845f539e7941cd0888daa2d1283df6a9d899ea7",
       "mode": 420
     },
     {
@@ -9617,17 +9687,87 @@
       "mode": 420
     },
     {
+      "id": "file:tools/ant-hive-world/__tests__/on-policy-fix.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/on-policy-fix.test.cjs",
+      "sha256": "3701606ba37a9f6eae778e07944033e2ee57e124110534177e5695ccaf64fa71",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/planner-divergence-check.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/planner-divergence-check.test.cjs",
+      "sha256": "0eed8bcaa5fa0d89cab968271650d51bf4c18be43ed9864b6004327ead99e30f",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/planner-lane.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/planner-lane.test.cjs",
+      "sha256": "8c7075a236f4730ad939289ffaf33b9b8fb64f8b9c723314bfd7fa17e04382e1",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/reward-contract-v3.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/reward-contract-v3.test.cjs",
+      "sha256": "f25a03adf5f124168d192b5a738190da35ae817f571516ecd3d70d3d0533a48b",
+      "mode": 420
+    },
+    {
       "id": "file:tools/ant-hive-world/__tests__/reward-contract.test.cjs",
       "type": "file",
       "path": "tools/ant-hive-world/__tests__/reward-contract.test.cjs",
-      "sha256": "9dac4bb4d848b33a5a8d83a6c5f2f2eecb2c8e40a2624fb742bfb63e664c4ed0",
+      "sha256": "cd939aec1be79e7b92985e3cd92fc5f39262828368d738ef63c1c41d7bdba204",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/reward-provenance.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/reward-provenance.test.cjs",
+      "sha256": "c05ba5748622ed839b28f6eb1d21fc4dbb2353def662331c1735868f2d22a116",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/run-live-argv.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/run-live-argv.test.cjs",
+      "sha256": "0bc1ea5b633fa688cc41b90de66e038780123ebc0140bfba96d44477d929fa1f",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/sweeper-lane.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/sweeper-lane.test.cjs",
+      "sha256": "84398fe4ffc6a3911c5ca224773c34978e51d06709d3896380b2af31cd5bedea",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/territory-reassertion.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/territory-reassertion.test.cjs",
+      "sha256": "8c3421ac24152443f99a536d7f8ae014b5c34ecd2ffcfc716ab64b1b32a76024",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/territory-verifier-blind-spot.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/territory-verifier-blind-spot.test.cjs",
+      "sha256": "d786f91264dce6d8603b6ff3844d5ae0ace6aded8aeb34b07eeee92a61d74f80",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/train-tick-triad-wiring.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/train-tick-triad-wiring.test.cjs",
+      "sha256": "e020cadcaf4913bb68de1759d61a87c657d8c9a0d7e4526d2d9b4b9f9567619b",
       "mode": 420
     },
     {
       "id": "file:tools/ant-hive-world/__tests__/untrained-network.test.cjs",
       "type": "file",
       "path": "tools/ant-hive-world/__tests__/untrained-network.test.cjs",
-      "sha256": "41c7cd8da5c3509c83cbeeb77aaeae6bfa20a899d9ddd6998ad7973ad9d9c77d",
+      "sha256": "260424f45f00caffb0117da7f75376a550ed6514a1198342283bf4a19ea8c066",
       "mode": 420
     },
     {
@@ -9635,6 +9775,27 @@
       "type": "file",
       "path": "tools/ant-hive-world/__tests__/validate-hive-mind.test.cjs",
       "sha256": "a884fe3b7737827957d5a69ce5b0fa24fc2a8067d47a5bc2ed709ed0227de404",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/verifier-breadth.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/verifier-breadth.test.cjs",
+      "sha256": "4e28670f78ccb134d1ecdcfb20a612bb0c0e33fd5c7a169fd682121e8b28e594",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/verifier-lane.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/verifier-lane.test.cjs",
+      "sha256": "a512806e85f3d8412f2b5f555a55519ffd745a6e231f34d46b62087e477a9c4c",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/world-mind-harness.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/world-mind-harness.test.cjs",
+      "sha256": "6bacce6c1b833bf4a1366ab29f5384a27d2eb9a80dff8cc26b7b8960ad462020",
       "mode": 420
     },
     {
@@ -9652,10 +9813,185 @@
       "mode": 420
     },
     {
+      "id": "file:tools/ant-hive-world/__tests__/world-state-replenishment.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/world-state-replenishment.test.cjs",
+      "sha256": "c650863602fe760d416bfadbbd35816934e8f63c528a67dfe08a41bfbc657a5d",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/world-state-torn-write.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/world-state-torn-write.test.cjs",
+      "sha256": "1c134255c6b8db758587adb25970c4f02337a4b9fc1cb0f8b607d9aacb7e9bd1",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/_dev/state/session-present.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/_dev/state/session-present.json",
+      "sha256": "ada972141b240214a3c5cafce9e9099c65029f2fff030cd6de3fa421636283b5",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/analysis/calibration-sweep.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/analysis/calibration-sweep.cjs",
+      "sha256": "fa55582f05261b274a4dbb401108cad34ff0d22b952e9fbf0fa36b8b5353e460",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/analysis/demand-decomposition.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/analysis/demand-decomposition.cjs",
+      "sha256": "ac4eb8e5c85fadba272ebc9d65fcbc4b62acc9bb9eca3beb2c3d9d133aed2b5a",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/analysis/README.md",
+      "type": "file",
+      "path": "tools/ant-hive-world/analysis/README.md",
+      "sha256": "ace97f6d44522f71183611465ee3336576c7044c2a06845afabcf839ab43bd0c",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/analysis/reward-ablation-sweep.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/analysis/reward-ablation-sweep.cjs",
+      "sha256": "6c0d76c6bb3066d832003a34d62e8ddc0ef3bcb096a0b7cadc2971f076511f91",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/analysis/reward-composition.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/analysis/reward-composition.cjs",
+      "sha256": "71b6dbe90ff11497b54824ea3745f330a4dbdba2f5791254c5994ae08bdc6a25",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/checkpoint-schema.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/checkpoint-schema.json",
+      "sha256": "b1bbddbe12c10f64cf98b1492bdced27273e2675942fe5bbd4c7b152280d77a9",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/checkpoint.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/checkpoint.js",
+      "sha256": "7fab8d04ac2a3e866ed593f3bb9e5f07dee5fe6be9e418fe4118f0d156f4d4d5",
+      "mode": 420
+    },
+    {
       "id": "file:tools/ant-hive-world/dashboard.js",
       "type": "file",
       "path": "tools/ant-hive-world/dashboard.js",
-      "sha256": "d084d46143fde338c0ce01fc927f9e0b314090c1a38afeb7d957b38dc827edf0",
+      "sha256": "519487e479ebde3468380e6155654f305479f71a428020ead4a414b256df0560",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/dream/calibration.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/dream/calibration.js",
+      "sha256": "1749930ba7b5f6029daeb430d315be805dc93c076e215d42540ba867d3bb2ba0",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/dream/consequence-ledger.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/dream/consequence-ledger.js",
+      "sha256": "0ce73c715cdac10b4436abfead678bde8225c3cd66734f28c8948d7489d95075",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/dream/dream-composer.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/dream/dream-composer.js",
+      "sha256": "ed9f9aa7ae7bc3a4bd1f7c6e8d2ef498c3430cbfc04e669effe20af020ef9715",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/dream/dream-lane.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/dream/dream-lane.js",
+      "sha256": "d88a0c8b1664646e3432b77e7d7175e19d0f9fab8815ba6d183d9698ba269ba8",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/dream/dream-memory.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/dream/dream-memory.js",
+      "sha256": "3110078f86d9591b0a2b90714d3946fbe5b583ee91ee69b13fc5971b045a10dc",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/bridge_scene.xml",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/bridge_scene.xml",
+      "sha256": "6c06cc20b0724aea3b69d80c334110147751f79930c840b5e02795595fcf912c",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/bridge_step.py",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/bridge_step.py",
+      "sha256": "8430ad20a738a4097c4933907b46b942bba488feaeeb83b3125e66e3e219e7da",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/bridge-client.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/bridge-client.js",
+      "sha256": "4b8685b8604df75a22ff089b6a7921562a8dfd0f3f5b95b77ab1597fbbe8f528",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/bridge-network.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/bridge-network.js",
+      "sha256": "b6dc115d81498f5a86511f9372110c8dfd698e79d4cf89f16452eadd730bbe77",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/check-containment-gate.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/check-containment-gate.js",
+      "sha256": "a97c234bf909041979870c95d39e8282f7cc3f33d645539fc659a6c3294ecf7a",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/Dockerfile",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/Dockerfile",
+      "sha256": "7678b7340d3d9c567fcaf7788e368c10c9c40e59610a27032f13989db4b06adf",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/requirements-lock.txt",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/requirements-lock.txt",
+      "sha256": "e5c10c36a8d8ed18547e264b3255a7607278d5155d95fd874253b7fa2fe64987",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/verify-containment.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/verify-containment.js",
+      "sha256": "44fe62605c83d7b3c88194735bcd1d7c83a780a15ba5f35189960e1f871ae758",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/verify-s1-roundtrip.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/verify-s1-roundtrip.js",
+      "sha256": "f3697fa6f9b03d9b42d4f502d3f711037f65c981b4c73a8638e8b3136d587121",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/verify-s2-perception.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/verify-s2-perception.js",
+      "sha256": "95850f4d23697beaea877d2bb1d0730c6747c6a29186df933c4ddc60cbd3fa67",
       "mode": 420
     },
     {
@@ -9708,17 +10044,38 @@
       "mode": 420
     },
     {
+      "id": "file:tools/ant-hive-world/goal-evaluator.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/goal-evaluator.js",
+      "sha256": "e73b0fbe8db163f4ce7228de56395dc823c8a35f1800825b71612d1720507580",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/goal-packet-schema.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/goal-packet-schema.json",
+      "sha256": "f5195c92ad629d75b524f30d8047307a8d80883898d95e9e0fcf1ca454dc4c2e",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/goal-rehearsal-evidence-schema.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/goal-rehearsal-evidence-schema.json",
+      "sha256": "eb985455e603943049d6e64d0ad8696d33a3833a95015119580799005e2d01b6",
+      "mode": 420
+    },
+    {
       "id": "file:tools/ant-hive-world/harness.js",
       "type": "file",
       "path": "tools/ant-hive-world/harness.js",
-      "sha256": "ebde66c096f688ea95976f712e5cfa81d19ecd4ee7199298faad61f8ed913bd7",
+      "sha256": "82925053cd9cea93e66ff0c76e55df3766b4757515a93182769ab0767b014b42",
       "mode": 420
     },
     {
       "id": "file:tools/ant-hive-world/live-config.js",
       "type": "file",
       "path": "tools/ant-hive-world/live-config.js",
-      "sha256": "32f334e8bb75cb01df6f15400bd7c01503c4394f3afc32d1cb61aeed9632c7a0",
+      "sha256": "2eb0af9a45f655094a41de4fb97ed593aa0197acc2f1e6829411a66806a75ed3",
       "mode": 420
     },
     {
@@ -9757,17 +10114,31 @@
       "mode": 420
     },
     {
+      "id": "file:tools/ant-hive-world/planner-divergence-check.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/planner-divergence-check.cjs",
+      "sha256": "9835fa36aa167fd0de8d4f390f8f2e0a220f910db64f9f6011e53ad2f23c21c9",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/planner-lane.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/planner-lane.js",
+      "sha256": "8afd9f4aa24f947e20329344df1c8586f46c38308a100f9dd5d3d47c6322ab98",
+      "mode": 420
+    },
+    {
       "id": "file:tools/ant-hive-world/README.md",
       "type": "file",
       "path": "tools/ant-hive-world/README.md",
-      "sha256": "3e29f86bd6ecc45351d31531d07a9ae919f7335f86ef15a307571117f3ede92a",
+      "sha256": "91623545cafcac1567ce1b86272a1c9517224f25a24d00c38ce66198d7a2aaff",
       "mode": 420
     },
     {
       "id": "file:tools/ant-hive-world/run-live.js",
       "type": "file",
       "path": "tools/ant-hive-world/run-live.js",
-      "sha256": "1eabe9b85f1ada493f4034fb71ad17ae688fbed3c21665d161ff9360a4da9aec",
+      "sha256": "ef6bb89ac789cf8849ddf4e1bb1ee1c902ee657c76a04b15525fc34db3bacb5f",
       "mode": 420
     },
     {
@@ -9778,17 +10149,185 @@
       "mode": 420
     },
     {
+      "id": "file:tools/ant-hive-world/sweeper-lane.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/sweeper-lane.js",
+      "sha256": "e8a144ad39eae7e585ccb08c6c4dfd861dd5b202d12d107413e3c2aa91b60481",
+      "mode": 420
+    },
+    {
       "id": "file:tools/ant-hive-world/train-tick.js",
       "type": "file",
       "path": "tools/ant-hive-world/train-tick.js",
-      "sha256": "332e9898ef10dca8d726e53fac31f4abdd63e7cd99db13671cf13c0ca2cd61af",
+      "sha256": "de7f775df2c128623448a2c5cb354241ed8a2909576b508c9d778bb7c15d0b97",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/__tests__/deploy-state-corrections.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/__tests__/deploy-state-corrections.test.cjs",
+      "sha256": "214c5e260a99687d17cacc476de77e853ecb72604f66b8372589c9fd58c79a1c",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/deploy-state.jsonl",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/deploy-state.jsonl",
+      "sha256": "562407878f989f3762c855d945892240a7a4b8f4510918331607817a995617a8",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/import-index.jsonl",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/import-index.jsonl",
+      "sha256": "aad226e21c885323ce001b67be11ed57bb037ae5989b118954457b26573913fb",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/import-turn.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/import-turn.js",
+      "sha256": "e227fb099de5b3e3ff4285eacb3f8e7093dba9e3d378f36255333ca99ee5a228",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/README.md",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/README.md",
+      "sha256": "67b200060e2dba91b13f3646172db62e2f0bf243262231ae281e3163a1f942e5",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/schema.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/schema.json",
+      "sha256": "c8a536e8c18e2a67974f4f681b29609d91485625862ab7abacd7d6f7ab68c5a3",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/ue/AntSimV2.uproject",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/ue/AntSimV2.uproject",
+      "sha256": "910a86993ec10da65684c8d49163d5f54b3e791cb3f55e55bf6ed5b49d4a52ba",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/ue/Config/DefaultEngine.ini",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/ue/Config/DefaultEngine.ini",
+      "sha256": "d418abc5a8326359e8a6ef9f77b537d7d66929a64f70d2756255a911bd64f82c",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/ue/Config/DefaultGame.ini",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/ue/Config/DefaultGame.ini",
+      "sha256": "34f2aeb0593eeec463c84cae7d7a70742fbb063e289be609b0f709730584ee9f",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/ue/Content/Python/build_world.py",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/ue/Content/Python/build_world.py",
+      "sha256": "9072d895f08ca5888ce04610002b8e6edf3d070077ab179813d5031b8b7728da",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/ue/Content/Python/init_unreal.py",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/ue/Content/Python/init_unreal.py",
+      "sha256": "5f6321c247d7208e3999c42ace66ab364331823b267dcdc7b11cd3acebf039e2",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/ue/deploy.sh",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/ue/deploy.sh",
+      "sha256": "f895d5eaf6db2b5bda6c4ca8ceed6021aae949623ae8daf8c0b0e2cc52ca3479",
+      "mode": 493
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/ue/README.md",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/ue/README.md",
+      "sha256": "0dcc413caffffce5920822b41181352d13d60e1e231edbc8b3ecdfb830b527f1",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/ue/Tools/BuildLevel.ps1",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/ue/Tools/BuildLevel.ps1",
+      "sha256": "3c1136107786450534a66706cadfa5e0bdd1ce8d3e619cfa1b3c961877ca222d",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/unreal-import__baseline-3000-r6.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/unreal-import__baseline-3000-r6.json",
+      "sha256": "79f34b77e3bcf931705fa2aa9cb093560bb61c6752923599e7854e6a7ea424cb",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/unreal-import__baseline-3000-r7.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/unreal-import__baseline-3000-r7.json",
+      "sha256": "f198cc860c7be2fdde9b0d45e8a9c5fd1c4b7a744d93006c545fd3f2db20bc98",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/unreal-import__cc-turn1.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/unreal-import__cc-turn1.json",
+      "sha256": "92f661d5df5f13e24081cbb1f81071616fbdfbc5a22c0d588d468ede524381e2",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/unreal-import__cc-turn2.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/unreal-import__cc-turn2.json",
+      "sha256": "225ee6fe2fba98129d2a9e547ff1b2a4b6332ae7f563785595cfb79f2d63438d",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/unreal-import__cc-turn3.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/unreal-import__cc-turn3.json",
+      "sha256": "13829f0e180d39ac226622ee19542417b9d0c0ae59afd94da9ca73f2e462b6f0",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/unreal-import__tt-run-001-09a6c88b.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/unreal-import__tt-run-001-09a6c88b.json",
+      "sha256": "7eabac1d8cd0d502a727324f66763ae526f0fee343e1914636aa12d09578b528",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/unreal-import__tt-run-002r2-6028d083.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/unreal-import__tt-run-002r2-6028d083.json",
+      "sha256": "c813e8fccbf3c14ab5f52d32f0b351d12d1a19cc485471d6092f0487dee34650",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/unreal-import__tt-run-003-5c9cbe9d.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/unreal-import__tt-run-003-5c9cbe9d.json",
+      "sha256": "e71328c2ffc76dfac4cfeba5b39b2f8f4329de147a2f7fa613dc87743074ae15",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/watch-imports.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/watch-imports.js",
+      "sha256": "c4de88e1482d5795a5b9e95c9ec25c454b63aecbadfc1ece89a576667735fa8c",
       "mode": 420
     },
     {
       "id": "file:tools/ant-hive-world/untrained-network.js",
       "type": "file",
       "path": "tools/ant-hive-world/untrained-network.js",
-      "sha256": "bc9692acf7ff4e3c8c61738af983887629d5bd841553f2672db625f0adb237ce",
+      "sha256": "c79d621bab5d553f30690cd315d571d5cca0a34b6ab7d7fddd4e66307e4e6f29",
       "mode": 420
     },
     {
@@ -9799,24 +10338,45 @@
       "mode": 420
     },
     {
+      "id": "file:tools/ant-hive-world/verifier-breadth-check.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/verifier-breadth-check.cjs",
+      "sha256": "ea465b914036e0dfc5df949cc89c2d360f498816cb5de9db20f1ab735b659ed1",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/verifier-lane.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/verifier-lane.js",
+      "sha256": "53b8e7e063452f5a52ad54b7ba059564b7c59be8c59ad24abf58eb3dae39ea02",
+      "mode": 420
+    },
+    {
       "id": "file:tools/ant-hive-world/world-mind-harness.cjs",
       "type": "file",
       "path": "tools/ant-hive-world/world-mind-harness.cjs",
-      "sha256": "eab2f9c0a5e3c88956fc3efe3184b6e45c51ceccf730affd0b0a97cc612882ef",
+      "sha256": "65980773e5371b88f69a79eeaa3fe60506a30b5cbac2385927a64a21cf847b54",
       "mode": 420
     },
     {
       "id": "file:tools/ant-hive-world/world-mind.js",
       "type": "file",
       "path": "tools/ant-hive-world/world-mind.js",
-      "sha256": "09a87ac21b493ca4410bd381a15acd2351a1b7dc7eae467ceb464d68adaaaa0d",
+      "sha256": "6d079b2a3d48bc82ec35a8d5f527e2a75fab6a9c2142b4cbd9fbbeaf5bf0521a",
       "mode": 420
     },
     {
       "id": "file:tools/ant-hive-world/world-state.js",
       "type": "file",
       "path": "tools/ant-hive-world/world-state.js",
-      "sha256": "81847138a6171f99da9b8a238e64e58e235ba3c256921420acffc6e80070860d",
+      "sha256": "090dd3026a1770aeffad5b3598a44e507f4c4bd9dacee1aadd546c2355b12b7a",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/world-train.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/world-train.js",
+      "sha256": "0e2dd2e3d0491f4f58248f6e5733525f4038d1f7a23031afacfb188c23daea7c",
       "mode": 420
     },
     {
@@ -11118,7 +11678,7 @@
       "id": "file:tools/commands/handlers/new-session.cjs",
       "type": "file",
       "path": "tools/commands/handlers/new-session.cjs",
-      "sha256": "b0daec029400d5ed51e25a96f203f192db27327f81beb3092ab0ef3276447202",
+      "sha256": "beae8ec29486e22a83bffb54d5d685d4521fede823b9d9f811aeb1f1e0ae170e",
       "mode": 420
     },
     {
@@ -11153,7 +11713,7 @@
       "id": "file:tools/commands/handlers/shutdown.cjs",
       "type": "file",
       "path": "tools/commands/handlers/shutdown.cjs",
-      "sha256": "e1622e2918d7f8b1efc0b860012de465b60ae4c7d02e8d898155fafb1f7ee3a3",
+      "sha256": "ce50bee0424d4bd70267f6c1156f9fea746442f32ad9ccec8ffd7abb8be93d70",
       "mode": 420
     },
     {
@@ -13236,6 +13796,20 @@
       "mode": 420
     },
     {
+      "id": "file:tools/kernel/hooks/__tests__/dispatch-stop-failopen.test.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/__tests__/dispatch-stop-failopen.test.cjs",
+      "sha256": "c6f371cd3ed2d7a21e51d23642c2a688255006db556c70dfdc8183e1ef7610e8",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/kernel/hooks/__tests__/dispatch-userprompt-failopen.test.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/__tests__/dispatch-userprompt-failopen.test.cjs",
+      "sha256": "771dee97c859b57b88eb91730f944f7f2a80a46e2828d785cf9be0ab7c5a2a91",
+      "mode": 420
+    },
+    {
       "id": "file:tools/kernel/hooks/__tests__/once-per-session.test.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/__tests__/once-per-session.test.cjs",
@@ -13386,14 +13960,14 @@
       "id": "file:tools/kernel/hooks/dispatch-stop.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/dispatch-stop.cjs",
-      "sha256": "a7eb55ef358657251267097fafbd3d9fd80a7a1f3692ecae6c344b2ef68c1977",
+      "sha256": "134e5ec30a7a8765f8980f5ba74519e410c410cbc2315532eb53dc7ed4ea1329",
       "mode": 420
     },
     {
       "id": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/dispatch-userprompt.cjs",
-      "sha256": "f158cb755cf18e980af478a7bb2b8ea8661cf5b5e9503ba6fb3e694df2b27e33",
+      "sha256": "603fac5b2968f678faa50aaddd389d5c4b76298f276106e47f6d2de4a2ac06e2",
       "mode": 420
     },
     {
@@ -15822,7 +16396,7 @@
       "id": "file:tools/parity/build-wiring-graph.cjs",
       "type": "file",
       "path": "tools/parity/build-wiring-graph.cjs",
-      "sha256": "12c11bee283fac5ad6bc5b94efdf4bee972f9e40dd69d62cf200efbd1b2ab100",
+      "sha256": "ff4d8beaebd80701a06588312391da7969df90a4a9c0fa1ce7b96cb6e9ea04cf",
       "mode": 420
     },
     {
@@ -16897,6 +17471,13 @@
       "mode": 420
     },
     {
+      "id": "file:tools/sessions/__tests__/watcher-lifecycle.test.cjs",
+      "type": "file",
+      "path": "tools/sessions/__tests__/watcher-lifecycle.test.cjs",
+      "sha256": "e2fcc255ee9187cadb832e5842787ed0a3ea29ce633b730b7f1a58ddb344ef6a",
+      "mode": 420
+    },
+    {
       "id": "file:tools/sessions/boot-dead-session-reaper.cjs",
       "type": "file",
       "path": "tools/sessions/boot-dead-session-reaper.cjs",
@@ -16967,6 +17548,13 @@
       "mode": 420
     },
     {
+      "id": "file:tools/sessions/lib/resolve-session-id.cjs",
+      "type": "file",
+      "path": "tools/sessions/lib/resolve-session-id.cjs",
+      "sha256": "447966c8a7e34a07433b6a71e944b026de21eb70f22db6c6a965bb9c5cccd647",
+      "mode": 420
+    },
+    {
       "id": "file:tools/sessions/lib/resume-packet.cjs",
       "type": "file",
       "path": "tools/sessions/lib/resume-packet.cjs",
@@ -17006,6 +17594,13 @@
       "type": "file",
       "path": "tools/sessions/spawn-coordinator.cjs",
       "sha256": "381ea42012326efadb62d721b6cfd4ff4e307584a3d1491b88348a7170eb4d9b",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/sessions/watcher-lifecycle.cjs",
+      "type": "file",
+      "path": "tools/sessions/watcher-lifecycle.cjs",
+      "sha256": "7a1c9647db935c68c2161dafe8ac398363c48fa2d11aadf3fbcffbfd759ae682",
       "mode": 420
     },
     {
@@ -18343,6 +18938,272 @@
       "type": "file",
       "path": "tools/terminal/set-client-terminal-color.js",
       "sha256": "c3d4898c25d8fcb616298d283cd9d07548952051534974bd3d4bc401c9229cda",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/__fixtures__/charter-template-test-minimal.json",
+      "type": "file",
+      "path": "tools/ticktock/__fixtures__/charter-template-test-minimal.json",
+      "sha256": "4bfd0a53586c553b57d2fe93d692f2670689f3e2ab341fc8423accbec1236e78",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/__fixtures__/run-002r2-merge-not-clean.jsonl",
+      "type": "file",
+      "path": "tools/ticktock/__fixtures__/run-002r2-merge-not-clean.jsonl",
+      "sha256": "3c44b7dc826d1ae9da4ff72e7abefee9e4b2ed9149c91f86d5b9d958c1eb067f",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/__fixtures__/run-002r2-merge-not-clean.jsonl.anchor.json",
+      "type": "file",
+      "path": "tools/ticktock/__fixtures__/run-002r2-merge-not-clean.jsonl.anchor.json",
+      "sha256": "1699a1413d623c64196244801bd232a3654b773fbe6b690f840f7320b9bbe064",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/__fixtures__/stale-s4c-review-decision.20260812T040400Z.json",
+      "type": "file",
+      "path": "tools/ticktock/__fixtures__/stale-s4c-review-decision.20260812T040400Z.json",
+      "sha256": "6db99cf580eda1ce844e56b0c5589d9fd6ad5cf2bcee91b0c7ac505fe00af616",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/benchmark-colony-v1.json",
+      "type": "file",
+      "path": "tools/ticktock/benchmark-colony-v1.json",
+      "sha256": "2b18773a5fdfb4ed217c7391ae2fa60fe567ec05199eb5b32422d7bb0c471c94",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/canonical.cjs",
+      "type": "file",
+      "path": "tools/ticktock/canonical.cjs",
+      "sha256": "1bdc45d50778c89a62ae6af37bf352095105780836ef347ef1882d9defa89450",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/ceilings.cjs",
+      "type": "file",
+      "path": "tools/ticktock/ceilings.cjs",
+      "sha256": "c65c42e673efee4af46e2d52ba1c879ad31bc75748eb86c11fcd1640c240539b",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/charter-schema.json",
+      "type": "file",
+      "path": "tools/ticktock/charter-schema.json",
+      "sha256": "6290d333507ffd777888cfb3e0006d6792de6f52da9c4a382623c7154f569366",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/charter-template-run.json",
+      "type": "file",
+      "path": "tools/ticktock/charter-template-run.json",
+      "sha256": "43e78d0582c94000e55d89f5bf723c7629eaea0ccaf6ec956dc493f5073d592f",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/charter.cjs",
+      "type": "file",
+      "path": "tools/ticktock/charter.cjs",
+      "sha256": "745f06900f75df6e9c224cf40f066f37b0b9ec716873ccb988cbc65401ff0f56",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/cycle-driver.cjs",
+      "type": "file",
+      "path": "tools/ticktock/cycle-driver.cjs",
+      "sha256": "64ae0dd85cb477effb3f53f4749a916a5a6bc19f6c88ac68bca0b4e0debf2db1",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/dryrun-s3.cjs",
+      "type": "file",
+      "path": "tools/ticktock/dryrun-s3.cjs",
+      "sha256": "5880214e5a9d2beb85d0f4f3d69a5edf664f46b47ae256fb21e2cc65d5aad20a",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/effectful-phase.cjs",
+      "type": "file",
+      "path": "tools/ticktock/effectful-phase.cjs",
+      "sha256": "360feec24a8e30f7dadd9d1700275f5044ff8d66f4ce453c1c1b712812ac3f5e",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/generation-manifest-schema.json",
+      "type": "file",
+      "path": "tools/ticktock/generation-manifest-schema.json",
+      "sha256": "b63ba5e01896cbecf573e5067ec432443fff31ac1e3186f72e5e45cff7410798",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/generation-manifest.cjs",
+      "type": "file",
+      "path": "tools/ticktock/generation-manifest.cjs",
+      "sha256": "d5a82d45aa45fc3b6479829827cad74017330b08e779c0137e11cd78ea2ac589",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/journal-schema.json",
+      "type": "file",
+      "path": "tools/ticktock/journal-schema.json",
+      "sha256": "0c6c1143556cde73567b4ce931ad5db936f702501892ec54ae2a6755b9d0a5e3",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/journal.cjs",
+      "type": "file",
+      "path": "tools/ticktock/journal.cjs",
+      "sha256": "a30bb7564a8f969b9e5b8799a8b4d804d2e2417f3b459333a537333a45e8f7de",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/lib/live-probe.cjs",
+      "type": "file",
+      "path": "tools/ticktock/lib/live-probe.cjs",
+      "sha256": "88bcf01b4b88134566fa69467c3e4dffe1fe52edec2b9415333123e006b48ca1",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/preflight-and-journal.cjs",
+      "type": "file",
+      "path": "tools/ticktock/preflight-and-journal.cjs",
+      "sha256": "4af28081e63825b2f1e6c610e0ff1fc7f8d59e0dbeafd7435e12f634f160bbfc",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/preflight-ticktock.cjs",
+      "type": "file",
+      "path": "tools/ticktock/preflight-ticktock.cjs",
+      "sha256": "f8dd9611882c6be0c880a69ed2d4c45c3d8bdb1908d8558ab08f0ce695c9abba",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/ratification-proposal-schema.json",
+      "type": "file",
+      "path": "tools/ticktock/ratification-proposal-schema.json",
+      "sha256": "87b0c79e6306a018105edb1bc48516cf6317e8fc33ee19fbce075813a57eaf04",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/ratification-proposal.cjs",
+      "type": "file",
+      "path": "tools/ticktock/ratification-proposal.cjs",
+      "sha256": "5f5dc306d473831ba822be540c6dcd3f8608ef787754bab27f30345e0d9b83d6",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/run-benchmark.js",
+      "type": "file",
+      "path": "tools/ticktock/run-benchmark.js",
+      "sha256": "954dda2743efe49657d65feafc518456b6f397ddff0dc821890478d66928829f",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-append-after-truncation.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-append-after-truncation.cjs",
+      "sha256": "8d0688748e3094f767f45a5cd9473624b135ada465d1f03acdeb736b5e8a1560",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-benchmark-halt-enum.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-benchmark-halt-enum.cjs",
+      "sha256": "2223348c1dd484b6f9ff5228c4891929371b1107994e3f440b42a03c774c3591",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-ceilings.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-ceilings.cjs",
+      "sha256": "f9eafb8520cd59944c2ef1044d70eb7d5290835835eb27b3a63613d2fb380941",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-cycle-driver-halts.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-cycle-driver-halts.cjs",
+      "sha256": "c2c061c0f7e92e992b24409a6ef698485d40c2e6dc0ae88d2f4afea0fd392493",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-drift-notice.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-drift-notice.cjs",
+      "sha256": "7584b7996a89ddf171526a03b4cb0c4ae4f33ab81ef364d5fe8d0d173404c28e",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-generation-manifest.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-generation-manifest.cjs",
+      "sha256": "ae6f697211d7994c8fb45b73f6fa95cea7aacbe40098446861ff1ba6476f55d1",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-hive-freeze.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-hive-freeze.cjs",
+      "sha256": "d339cac51ce38a201e08a3c3117b17d5499e4b8e4d8d13830a30b3734b32e9a3",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-journal-anchor.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-journal-anchor.cjs",
+      "sha256": "fe7755cdb56c6f5176d1e45a3646eb5fbe1f27c7bd9ee1e93c6eb883f53d4b06",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-preflight-live-probe.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-preflight-live-probe.cjs",
+      "sha256": "002fff29719c46a3583270cf7396b3673738a1e88ceacb7e52f5058b3a0e5f32",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-ratification-proposal.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-ratification-proposal.cjs",
+      "sha256": "86852a380cb11defdb638736dcb58fb0a2e724d44b4d0f3f759e671c72cf4338",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-rebaseline-frequency.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-rebaseline-frequency.cjs",
+      "sha256": "c5849097aad9d1ec811d16e8b263e1e1fe3bce0efa30ca3db9ec9652c5acff8d",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-resume-terminal-halts.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-resume-terminal-halts.cjs",
+      "sha256": "aef2731da4c82fbd99655464e198e2a22859bca81c42f016c0d336fdd0ed30ea",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-write-review-decision.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-write-review-decision.cjs",
+      "sha256": "a92b40a0993ef70de617c139abebd01c2fda96577e35f11eb24d612da42204ed",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/ticktock-review-decision-schema.json",
+      "type": "file",
+      "path": "tools/ticktock/ticktock-review-decision-schema.json",
+      "sha256": "60715533fa1f31c8c1124399065b5aea82b472b8f3b4034ad3f508db5af49ce2",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/write-review-decision.cjs",
+      "type": "file",
+      "path": "tools/ticktock/write-review-decision.cjs",
+      "sha256": "9b1c80c3c75f05bd911356c7c4288162fa559d348001e3d25ab4851cab6dc166",
       "mode": 420
     },
     {
@@ -20003,70 +20864,70 @@
       "name": "wordpress/seo-validation"
     },
     {
-      "id": "hook:PostToolUse:618",
+      "id": "hook:PostToolUse:620",
       "type": "hook",
       "event": "PostToolUse",
       "command_sha256": "e395bd31a35362065002007d044e98d86e484bf829d16ebe2027da8a928db52c"
     },
     {
-      "id": "hook:PreToolUse:615",
+      "id": "hook:PreToolUse:617",
       "type": "hook",
       "event": "PreToolUse",
       "command_sha256": "ce97f4fd7eb07f52a0e9c6352fab2ce0e803f0920ef184d8f42261a46580103b"
     },
     {
-      "id": "hook:SessionEnd:622",
+      "id": "hook:SessionEnd:624",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "35974852e367c31bae49591ac0aa4afd518ec624f233743462e37c4c3863b1ed"
     },
     {
-      "id": "hook:SessionEnd:623",
+      "id": "hook:SessionEnd:625",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "519f522b04afb8471aa7e7ca117deb8af91976de62b5c1f5f4f6f9f60c8c217f"
     },
     {
-      "id": "hook:SessionEnd:624",
+      "id": "hook:SessionEnd:626",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "4ee05b68abff34325a3950761939e20cf2391c7b29d640b29b95233d29943fd4"
     },
     {
-      "id": "hook:SessionStart:619",
+      "id": "hook:SessionStart:621",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "26962e5976f5c689361f18050bb4e718d507df72590fbbc620e356cde47cf86b"
     },
     {
-      "id": "hook:SessionStart:620",
+      "id": "hook:SessionStart:622",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "00253242784e7853b94e1125e7c69f31085961b2dd7b3d1fcb6b4c79d94e9baf"
     },
     {
-      "id": "hook:SessionStart:621",
+      "id": "hook:SessionStart:623",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "c738ce0e54e375f17b97f1186b95e5fd1125c0675d2f3e9238e872062f5b7076"
     },
     {
-      "id": "hook:Stop:616",
+      "id": "hook:Stop:618",
       "type": "hook",
       "event": "Stop",
-      "command_sha256": "c0c0282a10c1ff35c525d7786ceb380c853b678494f400dbf1fc178cdddcbb19"
+      "command_sha256": "4f226e828c37bc4a712aab7fb0158cc46e64d013ffa001531087941dfd30cca3"
     },
     {
-      "id": "hook:SubagentStop:625",
+      "id": "hook:SubagentStop:627",
       "type": "hook",
       "event": "SubagentStop",
       "command_sha256": "4ca0f2529c8dd4023ade83508a1e40a1728dbdcfa35aadf9ea953cf8ac9a587d"
     },
     {
-      "id": "hook:UserPromptSubmit:617",
+      "id": "hook:UserPromptSubmit:619",
       "type": "hook",
       "event": "UserPromptSubmit",
-      "command_sha256": "d647b60c73e5962cae00cf1cf2bd11d28472fdb8c47074a2e62cabf0e7e89545"
+      "command_sha256": "d4ad7e134fc41713541198d7a3573ced8aea291a0528477528b08ca3c5b1dfe7"
     },
     {
       "id": "installer-definition:frameworks/wordpress/qa/runner/tools/install-browsers.js",
@@ -22913,6 +23774,12 @@
       "command_sha256": "66f19f22112eb13c9cc5a6db948ecf21ed4049f4b1dfc1c2a2d3bf721af93e5e"
     },
     {
+      "id": "package-script:parity:baseline:repair",
+      "type": "package-script",
+      "name": "parity:baseline:repair",
+      "command_sha256": "e417724921acd6c0a3d17938e159de83a071015cab41769e63f2e134e906d314"
+    },
+    {
       "id": "package-script:parity:graph",
       "type": "package-script",
       "name": "parity:graph",
@@ -24231,6 +25098,11 @@
       "id": "skill-definition:store-credential",
       "type": "skill-definition",
       "name": "store-credential"
+    },
+    {
+      "id": "skill-definition:ticktock",
+      "type": "skill-definition",
+      "name": "ticktock"
     }
   ],
   "edges": [
@@ -24379,16 +25251,6 @@
       "required": true,
       "declared_target": "tools/workspace/validate-output.js",
       "resolution": "tracked"
-    },
-    {
-      "id": "010876cb845f35566878388ce954b78793a623b94a4f14f61c4e8bccc1a304cc",
-      "type": "hook-target",
-      "from": "hook:SessionStart:621",
-      "to": "file:tools/user/inject-mirror.cjs",
-      "target": "tools/user/inject-mirror.cjs",
-      "required": true,
-      "declared_target": "tools/user/inject-mirror.cjs",
-      "event": "SessionStart"
     },
     {
       "id": "010b30cc4fc72e0a32d1a8eeb743fc9727def556ce07ba0f75086bc91f020b4f",
@@ -24542,6 +25404,15 @@
       "target": "tools/telemetry/dispatches/lib/append-lock.cjs",
       "required": true,
       "specifier": "./append-lock.cjs"
+    },
+    {
+      "id": "0229ed42f0d397222601b584475f1751bb1405979646fdc5f226b105057f94d5",
+      "type": "static-import",
+      "from": "file:tools/ticktock/preflight-and-journal.cjs",
+      "to": "file:tools/ticktock/journal.cjs",
+      "target": "tools/ticktock/journal.cjs",
+      "required": true,
+      "specifier": "./journal.cjs"
     },
     {
       "id": "02458c7998df47bfda40658d77c178c673a2136a33595a374e8141e3194cdb9d",
@@ -25007,6 +25878,15 @@
       "specifier": "schema/subject-record.schema.json"
     },
     {
+      "id": "07b16a445346f4a97f28ad2cfc581af21ac57df61b42c7148d97ddb3d695b560",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/checkpoint.js",
+      "to": "file:tools/ant-hive-world/harness.js",
+      "target": "tools/ant-hive-world/harness.js",
+      "required": true,
+      "specifier": "./harness.js"
+    },
+    {
       "id": "07c6679b35af5c3572455d436a73173407c73009169a2b467cee33703703a0ef",
       "type": "static-import",
       "from": "file:tools/client-storage/__tests__/remote-retirement.test.js",
@@ -25088,6 +25968,15 @@
       "declared_target": "instructions/canonical/commands/claim-intake.yaml"
     },
     {
+      "id": "08e697d3bcb1d2c00706ab83438521f6cd1ace9d1e680556f526af0607b1a31e",
+      "type": "static-import",
+      "from": "file:tools/ticktock/dryrun-s3.cjs",
+      "to": "file:tools/ticktock/preflight-ticktock.cjs",
+      "target": "tools/ticktock/preflight-ticktock.cjs",
+      "required": true,
+      "specifier": "./preflight-ticktock.cjs"
+    },
+    {
       "id": "08f4103b96308f922f9d1a010a60bbef53508cf7da879753b89ae863e15e27a3",
       "type": "static-import",
       "from": "file:tools/runtime/hook-emulation.js",
@@ -25158,6 +26047,15 @@
       "target": "frameworks/wordpress/livecanvas-rebuild/guardrails.md",
       "required": true,
       "declared_target": "frameworks/wordpress/livecanvas-rebuild/guardrails.md"
+    },
+    {
+      "id": "09a50e8817919b7b5359a9ce041aa336868028c0548b7cea357e730e6165846c",
+      "type": "static-import",
+      "from": "file:tools/commands/handlers/shutdown.cjs",
+      "to": "file:tools/commands/lib/command-registry.cjs",
+      "target": "tools/commands/lib/command-registry.cjs",
+      "required": true,
+      "specifier": "../lib/command-registry.cjs"
     },
     {
       "id": "09dede0778becb0e0ce744e5e8fd3124394ce1e74f78bbe2e7b6e5c758450be9",
@@ -25478,6 +26376,15 @@
       "specifier": "../../schemas/recursive-actor-work-order.schema.json"
     },
     {
+      "id": "0c3603e1625680803af953b92a792ab461ac8cc0924340e86e47f064d76c3b72",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/train-tick.js",
+      "to": "file:tools/ant-hive-world/dream/dream-lane.js",
+      "target": "tools/ant-hive-world/dream/dream-lane.js",
+      "required": true,
+      "specifier": "./dream/dream-lane.js"
+    },
+    {
       "id": "0c3702f777a3373b3b27826af4dd2f77e9e1103f22f8271fd5aa7ca027cf3e50",
       "type": "command-alias-authority",
       "from": "command-definition:open-contract",
@@ -25744,6 +26651,15 @@
       "specifier": "./audit.cjs"
     },
     {
+      "id": "0f2bed0d5a63008e5411bf24da3bc7c6659aef18597cb44b1b84e964eaba8880",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/train-tick-triad-wiring.test.cjs",
+      "to": "file:tools/ant-hive-world/generate-blank-hive-seed.js",
+      "target": "tools/ant-hive-world/generate-blank-hive-seed.js",
+      "required": true,
+      "specifier": "../generate-blank-hive-seed.js"
+    },
+    {
       "id": "0f507813c73afc540be888c4835dd23588ca647f5a1fff256c230df5a358bc24",
       "type": "static-import",
       "from": "file:tools/verify/verify-report-claims.cjs",
@@ -25825,6 +26741,15 @@
       "required": true,
       "declared_target": "tools/ai-bridge/evidence-gather.js",
       "resolution": "tracked"
+    },
+    {
+      "id": "1085c15f159a1e70f5d4a3151bbde5ad18d44c20a6d4e4d820066aa48ec23ecc",
+      "type": "static-import",
+      "from": "file:tools/ticktock/preflight-and-journal.cjs",
+      "to": "file:tools/ticktock/preflight-ticktock.cjs",
+      "target": "tools/ticktock/preflight-ticktock.cjs",
+      "required": true,
+      "specifier": "./preflight-ticktock.cjs"
     },
     {
       "id": "109b5d66fcfe888e94801452f94fc4fd5a87d51a18dc35c66916ca0dd5fec0a4",
@@ -26054,6 +26979,15 @@
       "specifier": "./exact-comparator.cjs"
     },
     {
+      "id": "132efdaff0af6f018650e8c182090866cc6e35dffdd5a8d0fd0c9095700a1838",
+      "type": "static-import",
+      "from": "file:tools/ticktock/charter.cjs",
+      "to": "file:tools/ticktock/charter-schema.json",
+      "target": "tools/ticktock/charter-schema.json",
+      "required": true,
+      "specifier": "./charter-schema.json"
+    },
+    {
       "id": "1330ec17e1ab9888345806c40d5ca67fa69dd73398397e5b88c9f1f15e82e1d7",
       "type": "static-import",
       "from": "file:tools/signals/lib/signal-lifecycle-driver.js",
@@ -26061,6 +26995,15 @@
       "target": "tools/signals/lib/signal-lifecycle.js",
       "required": true,
       "specifier": "./signal-lifecycle"
+    },
+    {
+      "id": "1337a1ff15e3b51cae42edffbdc5e321518329a2e32c50653ae7d1b46e9fb77e",
+      "type": "static-import",
+      "from": "file:tools/commands/handlers/new-session.cjs",
+      "to": "file:tools/sessions/lib/resolve-session-id.cjs",
+      "target": "tools/sessions/lib/resolve-session-id.cjs",
+      "required": true,
+      "specifier": "../../sessions/lib/resolve-session-id.cjs"
     },
     {
       "id": "13455559636ce5926e263fd19a185743ca1ec8e0ce9b15c6d2ea0021a582548d",
@@ -26106,6 +27049,15 @@
       "target": ".claude/commands/council-of-owls.md",
       "required": true,
       "declared_target": ".claude/commands/council-of-owls.md"
+    },
+    {
+      "id": "1377cd3e409b3c02d03d3e2b56c065477fc20f82b63527f9bc9b0778ac0dc82f",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/verifier-breadth-check.cjs",
+      "to": "file:tools/ant-hive-world/harness.js",
+      "target": "tools/ant-hive-world/harness.js",
+      "required": true,
+      "specifier": "./harness.js"
     },
     {
       "id": "139d29197b962495ab57afe1cf81aede13ddeafae00a380242abab818b15c260",
@@ -26255,6 +27207,15 @@
       "specifier": "./client"
     },
     {
+      "id": "156039d9698a063ea61162c15958a685e221140f44f3d70c5bb7b1245684129a",
+      "type": "static-import",
+      "from": "file:tools/ticktock/dryrun-s3.cjs",
+      "to": "file:tools/ticktock/journal.cjs",
+      "target": "tools/ticktock/journal.cjs",
+      "required": true,
+      "specifier": "./journal.cjs"
+    },
+    {
       "id": "1589579c0f2339742e645a5aa91a2f51e575d6acf7f6d500dcc17b3c6e190e1a",
       "type": "operation-command",
       "from": "operation:ad-copy-dev",
@@ -26326,6 +27287,15 @@
       "target": "tools/sessions/boot-dead-session-reaper.cjs",
       "required": true,
       "specifier": "../boot-dead-session-reaper.cjs"
+    },
+    {
+      "id": "1680c6a82045c24af015ac3894c0296fc780a8890916fb475474ac12744d38d9",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/embodiment-bridge/verify-s1-roundtrip.js",
+      "to": "file:tools/ant-hive-world/embodiment-bridge/bridge-client.js",
+      "target": "tools/ant-hive-world/embodiment-bridge/bridge-client.js",
+      "required": true,
+      "specifier": "./bridge-client"
     },
     {
       "id": "16aed9d470bfbd97b6a7a5e73554be31628a9490ad90fb161824b1f5ccd8829f",
@@ -26520,6 +27490,15 @@
       "declared_target": ".claude/agents/framework-auditor.md"
     },
     {
+      "id": "181defdd030cd4fa4ab55f8655002ab854b23ef41ba4ead6d17595e62687cc6e",
+      "type": "static-import",
+      "from": "file:tools/ticktock/dryrun-s3.cjs",
+      "to": "file:tools/ticktock/canonical.cjs",
+      "target": "tools/ticktock/canonical.cjs",
+      "required": true,
+      "specifier": "./canonical.cjs"
+    },
+    {
       "id": "181f54ba88a547d151831c100a9130d5690e7e3e77c45e2bf1ba15cf84ee153b",
       "type": "command-definition-file",
       "from": "command-definition:crush-self-help",
@@ -26601,6 +27580,16 @@
       "specifier": "./lib/plan-dart-projection.js"
     },
     {
+      "id": "18e25f4aeed59304ff7e96a0ecaaa1e64f317cab2b7f7624bc2c21c96a5d1c0a",
+      "type": "hook-target",
+      "from": "hook:Stop:618",
+      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
+      "target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "event": "Stop"
+    },
+    {
       "id": "18e6544664fa5062e7e47538e378a2f7126287b3110743bb105ae8cb70cdd982",
       "type": "static-import",
       "from": "file:tools/planning/validate-task-plan.js",
@@ -26644,6 +27633,24 @@
       "target": ".claude/commands/audit-framework.md",
       "required": true,
       "declared_target": ".claude/commands/audit-framework.md"
+    },
+    {
+      "id": "1942bc0f2090a340129d20527b33d00de5551796206fc2e44ec45cf81c886311",
+      "type": "static-import",
+      "from": "file:tools/ticktock/cycle-driver.cjs",
+      "to": "file:tools/ticktock/journal.cjs",
+      "target": "tools/ticktock/journal.cjs",
+      "required": true,
+      "specifier": "./journal.cjs"
+    },
+    {
+      "id": "194dd400e9eaebf1d62d875db685dcfd4f806d1e2cb817b4270d7a4fcad95ee4",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/embodiment-bridge/bridge-network.js",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "../untrained-network.js"
     },
     {
       "id": "1955c2f476bb810a1c252a909c31982741ac02389d65b66f7dd2f41645586a09",
@@ -27505,6 +28512,15 @@
       "specifier": "../../../verify/lib/signal.cjs"
     },
     {
+      "id": "21966894abaccc7ea47a54631368cd0c929cb8239b73740999d47514cc70220b",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-rebaseline-frequency.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
+    },
+    {
       "id": "2196a53528dc6d99f9052f889e0a8e590d785d7cfa6013bf41e7795a43cfc216",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/rehearse-grimoire.md",
@@ -27830,6 +28846,15 @@
       "specifier": "./posttool-arc-transition.cjs"
     },
     {
+      "id": "24a5f1de1876251ce314ff11ed26e2a46e169298d4f041bb8386ed535166bd95",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/territory-verifier-blind-spot.test.cjs",
+      "to": "file:tools/ant-hive-world/train-tick.js",
+      "target": "tools/ant-hive-world/train-tick.js",
+      "required": true,
+      "specifier": "../train-tick.js"
+    },
+    {
       "id": "24b59326f21825065f5dceab0ae14233cf81cfd4730c3b563311f52550fbc388",
       "type": "schema-consumer",
       "from": "file:frameworks/paid-media/meta-creative-iteration/manifest.json",
@@ -27856,6 +28881,15 @@
       "target": "tools/mcp/google-ads/config.js",
       "required": true,
       "specifier": "../config"
+    },
+    {
+      "id": "24bcec0195c60d12d8fc757e9500634d4420c92f6abcf78183a3034d8044da97",
+      "type": "static-import",
+      "from": "file:tools/ticktock/charter.cjs",
+      "to": "file:tools/ticktock/canonical.cjs",
+      "target": "tools/ticktock/canonical.cjs",
+      "required": true,
+      "specifier": "./canonical.cjs"
     },
     {
       "id": "24d81a69bc15c6f73a7ca4ed9225dc9886090762e8c6d95fd621d2dc0634d2b9",
@@ -28057,6 +29091,15 @@
       "declared_target": "frameworks/wordpress/seo-validation/.claude/skills/seo-validation"
     },
     {
+      "id": "274fd600593fd333abed81e0c4ffdd58e5984cf97058ed5af0cbd704afad8d0f",
+      "type": "static-import",
+      "from": "file:tools/ticktock/ratification-proposal.cjs",
+      "to": "file:tools/ticktock/canonical.cjs",
+      "target": "tools/ticktock/canonical.cjs",
+      "required": true,
+      "specifier": "./canonical.cjs"
+    },
+    {
       "id": "27768fc91bc64b1e981563d98f21eb0f5539d0a47b9fedeb294e0ea5bc9e5bc4",
       "type": "operation-canonical",
       "from": "operation:fw-deliverables-version-reconciliation",
@@ -28239,6 +29282,15 @@
       "specifier": "../workspace/lib/args"
     },
     {
+      "id": "2a57ecd2ff9995ee5d6944c57329762bc0ceb13a1fb00ab1e1d52a183e4eb5ef",
+      "type": "static-import",
+      "from": "file:tools/ticktock/effectful-phase.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
+    },
+    {
       "id": "2a5a423f0468fd674fb091878d2510505c3eecfce14c7b7699cf82ced97f2d6d",
       "type": "static-import",
       "from": "file:tools/client-storage/backfill-metadata.js",
@@ -28300,6 +29352,15 @@
       "target": "tools/maintenance/lib/maintenance-disposition.schema.json",
       "required": true,
       "declared_target": "tools/maintenance/lib/maintenance-disposition.schema.json"
+    },
+    {
+      "id": "2b4066787dc3ac461899109f4c16bc9df258c257afdf52eeab5a729e1a6414ab",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/verifier-lane.js",
+      "to": "file:tools/ant-hive-world/harness.js",
+      "target": "tools/ant-hive-world/harness.js",
+      "required": true,
+      "specifier": "./harness.js"
     },
     {
       "id": "2b7e7555c58fdd1a0675dbb6e3e436cf467921ffb034646fed3bddc2813b740c",
@@ -28556,6 +29617,15 @@
       "resolution": "tracked"
     },
     {
+      "id": "2df964b1aa6fb44225036626c5b8798adf270c400181ce4e1f025bce5c0ad733",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/checkpoint.js",
+      "to": "file:tools/ant-hive-world/sweeper-lane.js",
+      "target": "tools/ant-hive-world/sweeper-lane.js",
+      "required": true,
+      "specifier": "./sweeper-lane.js"
+    },
+    {
       "id": "2e182ad4b07676716133bc4263a9a859163e8f64a1afe02342008b2c8e0616d2",
       "type": "static-import",
       "from": "file:tools/hygiene/auto-commit-governance-gate.verify.js",
@@ -28682,6 +29752,24 @@
       "target": "tools/kernel/lib/rest-trigger-evaluators.cjs",
       "required": true,
       "specifier": "../lib/rest-trigger-evaluators.cjs"
+    },
+    {
+      "id": "2f590d95422f391bb755b87efe27cc2bd9f6704ac2ea6dba9bebb2320fffed47",
+      "type": "static-import",
+      "from": "file:tools/commands/handlers/shutdown.cjs",
+      "to": "file:tools/verify/lib/signal.cjs",
+      "target": "tools/verify/lib/signal.cjs",
+      "required": true,
+      "specifier": "../../verify/lib/signal.cjs"
+    },
+    {
+      "id": "2fa63d3984eabbb52bb7ae9d8dce4f35374db2cd9f0d0f1a6bf7d7fb04c9e3ec",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-ceilings.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
     },
     {
       "id": "2fb3d90afec264e730fd92790f3c31151fff669e981ac557c5801f31c498400c",
@@ -29002,6 +30090,24 @@
       "declared_target": ".claude/commands/telemetry-status.md"
     },
     {
+      "id": "32b26594ecedfc79cba94cf928aa4003180f37ddbdcc3265c1469a783ad5a19f",
+      "type": "static-import",
+      "from": "file:tools/ticktock/cycle-driver.cjs",
+      "to": "file:tools/ticktock/ceilings.cjs",
+      "target": "tools/ticktock/ceilings.cjs",
+      "required": true,
+      "specifier": "./ceilings.cjs"
+    },
+    {
+      "id": "32b69143db771026f469fe5e92cf3cf1dd3083b41c909d0b239bee7942c5e784",
+      "type": "static-import",
+      "from": "file:tools/sessions/lib/resolve-session-id.cjs",
+      "to": "file:tools/sessions/lib/active-session-registry.js",
+      "target": "tools/sessions/lib/active-session-registry.js",
+      "required": true,
+      "specifier": "./active-session-registry.js"
+    },
+    {
       "id": "32d86cf9b073d71cd0141188278940232418e27192c38f6f9950b6fe86360467",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/fw-wordpress-seo-validation.md",
@@ -29148,6 +30254,15 @@
       "declared_target": "tools/workspace/schemas/loop-grade-record.schema.json"
     },
     {
+      "id": "3433e5710365a6ddc28ab2c5a25fb1140ee1b3efdc39554d74c3f7484e5a2b75",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/territory-verifier-blind-spot.test.cjs",
+      "to": "file:tools/ant-hive-world/world-state.js",
+      "target": "tools/ant-hive-world/world-state.js",
+      "required": true,
+      "specifier": "../world-state.js"
+    },
+    {
       "id": "3461110f4a02da69bed0ad7fb0c60cda29f747410b6b8889799ca271586c8a90",
       "type": "static-import",
       "from": "file:tools/signals/run-remote-ssh-bridge.js",
@@ -29200,6 +30315,15 @@
       "target": ".claude/commands/concept-promote.md",
       "required": true,
       "declared_target": ".claude/commands/concept-promote.md"
+    },
+    {
+      "id": "34b8139688cb18846c7c02f32fbf2a41fe24c1f94fd3e88bf3df86c31550a184",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-resume-terminal-halts.cjs",
+      "to": "file:tools/ticktock/journal-schema.json",
+      "target": "tools/ticktock/journal-schema.json",
+      "required": true,
+      "specifier": "./journal-schema.json"
     },
     {
       "id": "34cda32a72868f83a611faceca3213581da9f88124aaea9082000b7ca72ee300",
@@ -29485,6 +30609,24 @@
       "specifier": "./lib/signal.cjs"
     },
     {
+      "id": "371e3ea833670115c9e51736d1f1998f96d162a3b5fda0227f3cb9583b2824e9",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-drift-notice.cjs",
+      "to": "file:tools/ticktock/run-benchmark.js",
+      "target": "tools/ticktock/run-benchmark.js",
+      "required": true,
+      "specifier": "./run-benchmark.js"
+    },
+    {
+      "id": "373fa69d61a3661f7ca9a28474571c9a27c97a2f58949ac18d318428ccdd6c7d",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/train-tick.js",
+      "to": "file:tools/ant-hive-world/planner-lane.js",
+      "target": "tools/ant-hive-world/planner-lane.js",
+      "required": true,
+      "specifier": "./planner-lane.js"
+    },
+    {
       "id": "376cfc9ccaae2f45f588c2fe28a722b94dcee178555954399a10ac0cc8d71705",
       "type": "schema-consumer",
       "from": "file:tools/image-optimize/derivative-manifest.schema.json",
@@ -29538,6 +30680,15 @@
       "target": ".claude/commands/execute-plan.md",
       "required": true,
       "declared_target": ".claude/commands/execute-plan.md"
+    },
+    {
+      "id": "37c229e60ab55e5ff4c4af6351bdae08423ad2d6368336ee04490f9c0ea43fc9",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-benchmark-halt-enum.cjs",
+      "to": "file:tools/ticktock/run-benchmark.js",
+      "target": "tools/ticktock/run-benchmark.js",
+      "required": true,
+      "specifier": "./run-benchmark.js"
     },
     {
       "id": "37deca5c7086db7adcd23f4ee391a353e27b71f5ce61028634c0e3cdc2d64d78",
@@ -29620,16 +30771,6 @@
       "target": "tools/signals/lib/signal-lifecycle.js",
       "required": true,
       "specifier": "./lib/signal-lifecycle.js"
-    },
-    {
-      "id": "3898743addae021125ffd83b4e179a7aa179469f975f5e7826eba36bb6a64490",
-      "type": "hook-target",
-      "from": "hook:SubagentStop:625",
-      "to": "file:.claude/hooks/subagent-telemetry-writer.cjs",
-      "target": ".claude/hooks/subagent-telemetry-writer.cjs",
-      "required": true,
-      "declared_target": ".claude/hooks/subagent-telemetry-writer.cjs",
-      "event": "SubagentStop"
     },
     {
       "id": "389af8c09ddcf5918dd0128a09bd3bec58b34ea19cd4093eec7c0d3b4e0bdb1b",
@@ -30396,6 +31537,15 @@
       "declared_target": "frameworks/wordpress/qa/.claude/skills/qa"
     },
     {
+      "id": "3ff001be9c83104b1a8b00fe145ac61cf677f722ab4683d47871410c52becea0",
+      "type": "static-import",
+      "from": "file:tools/ticktock/preflight-and-journal.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
+    },
+    {
       "id": "3ff3fa7a9283da497ac84da8e8f3e171a31f3d409c3363ea14e69497a3a59550",
       "type": "static-import",
       "from": "file:tools/mcp/crm/config.js",
@@ -30558,6 +31708,15 @@
       "target": "tools/verify/convene-unlock.cjs",
       "required": true,
       "specifier": "../../convene-unlock.cjs"
+    },
+    {
+      "id": "41543dde5ead65abddd2af283a69a7bd0de7e6e4519b806548b46f9393e283aa",
+      "type": "static-import",
+      "from": "file:tools/ticktock/journal.cjs",
+      "to": "file:tools/ticktock/canonical.cjs",
+      "target": "tools/ticktock/canonical.cjs",
+      "required": true,
+      "specifier": "./canonical.cjs"
     },
     {
       "id": "41664895e8e488ac06f608bc2db8a3b89216bddd77029e3d9da087cffda0c6c8",
@@ -30918,6 +32077,15 @@
       "specifier": "../../verify/lib/signal.cjs"
     },
     {
+      "id": "453a453d483a4366bbb69bcfb237e67a25677dc2e85631a367fb5568d41d6fbc",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/embodiment-bridge/verify-s2-perception.js",
+      "to": "file:tools/ant-hive-world/embodiment-bridge/bridge-network.js",
+      "target": "tools/ant-hive-world/embodiment-bridge/bridge-network.js",
+      "required": true,
+      "specifier": "./bridge-network"
+    },
+    {
       "id": "45424a906310fe7f27a8ed7cc0b8c5eb4af9fe480e48ead79bed67a152afaf41",
       "type": "static-import",
       "from": "file:tools/hygiene/auto-commit.js",
@@ -31000,6 +32168,15 @@
       "required": true,
       "declared_target": "tools/workspace/generate-harness.js",
       "resolution": "tracked"
+    },
+    {
+      "id": "45d7f4ca45236e5b76d76a5a23542032955bccb8426579c0161d9e5ec914965e",
+      "type": "static-import",
+      "from": "file:tools/ticktock/cycle-driver.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
     },
     {
       "id": "45e548362839e3da85ca7d47dfed93020fe95b2408a296865d84042d06c54d9a",
@@ -31169,6 +32346,15 @@
       "authority": "system-status"
     },
     {
+      "id": "4750bbcfb1a198d6a3325532f3ac852c8cd0387da60d603a2a4c50285dc0606a",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/unreal-export/import-turn.js",
+      "to": "file:tools/ant-hive-world/unreal-export/schema.json",
+      "target": "tools/ant-hive-world/unreal-export/schema.json",
+      "required": true,
+      "specifier": "./schema.json"
+    },
+    {
       "id": "4775f6fc8320bc2406b91bf631c2b50fa3102361e146281d31affd914deb6f41",
       "type": "package-script-target",
       "from": "package-script:verify:guardrails",
@@ -31297,6 +32483,15 @@
       "specifier": "schemas/actor-work-order.schema.json"
     },
     {
+      "id": "4936960cdfffaa27dd5abe7b7523601482de8367eb2de84d8dccad34404a4c42",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/planner-divergence-check.test.cjs",
+      "to": "file:tools/ant-hive-world/planner-divergence-check.cjs",
+      "target": "tools/ant-hive-world/planner-divergence-check.cjs",
+      "required": true,
+      "specifier": "../planner-divergence-check.cjs"
+    },
+    {
       "id": "493d413e8424de4a8cb167dd7bc4af8637165f330054a52b3dce7d5f2c34aa7d",
       "type": "operation-canonical",
       "from": "operation:fw-wordpress-page-cro",
@@ -31394,16 +32589,6 @@
       "target": "tools/kernel/hooks/pretool-mutation-plan-gate.cjs",
       "required": true,
       "specifier": "./pretool-mutation-plan-gate.cjs"
-    },
-    {
-      "id": "4a69ed07bd29f06e426d1b2403f1c6ed5c650a88d8d4bd7aa4c00470bfa5199f",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:623",
-      "to": "file:tools/context/repo-awareness-closeout.cjs",
-      "target": "tools/context/repo-awareness-closeout.cjs",
-      "required": true,
-      "declared_target": "tools/context/repo-awareness-closeout.cjs",
-      "event": "SessionEnd"
     },
     {
       "id": "4a93eac1a376004015b9691bae752e2d10c1406553f7771721ea7a8fd54b1386",
@@ -31560,6 +32745,15 @@
       "specifier": "./lib/model-runtime"
     },
     {
+      "id": "4c557cbe862aa6bdff4d201968dc52fc70c3ff0840b92401ca0071f5b53608de",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/world-mind.js",
+      "to": "file:tools/ant-hive-world/world-train.js",
+      "target": "tools/ant-hive-world/world-train.js",
+      "required": true,
+      "specifier": "./world-train.js"
+    },
+    {
       "id": "4c69697fd438ffb7592abd67eaaaf4710d0c62231a77426c7661c93cb180294e",
       "type": "static-import",
       "from": "file:tools/google-ads/pmax-url-exclusions.js",
@@ -31586,6 +32780,15 @@
       "target": "tools/autonomy/schemas/run-log-entry.schema.json",
       "required": true,
       "declared_target": "tools/autonomy/schemas/run-log-entry.schema.json"
+    },
+    {
+      "id": "4c96510082daf8dc6c280e7a6f1094b21b945eeb7573662fa1bb137b1516bc0f",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/unreal-export/import-turn.js",
+      "to": "file:tools/ant-hive-world/mirror-detector.js",
+      "target": "tools/ant-hive-world/mirror-detector.js",
+      "required": true,
+      "specifier": "../mirror-detector.js"
     },
     {
       "id": "4c9f2655bcedcc8633f2d30deffbd883956c91d6a32bd65aa2a19f5fa4c145e6",
@@ -31706,6 +32909,16 @@
       "specifier": "../capability-probe.js"
     },
     {
+      "id": "4d3b76c049eca069cd781a23557369d9bf4b3f7b28f8c6d948f8fdc350345015",
+      "type": "package-script-target",
+      "from": "package-script:parity:baseline:repair",
+      "to": "file:tools/parity/surgical-baseline-repair.cjs",
+      "target": "tools/parity/surgical-baseline-repair.cjs",
+      "required": true,
+      "declared_target": "tools/parity/surgical-baseline-repair.cjs",
+      "resolution": "tracked"
+    },
+    {
       "id": "4d3c05b871232d58d2b6c6b74f6ebdfe90f80ac1e4a61e366ab7e82c78d7f9a6",
       "type": "schema-definition-file",
       "from": "schema-definition:tools/verify/schemas/settings.schema.json",
@@ -31722,6 +32935,15 @@
       "target": "tools/diagnostics/gtm-container-auditor/auditor.js",
       "required": true,
       "specifier": "./auditor"
+    },
+    {
+      "id": "4d7b1a08bca16ead68443059532b00e468fe1f426747117c6d5d19b9ec435038",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/world-state-replenishment.test.cjs",
+      "to": "file:tools/ant-hive-world/world-state.js",
+      "target": "tools/ant-hive-world/world-state.js",
+      "required": true,
+      "specifier": "../world-state.js"
     },
     {
       "id": "4d7b5ef8b265b936d73ed8fa63fcbc9cefd329e66f77e7d38d3575ca417dc835",
@@ -31789,6 +33011,15 @@
       "resolution": "tracked"
     },
     {
+      "id": "4e34955bc999836748408a56eb52e55cb5c47e91a589c47bdc926e48f5be489f",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/checkpoint.js",
+      "to": "file:tools/ant-hive-world/world-mind.js",
+      "target": "tools/ant-hive-world/world-mind.js",
+      "required": true,
+      "specifier": "./world-mind.js"
+    },
+    {
       "id": "4e609ba29d08bca203c7e6bde053ec4f0aa9d7f959dd0a882f0203146dabb375",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/fw-wordpress-design-mockup-validation.md",
@@ -31850,6 +33081,15 @@
       "target": "tools/seo-validation/lib/report.js",
       "required": true,
       "specifier": "./lib/report"
+    },
+    {
+      "id": "4fb9088cc6f618107ba9750f8a8a1684e22d2731f5e61216a877e4cb33e1f973",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/dream-lane.test.cjs",
+      "to": "file:tools/ant-hive-world/dream/dream-composer.js",
+      "target": "tools/ant-hive-world/dream/dream-composer.js",
+      "required": true,
+      "specifier": "../dream/dream-composer.js"
     },
     {
       "id": "4fc62f979a8949a651b24c42cf32d8e2dbe8a7e748fee323f0838d3dd919b54b",
@@ -31933,6 +33173,15 @@
       "declared_target": ".claude/commands/cast.md"
     },
     {
+      "id": "50b77d52a9db9b2b7d6c980f0e126f2f516697b028803ad20f600685a0ad2e20",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/dream-lane.test.cjs",
+      "to": "file:tools/ant-hive-world/dream/calibration.js",
+      "target": "tools/ant-hive-world/dream/calibration.js",
+      "required": true,
+      "specifier": "../dream/calibration.js"
+    },
+    {
       "id": "50c0517bd057631c7bc3efd1af8ac0c4c5060f63820d2230a7f421a387789b4c",
       "type": "schema-definition-file",
       "from": "schema-definition:tools/workspace/schemas/signal-entry.schema.json",
@@ -31959,6 +33208,15 @@
       "required": true,
       "declared_target": "tools/maintenance/status.js",
       "resolution": "tracked"
+    },
+    {
+      "id": "50d8f01c38559ca4126a14d03271c249c40cd6018643b5668935936cfcd73b9a",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/checkpoint-lane-state.test.cjs",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "../untrained-network.js"
     },
     {
       "id": "50dee5da475d8bdc5882b40ecb62549193ea801c0aee212d7bce3d712bdd2873",
@@ -32022,6 +33280,15 @@
       "target": "tools/codex/commands/telemetry-status.js",
       "required": true,
       "specifier": "../codex/commands/telemetry-status"
+    },
+    {
+      "id": "516510d3cf4efec791cb64be274ef2a9db2e5d6d06b29e894cb3c9c30d6bd0c6",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/verifier-lane.js",
+      "to": "file:tools/ant-hive-world/world-state.js",
+      "target": "tools/ant-hive-world/world-state.js",
+      "required": true,
+      "specifier": "./world-state.js"
     },
     {
       "id": "5176a33590ca6694d5c7f7bc86a1885ee1e45d9ade33a40418eb490b12449f5d",
@@ -32158,6 +33425,15 @@
       "target": ".claude/skills/evidence-loop/SKILL.md",
       "required": true,
       "declared_target": ".claude/skills/evidence-loop/SKILL.md"
+    },
+    {
+      "id": "538dc457147f832a2c07a02cb34e44e1df5abbb9222051ad661b28bb6ea8d8fe",
+      "type": "static-import",
+      "from": "file:tools/ticktock/charter.cjs",
+      "to": "file:tools/ticktock/charter-template-run.json",
+      "target": "tools/ticktock/charter-template-run.json",
+      "required": true,
+      "specifier": "./charter-template-run.json"
     },
     {
       "id": "53ade8c1bd87823ffa2e3b02052a132cc383eddc1b1c0e36350f9484de569bd7",
@@ -32356,6 +33632,15 @@
       "target": "frameworks/paid-media/campaign-management/.claude/agents/campaign-management",
       "required": true,
       "declared_target": "frameworks/paid-media/campaign-management/.claude/agents/campaign-management"
+    },
+    {
+      "id": "558b1bc0620cdc2a9b97a6c7610d2ee44388c6ac7b0f00097698c8c62029986a",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/dream-composer.test.cjs",
+      "to": "file:tools/ant-hive-world/dream/consequence-ledger.js",
+      "target": "tools/ant-hive-world/dream/consequence-ledger.js",
+      "required": true,
+      "specifier": "../dream/consequence-ledger.js"
     },
     {
       "id": "558cfd7bdf4a389afe3780184ac3eb2091ae3b3ad28abf48739c341f60967660",
@@ -32722,6 +34007,15 @@
       "specifier": "./adapters"
     },
     {
+      "id": "58a3db4d26f0fdb8aa30071f09873d1221c43eb9dce097f944f8ee4795184dc9",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/train-tick-triad-wiring.test.cjs",
+      "to": "file:tools/ant-hive-world/sweeper-lane.js",
+      "target": "tools/ant-hive-world/sweeper-lane.js",
+      "required": true,
+      "specifier": "../sweeper-lane.js"
+    },
+    {
       "id": "58b41c576b6b85e9b750816c44afecf61d29e6a543530757f084efc3ad64e41c",
       "type": "operation-command",
       "from": "operation:fw-wordpress-qa",
@@ -32738,6 +34032,15 @@
       "target": "tools/signals/lib/codex-bridge-hygiene.js",
       "required": true,
       "specifier": "./codex-bridge-hygiene"
+    },
+    {
+      "id": "58c4709d33835718e5210893f09ea089a83ebddb77721ed4b91b15ed887f81a0",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/planner-lane.test.cjs",
+      "to": "file:tools/ant-hive-world/planner-lane.js",
+      "target": "tools/ant-hive-world/planner-lane.js",
+      "required": true,
+      "specifier": "../planner-lane.js"
     },
     {
       "id": "58d25416b12cf01d6afb4e12e155d2d7d8bb08dab28e3ed2b3099cb71e642987",
@@ -32785,6 +34088,15 @@
       "specifier": "./bundle-paths.js"
     },
     {
+      "id": "59509e6299fe3f1fd9f57517064118b13bf15ae94243b67e9ac856f15eafbf48",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/verifier-breadth.test.cjs",
+      "to": "file:tools/ant-hive-world/verifier-lane.js",
+      "target": "tools/ant-hive-world/verifier-lane.js",
+      "required": true,
+      "specifier": "../verifier-lane.js"
+    },
+    {
       "id": "5955e89aa2643a79d877277801d14d9d1a9bea22b831bac11e6db8779a18eda5",
       "type": "static-import",
       "from": "file:tools/kernel/hooks/pretool-delegation-altitude.cjs",
@@ -32819,16 +34131,6 @@
       "target": "instructions/canonical/commands/new-framework.yaml",
       "required": true,
       "declared_target": "instructions/canonical/commands/new-framework.yaml"
-    },
-    {
-      "id": "59720247cd9aa4505470b0b65d6d2571e1a979e801a270fc30c19ae3db4e9e2a",
-      "type": "hook-target",
-      "from": "hook:UserPromptSubmit:617",
-      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
-      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-userprompt.cjs",
-      "event": "UserPromptSubmit"
     },
     {
       "id": "59a947778fe4d3ee88e566d21127a1d72557d7acd45ac676bfd239ac632153ab",
@@ -33012,6 +34314,15 @@
       "specifier": "./validate-run-plan.cjs"
     },
     {
+      "id": "5b660813ac007514a8ff2a4ba826869e68cbeb19f815bdeac6e1c62b46d43069",
+      "type": "static-import",
+      "from": "file:tools/ticktock/dryrun-s3.cjs",
+      "to": "file:tools/ticktock/ratification-proposal.cjs",
+      "target": "tools/ticktock/ratification-proposal.cjs",
+      "required": true,
+      "specifier": "./ratification-proposal.cjs"
+    },
+    {
       "id": "5b6ddca3a7b7dc1888a4c35a9a03ce5f0082d3b4614cf09bb8b4bf71afad1128",
       "type": "static-import",
       "from": "file:tools/bundle/generate-handoff-bundle.js",
@@ -33037,6 +34348,15 @@
       "target": "frameworks/paid-media/meta-creative-iteration/schemas/stage1-message-hypothesis.schema.json",
       "required": true,
       "specifier": "schemas/stage1-message-hypothesis.schema.json"
+    },
+    {
+      "id": "5b935ad2cb383a1252e0fe417f452f61d0fc01a5079a79ebfcfdee0e43f4ef2e",
+      "type": "static-import",
+      "from": "file:tools/ticktock/ratification-proposal.cjs",
+      "to": "file:tools/ticktock/ratification-proposal-schema.json",
+      "target": "tools/ticktock/ratification-proposal-schema.json",
+      "required": true,
+      "specifier": "./ratification-proposal-schema.json"
     },
     {
       "id": "5ba5160822dd9b7e49855bebe9cc4cf7cb7b84e02201b55fd398a056307c8fe6",
@@ -33305,6 +34625,15 @@
       "declared_target": ".claude/skills/prompt-refinement/SKILL.md"
     },
     {
+      "id": "5ed8fa4fb589e53f4dd237e7d826e690fbfa484f522f4d62ff56985471c8295c",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/territory-reassertion.test.cjs",
+      "to": "file:tools/ant-hive-world/harness.js",
+      "target": "tools/ant-hive-world/harness.js",
+      "required": true,
+      "specifier": "../harness.js"
+    },
+    {
       "id": "5eed464946b40a2f3bc5301c4a864560ccc3f303c6ae7adc963d48cfddb37277",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/plans.md",
@@ -33330,6 +34659,15 @@
       "target": "tools/mcp/delesign/tools.js",
       "required": true,
       "specifier": "./tools"
+    },
+    {
+      "id": "5ef8c915495d623991c96ed29f0a5cf3894711a8ef69eebac0aa06f474fe4c79",
+      "type": "static-import",
+      "from": "file:tools/ticktock/generation-manifest.cjs",
+      "to": "file:tools/ticktock/generation-manifest-schema.json",
+      "target": "tools/ticktock/generation-manifest-schema.json",
+      "required": true,
+      "specifier": "./generation-manifest-schema.json"
     },
     {
       "id": "5f54b32f8f2ebee9b0e41634a0d3353ee6f0ba136c71ad6a9800dcfd138c315e",
@@ -33469,6 +34807,15 @@
       "declared_target": "tools/instructions/lib/schema/canonical-system.schema.json"
     },
     {
+      "id": "6023c70a2bd084baf85839cd053d98e5f0d9b93c576d1dc73d342f8a42aa5670",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/embodiment-bridge/verify-s2-perception.js",
+      "to": "file:tools/ant-hive-world/embodiment-bridge/bridge-client.js",
+      "target": "tools/ant-hive-world/embodiment-bridge/bridge-client.js",
+      "required": true,
+      "specifier": "./bridge-client"
+    },
+    {
       "id": "602bfc2e10f274073faa511fb3214219ad87eca8182c2987abfc5dafb355700d",
       "type": "static-import",
       "from": "file:tools/oversight/status-report.js",
@@ -33476,6 +34823,15 @@
       "target": "tools/planning/lib/resolve-task-plan.js",
       "required": true,
       "specifier": "../planning/lib/resolve-task-plan"
+    },
+    {
+      "id": "602f4ce743a9eac97e7e5c621190d9abb10f553f8293fa165c7396a33ab06637",
+      "type": "static-import",
+      "from": "file:tools/ticktock/dryrun-s3.cjs",
+      "to": "file:tools/ticktock/ceilings.cjs",
+      "target": "tools/ticktock/ceilings.cjs",
+      "required": true,
+      "specifier": "./ceilings.cjs"
     },
     {
       "id": "607d1f7122688650593e2edf97e49755852501259f390d3e0f86e0970b26cbb2",
@@ -33595,6 +34951,15 @@
       "declared_target": "tools/verify/schemas/verification-signal-v1.0.schema.json"
     },
     {
+      "id": "61ce3bfbf71f4894539fbaa63fee70d15c855d25717e743faeaf53c457590c73",
+      "type": "static-import",
+      "from": "file:tools/ticktock/dryrun-s3.cjs",
+      "to": "file:tools/ticktock/generation-manifest.cjs",
+      "target": "tools/ticktock/generation-manifest.cjs",
+      "required": true,
+      "specifier": "./generation-manifest.cjs"
+    },
+    {
       "id": "61e3890adf6809b19c8600bcc77584515aa78bfb4b8e4a7f9ef952f18ac9e81c",
       "type": "static-import",
       "from": "file:tools/maintenance/end-session-closeout.js",
@@ -33613,6 +34978,15 @@
       "declared_target": "instructions/canonical/commands/fw-wordpress-analytics-tracking.yaml"
     },
     {
+      "id": "620a837869d75535a33fabc699d1f93a8f7469d15dd6838f0a9be05aa56eb311",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-ceilings.cjs",
+      "to": "file:tools/ticktock/ceilings.cjs",
+      "target": "tools/ticktock/ceilings.cjs",
+      "required": true,
+      "specifier": "./ceilings.cjs"
+    },
+    {
       "id": "621aa987e3b4ba39223fe26b9bedbf46c9fd3f3f04a1082ec2e4ebb5c30663b4",
       "type": "static-import",
       "from": "file:tools/kernel/loop-protocol/rerun-fixtures.cjs",
@@ -33620,6 +34994,15 @@
       "target": "tools/planning/lib/loop-grade-record.js",
       "required": true,
       "specifier": "../../planning/lib/loop-grade-record.js"
+    },
+    {
+      "id": "621c246eca4caae58c87e0905c449af2c3ebc3046083d06dec8996b3697829b9",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/gather-yield.test.cjs",
+      "to": "file:tools/ant-hive-world/live-config.js",
+      "target": "tools/ant-hive-world/live-config.js",
+      "required": true,
+      "specifier": "../live-config.js"
     },
     {
       "id": "6255b6675de52f5b509a824ecc3f176f423f63ab6ac8dd5e1c259a7b8ab041f6",
@@ -33631,6 +35014,15 @@
       "declared_target": "tools/autonomy/schemas/task-profile.schema.json"
     },
     {
+      "id": "629e5ab567f500d3660ecf212c8d515a941983097ef4a9e3db842f5ccc99c491",
+      "type": "static-import",
+      "from": "file:tools/ticktock/preflight-ticktock.cjs",
+      "to": "file:tools/ticktock/lib/live-probe.cjs",
+      "target": "tools/ticktock/lib/live-probe.cjs",
+      "required": true,
+      "specifier": "./lib/live-probe.cjs"
+    },
+    {
       "id": "62e3f23f868397d5eb86238aa087ef957448f042ea013b487310d9098e09a374",
       "type": "static-import",
       "from": "file:tools/mcp/google-ads/l0-diagnostic-pull.js",
@@ -33638,6 +35030,15 @@
       "target": "tools/mcp/google-ads/config.js",
       "required": true,
       "specifier": "./config"
+    },
+    {
+      "id": "6310bb3abd1f5e28ffe8bf17faaa7e31481efc2c84a8aae77b813c5415d443ce",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/dream-composer.test.cjs",
+      "to": "file:tools/ant-hive-world/dream/dream-composer.js",
+      "target": "tools/ant-hive-world/dream/dream-composer.js",
+      "required": true,
+      "specifier": "../dream/dream-composer.js"
     },
     {
       "id": "6313601e4273b4743fd5acc548c133a260e26094670b9ed5603c34f6f7de7968",
@@ -33758,6 +35159,15 @@
       "specifier": "./handlers/shutdown.cjs"
     },
     {
+      "id": "64246820fa7e62ded70bf0e2059ec5515763379751a83213bbebb20e4cdd1920",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/dream-lane.test.cjs",
+      "to": "file:tools/ant-hive-world/dream/dream-lane.js",
+      "target": "tools/ant-hive-world/dream/dream-lane.js",
+      "required": true,
+      "specifier": "../dream/dream-lane.js"
+    },
+    {
       "id": "64288d64d78210b176a2ee7f8d28843fcf6d861f96433c087fd1be2ca61ae3e4",
       "type": "schema-definition-file",
       "from": "schema-definition:tools/signals/schemas/signal-authority-decision.schema.json",
@@ -33803,6 +35213,15 @@
       "target": "tools/verify/schemas/review-packet.schema.json",
       "required": true,
       "declared_target": "tools/verify/schemas/review-packet.schema.json"
+    },
+    {
+      "id": "64d8887d508e0b22115c037ab07807541a977046d02101a29b6945f39d5991ec",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/dream-composer.test.cjs",
+      "to": "file:tools/ant-hive-world/dream/calibration.js",
+      "target": "tools/ant-hive-world/dream/calibration.js",
+      "required": true,
+      "specifier": "../dream/calibration.js"
     },
     {
       "id": "64fcd4ee17957c98fa5de34b4a601ee8cb096197aff585a9d2713eb77f0c2fb4",
@@ -34652,16 +36071,6 @@
       "specifier": "../posttool-write-ledger.cjs"
     },
     {
-      "id": "6d00d4ee85d43a86503c1d70ffb236c552b82dfc3dc788880531feb158ffb8e6",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:622",
-      "to": "file:tools/hooks/session-lifecycle/session-end-close.cjs",
-      "target": "tools/hooks/session-lifecycle/session-end-close.cjs",
-      "required": true,
-      "declared_target": "tools/hooks/session-lifecycle/session-end-close.cjs",
-      "event": "SessionEnd"
-    },
-    {
       "id": "6d0272d6f7e6f08fe3965bce188ec3804dfd4e41a7492e16f3c48ac0a8f9a498",
       "type": "manifest-target",
       "from": "manifest-path:.claude/skills/dl/SKILL.md",
@@ -34990,6 +36399,15 @@
       "specifier": "./lib/codex-auto"
     },
     {
+      "id": "6fee099cfeb325c8c2da0cef129ba20216bb75160c221ab1c4b67b48221e25cd",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/train-tick.js",
+      "to": "file:tools/ant-hive-world/sweeper-lane.js",
+      "target": "tools/ant-hive-world/sweeper-lane.js",
+      "required": true,
+      "specifier": "./sweeper-lane.js"
+    },
+    {
       "id": "6ffd6e38560f5c1ab786c9994b54f524a9d9c36309043277cdfa88154889d554",
       "type": "static-import",
       "from": "file:tools/memory/dependency-edge/write-edges.js",
@@ -35270,6 +36688,15 @@
       "declared_target": ".claude/commands/invoke.md"
     },
     {
+      "id": "71ba1b18c6006ce8acec58f3a0fa291d392737703ed1264406607e9993f1f4ad",
+      "type": "static-import",
+      "from": "file:tools/commands/handlers/shutdown.cjs",
+      "to": "file:tools/commands/lib/command-aliases.cjs",
+      "target": "tools/commands/lib/command-aliases.cjs",
+      "required": true,
+      "specifier": "../lib/command-aliases.cjs"
+    },
+    {
       "id": "71badc5e23c85ec46a228534fd4ed43101c0651b71f4ea459ed8a76fc23fe951",
       "type": "static-import",
       "from": "file:tools/ant-hive-world/__tests__/dashboard.test.cjs",
@@ -35358,6 +36785,15 @@
       "target": "tools/instructions/lib/io.js",
       "required": true,
       "specifier": "./lib/io"
+    },
+    {
+      "id": "72c505cdec8bef502aa5ad31c5b2b0b98ba94b5e1e0148ad3b611914a63a9f01",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-preflight-live-probe.cjs",
+      "to": "file:tools/ticktock/preflight-ticktock.cjs",
+      "target": "tools/ticktock/preflight-ticktock.cjs",
+      "required": true,
+      "specifier": "./preflight-ticktock.cjs"
     },
     {
       "id": "72cb031c46f43f80b05a88d404eaa198b64dd246c6cebf6c0e54c82c31af24d9",
@@ -35469,6 +36905,15 @@
       "target": ".claude/skills/clean-house/SKILL.md",
       "required": true,
       "declared_target": ".claude/skills/clean-house/SKILL.md"
+    },
+    {
+      "id": "744df473fdbda529b18676b5e96d926b2d95f7028a33094d6eb2a4a7ab73021a",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/dream/dream-composer.js",
+      "to": "file:tools/ant-hive-world/dream/calibration.js",
+      "target": "tools/ant-hive-world/dream/calibration.js",
+      "required": true,
+      "specifier": "./calibration.js"
     },
     {
       "id": "7452d3493907942983c615de66b701d81b355fad609489becd405e1975588441",
@@ -35635,6 +37080,15 @@
       "declared_target": ".claude/skills/lint-attributions/SKILL.md"
     },
     {
+      "id": "75c703554e500871ebeecd9be8dce5538affc589f978e3de2819c66f777e5d3e",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/train-tick-triad-wiring.test.cjs",
+      "to": "file:tools/ant-hive-world/train-tick.js",
+      "target": "tools/ant-hive-world/train-tick.js",
+      "required": true,
+      "specifier": "../train-tick.js"
+    },
+    {
       "id": "75d8cc0a99ca11f7e041d0865be033769025dd04896e5d0a55bf708801f2054b",
       "type": "static-import",
       "from": "file:tools/signals/lib/__tests__/bridge-prompt-review-only.test.js",
@@ -35651,6 +37105,15 @@
       "target": ".claude/commands/fw-wordpress-seo-audit.md",
       "required": true,
       "declared_target": ".claude/commands/fw-wordpress-seo-audit.md"
+    },
+    {
+      "id": "763c80c10d6da8e814ee7ae788f343b207c8e0aedec15a4a6a9a50056179e472",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/planner-lane.test.cjs",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "../untrained-network.js"
     },
     {
       "id": "765bc9afedf17c48fb9cea94a275a0786edd790663d0435cf5f6da80b7cddd15",
@@ -36116,14 +37579,13 @@
       "specifier": "../harness.js"
     },
     {
-      "id": "7bdb05ea8533d3cdc97faaec135096cedb3295e7f03810fba777ffe743461f51",
-      "type": "hook-target",
-      "from": "hook:SessionStart:620",
-      "to": "file:tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "id": "7c065e81f7ef4d25043f42ce44eb6505647e53c981260026ad8bd37de880bd55",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-preflight-live-probe.cjs",
+      "to": "file:tools/ticktock/lib/live-probe.cjs",
+      "target": "tools/ticktock/lib/live-probe.cjs",
       "required": true,
-      "declared_target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "event": "SessionStart"
+      "specifier": "./lib/live-probe.cjs"
     },
     {
       "id": "7c099639a7af92e5b3d9e2a4f98fa01e7d3c5463d3ac6c9994a2b4def8acde93",
@@ -36152,6 +37614,15 @@
       "required": true,
       "declared_target": ".claude/commands/new-client.md",
       "authority": "new-client"
+    },
+    {
+      "id": "7c30c5ae3248d6b376beb2d1749b8217cde4a3ab58988210ee15842718886e76",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-rebaseline-frequency.cjs",
+      "to": "file:tools/ticktock/run-benchmark.js",
+      "target": "tools/ticktock/run-benchmark.js",
+      "required": true,
+      "specifier": "./run-benchmark.js"
     },
     {
       "id": "7c30e28912c03ec4d6a2f0dd4cf99a23f4ab0301dd0a013c5956e2c833e95c0b",
@@ -36207,6 +37678,33 @@
       "target": "tools/planning/lib/resolve-task-plan.js",
       "required": true,
       "specifier": "../../planning/lib/resolve-task-plan"
+    },
+    {
+      "id": "7ca53cb6f12c21b8412a3ff46177f9cf38537cdcbc35661eb861bf5e5505d342",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/world-train.js",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "./untrained-network.js"
+    },
+    {
+      "id": "7cc4d845e4e7ce186f3fdd13b4765081bf4dd54d8f9e5c8099adbc7ce0ab691c",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/dream/dream-lane.js",
+      "to": "file:tools/ant-hive-world/dream/calibration.js",
+      "target": "tools/ant-hive-world/dream/calibration.js",
+      "required": true,
+      "specifier": "./calibration.js"
+    },
+    {
+      "id": "7cd4ece04ecf82d5a993d0ca05ecffc7c3797b974da1ef8f70703a0d122e3bf9",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-generation-manifest.cjs",
+      "to": "file:tools/ticktock/generation-manifest.cjs",
+      "target": "tools/ticktock/generation-manifest.cjs",
+      "required": true,
+      "specifier": "./generation-manifest.cjs"
     },
     {
       "id": "7ce80947899d170aba328e106400eeeb39a467a909f830411fa349157aab7c1a",
@@ -36291,6 +37789,16 @@
       "specifier": "../telemetry/dispatches/lib/emit-span.cjs"
     },
     {
+      "id": "7e26be47a156a113bdff91d299e6676208fd2ca5eca22ad312d7bf165c5ee9af",
+      "type": "hook-target",
+      "from": "hook:PostToolUse:620",
+      "to": "file:tools/kernel/hooks/dispatch-posttool.cjs",
+      "target": "tools/kernel/hooks/dispatch-posttool.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-posttool.cjs",
+      "event": "PostToolUse"
+    },
+    {
       "id": "7e27ac3487187db63a6dd98d4c91c8f981ecbf8eebf3016dce89d30b56b397f6",
       "type": "schema-definition-file",
       "from": "schema-definition:tools/framework-execution/compiler/framework-run-plan.schema.json",
@@ -36363,6 +37871,15 @@
       "specifier": "./lib/resolve-task-plan"
     },
     {
+      "id": "7eb8e20e983f46de3681a6614eff3842d7e58bf1dbb6cf7e12a437bdc41afe9b",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/dispatch-stop-failopen.test.cjs",
+      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
+      "target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "required": true,
+      "specifier": "../dispatch-stop.cjs"
+    },
+    {
       "id": "7ed237610dcfd6210477e0bdc832d2b9efe08208e4c6a93f8a553401544f3811",
       "type": "static-import",
       "from": "file:tools/kernel/loop-protocol/phase-question-loop.js",
@@ -36388,6 +37905,15 @@
       "target": "tools/mcp/google-ads/client.js",
       "required": true,
       "specifier": "./client"
+    },
+    {
+      "id": "7efd9e7c98022d1d84e424aa9e62a3b7fc6a6e7da862d501e70475786a046e7a",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/checkpoint-lane-state.test.cjs",
+      "to": "file:tools/ant-hive-world/checkpoint.js",
+      "target": "tools/ant-hive-world/checkpoint.js",
+      "required": true,
+      "specifier": "../checkpoint.js"
     },
     {
       "id": "7f3c331bcc2d52d91a30736c739ee7b133799d65e1f42dd3c83d865077f0c9ae",
@@ -36810,6 +38336,15 @@
       "declared_target": ".claude/commands/el.md"
     },
     {
+      "id": "82768f36fae9af63c4899fdbeb94be939586d280ea3f32ecedebf194c36489c8",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/gather-yield.test.cjs",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "../untrained-network.js"
+    },
+    {
       "id": "82ac19224af317f5a381065e3aaff0df1f2196f17ec6d5905de35dbcb8e4a7cb",
       "type": "command-alias-authority",
       "from": "command-definition:empower-grimoire",
@@ -37194,6 +38729,16 @@
       "specifier": "./model-registry"
     },
     {
+      "id": "8620d016571df905a8348f72c38996cd7d80bb23b77b87e67fd56190447c18e0",
+      "type": "hook-target",
+      "from": "hook:SessionStart:623",
+      "to": "file:tools/user/inject-mirror.cjs",
+      "target": "tools/user/inject-mirror.cjs",
+      "required": true,
+      "declared_target": "tools/user/inject-mirror.cjs",
+      "event": "SessionStart"
+    },
+    {
       "id": "8677095012523dec8766751b914ab17f9a0674f7e1f5baca2a06dd526eaf9c45",
       "type": "static-import",
       "from": "file:tools/commands/smos-command-runner.cjs",
@@ -37285,6 +38830,15 @@
       "specifier": "../../planning/lib/resolve-task-plan"
     },
     {
+      "id": "87599993d795ceac6b2f7ae69b144a2f8858e85cfeeef76282df40f36aeb66a5",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/reward-contract-v3.test.cjs",
+      "to": "file:tools/ant-hive-world/train-tick.js",
+      "target": "tools/ant-hive-world/train-tick.js",
+      "required": true,
+      "specifier": "../train-tick.js"
+    },
+    {
       "id": "87b4aeacb751c405fe1127191cf0462ee9b7eea9b8ae9f8a110006a574ac0c09",
       "type": "static-import",
       "from": "file:tools/commands/handlers/review-progress.cjs",
@@ -37329,6 +38883,15 @@
       "target": "tools/workspace/schemas/output-contract-v2.schema.json",
       "required": true,
       "declared_target": "tools/workspace/schemas/output-contract-v2.schema.json"
+    },
+    {
+      "id": "88246011841ae1cbf0b52d10d0d7fefc0e4798562e776176ca8d88f241ec7ab9",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/dream-lane.test.cjs",
+      "to": "file:tools/ant-hive-world/dream/dream-memory.js",
+      "target": "tools/ant-hive-world/dream/dream-memory.js",
+      "required": true,
+      "specifier": "../dream/dream-memory.js"
     },
     {
       "id": "8869425a0605e8db829731972f60b4378411afbea54d7c8ea115282c320baf21",
@@ -37459,6 +39022,15 @@
       "specifier": "../signal-lifecycle"
     },
     {
+      "id": "8a2cac8256a463314853316053a7fb26738701afe5465b6824c84c04ee04b33f",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/train-tick-triad-wiring.test.cjs",
+      "to": "file:tools/ant-hive-world/harness.js",
+      "target": "tools/ant-hive-world/harness.js",
+      "required": true,
+      "specifier": "../harness.js"
+    },
+    {
       "id": "8a3aeef43fd2f120c987e13805c68cf510166c38229e0e491233834eff1d6cde",
       "type": "command-definition-file",
       "from": "command-definition:execute-plan",
@@ -37540,6 +39112,15 @@
       "target": "frameworks/paid-media/google-ads-search-campaign-build/guardrails.md",
       "required": true,
       "declared_target": "frameworks/paid-media/google-ads-search-campaign-build/guardrails.md"
+    },
+    {
+      "id": "8b1e793a7c05e2d7c01c3753e1b9e66f08fada69887513d1494d081389dd5447",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/run-live.js",
+      "to": "file:tools/ant-hive-world/goal-evaluator.js",
+      "target": "tools/ant-hive-world/goal-evaluator.js",
+      "required": true,
+      "specifier": "./goal-evaluator.js"
     },
     {
       "id": "8b2dd8e2b556c55b26e9a3f7f98f70801adaba2d6df4a9bab86d6cb70cfb8c63",
@@ -37821,6 +39402,15 @@
       "declared_target": ".claude/skills/orchestrate-loop/SKILL.md"
     },
     {
+      "id": "8df901ede2a6b626a1d7df0cc012b41c7e6794abda8ca80ead1929951b9ea4e7",
+      "type": "static-import",
+      "from": "file:tools/ticktock/write-review-decision.cjs",
+      "to": "file:tools/ticktock/journal.cjs",
+      "target": "tools/ticktock/journal.cjs",
+      "required": true,
+      "specifier": "./journal.cjs"
+    },
+    {
       "id": "8e1f830a63896c639bd3888b8fece19f362351e381f6e1c7b568e9d8221ae5df",
       "type": "operation-canonical",
       "from": "operation:capture-task",
@@ -37837,6 +39427,15 @@
       "target": "tools/codex/commands/run-plan.js",
       "required": true,
       "specifier": "../run-plan"
+    },
+    {
+      "id": "8e76f01fc8b4ab6efd28315a22f2a46b778d0368a24d517d864d891c60b64ef9",
+      "type": "static-import",
+      "from": "file:tools/ticktock/run-benchmark.js",
+      "to": "file:tools/ticktock/canonical.cjs",
+      "target": "tools/ticktock/canonical.cjs",
+      "required": true,
+      "specifier": "./canonical.cjs"
     },
     {
       "id": "8e9aaa49841d2bcfd6e7658ebab991e23752c6dcc8510afe671bf2841e23c48b",
@@ -38086,6 +39685,16 @@
       "resolution": "tracked"
     },
     {
+      "id": "90acdad549ab9bec10ebb7dd28745709cb3108dee4e8b5a0a38fd23ab0810d4c",
+      "type": "hook-target",
+      "from": "hook:SubagentStop:627",
+      "to": "file:.claude/hooks/subagent-telemetry-writer.cjs",
+      "target": ".claude/hooks/subagent-telemetry-writer.cjs",
+      "required": true,
+      "declared_target": ".claude/hooks/subagent-telemetry-writer.cjs",
+      "event": "SubagentStop"
+    },
+    {
       "id": "90ce11dececd066783d72f1d8f4ca94aa9dc607c251709a913fadca6364ec3b0",
       "type": "framework-guardrails",
       "from": "framework:wordpress/analytics-tracking",
@@ -38140,6 +39749,15 @@
       "target": "tools/operator-guidance/schema.js",
       "required": true,
       "specifier": "./schema"
+    },
+    {
+      "id": "91a88afe375cc71a59c0dc0c6eded7ae47312076e49b1692fac585b410c9b566",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-benchmark-halt-enum.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
     },
     {
       "id": "91aa71e68aac96a3d3c31b82d84f431f38ada29af97698e0205592d07903f9e5",
@@ -38434,6 +40052,15 @@
       "declared_target": "instructions/canonical/commands/audit-framework.yaml"
     },
     {
+      "id": "94863a0d823cf219c1caf737471d6fdf931a1d73af34694ab4b427269d1fd0a5",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/unreal-export/__tests__/deploy-state-corrections.test.cjs",
+      "to": "file:tools/ant-hive-world/unreal-export/watch-imports.js",
+      "target": "tools/ant-hive-world/unreal-export/watch-imports.js",
+      "required": true,
+      "specifier": "../watch-imports.js"
+    },
+    {
       "id": "948fcc2dd8f674d77e1d7dce3e4a17dc71589d3b770e44fa90f491b463dff242",
       "type": "static-import",
       "from": "file:tools/planning/lib/__tests__/plan-execution-cursor.test.js",
@@ -38632,6 +40259,15 @@
       "declared_target": ".claude/guardrails.md"
     },
     {
+      "id": "96cba0e76257025500ec0878d05144207cbedb6b29a4816c5c027f94acaa4739",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-ceilings.cjs",
+      "to": "file:tools/ticktock/journal.cjs",
+      "target": "tools/ticktock/journal.cjs",
+      "required": true,
+      "specifier": "./journal.cjs"
+    },
+    {
       "id": "96cf0ca0db771113ef73c447419b6e499bfb449e372767fc217d8fdf130f6246",
       "type": "static-import",
       "from": "file:tools/sessions/write-boundary.cjs",
@@ -38657,6 +40293,15 @@
       "target": ".claude/agents/research-fetcher.md",
       "required": true,
       "declared_target": ".claude/agents/research-fetcher.md"
+    },
+    {
+      "id": "97174f1f48f203121f56bf9c18da8ea7c7a79095d3fa95764e918af42e96f454",
+      "type": "static-import",
+      "from": "file:tools/ticktock/dryrun-s3.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
     },
     {
       "id": "972b332f84b2dea1af1f6fef2d1f2eab03ed49d79ca75b87606c9948493f2948",
@@ -38732,6 +40377,15 @@
       "resolution": "tracked"
     },
     {
+      "id": "97fad472b2896e895cb72de28d811b77574e719f97239750e7aca3e074fe8141",
+      "type": "static-import",
+      "from": "file:tools/ticktock/ceilings.cjs",
+      "to": "file:tools/ticktock/journal.cjs",
+      "target": "tools/ticktock/journal.cjs",
+      "required": true,
+      "specifier": "./journal.cjs"
+    },
+    {
       "id": "981785bb40bd0a1720d38846c72508a9746e375d77e43b47b286337a63d5c8a6",
       "type": "static-import",
       "from": "file:tools/signals/lib/__tests__/run-openrouter-bridge.test.js",
@@ -38757,6 +40411,24 @@
       "target": "tools/ant-hive-world/harness.js",
       "required": true,
       "specifier": "../harness.js"
+    },
+    {
+      "id": "988bee498a463daeb862f4b70bfb38d2df060dbb42914a36a41c103b56e13950",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-ratification-proposal.cjs",
+      "to": "file:tools/ticktock/ratification-proposal.cjs",
+      "target": "tools/ticktock/ratification-proposal.cjs",
+      "required": true,
+      "specifier": "./ratification-proposal.cjs"
+    },
+    {
+      "id": "9893f3ed034a7b772d2e57e2d316b9d2d735c9632f984e3c907fb3860a792de2",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/dream-consequence-ledger.test.cjs",
+      "to": "file:tools/ant-hive-world/dream/consequence-ledger.js",
+      "target": "tools/ant-hive-world/dream/consequence-ledger.js",
+      "required": true,
+      "specifier": "../dream/consequence-ledger.js"
     },
     {
       "id": "98b5a0746051310fc745fe36f8005f979ce7157a72b811335adc76d6dda6f191",
@@ -38948,6 +40620,15 @@
       "target": ".claude/commands/amend-plan.md",
       "required": true,
       "declared_target": ".claude/commands/amend-plan.md"
+    },
+    {
+      "id": "9a2651ec01bed1624151d5ce8c7ea098710d1bfd124166e14b8e8b0625f7c5ce",
+      "type": "static-import",
+      "from": "file:tools/ticktock/cycle-driver.cjs",
+      "to": "file:tools/ticktock/run-benchmark.js",
+      "target": "tools/ticktock/run-benchmark.js",
+      "required": true,
+      "specifier": "./run-benchmark.js"
     },
     {
       "id": "9a2693a613f27d234092ebb802fba965fe6313d93a44410a037c2eb80a4b4304",
@@ -39369,6 +41050,15 @@
       "specifier": "./lib/csv.cjs"
     },
     {
+      "id": "9d13a752da25d57a59dd920977415decd3869a94113e465638a7723adae463d5",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/verifier-breadth-check.cjs",
+      "to": "file:tools/ant-hive-world/generate-blank-hive-seed.js",
+      "target": "tools/ant-hive-world/generate-blank-hive-seed.js",
+      "required": true,
+      "specifier": "./generate-blank-hive-seed.js"
+    },
+    {
       "id": "9d2065b3c391f080396fbf157a88f8c772bbb2aff0f2a3281e104e93afa1ca77",
       "type": "static-import",
       "from": "file:tools/notify/twilio-call.js",
@@ -39376,6 +41066,15 @@
       "target": "tools/notify/twilio-api.js",
       "required": true,
       "specifier": "./twilio-api"
+    },
+    {
+      "id": "9d257a28fb022c8b980c11caadbafb8bdd1aa58a8c51bdda6cd0102446ea306a",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/planner-divergence-check.cjs",
+      "to": "file:tools/ant-hive-world/planner-lane.js",
+      "target": "tools/ant-hive-world/planner-lane.js",
+      "required": true,
+      "specifier": "./planner-lane.js"
     },
     {
       "id": "9d280cc6bfdfff62eabffd3bf6f21c817c475c5d7aaa11024d9b0e6b24dbc8b5",
@@ -39479,6 +41178,15 @@
       "declared_target": ".claude/skills/audio-output/SKILL.md"
     },
     {
+      "id": "9db33c8f79f3bc5241684ebd2b5e1f6c26d3c803e448c85cb7e73518a6967bdb",
+      "type": "static-import",
+      "from": "file:tools/ticktock/generation-manifest.cjs",
+      "to": "file:tools/ticktock/canonical.cjs",
+      "target": "tools/ticktock/canonical.cjs",
+      "required": true,
+      "specifier": "./canonical.cjs"
+    },
+    {
       "id": "9dbf601205d147c0b1d9eda229e3b26c76f189a76bfa642683bd1641d8b51ec9",
       "type": "command-definition-file",
       "from": "command-definition:reconcile-lessons",
@@ -39551,6 +41259,15 @@
       "declared_target": ".claude/commands/bridge-speakers.md"
     },
     {
+      "id": "9e88e6acf770ea61a3c899387725d13a5d0668eb33836a4294a9b816726087a7",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-cycle-driver-halts.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
+    },
+    {
       "id": "9ea2c5d0be5b0d410f091dc14d6772bb6bced552964524077a7355e513c9a093",
       "type": "static-import",
       "from": "file:tools/signals/run-remote-ssh-bridge.js",
@@ -39560,6 +41277,15 @@
       "specifier": "../workspace/lib/args"
     },
     {
+      "id": "9ede74975f9cb5a022b081743b7e353bf2c4dcdf95c9685c2f0b1d4c72c7500b",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/dream/dream-lane.js",
+      "to": "file:tools/ant-hive-world/dream/dream-composer.js",
+      "target": "tools/ant-hive-world/dream/dream-composer.js",
+      "required": true,
+      "specifier": "./dream-composer.js"
+    },
+    {
       "id": "9ee7991059ac29ee800e727c157f61d2503efcaceb5d94346a9b625c23826250",
       "type": "operation-canonical",
       "from": "operation:fw-wordpress-design-research",
@@ -39567,6 +41293,15 @@
       "target": "instructions/canonical/commands/fw-wordpress-design-research.yaml",
       "required": true,
       "declared_target": "instructions/canonical/commands/fw-wordpress-design-research.yaml"
+    },
+    {
+      "id": "9f15afa8a9a3bbda67de182308e3baca269f54af741527dd06df92574e82c617",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-append-after-truncation.cjs",
+      "to": "file:tools/ticktock/journal.cjs",
+      "target": "tools/ticktock/journal.cjs",
+      "required": true,
+      "specifier": "./journal.cjs"
     },
     {
       "id": "9f19a09341028b1e49a34c4842dd85861050398a1dfee599f3d6df2807c0d6f7",
@@ -40071,6 +41806,15 @@
       "specifier": "../world-state.js"
     },
     {
+      "id": "a573dcc35a81cb1a4c34b81dbbbe26efc47d47c7298ca91cab36642bb72a8afe",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/planner-divergence-check.cjs",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "./untrained-network.js"
+    },
+    {
       "id": "a5754924edf1c8c5be543147e686d47ce1e64d28634537bfbd6b654061001de4",
       "type": "package-script-target",
       "from": "package-script:verify:scratch-leak",
@@ -40142,6 +41886,24 @@
       "target": ".claude/commands/gauntlet.md",
       "required": true,
       "declared_target": ".claude/commands/gauntlet.md"
+    },
+    {
+      "id": "a6477ff3a2c11f9245ccaa497e8ed5317b389d5ffbd7d0ee29ace9d57477970f",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-journal-anchor.cjs",
+      "to": "file:tools/ticktock/journal.cjs",
+      "target": "tools/ticktock/journal.cjs",
+      "required": true,
+      "specifier": "./journal.cjs"
+    },
+    {
+      "id": "a64fd435c208a37dff32341197fc4c830d1157f5ea93d220dee4ac6d53ca6d6d",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/world-state-replenishment.test.cjs",
+      "to": "file:tools/ant-hive-world/live-config.js",
+      "target": "tools/ant-hive-world/live-config.js",
+      "required": true,
+      "specifier": "../live-config.js"
     },
     {
       "id": "a66d216988706554b3298b044db12cfd3f66b30f6ae0fb9749f4fb11fb2f4202",
@@ -40245,16 +42007,6 @@
       "specifier": "../../reconciliation/lib/normalized-content-hash.cjs"
     },
     {
-      "id": "a73cba37b5d3bcf6692a838e1c010e32aac89531fe7f055ce424af8a54b5bbb3",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:624",
-      "to": "file:tools/sessions/session-end-boundary-log.cjs",
-      "target": "tools/sessions/session-end-boundary-log.cjs",
-      "required": true,
-      "declared_target": "tools/sessions/session-end-boundary-log.cjs",
-      "event": "SessionEnd"
-    },
-    {
       "id": "a7a3283534d10e3a2a5638f4f9429c82348a3831c36ee3f2fa1926f541809563",
       "type": "command-definition-file",
       "from": "command-definition:scry",
@@ -40262,16 +42014,6 @@
       "target": ".claude/commands/scry.md",
       "required": true,
       "declared_target": ".claude/commands/scry.md"
-    },
-    {
-      "id": "a7a460041535a987d121a417b308e5a3f548b5e755d71bbf13022fc0d8bfe448",
-      "type": "hook-target",
-      "from": "hook:Stop:616",
-      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
-      "target": "tools/kernel/hooks/dispatch-stop.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-stop.cjs",
-      "event": "Stop"
     },
     {
       "id": "a7be0bf0272974b419b9976895e2ba496de178fb47641c071605fb92af8a3554",
@@ -40364,6 +42106,15 @@
       "specifier": "../../dart-integration/lib/dart-api.js"
     },
     {
+      "id": "a8ad1b228260d6c7c7a6f31e1063f1cc679a442e6630ac577beb54ea767d1215",
+      "type": "static-import",
+      "from": "file:tools/ticktock/write-review-decision.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
+    },
+    {
       "id": "a8cf4cc22f31c8d24bfeee501a1c96cbf97addb4634e006534e7980ace4100e7",
       "type": "static-import",
       "from": "file:tools/verify/verify-agent.cjs",
@@ -40380,6 +42131,15 @@
       "target": "tools/commands/lib/command-aliases.cjs",
       "required": true,
       "specifier": "../../commands/lib/command-aliases.cjs"
+    },
+    {
+      "id": "a8eec0f7c23eb73c0c75fed791d995bdbf4e6679e837852b8312a39954d2370f",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/verifier-lane.test.cjs",
+      "to": "file:tools/ant-hive-world/verifier-lane.js",
+      "target": "tools/ant-hive-world/verifier-lane.js",
+      "required": true,
+      "specifier": "../verifier-lane.js"
     },
     {
       "id": "a8f6d64a2c5d44ac0f62b6e30df4e0f3865a298ae7a39135d211483ef87668da",
@@ -40425,6 +42185,15 @@
       "target": "frameworks/paid-media/google-ads-search-campaign-build/manifest.json",
       "required": true,
       "declared_target": "frameworks/paid-media/google-ads-search-campaign-build/manifest.json"
+    },
+    {
+      "id": "a94cd7cf7419e0abd6157f8720342f1efe2c3635d9db748a13ddee4e869a282d",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/run-live.js",
+      "to": "file:tools/ant-hive-world/dream/dream-memory.js",
+      "target": "tools/ant-hive-world/dream/dream-memory.js",
+      "required": true,
+      "specifier": "./dream/dream-memory.js"
     },
     {
       "id": "a9658f541fe3d93b3549760b1d72767ca8f4f035422530f183e765832c402cb5",
@@ -40715,6 +42484,15 @@
       "declared_target": ".claude/skills/prompt-refinement/SKILL.md"
     },
     {
+      "id": "ac9ec1057fcfd0cfc859ddaac0b98ea40e1c0724b0a85ab603fff12caa6c8e18",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/verifier-breadth-check.cjs",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "./untrained-network.js"
+    },
+    {
       "id": "acafb909b71668b6445d892ac063c7cad845d761a9dd6aa8cc567b99cef62e8f",
       "type": "static-import",
       "from": "file:tools/mcp/crm/probe.js",
@@ -40869,6 +42647,15 @@
       "specifier": "tools/workspace/schemas/verification-result.schema.json"
     },
     {
+      "id": "adf30658fd246c84224675e2c19c16bdbb94c731a25744cf04bc28801faa7b8a",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/territory-reassertion.test.cjs",
+      "to": "file:tools/ant-hive-world/generate-blank-hive-seed.js",
+      "target": "tools/ant-hive-world/generate-blank-hive-seed.js",
+      "required": true,
+      "specifier": "../generate-blank-hive-seed.js"
+    },
+    {
       "id": "adf4a40ee4b6360be5b4f468594826963148caa98fae5a59c6ea7573658d1522",
       "type": "static-import",
       "from": "file:tools/workspace/promote-candidate.js",
@@ -40979,6 +42766,15 @@
       "authority": "cast-grimoire"
     },
     {
+      "id": "aeb2792714776d50ea1247ad55a061da75ee42d5b15d0d6cb6dd6670475bd28d",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/territory-reassertion.test.cjs",
+      "to": "file:tools/ant-hive-world/checkpoint.js",
+      "target": "tools/ant-hive-world/checkpoint.js",
+      "required": true,
+      "specifier": "../checkpoint.js"
+    },
+    {
       "id": "aeb4e8ed4475eb56ba5c788fd941595ee3d7582e1f8f7a80f60796cec33d297e",
       "type": "schema-consumer",
       "from": "file:tools/memory/README.md",
@@ -41041,6 +42837,15 @@
       "target": "tools/verify/lib/signal.cjs",
       "required": true,
       "specifier": "./lib/signal.cjs"
+    },
+    {
+      "id": "afbdf6fe03479890330d1a0828fbd312c8fc0af47fe8dad4321117cbca86fd4b",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-cycle-driver-halts.cjs",
+      "to": "file:tools/ticktock/journal.cjs",
+      "target": "tools/ticktock/journal.cjs",
+      "required": true,
+      "specifier": "./journal.cjs"
     },
     {
       "id": "afd1e263b6891a8a1fcb040fd748e2322014a2eb3b383257542b0447b2010a8e",
@@ -41253,6 +43058,15 @@
       "specifier": "./lib/readers"
     },
     {
+      "id": "b165bbdcee03c7d4bb65cd7ac7517a8c9d7146be14aebc7a171fc33fb3d6ce06",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/dream/dream-lane.js",
+      "to": "file:tools/ant-hive-world/dream/consequence-ledger.js",
+      "target": "tools/ant-hive-world/dream/consequence-ledger.js",
+      "required": true,
+      "specifier": "./consequence-ledger.js"
+    },
+    {
       "id": "b17d93a87ec95e71f2a03476b3b238e0f67446e6b9e9e6f18a4ea472606ce744",
       "type": "operation-canonical",
       "from": "operation:amend-plan",
@@ -41287,6 +43101,16 @@
       "target": "frameworks/paid-media/google-ads-search-campaign-build/.claude/skills/google-ads-search-campaign-build",
       "required": true,
       "declared_target": "frameworks/paid-media/google-ads-search-campaign-build/.claude/skills/google-ads-search-campaign-build"
+    },
+    {
+      "id": "b1c59cb409a853fd6af6fcb3ef5dba51db75eda7ab50dcfffb8bd2939b5ce278",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:626",
+      "to": "file:tools/sessions/session-end-boundary-log.cjs",
+      "target": "tools/sessions/session-end-boundary-log.cjs",
+      "required": true,
+      "declared_target": "tools/sessions/session-end-boundary-log.cjs",
+      "event": "SessionEnd"
     },
     {
       "id": "b1c8f4bc66eae7747ca039cf68223593f613c5a80c651c32e28e33881451ff4c",
@@ -41525,6 +43349,15 @@
       "specifier": "../signals/lib/follow-signal"
     },
     {
+      "id": "b444cc7d09d0d06fc6c0353f03d1a1779ddbdebc589e573a78f092cc0abcd4b0",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-resume-terminal-halts.cjs",
+      "to": "file:tools/ticktock/journal.cjs",
+      "target": "tools/ticktock/journal.cjs",
+      "required": true,
+      "specifier": "./journal.cjs"
+    },
+    {
       "id": "b467fd42954f60cf682d47f4857f445c3441205196a810149d84c63d11faaf20",
       "type": "static-import",
       "from": "file:tools/client-storage/__tests__/classify.test.js",
@@ -41707,6 +43540,15 @@
       "declared_target": ".claude/commands/follow-signal.md"
     },
     {
+      "id": "b5d5ce83ab7c85e7f7f317a5ac016f84e89ebed3645db2c6e4d1e7f994c5b666",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-generation-manifest.cjs",
+      "to": "file:tools/ticktock/preflight-ticktock.cjs",
+      "target": "tools/ticktock/preflight-ticktock.cjs",
+      "required": true,
+      "specifier": "./preflight-ticktock.cjs"
+    },
+    {
       "id": "b5d8ef360d7289187fd524e800a3802ce231fb0f9239bbc41de850e27665b78c",
       "type": "static-import",
       "from": "file:tools/kernel/hooks/dispatch-pretool.cjs",
@@ -41770,6 +43612,15 @@
       "required": true,
       "declared_target": "tools/maintenance/declared-trigger-lint.cjs",
       "resolution": "tracked"
+    },
+    {
+      "id": "b6ca03da91b57826ccbe14accbd9d8ddbc9be1a1245368d646b15b9a43146567",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/checkpoint.js",
+      "to": "file:tools/ant-hive-world/checkpoint-schema.json",
+      "target": "tools/ant-hive-world/checkpoint-schema.json",
+      "required": true,
+      "specifier": "./checkpoint-schema.json"
     },
     {
       "id": "b6d4a7ec86be827d3de1dc89938ecc972f0eda23de68bd7c69c1cf93f6a4cb2c",
@@ -41926,6 +43777,15 @@
       "specifier": "../codex-auto"
     },
     {
+      "id": "b84cc2f2b16c324f30ba2cf35b8a4e4d517ac1a4852382167564e90c2deca1d2",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/train-tick-triad-wiring.test.cjs",
+      "to": "file:tools/ant-hive-world/planner-lane.js",
+      "target": "tools/ant-hive-world/planner-lane.js",
+      "required": true,
+      "specifier": "../planner-lane.js"
+    },
+    {
       "id": "b84f66f34e7e8a79144322ee4868bb699bd830bbd4b9d03b981c6a22e2fdb8e5",
       "type": "static-import",
       "from": "file:tools/signals/lib/__tests__/run-openrouter-jurisdiction-gate.test.js",
@@ -41979,6 +43839,15 @@
       "target": "tools/bundle/lib/fs.js",
       "required": true,
       "specifier": "./lib/fs.js"
+    },
+    {
+      "id": "b8ab1b04e21ce68638f711fdf4359ecb0b0347e9d0fee66baabe1d3bb01cc2eb",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/reward-contract-v3.test.cjs",
+      "to": "file:tools/ant-hive-world/live-config.js",
+      "target": "tools/ant-hive-world/live-config.js",
+      "required": true,
+      "specifier": "../live-config.js"
     },
     {
       "id": "b8ad2e89b1ba1f685a212702bd988ec687ae35725811de2483599775caf09ee3",
@@ -42071,6 +43940,15 @@
       "target": "tools/dart-integration/lib/dart-api.js",
       "required": true,
       "specifier": "./lib/dart-api"
+    },
+    {
+      "id": "ba07bbb3ab519a5965354e9a327e894a42c579c95d5b80498ee0351cb1b03a69",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/run-live.js",
+      "to": "file:tools/ant-hive-world/world-train.js",
+      "target": "tools/ant-hive-world/world-train.js",
+      "required": true,
+      "specifier": "./world-train.js"
     },
     {
       "id": "ba2e3e0dc5a10ec759fe823ba118c19bd4b2f9677cda5b2dc7e90d4b63a065b9",
@@ -42525,6 +44403,15 @@
       "declared_target": "frameworks/paid-media/meta-creative-iteration/guardrails.md"
     },
     {
+      "id": "bdadd397c1c328ddcde9a9003279424913ad8e937386660a7f7845bc559cdebe",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/world-state-torn-write.test.cjs",
+      "to": "file:tools/ant-hive-world/world-state.js",
+      "target": "tools/ant-hive-world/world-state.js",
+      "required": true,
+      "specifier": "../world-state.js"
+    },
+    {
       "id": "bdbff7de9d5fa1c7563e1b4c8b7fdf8b5723eb78ecc5e3ae834b9598087cb229",
       "type": "static-import",
       "from": "file:tools/maintenance/spider-council.js",
@@ -42586,6 +44473,15 @@
       "target": "tools/lib/creds.config.schema.json",
       "required": true,
       "declared_target": "tools/lib/creds.config.schema.json"
+    },
+    {
+      "id": "be5b6219d4d5cfe1393f79bd82cc8e3a71ae9518b83ce6ac0fcacfe6c5339887",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/reward-contract-v3.test.cjs",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "../untrained-network.js"
     },
     {
       "id": "be77282455679f48cf88182dcac23890a2aff01e317efc74e1ca10b6587b2f6b",
@@ -42688,6 +44584,15 @@
       "specifier": "./harness.js"
     },
     {
+      "id": "bf522b5f505fc5c8551cbe9944ae7763b9f78871bed191190f844c4cf4e73b66",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/dream/dream-lane.js",
+      "to": "file:tools/ant-hive-world/dream/dream-memory.js",
+      "target": "tools/ant-hive-world/dream/dream-memory.js",
+      "required": true,
+      "specifier": "./dream-memory.js"
+    },
+    {
       "id": "bf59d4cbc0a5d32d159761cb53cc0b564a5f07f5c6168d40b7a50176e5f14d07",
       "type": "static-import",
       "from": "file:tools/retrieval/component-match.cjs",
@@ -42743,6 +44648,16 @@
       "specifier": "./schema"
     },
     {
+      "id": "bfaa194e7a44c46baf25328be6a1610c8a7d32cd6c371f4b47eddceebea64a1a",
+      "type": "hook-target",
+      "from": "hook:PreToolUse:617",
+      "to": "file:tools/kernel/hooks/dispatch-pretool.cjs",
+      "target": "tools/kernel/hooks/dispatch-pretool.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-pretool.cjs",
+      "event": "PreToolUse"
+    },
+    {
       "id": "bfbd3f7bd664cac0ad3b56539e6ce20eca90183d5d42e3f5571124641607f9a4",
       "type": "static-import",
       "from": "file:tools/ai-bridge/lib/model-runtime.js",
@@ -42768,6 +44683,15 @@
       "target": "tools/workspace/lib/learning-ledger.js",
       "required": true,
       "specifier": "./lib/learning-ledger"
+    },
+    {
+      "id": "bff8f4a7581621fc0c547c918fd4d1756ddb8df7f88d679597f92e71f4d005a1",
+      "type": "static-import",
+      "from": "file:tools/commands/handlers/shutdown.cjs",
+      "to": "file:tools/sessions/boot-dead-session-reaper.cjs",
+      "target": "tools/sessions/boot-dead-session-reaper.cjs",
+      "required": true,
+      "specifier": "../../sessions/boot-dead-session-reaper.cjs"
     },
     {
       "id": "c0189c5f2605a84c388f3842c47ceab48b8f9598a31d88f43909be407a19be62",
@@ -42859,6 +44783,16 @@
       "target": "tools/workspace/lib/args.js",
       "required": true,
       "specifier": "../workspace/lib/args"
+    },
+    {
+      "id": "c16e5ac5666d51a42ec627177658c75c09326028cdb37a779077a9414b777b56",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:625",
+      "to": "file:tools/context/repo-awareness-closeout.cjs",
+      "target": "tools/context/repo-awareness-closeout.cjs",
+      "required": true,
+      "declared_target": "tools/context/repo-awareness-closeout.cjs",
+      "event": "SessionEnd"
     },
     {
       "id": "c1793462b5c9904162fa7c44219fb005b7a878934437a7b4f6f1bb1a1ac0c5fb",
@@ -43095,6 +45029,15 @@
       "specifier": "./export-public.cjs"
     },
     {
+      "id": "c48ce7e893971466a36399285eda1cbf50efa8fed446c8fea65b7670699dec61",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/dispatch-userprompt-failopen.test.cjs",
+      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
+      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "required": true,
+      "specifier": "../dispatch-userprompt.cjs"
+    },
+    {
       "id": "c497f294f4af89cc1f13919dde4faac19956158d65e72115f621b03adfc4419a",
       "type": "static-import",
       "from": "file:tools/kernel/hooks/__tests__/stop-closeout-evidence-gate.test.cjs",
@@ -43324,6 +45267,15 @@
       "required": true,
       "declared_target": "tools/launchd/install.sh",
       "resolution": "tracked"
+    },
+    {
+      "id": "c728ef04963323a869e95eaea0036973bb61df78b75c022c2a70ef6b838dcced",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-benchmark-halt-enum.cjs",
+      "to": "file:tools/ticktock/journal.cjs",
+      "target": "tools/ticktock/journal.cjs",
+      "required": true,
+      "specifier": "./journal.cjs"
     },
     {
       "id": "c7291b5e3b9748799a192c8ddba13c3f24985e08a05d22ed9cdb0112a3221e97",
@@ -43970,6 +45922,15 @@
       "specifier": "../../commands/__tests__/route-fixtures.cjs"
     },
     {
+      "id": "ce2219d6221dc145d01f9fe23fa17a9eb2dd9e8f3ad6a47db303ffdb753b6422",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/verifier-breadth-check.cjs",
+      "to": "file:tools/ant-hive-world/verifier-lane.js",
+      "target": "tools/ant-hive-world/verifier-lane.js",
+      "required": true,
+      "specifier": "./verifier-lane.js"
+    },
+    {
       "id": "ce25b5af1d0efc8407a4bc6e16f5fe77571685edc6b4d24bfba5d9a936290a82",
       "type": "command-definition-file",
       "from": "command-definition:chronicle",
@@ -44126,6 +46087,24 @@
       "resolution": "tracked"
     },
     {
+      "id": "cfa20c5015b56cd2da96be10a0f470e85e95ebc8f05298f83766cb5ee47eef09",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/checkpoint-lane-state.test.cjs",
+      "to": "file:tools/ant-hive-world/sweeper-lane.js",
+      "target": "tools/ant-hive-world/sweeper-lane.js",
+      "required": true,
+      "specifier": "../sweeper-lane.js"
+    },
+    {
+      "id": "cfc5e30e11de471950a6d599473aab4f377c9f02555fcb754a2db643a8e3cebe",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/planner-lane.js",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "./untrained-network.js"
+    },
+    {
       "id": "cfde0e224fada2b2b37a52e3ed09c4e75cf4631f521529be1ffa440e5301636f",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/reconcile-lessons.md",
@@ -44169,6 +46148,15 @@
       "target": "frameworks/media/video-editing/guardrails.md",
       "required": true,
       "declared_target": "frameworks/media/video-editing/guardrails.md"
+    },
+    {
+      "id": "d054a1a169591c8ae4c74b751232e73c5e54c8a3dc20cc5af0a62e024b0cfd42",
+      "type": "static-import",
+      "from": "file:tools/ticktock/preflight-ticktock.cjs",
+      "to": "file:tools/ticktock/ticktock-review-decision-schema.json",
+      "target": "tools/ticktock/ticktock-review-decision-schema.json",
+      "required": true,
+      "specifier": "./ticktock-review-decision-schema.json"
     },
     {
       "id": "d08051a1a07b80b0e153d3889629c020b21f090019f45735e8feea0abedfa40a",
@@ -44233,6 +46221,15 @@
       "target": "tools/planning/lib/handoff-authority-assessment.js",
       "required": true,
       "specifier": "../handoff-authority-assessment"
+    },
+    {
+      "id": "d11959f7a68c739fc7110a0655c19db98f46679f24a67c3119d2acfdb92fe8c0",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/planner-divergence-check.cjs",
+      "to": "file:tools/ant-hive-world/harness.js",
+      "target": "tools/ant-hive-world/harness.js",
+      "required": true,
+      "specifier": "./harness.js"
     },
     {
       "id": "d122ff4243abcc2da387a683842d6ace157906cfd649282124c3d3bbc1b120e2",
@@ -44360,16 +46357,6 @@
       "target": ".claude/commands/route.md",
       "required": true,
       "declared_target": ".claude/commands/route.md"
-    },
-    {
-      "id": "d2bf50ad880cf88f1a6e3aeea8e4400edf3ec6396af559ca8d82f3998e253aa0",
-      "type": "hook-target",
-      "from": "hook:PostToolUse:618",
-      "to": "file:tools/kernel/hooks/dispatch-posttool.cjs",
-      "target": "tools/kernel/hooks/dispatch-posttool.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-posttool.cjs",
-      "event": "PostToolUse"
     },
     {
       "id": "d2c83857e6f1794e65f75aadd6efaad3667549bac541221d8a7ec5d832ac2692",
@@ -44858,6 +46845,15 @@
       "specifier": "../live-signal-scanner"
     },
     {
+      "id": "d8102ea7265f84cc0992c2fae3029ca59c1a255c0d37b7c579d78e47e099c478",
+      "type": "static-import",
+      "from": "file:tools/ticktock/journal.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
+    },
+    {
       "id": "d81dc2bca909a4ff51b08eab2f9b846eec435f28cc295443fd8afb8507ffec15",
       "type": "operation-canonical",
       "from": "operation:extract-skill",
@@ -44966,6 +46962,15 @@
       "declared_target": ".claude/skills/propose-skill-capture/SKILL.md"
     },
     {
+      "id": "d98d96a5d170cf17a351eb80f70b7068eb193d681d732402dcb3d774675cdf1b",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/checkpoint.js",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "./untrained-network.js"
+    },
+    {
       "id": "d9ad4affd97fd86b6f401272d15b3885b3db3771be35bcaf363c2ae38249f6b7",
       "type": "static-import",
       "from": "file:tools/telemetry/dispatches/seed-root-trace.cjs",
@@ -44973,6 +46978,15 @@
       "target": "tools/telemetry/dispatches/lib/trace-context.cjs",
       "required": true,
       "specifier": "./lib/trace-context.cjs"
+    },
+    {
+      "id": "d9b7aaf0dd29748d24a11c36c520e3dc85c4007f09c1200c4cdc0b70a7381570",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/territory-verifier-blind-spot.test.cjs",
+      "to": "file:tools/ant-hive-world/generate-blank-hive-seed.js",
+      "target": "tools/ant-hive-world/generate-blank-hive-seed.js",
+      "required": true,
+      "specifier": "../generate-blank-hive-seed.js"
     },
     {
       "id": "d9fdc3458c9cb1aa79a7664ee8f16db2ea2dca8408c5b408c0034b4da52ead75",
@@ -45146,6 +47160,26 @@
       "specifier": "./lib.js"
     },
     {
+      "id": "db98d419e99d319228d09f145922bdf8f0fc1c191a158244d4f4511446ed9751",
+      "type": "hook-target",
+      "from": "hook:SessionStart:622",
+      "to": "file:tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "required": true,
+      "declared_target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "event": "SessionStart"
+    },
+    {
+      "id": "dbb7eb37d67288527794a4bfb62c8315cf82e9dd36e734c516399881e9736d2c",
+      "type": "hook-target",
+      "from": "hook:UserPromptSubmit:619",
+      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
+      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "event": "UserPromptSubmit"
+    },
+    {
       "id": "dbb8528b47366653ad83fedacef4b1e9d94f21527d3ff1c8817eb799412a71bb",
       "type": "schema-definition-file",
       "from": "schema-definition:frameworks/deliverables/presentation-review/schemas/output/slide-finding.schema.json",
@@ -45198,6 +47232,16 @@
       "target": ".claude/commands/el.md",
       "required": true,
       "declared_target": ".claude/commands/el.md"
+    },
+    {
+      "id": "dc95bb94a319efc972b5f8fdc3cd2c6f42fee99e4e0fc6c2e4a276dd5ee3f95d",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:624",
+      "to": "file:tools/hooks/session-lifecycle/session-end-close.cjs",
+      "target": "tools/hooks/session-lifecycle/session-end-close.cjs",
+      "required": true,
+      "declared_target": "tools/hooks/session-lifecycle/session-end-close.cjs",
+      "event": "SessionEnd"
     },
     {
       "id": "dc9fcd21524839f8bf74c7b6b4a4820f8d9e0f99fb7a6408ca77f91698fbf89d",
@@ -45433,6 +47477,24 @@
       "target": "tools/dart-integration/lib/perimeter-classifier-stub.js",
       "required": true,
       "specifier": "./perimeter-classifier-stub"
+    },
+    {
+      "id": "dec78694c486bdf534b6b9792023c3e4e1498892fc011f729973b4cb4349a762",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/planner-divergence-check.cjs",
+      "to": "file:tools/ant-hive-world/generate-blank-hive-seed.js",
+      "target": "tools/ant-hive-world/generate-blank-hive-seed.js",
+      "required": true,
+      "specifier": "./generate-blank-hive-seed.js"
+    },
+    {
+      "id": "decd8dddb3d44966eabc644698d16bd117ebd11c9967c8999cf299c3a4aad26f",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/verifier-breadth-check.cjs",
+      "to": "file:tools/ant-hive-world/world-state.js",
+      "target": "tools/ant-hive-world/world-state.js",
+      "required": true,
+      "specifier": "./world-state.js"
     },
     {
       "id": "ded720f0651c21dfe45b1ca6cb7bce8ea5584a0b66281da27b98adf32d850e24",
@@ -45701,6 +47763,15 @@
       "specifier": "./lib/fs"
     },
     {
+      "id": "e0a741447feb8976eaecdb5fb389fb448efdcf950921b5c19f9cfed43103dac5",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/dream-calibration.test.cjs",
+      "to": "file:tools/ant-hive-world/dream/calibration.js",
+      "target": "tools/ant-hive-world/dream/calibration.js",
+      "required": true,
+      "specifier": "../dream/calibration.js"
+    },
+    {
       "id": "e0aedb9d1c8e52d8d2eec567dec98e0c65e844f8831aea30a94a5547b4b277e6",
       "type": "schema-consumer",
       "from": "file:tools/memory/README.md",
@@ -45899,16 +47970,6 @@
       "required": true,
       "declared_target": "tools/news/watch-rss.js",
       "resolution": "tracked"
-    },
-    {
-      "id": "e21840f6ff7aacac1a776c3853c7b11d142bde244098b46fdb96865f2451c98d",
-      "type": "hook-target",
-      "from": "hook:PreToolUse:615",
-      "to": "file:tools/kernel/hooks/dispatch-pretool.cjs",
-      "target": "tools/kernel/hooks/dispatch-pretool.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-pretool.cjs",
-      "event": "PreToolUse"
     },
     {
       "id": "e238aa3df00f3b1d9156cef8f10067189627e200904f8980dfd77294c1237f6f",
@@ -46139,6 +48200,15 @@
       "declared_target": ".claude/commands/codex-self-help.md"
     },
     {
+      "id": "e44c23d0791e797b3a8fd5eef364a828ddf8af7f49bb5267e4ad3c514863697d",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/territory-verifier-blind-spot.test.cjs",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "../untrained-network.js"
+    },
+    {
       "id": "e45366a1da8ef0d5f85fdbc0d8d716789fc5991aa8a261bb7c4f433d4038f02c",
       "type": "static-import",
       "from": "file:tools/planning/component-index.cjs",
@@ -46146,6 +48216,15 @@
       "target": "tools/planning/lib/resolve-task-plan.js",
       "required": true,
       "specifier": "./lib/resolve-task-plan.js"
+    },
+    {
+      "id": "e45f24153490e7ad21dfdbecedcf7886642ee89f6c68734c97aa0e4af01095b4",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/train-tick-triad-wiring.test.cjs",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "../untrained-network.js"
     },
     {
       "id": "e49fb53e7b0a385e4a9d8a007fb3241320baf4aac747215785cf3b565ff6de7b",
@@ -46232,6 +48311,15 @@
       "id": "e56affba6c7631be906851d9d318b918b40aca230c502a02138fc35eb3096753",
       "type": "static-import",
       "from": "file:tools/ant-hive-world/__tests__/event-schema.test.cjs",
+      "to": "file:tools/ant-hive-world/harness.js",
+      "target": "tools/ant-hive-world/harness.js",
+      "required": true,
+      "specifier": "../harness.js"
+    },
+    {
+      "id": "e56f30c6c3a0ba4d4e6b0fdc108f9c7de1d75fe52a34d4ab84ecbeb3dabc65ec",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/territory-verifier-blind-spot.test.cjs",
       "to": "file:tools/ant-hive-world/harness.js",
       "target": "tools/ant-hive-world/harness.js",
       "required": true,
@@ -46473,6 +48561,15 @@
       "specifier": "./lib/compat-dispatch.cjs"
     },
     {
+      "id": "e81a02d124126854621359d405d5635c5eda836d97b6035018015994909af349",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/planner-divergence-check.cjs",
+      "to": "file:tools/ant-hive-world/train-tick.js",
+      "target": "tools/ant-hive-world/train-tick.js",
+      "required": true,
+      "specifier": "./train-tick.js"
+    },
+    {
       "id": "e847a818b36aaba785ad2abfc14646190eef6e945d4dcb5f27e96acb98f22a42",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/consult-oracle.md",
@@ -46528,6 +48625,15 @@
       "resolution": "tracked"
     },
     {
+      "id": "e8d233e62a96fbab55acbb8e52a4ddb6f3187068936df72833b470294e253179",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/sweeper-lane.test.cjs",
+      "to": "file:tools/ant-hive-world/sweeper-lane.js",
+      "target": "tools/ant-hive-world/sweeper-lane.js",
+      "required": true,
+      "specifier": "../sweeper-lane.js"
+    },
+    {
       "id": "e8dfdf0e27d90ce2ffe5d464c36922d151f96b0c6788fe6c4ad73583b5ddd4d6",
       "type": "static-import",
       "from": "file:tools/workspace/validate-output.js",
@@ -46555,6 +48661,15 @@
       "specifier": "./lib/checks.cjs"
     },
     {
+      "id": "e931503a26a89a0ec993bd8112d86358c9b3ea61c1e4c673c8d91ea81182f000",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/train-tick.js",
+      "to": "file:tools/ant-hive-world/verifier-lane.js",
+      "target": "tools/ant-hive-world/verifier-lane.js",
+      "required": true,
+      "specifier": "./verifier-lane.js"
+    },
+    {
       "id": "e9336d0f631547a4dbda82b9928984602635d79510f164c1f4f8e7245d60095e",
       "type": "static-import",
       "from": "file:tools/signals/__tests__/check-dispatch-coverage.test.cjs",
@@ -46562,6 +48677,15 @@
       "target": "tools/signals/check-dispatch-coverage.cjs",
       "required": true,
       "specifier": "../check-dispatch-coverage.cjs"
+    },
+    {
+      "id": "e93b9db718bd36719edb8c8d35822e566146957753820f0edeae4abf0eb73400",
+      "type": "static-import",
+      "from": "file:tools/sessions/__tests__/watcher-lifecycle.test.cjs",
+      "to": "file:tools/sessions/watcher-lifecycle.cjs",
+      "target": "tools/sessions/watcher-lifecycle.cjs",
+      "required": true,
+      "specifier": "../watcher-lifecycle.cjs"
     },
     {
       "id": "e958e58c41410fe2171c28db1eaf8e923d83210b9b2fe14a172d913a0ae70274",
@@ -46702,6 +48826,15 @@
       "specifier": "schemas/actor-registry.schema.json"
     },
     {
+      "id": "eaa686dfa974cc294064b73dcb1e30c9b7d6c479294c5014d015b9e6815005ce",
+      "type": "static-import",
+      "from": "file:tools/ticktock/journal.cjs",
+      "to": "file:tools/ticktock/journal-schema.json",
+      "target": "tools/ticktock/journal-schema.json",
+      "required": true,
+      "specifier": "./journal-schema.json"
+    },
+    {
       "id": "eab1ba2aa2519b8935eefe5881cba7f0e1d3502f7df4238ed2d8ebe4064de6d6",
       "type": "package-script-target",
       "from": "package-script:session:update",
@@ -46719,6 +48852,15 @@
       "target": "instructions/canonical/commands/plan-task.yaml",
       "required": true,
       "declared_target": "instructions/canonical/commands/plan-task.yaml"
+    },
+    {
+      "id": "eb16bed1c5f730df35a2f25a37b6a58675ab8e21401bc4a9a89bf4f5c2b4181e",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/on-policy-fix.test.cjs",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "../untrained-network.js"
     },
     {
       "id": "eb2eabc034637ebcd24516053bd22f815b632495291f75500860b67a39e74dae",
@@ -46975,16 +49117,6 @@
       "required": true,
       "declared_target": "tools/voice/smoke-discord-voice.py",
       "resolution": "tracked"
-    },
-    {
-      "id": "ed5cc2c555d88e14fc038e8157ff344bd9d9482f83048ad10113828a48c37731",
-      "type": "hook-target",
-      "from": "hook:SessionStart:619",
-      "to": "file:tools/kernel/hooks/dispatch-session-start.cjs",
-      "target": "tools/kernel/hooks/dispatch-session-start.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-session-start.cjs",
-      "event": "SessionStart"
     },
     {
       "id": "ed5d7e52fc999f49e6328d98a4484d5c95a69055856d9c4abf86a918c244dfb3",
@@ -47432,6 +49564,15 @@
       "specifier": "./native-promotion-gate.cjs"
     },
     {
+      "id": "f192ef301c9692005c381826ae2dfb7867a9d78461f56247b5cd49c60b685648",
+      "type": "static-import",
+      "from": "file:tools/ticktock/cycle-driver.cjs",
+      "to": "file:tools/ticktock/generation-manifest.cjs",
+      "target": "tools/ticktock/generation-manifest.cjs",
+      "required": true,
+      "specifier": "./generation-manifest.cjs"
+    },
+    {
       "id": "f1a22ffe9409bafbf88533921d538d07c849937d0cb42f09425e7ea34b87691f",
       "type": "static-import",
       "from": "file:tools/verify/lib/__tests__/completion-audit-packet.test.cjs",
@@ -47493,6 +49634,16 @@
       "target": "tools/telemetry/dispatches/lib/trace-context.cjs",
       "required": true,
       "specifier": "../../telemetry/dispatches/lib/trace-context.cjs"
+    },
+    {
+      "id": "f2526a3705800204dde0232165569f03685db4ed99b0c96ceaf515aed956e01c",
+      "type": "hook-target",
+      "from": "hook:SessionStart:621",
+      "to": "file:tools/kernel/hooks/dispatch-session-start.cjs",
+      "target": "tools/kernel/hooks/dispatch-session-start.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-session-start.cjs",
+      "event": "SessionStart"
     },
     {
       "id": "f259088384650860f9743b83dca55c9fa0f8fb3c9b66fea23f64343ba587c9da",
@@ -47621,6 +49772,15 @@
       "target": ".claude/commands/campaign.md",
       "required": true,
       "declared_target": ".claude/commands/campaign.md"
+    },
+    {
+      "id": "f300abe9b977c58721d28876f32a8529f79ec63ebe32513b42ecdc987277fdfb",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/verifier-breadth-check.cjs",
+      "to": "file:tools/ant-hive-world/train-tick.js",
+      "target": "tools/ant-hive-world/train-tick.js",
+      "required": true,
+      "specifier": "./train-tick.js"
     },
     {
       "id": "f308b988c035e96d9d964c42274f1f5090dbbc83152f2c14e08ead78484848d2",
@@ -48214,6 +50374,15 @@
       "specifier": "../workspace/lib/args"
     },
     {
+      "id": "f80ded194d3cf5c5a976370500bbb7cd6aacbc81c273bb2efa0a79ab97bd72f7",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/territory-reassertion.test.cjs",
+      "to": "file:tools/ant-hive-world/world-state.js",
+      "target": "tools/ant-hive-world/world-state.js",
+      "required": true,
+      "specifier": "../world-state.js"
+    },
+    {
       "id": "f81318fe60c20970f46aca9282a5a9ab363afc9381535d1255444de610f7c308",
       "type": "static-import",
       "from": "file:tools/bundle/lib/copy-artifacts.js",
@@ -48266,6 +50435,15 @@
       "target": "tools/signals/lib/codex-listener.js",
       "required": true,
       "specifier": "./lib/codex-listener"
+    },
+    {
+      "id": "f861625f590d2497570d3441ba16776db13faf570c0c45199e3385cdfcabd656",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/dream-memory.test.cjs",
+      "to": "file:tools/ant-hive-world/dream/dream-memory.js",
+      "target": "tools/ant-hive-world/dream/dream-memory.js",
+      "required": true,
+      "specifier": "../dream/dream-memory.js"
     },
     {
       "id": "f87a1af309ce968126f23c14f830b3cc24c225cdb3ff7ce8c19423f2d1273969",
@@ -48433,6 +50611,15 @@
       "specifier": "../launcher-stub.js"
     },
     {
+      "id": "f9e9646dcaba94b06f81371ca9d4b0e63f550eb6d33ebf524620b3366aceca39",
+      "type": "skill-definition-file",
+      "from": "skill-definition:ticktock",
+      "to": "file:.claude/skills/ticktock/SKILL.md",
+      "target": ".claude/skills/ticktock/SKILL.md",
+      "required": true,
+      "declared_target": ".claude/skills/ticktock/SKILL.md"
+    },
+    {
       "id": "f9e9a9698c4d08e9afcd7d4cdb6bd89e91130540c4b3748201c9f64abee2e522",
       "type": "static-import",
       "from": "file:tools/seo-validation/run.js",
@@ -48449,6 +50636,15 @@
       "target": "tools/signals/lib/actor-auto.js",
       "required": true,
       "specifier": "./lib/actor-auto"
+    },
+    {
+      "id": "fa15d055ae71ae7859b12e81850c3217fc016606079b8fe9cd00bf16aa9f1d0c",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-benchmark-halt-enum.cjs",
+      "to": "file:tools/ticktock/journal-schema.json",
+      "target": "tools/ticktock/journal-schema.json",
+      "required": true,
+      "specifier": "./journal-schema.json"
     },
     {
       "id": "fa1fa53348025ba97013fe4ef2bfbf2a96e96b799585bb4dd611caa6f58d2677",
@@ -48644,6 +50840,15 @@
       "specifier": "./lib/dispatchers"
     },
     {
+      "id": "fbd2fd3f22f9b34e160dd33dda0f191ab4d96f773581fe7901502c0fda45464f",
+      "type": "static-import",
+      "from": "file:tools/ticktock/dryrun-s3.cjs",
+      "to": "file:tools/ticktock/run-benchmark.js",
+      "target": "tools/ticktock/run-benchmark.js",
+      "required": true,
+      "specifier": "./run-benchmark.js"
+    },
+    {
       "id": "fc0375ea9a67ce7622217c1a1dc4131bec4f168ff9d0e9ccd6163877178c4d2f",
       "type": "static-import",
       "from": "file:tools/mcp/youtube/config.js",
@@ -48825,6 +51030,15 @@
       "declared_target": "frameworks/wordpress/design-mockup-validation/schemas/review.schema.json"
     },
     {
+      "id": "fdb0dc5d6d4fe2a153fd5bd30bf688b3739605059338949b04f2c7687c5c194c",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/territory-reassertion.test.cjs",
+      "to": "file:tools/ant-hive-world/train-tick.js",
+      "target": "tools/ant-hive-world/train-tick.js",
+      "required": true,
+      "specifier": "../train-tick.js"
+    },
+    {
       "id": "fddd45b0af7ca5f5fdd28fff1c90061da465ee8eecfe34e61f554d862b041690",
       "type": "manifest-target",
       "from": "manifest-path:.claude/skills/orchestrate-loop/SKILL.md",
@@ -48870,6 +51084,15 @@
       "target": "tools/workspace/lib/args.js",
       "required": true,
       "specifier": "../workspace/lib/args"
+    },
+    {
+      "id": "fe31ca4c51e703cf4eb23962231e6d1e6ab9ae489a9bfc468c150792ac8ab005",
+      "type": "static-import",
+      "from": "file:tools/ticktock/effectful-phase.cjs",
+      "to": "file:tools/ticktock/journal.cjs",
+      "target": "tools/ticktock/journal.cjs",
+      "required": true,
+      "specifier": "./journal.cjs"
     },
     {
       "id": "fe3687e81a0ac4385d508eb6c0573fd3bc868b8b772f9db1bb71cd3f9cee0106",
@@ -48952,6 +51175,15 @@
       "target": "tools/sessions/lib/boundary-markers.cjs",
       "required": true,
       "specifier": "../../sessions/lib/boundary-markers.cjs"
+    },
+    {
+      "id": "fea5e1be770eaa5978f879e942034af2dcba98f0b9b5a4deb852ab3b2de44828",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/checkpoint.js",
+      "to": "file:tools/ant-hive-world/world-train.js",
+      "target": "tools/ant-hive-world/world-train.js",
+      "required": true,
+      "specifier": "./world-train.js"
     },
     {
       "id": "feb0bde666708fd1364a759dc78363402b7b84bdcc25a835c9c4aa7d22cfecad",
@@ -49078,11 +51310,20 @@
       "target": "tools/ai-bridge/lib/verification-contract.js",
       "required": true,
       "specifier": "../lib/verification-contract"
+    },
+    {
+      "id": "ffd5a7470f5c0612b51de91eb22312b713044d5ae7982651725090978a34d1f3",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/run-live.js",
+      "to": "file:tools/ant-hive-world/checkpoint.js",
+      "target": "tools/ant-hive-world/checkpoint.js",
+      "required": true,
+      "specifier": "./checkpoint.js"
     }
   ],
   "counts": {
-    "nodes": 3726,
-    "edges": 2730,
+    "nodes": 3851,
+    "edges": 2882,
     "unresolved": 0
   }
 }

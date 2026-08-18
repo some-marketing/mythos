@@ -1,0 +1,16 @@
+{
+  "schema": "TickTockCharterTemplate/1.0",
+  "template_id": "charter-template-test-minimal",
+  "description": "TEST-ONLY. Round-2 design decision (coordinator, tt-charter-template-and-spend-ledger): the canonical charter-template-run.json's floors ({36440 lines, 77 files, 9 external actions}) make it impossible for a test fixture to build a small-ceiling charter through createCharter() itself, which blocks testing over-ceiling behavior through the real readCharter()-validated pipeline. This is a genuine TickTockCharterTemplate/1.0 document -- hashed and bound by charter.cjs exactly the same way as the canonical one -- just deliberately undemanding: one permissive write-surface glob and floors of zero, so a spec's own small ceiling values (e.g. 5 lines / 2 files / 1 external action) always satisfy it. Reachable ONLY via createCharter(spec, {templatePath}) -- an opt-in module-level argument no production call site passes; see charter.cjs's 'Template override' comment for the full statement of what this does and does not bind.",
+  "mandated_write_surfaces": [
+    "tools/ticktock/**"
+  ],
+  "min_max_cumulative_diff": {
+    "lines_changed": 0,
+    "files_changed": 0
+  },
+  "min_max_external_actions": 0,
+  "derivation": {
+    "note": "No measured spend backs this template -- it is not a run charter for any real cycle, only a test fixture. Stripped by computeTemplateHash() before hashing, same as the canonical template."
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://mythos.local/schemas/ticktock/TickTockRatificationProposal/1.0",
+  "title": "TickTockRatificationProposal/1.0",
+  "description": "The artifact a REFUSED charter-or-meta-file edit must produce. SKILL.md (tt.improve) hard-blocks a candidate touching the charter, .claude/skills/go/, .claude/skills/meditate/, .claude/skills/ticktock/, instructions/canonical/dispatch-routing-rule.yaml, or the capabilities matrix -- and says the refusal must EMIT this proposal rather than stop: 'a bare refusal is an incomplete outcome (this is what S3-c checks)'. A refusal tells the cycle what it may not do; this artifact tells the operator what could be ratified instead, which is the difference between a wall and a door. It is a PROPOSAL: writing it changes nothing, ratifies nothing, and never itself edits the blocked target. The operator is the gate.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "proposal_id",
+    "created_at",
+    "charter_id",
+    "charter_hash",
+    "cycle_index",
+    "refusal",
+    "target",
+    "proposed_change",
+    "rationale",
+    "ratification_path",
+    "status",
+    "proposal_hash"
+  ],
+  "properties": {
+    "schema": { "const": "TickTockRatificationProposal/1.0" },
+    "proposal_id": {
+      "type": "string",
+      "pattern": "^tt-proposal-[0-9]{8}T[0-9]{6}Z-[0-9a-f]{8}$",
+      "description": "tt-proposal-<UTC timestamp>-<8 hex of the target+change digest>. Also the filename stem. The digest suffix means two proposals raised in the same second against different targets cannot collide."
+    },
+    "created_at": { "type": "string", "minLength": 1 },
+    "charter_id": { "type": "string", "minLength": 1 },
+    "charter_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "The charter in force when the edit was refused. A proposal does not carry across charters."
+    },
+    "cycle_index": { "type": "integer", "minimum": 0 },
+    "refusal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["halt_state", "detail", "refused_by"],
+      "description": "The refusal this proposal is the completion of. halt_state uses the journal's halt vocabulary so a proposal and a journal record never disagree about why the edit was blocked.",
+      "properties": {
+        "halt_state": { "type": "string", "minLength": 1 },
+        "detail": { "type": "string" },
+        "refused_by": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The mechanism that refused -- e.g. charter.checkImmutability, or the allowed_write_surfaces bound."
+        }
+      }
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "kind", "inside_allowed_write_surfaces"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "kind": {
+          "enum": ["charter", "meta_file", "capabilities_matrix", "dispatch_routing_rule", "other"],
+          "description": "What class of protected surface was targeted. 'other' exists so an unanticipated refusal is still recordable rather than silently unrecordable."
+        },
+        "inside_allowed_write_surfaces": {
+          "type": "boolean",
+          "description": "Whether the target sits inside the charter's own allowed_write_surfaces. False is the ordinary case for a meta-file: the charter's bound is the mechanism that refused."
+        }
+      }
+    },
+    "proposed_change": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary", "fields", "diff_preview"],
+      "description": "WHAT was wanted, described rather than applied. There is deliberately no field here that an executor could replay: a proposal that could be auto-applied would be an edit wearing a proposal's name.",
+      "properties": {
+        "summary": { "type": "string", "minLength": 1 },
+        "fields": {
+          "type": "array",
+          "description": "The specific fields or sections the change would touch, with their current and wanted values rendered as strings.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["field", "current", "proposed"],
+            "properties": {
+              "field": { "type": "string", "minLength": 1 },
+              "current": { "type": "string" },
+              "proposed": { "type": "string" }
+            }
+          }
+        },
+        "diff_preview": {
+          "type": "string",
+          "description": "Human-readable rendering of the change. Never machine-applied."
+        }
+      }
+    },
+    "rationale": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["why", "expected_benefit", "falsifier", "evidence_links"],
+      "description": "The same four things every /tt improvement candidate carries. A proposal with no falsifier is a preference, and is marked as one by leaving falsifier empty -- the field is required so the absence is visible.",
+      "properties": {
+        "why": { "type": "string", "minLength": 1 },
+        "expected_benefit": { "type": "string" },
+        "falsifier": { "type": "string" },
+        "evidence_links": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "ratification_path": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["steps", "gate", "decided_by"],
+      "description": "The route from this proposal to a ratified change. The producer never walks it; it names it.",
+      "properties": {
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "gate": { "type": "string", "minLength": 1 },
+        "decided_by": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Who may ratify. Never the cycle that raised the proposal -- a producer never validates its own trial."
+        }
+      }
+    },
+    "status": {
+      "const": "PROPOSED",
+      "description": "The only value this producer may write. Ratification, rejection, and withdrawal are the operator's edits to make, not the cycle's."
+    },
+    "proposal_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "sha256 over the canonical projection with proposal_hash omitted. Computed by the writer; a caller-supplied hash is recomputed and must match."
+    }
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://mythos.local/schemas/ticktock/TickTockReviewDecision/1.0",
+  "title": "TickTockReviewDecision/1.0",
+  "description": "The machine-readable decision record for the G-TICKTOCK-REVIEW gate. Produced by ticktock-skill S4 (the maximum-reviewer trial) at _dev/state/ticktock/g-ticktock-review-decision.json, paired with the human-readable debrief at _dev/reports/analysis/run-debrief__ticktock-skill__<date>.md. Before this artifact exists the gate is ABSENT: tools/ticktock/preflight-ticktock.cjs reads it fail-closed and refuses every non-dry-run cycle. The single field whose value clears the gate is decision.cleared, corroborated by decision.unresolved_findings_total == 0 and by every reviewers[] entry carrying verdict APPROVE with unresolved_findings 0 -- a cleared flag that the roster does not support is a validation failure, not a pass.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "gate_id",
+    "decision_id",
+    "produced_by_step",
+    "created_at",
+    "charter_id",
+    "charter_hash",
+    "roster_hash",
+    "reviewers",
+    "decision"
+  ],
+  "properties": {
+    "schema": { "const": "TickTockReviewDecision/1.0" },
+    "gate_id": { "const": "G-TICKTOCK-REVIEW" },
+    "decision_id": {
+      "type": "string",
+      "pattern": "^tt-review-[0-9]{8}T[0-9]{6}Z$",
+      "description": "tt-review-<UTC timestamp>. Stable identity for this decision; cited by the journal record and the generation manifest of the first cycle it permits."
+    },
+    "produced_by_step": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The plan step that produced this record. S4 for the ticktock-skill plan."
+    },
+    "created_at": { "type": "string", "minLength": 1 },
+    "charter_id": { "type": "string", "minLength": 1 },
+    "charter_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "The charter this decision was taken against. A decision does not carry across charters: a new charter is a new run and needs a new decision."
+    },
+    "roster_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "The charter's lane_binding_hash at decision time. If the roster hash no longer matches the charter at read time, the decision does not apply."
+    },
+    "reviewers": {
+      "type": "array",
+      "minItems": 1,
+      "description": "One entry per LOCKED lane in the roster, including lanes that were unavailable or timed out. A missing lane is a defect, never an implicit pass.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "lane_id",
+          "family",
+          "model_pin_requested",
+          "model_pin_observed",
+          "pin_verified",
+          "status",
+          "verdict",
+          "unresolved_findings",
+          "review_artifact_path"
+        ],
+        "properties": {
+          "lane_id": { "type": "string", "minLength": 1 },
+          "family": { "type": "string", "minLength": 1 },
+          "model_pin_requested": { "type": "string", "minLength": 1 },
+          "model_pin_observed": { "type": ["string", "null"] },
+          "pin_verified": { "type": "boolean" },
+          "status": {
+            "enum": ["clean", "findings", "timeout", "substituted", "pin_mismatch", "unavailable", "error"]
+          },
+          "verdict": { "enum": ["APPROVE", "AMEND_REQUIRED", "REJECT", "NO_VERDICT"] },
+          "unresolved_findings": { "type": "integer", "minimum": 0 },
+          "review_artifact_path": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Where this lane's raw review output was written. A verdict with no readable artifact is not evidence."
+          }
+        }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cleared", "unresolved_findings_total", "reasons", "decided_at", "decided_by"],
+      "description": "THE GATE READ. decision.cleared is the exact field whose value clears G-TICKTOCK-REVIEW; it may be true only when unresolved_findings_total is 0 and every reviewers[] entry is APPROVE with zero unresolved findings.",
+      "properties": {
+        "cleared": {
+          "type": "boolean",
+          "description": "Strict boolean. Only true clears the gate. Absent, null, or any non-true value is a refusal."
+        },
+        "unresolved_findings_total": { "type": "integer", "minimum": 0 },
+        "reasons": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "description": "Why not cleared, one entry per failing condition. Empty exactly when cleared is true."
+        },
+        "decided_at": { "type": "string", "minLength": 1 },
+        "decided_by": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Who took the decision. The producer of the implementation is never the decider -- a producer never validates its own trial."
+        },
+        "operator_stamp": {
+          "type": ["string", "null"],
+          "description": "Verbatim operator authorization line. Required for SCHEDULE activation (TT-007), which needs BOTH this gate cleared and an explicit stamp; null when the decision clears cycles but not activation."
+        }
+      }
+    },
+    "debrief_artifact_path": {
+      "type": "string",
+      "description": "The paired human-readable debrief, _dev/reports/analysis/run-debrief__ticktock-skill__<date>.md."
+    }
+  }
+}

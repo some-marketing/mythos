@@ -392,13 +392,17 @@ function renderCulture(data) {
       '</div>';
   }).join('') || '<div class="row">(none yet)</div>';
 
+  const buildsEl = document.getElementById('culture-builds');
   const mirror = culture.mirror;
   if (mirror) {
+    const existingMirror = document.getElementById('culture-mirror-panel');
+    if (existingMirror) existingMirror.remove();
     const mirrorEl = document.createElement('div');
+    mirrorEl.id = 'culture-mirror-panel';
     mirrorEl.style.cssText = 'margin-top:1rem;padding:0.8rem 1rem;border:1px solid rgba(243,233,219,0.13);border-radius:10px;background:#261d13;';
     const color = mirror.verdict === 'mirror-forming' ? '#7ee081' : mirror.verdict === 'approaching-null' ? '#e0a949' : '#c2ab8d';
-    mirrorEl.innerHTML = '<h3 style="font-size:0.9rem;color:"#e0a949";margin:0 0 0.4rem;">Mirror gate (three-sided experiment)</h3>' +
-      '<div class="row"><span>Gate: "will they create a simulation that mirrors this one"</span><b style="color:"' + color + '";">' + mirror.verdict + '</b></div>' +
+    mirrorEl.innerHTML = '<h3 style="font-size:0.9rem;color:#e0a949;margin:0 0 0.4rem;">Mirror gate (three-sided experiment)</h3>' +
+      '<div class="row"><span>Gate: "will they create a simulation that mirrors this one"</span><b style="color:' + color + ';">' + mirror.verdict + '</b></div>' +
       '<div class="row"><span>Builds / features</span><b>' + mirror.n_builds + ' / ' + mirror.n_features + '</b></div>' +
       '<div class="row"><span>Observed mean nearest-feature dist</span><b>' + (mirror.observed != null ? mirror.observed.toFixed(2) : '—') + '</b></div>' +
       '<div class="row"><span>Null mean ± sd</span><b>' + (mirror.null_mean != null ? mirror.null_mean.toFixed(2) + ' ± ' + mirror.null_sd.toFixed(2) : '—') + '</b></div>' +
@@ -406,7 +410,6 @@ function renderCulture(data) {
       '<div style="font-size:0.72rem;color:#8a7a63;margin-top:0.4rem;">p&lt;0.05 = mirror forming; p&lt;0.2 = approaching null; else null-consistent. Panel appears only when the detector runs cleanly.</div>';
     buildsEl.insertAdjacentElement('beforebegin', mirrorEl);
   }
-  const buildsEl = document.getElementById('culture-builds');
   const ledger = culture.build_ledger || [];
   buildsEl.innerHTML = ledger.length ? ledger.map((e) =>
     '<div class="row"><span>' + e.hive + ' ' + (e.kind || '?') + ' @ [' + (e.coords || []).join(',') + ']</span><b>wood ' + (e.wood_at_build != null ? e.wood_at_build : '—') + '</b></div>'

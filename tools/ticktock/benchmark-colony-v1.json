@@ -1,0 +1,105 @@
+{
+  "schema": "BenchmarkColonySpec/1.0",
+  "colony_spec_version": "v1",
+  "created_at": "2026-08-05T00:00:00.000Z",
+  "purpose": "A frozen ant-hive-world colony run, replayed at the start of every /ticktock cycle and compared against a recorded fingerprint. Its job is to answer one question -- 'does the engine still behave exactly as it did when this baseline was taken' -- and to answer it over the FULL behavioral surface rather than a chosen metric subset, because a metric subset only catches the drift someone already thought to measure. Divergence in any dimension HALTS the run. Clearing a halt requires an explicit reviewed re-baseline, never a silent acceptance.",
+  "engine": {
+    "driver": "tools/ant-hive-world/run-live.js",
+    "invocation_contract": "The spec is executed by tools/ticktock/run-benchmark.js, which writes world_params into <sandbox>/live-config.json BEFORE invoking the driver and then passes cli_args verbatim. Nothing else is supplied: no goal packet, no resume, no stream shuffle, no checkpoint.",
+    "cli_args": [
+      "--ticks", "300",
+      "--tick-interval-ms", "0",
+      "--root-seed", "20260805",
+      "--arm", "benchmark-colony-v1",
+      "--run-name", "benchmark-colony-v1",
+      "--no-checkpoint",
+      "--freeze-world-learning",
+      "--freeze-hive-learning"
+    ],
+    "arg_rationale": {
+      "--ticks 300": "Fixed tick count. 300 is the driver's own default and completes in well under a second locally (measured 0.58s wall clock), which is what lets the benchmark run at the START of every cycle instead of being skipped as too expensive.",
+      "--root-seed 20260805": "Fixed root seed. Without it the driver draws from the OS CSPRNG and no two runs are comparable. The driver derives hive-a, hive-b and world stream seeds from this one value by fixed prime offsets, so pinning it pins all three.",
+      "--tick-interval-ms 0": "No sleep between rounds. The interval affects wall clock only, never behavior, but it is pinned so the benchmark's runtime is a stable number rather than a configuration accident.",
+      "--no-checkpoint": "The benchmark writes no checkpoint. It is a measurement, not a lineage: a benchmark run that committed a generation would pollute the very state it is measuring.",
+      "--freeze-world-learning": "LEARNING OFF for the world mind: the world block still encodes state, still computes and reports the masked prediction loss, and writes no parameter.",
+      "--freeze-hive-learning": "LEARNING OFF for both hive networks (added in repair of review finding F1). The hives still decide, still act, still take upkeep decay and are still scored -- and trainStep() writes no weight. Before this flag existed the hive REINFORCE update ran at a hard-coded LEARNING_RATE = 0.05 with no way to disable it, so 'learning OFF' was a claim the engine could not honor: the run was reproducible under a fixed seed, which is a different property from being frozen. With both freeze flags supplied, no parameter anywhere in the engine moves during a benchmark run.",
+      "--arm / --run-name": "Fixed identity strings. They appear in run-log rows, which the fingerprint does not read, but pinning them keeps two benchmark runs textually comparable for a human reading the logs."
+    },
+    "explicitly_absent": {
+      "--goal-packet": "NO GOAL PACKET. The driver records an absent packet as an explicit no-goal run rather than a silent default, and the goal evaluator never executes. A benchmark carrying a goal would measure the goal as much as the engine.",
+      "--resume-from": "Always a fresh start from absolute tick 0.",
+      "--shuffle-streams": "Stream-to-seed assignment stays at its canonical order (hive-a, hive-b, world).",
+      "--seed-a / --seed-b": "Not overridden; both derive from root_seed, so one pinned number controls the whole run."
+    }
+  },
+  "world_params": {
+    "_note": "The full live-config surface, pinned explicitly rather than inherited from live-config.js DEFAULT_CONFIG. Inheriting the defaults would make the benchmark drift silently every time someone tuned a default, which is the opposite of what a frozen colony is for. A defaults change is still VISIBLE: the fingerprint carries a world_params_defaults dimension that hashes DEFAULT_CONFIG, so the change shows up as a named divergence instead of quietly moving the baseline.",
+    "tick_interval_ms": 0,
+    "build_cost_wood": 2,
+    "pheromone_deposit": 1,
+    "pheromone_decay": 0.9,
+    "trail_follow_prob": 0.8,
+    "food_source_spawn_chance": 0.04,
+    "food_source_spawn_amount": 6,
+    "max_food_sources": 7,
+    "prey_growth_rate": 0.05,
+    "prey_graze_rate": 0.4,
+    "predation_rate": 0.02,
+    "predator_growth_rate": 0.15,
+    "predator_death_rate": 0.08,
+    "upkeep_cost_food": 1,
+    "entropy_bonus_weight": 0.3,
+    "forced_exploration_interval": 75,
+    "entropy_bonus_weight_initial": 3,
+    "entropy_bonus_decay_ticks": 75,
+    "update_clip": 0,
+    "entropy_controller_enabled": 1,
+    "entropy_controller_trigger": 0.9,
+    "entropy_controller_release": 1.2,
+    "entropy_controller_boost_weight": 3,
+    "material_spawn_chance": 0.03,
+    "material_harvest_rate": 0.15,
+    "mud_conversion_rate": 0.2
+  },
+  "fixed_seeds": {
+    "root_seed": 20260805,
+    "derived": {
+      "hive-a": "root_seed",
+      "hive-b": "root_seed + 104729",
+      "world": "root_seed + 1000003"
+    },
+    "derivation_source": "tools/ant-hive-world/run-live.js -- distinct prime offset per stream so no two streams share an RNG sequence"
+  },
+  "tick_count": 300,
+  "learning": {
+    "world_mind": "OFF (--freeze-world-learning): loss measured and reported, no parameter written",
+    "hive_networks": "OFF (--freeze-hive-learning): action sampled, applied, decayed and scored as always; trainStep() computes the gradient and writes no weight. Verified mechanically by tools/ticktock/test-hive-freeze.cjs, which asserts both halves -- a frozen network is byte-identical after 50 update calls, and an unfrozen one demonstrably is not.",
+    "goal": "NONE (no goal packet supplied; explicit no-goal run)",
+    "claim": "TRUE learning-OFF across every learning path the engine has. No parameter, in any network, moves during a benchmark run."
+  },
+  "fingerprint_dimensions": [
+    "final_world_state",
+    "decision_stream",
+    "resource_curves",
+    "applied_rates",
+    "entropy",
+    "build_placements",
+    "world_params_defaults"
+  ],
+  "volatile_fields_excluded": {
+    "keys": ["written_at", "at", "ts", "when", "run_id", "episode_id", "tick_key"],
+    "why": "These differ between two byte-identical behavioral runs -- wall clock stamps and per-process UUIDs -- so including them would guarantee a false divergence on every single comparison and destroy the detector's meaning. They are stripped RECURSIVELY from world and hive state before hashing. The decision stream needs no stripping: the driver already excludes every wall-clock and identity field from it by design, which is why it can serve as the full behavioral surface."
+  },
+  "limitations": {
+    "hive_learning": "RESOLVED (review finding F1, repaired 2026-08-05). Previously the two hive networks learned by REINFORCE at a hard-coded LEARNING_RATE = 0.05 with no switch, so this spec's 'learning OFF' was true of the world mind only. tools/ant-hive-world/untrained-network.js trainStep() now takes options.freeze, tools/ant-hive-world/train-tick.js threads it as options.freezeHiveLearning, and tools/ant-hive-world/run-live.js exposes it as --freeze-hive-learning, which this spec's cli_args now supply. The freeze is passed as an explicit argument rather than through live-config, deliberately: live-config is re-read every round and is dashboard-tunable, and a freeze a running dashboard could switch off is not a freeze. The fingerprint was RE-RECORDED after this change -- the prior baseline was taken with hive learning ON and is invalid as a frozen baseline; see the fingerprint's lineage entry.",
+    "engine_digests_are_a_notice_not_a_gate": "The fingerprint records sha256 digests of the engine source files it was taken against, and since review finding F2 it also COMPARES them -- as a non-fatal DRIFT NOTICE, never as a halt. The behavioral fingerprint remains the only halting gate, because a source digest that halts a run on a comment edit is a detector readers learn to ignore. What a drift notice proves: a file changed. What it does not prove: that behavior changed, or that it did not -- this benchmark samples one 300-tick trajectory, so an edit the trajectory never exercises is invisible to the behavioral gate, and the digest is the only signal it happened at all. The pairing worth reading closely is drift_detected: true alongside identical: true.",
+    "spec_hash_is_a_notice_not_a_gate": "Found while repairing F2, same shape of gap: colony_spec_hash is folded into fingerprint_hash but the comparison reads only `dimensions`, so editing THIS FILE -- including its prose -- produced identical: true alongside two different fingerprint_hash values with nothing said about it. It is now reported as a spec_drift NOTICE. A spec edit touching world_params or cli_args changes behavior and diverges a dimension on its own; an edit to these comments does not, and should not.",
+    "environment_identity": "The fingerprint records node version, V8 version, platform, arch and the resolved versions of the engine's own bare-required dependencies (review finding F5's caveat). These are compared as a drift notice on the same non-fatal terms. They are recorded so that a future 'identical: true' is a claim about two runs whose runtime identity is KNOWN, rather than an unexamined assumption that they shared one. The benchmark still inherits the ambient environment apart from three cleared variables; this records what it ran under, it does not isolate it.",
+    "behavioral_coverage": "The fingerprint is a full-surface comparison of ONE trajectory, not of the engine. Every decision of every actor on every tick is covered -- for the 300 ticks, one seed, and one parameter set this spec pins. Engine behavior outside that trajectory is not measured by any dimension here. Two MEASURED examples, both live constants in untrained-network.js that this benchmark cannot see (verified by tools/ticktock/test-drift-notice.cjs): TRAIL_FOLLOW_PROB, because world_params pins trail_follow_prob and live config overrides the module constant; and LEARNING_RATE, because --freeze-hive-learning means no weight is written at all, so the rate one would have been written at is inert. Editing either produces identical: true. Before F2 that was also SILENT; it now produces a drift notice. NOTE this specifically corrects the prior version of this spec, which claimed that 'because the learning constant feeds every decision, a change to it appears as a first-tick divergence' -- that was true of the unfrozen benchmark and is FALSE of the frozen one. Freezing the learning path is what makes the source-drift notice load-bearing rather than redundant."
+  },
+  "halt_contract": {
+    "on_divergence": "HALT. Emit {identical: false, diverging_dimensions: [...], first_diverging_tick: <int|null>} and write journal halt_state BENCHMARK-DIVERGENCE.",
+    "clearing_a_halt": "Only an explicit reviewed RE-BASELINE clears it: a plan naming what changed, why the change is intentional, which cycle caused it, a distinct-mind review, and operator ratification. The charter then records benchmark-colony-vN+1 with that reason and a lineage chain entry (prior fingerprint hash, new fingerprint hash, triggering cycle, review artifact reference, ratification reference), so history is walked mechanically rather than reconstructed from narrative.",
+    "repeated_rebaselining": "TT-003: if re-baselining occurs in more than N of the last M cycles (charter default N=2, M=5, operator-overridable), that FREQUENCY is itself a halt and a finding -- the frame is too tight, or the loop is drifting deliberately -- and it requires an explicit operator decision before further cycles run."
+  }
+}

@@ -50,7 +50,6 @@ const GUEST_TRANSPORT = argVal('--guest-transport', 'ssh'); // ssh (Mac->Orwell)
 const GUEST_DISTRO = argVal('--guest-distro', 'Ubuntu-24.04');
 const GUEST_STATE_PATH = argVal('--guest-state-path', '/opt/antworld/_dev/state/ant-hive-world-run/shared/world-state.json');
 const GUEST_DECISION_PATH = argVal('--guest-decision-path', '/opt/antworld/_dev/state/ant-hive-world-run/world-mind-decision.json');
-const GUEST_SHELL = `wsl -d ${GUEST_DISTRO} -- bash -lc`;
 
 const MYTHOS_ROOT = path.resolve(__dirname, '..', '..');
 const HARNESS_MEMORY_DIR = argVal('--memory-dir', path.join(process.env.HOME, '.claude', 'projects', '-Users-admin-mythos', 'memory'));
@@ -60,15 +59,52 @@ const DECISION_LOG = path.join(MYTHOS_ROOT, '_dev', 'state', 'ant-hive-world-run
 
 const WORLD_VERBS = ['seed-wood', 'seed-stone', 'signal-food', 'relax-decay', 'idle'];
 
+// ---- guest transport: execFile/argv only (A3) ------------------------------
+// A3 (plan sim-foundation-repairs, S7): the old pull/push interpolated
+// argv-derived --guest-state-path/--guest-decision-path/--guest-distro into
+// bash -lc STRINGS (`cat ${GUEST_STATE_PATH}` etc.), a host command-injection
+// surface: a path containing `;`, `$(...)`, or backticks executed on the host.
+// CHOSEN MECHANISM (single, per the plan): execFileSync with argv ARRAYS -- a
+// fixed literal script receives the variable path as a QUOTED POSITIONAL bound
+// inside the script as "$1" (and "$2" for the push payload). Env-var transport
+// and blacklists are REJECTED as insufficient: env vars expand unquoted, and a
+// blacklist does not define the accepted grammar. The grammar below is the
+// gate: any value that does not match is refused BEFORE a command is built, so
+// no command can execute with a non-conforming value.
+const GUEST_PATH_GRAMMAR = /^[A-Za-z0-9_./-]+$/;   // no spaces, quotes, $, ;, backticks, newlines
+const GUEST_DISTRO_GRAMMAR = /^[A-Za-z0-9_.-]+$/;  // distro names: letters/digits/./_/-
+
+function validateGuestValues() {
+  const problems = [];
+  if (!GUEST_PATH_GRAMMAR.test(GUEST_STATE_PATH)) {
+    problems.push(`--guest-state-path '${GUEST_STATE_PATH}' does not match ${GUEST_PATH_GRAMMAR}`);
+  }
+  if (!GUEST_PATH_GRAMMAR.test(GUEST_DECISION_PATH)) {
+    problems.push(`--guest-decision-path '${GUEST_DECISION_PATH}' does not match ${GUEST_PATH_GRAMMAR}`);
+  }
+  if (!GUEST_DISTRO_GRAMMAR.test(GUEST_DISTRO)) {
+    problems.push(`--guest-distro '${GUEST_DISTRO}' does not match ${GUEST_DISTRO_GRAMMAR}`);
+  }
+  return problems;
+}
+
 // ---- host-initiated guest pull (sim state OUT) -----------------------------
+// Fixed literal script (no interpolation); the state path arrives as "$1".
+//   local:  wsl -d <distro> -- bash -lc 'cat "$1"' <path>
+//   ssh:    ssh ... <host> "wsl -d <distro> -- bash -lc 'cat \"\$1\"' <path>"
 function pullWorldState() {
+  const invalid = validateGuestValues();
+  if (invalid.length > 0) {
+    process.stderr.write(`[world-mind] REFUSED guest state pull: ${invalid.join('; ')}\n`);
+    return null;
+  }
   try {
     const out = GUEST_TRANSPORT === 'local'
-      ? execFileSync('wsl', ['-d', GUEST_DISTRO, '--', 'bash', '-lc', `cat ${GUEST_STATE_PATH}`], {
+      ? execFileSync('wsl', ['-d', GUEST_DISTRO, '--', 'bash', '-lc', 'cat "$1"', 'world-mind-pull', GUEST_STATE_PATH], {
           encoding: 'utf8', timeout: 20000, stdio: ['ignore', 'pipe', 'ignore']
         })
       : execFileSync('ssh', ['-o', 'ConnectTimeout=10', '-o', 'BatchMode=yes', '-o', 'UpdateHostKeys=no',
-          ORWELL_SSH, `wsl -d ${GUEST_DISTRO} -- bash -lc "cat ${GUEST_STATE_PATH}"`], {
+          ORWELL_SSH, `wsl -d ${GUEST_DISTRO} -- bash -lc 'cat "$1"' world-mind-pull`, GUEST_STATE_PATH], {
           encoding: 'utf8', timeout: 20000, stdio: ['ignore', 'pipe', 'ignore']
         });
     return JSON.parse(out);
@@ -78,19 +114,28 @@ function pullWorldState() {
 }
 
 // ---- host-initiated guest push (decision IN) -------------------------------
-// Base64 through every layer (ssh -> cmd -> wsl -> bash): JSON double-quotes
-// and spaces would otherwise be mangled by the Windows quoting chain.
+// The payload (base64 of the decision JSON) is passed as "$1", the decision
+// path as "$2" -- both quoted positionals inside a fixed literal script, never
+// concatenated into a shell string. Base64 is the wire format because JSON
+// double-quotes and spaces would otherwise be mangled by the Windows quoting
+// chain (ssh -> cmd -> wsl -> bash); the fixed script decodes it guest-side.
 function pushDecision(decision) {
   const payload = Buffer.from(JSON.stringify(decision)).toString('base64');
+  const invalid = validateGuestValues();
+  if (invalid.length > 0) {
+    process.stderr.write(`[world-mind] REFUSED guest decision push: ${invalid.join('; ')}\n`);
+    return false;
+  }
   try {
     if (GUEST_TRANSPORT === 'local') {
       execFileSync('wsl', ['-d', GUEST_DISTRO, '--', 'bash', '-lc',
-        `printf '%s' '${payload}' | base64 -d > ${GUEST_DECISION_PATH}`], {
+        'printf %s "$1" | base64 -d > "$2"', 'world-mind-push', payload, GUEST_DECISION_PATH], {
         encoding: 'utf8', timeout: 20000, stdio: ['ignore', 'pipe', 'ignore']
       });
     } else {
       execFileSync('ssh', ['-o', 'ConnectTimeout=10', '-o', 'BatchMode=yes', '-o', 'UpdateHostKeys=no',
-        ORWELL_SSH, `wsl -d ${GUEST_DISTRO} -- bash -lc "printf '%s' '${payload}' | base64 -d > ${GUEST_DECISION_PATH}"`], {
+        ORWELL_SSH, `wsl -d ${GUEST_DISTRO} -- bash -lc 'printf %s "$1" | base64 -d > "$2"' world-mind-push`,
+        payload, GUEST_DECISION_PATH], {
         encoding: 'utf8', timeout: 20000, stdio: ['ignore', 'pipe', 'ignore']
       });
     }

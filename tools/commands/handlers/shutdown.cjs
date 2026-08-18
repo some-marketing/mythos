@@ -13,6 +13,10 @@
 //    before any mechanical execution. Never softened to a warning.
 //  - judgment_remaining is computed at runtime from the live parsed spec
 //    filtered by SPEC_COVERAGE lanes — never a standalone hardcoded array.
+//  - Step 0 (watcher-stop) runs FIRST and fail-closed: it executes the
+//    registered watcher-lifecycle.cjs CLI (identity-verified stopWatchers),
+//    halting the cascade on any nonzero exit so closeout never races live
+//    daemons.
 //  - No secrets/env values/client payloads in the packet. No commits, no
 //    marker consumption, no signal closing, no handoff prose.
 //  - Fail closed: fields the runner cannot ground in evidence stay '' and are
@@ -28,6 +32,14 @@ const {
 } = require('../lib/lifecycle-spec-drift.cjs');
 const { buildCloseout } = require('../../maintenance/lib/end-session-closeout.js');
 const { writeMarker, SCHEMA: BOUNDARY_SCHEMA } = require('../../sessions/lib/boundary-markers.cjs');
+// S3 (plan session-lifecycle-mechanical-repairs): command-validity gate for the
+// plural-candidate continuity fallback (isExactSlashCommand + canonical
+// registry resolution, alias-aware) and the best-effort reaper-stale scope
+// exclusion (fail-open — on any reaper error the filter is skipped).
+const { isExactSlashCommand } = require('../../verify/lib/signal.cjs');
+const { parseSlashCommand, loadCanonicalCommand } = require('../lib/command-registry.cjs');
+const { resolveCommandAlias } = require('../lib/command-aliases.cjs');
+const { reapDeadSessions } = require('../../sessions/boot-dead-session-reaper.cjs');
 
 const SPEC_REL_PATH = 'instructions/canonical/commands/shutdown.yaml';
 const PACKETS_REL_DIR = path.join('_dev', 'reports', 'lifecycle', 'session-close-packets');
@@ -39,6 +51,8 @@ const FALLBACK_NOTE = 'mechanical path refused; fall back to YAML spec inference
 // { redacted_family, count } summary rather than emitted verbatim.
 const FORBIDDEN_CHANGED_FILE_FAMILIES = Object.freeze([
   Object.freeze({ glob: 'Mythos-memories/**', test: (p) => p === 'Mythos-memories' || p.startsWith('Mythos-memories/') }),
+  // Legacy memory-root compatibility for older session status payloads.
+  Object.freeze({ glob: 'sm_os-memories/**', test: (p) => p === 'sm_os-memories' || p.startsWith('sm_os-memories/') }),
   Object.freeze({ glob: '**/.env', test: (p) => p.split('/').some((seg) => seg === '.env' || seg.startsWith('.env.')) }),
   Object.freeze({ glob: '**/*secret*', test: (p) => /secret/i.test(p) }),
   Object.freeze({ glob: '**/*credential*', test: (p) => /credential/i.test(p) }),
@@ -63,12 +77,21 @@ const SKELETON_REQUIRED_FIELDS = Object.freeze([
 
 // Total map over the live shutdown.yaml process array, in order. The drift
 // gate (checkDrift) proves this stays a total ordered match at every run.
+// shutdown.yaml now leads with "Step 0 — watcher-stop"; the scope-resolution
+// preamble entry that follows no longer occupies index 0, so the drift parser
+// classifies it `unrecognized-1` (covered below, executed like the former
+// preamble).
 const SPEC_COVERAGE = Object.freeze([
   Object.freeze({
-    step_id: 'preamble',
+    step_id: '0',
+    label: 'watcher-stop',
+    lane: 'mechanical'
+  }),
+  Object.freeze({
+    step_id: 'unrecognized-1',
     label: 'Resolve scope from $ARGUMENTS',
     lane: 'mechanical',
-    note: 'Mechanical when --system/--client/--scope is given; ambiguous scope is judgment, so the runner refuses (exit 2) instead of inferring.'
+    note: 'Scope-resolution preamble (shutdown.yaml process entry 2). With Step 0 watcher-stop leading the array, the drift parser classifies this entry unrecognized-1; it executes exactly like the former preamble. Mechanical when --system/--client/--scope is given; ambiguous scope is judgment, so the runner refuses (exit 2) instead of inferring.'
   }),
   Object.freeze({
     step_id: '1',
@@ -112,8 +135,13 @@ const SPEC_COVERAGE = Object.freeze([
   })
 ]);
 
-function defaultCommands() {
+function defaultCommands(projectRoot) {
   return {
+    // Step 0: watcher-stop. Executes tools/sessions/watcher-lifecycle.cjs
+    // (identity-verified stopWatchers). Nonzero exit (identity-refused or
+    // unreapable watchers) halts the cascade so closeout never races live
+    // daemons. Empty session id -> clean no-op exit 0.
+    '0': [process.execPath, path.join('tools', 'sessions', 'watcher-lifecycle.cjs'), 'stop', (resolveSessionId(projectRoot).session_id || ''), '--root', projectRoot],
     // Warn-only by its own contract: nonzero exit is a warn, shutdown continues.
     '4b': [process.execPath, path.join('tools', 'hygiene', 'disk-quota-guard.cjs'), '--apply'],
     // Exit 1 = HALT (push rejection requires human resolution; never force-push).
@@ -173,20 +201,13 @@ function resolveScopeSelector(opts) {
   return { selector: '--scope', scope_type: 'workstream', scope_value: scope, scope_key: slugify(scope) };
 }
 
-// Harness session id, best-effort, for the SessionClosePacket/1.0 additive
-// `session_id` field. Order: explicit env (the harness sets one of these),
-// then the durable active-session sidecar (_dev/state/active-sessions/_current-id).
-// Never fabricated — genuinely unavailable resolves to null with a source note.
+// Harness session id for the SessionClosePacket/1.0 additive `session_id`
+// field (S2, plan session-lifecycle-mechanical-repairs): delegated to the
+// shared resolver (tools/sessions/lib/resolve-session-id.cjs) so all three
+// consumers agree on identity. Display/packet use only — best_effort rungs are
+// fine here; custody never keys off this id.
 function resolveSessionId(projectRoot) {
-  const env = process.env;
-  const fromEnv = env.CLAUDE_SESSION_ID || env.MYTHOS_SESSION_ID || env.CODEX_SESSION_ID || '';
-  if (fromEnv) return { session_id: fromEnv, session_id_source: 'env' };
-  try {
-    const sidecar = path.join(projectRoot, '_dev', 'state', 'active-sessions', '_current-id');
-    const id = fs.readFileSync(sidecar, 'utf8').trim();
-    if (id) return { session_id: id, session_id_source: 'active-session-sidecar' };
-  } catch { /* sidecar absent — fall through to null */ }
-  return { session_id: null, session_id_source: 'unavailable' };
+  return require('../../sessions/lib/resolve-session-id.cjs').resolveSessionId(projectRoot);
 }
 
 // The scope string carried in the emitted SessionBoundary/1.0 marker — exactly
@@ -264,11 +285,18 @@ function walkJsonFiles(dirPath, limit = 800) {
     } catch {
       return;
     }
+    // Files BEFORE subdirectories: live signals sit in the scan root while
+    // closed/ accumulates unboundedly. Depth-first-into-closed exhausted the
+    // limit before any live root signal was read (observed 2026-08-13 with
+    // 802 closed files vs limit 800 — a silent-truncation false fail-closed
+    // on recommended_next_command grounding).
     for (const entry of entries) {
       if (out.length >= limit) return;
-      const fullPath = path.join(current, entry.name);
-      if (entry.isDirectory()) walk(fullPath);
-      else if (entry.isFile() && entry.name.endsWith('.json')) out.push(fullPath);
+      if (entry.isFile() && entry.name.endsWith('.json')) out.push(path.join(current, entry.name));
+    }
+    for (const entry of entries) {
+      if (out.length >= limit) return;
+      if (entry.isDirectory()) walk(path.join(current, entry.name));
     }
   }
   walk(dirPath);
@@ -282,10 +310,13 @@ function scanSignals(projectRoot, scopeInfo) {
   const signalsDir = path.join(projectRoot, '_dev', 'reports', 'signals');
   const live = [];
   const closed = [];
+  // S3: candidates carry { command, scope } so the reaper-stale exclusion can
+  // filter by signal scope before distinct-candidate counting.
   const nextCommandCandidates = [];
+  let newestLiveTimestamp = null;
   for (const filePath of walkJsonFiles(signalsDir)) {
     const parsed = safeReadJson(filePath);
-    if (!parsed || typeof parsed.schema !== 'string' || !parsed.schema.startsWith('HandoffSignal/')) continue;
+    if (!parsed || typeof parsed.schema !== 'string' || !parsed.schema.startsWith('CoordinationSignal/')) continue;
     const relPath = toPosix(path.relative(projectRoot, filePath));
     const signalScope = String(parsed.signal_scope || parsed.scope || '');
     const relevant = scopeInfo.scope_type === 'system'
@@ -297,22 +328,31 @@ function scanSignals(projectRoot, scopeInfo) {
     const nextCommand = typeof parsed.recommended_next_command === 'string'
       ? parsed.recommended_next_command.trim()
       : '';
+    // Bounded timestamp for the S3 freshness gate: the signal's own timestamp,
+    // else the file mtime. Used to prove a continuity entry is not older than
+    // the newest live scope-matching signal.
+    const parsedTs = typeof parsed.timestamp === 'string' ? parsed.timestamp.trim() : '';
     const entry = {
       path: relPath,
       schema: parsed.schema,
       signal_type: parsed.signal_type || parsed.type || null,
       signal_scope: signalScope || null,
       lifecycle_state: parsed.lifecycle_state || null,
-      recommended_next_command_present: Boolean(nextCommand)
+      recommended_next_command_present: Boolean(nextCommand),
+      timestamp: parsedTs || null
     };
     if (parsed.lifecycle_state === 'closed') {
       closed.push(entry);
     } else {
       live.push(entry);
-      if (nextCommand) nextCommandCandidates.push(nextCommand);
+      if (nextCommand) nextCommandCandidates.push({ command: nextCommand, scope: signalScope });
+      const tsMs = parsedTs ? Date.parse(parsedTs) : Number.NaN;
+      if (Number.isFinite(tsMs) && (newestLiveTimestamp === null || tsMs > Date.parse(newestLiveTimestamp))) {
+        newestLiveTimestamp = parsedTs;
+      }
     }
   }
-  return { live, closed, nextCommandCandidates };
+  return { live, closed, nextCommandCandidates, newestLiveTimestamp };
 }
 
 function firstNonEmptyLine(filePath, maxChars = 240) {
@@ -393,6 +433,66 @@ function redactChangedFiles(files) {
   return [...passthrough, ...summaries];
 }
 
+// S3 helpers (plan session-lifecycle-mechanical-repairs):
+
+// Normalize a scope string for matching (lowercase, trimmed).
+function normalizeScope(scope) {
+  return String(scope || '').trim().toLowerCase();
+}
+
+// Best-effort reaper-stale scope set: boundary-marker scopes the dead-session
+// reaper grades stale_completed / stale_review_approved. FAIL-OPEN — on any
+// error (module unresolvable, unreadable state) returns null so the caller
+// skips the filter and behaves exactly as the pre-filter rule.
+function staleReaperScopes(projectRoot) {
+  try {
+    const report = reapDeadSessions({ root: projectRoot });
+    const stale = new Set();
+    for (const item of report.surfaced || []) {
+      const classifications = Array.isArray(item.classifications) ? item.classifications : [];
+      if (classifications.includes('stale_completed') || classifications.includes('stale_review_approved')) {
+        if (item.scope) stale.add(normalizeScope(item.scope));
+      }
+    }
+    return stale;
+  } catch (_) {
+    return null;
+  }
+}
+
+// Freshness gate (S3 v2 gate a): the continuity entry's mtime must be within a
+// 7-day window AND not older than the newest live scope-matching signal.
+const CONTINUITY_FRESHNESS_WINDOW_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+
+function isContinuityFresh(continuity, signals) {
+  const mtimeMs = Date.parse(String(continuity.mtime || ''));
+  if (!Number.isFinite(mtimeMs)) return false;
+  const nowMs = Date.now();
+  if (nowMs - mtimeMs > CONTINUITY_FRESHNESS_WINDOW_MS) return false;
+  if (signals.newestLiveTimestamp) {
+    const newestMs = Date.parse(String(signals.newestLiveTimestamp));
+    if (Number.isFinite(newestMs) && mtimeMs < newestMs) return false;
+  }
+  return true;
+}
+
+// Command-validity gate (S3 v2 gate b): the command must be an exact slash
+// command (isExactSlashCommand) that parses and resolves in the canonical
+// command registry (alias-resolved). Malformed / unregistered / freeform
+// commands are rejected.
+function isValidSlashCommandForScope(projectRoot, command) {
+  try {
+    if (!isExactSlashCommand(command)) return false;
+    const parsed = parseSlashCommand(command);
+    if (!parsed.ok) return false;
+    const alias = resolveCommandAlias(projectRoot, parsed.commandId);
+    const commandId = alias && alias.isAlias ? alias.resolvedCommand : parsed.commandId;
+    return Boolean(loadCanonicalCommand(projectRoot, commandId));
+  } catch (_) {
+    return false;
+  }
+}
+
 function buildSkeleton(projectRoot, scopeInfo, opts, judgmentRemaining, exec) {
   const missing = [];
 
@@ -436,15 +536,55 @@ function buildSkeleton(projectRoot, scopeInfo, opts, judgmentRemaining, exec) {
   }
   if (!currentState) missing.push('current_state');
 
-  // recommended_next_command: exactly one distinct candidate from live
-  // scope-matching signals wins; otherwise the latest scope-matching
-  // continuity entry; otherwise fail closed ('').
+  // recommended_next_command (S3, plan session-lifecycle-mechanical-repairs):
+  //   - live signal candidates are FIRST filtered of reaper-stale scopes
+  //     (best-effort, fail-open: on any reaper error the filter is skipped and
+  //     behavior is exactly the pre-filter rule) — v3 codewhale C2.
+  //   - exactly one distinct surviving candidate wins (unchanged).
+  //   - zero candidates: latest scope-matching continuity entry (regression-
+  //     green, unchanged).
+  //   - MORE than one distinct candidate: the plural-candidate continuity
+  //     fallback is GATED (v2 codex Major 2) — the continuity entry's command
+  //     is used ONLY IF it passes BOTH gates: (a) FRESHNESS — mtime within a
+  //     7-day window AND not older than the newest live scope-matching signal;
+  //     (b) COMMAND VALIDITY — exact slash command that resolves in the
+  //     canonical command registry (alias-resolved). Any gate failure keeps
+  //     fail-closed ('' + missing_required_fields + exit 3) exactly as today.
+  //   - the skeleton records the bounded candidate list and the fallback
+  //     disposition (used | rejected-stale | rejected-invalid | absent).
   let recommendedNextCommand = '';
-  const distinctSignalCommands = [...new Set(signals.nextCommandCandidates)];
+  let nextCommandFallbackDisposition = null;
+  // v3 (codewhale C2): reaper-stale scopes excluded from candidacy BEFORE
+  // counting (best-effort, fail-open); the disposition records how many
+  // candidate commands were removed by the exclusion.
+  const reaperStaleScopes = staleReaperScopes(projectRoot); // Set|null; null = filter skipped
+  let candidateScopes = signals.nextCommandCandidates;
+  let reaperExcludedCount = 0;
+  if (reaperStaleScopes && reaperStaleScopes.size > 0) {
+    candidateScopes = signals.nextCommandCandidates.filter((c) => {
+      const stale = reaperStaleScopes.has(normalizeScope(c.scope));
+      if (stale) reaperExcludedCount++;
+      return !stale;
+    });
+  }
+  const distinctSignalCommands = [...new Set(candidateScopes.map((c) => c.command))];
   if (distinctSignalCommands.length === 1) {
     recommendedNextCommand = distinctSignalCommands[0];
   } else if (distinctSignalCommands.length === 0 && continuity && typeof continuity.recommended_next_command === 'string' && continuity.recommended_next_command.trim()) {
     recommendedNextCommand = continuity.recommended_next_command.trim();
+    nextCommandFallbackDisposition = 'used';
+  } else if (distinctSignalCommands.length > 1 && continuity && typeof continuity.recommended_next_command === 'string' && continuity.recommended_next_command.trim()) {
+    const continuityCmd = continuity.recommended_next_command.trim();
+    if (!isContinuityFresh(continuity, signals)) {
+      nextCommandFallbackDisposition = 'rejected-stale';
+    } else if (!isValidSlashCommandForScope(projectRoot, continuityCmd)) {
+      nextCommandFallbackDisposition = 'rejected-invalid';
+    } else {
+      recommendedNextCommand = continuityCmd;
+      nextCommandFallbackDisposition = 'used';
+    }
+  } else if (distinctSignalCommands.length > 1) {
+    nextCommandFallbackDisposition = 'absent';
   }
   if (!recommendedNextCommand) missing.push('recommended_next_command');
 
@@ -457,6 +597,11 @@ function buildSkeleton(projectRoot, scopeInfo, opts, judgmentRemaining, exec) {
     closed_signals: signals.closed,
     blockers: closeout.blockers || [],
     recommended_next_command: recommendedNextCommand,
+    // S3: bounded candidate list + fallback disposition so the model lane sees
+    // what was ambiguous and why.
+    signal_command_candidates: distinctSignalCommands.slice(0, 20),
+    recommended_next_command_fallback: nextCommandFallbackDisposition,
+    reaper_stale_excluded_candidates: reaperExcludedCount,
     handoff_path: handoffPath,
     artifact_receipts: artifactReceipts,
     missing_required_fields: missing,
@@ -512,7 +657,7 @@ function runShutdownInner(projectRoot, opts) {
   }
 
   const exec = opts.spawn || spawnSync;
-  const commands = { ...defaultCommands(), ...(opts.commands || {}) };
+  const commands = { ...defaultCommands(projectRoot), ...(opts.commands || {}) };
   const skipSet = new Set((opts.skip || []).map(normalizeSkipToken).filter(Boolean));
 
   // judgment_remaining: computed at runtime from the LIVE parsed spec steps
@@ -559,7 +704,7 @@ function runShutdownInner(projectRoot, opts) {
       continue;
     }
     // Mechanical lane.
-    if (coverage.step_id === 'preamble') {
+    if (coverage.step_id === 'preamble' || coverage.step_id === 'unrecognized-1') {
       record.status = 'complete';
       record.detail = `scope resolved mechanically via ${scopeInfo.selector} (${scopeInfo.scope_key})`;
       stepRecords.push(record);
@@ -598,9 +743,11 @@ function runShutdownInner(projectRoot, opts) {
       }
     } else if (record.exit_code === 0) {
       record.status = 'complete';
-    } else if (coverage.step_id === '5') {
+    } else if (coverage.step_id === '5' || coverage.step_id === '0') {
       record.status = 'failed';
-      record.detail = record.detail || 'sync-private-remotes exited nonzero; divergence requires human resolution; never force-push';
+      record.detail = record.detail || (coverage.step_id === '5'
+        ? 'sync-private-remotes exited nonzero; divergence requires human resolution; never force-push'
+        : 'watcher-stop exited nonzero (identity-refused or unreapable watchers); halting so closeout never races live daemons');
       halted = true;
       haltReason = {
         step_id: coverage.step_id,
@@ -649,7 +796,10 @@ function runShutdownInner(projectRoot, opts) {
     fs.writeFileSync(packetAbs, JSON.stringify(packet, null, 2) + '\n');
   }
 
-  const exitCode = halted ? 1 : 0;
+  // Blocked boundary emission is a failed close, not a quiet warning: a
+  // /shutdown that could not ground a handoff + next command must not report
+  // success (exit 3), or the closeout gate it exists to enforce is advisory.
+  const exitCode = halted ? 1 : (boundaryEmission.blocking ? 3 : 0);
   let stdout;
   if (opts.json !== false) {
     stdout = JSON.stringify({
@@ -686,7 +836,7 @@ function runShutdownInner(projectRoot, opts) {
 
 /**
  * Composable API. /cross-session may import this directly or invoke the
- * stable CLI (node tools/commands/smos-command-runner.cjs --command
+ * stable CLI (node tools/commands/mythos-command-runner.cjs --command
  * "/shutdown --system"); both hold.
  *
  * opts: { scope, system, client, skip: [], dryRun, exec, json, write,

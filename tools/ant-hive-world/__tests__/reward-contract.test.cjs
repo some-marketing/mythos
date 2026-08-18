@@ -97,11 +97,26 @@ test('DOCUMENTED EXCEPTION: a FAILED gather scores below idling when exhausted',
   assert.ok(failedGather < idleReward, 'a failed forage costs more than doing nothing');
 });
 
-test('failed actions and build/claim rewards are unchanged from v1', () => {
+// HISTORICAL NOTE (plan ant-sim-reward-specification-repair, S3, orchestrator
+// ruling): this test originally pinned that v2 changed ONLY the starvation
+// keying and left every other reward literal -- failed actions, build,
+// claim-territory -- byte-identical to v1. That "no other change" claim was
+// a fact about the v1->v2 boundary specifically. S3 deliberately supersedes
+// it: it retunes reward_build_applied 2.0 -> 1.5 and
+// reward_claim_territory_new 1.5 -> 0.5 (see train-tick.js's THE v3 TABLE,
+// and resolveRewardWeights()). A v3 test cannot assert "unchanged from v1"
+// for those two without being false, so the two literal pins that made that
+// claim (build applied === 2, claim-territory applied === 1.5) are retired
+// here rather than silently deleted -- this comment is their record. v3's
+// own ordering/weight assertions for build and claim-territory live in
+// __tests__/reward-contract-v3.test.cjs, not here.
+//
+// What remains true, and is what this test still asserts, is that the
+// FAILURE weight and the IDLE weight are untouched across the v2->v3
+// boundary as well.
+test('failed actions and idle reward are unchanged across the v2->v3 boundary', () => {
   assert.equal(computeReward({ verb: 'gather', applied: false }, false), -0.5);
-  assert.equal(computeReward({ verb: 'build', applied: true }, false), 2);
   assert.equal(computeReward({ verb: 'build', applied: false }, false), -0.5);
-  assert.equal(computeReward({ verb: 'claim-territory', applied: true }, false), 1.5);
   assert.equal(computeReward({ verb: 'idle', applied: true }, false), 0);
 });
 

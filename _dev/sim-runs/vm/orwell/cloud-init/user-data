@@ -136,11 +136,21 @@ write_files:
       # "verify manifests on both sides of every boundary".
       if [ -f "$COURIER/PAYLOAD-MANIFEST.txt" ]; then
         cd /opt/antworld
-        grep -v '^#' "$COURIER/PAYLOAD-MANIFEST.txt" | sha256sum -c - > /tmp/manifest-check.txt 2>&1 || true
+        # CODE REVIEW (confirmation pass, codex P1): `|| true` swallowed
+        # sha256sum's own exit code. When the manifest is empty, truncated to
+        # comments, or otherwise malformed, `sha256sum -c` exits nonzero with
+        # a parser error that does not contain the word FAILED -- so BAD
+        # stayed 0 and bootstrap accepted the payload having verified zero
+        # files. Capture sha256sum's real exit code and require at least one
+        # ": OK" line before treating the allowlist as verified.
+        grep -v '^#' "$COURIER/PAYLOAD-MANIFEST.txt" | sha256sum -c - > /tmp/manifest-check.txt 2>&1
+        MANIFEST_RC=$?
         BAD=$(grep -c 'FAILED' /tmp/manifest-check.txt || true)
         OK=$(grep -c ': OK' /tmp/manifest-check.txt || true)
-        echo "guest-side manifest verification: $OK OK, $BAD FAILED"
-        if [ "$BAD" != "0" ]; then echo "FATAL: payload manifest mismatch in guest"; exit 1; fi
+        echo "guest-side manifest verification: $OK OK, $BAD FAILED (sha256sum exit=$MANIFEST_RC)"
+        if [ "$MANIFEST_RC" != "0" ] || [ "$BAD" != "0" ] || [ "$OK" = "0" ]; then
+          echo "FATAL: payload manifest verification failed in guest (exit=$MANIFEST_RC, ok=$OK, bad=$BAD)"; exit 1
+        fi
       fi
 
       # --- No network: stop systemd waiting for one -----------------------

@@ -133,3 +133,13 @@ while ($true) {
 # --- 5..6 harvest -----------------------------------------------------------
 "=== HARVEST ==="
 & (Join-Path $PSScriptRoot 'harvest-results.ps1') -RunName $RunName
+
+# CODE REVIEW (confirmation pass, codex P2): a host-forced watchdog stop can
+# still leave a guest-written STATUS=0 if the guest had already finished
+# writing results before power-off cut it short -- so the STATUS gate above
+# does not catch this case. The job did not run to completion under its own
+# control, so it must not be reported as a normal successful run even though
+# harvest-results.ps1 has already preserved whatever artifacts exist.
+if ($forced) {
+  throw "REFUSING to report success: host watchdog forced VM '$VMName' to stop after $WatchdogMinutes minutes. Artifacts are preserved (see harvest above), but a forced stop is not a completed run."
+}

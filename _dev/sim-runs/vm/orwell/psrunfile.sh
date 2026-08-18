@@ -39,6 +39,25 @@ for sib in "$srcdir"/*.ps1; do
   scp -q "$sib" "orwell:${dest_dir}/${sibname}"
 done
 
+# CODE REVIEW (confirmation pass, codex P1): $* was expanded unquoted into
+# the ssh command string below. orwell's SSH default shell is cmd.exe, so a
+# caller-supplied argument containing whitespace or a cmd.exe metacharacter
+# (e.g. -RunName 'safe & whoami') is parsed as a separate remote command
+# before PowerShell or the target script's own validation ever sees it --
+# silently bypassing run-name/deadline checks like run-job.ps1's. Quoting
+# through ssh -> cmd.exe -> powershell is documented elsewhere in this
+# directory as unsafe for script bodies, so the fix here is allowlist
+# validation of every argument up front rather than attempting to quote
+# through three shells.
+for arg in "$@"; do
+  case "$arg" in
+    ''|*[!A-Za-z0-9_:./-]*)
+      echo "FATAL: argument '$arg' contains characters outside [A-Za-z0-9_:./-]; refusing to pass it through ssh -> cmd.exe -> powershell (injection risk)" >&2
+      exit 1
+      ;;
+  esac
+done
+
 ssh -o ConnectTimeout=30 orwell \
   "powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File ${dest_dir}/${name} $*" 2>&1 \
   | grep -v -e '^\*\* WARNING: connection is not using' \

@@ -42,9 +42,18 @@ say "sha256  : $LOCAL_SHA"
 say "size    : $(du -h "$ARCHIVE" | awk '{print $1}')"
 
 # --- refuse to ship anything that is not the allowlisted payload ------------
+# CODE REVIEW (confirmation pass, codex P1): a bare `*` glob only checks the
+# prefix/suffix -- a basename like antworld-payload-';...;#.tar.gz still
+# matches it. BASE later crosses into a single-quoted PowerShell string on
+# the remote side (hop 1 verification below); since orwell's SSH default
+# shell is cmd.exe, an embedded quote or shell metacharacter reaches the
+# remote command parser and can execute arbitrary commands under the
+# provisioning account. Require the exact UTC-stamp grammar build-export.sh
+# actually produces, character class by character class, so nothing but
+# digits, 'T' and 'Z' can appear in the stamp position.
 case "$BASE" in
-  antworld-payload-*.tar.gz) ;;
-  *) die "refusing to push '$BASE': only antworld-payload-*.tar.gz may cross" ;;
+  antworld-payload-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]T[0-9][0-9][0-9][0-9][0-9][0-9]Z.tar.gz) ;;
+  *) die "refusing to push '$BASE': must match antworld-payload-<UTC-stamp>.tar.gz exactly (build-export.sh's own stamp grammar; no extra characters)" ;;
 esac
 
 # --- ensure the remote staging tree exists ---------------------------------

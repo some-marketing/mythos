@@ -13408,7 +13408,6 @@
     "8e924025a26c584ad4ac6365116e09b852ae6b7016da4c0851e269348d93c228",
     "924b706c69dbf3653d580c0ec0373402b6845c58e0a7a7340db050a85bead8ee",
     "984ab8e1ce4f7e4fb08a5d3e1ffa52a58afe6afcfba05b35efb4f76c58a60c29",
-    "9a6937297f29ffe3a503d0980e1acee409697e1dbd9c01b65a50e73faebe2205",
     "9afcf05e0686aba039ccc353887ab82a1719aaeafd1f00f08c966854f8c63421",
     "a3edfc8f372d0d9790418579c1dcea8142701e55d587ca8b0aa730cfc1bedb3e",
     "b89910392c9e43ed40a2571bc02daa7e694f880f5ff93000967f66bbb5a37a03",
@@ -13448,9 +13447,6 @@
     ],
     "d5078f1ab80e9c7dfb4b1b31b22ddf60ac4d15f9da999d963741bf7e9c4027e3": [
       "tools/export-public/config/denylist-mythos.json"
-    ],
-    "9a6937297f29ffe3a503d0980e1acee409697e1dbd9c01b65a50e73faebe2205": [
-      "tools/commands/handlers/shutdown.cjs"
     ]
   },
   "security_evidence_artifacts": [

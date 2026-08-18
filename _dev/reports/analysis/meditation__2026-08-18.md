@@ -65,14 +65,14 @@
 
 ### 1.5 Port-era mechanical handlers — mixed (lost functionality #3)
 - Root `launchd/` tree = **stale smos duplicate family** (canonical is `tools/launchd/`):
-  - 12 smos plists point at the DELETED `/Users/admin/dev/SM_OS-recovered/` tree (moved to external
+  - 12 smos plists point at the DELETED `~/dev/SM_OS-recovered/` tree (moved to external
     storage per memory `sm-os-recovered-moved-to-general-storage`). All 12 targets MISSING.
   - `ca.somarketing.smos.delesign-poll` is **STILL LOADED** in launchctl (points into mythos, works,
     but wrong family; its mythos twin exists unloaded — identity confusion).
   - Root `launchd/install.sh` and `launchd/run-*.cjs` runners are stale duplicates of the
     `tools/launchd/` canonical set (different hashes).
 - `org.mythos.portable.*` (6 jobs) are LOADED and point at
-  `/Users/admin/.mythos-worktrees/mythos-portable-main/` — a Jul 29 **frozen worktree snapshot**,
+  `~/.mythos-worktrees/mythos-portable-main/` — a Jul 29 **frozen worktree snapshot**,
   not the live repo. They run old code. (Worktree dir still exists.)
 
 ### 1.6 Framework and verification contract

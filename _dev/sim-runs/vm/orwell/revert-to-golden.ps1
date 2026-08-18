@@ -72,7 +72,12 @@ else {
     if ($got -eq $want) { $ok++ } else { "MISMATCH $rel"; $bad++ }
   }
   "export verification: $ok OK, $bad BAD"
-  if ($bad -gt 0) { throw "golden export failed hash verification; refusing to restore from it" }
+  # CODE REVIEW (confirmation pass, codex P1): a hash file interrupted after
+  # its header but before any file-hash line was written previously verified
+  # as $ok=0, $bad=0, which passed the ($bad -gt 0) gate -- the destructive
+  # import below would then run against an export that was never actually
+  # verified. Require at least one OK entry, not merely zero bad ones.
+  if ($bad -gt 0 -or $ok -eq 0) { throw "golden export failed hash verification (ok=$ok bad=$bad); refusing to restore from it" }
 
   if (Get-VM -Name $VMName -ErrorAction SilentlyContinue) { Remove-VM -Name $VMName -Force }
   $vmcx = Get-ChildItem -LiteralPath $exportRoot.FullName -Recurse -Filter *.vmcx | Select-Object -First 1

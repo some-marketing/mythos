@@ -75,7 +75,23 @@ if (Test-Path $man) {
     if ($line -notmatch '^([0-9a-f]{64})\s+\.?[\\/]?(.+)$') { $malformed++; continue }
     $want = $Matches[1]
     $rel  = $Matches[2].Trim() -replace '/', '\'
-    $f    = Join-Path $runDir $rel
+    # CODE REVIEW (confirmation pass, codex P1): $rel comes from the
+    # UNTRUSTED guest. Without this guard a manifest entry containing '..'
+    # (e.g. '..\STATUS') resolves and hashes a path OUTSIDE $runDir -- a
+    # result directory containing only a manifest could reference a file the
+    # guest never wrote, letting $ok go positive while $actualFiles stays
+    # empty. Reject any relative path with a '..' segment or an absolute/
+    # rooted form before it is ever joined onto $runDir.
+    $relSegments = $rel -split '\\'
+    if ($rel -match '^[\\/]' -or $rel -match '^[A-Za-z]:' -or ($relSegments | Where-Object { $_ -eq '..' -or $_ -eq '.' })) {
+      "MALFORMED (path escape) $rel"; $malformed++; continue
+    }
+    $f = Join-Path $runDir $rel
+    $fResolved = [IO.Path]::GetFullPath($f)
+    $runDirResolved = [IO.Path]::GetFullPath($runDir)
+    if (-not $fResolved.StartsWith($runDirResolved + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) {
+      "MALFORMED (path escape) $rel"; $malformed++; continue
+    }
     [void]$manifestFiles.Add($rel.ToLowerInvariant())
     if (-not (Test-Path -LiteralPath $f)) { "MISSING $rel"; $bad++; continue }
     $got = (Get-FileHash -LiteralPath $f -Algorithm SHA256).Hash.ToLower()

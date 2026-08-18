@@ -7,6 +7,16 @@ f="$1"; shift || true
 name="$(basename "$f")"
 dest_dir='D:/HyperV/AntWorld/Logs/_run'
 
+# CODE REVIEW (confirmation pass, codex P1, round 2): $name is interpolated
+# directly into the remote command line below. orwell's SSH default shell is
+# cmd.exe, so a script basename like task.ps1&whoami would have its suffix
+# parsed as a second remote command. Require a strict single-token
+# [A-Za-z0-9_-]+.ps1 basename before it ever reaches scp or ssh.
+if ! printf '%s' "$name" | LC_ALL=C grep -Eq '^[A-Za-z0-9_-]+\.ps1$'; then
+  echo "FATAL: script basename '$name' does not match the required [A-Za-z0-9_-]+.ps1 grammar; refusing to pass it through ssh -> cmd.exe -> powershell (injection risk)" >&2
+  exit 1
+fi
+
 # FAIL CLOSED ON NON-ASCII.
 # PowerShell 5.1 reads a BOM-less file as Windows-1252, so a UTF-8 em-dash
 # arrives as mojibake whose trailing byte is a smart quote -- and PowerShell

@@ -51,26 +51,53 @@ MAN="$DEST/HARVEST-MANIFEST.txt"
 
 say ""
 say "verifying harvest manifest on the laptop side"
-ok=0; bad=0
+ok=0; bad=0; malformed=0
+manifest_list="$(mktemp)"
+trap 'rm -f "$manifest_list"' EXIT
 while IFS= read -r line; do
   # PowerShell writes this manifest with CRLF, so strip the carriage return
   # before anything else -- otherwise every path carries a trailing \r and every
   # single file reports MISSING while sitting right there on disk.
   line="${line%$'\r'}"
   case "$line" in \#*|'') continue ;; esac
+  # CODE REVIEW (confirmation pass, codex P1): a comment-only/truncated
+  # manifest previously fell straight through this loop with ok=0, bad=0,
+  # and the sole gate below (`bad -eq 0`) accepted that as success -- so a
+  # broken harvest, or a pull where scp copied files the manifest never
+  # mentions, was presented as fully verified. Require a strict "<64-hex>
+  # <sp><sp><path>" grammar per line, and require the pulled-file set to
+  # match the manifest set exactly.
+  if ! printf '%s' "$line" | LC_ALL=C grep -Eq '^[0-9a-f]{64}  .+$'; then
+    say "  MALFORMED $line"; malformed=$((malformed+1)); continue
+  fi
   want="${line%%  *}"
   rel="${line#*  }"
   # orwell writes Windows separators; normalise for the local filesystem.
   rel="$(printf '%s' "$rel" | tr '\\' '/')"
   rel="${rel%$'\r'}"
+  case "/$rel/" in
+    */../*|*/./*) say "  MALFORMED (path escape) $rel"; malformed=$((malformed+1)); continue ;;
+  esac
+  printf '%s\n' "$rel" >> "$manifest_list"
   f="$DEST/$rel"
   if [ ! -f "$f" ]; then say "  MISSING  $rel"; bad=$((bad+1)); continue; fi
   got="$(shasum -a 256 "$f" | awk '{print $1}')"
   if [ "$got" = "$want" ]; then ok=$((ok+1)); else say "  MISMATCH $rel"; bad=$((bad+1)); fi
 done < "$MAN"
 
-say "  $ok verified, $bad bad"
-[ "$bad" -eq 0 ] || die "hop 2 verification failed — results are not byte-identical to what orwell harvested"
+unlisted=0
+while IFS= read -r pulled; do
+  rel="${pulled#"$DEST"/}"
+  if ! grep -qxF "$rel" "$manifest_list"; then
+    say "  UNLISTED $rel"
+    unlisted=$((unlisted+1))
+  fi
+done < <(find "$DEST" -type f ! -name HARVEST-MANIFEST.txt ! -name PULL-MANIFEST.txt)
+
+say "  $ok verified, $bad bad, $malformed malformed, $unlisted unlisted"
+if [ "$bad" -ne 0 ] || [ "$malformed" -ne 0 ] || [ "$ok" -eq 0 ] || [ "$unlisted" -ne 0 ]; then
+  die "hop 2 verification failed — results are not byte-identical to (or not fully covered by) what orwell harvested (ok=$ok bad=$bad malformed=$malformed unlisted=$unlisted)"
+fi
 
 # --- provenance -------------------------------------------------------------
 {

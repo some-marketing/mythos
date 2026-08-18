@@ -120,8 +120,15 @@ if (Test-Path $man) {
 # --- host-side manifest for the next hop ------------------------------------
 $outMan = Join-Path $Sterile 'HARVEST-MANIFEST.txt'
 "# harvested $(Get-Date -Format o) from courier, run $RunName" | Set-Content -LiteralPath $outMan
+# CODE REVIEW (confirmation pass, codex P2): a basename-wide exclusion also
+# skips a GUEST-written file nested somewhere under $Sterile that happens to
+# share the generated manifest's basename -- that file is copied into
+# sterile staging but never listed in HARVEST-MANIFEST.txt, and hop 2's
+# same-basename exclusion (pull-results.sh) then never checks it either, so
+# it crosses both hops unverified. Exempt only the actual generated file by
+# full path.
 Get-ChildItem -LiteralPath $Sterile -Recurse -File |
-  Where-Object { $_.Name -ne 'HARVEST-MANIFEST.txt' } |
+  Where-Object { $_.FullName -ne $outMan } |
   Sort-Object FullName | ForEach-Object {
     $h = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash.ToLower()
     $rel = $_.FullName.Substring($Sterile.Length + 1)

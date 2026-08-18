@@ -85,14 +85,22 @@ while IFS= read -r line; do
   if [ "$got" = "$want" ]; then ok=$((ok+1)); else say "  MISMATCH $rel"; bad=$((bad+1)); fi
 done < "$MAN"
 
+# CODE REVIEW (confirmation pass, codex P2): excluding by basename anywhere
+# in the tree (rather than by exact top-level path) would let a nested guest
+# file that happens to be named HARVEST-MANIFEST.txt or PULL-MANIFEST.txt
+# silently skip the unlisted-file check. Exclude only the two actual
+# generated files at $DEST's root.
 unlisted=0
 while IFS= read -r pulled; do
   rel="${pulled#"$DEST"/}"
+  case "$rel" in
+    HARVEST-MANIFEST.txt|PULL-MANIFEST.txt) continue ;;
+  esac
   if ! grep -qxF "$rel" "$manifest_list"; then
     say "  UNLISTED $rel"
     unlisted=$((unlisted+1))
   fi
-done < <(find "$DEST" -type f ! -name HARVEST-MANIFEST.txt ! -name PULL-MANIFEST.txt)
+done < <(find "$DEST" -type f)
 
 say "  $ok verified, $bad bad, $malformed malformed, $unlisted unlisted"
 if [ "$bad" -ne 0 ] || [ "$malformed" -ne 0 ] || [ "$ok" -eq 0 ] || [ "$unlisted" -ne 0 ]; then

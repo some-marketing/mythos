@@ -43,6 +43,7 @@
     "manifest:check": "node tools/verify/sync-manifest.cjs --check",
     "verify:parity": "node tools/parity/verify-parity.cjs",
     "parity:graph": "node tools/parity/build-wiring-graph.cjs",
+    "parity:baseline:repair": "node tools/parity/surgical-baseline-repair.cjs",
     "verify:parity:source": "node tools/parity/verify-parity.cjs",
     "verify:parity:ledger": "node tools/parity/check-ledger.cjs parity/reconciliation-ledger.json",
     "parity:ledger:generate": "node tools/parity/generate-reconciliation-ledger.cjs",

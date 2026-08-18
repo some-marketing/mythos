@@ -2816,7 +2816,7 @@
       "id": "file:.claude/settings.json",
       "type": "file",
       "path": ".claude/settings.json",
-      "sha256": "2f5ace5b3552ef13dc51a0e9fbdb1b80ed9e7f26cfaff793ee84eae904f85207",
+      "sha256": "7f20ab907b9edf9426ad693ca8302b34cc928fe007f61894944abd547830d2bd",
       "mode": 420
     },
     {
@@ -9053,7 +9053,7 @@
       "id": "file:package.json",
       "type": "file",
       "path": "package.json",
-      "sha256": "a355d08171297472c9cc554f703dc7d3dc42d654a419acdf2aca31a7c3a0baa7",
+      "sha256": "7b537dae589c8ac17c0fb4665c370028285b3cdc29e13980fbe7725f61d6f03c",
       "mode": 420
     },
     {
@@ -9624,6 +9624,20 @@
       "mode": 420
     },
     {
+      "id": "file:tools/ant-hive-world/__tests__/fixtures/fixture-v1.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/fixtures/fixture-v1.json",
+      "sha256": "44ad0a4ab6e87523ec047b7512f159e0b6bd4e00796bc7232798220e7e63e9c5",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/fixtures/fixture-v2.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/fixtures/fixture-v2.json",
+      "sha256": "f8ee5b840b4bb17c8bb10f15e921409fd8479cbc5cb86f693e277157a98de969",
+      "mode": 420
+    },
+    {
       "id": "file:tools/ant-hive-world/__tests__/gather-yield.test.cjs",
       "type": "file",
       "path": "tools/ant-hive-world/__tests__/gather-yield.test.cjs",
@@ -9753,7 +9767,7 @@
       "id": "file:tools/ant-hive-world/__tests__/untrained-network.test.cjs",
       "type": "file",
       "path": "tools/ant-hive-world/__tests__/untrained-network.test.cjs",
-      "sha256": "fd4ddfbb63bf6d59c4f882eabe4945d6361d5eb3dd71acf2b35245cf0a61c843",
+      "sha256": "260424f45f00caffb0117da7f75376a550ed6514a1198342283bf4a19ea8c066",
       "mode": 420
     },
     {
@@ -13782,6 +13796,20 @@
       "mode": 420
     },
     {
+      "id": "file:tools/kernel/hooks/__tests__/dispatch-stop-failopen.test.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/__tests__/dispatch-stop-failopen.test.cjs",
+      "sha256": "c6f371cd3ed2d7a21e51d23642c2a688255006db556c70dfdc8183e1ef7610e8",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/kernel/hooks/__tests__/dispatch-userprompt-failopen.test.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/__tests__/dispatch-userprompt-failopen.test.cjs",
+      "sha256": "771dee97c859b57b88eb91730f944f7f2a80a46e2828d785cf9be0ab7c5a2a91",
+      "mode": 420
+    },
+    {
       "id": "file:tools/kernel/hooks/__tests__/once-per-session.test.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/__tests__/once-per-session.test.cjs",
@@ -13932,14 +13960,14 @@
       "id": "file:tools/kernel/hooks/dispatch-stop.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/dispatch-stop.cjs",
-      "sha256": "a7eb55ef358657251267097fafbd3d9fd80a7a1f3692ecae6c344b2ef68c1977",
+      "sha256": "134e5ec30a7a8765f8980f5ba74519e410c410cbc2315532eb53dc7ed4ea1329",
       "mode": 420
     },
     {
       "id": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/dispatch-userprompt.cjs",
-      "sha256": "f158cb755cf18e980af478a7bb2b8ea8661cf5b5e9503ba6fb3e694df2b27e33",
+      "sha256": "603fac5b2968f678faa50aaddd389d5c4b76298f276106e47f6d2de4a2ac06e2",
       "mode": 420
     },
     {
@@ -16368,7 +16396,7 @@
       "id": "file:tools/parity/build-wiring-graph.cjs",
       "type": "file",
       "path": "tools/parity/build-wiring-graph.cjs",
-      "sha256": "12c11bee283fac5ad6bc5b94efdf4bee972f9e40dd69d62cf200efbd1b2ab100",
+      "sha256": "ff4d8beaebd80701a06588312391da7969df90a4a9c0fa1ce7b96cb6e9ea04cf",
       "mode": 420
     },
     {
@@ -20836,70 +20864,70 @@
       "name": "wordpress/seo-validation"
     },
     {
-      "id": "hook:PostToolUse:619",
+      "id": "hook:PostToolUse:620",
       "type": "hook",
       "event": "PostToolUse",
       "command_sha256": "e395bd31a35362065002007d044e98d86e484bf829d16ebe2027da8a928db52c"
     },
     {
-      "id": "hook:PreToolUse:616",
+      "id": "hook:PreToolUse:617",
       "type": "hook",
       "event": "PreToolUse",
       "command_sha256": "ce97f4fd7eb07f52a0e9c6352fab2ce0e803f0920ef184d8f42261a46580103b"
     },
     {
-      "id": "hook:SessionEnd:623",
+      "id": "hook:SessionEnd:624",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "35974852e367c31bae49591ac0aa4afd518ec624f233743462e37c4c3863b1ed"
     },
     {
-      "id": "hook:SessionEnd:624",
+      "id": "hook:SessionEnd:625",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "519f522b04afb8471aa7e7ca117deb8af91976de62b5c1f5f4f6f9f60c8c217f"
     },
     {
-      "id": "hook:SessionEnd:625",
+      "id": "hook:SessionEnd:626",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "4ee05b68abff34325a3950761939e20cf2391c7b29d640b29b95233d29943fd4"
     },
     {
-      "id": "hook:SessionStart:620",
+      "id": "hook:SessionStart:621",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "26962e5976f5c689361f18050bb4e718d507df72590fbbc620e356cde47cf86b"
     },
     {
-      "id": "hook:SessionStart:621",
+      "id": "hook:SessionStart:622",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "00253242784e7853b94e1125e7c69f31085961b2dd7b3d1fcb6b4c79d94e9baf"
     },
     {
-      "id": "hook:SessionStart:622",
+      "id": "hook:SessionStart:623",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "c738ce0e54e375f17b97f1186b95e5fd1125c0675d2f3e9238e872062f5b7076"
     },
     {
-      "id": "hook:Stop:617",
+      "id": "hook:Stop:618",
       "type": "hook",
       "event": "Stop",
-      "command_sha256": "c0c0282a10c1ff35c525d7786ceb380c853b678494f400dbf1fc178cdddcbb19"
+      "command_sha256": "4f226e828c37bc4a712aab7fb0158cc46e64d013ffa001531087941dfd30cca3"
     },
     {
-      "id": "hook:SubagentStop:626",
+      "id": "hook:SubagentStop:627",
       "type": "hook",
       "event": "SubagentStop",
       "command_sha256": "4ca0f2529c8dd4023ade83508a1e40a1728dbdcfa35aadf9ea953cf8ac9a587d"
     },
     {
-      "id": "hook:UserPromptSubmit:618",
+      "id": "hook:UserPromptSubmit:619",
       "type": "hook",
       "event": "UserPromptSubmit",
-      "command_sha256": "d647b60c73e5962cae00cf1cf2bd11d28472fdb8c47074a2e62cabf0e7e89545"
+      "command_sha256": "d4ad7e134fc41713541198d7a3573ced8aea291a0528477528b08ca3c5b1dfe7"
     },
     {
       "id": "installer-definition:frameworks/wordpress/qa/runner/tools/install-browsers.js",
@@ -23744,6 +23772,12 @@
       "type": "package-script",
       "name": "next-step",
       "command_sha256": "66f19f22112eb13c9cc5a6db948ecf21ed4049f4b1dfc1c2a2d3bf721af93e5e"
+    },
+    {
+      "id": "package-script:parity:baseline:repair",
+      "type": "package-script",
+      "name": "parity:baseline:repair",
+      "command_sha256": "e417724921acd6c0a3d17938e159de83a071015cab41769e63f2e134e906d314"
     },
     {
       "id": "package-script:parity:graph",
@@ -27035,16 +27069,6 @@
       "specifier": "./config"
     },
     {
-      "id": "13a2b0aac5a6e45262c7349c975b20cf090c9edf18a5ba2fe733405544f18e92",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:624",
-      "to": "file:tools/context/repo-awareness-closeout.cjs",
-      "target": "tools/context/repo-awareness-closeout.cjs",
-      "required": true,
-      "declared_target": "tools/context/repo-awareness-closeout.cjs",
-      "event": "SessionEnd"
-    },
-    {
       "id": "13a6d29ffb0a917969ba8bb7d523f723202383c278d0eb510f25fe4b63321c9d",
       "type": "static-import",
       "from": "file:tools/signals/lib/__tests__/signal-emission-evidence.test.js",
@@ -27172,16 +27196,6 @@
       "target": "instructions/canonical/commands/fw-deliverables-presentation-review.yaml",
       "required": true,
       "declared_target": "instructions/canonical/commands/fw-deliverables-presentation-review.yaml"
-    },
-    {
-      "id": "15256cebfd4f2d712e9be2db2e0a4d19a18b9f126d0d1e54609e341fce034e1a",
-      "type": "hook-target",
-      "from": "hook:PostToolUse:619",
-      "to": "file:tools/kernel/hooks/dispatch-posttool.cjs",
-      "target": "tools/kernel/hooks/dispatch-posttool.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-posttool.cjs",
-      "event": "PostToolUse"
     },
     {
       "id": "153d04b87b7de4254186edd64e84f04ed26871a6c96c2691c857233727141e0b",
@@ -27564,6 +27578,16 @@
       "target": "tools/dart-integration/lib/plan-dart-projection.js",
       "required": true,
       "specifier": "./lib/plan-dart-projection.js"
+    },
+    {
+      "id": "18e25f4aeed59304ff7e96a0ecaaa1e64f317cab2b7f7624bc2c21c96a5d1c0a",
+      "type": "hook-target",
+      "from": "hook:Stop:618",
+      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
+      "target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "event": "Stop"
     },
     {
       "id": "18e6544664fa5062e7e47538e378a2f7126287b3110743bb105ae8cb70cdd982",
@@ -32044,16 +32068,6 @@
       "specifier": "schemas/stage0-conversion-signal.schema.json"
     },
     {
-      "id": "45010621075a955b19a049826787df897f5b2c602c098832fc646570c5115a40",
-      "type": "hook-target",
-      "from": "hook:SessionStart:621",
-      "to": "file:tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "required": true,
-      "declared_target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "event": "SessionStart"
-    },
-    {
       "id": "45180fbfa26677fb65c69a9d5cab311256000e7b856ae5b8723668058398a1fd",
       "type": "static-import",
       "from": "file:tools/maintenance/lib/closeout-maintenance.js",
@@ -32895,6 +32909,16 @@
       "specifier": "../capability-probe.js"
     },
     {
+      "id": "4d3b76c049eca069cd781a23557369d9bf4b3f7b28f8c6d948f8fdc350345015",
+      "type": "package-script-target",
+      "from": "package-script:parity:baseline:repair",
+      "to": "file:tools/parity/surgical-baseline-repair.cjs",
+      "target": "tools/parity/surgical-baseline-repair.cjs",
+      "required": true,
+      "declared_target": "tools/parity/surgical-baseline-repair.cjs",
+      "resolution": "tracked"
+    },
+    {
       "id": "4d3c05b871232d58d2b6c6b74f6ebdfe90f80ac1e4a61e366ab7e82c78d7f9a6",
       "type": "schema-definition-file",
       "from": "schema-definition:tools/verify/schemas/settings.schema.json",
@@ -33590,16 +33614,6 @@
       "target": ".claude/commands/oc.md",
       "required": true,
       "declared_target": ".claude/commands/oc.md"
-    },
-    {
-      "id": "5557f941808e32c6bb11efc3fb3aedac909ca0e635d931405d9a4ee9db157536",
-      "type": "hook-target",
-      "from": "hook:SessionStart:620",
-      "to": "file:tools/kernel/hooks/dispatch-session-start.cjs",
-      "target": "tools/kernel/hooks/dispatch-session-start.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-session-start.cjs",
-      "event": "SessionStart"
     },
     {
       "id": "5559cf7edb3ff868f904593e6d154e7e4a1086e1c7615de23c05e087b783feca",
@@ -36947,16 +36961,6 @@
       "specifier": "../reconciliation/lib/evidence-binding.cjs"
     },
     {
-      "id": "74c5d22843ff65444a0c3d21242b63434a9079e88eb861a3212fab19e2695e30",
-      "type": "hook-target",
-      "from": "hook:SubagentStop:626",
-      "to": "file:.claude/hooks/subagent-telemetry-writer.cjs",
-      "target": ".claude/hooks/subagent-telemetry-writer.cjs",
-      "required": true,
-      "declared_target": ".claude/hooks/subagent-telemetry-writer.cjs",
-      "event": "SubagentStop"
-    },
-    {
       "id": "74d7694a96d71ee50544cbdc47775a59a12bfdb780ac411ef70000035b59939f",
       "type": "static-import",
       "from": "file:tools/verify/verify-run-evidence.cjs",
@@ -37785,6 +37789,16 @@
       "specifier": "../telemetry/dispatches/lib/emit-span.cjs"
     },
     {
+      "id": "7e26be47a156a113bdff91d299e6676208fd2ca5eca22ad312d7bf165c5ee9af",
+      "type": "hook-target",
+      "from": "hook:PostToolUse:620",
+      "to": "file:tools/kernel/hooks/dispatch-posttool.cjs",
+      "target": "tools/kernel/hooks/dispatch-posttool.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-posttool.cjs",
+      "event": "PostToolUse"
+    },
+    {
       "id": "7e27ac3487187db63a6dd98d4c91c8f981ecbf8eebf3016dce89d30b56b397f6",
       "type": "schema-definition-file",
       "from": "schema-definition:tools/framework-execution/compiler/framework-run-plan.schema.json",
@@ -37855,6 +37869,15 @@
       "target": "tools/planning/lib/resolve-task-plan.js",
       "required": true,
       "specifier": "./lib/resolve-task-plan"
+    },
+    {
+      "id": "7eb8e20e983f46de3681a6614eff3842d7e58bf1dbb6cf7e12a437bdc41afe9b",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/dispatch-stop-failopen.test.cjs",
+      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
+      "target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "required": true,
+      "specifier": "../dispatch-stop.cjs"
     },
     {
       "id": "7ed237610dcfd6210477e0bdc832d2b9efe08208e4c6a93f8a553401544f3811",
@@ -38704,6 +38727,16 @@
       "target": "tools/ai-bridge/lib/model-registry.js",
       "required": true,
       "specifier": "./model-registry"
+    },
+    {
+      "id": "8620d016571df905a8348f72c38996cd7d80bb23b77b87e67fd56190447c18e0",
+      "type": "hook-target",
+      "from": "hook:SessionStart:623",
+      "to": "file:tools/user/inject-mirror.cjs",
+      "target": "tools/user/inject-mirror.cjs",
+      "required": true,
+      "declared_target": "tools/user/inject-mirror.cjs",
+      "event": "SessionStart"
     },
     {
       "id": "8677095012523dec8766751b914ab17f9a0674f7e1f5baca2a06dd526eaf9c45",
@@ -39650,6 +39683,16 @@
       "required": true,
       "declared_target": "tools/codex/hook-emulator.js",
       "resolution": "tracked"
+    },
+    {
+      "id": "90acdad549ab9bec10ebb7dd28745709cb3108dee4e8b5a0a38fd23ab0810d4c",
+      "type": "hook-target",
+      "from": "hook:SubagentStop:627",
+      "to": "file:.claude/hooks/subagent-telemetry-writer.cjs",
+      "target": ".claude/hooks/subagent-telemetry-writer.cjs",
+      "required": true,
+      "declared_target": ".claude/hooks/subagent-telemetry-writer.cjs",
+      "event": "SubagentStop"
     },
     {
       "id": "90ce11dececd066783d72f1d8f4ca94aa9dc607c251709a913fadca6364ec3b0",
@@ -43060,6 +43103,16 @@
       "declared_target": "frameworks/paid-media/google-ads-search-campaign-build/.claude/skills/google-ads-search-campaign-build"
     },
     {
+      "id": "b1c59cb409a853fd6af6fcb3ef5dba51db75eda7ab50dcfffb8bd2939b5ce278",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:626",
+      "to": "file:tools/sessions/session-end-boundary-log.cjs",
+      "target": "tools/sessions/session-end-boundary-log.cjs",
+      "required": true,
+      "declared_target": "tools/sessions/session-end-boundary-log.cjs",
+      "event": "SessionEnd"
+    },
+    {
       "id": "b1c8f4bc66eae7747ca039cf68223593f613c5a80c651c32e28e33881451ff4c",
       "type": "package-script-target",
       "from": "package-script:test",
@@ -43321,16 +43374,6 @@
       "target": "tools/planning/lib/resolve-task-plan.js",
       "required": true,
       "specifier": "../planning/lib/resolve-task-plan"
-    },
-    {
-      "id": "b4a57f14ed55c3d8fd624bc38c5d785f6b0253addf4afa3790de9daf38d58ac0",
-      "type": "hook-target",
-      "from": "hook:UserPromptSubmit:618",
-      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
-      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-userprompt.cjs",
-      "event": "UserPromptSubmit"
     },
     {
       "id": "b4aa3e489b8e7a177078328575f18f094d278b6ca753883516275275ab45b6c8",
@@ -44135,16 +44178,6 @@
       "specifier": "./lib/detectors.cjs"
     },
     {
-      "id": "bbdc17c7a528ebc0770aaf340cb26a5cc4da4933cad3133044ead8c691435e5a",
-      "type": "hook-target",
-      "from": "hook:SessionStart:622",
-      "to": "file:tools/user/inject-mirror.cjs",
-      "target": "tools/user/inject-mirror.cjs",
-      "required": true,
-      "declared_target": "tools/user/inject-mirror.cjs",
-      "event": "SessionStart"
-    },
-    {
       "id": "bc1b3df8df3314a394712541198bbfb8be78d1c1664a63995e4a80017147f622",
       "type": "schema-definition-file",
       "from": "schema-definition:frameworks/paid-media/meta-creative-iteration/schemas/stage1-message-hypothesis.schema.json",
@@ -44606,16 +44639,6 @@
       "specifier": "./lib/copy-prompts.js"
     },
     {
-      "id": "bf9a9c9a490a0c06e8eec1871da2805321d6c64f044777234e10166be5e9ef56",
-      "type": "hook-target",
-      "from": "hook:PreToolUse:616",
-      "to": "file:tools/kernel/hooks/dispatch-pretool.cjs",
-      "target": "tools/kernel/hooks/dispatch-pretool.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-pretool.cjs",
-      "event": "PreToolUse"
-    },
-    {
       "id": "bfa8a3a38445f0b8cbb01282cd614f650fec04b27d157a623c145ea3c66b494e",
       "type": "static-import",
       "from": "file:tools/operator-guidance/index.js",
@@ -44623,6 +44646,16 @@
       "target": "tools/operator-guidance/schema.js",
       "required": true,
       "specifier": "./schema"
+    },
+    {
+      "id": "bfaa194e7a44c46baf25328be6a1610c8a7d32cd6c371f4b47eddceebea64a1a",
+      "type": "hook-target",
+      "from": "hook:PreToolUse:617",
+      "to": "file:tools/kernel/hooks/dispatch-pretool.cjs",
+      "target": "tools/kernel/hooks/dispatch-pretool.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-pretool.cjs",
+      "event": "PreToolUse"
     },
     {
       "id": "bfbd3f7bd664cac0ad3b56539e6ce20eca90183d5d42e3f5571124641607f9a4",
@@ -44750,6 +44783,16 @@
       "target": "tools/workspace/lib/args.js",
       "required": true,
       "specifier": "../workspace/lib/args"
+    },
+    {
+      "id": "c16e5ac5666d51a42ec627177658c75c09326028cdb37a779077a9414b777b56",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:625",
+      "to": "file:tools/context/repo-awareness-closeout.cjs",
+      "target": "tools/context/repo-awareness-closeout.cjs",
+      "required": true,
+      "declared_target": "tools/context/repo-awareness-closeout.cjs",
+      "event": "SessionEnd"
     },
     {
       "id": "c1793462b5c9904162fa7c44219fb005b7a878934437a7b4f6f1bb1a1ac0c5fb",
@@ -44984,6 +45027,15 @@
       "target": "tools/export-public/export-public.cjs",
       "required": true,
       "specifier": "./export-public.cjs"
+    },
+    {
+      "id": "c48ce7e893971466a36399285eda1cbf50efa8fed446c8fea65b7670699dec61",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/dispatch-userprompt-failopen.test.cjs",
+      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
+      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "required": true,
+      "specifier": "../dispatch-userprompt.cjs"
     },
     {
       "id": "c497f294f4af89cc1f13919dde4faac19956158d65e72115f621b03adfc4419a",
@@ -46162,16 +46214,6 @@
       "specifier": "../../../kernel/lib/dart-identity-precondition"
     },
     {
-      "id": "d1077a367a9ccc4b6795aa8c0d640fcf1881102d1e0bc58ae41aaf02dcc2f439",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:623",
-      "to": "file:tools/hooks/session-lifecycle/session-end-close.cjs",
-      "target": "tools/hooks/session-lifecycle/session-end-close.cjs",
-      "required": true,
-      "declared_target": "tools/hooks/session-lifecycle/session-end-close.cjs",
-      "event": "SessionEnd"
-    },
-    {
       "id": "d118f375ad95e5534843fa1dc8a383691e1b5553bdaf37efb23499d742c3780c",
       "type": "static-import",
       "from": "file:tools/planning/lib/__tests__/handoff-authority-assessment.test.js",
@@ -47118,6 +47160,26 @@
       "specifier": "./lib.js"
     },
     {
+      "id": "db98d419e99d319228d09f145922bdf8f0fc1c191a158244d4f4511446ed9751",
+      "type": "hook-target",
+      "from": "hook:SessionStart:622",
+      "to": "file:tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "required": true,
+      "declared_target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "event": "SessionStart"
+    },
+    {
+      "id": "dbb7eb37d67288527794a4bfb62c8315cf82e9dd36e734c516399881e9736d2c",
+      "type": "hook-target",
+      "from": "hook:UserPromptSubmit:619",
+      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
+      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "event": "UserPromptSubmit"
+    },
+    {
       "id": "dbb8528b47366653ad83fedacef4b1e9d94f21527d3ff1c8817eb799412a71bb",
       "type": "schema-definition-file",
       "from": "schema-definition:frameworks/deliverables/presentation-review/schemas/output/slide-finding.schema.json",
@@ -47170,6 +47232,16 @@
       "target": ".claude/commands/el.md",
       "required": true,
       "declared_target": ".claude/commands/el.md"
+    },
+    {
+      "id": "dc95bb94a319efc972b5f8fdc3cd2c6f42fee99e4e0fc6c2e4a276dd5ee3f95d",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:624",
+      "to": "file:tools/hooks/session-lifecycle/session-end-close.cjs",
+      "target": "tools/hooks/session-lifecycle/session-end-close.cjs",
+      "required": true,
+      "declared_target": "tools/hooks/session-lifecycle/session-end-close.cjs",
+      "event": "SessionEnd"
     },
     {
       "id": "dc9fcd21524839f8bf74c7b6b4a4820f8d9e0f99fb7a6408ca77f91698fbf89d",
@@ -49564,6 +49636,16 @@
       "specifier": "../../telemetry/dispatches/lib/trace-context.cjs"
     },
     {
+      "id": "f2526a3705800204dde0232165569f03685db4ed99b0c96ceaf515aed956e01c",
+      "type": "hook-target",
+      "from": "hook:SessionStart:621",
+      "to": "file:tools/kernel/hooks/dispatch-session-start.cjs",
+      "target": "tools/kernel/hooks/dispatch-session-start.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-session-start.cjs",
+      "event": "SessionStart"
+    },
+    {
       "id": "f259088384650860f9743b83dca55c9fa0f8fb3c9b66fea23f64343ba587c9da",
       "type": "static-import",
       "from": "file:tools/bundle/generate-handoff-bundle.js",
@@ -50447,16 +50529,6 @@
       "specifier": "../../schemas/operator-public-keyring.schema.json"
     },
     {
-      "id": "f9688fbd1b7b306f708db371851b8692c397a49b35009482a28701edd415566f",
-      "type": "hook-target",
-      "from": "hook:Stop:617",
-      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
-      "target": "tools/kernel/hooks/dispatch-stop.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-stop.cjs",
-      "event": "Stop"
-    },
-    {
       "id": "f96cf6cf07ac622b011d4137bb2022e82eb5eb96eca3b47fd9f6b33b2d5f8698",
       "type": "static-import",
       "from": "file:tools/planning/lib/harness-plan-output-contract.js",
@@ -50721,16 +50793,6 @@
       "required": true,
       "declared_target": ".claude/commands/evidence-loop.md",
       "authority": "evidence-loop"
-    },
-    {
-      "id": "fb6ac5cf4a29f1481e60c630044cc2475c4c37c1a3a57082c1b5aee782b195eb",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:625",
-      "to": "file:tools/sessions/session-end-boundary-log.cjs",
-      "target": "tools/sessions/session-end-boundary-log.cjs",
-      "required": true,
-      "declared_target": "tools/sessions/session-end-boundary-log.cjs",
-      "event": "SessionEnd"
     },
     {
       "id": "fb872ca135397343cb1965338de6e528a162d620ccd0016c27e22159a4843c76",
@@ -51260,8 +51322,8 @@
     }
   ],
   "counts": {
-    "nodes": 3846,
-    "edges": 2879,
+    "nodes": 3851,
+    "edges": 2882,
     "unresolved": 0
   }
 }

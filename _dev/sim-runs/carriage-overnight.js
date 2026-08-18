@@ -88,6 +88,19 @@ const EPISODE_ROUNDS = parseInt(argVal('--episode-rounds', '2000'), 10);
 const MAX_EPISODES = parseInt(argVal('--max-episodes', '1000'), 10);
 const DEADLINE_ISO = argVal('--deadline-iso', null);
 const REPLICATES = parseInt(argVal('--replicates', '5'), 10);
+
+// CODE REVIEW (confirmation pass, codex P2, round 9): none of these three
+// dimensions were validated when this driver is invoked directly (its
+// wrapper, run-job.ps1, validates them for the courier-driven path, but
+// that does not protect this documented standalone CLI, and the same gap
+// exists in authority-probe.js). A value of 0 lets the run emit zero-round
+// final rows and episode-end events and exit successfully with no results.
+for (const [name, value] of [['--episode-rounds', EPISODE_ROUNDS], ['--max-episodes', MAX_EPISODES], ['--replicates', REPLICATES]]) {
+  if (!Number.isInteger(value) || value < 1) {
+    process.stderr.write(`FAIL-CLOSED: ${name} must be a positive integer, got ${value}\n`);
+    process.exit(2);
+  }
+}
 const TICK_INTERVAL_MS = parseInt(argVal('--tick-interval-ms', '10'), 10);
 const SUMMARY_EVERY = parseInt(argVal('--summary-every', '200'), 10);
 const KILL_SWITCH = path.resolve(argVal('--kill-switch', path.join(REPO_ROOT, '_dev', 'state', 'kill-switches', 'ant-sim-overnight.off')));
@@ -436,13 +449,24 @@ async function runEpisode(episode) {
 
 async function main() {
   let episode = 0;
+  let completedEpisodes = 0;
   while (!checkStop(episode)) {
-    await runEpisode(episode);
+    const roundsDone = await runEpisode(episode);
+    if (roundsDone >= EPISODE_ROUNDS) completedEpisodes += 1;
     episode += 1;
   }
-  logEvent({ event: 'run-stopped', reason: stopReason, episodes_completed: episode });
+  logEvent({ event: 'run-stopped', reason: stopReason, episodes_completed: episode, full_episodes_completed: completedEpisodes });
   process.stdout.write(`\ncarriage-overnight: stopped after ${episode} episodes (${stopReason}).\n`);
   try { fs.unlinkSync(PID_FILE); } catch { /* already gone */ }
+  // CODE REVIEW (confirmation pass, codex P2, round 9): a deadline or
+  // kill-switch firing during the very first episode previously still
+  // exited 0 -- the guest wrote STATUS=0, and the host reported an empty
+  // experiment (zero-round final rows, no analyzable results) as a
+  // successful run. Require at least one fully-completed episode.
+  if (completedEpisodes === 0) {
+    process.stderr.write('FAIL-CLOSED: stopped before completing a single full episode; refusing to report success for an empty experiment\n');
+    process.exitCode = 5;
+  }
 }
 
 main().catch((e) => {

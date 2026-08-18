@@ -102,6 +102,17 @@ const EPISODE_ROUNDS = parseInt(argVal('--episode-rounds', '2000'), 10);
 const MAX_EPISODES = parseInt(argVal('--max-episodes', '100'), 10);
 const DEADLINE_ISO = argVal('--deadline-iso', null);
 const REPLICATES = parseInt(argVal('--replicates', '3'), 10);
+
+// CODE REVIEW (confirmation pass, codex P2, round 9): same gap as
+// carriage-overnight.js -- none of these three dimensions were validated,
+// so a directly-invoked --episode-rounds/--max-episodes/--replicates of 0
+// exits successfully having run nothing.
+for (const [name, value] of [['--episode-rounds', EPISODE_ROUNDS], ['--max-episodes', MAX_EPISODES], ['--replicates', REPLICATES]]) {
+  if (!Number.isInteger(value) || value < 1) {
+    process.stderr.write(`FAIL-CLOSED: ${name} must be a positive integer, got ${value}\n`);
+    process.exit(2);
+  }
+}
 const TICK_INTERVAL_MS = parseInt(argVal('--tick-interval-ms', '10'), 10);
 const SUMMARY_EVERY = parseInt(argVal('--summary-every', '200'), 10);
 const KILL_SWITCH = path.resolve(argVal('--kill-switch', path.join(REPO_ROOT, '_dev', 'state', 'kill-switches', 'ant-sim-authority-probe.off')));
@@ -771,13 +782,23 @@ async function runEpisode(episode) {
 
 async function main() {
   let episode = 0;
+  let completedEpisodes = 0;
   while (!checkStop(episode)) {
-    await runEpisode(episode);
+    const roundsDone = await runEpisode(episode);
+    if (roundsDone >= EPISODE_ROUNDS) completedEpisodes += 1;
     episode += 1;
   }
-  logEvent({ event: 'run-stopped', reason: stopReason, episodes_completed: episode });
+  logEvent({ event: 'run-stopped', reason: stopReason, episodes_completed: episode, full_episodes_completed: completedEpisodes });
   process.stdout.write(`\nauthority-probe: stopped after ${episode} episodes (${stopReason}).\n`);
   try { fs.unlinkSync(PID_FILE); } catch { /* already gone */ }
+  // CODE REVIEW (confirmation pass, codex P2, round 9): same gap as
+  // carriage-overnight.js -- a deadline or kill-switch firing during the
+  // very first episode previously still exited 0 with no analyzable
+  // results. Require at least one fully-completed episode.
+  if (completedEpisodes === 0) {
+    process.stderr.write('FAIL-CLOSED: stopped before completing a single full episode; refusing to report success for an empty experiment\n');
+    process.exitCode = 5;
+  }
 }
 
 main().catch((e) => {

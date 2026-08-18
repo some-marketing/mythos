@@ -2816,7 +2816,7 @@
       "id": "file:.claude/settings.json",
       "type": "file",
       "path": ".claude/settings.json",
-      "sha256": "2f5ace5b3552ef13dc51a0e9fbdb1b80ed9e7f26cfaff793ee84eae904f85207",
+      "sha256": "7f20ab907b9edf9426ad693ca8302b34cc928fe007f61894944abd547830d2bd",
       "mode": 420
     },
     {
@@ -9053,7 +9053,7 @@
       "id": "file:package.json",
       "type": "file",
       "path": "package.json",
-      "sha256": "f30ea0d9c87defaff4c9130dc8cb29e9f2e14a9c47916b0857c73ff47fe03b72",
+      "sha256": "7b537dae589c8ac17c0fb4665c370028285b3cdc29e13980fbe7725f61d6f03c",
       "mode": 420
     },
     {
@@ -13796,6 +13796,20 @@
       "mode": 420
     },
     {
+      "id": "file:tools/kernel/hooks/__tests__/dispatch-stop-failopen.test.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/__tests__/dispatch-stop-failopen.test.cjs",
+      "sha256": "c6f371cd3ed2d7a21e51d23642c2a688255006db556c70dfdc8183e1ef7610e8",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/kernel/hooks/__tests__/dispatch-userprompt-failopen.test.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/__tests__/dispatch-userprompt-failopen.test.cjs",
+      "sha256": "771dee97c859b57b88eb91730f944f7f2a80a46e2828d785cf9be0ab7c5a2a91",
+      "mode": 420
+    },
+    {
       "id": "file:tools/kernel/hooks/__tests__/once-per-session.test.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/__tests__/once-per-session.test.cjs",
@@ -13946,14 +13960,14 @@
       "id": "file:tools/kernel/hooks/dispatch-stop.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/dispatch-stop.cjs",
-      "sha256": "a7eb55ef358657251267097fafbd3d9fd80a7a1f3692ecae6c344b2ef68c1977",
+      "sha256": "134e5ec30a7a8765f8980f5ba74519e410c410cbc2315532eb53dc7ed4ea1329",
       "mode": 420
     },
     {
       "id": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/dispatch-userprompt.cjs",
-      "sha256": "f158cb755cf18e980af478a7bb2b8ea8661cf5b5e9503ba6fb3e694df2b27e33",
+      "sha256": "603fac5b2968f678faa50aaddd389d5c4b76298f276106e47f6d2de4a2ac06e2",
       "mode": 420
     },
     {
@@ -16382,7 +16396,7 @@
       "id": "file:tools/parity/build-wiring-graph.cjs",
       "type": "file",
       "path": "tools/parity/build-wiring-graph.cjs",
-      "sha256": "12c11bee283fac5ad6bc5b94efdf4bee972f9e40dd69d62cf200efbd1b2ab100",
+      "sha256": "ff4d8beaebd80701a06588312391da7969df90a4a9c0fa1ce7b96cb6e9ea04cf",
       "mode": 420
     },
     {
@@ -20936,7 +20950,7 @@
       "id": "hook:Stop:618",
       "type": "hook",
       "event": "Stop",
-      "command_sha256": "c0c0282a10c1ff35c525d7786ceb380c853b678494f400dbf1fc178cdddcbb19"
+      "command_sha256": "4f226e828c37bc4a712aab7fb0158cc46e64d013ffa001531087941dfd30cca3"
     },
     {
       "id": "hook:SubagentStop:627",
@@ -20948,7 +20962,7 @@
       "id": "hook:UserPromptSubmit:619",
       "type": "hook",
       "event": "UserPromptSubmit",
-      "command_sha256": "d647b60c73e5962cae00cf1cf2bd11d28472fdb8c47074a2e62cabf0e7e89545"
+      "command_sha256": "d4ad7e134fc41713541198d7a3573ced8aea291a0528477528b08ca3c5b1dfe7"
     },
     {
       "id": "installer-definition:frameworks/wordpress/qa/runner/tools/install-browsers.js",
@@ -37946,6 +37960,15 @@
       "specifier": "./lib/resolve-task-plan"
     },
     {
+      "id": "7eb8e20e983f46de3681a6614eff3842d7e58bf1dbb6cf7e12a437bdc41afe9b",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/dispatch-stop-failopen.test.cjs",
+      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
+      "target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "required": true,
+      "specifier": "../dispatch-stop.cjs"
+    },
+    {
       "id": "7ed237610dcfd6210477e0bdc832d2b9efe08208e4c6a93f8a553401544f3811",
       "type": "static-import",
       "from": "file:tools/kernel/loop-protocol/phase-question-loop.js",
@@ -45122,6 +45145,15 @@
       "specifier": "./export-public.cjs"
     },
     {
+      "id": "c48ce7e893971466a36399285eda1cbf50efa8fed446c8fea65b7670699dec61",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/dispatch-userprompt-failopen.test.cjs",
+      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
+      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "required": true,
+      "specifier": "../dispatch-userprompt.cjs"
+    },
+    {
       "id": "c497f294f4af89cc1f13919dde4faac19956158d65e72115f621b03adfc4419a",
       "type": "static-import",
       "from": "file:tools/kernel/hooks/__tests__/stop-closeout-evidence-gate.test.cjs",
@@ -51451,8 +51483,8 @@
     }
   ],
   "counts": {
-    "nodes": 3854,
-    "edges": 2894,
+    "nodes": 3856,
+    "edges": 2896,
     "unresolved": 0
   }
 }

@@ -96,23 +96,25 @@ function argVal(flag, def) {
   return i !== -1 && process.argv[i + 1] ? process.argv[i + 1] : def;
 }
 
-const REPO_ROOT = path.resolve(__dirname, '..', '..');
-const ROOT = path.resolve(argVal('--root', path.join(REPO_ROOT, '_dev', 'state', 'ant-sim-authority-probe')));
-const EPISODE_ROUNDS = parseInt(argVal('--episode-rounds', '2000'), 10);
-const MAX_EPISODES = parseInt(argVal('--max-episodes', '100'), 10);
-const DEADLINE_ISO = argVal('--deadline-iso', null);
-const REPLICATES = parseInt(argVal('--replicates', '3'), 10);
-
-// CODE REVIEW (confirmation pass, codex P2, round 9): same gap as
-// carriage-overnight.js -- none of these three dimensions were validated,
-// so a directly-invoked --episode-rounds/--max-episodes/--replicates of 0
-// exits successfully having run nothing.
-for (const [name, value] of [['--episode-rounds', EPISODE_ROUNDS], ['--max-episodes', MAX_EPISODES], ['--replicates', REPLICATES]]) {
-  if (!Number.isInteger(value) || value < 1) {
-    process.stderr.write(`FAIL-CLOSED: ${name} must be a positive integer, got ${value}\n`);
+// CODE REVIEW (confirmation pass, codex P2, round 10): same gap as
+// carriage-overnight.js -- Number.isInteger(parseInt(raw)) still accepts
+// '1e3' or '2.5' because parseInt truncates rather than rejects. Validate
+// the raw CLI string against a strict positive-integer grammar first.
+function positiveIntArg(flag, def) {
+  const raw = argVal(flag, def);
+  if (!/^[1-9][0-9]*$/.test(String(raw))) {
+    process.stderr.write(`FAIL-CLOSED: ${flag} must be a positive integer (no decimals, exponents, or other trailing characters), got '${raw}'\n`);
     process.exit(2);
   }
+  return parseInt(raw, 10);
 }
+
+const REPO_ROOT = path.resolve(__dirname, '..', '..');
+const ROOT = path.resolve(argVal('--root', path.join(REPO_ROOT, '_dev', 'state', 'ant-sim-authority-probe')));
+const EPISODE_ROUNDS = positiveIntArg('--episode-rounds', '2000');
+const MAX_EPISODES = positiveIntArg('--max-episodes', '100');
+const DEADLINE_ISO = argVal('--deadline-iso', null);
+const REPLICATES = positiveIntArg('--replicates', '3');
 const TICK_INTERVAL_MS = parseInt(argVal('--tick-interval-ms', '10'), 10);
 const SUMMARY_EVERY = parseInt(argVal('--summary-every', '200'), 10);
 const KILL_SWITCH = path.resolve(argVal('--kill-switch', path.join(REPO_ROOT, '_dev', 'state', 'kill-switches', 'ant-sim-authority-probe.off')));

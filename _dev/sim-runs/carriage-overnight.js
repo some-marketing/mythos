@@ -82,25 +82,27 @@ function argVal(flag, def) {
   return i !== -1 && process.argv[i + 1] ? process.argv[i + 1] : def;
 }
 
-const REPO_ROOT = path.resolve(__dirname, '..', '..');
-const ROOT = path.resolve(argVal('--root', path.join(REPO_ROOT, '_dev', 'state', 'ant-sim-overnight')));
-const EPISODE_ROUNDS = parseInt(argVal('--episode-rounds', '2000'), 10);
-const MAX_EPISODES = parseInt(argVal('--max-episodes', '1000'), 10);
-const DEADLINE_ISO = argVal('--deadline-iso', null);
-const REPLICATES = parseInt(argVal('--replicates', '5'), 10);
-
-// CODE REVIEW (confirmation pass, codex P2, round 9): none of these three
-// dimensions were validated when this driver is invoked directly (its
-// wrapper, run-job.ps1, validates them for the courier-driven path, but
-// that does not protect this documented standalone CLI, and the same gap
-// exists in authority-probe.js). A value of 0 lets the run emit zero-round
-// final rows and episode-end events and exit successfully with no results.
-for (const [name, value] of [['--episode-rounds', EPISODE_ROUNDS], ['--max-episodes', MAX_EPISODES], ['--replicates', REPLICATES]]) {
-  if (!Number.isInteger(value) || value < 1) {
-    process.stderr.write(`FAIL-CLOSED: ${name} must be a positive integer, got ${value}\n`);
+// CODE REVIEW (confirmation pass, codex P2, round 10): the prior fix
+// validated Number.isInteger(parseInt(raw)), but parseInt truncates rather
+// than rejects -- '1e3' becomes 1, '2.5' becomes 2 -- so a materially
+// different (and silently wrong) experiment size passed the guard. Validate
+// the raw CLI string against a strict positive-integer grammar BEFORE any
+// numeric conversion.
+function positiveIntArg(flag, def) {
+  const raw = argVal(flag, def);
+  if (!/^[1-9][0-9]*$/.test(String(raw))) {
+    process.stderr.write(`FAIL-CLOSED: ${flag} must be a positive integer (no decimals, exponents, or other trailing characters), got '${raw}'\n`);
     process.exit(2);
   }
+  return parseInt(raw, 10);
 }
+
+const REPO_ROOT = path.resolve(__dirname, '..', '..');
+const ROOT = path.resolve(argVal('--root', path.join(REPO_ROOT, '_dev', 'state', 'ant-sim-overnight')));
+const EPISODE_ROUNDS = positiveIntArg('--episode-rounds', '2000');
+const MAX_EPISODES = positiveIntArg('--max-episodes', '1000');
+const DEADLINE_ISO = argVal('--deadline-iso', null);
+const REPLICATES = positiveIntArg('--replicates', '5');
 const TICK_INTERVAL_MS = parseInt(argVal('--tick-interval-ms', '10'), 10);
 const SUMMARY_EVERY = parseInt(argVal('--summary-every', '200'), 10);
 const KILL_SWITCH = path.resolve(argVal('--kill-switch', path.join(REPO_ROOT, '_dev', 'state', 'kill-switches', 'ant-sim-overnight.off')));

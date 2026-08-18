@@ -42,6 +42,12 @@ if ($RunName -notmatch '^[A-Za-z0-9][A-Za-z0-9_-]*$') {
 $VMName = 'ant-world'
 $Root   = 'D:\HyperV\AntWorld'
 
+# CODE REVIEW (confirmation pass, codex P2, round 8): -WatchdogMinutes 5 or
+# less makes the default deadline computation below produce a deadline at or
+# before "now", which the format-only ISO-8601 check accepted. Require the
+# margin the comment above promises.
+if ($WatchdogMinutes -le 5) { throw 'WatchdogMinutes must be > 5 so the default deadline (watchdog horizon minus a 5-minute margin) is actually in the future' }
+
 if (-not $DeadlineIso) {
   # The driver refuses to run unattended without a wall-clock bound; default to
   # the watchdog horizon minus a margin so the guest stops itself first.
@@ -53,6 +59,16 @@ if (-not $DeadlineIso) {
 # metacharacters would be parsed as a command. Require ISO-8601.
 if ($DeadlineIso -notmatch '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(Z|[+-]\d{2}:\d{2})$') {
   throw "DeadlineIso [$DeadlineIso] is not ISO-8601 (yyyy-MM-ddTHH:mm:ssZ); refusing to write job.env"
+}
+# CODE REVIEW (confirmation pass, codex P2, round 8): a well-formed but
+# already-elapsed (or imminent) explicit -DeadlineIso passed this check
+# unchanged. carriage-overnight.js observes the deadline before its first
+# episode and exits 0 having run nothing, so the guest still writes
+# STATUS=0 and the host reported an empty experiment as successful. Require
+# the deadline to be at least one minute in the future.
+$parsedDeadline = [DateTimeOffset]::Parse($DeadlineIso, [Globalization.CultureInfo]::InvariantCulture, [Globalization.DateTimeStyles]::AssumeUniversal)
+if ($parsedDeadline -lt ([DateTimeOffset]::UtcNow).AddMinutes(1)) {
+  throw "DeadlineIso [$DeadlineIso] is not at least 1 minute in the future; refusing to start a job that would observe its deadline before doing any work"
 }
 if ($Mode -eq 'turn' -and $Ticks -lt 1) { throw 'Ticks must be >= 1 for MODE=turn' }
 # CODE REVIEW (confirmation pass, codex P2, round 7): with -Mode sim,

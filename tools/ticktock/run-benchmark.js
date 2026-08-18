@@ -928,22 +928,40 @@ function checkRebaselineFrequency(lineageEntries, options = {}) {
 // Verifies the lineage chain links: each entry's prior_fingerprint_hash must
 // equal the previous entry's new_fingerprint_hash. A break means a re-baseline
 // happened that the chain does not account for.
+const FINGERPRINT_HASH_PATTERN = /^[0-9a-f]{64}$/;
+
 function verifyLineageChain(lineageEntries) {
   const errors = [];
-  // Codex PR#20 review: the adjacent-pair loop below starts at i=1 because
-  // entry 0 has no predecessor to link against -- but that also meant entry
-  // 0's own REQUIRED FIELDS were never checked by anything. For a lineage
-  // containing exactly one rebaseline (the normal first-rebaseline case),
-  // the loop performed zero validation at all, so an entry missing
+  // Codex PR#20 review (round 2): the adjacent-pair loop below starts at i=1
+  // because entry 0 has no predecessor to link against -- but that also
+  // meant entry 0's own REQUIRED FIELDS were never checked by anything. For
+  // a lineage containing exactly one rebaseline (the normal first-rebaseline
+  // case), the loop performed zero validation at all, so an entry missing
   // triggering_cycle/review_artifact/ratification_reference/reason was
   // reported chain_unbroken:true. Required-field validation applies to
   // EVERY entry, including the first; only the adjacent-hash-link check is
   // genuinely inapplicable to entry 0.
-  if (lineageEntries.length > 0) {
-    const first = lineageEntries[0];
+  //
+  // Codex PR#20 review (round 3): the required-field list above still
+  // omitted prior_fingerprint_hash and new_fingerprint_hash themselves, so a
+  // single entry carrying all four metadata fields but no hashes at all
+  // passed required-field validation, then skipped the adjacent-link
+  // comparison (entry 0 has none), and was reported chain_unbroken:true --
+  // and with multiple entries, two adjacent MISSING hashes could even
+  // compare equal as `undefined === undefined` and pass the link check too.
+  // Both hash fields are now required on EVERY entry, and must be exactly
+  // 64-character hex strings (the shape a real sha256 digest has), before
+  // the adjacent-link comparison ever runs.
+  for (let i = 0; i < lineageEntries.length; i += 1) {
+    const entry = lineageEntries[i];
     for (const required of ['triggering_cycle', 'review_artifact', 'ratification_reference', 'reason']) {
-      if (first[required] === undefined || first[required] === null || first[required] === '') {
-        errors.push({ index: 0, message: `lineage entry is missing "${required}" -- a re-baseline without it cannot be walked mechanically` });
+      if (entry[required] === undefined || entry[required] === null || entry[required] === '') {
+        errors.push({ index: i, message: `lineage entry is missing "${required}" -- a re-baseline without it cannot be walked mechanically` });
+      }
+    }
+    for (const hashField of ['prior_fingerprint_hash', 'new_fingerprint_hash']) {
+      if (typeof entry[hashField] !== 'string' || !FINGERPRINT_HASH_PATTERN.test(entry[hashField])) {
+        errors.push({ index: i, message: `lineage entry's "${hashField}" is ${JSON.stringify(entry[hashField])}, not a 64-character sha256 hex hash -- a missing or malformed hash cannot prove a lineage link` });
       }
     }
   }
@@ -952,11 +970,6 @@ function verifyLineageChain(lineageEntries) {
     const cur = lineageEntries[i];
     if (cur.prior_fingerprint_hash !== prev.new_fingerprint_hash) {
       errors.push({ index: i, message: `prior_fingerprint_hash ${cur.prior_fingerprint_hash} does not match the preceding entry's new_fingerprint_hash ${prev.new_fingerprint_hash}` });
-    }
-    for (const required of ['triggering_cycle', 'review_artifact', 'ratification_reference', 'reason']) {
-      if (cur[required] === undefined || cur[required] === null || cur[required] === '') {
-        errors.push({ index: i, message: `lineage entry is missing "${required}" -- a re-baseline without it cannot be walked mechanically` });
-      }
     }
   }
   return { chain_unbroken: errors.length === 0, independently_verified: true, errors, entries: lineageEntries.length };

@@ -1159,6 +1159,49 @@ function appendRecordLocked(journalPath, partial) {
       err.code = 'SPEND-RECEIPT-PROVENANCE';
       throw err;
     }
+
+    // Codex PR#20 (round 3): every check above confirms only that
+    // receipt.observed_spend matches the ledger's own recorded spend -- it
+    // never compares that spend with ledgerDoc.ceilings (already required and
+    // identity-bound to this record's charter above), so a completed record
+    // (completed !== null) carrying an over-limit ledger and a matching,
+    // schema-valid receipt whose OWN within_ceiling field already says false
+    // was appended as a successful completion regardless. Recompute the
+    // ceiling verdict at this lowest append boundary -- the same
+    // strictly-greater-than comparison ceilings.evaluateCeilings() uses -- and
+    // reject an over-limit completion unless it is represented by the
+    // required halt flow (halt_state === CEILING-EXCEEDED). A receipt whose
+    // self-reported within_ceiling disagrees with the recomputation is
+    // refused outright: a receipt cannot certify a ceiling verdict the ledger
+    // it is bound to does not actually show.
+    const limits = ledgerDoc.ceilings || {};
+    const ceilingChecks = [
+      { ceiling: 'max_cumulative_diff.lines_changed', observed: ledgerObserved.lines_changed, limit: limits.lines_changed },
+      { ceiling: 'max_cumulative_diff.files_changed', observed: ledgerObserved.files_changed, limit: limits.files_changed },
+      { ceiling: 'max_external_actions', observed: ledgerObserved.external_actions, limit: limits.external_actions }
+    ];
+    const exceededChecks = ceilingChecks.filter((c) => typeof c.limit === 'number' && c.observed > c.limit);
+    const recomputedWithin = exceededChecks.length === 0;
+    if (receipt.within_ceiling !== recomputedWithin) {
+      const err = new Error(
+        `appendRecord: refused -- receipt.within_ceiling is ${JSON.stringify(receipt.within_ceiling)} but recomputing observed spend `
+        + `${JSON.stringify(ledgerObserved)} against the ledger's own ceilings ${JSON.stringify(limits)} derives ${recomputedWithin}`
+        + (exceededChecks.length ? `: ${exceededChecks.map((c) => `${c.ceiling} observed ${c.observed} > limit ${c.limit}`).join('; ')}` : '')
+        + '. A receipt cannot certify a ceiling verdict the ledger it is bound to does not actually show.'
+      );
+      err.code = 'CEILING-VERDICT-MISMATCH';
+      throw err;
+    }
+    if (!recomputedWithin && record.halt_state !== 'CEILING-EXCEEDED') {
+      const err = new Error(
+        `appendRecord: refused -- observed spend ${JSON.stringify(ledgerObserved)} exceeds the ledger's own ceilings `
+        + `${JSON.stringify(limits)} (${exceededChecks.map((c) => `${c.ceiling}: ${c.observed} > ${c.limit}`).join('; ')}), `
+        + `but this record's halt_state is ${JSON.stringify(record.halt_state)}, not ${'CEILING-EXCEEDED'}. `
+        + 'An over-limit completion must be represented by the required halt flow, never appended as a successful completion.'
+      );
+      err.code = 'CEILING-EXCEEDED-NOT-HALTED';
+      throw err;
+    }
   }
 
   if (record.halt_state !== null && !HALT_STATES.includes(record.halt_state)) {

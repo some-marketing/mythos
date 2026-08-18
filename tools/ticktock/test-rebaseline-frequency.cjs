@@ -310,6 +310,52 @@ section('(g) codex PR#20: an array-form lineage with a genuinely BROKEN adjacent
 }
 
 // ---------------------------------------------------------------------------
+section('(g2) codex PR#20 round 3: both fingerprint hash fields are required and hash-shaped on EVERY entry');
+// ---------------------------------------------------------------------------
+{
+  // A single entry with all four metadata fields but no hashes at all. Before
+  // the fix, the adjacent-pair loop never runs for a 1-entry array and the
+  // required-field list did not cover the hash fields, so this was reported
+  // chain_unbroken:true despite having no fingerprint hashes whatsoever.
+  const noHashesEntry = [{
+    triggering_cycle: 0,
+    review_artifact: '_dev/reports/analysis/rebaseline-review-0.md',
+    ratification_reference: 'operator-stamp-0',
+    reason: 'fixture with all metadata but no hashes'
+  }];
+  const chain1 = bench.verifyLineageChain(noHashesEntry);
+  check('a 1-entry lineage with no fingerprint hashes at all is reported chain_unbroken:false', chain1.chain_unbroken === false, chain1);
+  check('the error names both missing hash fields on index 0',
+    chain1.errors.some((e) => e.index === 0 && /prior_fingerprint_hash/.test(e.message))
+    && chain1.errors.some((e) => e.index === 0 && /new_fingerprint_hash/.test(e.message)),
+    chain1.errors);
+
+  // Two adjacent entries BOTH missing new_fingerprint_hash / prior_fingerprint_hash
+  // respectively would previously compare `undefined === undefined` in the
+  // adjacent-link check and pass it -- required-field/hash-shape validation
+  // must catch this before the link comparison ever gets a chance to.
+  const bothMissingAdjacent = [
+    { triggering_cycle: 0, review_artifact: 'r0.md', ratification_reference: 'op-0', reason: 'r0', prior_fingerprint_hash: 'a'.repeat(64) /* new_fingerprint_hash omitted */ },
+    { triggering_cycle: 1, review_artifact: 'r1.md', ratification_reference: 'op-1', reason: 'r1', new_fingerprint_hash: 'c'.repeat(64) /* prior_fingerprint_hash omitted */ }
+  ];
+  const chain2 = bench.verifyLineageChain(bothMissingAdjacent);
+  check('adjacent entries with complementary missing hashes do not compare undefined===undefined into a pass', chain2.chain_unbroken === false, chain2);
+  check('missing new_fingerprint_hash on entry 0 is reported', chain2.errors.some((e) => e.index === 0 && /new_fingerprint_hash/.test(e.message)), chain2.errors);
+  check('missing prior_fingerprint_hash on entry 1 is reported', chain2.errors.some((e) => e.index === 1 && /prior_fingerprint_hash/.test(e.message)), chain2.errors);
+
+  // A malformed (non-64-hex) hash value is refused too, not just an absent one.
+  const malformedHash = [mkEntry(0, { prior: 'not-a-real-hash', next: 'b'.repeat(64) })];
+  const chain3 = bench.verifyLineageChain(malformedHash);
+  check('a non-64-hex prior_fingerprint_hash is reported chain_unbroken:false', chain3.chain_unbroken === false, chain3);
+
+  // Differential control: a genuinely complete, correctly-linked 2-entry
+  // chain with real 64-hex hashes still passes.
+  const cleanTwo = [mkEntry(0, { prior: 'a'.repeat(64), next: 'b'.repeat(64) }), mkEntry(1, { prior: 'b'.repeat(64), next: 'c'.repeat(64) })];
+  const cleanChain = bench.verifyLineageChain(cleanTwo);
+  check('a complete, correctly-hashed 2-entry chain still passes (no false-positive from the fix)', cleanChain.chain_unbroken === true, cleanChain);
+}
+
+// ---------------------------------------------------------------------------
 section('(h) codex PR#20: charter fingerprint-binding mismatch is now a distinct halt, not silently absorbed into a benchmark-identical pass');
 // ---------------------------------------------------------------------------
 {

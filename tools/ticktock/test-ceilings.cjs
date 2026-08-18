@@ -349,6 +349,86 @@ check('a fabricated ledger whose observed_spend contradicts the receipt is refus
     `expected SPEND-RECEIPT-PROVENANCE, got ${threw ? threw.code + ': ' + threw.message : 'NO THROW'}`);
 });
 
+// ---------------------------------------------------------------------------
+// Codex PR#20 (round 3): appendRecord recomputes the ceiling verdict from
+// the ledger's own observed spend and ceilings at the lowest append
+// boundary, and refuses a completion that exceeds them unless it is
+// represented by the required CEILING-EXCEEDED halt flow.
+// ---------------------------------------------------------------------------
+process.stdout.write('\nT-round3: appendRecord recomputes and enforces the ceiling verdict, not just observed_spend consistency\n');
+
+function genuineOverLimitReceipt(dirSuffix, phaseId) {
+  const dir = fs.mkdtempSync(path.join(tmpRoot, dirSuffix));
+  const ledger = ceilings.createSpendLedger(TEST_CHARTER);
+  // TEST_CHARTER's ceiling is 10 lines_changed / 3 files_changed / 2 external
+  // actions -- 999 lines is genuinely, unambiguously over the line ceiling.
+  ceilings.accumulate(ledger, { lines_changed: 999, files: ['a.js'], external_actions: 0, phase_id: 'tt.improve', cycle_index: 0 });
+  const { ledger_path, ledger_sha256 } = ceilings.persistSpendLedger(ledger, path.join(dir, `${TEST_CHARTER.charter_id}.json`));
+  return {
+    charter_hash: TEST_CHARTER.charter_hash,
+    cycle_index: 0,
+    phase_id: phaseId,
+    ledger_path,
+    ledger_sha256,
+    observed_spend: ceilings.observedSpend(ledger),
+    checked_at: new Date().toISOString()
+  };
+}
+
+check('a receipt that LIES about within_ceiling (claims true for a genuinely over-limit ledger) is refused (CEILING-VERDICT-MISMATCH)', () => {
+  const receipt = Object.assign(genuineOverLimitReceipt('ceiling-lie-true-', 'tt.orient'), { within_ceiling: true });
+  const jp = path.join(tmpRoot, `t-ceiling-lie-${receiptSeq++}.jsonl`);
+  const artifact = path.join(tmpRoot, `t-ceiling-lie-artifact-${receiptSeq}.txt`);
+  fs.writeFileSync(artifact, 'artifact\n');
+  let threw = null;
+  try { journal.completePhase(jp, { charter_hash: TEST_CHARTER.charter_hash, cycle_index: 0, phase_id: 'tt.orient', spend_receipt: receipt }, [artifact]); } catch (err) { threw = err; }
+  assert(threw && threw.code === 'CEILING-VERDICT-MISMATCH',
+    `expected CEILING-VERDICT-MISMATCH, got ${threw ? threw.code + ': ' + threw.message : 'NO THROW'}`);
+});
+
+check('a genuinely over-limit ledger with an HONEST within_ceiling:false receipt, but NO CEILING-EXCEEDED halt_state, is refused as a successful completion (CEILING-EXCEEDED-NOT-HALTED)', () => {
+  const receipt = Object.assign(genuineOverLimitReceipt('ceiling-unhalted-', 'tt.orient'), { within_ceiling: false });
+  const jp = path.join(tmpRoot, `t-ceiling-unhalted-${receiptSeq++}.jsonl`);
+  const artifact = path.join(tmpRoot, `t-ceiling-unhalted-artifact-${receiptSeq}.txt`);
+  fs.writeFileSync(artifact, 'artifact\n');
+  let threw = null;
+  // completed !== null (completePhase always stamps completed), halt_state
+  // defaults to null -- exactly the "appended as a successful completion
+  // despite exceeding its declared ceilings" shape the finding named.
+  try { journal.completePhase(jp, { charter_hash: TEST_CHARTER.charter_hash, cycle_index: 0, phase_id: 'tt.orient', spend_receipt: receipt }, [artifact]); } catch (err) { threw = err; }
+  assert(threw && threw.code === 'CEILING-EXCEEDED-NOT-HALTED',
+    `expected CEILING-EXCEEDED-NOT-HALTED, got ${threw ? threw.code + ': ' + threw.message : 'NO THROW'}`);
+});
+
+check('a genuinely over-limit ledger, honestly reported, and represented by an actual CEILING-EXCEEDED halt_state is accepted', () => {
+  const receipt = Object.assign(genuineOverLimitReceipt('ceiling-honest-halt-', 'tt.orient'), { within_ceiling: false });
+  const jp = path.join(tmpRoot, `t-ceiling-honest-${receiptSeq++}.jsonl`);
+  const artifact = path.join(tmpRoot, `t-ceiling-honest-artifact-${receiptSeq}.txt`);
+  fs.writeFileSync(artifact, 'artifact\n');
+  const record = journal.completePhase(jp, {
+    charter_hash: TEST_CHARTER.charter_hash, cycle_index: 0, phase_id: 'tt.orient',
+    halt_state: 'CEILING-EXCEEDED', spend_receipt: receipt
+  }, [artifact]);
+  assert(record.halt_state === 'CEILING-EXCEEDED', 'the accepted record must actually carry the CEILING-EXCEEDED halt_state');
+});
+
+check('a within-limit ledger with an honest within_ceiling:true receipt is unaffected by the new recomputation (no false positive)', () => {
+  const dir = fs.mkdtempSync(path.join(tmpRoot, 'ceiling-within-'));
+  const ledger = ceilings.createSpendLedger(TEST_CHARTER);
+  ceilings.accumulate(ledger, { lines_changed: 3, files: ['a.js'], external_actions: 0, phase_id: 'tt.improve', cycle_index: 0 });
+  const { ledger_path, ledger_sha256 } = ceilings.persistSpendLedger(ledger, path.join(dir, `${TEST_CHARTER.charter_id}.json`));
+  const receipt = {
+    charter_hash: TEST_CHARTER.charter_hash, cycle_index: 0, phase_id: 'tt.orient',
+    ledger_path, ledger_sha256, observed_spend: ceilings.observedSpend(ledger),
+    within_ceiling: true, checked_at: new Date().toISOString()
+  };
+  const jp = path.join(tmpRoot, `t-ceiling-within-${receiptSeq++}.jsonl`);
+  const artifact = path.join(tmpRoot, `t-ceiling-within-artifact-${receiptSeq}.txt`);
+  fs.writeFileSync(artifact, 'artifact\n');
+  const record = journal.completePhase(jp, { charter_hash: TEST_CHARTER.charter_hash, cycle_index: 0, phase_id: 'tt.orient', spend_receipt: receipt }, [artifact]);
+  assert(record.halt_state === null, 'a genuinely within-limit completion must still append cleanly');
+});
+
 check('a fabricated ledger at a NON-CANONICAL path (not <ledgerDir>/<charter_id>.json) is refused at append (bytes match)', () => {
   const dir = fs.mkdtempSync(path.join(tmpRoot, 'fab-path-'));
   // A ledger claiming the receipt's charter identity, but stored at a path

@@ -53,6 +53,7 @@ const crypto = require('node:crypto');
 const Ajv = require('ajv');
 
 const { canonicalize, sha256Hex, hashObject } = require('./canonical.cjs');
+const charterMod = require('./charter.cjs');
 const MANIFEST_SCHEMA = require('./generation-manifest-schema.json');
 
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
@@ -196,7 +197,25 @@ function manifestPath(generationId, dir) {
 function verifyOutputArtifacts(outputs) {
   const mismatches = [];
   for (const entry of outputs || []) {
+    // Codex PR#20 (round 3): an absolute path, or a relative path with enough
+    // `..` segments, made path.resolve(REPO_ROOT, entry.path) escape the repo
+    // entirely -- a caller-controlled manifest could point outputs[].path at
+    // a private .env, credential file, or any other file the process can
+    // read, and on a digest mismatch the thrown error even reported that
+    // file's actual sha256. Reject an absolute path outright, and require the
+    // resolved path to remain at or beneath REPO_ROOT, BEFORE ever opening it
+    // -- the same fail-closed-before-disk discipline every other check in
+    // this writer follows.
+    if (typeof entry.path !== 'string' || path.isAbsolute(entry.path)) {
+      mismatches.push({ path: entry.path, resolved_path: null, reason: 'outputs[].path must be a repo-relative path; an absolute path is refused, never resolved' });
+      continue;
+    }
     const absPath = path.resolve(REPO_ROOT, entry.path);
+    const rootWithSep = REPO_ROOT.endsWith(path.sep) ? REPO_ROOT : REPO_ROOT + path.sep;
+    if (absPath !== REPO_ROOT && !absPath.startsWith(rootWithSep)) {
+      mismatches.push({ path: entry.path, resolved_path: absPath, reason: `resolved path escapes the repository root (${REPO_ROOT}) -- refusing to read outside the repo` });
+      continue;
+    }
     let buf;
     try {
       buf = fs.readFileSync(absPath);
@@ -276,9 +295,97 @@ function writeGenerationManifest(manifest, opts) {
   {
     const reviews = Array.isArray(document.reviews) ? document.reviews : [];
     const uncleanReasons = [];
+
+    // Codex PR#20 (round 3): the check below previously required only a
+    // nonempty reviews[] array and evaluated whatever entries the cycle
+    // happened to supply -- it never compared lane_id, family, or model pin
+    // against the charter's LOCKED roster. A manifest carrying one
+    // self-authored clean review could derive clean:true and receive a
+    // verified write receipt even though the remaining locked reviewers
+    // never ran. Load the bound charter (same charter_id-based convention
+    // preflight-ticktock.cjs's G-TICKTOCK-REVIEW gate uses, with the same
+    // opts.charterPath test seam) and require EXACT, duplicate-free roster
+    // identity coverage -- every locked lane present exactly once, no extra
+    // lanes, and each entry's family/model_pin_requested matching its
+    // same-lane_id locked charter lane -- before cleanliness can be derived
+    // at all. An unresolvable or mismatched charter binding refuses clean:true
+    // outright; it is never treated as "no opinion".
+    const charterRelPath = options.charterPath || `_dev/state/ticktock/charter__${document.charter_id}.json`;
+    // Loaded the same way preflight-ticktock.cjs's G-TICKTOCK-REVIEW gate
+    // resolves and trusts a charter: parse the raw JSON, then recompute its
+    // lane_binding_hash and charter_hash via charterMod.checkImmutability
+    // (never a bare JSON.parse trusted as-is). Deliberately NOT
+    // charterMod.readCharter()'s full schema-shape validation -- this check's
+    // job is "does this manifest's reviews match the charter's locked
+    // roster", the same job G-TICKTOCK-REVIEW already does, not "is this a
+    // template-compliant charter" (that is charter.cjs's own creation-time
+    // gate, already enforced when the charter was created).
+    let boundCharter = null;
+    const charterAbsPath = path.resolve(REPO_ROOT, charterRelPath);
+    if (!fs.existsSync(charterAbsPath)) {
+      uncleanReasons.push(`bound charter could not be read at ${charterRelPath} (no such file) -- a manifest that cannot bind to its charter cannot derive clean:true`);
+    } else {
+      try {
+        const parsedCharter = JSON.parse(fs.readFileSync(charterAbsPath, 'utf8'));
+        const immut = charterMod.checkImmutability(parsedCharter);
+        if (!immut.ok) {
+          uncleanReasons.push(`bound charter ${charterRelPath} failed immutability verification (${immut.halt_state}: ${immut.detail}) -- a tampered charter cannot support a clean derivation`);
+        } else {
+          boundCharter = parsedCharter;
+        }
+      } catch (err) {
+        uncleanReasons.push(`bound charter could not be read/parsed at ${charterRelPath} (${err.message}) -- a manifest that cannot bind to its charter cannot derive clean:true`);
+      }
+    }
+    if (boundCharter && boundCharter.charter_hash !== document.charter_hash) {
+      uncleanReasons.push(
+        `bound charter ${charterRelPath} charter_hash ${boundCharter.charter_hash} does not equal this manifest's `
+        + `charter_hash ${document.charter_hash} -- cleanliness cannot be derived against a charter this manifest does not declare`
+      );
+      boundCharter = null;
+    }
+    let lockedLaneObjects = null;
+    if (boundCharter) {
+      lockedLaneObjects = boundCharter.reviewer_roster && Array.isArray(boundCharter.reviewer_roster.lanes)
+        ? boundCharter.reviewer_roster.lanes
+        : null;
+      if (!lockedLaneObjects) {
+        uncleanReasons.push(`bound charter ${boundCharter.charter_id} carries no reviewer_roster.lanes[] array -- locked roster coverage cannot be proven`);
+      }
+    }
+
     if (!reviews.length) {
       uncleanReasons.push('reviews is empty -- no locked lane reported in, cannot be clean');
     }
+
+    if (lockedLaneObjects) {
+      const lockedLaneIds = lockedLaneObjects.map((l) => l.lane_id);
+      const reportedLaneIds = reviews.map((r) => r && r.lane_id);
+      const dupLanes = [...new Set(reportedLaneIds.filter((id, i) => reportedLaneIds.indexOf(id) !== i))];
+      const missingLanes = lockedLaneIds.filter((id) => !reportedLaneIds.includes(id));
+      const extraLanes = reportedLaneIds.filter((id) => !lockedLaneIds.includes(id));
+      if (dupLanes.length) {
+        uncleanReasons.push(`reviews[] contains duplicate lane_id entries: ${dupLanes.join(', ')} -- a duplicate cannot substitute for a lane that never reported in`);
+      }
+      if (missingLanes.length) {
+        uncleanReasons.push(`reviews[] is missing the locked lane(s): ${missingLanes.join(', ')} -- a missing lane is a defect, never an implicit pass`);
+      }
+      if (extraLanes.length) {
+        uncleanReasons.push(`reviews[] contains lane(s) not in the charter's locked roster: ${extraLanes.join(', ')}`);
+      }
+      const lockedByLaneId = new Map(lockedLaneObjects.map((l) => [l.lane_id, l]));
+      for (const r of reviews) {
+        const lockedLane = r && lockedByLaneId.get(r.lane_id);
+        if (!lockedLane) continue; // already reported above as extra/duplicate/missing
+        if (r.family !== lockedLane.family) {
+          uncleanReasons.push(`lane ${r.lane_id}: reported family "${r.family}" does not match the locked charter lane's family "${lockedLane.family}"`);
+        }
+        if (r.model_pin_requested !== lockedLane.model_pin) {
+          uncleanReasons.push(`lane ${r.lane_id}: reported model_pin_requested "${r.model_pin_requested}" does not match the locked charter lane's model_pin "${lockedLane.model_pin}"`);
+        }
+      }
+    }
+
     for (const r of reviews) {
       const laneId = (r && r.lane_id) || '<unknown lane>';
       if (!r || r.status !== 'clean') {
@@ -470,11 +577,34 @@ function verifyLineageLink(manifest, parentManifest) {
         + `${parentManifest.manifest_hash} does not match its recomputed content hash ${expected} (tampered or corrupted parent)`
     };
   }
-  const ok = p.parent_manifest_hash === expected && p.parent_generation_id === parentManifest.generation_id;
-  return {
-    linked: ok,
-    reason: ok ? 'lineage intact' : `expected parent ${parentManifest.generation_id}/${expected}, found ${p.parent_generation_id}/${p.parent_manifest_hash}`
-  };
+  const hashOk = p.parent_manifest_hash === expected && p.parent_generation_id === parentManifest.generation_id;
+  if (!hashOk) {
+    return {
+      linked: false,
+      reason: `expected parent ${parentManifest.generation_id}/${expected}, found ${p.parent_generation_id}/${p.parent_manifest_hash}`
+    };
+  }
+  // Codex PR#20 (round 3): the check above accepted a valid parent solely on
+  // the supplied id and hash matching THAT file -- it never required the
+  // parent to actually be the immediately-prior cycle of the SAME charter, so
+  // cycle 5 could point at cycle 0 (or at a manifest from a different
+  // charter entirely) and still receive lineage_link_verified:true as long as
+  // the id/hash pair matched some file on disk. Enforce both invariants a
+  // real chain implies: same charter_hash, and cycle_index exactly one less
+  // than this manifest's.
+  if (parentManifest.charter_hash !== manifest.charter_hash) {
+    return {
+      linked: false,
+      reason: `parent manifest ${parentManifest.generation_id} belongs to charter_hash ${parentManifest.charter_hash}, not this manifest's charter_hash ${manifest.charter_hash} -- lineage cannot cross charters`
+    };
+  }
+  if (parentManifest.cycle_index !== manifest.cycle_index - 1) {
+    return {
+      linked: false,
+      reason: `parent manifest ${parentManifest.generation_id} has cycle_index ${parentManifest.cycle_index}, but this manifest's cycle_index ${manifest.cycle_index} requires a parent at cycle_index ${manifest.cycle_index - 1}`
+    };
+  }
+  return { linked: true, reason: 'lineage intact' };
 }
 
 module.exports = {

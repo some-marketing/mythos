@@ -11,12 +11,14 @@
  * This tool has NO delete capability. It only moves files.
  *
  * Usage:
- *   node tools/artifacts/archive-finished.js [--execute] [--age <days>] [--verbose]
+ *   node tools/artifacts/archive-finished.js [--execute] [--age <days>] [--verbose] [--no-log]
  *
  * Options:
  *   --execute    Actually move files (default is dry-run)
  *   --age        Minimum age in days to consider finished (default: 7)
  *   --verbose    Show per-file details
+ *   --no-log     Suppress the dry-run auditability log write (for genuinely
+ *                read-only embedded callers, e.g. status collection)
  *   --help       Show this help
  *
  * Exit code 0 = success, 1 = error
@@ -49,6 +51,7 @@ Options:
   --execute    Actually move files (default is dry-run preview)
   --age <n>    Minimum age in days to consider finished (default: 7)
   --verbose    Show per-file details
+  --no-log     Suppress the dry-run auditability log write
   --help       Show this help
 
 Archive destination: _dev/archive/{year}-{month}/analysis/
@@ -245,19 +248,24 @@ console.log('');
 if (dryRun) {
   console.log('This was a dry run. Use --execute to perform the archive.');
 
-  // Log dry-run entries too for auditability
-  for (const c of candidates) {
-    appendArchiveLog({
-      ts: new Date().toISOString(),
-      event: 'artifact.archive',
-      source: c.relPath,
-      destination: path.relative(PROJECT_ROOT, archiveDestination(c.filePath)),
-      surface: SURFACE_KEY,
-      reason: 'finished',
-      size_bytes: c.size,
-      operator: 'archive-finished',
-      dry_run: true
-    });
+  // Log dry-run entries too for auditability, unless the caller asked for a
+  // genuinely read-only preview (--no-log). A routine status check embeds
+  // this script's preview mode via closeout-maintenance.js and must never
+  // dirty the worktree; Codex review, PR #18.
+  if (!args.no_log) {
+    for (const c of candidates) {
+      appendArchiveLog({
+        ts: new Date().toISOString(),
+        event: 'artifact.archive',
+        source: c.relPath,
+        destination: path.relative(PROJECT_ROOT, archiveDestination(c.filePath)),
+        surface: SURFACE_KEY,
+        reason: 'finished',
+        size_bytes: c.size,
+        operator: 'archive-finished',
+        dry_run: true
+      });
+    }
   }
 
   process.exit(0);

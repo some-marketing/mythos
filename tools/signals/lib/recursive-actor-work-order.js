@@ -492,9 +492,15 @@ function validateActorReturn(payload, opts = {}) {
     errors.push(`bubble_up_gate must be 'none' or one of: ${GATE_IDS.join(', ')}.`);
   }
 
-  if (COMPLETED_STATUSES.has(String(payload.status || '').trim())) {
+  if (COMPLETED_STATUSES.has(String(payload.status || '').trim().toLowerCase())) {
+    // A completion receipt's scope identifies the delegated/child work, which
+    // may intentionally differ from the parent's own scope identity. Forward
+    // both, and let validateDelegatedCompletionReceipt prefer the delegated
+    // scope (opts.scope) over the parent's own scope (opts.parentScope) when
+    // comparing against receipt.scope. Codex review, PR #18.
     const completion = validateDelegatedCompletionReceipt(payload, {
-      parentScope: opts.parentScope || opts.scope,
+      scope: opts.scope,
+      parentScope: opts.parentScope,
       criteria: opts.acceptanceCriteria || opts.criteria
     });
     errors.push(...completion.errors.map(error => `completion receipt: ${error}`));

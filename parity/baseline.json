@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "bce5141ca1738501dd54dbff1fc2b0cee2db89b51e6b7fb0cc1064f8b5795beb",
+    "expected_tree_sha256": "f893bf6f56bea657cc6f88ca3b2d75586d69466a6cee3a10ee2c3a19657491a0",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -5527,7 +5527,7 @@
       },
       {
         "path": "package.json",
-        "sha256": "a355d08171297472c9cc554f703dc7d3dc42d654a419acdf2aca31a7c3a0baa7",
+        "sha256": "f30ea0d9c87defaff4c9130dc8cb29e9f2e14a9c47916b0857c73ff47fe03b72",
         "mode": 420
       },
       {
@@ -5557,7 +5557,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "e20993f1009aedbb26476d90d2bf309522e53d18621d7fb3eb168dd2b49aef5f",
+        "sha256": "d867c34e1036a317537774fc9da202ebe83a3b56f5656e7c3ecd7de395157adb",
         "mode": 420
       },
       {
@@ -5941,6 +5941,16 @@
         "mode": 420
       },
       {
+        "path": "tools/ant-hive-world/__tests__/fixtures/fixture-v1.json",
+        "sha256": "44ad0a4ab6e87523ec047b7512f159e0b6bd4e00796bc7232798220e7e63e9c5",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/fixtures/fixture-v2.json",
+        "sha256": "f8ee5b840b4bb17c8bb10f15e921409fd8479cbc5cb86f693e277157a98de969",
+        "mode": 420
+      },
+      {
         "path": "tools/ant-hive-world/__tests__/gather-yield.test.cjs",
         "sha256": "aaf96cc8dcd981f840df1ba09845f539e7941cd0888daa2d1283df6a9d899ea7",
         "mode": 420
@@ -6032,7 +6042,7 @@
       },
       {
         "path": "tools/ant-hive-world/__tests__/untrained-network.test.cjs",
-        "sha256": "fd4ddfbb63bf6d59c4f882eabe4945d6361d5eb3dd71acf2b35245cf0a61c843",
+        "sha256": "260424f45f00caffb0117da7f75376a550ed6514a1198342283bf4a19ea8c066",
         "mode": 420
       },
       {
@@ -6507,7 +6517,7 @@
       },
       {
         "path": "tools/artifacts/archive-finished.js",
-        "sha256": "ec7acc69a274483636508911ed4df9f3398526958411d2995ee877e97c2c2939",
+        "sha256": "501ea4c13588757225572fb699ba19d581a421c8c7eb93d136f94572d548126b",
         "mode": 420
       },
       {
@@ -7167,7 +7177,7 @@
       },
       {
         "path": "tools/codex/commands/run-plan.js",
-        "sha256": "e1de5b2ab3cea41e23f8c1048d23503e81e0131c40e7a2a61a59b611257fbc8b",
+        "sha256": "c89a44b75ac39887a5d87321a33d42d506bb2d715e9fbb9f8b41b60e4217e15e",
         "mode": 420
       },
       {
@@ -7392,7 +7402,7 @@
       },
       {
         "path": "tools/commands/handlers/new-session.cjs",
-        "sha256": "beae8ec29486e22a83bffb54d5d685d4521fede823b9d9f811aeb1f1e0ae170e",
+        "sha256": "0496361f82d21900c30f15bc9b3dfcf805ff6d61b41f4b4fbabc212bd473ea26",
         "mode": 420
       },
       {
@@ -9842,7 +9852,7 @@
       },
       {
         "path": "tools/maintenance/lib/closeout-maintenance.js",
-        "sha256": "bb367658c956eefb93e83284b1c1451dee1a58d0dbe2818695be07e13a29d64a",
+        "sha256": "7c7c80a4979235b3582fc616a7301b2672f48edc2329fe9921de2b3fcfbea720",
         "mode": 420
       },
       {
@@ -11566,6 +11576,11 @@
         "mode": 420
       },
       {
+        "path": "tools/sessions/lib/__tests__/session-identity-precondition.test.cjs",
+        "sha256": "7bfcb67b90be487b60ee61a95f83058ff9d03a7138a0749e1056f348f18e31f9",
+        "mode": 420
+      },
+      {
         "path": "tools/sessions/lib/active-session-registry.js",
         "sha256": "041d8aa7b2898b8a7ff941a3bad94419179c66267888e3d6875bd6c6bf311959",
         "mode": 420
@@ -11577,7 +11592,7 @@
       },
       {
         "path": "tools/sessions/lib/resolve-session-id.cjs",
-        "sha256": "447966c8a7e34a07433b6a71e944b026de21eb70f22db6c6a965bb9c5cccd647",
+        "sha256": "776d6728df2086b90837cb1a138d34480661d9af31ec811047fa3bd102e844a3",
         "mode": 420
       },
       {
@@ -11742,7 +11757,7 @@
       },
       {
         "path": "tools/signals/lib/__tests__/actor-return-bubble-up.test.js",
-        "sha256": "c1f507c5ca72587d7f3bbe509350d4d1f107c9ba4cfcda4bf2063a71d2c4d4a9",
+        "sha256": "48f303702a0218b44dc4d5992fbc41ee6a057fc78693d4180b151c250703d3f3",
         "mode": 420
       },
       {
@@ -12007,7 +12022,7 @@
       },
       {
         "path": "tools/signals/lib/recursive-actor-work-order.js",
-        "sha256": "99a973da8d28cd803186d2b058c63460d0e54254f4ab47fec82c5bdca696dc11",
+        "sha256": "60f0c69f6920f5171d056b61a0dfb52a093cbe0475d12d9ce5fa67d5475e7be5",
         "mode": 420
       },
       {
@@ -12276,6 +12291,11 @@
         "mode": 420
       },
       {
+        "path": "tools/status/__tests__/review-closure.test.cjs",
+        "sha256": "6d20df26998467d215af90461d3c3b23d87cfeceae8bd1c79736b315fe94c9c6",
+        "mode": 420
+      },
+      {
         "path": "tools/status/bridge-status.js",
         "sha256": "b6a4ac021410bb9865add7892c6af550982fb088d32041b4a124db7ec2795f78",
         "mode": 420
@@ -12287,7 +12307,12 @@
       },
       {
         "path": "tools/status/mythos-status.js",
-        "sha256": "332b0a0ff54cf5803f45df1dad7f41d9357d3ceb7fe958a10b2e8749ecc16eb7",
+        "sha256": "d0834f00a9391b6f2041041506e889d8b8fc913abd94d6618ffe9261cd124d51",
+        "mode": 420
+      },
+      {
+        "path": "tools/status/review-closure.js",
+        "sha256": "14630d2386538dffca4787f50d1d18546c7e6ff0a4e17223365a18fdb4280050",
         "mode": 420
       },
       {
@@ -12981,6 +13006,11 @@
         "mode": 420
       },
       {
+        "path": "tools/verify/lib/__tests__/delegated-completion-receipt.test.cjs",
+        "sha256": "f843571b5c6deb2807f06edad9bd526469c2f1ed0bf759ac74fb64d887cac278",
+        "mode": 420
+      },
+      {
         "path": "tools/verify/lib/__tests__/paste-target-prompt-coverage.test.cjs",
         "sha256": "2b138b47eba1726b64e99043dcd83efbfeab1768d748de3fe53c430f6d522ba2",
         "mode": 420
@@ -13013,6 +13043,11 @@
       {
         "path": "tools/verify/lib/concept-frontmatter.cjs",
         "sha256": "4399a18fb6c609a945091d95aa4b7143fdcad82cb9be42b2d9b43e709c9e9e91",
+        "mode": 420
+      },
+      {
+        "path": "tools/verify/lib/delegated-completion-receipt.cjs",
+        "sha256": "2027cea5cec8514ee10c659be9dae492f65ab9e04759f21c3125d012af39a836",
         "mode": 420
       },
       {
@@ -13891,12 +13926,12 @@
     ]
   },
   "wiring": {
-    "package_script_count": 204,
+    "package_script_count": 205,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "e20993f1009aedbb26476d90d2bf309522e53d18621d7fb3eb168dd2b49aef5f",
-    "graph_nodes": 3846,
-    "graph_edges": 2879
+    "graph_sha256": "d867c34e1036a317537774fc9da202ebe83a3b56f5656e7c3ecd7de395157adb",
+    "graph_nodes": 3854,
+    "graph_edges": 2894
   },
   "runtime_exclusions": [
     ".git/**",

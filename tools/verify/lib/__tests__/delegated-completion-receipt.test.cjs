@@ -36,3 +36,41 @@ test('parent reintegration rejects ungated completion and preserves incomplete',
   assert.equal(validateActorReturn({ ...common, status: 'complete', summary: 'done' }).valid, false);
   assert.equal(validateActorReturn({ ...common, status: 'complete', completion_receipt: receipt() }, { parentScope: 'task/example' }).valid, true);
 });
+
+// Codex review, PR #18: the completed-status membership check was
+// case-sensitive in both validateDelegatedCompletionReceipt and
+// validateActorReturn's identical pre-check, so 'Completed'/'DONE'/etc.
+// silently skipped receipt validation entirely.
+test('completed-status membership check is case-insensitive for every accepted spelling', () => {
+  for (const spelling of ['complete', 'Complete', 'COMPLETE', 'completed', 'Completed', 'done', 'Done', 'DONE', ' done ']) {
+    assert.equal(
+      validateDelegatedCompletionReceipt({ status: spelling, summary: 'no receipt' }).valid,
+      false,
+      `expected status "${spelling}" to be gated and rejected without a receipt`
+    );
+    assert.equal(
+      validateDelegatedCompletionReceipt(receipt({ status: spelling.trim() }), { parentScope: 'task/example' }).valid,
+      true,
+      `expected status "${spelling}" with a valid receipt to be accepted`
+    );
+  }
+});
+
+// Codex review, PR #18: opts.parentScope || opts.scope compared receipt.scope
+// against the PARENT's own scope identity, but a delegated completion
+// receipt legitimately identifies the CHILD/delegated work scope, which may
+// intentionally differ from its parent. The delegated scope (options.scope)
+// must win the comparison when both are supplied.
+test('scope check compares against the delegated child scope, not the parent scope, when both are supplied', () => {
+  const value = receipt({ scope: 'task/child-example' });
+  assert.equal(
+    validateDelegatedCompletionReceipt(value, { parentScope: 'task/parent-example', scope: 'task/child-example' }).valid,
+    true,
+    'a receipt scoped to the delegated child work must be accepted even though it differs from the parent scope'
+  );
+  assert.equal(
+    validateDelegatedCompletionReceipt(value, { parentScope: 'task/child-example', scope: 'task/wrong-child' }).valid,
+    false,
+    'a receipt whose scope does not match the actual delegated scope must be rejected'
+  );
+});

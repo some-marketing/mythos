@@ -62,22 +62,30 @@ else {
 
   "verifying export against $hashFile"
   $bad = 0; $ok = 0
+  $hashedFiles = New-Object 'System.Collections.Generic.HashSet[string]'
   foreach ($line in (Get-Content $hashFile)) {
     if ($line -match '^#' -or -not $line.Trim()) { continue }
     $parts = $line -split '\s+', 2
     $want = $parts[0]; $rel = $parts[1].Trim()
+    [void]$hashedFiles.Add($rel.ToLowerInvariant())
     $f = Join-Path $exportRoot.FullName $rel
     if (-not (Test-Path -LiteralPath $f)) { "MISSING $rel"; $bad++; continue }
     $got = (Get-FileHash -LiteralPath $f -Algorithm SHA256).Hash.ToLower()
     if ($got -eq $want) { $ok++ } else { "MISMATCH $rel"; $bad++ }
   }
-  "export verification: $ok OK, $bad BAD"
-  # CODE REVIEW (confirmation pass, codex P1): a hash file interrupted after
-  # its header but before any file-hash line was written previously verified
-  # as $ok=0, $bad=0, which passed the ($bad -gt 0) gate -- the destructive
-  # import below would then run against an export that was never actually
-  # verified. Require at least one OK entry, not merely zero bad ones.
-  if ($bad -gt 0 -or $ok -eq 0) { throw "golden export failed hash verification (ok=$ok bad=$bad); refusing to restore from it" }
+  # CODE REVIEW (confirmation pass, codex P1, round 3): seal-golden.ps1 writes
+  # hash entries incrementally, so an interruption partway through leaves a
+  # hash file that is well-formed and entirely consistent with the files it
+  # DOES list -- ok positive, bad zero -- while files added to the export
+  # after the interruption are simply absent from the manifest and were
+  # never compared against anything. Require exact file-set coverage between
+  # the hash file and $exportRoot before this gate can pass.
+  $actualExportFiles = @(Get-ChildItem -LiteralPath $exportRoot.FullName -Recurse -File)
+  $unlisted = @($actualExportFiles | Where-Object { -not $hashedFiles.Contains($_.FullName.Substring($exportRoot.FullName.Length + 1).ToLowerInvariant()) })
+  "export verification: $ok OK, $bad BAD, $($unlisted.Count) unlisted"
+  if ($bad -gt 0 -or $ok -eq 0 -or $unlisted.Count -gt 0) {
+    throw "golden export failed hash verification (ok=$ok bad=$bad unlisted=$($unlisted.Count)); refusing to restore from it"
+  }
 
   if (Get-VM -Name $VMName -ErrorAction SilentlyContinue) { Remove-VM -Name $VMName -Force }
   $vmcx = Get-ChildItem -LiteralPath $exportRoot.FullName -Recurse -Filter *.vmcx | Select-Object -First 1

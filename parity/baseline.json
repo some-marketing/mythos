@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "bce5141ca1738501dd54dbff1fc2b0cee2db89b51e6b7fb0cc1064f8b5795beb",
+    "expected_tree_sha256": "302a154af9ae3d1a3a289ca20e1ba69f4d0ab1e87bd2e3bc272d7c005fdcb0a8",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -1062,7 +1062,7 @@
       },
       {
         "path": ".claude/settings.json",
-        "sha256": "2f5ace5b3552ef13dc51a0e9fbdb1b80ed9e7f26cfaff793ee84eae904f85207",
+        "sha256": "7f20ab907b9edf9426ad693ca8302b34cc928fe007f61894944abd547830d2bd",
         "mode": 420
       },
       {
@@ -5527,7 +5527,7 @@
       },
       {
         "path": "package.json",
-        "sha256": "a355d08171297472c9cc554f703dc7d3dc42d654a419acdf2aca31a7c3a0baa7",
+        "sha256": "7b537dae589c8ac17c0fb4665c370028285b3cdc29e13980fbe7725f61d6f03c",
         "mode": 420
       },
       {
@@ -5557,7 +5557,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "e20993f1009aedbb26476d90d2bf309522e53d18621d7fb3eb168dd2b49aef5f",
+        "sha256": "8b519a07c48a0c91671ecc4cc58b2a36bb054856c69c70a20926ab7a7a72746b",
         "mode": 420
       },
       {
@@ -5941,6 +5941,16 @@
         "mode": 420
       },
       {
+        "path": "tools/ant-hive-world/__tests__/fixtures/fixture-v1.json",
+        "sha256": "44ad0a4ab6e87523ec047b7512f159e0b6bd4e00796bc7232798220e7e63e9c5",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/fixtures/fixture-v2.json",
+        "sha256": "f8ee5b840b4bb17c8bb10f15e921409fd8479cbc5cb86f693e277157a98de969",
+        "mode": 420
+      },
+      {
         "path": "tools/ant-hive-world/__tests__/gather-yield.test.cjs",
         "sha256": "aaf96cc8dcd981f840df1ba09845f539e7941cd0888daa2d1283df6a9d899ea7",
         "mode": 420
@@ -6032,7 +6042,7 @@
       },
       {
         "path": "tools/ant-hive-world/__tests__/untrained-network.test.cjs",
-        "sha256": "fd4ddfbb63bf6d59c4f882eabe4945d6361d5eb3dd71acf2b35245cf0a61c843",
+        "sha256": "260424f45f00caffb0117da7f75376a550ed6514a1198342283bf4a19ea8c066",
         "mode": 420
       },
       {
@@ -8901,6 +8911,16 @@
         "mode": 420
       },
       {
+        "path": "tools/kernel/hooks/__tests__/dispatch-stop-failopen.test.cjs",
+        "sha256": "80f09aa3b92d54ca4c5e601305e08cd532ba60f894ce33e2de47d89cadb71f0a",
+        "mode": 420
+      },
+      {
+        "path": "tools/kernel/hooks/__tests__/dispatch-userprompt-failopen.test.cjs",
+        "sha256": "771dee97c859b57b88eb91730f944f7f2a80a46e2828d785cf9be0ab7c5a2a91",
+        "mode": 420
+      },
+      {
         "path": "tools/kernel/hooks/__tests__/once-per-session.test.cjs",
         "sha256": "d9a9cb4bc34f11cf3fd52d77abe9c929ca2a1fe69582e58324f3c677419356f9",
         "mode": 420
@@ -9007,12 +9027,12 @@
       },
       {
         "path": "tools/kernel/hooks/dispatch-stop.cjs",
-        "sha256": "a7eb55ef358657251267097fafbd3d9fd80a7a1f3692ecae6c344b2ef68c1977",
+        "sha256": "134e5ec30a7a8765f8980f5ba74519e410c410cbc2315532eb53dc7ed4ea1329",
         "mode": 420
       },
       {
         "path": "tools/kernel/hooks/dispatch-userprompt.cjs",
-        "sha256": "f158cb755cf18e980af478a7bb2b8ea8661cf5b5e9503ba6fb3e694df2b27e33",
+        "sha256": "603fac5b2968f678faa50aaddd389d5c4b76298f276106e47f6d2de4a2ac06e2",
         "mode": 420
       },
       {
@@ -13891,12 +13911,12 @@
     ]
   },
   "wiring": {
-    "package_script_count": 204,
+    "package_script_count": 205,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "e20993f1009aedbb26476d90d2bf309522e53d18621d7fb3eb168dd2b49aef5f",
-    "graph_nodes": 3846,
-    "graph_edges": 2879
+    "graph_sha256": "8b519a07c48a0c91671ecc4cc58b2a36bb054856c69c70a20926ab7a7a72746b",
+    "graph_nodes": 3849,
+    "graph_edges": 2880
   },
   "runtime_exclusions": [
     ".git/**",

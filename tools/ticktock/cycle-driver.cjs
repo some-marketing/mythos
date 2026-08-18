@@ -159,7 +159,11 @@ const commands = {
       || (fingerprintBindingMismatch ? 'FINGERPRINT-BINDING-MISMATCH' : null)
       || (!lineageChain.chain_unbroken ? 'LINEAGE-CHAIN-BROKEN' : null)
       || (error ? 'BENCHMARK-ERROR' : null)
-      || (result && result.identical === false ? 'BENCHMARK-DIVERGENCE' : null);
+      // Codex PR#20 (round 2): bench.check() returns { result, observed, recorded }
+      // -- the comparison verdict is nested at result.result.identical, not
+      // result.identical (which is always undefined on the wrapper object).
+      // The bare `result.identical` check above silently never fired.
+      || (result && result.result && result.result.identical === false ? 'BENCHMARK-DIVERGENCE' : null);
 
     const payload = {
       schema: 'TickTockBenchmarkCheck/1.0',

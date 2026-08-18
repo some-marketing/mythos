@@ -111,8 +111,15 @@ check('read-back detects post-write tampering', () => {
 });
 
 check('lineage link requires the parent hash', () => {
+  // A real parent manifest is always read back from disk after
+  // writeGenerationManifest() has injected its manifest_hash field (Codex
+  // PR#20 round 2: verifyLineageLink now refuses a parent whose OWN stored
+  // manifest_hash does not match its recomputed content hash, to catch a
+  // parent silently edited after the fact). Set it here to model that real
+  // shape rather than a bare in-memory fixture that was never "written".
   const parent = fixture();
   const parentHash = gm.computeManifestHash(parent);
+  parent.manifest_hash = parentHash;
   const childGood = fixture({
     generation_id: 'tt-gen-1-fixture',
     cycle_index: 1,

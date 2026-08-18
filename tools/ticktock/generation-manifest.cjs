@@ -264,6 +264,47 @@ function writeGenerationManifest(manifest, opts) {
     throw new Error(`MANIFEST-SCHEMA-INVALID (pre-write): ${pre.errorText}`);
   }
 
+  // 2a2. RECOMPUTE MERGE CLEANLINESS -- mandatory, before disk. Codex PR#20
+  // (round 2): merge_decision.clean is schema-typed as a boolean, but nothing
+  // enforced the schema's own documented invariant ("true only when every
+  // locked lane returned status clean with zero unresolved findings"). If
+  // `reviews` is empty, or contains a timeout / rejected verdict / unresolved
+  // finding while merge_decision.clean is hand-set to true, schema validation
+  // passes each field independently and a false "clean" trial was written and
+  // read-back-verified. Derive clean from the actual review entries and
+  // refuse a mismatch, rather than trusting a value the producer supplied.
+  {
+    const reviews = Array.isArray(document.reviews) ? document.reviews : [];
+    const uncleanReasons = [];
+    if (!reviews.length) {
+      uncleanReasons.push('reviews is empty -- no locked lane reported in, cannot be clean');
+    }
+    for (const r of reviews) {
+      const laneId = (r && r.lane_id) || '<unknown lane>';
+      if (!r || r.status !== 'clean') {
+        uncleanReasons.push(`lane ${laneId} status is ${r && r.status} (not clean)`);
+        continue;
+      }
+      if (r.verdict !== 'APPROVE') {
+        uncleanReasons.push(`lane ${laneId} verdict is ${r.verdict} (not APPROVE)`);
+      }
+      if (typeof r.unresolved_findings !== 'number' || r.unresolved_findings !== 0) {
+        uncleanReasons.push(`lane ${laneId} has ${r.unresolved_findings} unresolved findings`);
+      }
+      if (r.pin_verified !== true) {
+        uncleanReasons.push(`lane ${laneId} model pin is not verified`);
+      }
+    }
+    const derivedClean = uncleanReasons.length === 0;
+    const claimedClean = !!(document.merge_decision && document.merge_decision.clean === true);
+    if (claimedClean !== derivedClean) {
+      throw new Error(
+        `MERGE-DECISION-MISMATCH: merge_decision.clean is ${claimedClean} but the review entries derive ${derivedClean}. `
+        + `Reasons: ${uncleanReasons.length ? uncleanReasons.join('; ') : '(none -- all locked lanes clean, verdict APPROVE, zero unresolved findings, pin verified)'}.`
+      );
+    }
+  }
+
   // 2b. ACCEPT -- mandatory rotation. The schema can only require the rotation
   // OBJECT; it cannot express "a lane actually rotated". This is the acceptance
   // check that reads its contents. It runs before disk for the same reason the
@@ -413,6 +454,22 @@ function verifyLineageLink(manifest, parentManifest) {
     return { linked: false, reason: 'no parent manifest supplied for a non-zero cycle_index' };
   }
   const expected = computeManifestHash(parentManifest);
+  // Codex PR#20 (round 2): the check below recomputes `expected` FROM the
+  // parent's current on-disk content and compares the child's claim against
+  // that recomputation -- but it never checks that the parent's OWN stored
+  // manifest_hash still matches its own content. If the parent file is edited
+  // after the fact without updating its manifest_hash field, the parent is
+  // internally corrupt (self-inconsistent), yet a child whose
+  // parent_manifest_hash happens to cite the freshly-recomputed (tampered)
+  // value would still pass. Refuse first on parent self-inconsistency, before
+  // ever trusting a hash derived from that same content to validate the child.
+  if (parentManifest.manifest_hash !== expected) {
+    return {
+      linked: false,
+      reason: `parent manifest ${parentManifest.generation_id} is internally inconsistent -- its stored manifest_hash `
+        + `${parentManifest.manifest_hash} does not match its recomputed content hash ${expected} (tampered or corrupted parent)`
+    };
+  }
   const ok = p.parent_manifest_hash === expected && p.parent_generation_id === parentManifest.generation_id;
   return {
     linked: ok,

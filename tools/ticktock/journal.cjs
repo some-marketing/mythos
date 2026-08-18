@@ -1090,7 +1090,29 @@ function appendRecordLocked(journalPath, partial) {
       err.code = 'SPEND-RECEIPT-PROVENANCE';
       throw err;
     }
-    if (typeof ledgerDoc.charter_hash === 'string' && ledgerDoc.charter_hash !== receipt.charter_hash) {
+    // Codex PR#20 (round 2): the two checks below used to run ONLY when the
+    // field was present (`typeof ledgerDoc.charter_hash === 'string'` /
+    // `typeof ledgerDoc.charter_id === 'string' && ...`), on the theory that a
+    // "bare schema-only stub ledger" (no charter identity) has no identity
+    // claim to verify. That reasoning does not hold on THIS path:
+    // appendRecordLocked is the production completion boundary, and a caller
+    // can fabricate a zero-spend ledger with no charter_hash/charter_id at
+    // all, hash it, and hand back a receipt whose charter_hash the EARLIER
+    // boundary check already required to match record.charter_hash -- the
+    // receipt looks bound, but the ledger CONTENT was never actually tied to
+    // this charter or run. The identity fields are now REQUIRED unconditionally
+    // on this path; a schema-only ledger with no charter identity is refused,
+    // not exempted. Test fixtures that legitimately want a schema-only ledger
+    // must not route through appendRecord/appendRecordLocked.
+    if (typeof ledgerDoc.charter_hash !== 'string' || !ledgerDoc.charter_hash) {
+      const err = new Error(
+        `appendRecord: refused -- the ledger at "${receipt.ledger_path}" carries no charter_hash. `
+        + 'A ledger with no charter identity cannot certify spend for a specific charter; producer-owned identity fields are required, not optional.'
+      );
+      err.code = 'SPEND-RECEIPT-PROVENANCE';
+      throw err;
+    }
+    if (ledgerDoc.charter_hash !== receipt.charter_hash) {
       const err = new Error(
         `appendRecord: refused -- the ledger at "${receipt.ledger_path}" was measured under charter_hash ${ledgerDoc.charter_hash}, `
         + `not the receipt's ${receipt.charter_hash}. Spend measured under one charter cannot certify another.`
@@ -1098,7 +1120,15 @@ function appendRecordLocked(journalPath, partial) {
       err.code = 'SPEND-RECEIPT-PROVENANCE';
       throw err;
     }
-    if (typeof ledgerDoc.charter_id === 'string' && ledgerDoc.charter_id) {
+    if (typeof ledgerDoc.charter_id !== 'string' || !ledgerDoc.charter_id) {
+      const err = new Error(
+        `appendRecord: refused -- the ledger at "${receipt.ledger_path}" carries no charter_id. `
+        + 'A ledger with no charter identity cannot be bound to its charter-derived canonical location; producer-owned identity fields are required, not optional.'
+      );
+      err.code = 'SPEND-RECEIPT-PROVENANCE';
+      throw err;
+    }
+    {
       const canonicalName = `${ledgerDoc.charter_id}.json`;
       if (path.basename(path.resolve(receipt.ledger_path)) !== canonicalName) {
         const err = new Error(

@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "b495ace83782021c7b2c5da0b10c35f8df591467d8d12c3d286c21c1fb2aa5eb",
+    "expected_tree_sha256": "e8e34ba1c81ba976a08f55f9ea1a210aaa49efac105632b5b4bfcbecb111e349",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -1538,6 +1538,11 @@
       {
         "path": "README.md",
         "sha256": "00d3a5c0166b310765da763c4eb2aefa909b3af5dd1ea5fde2c05096de9ad841",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/task-plans/ticktock-skill__plan.json",
+        "sha256": "f84bcddce021801674042215a9a9c84fda276cb5b238a13b773c555a6cffd3d0",
         "mode": 420
       },
       {
@@ -5562,7 +5567,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "171ce66b9107881ac178dc1d5c94dd1b62125cc249d83971039202113c124e78",
+        "sha256": "6118f3626a23243f6429c777b227024ddad04ef803baf0eec440792f5221f987",
         "mode": 420
       },
       {
@@ -12277,7 +12282,7 @@
       },
       {
         "path": "tools/ticktock/cycle-driver.cjs",
-        "sha256": "640cf33ec5d3018006510ff5abf4f7fe1e167e7fe857733550c1aff606d5f7fd",
+        "sha256": "849aae45b6faf6e191e6fb8a295a88ec7c334927ec0cb8516b8b4089bc860569",
         "mode": 420
       },
       {
@@ -12297,7 +12302,7 @@
       },
       {
         "path": "tools/ticktock/generation-manifest.cjs",
-        "sha256": "825ad2a5d007b836bb2cad286a56f7fa2c97a487c2d87e23b6c0c819c345f122",
+        "sha256": "25393213f169f70124ada8d2d575ecbb28a9e3825042e1171c8d0cd86d8dff82",
         "mode": 420
       },
       {
@@ -12307,7 +12312,7 @@
       },
       {
         "path": "tools/ticktock/journal.cjs",
-        "sha256": "e9645b6895924ed8cfa487398fd49692ff721ddf01baeb2eba09e4b80aedaa81",
+        "sha256": "bb4987ce1f4835f6de07d090d83858248593e98a1b38999041a936b0b1bc2d71",
         "mode": 420
       },
       {
@@ -12342,7 +12347,7 @@
       },
       {
         "path": "tools/ticktock/test-append-after-truncation.cjs",
-        "sha256": "8d0688748e3094f767f45a5cd9473624b135ada465d1f03acdeb736b5e8a1560",
+        "sha256": "540599bcb0223ec3e13d2bb96a4f32d89ae177c4f764880f54dd8450fac8919f",
         "mode": 420
       },
       {
@@ -12352,7 +12357,7 @@
       },
       {
         "path": "tools/ticktock/test-ceilings.cjs",
-        "sha256": "021fcc1c4f019eb5403558c96188361695a5f076bbfdacef9601bb4b0b1c3b81",
+        "sha256": "287251bf46d931e16e3ad7d54f00bafadd4d84eacd6ed192e6aeb496b9705fc6",
         "mode": 420
       },
       {
@@ -12372,7 +12377,7 @@
       },
       {
         "path": "tools/ticktock/test-generation-manifest.cjs",
-        "sha256": "b76be1ead61c623c5fa723466898bd2db11afc5e9043f20ad560f164908210c5",
+        "sha256": "010016d03c08c002576512a6c437c08f2bccc2a92feaa1d54c0834ab8127a04e",
         "mode": 420
       },
       {
@@ -12382,7 +12387,7 @@
       },
       {
         "path": "tools/ticktock/test-journal-anchor.cjs",
-        "sha256": "fe7755cdb56c6f5176d1e45a3646eb5fbe1f27c7bd9ee1e93c6eb883f53d4b06",
+        "sha256": "fcd8090bea9ab30fa4e7310aeadb1d20ce4bcfe4120a1f307ba741490972ef50",
         "mode": 420
       },
       {
@@ -12402,7 +12407,7 @@
       },
       {
         "path": "tools/ticktock/test-resume-terminal-halts.cjs",
-        "sha256": "aef2731da4c82fbd99655464e198e2a22859bca81c42f016c0d336fdd0ed30ea",
+        "sha256": "f78cfdfe20b4b9bc94614eaca0130c1be80521baa5d812faf8bf0f42b3c0fa6d",
         "mode": 420
       },
       {
@@ -13559,7 +13564,7 @@
     "package_script_count": 204,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "171ce66b9107881ac178dc1d5c94dd1b62125cc249d83971039202113c124e78",
+    "graph_sha256": "6118f3626a23243f6429c777b227024ddad04ef803baf0eec440792f5221f987",
     "graph_nodes": 3780,
     "graph_edges": 2809
   },

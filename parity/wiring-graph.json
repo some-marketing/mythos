@@ -18515,7 +18515,7 @@
       "id": "file:tools/ticktock/cycle-driver.cjs",
       "type": "file",
       "path": "tools/ticktock/cycle-driver.cjs",
-      "sha256": "640cf33ec5d3018006510ff5abf4f7fe1e167e7fe857733550c1aff606d5f7fd",
+      "sha256": "849aae45b6faf6e191e6fb8a295a88ec7c334927ec0cb8516b8b4089bc860569",
       "mode": 420
     },
     {
@@ -18543,7 +18543,7 @@
       "id": "file:tools/ticktock/generation-manifest.cjs",
       "type": "file",
       "path": "tools/ticktock/generation-manifest.cjs",
-      "sha256": "825ad2a5d007b836bb2cad286a56f7fa2c97a487c2d87e23b6c0c819c345f122",
+      "sha256": "25393213f169f70124ada8d2d575ecbb28a9e3825042e1171c8d0cd86d8dff82",
       "mode": 420
     },
     {
@@ -18557,7 +18557,7 @@
       "id": "file:tools/ticktock/journal.cjs",
       "type": "file",
       "path": "tools/ticktock/journal.cjs",
-      "sha256": "e9645b6895924ed8cfa487398fd49692ff721ddf01baeb2eba09e4b80aedaa81",
+      "sha256": "bb4987ce1f4835f6de07d090d83858248593e98a1b38999041a936b0b1bc2d71",
       "mode": 420
     },
     {
@@ -18606,7 +18606,7 @@
       "id": "file:tools/ticktock/test-append-after-truncation.cjs",
       "type": "file",
       "path": "tools/ticktock/test-append-after-truncation.cjs",
-      "sha256": "8d0688748e3094f767f45a5cd9473624b135ada465d1f03acdeb736b5e8a1560",
+      "sha256": "540599bcb0223ec3e13d2bb96a4f32d89ae177c4f764880f54dd8450fac8919f",
       "mode": 420
     },
     {
@@ -18620,7 +18620,7 @@
       "id": "file:tools/ticktock/test-ceilings.cjs",
       "type": "file",
       "path": "tools/ticktock/test-ceilings.cjs",
-      "sha256": "021fcc1c4f019eb5403558c96188361695a5f076bbfdacef9601bb4b0b1c3b81",
+      "sha256": "287251bf46d931e16e3ad7d54f00bafadd4d84eacd6ed192e6aeb496b9705fc6",
       "mode": 420
     },
     {
@@ -18648,7 +18648,7 @@
       "id": "file:tools/ticktock/test-generation-manifest.cjs",
       "type": "file",
       "path": "tools/ticktock/test-generation-manifest.cjs",
-      "sha256": "b76be1ead61c623c5fa723466898bd2db11afc5e9043f20ad560f164908210c5",
+      "sha256": "010016d03c08c002576512a6c437c08f2bccc2a92feaa1d54c0834ab8127a04e",
       "mode": 420
     },
     {
@@ -18662,7 +18662,7 @@
       "id": "file:tools/ticktock/test-journal-anchor.cjs",
       "type": "file",
       "path": "tools/ticktock/test-journal-anchor.cjs",
-      "sha256": "fe7755cdb56c6f5176d1e45a3646eb5fbe1f27c7bd9ee1e93c6eb883f53d4b06",
+      "sha256": "fcd8090bea9ab30fa4e7310aeadb1d20ce4bcfe4120a1f307ba741490972ef50",
       "mode": 420
     },
     {
@@ -18690,7 +18690,7 @@
       "id": "file:tools/ticktock/test-resume-terminal-halts.cjs",
       "type": "file",
       "path": "tools/ticktock/test-resume-terminal-halts.cjs",
-      "sha256": "aef2731da4c82fbd99655464e198e2a22859bca81c42f016c0d336fdd0ed30ea",
+      "sha256": "f78cfdfe20b4b9bc94614eaca0130c1be80521baa5d812faf8bf0f42b3c0fa6d",
       "mode": 420
     },
     {

@@ -377,12 +377,20 @@ check('a fabricated ledger at a NON-CANONICAL path (not <ledgerDir>/<charter_id>
     `expected SPEND-RECEIPT-PROVENANCE, got ${threw ? threw.code + ': ' + threw.message : 'NO THROW'}`);
 });
 
-// Compatibility guard: a bare schema-only stub ledger at a non-canonical path
-// (the shape the pre-existing journal-anchor / resume-terminal-halts /
-// append-after-truncation suites write, and what cycle-driver.cjs writes for
-// its own scratch ledgers) must STILL pass -- provenance is required only when
-// the ledger carries an identity to verify against.
-check('a bare schema-only stub ledger (no charter identity) still appends -- stub-suite compatibility', () => {
+// Codex PR#20 (round 2) REVERSED this guard's original claim. The
+// schema-only-ledger exemption below was the bug: "provenance is required
+// only when the ledger carries an identity to verify against" meant a caller
+// could fabricate a zero-spend ledger with NO charter_hash/charter_id at all,
+// hash it, and have appendRecordLocked accept a completed phase with no
+// ledger actually tied to the run or its ceilings -- the receipt-level
+// charter_hash check earlier in the function does not verify the LEDGER
+// CONTENT itself carries that identity. identity fields are now REQUIRED
+// unconditionally on this production append path; a bare schema-only ledger
+// is refused, not exempted. (The journal-anchor / resume-terminal-halts /
+// append-after-truncation suites were updated to stamp a throwaway
+// charter_id + canonical filename on their stub ledgers instead of relying
+// on this exemption.)
+check('a bare schema-only stub ledger (no charter identity) is REFUSED, not exempted', () => {
   const dir = fs.mkdtempSync(path.join(tmpRoot, 'stub-compat-'));
   const ledgerPath = path.join(dir, 'stub-ledger.json');
   const stub = { schema: 'TickTockSpendLedger/1.0', lines_changed: 0, files: [], external_actions: 0 };
@@ -400,7 +408,8 @@ check('a bare schema-only stub ledger (no charter identity) still appends -- stu
   let threw = null;
   let rec = null;
   try { rec = completePhaseWithReceipt(receipt); } catch (err) { threw = err; }
-  assert(threw === null && rec && rec.spend_receipt, `bare stub ledger must append, got ${threw ? threw.message : 'no record'}`);
+  assert(threw && threw.code === 'SPEND-RECEIPT-PROVENANCE' && !rec,
+    `expected SPEND-RECEIPT-PROVENANCE for a no-identity ledger, got ${threw ? threw.code + ': ' + threw.message : 'no throw, record: ' + JSON.stringify(rec)}`);
 });
 
 // ---------------------------------------------------------------------------

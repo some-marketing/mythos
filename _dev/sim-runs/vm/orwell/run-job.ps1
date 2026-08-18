@@ -55,6 +55,17 @@ if ($DeadlineIso -notmatch '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(Z|[+-]\d{2}:\d{
   throw "DeadlineIso [$DeadlineIso] is not ISO-8601 (yyyy-MM-ddTHH:mm:ssZ); refusing to write job.env"
 }
 if ($Mode -eq 'turn' -and $Ticks -lt 1) { throw 'Ticks must be >= 1 for MODE=turn' }
+# CODE REVIEW (confirmation pass, codex P2, round 7): with -Mode sim,
+# EpisodeRounds/MaxEpisodes/Replicates were never validated. A value of 0
+# for any of them lets carriage-overnight.js exit successfully having run
+# zero rounds, episodes, or replicate groups; the guest still writes
+# STATUS=0 and a complete-looking manifest, so the job reports a successful
+# experiment that contains no experiment at all.
+if ($Mode -eq 'sim') {
+  if ($EpisodeRounds -lt 1) { throw 'EpisodeRounds must be >= 1 for MODE=sim' }
+  if ($MaxEpisodes -lt 1)   { throw 'MaxEpisodes must be >= 1 for MODE=sim' }
+  if ($Replicates -lt 1)    { throw 'Replicates must be >= 1 for MODE=sim' }
+}
 # ---------------------------------------------------------------------------
 # PRECONDITION: the golden baseline must exist before any experiment runs.
 #

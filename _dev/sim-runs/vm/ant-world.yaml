@@ -63,12 +63,18 @@ ssh:
 # listening guest port to 127.0.0.1 on the host; that is convenient and exactly
 # wrong for a quarantined testbed.
 portForwards:
-- guestPortRange: [1, 65535]
-  ignore: true
+# CODE REVIEW (confirmation pass, codex P2, round 7): Lima evaluates
+# portForwards rules in order and stops at the first match. The catch-all
+# ignore rule was listed first, so it matched guest port 4174 before the
+# dashboard exception below it was ever reached -- the advertised dashboard
+# was never actually exposed. The specific exception must precede the
+# catch-all.
 # dashboard (operator: 2026-08-03, guildmaster loop) — expose only the dashboard port
 - guestPort: 4174
   hostPort: 4174
   hostAddress: 127.0.0.1
+- guestPortRange: [1, 65535]
+  ignore: true
 
 # Guest resolves DNS itself rather than through the host agent's resolver.
 # (After lockdown the guest has no egress anyway, so this resolves nothing.)

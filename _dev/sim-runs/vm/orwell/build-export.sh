@@ -130,7 +130,12 @@ MANIFEST="$OUT_DIR/antworld-payload-${STAMP}.MANIFEST.txt"
 {
   echo "# ant-world orwell payload manifest"
   echo "# built:      ${STAMP}"
-  echo "# source:     ${REPO_ROOT}"
+  # CODE REVIEW (confirmation pass, codex P1, round 7): this manifest crosses
+  # into the payload that inbound-push.sh ships to orwell and gets copied
+  # onto the courier -- when the repo is checked out under a human
+  # operator's home directory, printing the absolute REPO_ROOT here leaked
+  # the local username and workstation layout off the laptop. The git commit
+  # already gives byte-exact provenance without exposing a local path.
   echo "# git commit: $(git rev-parse HEAD 2>/dev/null || echo unknown)"
   echo "# authority:  destination review D1 allowlist"
   echo "#"

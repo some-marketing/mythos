@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "bc3e2943296f6f8bcf0e66e5a968a6be9af1ad9d28f97e9e7a1d5f94d7e5032e",
+    "expected_tree_sha256": "ae428f7efe6c8abf659b4b79b50c7514f413117700da49a0d9a1d716dcd2dbc6",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -1528,6 +1528,16 @@
       {
         "path": "README.md",
         "sha256": "00d3a5c0166b310765da763c4eb2aefa909b3af5dd1ea5fde2c05096de9ad841",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/meditation__2026-08-18.md",
+        "sha256": "5e7037bd656067eb9d2cbbf3e5670846d09942dc34636ce26e9d9c97dd6d5faa",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/verify-evidence__mythos-memory-dreaming__2026-08-18.json",
+        "sha256": "5c6cc84caf845fd6a0d0209c8fb3f3c813ed8db6feb10c6463da2e9f196ecbed",
         "mode": 420
       },
       {
@@ -5677,7 +5687,7 @@
       },
       {
         "path": "package.json",
-        "sha256": "a355d08171297472c9cc554f703dc7d3dc42d654a419acdf2aca31a7c3a0baa7",
+        "sha256": "0174a03e6beef86c68242f440c13a64f2a4fc92221f2f442a05faeb692bcc3ee",
         "mode": 420
       },
       {
@@ -5692,7 +5702,7 @@
       },
       {
         "path": "parity/host-activation.json",
-        "sha256": "db362b1d95d6d92a8c8b25186666c046fa35f6ef5a77e1850598b2f4c5c38a3e",
+        "sha256": "4842b9fed5b272b2de9569b35e7b5de0f0ae09004a27522b7742443c0fb6fd07",
         "mode": 420
       },
       {
@@ -5707,7 +5717,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "5503d0dbe7bae095fbb42f62677036744391875e6406c8bc744e384b1a51e9f9",
+        "sha256": "8056aa1a3e3178ca986408318d07f6900c30e786fe3b6acfa53cce68145574bd",
         "mode": 420
       },
       {
@@ -8637,12 +8647,12 @@
       },
       {
         "path": "tools/kernel/heartbeat-consumer.cjs",
-        "sha256": "ccc20f6b87c915c07c868d706ded1509c96f8f8cebafa6013dcbe58378d9462d",
+        "sha256": "0988012ef98e05aee8f5e607006d7b13ac9c4e4830fbd3e136b45e011f8d918d",
         "mode": 420
       },
       {
         "path": "tools/kernel/heartbeat.js",
-        "sha256": "3da3c996f1a759a794ad2426c9167437230effe9983a53e69a357353758f8049",
+        "sha256": "852f27b5ca81e16cf93f509282bca3565fb83328ecdf202a728801ec4707cda5",
         "mode": 420
       },
       {
@@ -8767,7 +8777,7 @@
       },
       {
         "path": "tools/kernel/hooks/dispatch-session-start.cjs",
-        "sha256": "b0128797bcff64c1dacf815f8dbe9beea930773a45a7405a7605d688897634d7",
+        "sha256": "8eb76bf115e7f3f694bc1782d3d715b01c2f394b4571599b215b336694aec4b2",
         "mode": 420
       },
       {
@@ -9282,7 +9292,7 @@
       },
       {
         "path": "tools/launchd/run-delesign-poll.cjs",
-        "sha256": "97396f686ea31b88b89b6ee2fa0982ce9d3b3db7290fa4a97780d13cd6c33fe5",
+        "sha256": "141c085025c0d374304079302b910f8ce2201bdc81da499dcfae07202ea6d5ae",
         "mode": 420
       },
       {
@@ -9302,7 +9312,7 @@
       },
       {
         "path": "tools/launchd/run-hygiene-sweep.cjs",
-        "sha256": "29481ec38942de4ddc92d501dc5daeb42b216723ba81d9a1236bbe124af086f2",
+        "sha256": "1ed99351946f16b2039e3435f4eb71d83fc84d07fc4cedb9aaf4bb3a1082fc48",
         "mode": 420
       },
       {
@@ -9312,7 +9322,7 @@
       },
       {
         "path": "tools/launchd/services.json",
-        "sha256": "0886c333ef6eaa4f889f0f6d50302601a18fe287a5087a9b4e8164bf40180eb0",
+        "sha256": "8040569fc88246cb4124291be67f43ae4e1ef56cbefd231304bac784024b9537",
         "mode": 420
       },
       {
@@ -10136,6 +10146,11 @@
         "mode": 420
       },
       {
+        "path": "tools/memory/__tests__/contextual-sweep.test.cjs",
+        "sha256": "aa6825d1d160462bbe84bc57cd22ded2238bbd0e1d09a23f647bb02e1e9e9e2d",
+        "mode": 420
+      },
+      {
         "path": "tools/memory/agent-state.js",
         "sha256": "fc508d85a47bb4ea402cf12e6083410e77e5f3ed2f26fc5f5e0a6531a4e04d72",
         "mode": 493
@@ -10167,12 +10182,12 @@
       },
       {
         "path": "tools/memory/contextual-inject.cjs",
-        "sha256": "f2bb4c849eef01e2cbfb31abe4476e35eda1e31a6c60a0a5d05238a64e4dd7ec",
+        "sha256": "ce5e2a873c10c9b581c36f86cf1fea72031e91a7bbead882c48010f07471455b",
         "mode": 420
       },
       {
         "path": "tools/memory/contextual-sweep.js",
-        "sha256": "7f5c3223e717cbb5d864fdf252a34c2eaff6781de8ad6b40b6c65f12f29ad06d",
+        "sha256": "2fae959d93b9adacbb31a4c9c6f2b8a201dc9215c8d75ec3ce7057b38a8329d4",
         "mode": 493
       },
       {
@@ -11347,7 +11362,7 @@
       },
       {
         "path": "tools/sessions/session-start-cross-session-consumer.cjs",
-        "sha256": "caceaa610682146a81620e9d058bc1ce2cc8c99520737b96f72242c44f49edcc",
+        "sha256": "a6629a8c1db4ab63164dbc13e0eb883ce89ee96539aa1c7090211c69ce28abbb",
         "mode": 493
       },
       {
@@ -13451,12 +13466,12 @@
     ]
   },
   "wiring": {
-    "package_script_count": 204,
+    "package_script_count": 205,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "5503d0dbe7bae095fbb42f62677036744391875e6406c8bc744e384b1a51e9f9",
-    "graph_nodes": 3757,
-    "graph_edges": 2730
+    "graph_sha256": "8056aa1a3e3178ca986408318d07f6900c30e786fe3b6acfa53cce68145574bd",
+    "graph_nodes": 3760,
+    "graph_edges": 2736
   },
   "runtime_exclusions": [
     ".git/**",

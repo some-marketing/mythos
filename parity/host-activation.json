@@ -1,7 +1,7 @@
 {
   "schema": "MythosHostActivation/2.0",
   "secret_free": true,
-  "plan_sha256": "8f41456212d69153acd5c5ad101edf567398a235940103fe8cee58b1754743da",
+  "plan_sha256": "be5fb13a526f1a6110345a5ee1ce1f22c16c8872f9ad8602577fb35aaa8cd31c",
   "operator_approval": "pending",
   "approval_manifest_sha256": null,
   "activation_status": "planned",
@@ -596,6 +596,71 @@
         }
       ],
       "receipt": "_dev/state/host-activation/receipts/launchd-cowork-bridge.json"
+    },
+    {
+      "id": "launchd-contextual-sweep",
+      "kind": "launchd",
+      "selection": "selected",
+      "not_applicable_reason": null,
+      "binding": null,
+      "prerequisites": [
+        "node",
+        "launchctl",
+        "plutil",
+        "tools/memory/contextual-sweep.js"
+      ],
+      "backup": [
+        {
+          "op": "backup-launchd-plist",
+          "args": [
+            "contextual-sweep"
+          ]
+        }
+      ],
+      "preflight": [
+        {
+          "op": "run",
+          "args": [
+            "tools/launchd/install.sh",
+            "contextual-sweep",
+            "--dry-run"
+          ]
+        }
+      ],
+      "install": [
+        {
+          "op": "run",
+          "args": [
+            "tools/launchd/install.sh",
+            "contextual-sweep"
+          ]
+        }
+      ],
+      "kickstart": [
+        {
+          "op": "launchctl-kickstart",
+          "args": [
+            "org.mythos.portable.contextual-sweep"
+          ]
+        }
+      ],
+      "healthcheck": [
+        {
+          "op": "launchctl-print",
+          "args": [
+            "org.mythos.portable.contextual-sweep"
+          ]
+        }
+      ],
+      "rollback": [
+        {
+          "op": "rollback-launchd",
+          "args": [
+            "contextual-sweep"
+          ]
+        }
+      ],
+      "receipt": "_dev/state/host-activation/receipts/launchd-contextual-sweep.json"
     },
     {
       "id": "mcp-delesign",

@@ -1,0 +1,512 @@
+#cloud-config
+# ant-world guest provisioning — orwell Hyper-V testbed.
+#
+# This guest has ZERO network adapters. Nothing here may download anything;
+# every binary arrives on the courier disk, per the re-review condition that no
+# runtime package installation is required after the golden image is sealed.
+
+hostname: antworld
+manage_etc_hosts: true
+preserve_hostname: false
+
+users:
+  - name: antworld
+    gecos: ant-world runner
+    shell: /bin/bash
+    lock_passwd: true
+    sudo: false
+
+# No SSH anywhere: there is no network to reach it on, and no key should exist
+# in the guest to be found later by the reverse-membrane audit.
+ssh_pwauth: false
+disable_root: true
+ssh_deletekeys: true
+ssh:
+  emit_keys_to_console: false
+
+write_files:
+  # ---------------------------------------------------------------------
+  # Bootstrap — runs once, from the courier, during provisioning only.
+  # ---------------------------------------------------------------------
+  - path: /usr/local/sbin/antworld-bootstrap.sh
+    permissions: '0755'
+    owner: root:root
+    content: |
+      #!/bin/bash
+      set -uo pipefail
+      LOG=/var/log/antworld-bootstrap.log
+      exec > >(tee -a "$LOG") 2>&1
+      echo "=== antworld bootstrap $(date -u +%FT%TZ) ==="
+
+      COURIER=/mnt/courier
+      mkdir -p "$COURIER"
+
+      # Copy this log back to the courier on ANY exit, not just success.
+      # The original version only reported when everything worked, so a failure
+      # partway through left the courier empty and the failure invisible -- which
+      # is exactly what happened on the first two provisioning boots.
+      copy_log_out() {
+        rc=$?
+        if mountpoint -q "$COURIER"; then
+          mkdir -p "$COURIER/out"
+          cp "$LOG" "$COURIER/out/bootstrap.log" 2>/dev/null || true
+          echo "$rc" > "$COURIER/out/BOOTSTRAP-RC" 2>/dev/null || true
+          sync
+        fi
+        return $rc
+      }
+      trap copy_log_out EXIT
+
+      # Enumerate storage BEFORE trying to mount, so a mount failure still
+      # leaves a record of what the guest could actually see.
+      echo "--- block devices ---"
+      lsblk -o NAME,SIZE,FSTYPE,LABEL,TYPE 2>/dev/null || true
+      echo "--- blkid ---"
+      blkid 2>/dev/null || true
+
+      # Find the courier by label, then fall back to scanning for a vfat volume
+      # labelled ANTWORLD, then to any vfat volume that is not the CIDATA seed.
+      DEV="$(blkid -L ANTWORLD 2>/dev/null || true)"
+      if [ -z "$DEV" ]; then
+        DEV="$(blkid -t LABEL=ANTWORLD -o device 2>/dev/null | head -1 || true)"
+      fi
+      if [ -z "$DEV" ]; then
+        echo "label lookup failed; scanning vfat partitions"
+        for d in $(blkid -t TYPE=vfat -o device 2>/dev/null); do
+          l="$(blkid -s LABEL -o value "$d" 2>/dev/null || true)"
+          echo "  candidate $d label=$l"
+          if [ "$l" != "CIDATA" ]; then DEV="$d"; fi
+        done
+      fi
+      if [ -z "$DEV" ]; then echo "FATAL: no courier disk found"; exit 1; fi
+      echo "courier device: $DEV"
+      mount -t vfat -o rw,uid=0,gid=0 "$DEV" "$COURIER" || { echo "FATAL: mount failed"; exit 1; }
+      mkdir -p "$COURIER/out"
+      echo "mounted $DEV at $COURIER at $(date -u +%FT%TZ)" > "$COURIER/out/BOOTSTRAP-STARTED"
+      sync
+
+      # --- Node runtime -------------------------------------------------
+      NODE_TARBALL="$(ls "$COURIER"/node-*-linux-x64.tar.xz 2>/dev/null | head -1)"
+      if [ -z "$NODE_TARBALL" ]; then echo "FATAL: node tarball absent from courier"; exit 1; fi
+      echo "installing node from $(basename "$NODE_TARBALL")"
+      # CODE REVIEW (PR #12, codex P1): a missing checksum previously skipped
+      # verification entirely and a failed `sha256sum -c` was ignored (this
+      # script runs without `set -e`), so an altered archive could be
+      # extracted and sealed as a trusted runtime. The host always writes
+      # node.sha256 alongside the tarball (provision-vm.ps1) -- require it
+      # and fail closed on any verification failure, mirroring the payload
+      # checksum block below.
+      if [ ! -f "$COURIER/node.sha256" ]; then
+        echo "FATAL: node.sha256 absent from courier -- refusing to install unverified runtime"; exit 1
+      fi
+      ( cd "$COURIER" && sha256sum -c node.sha256 ) \
+        || { echo "FATAL: node tarball checksum verification failed"; exit 1; }
+      echo "node tarball sha256 VERIFIED"
+      mkdir -p /usr/local/node
+      # Explicit failure checks: this script runs without `set -e` so that a
+      # failure still reaches the EXIT trap and gets reported, which means every
+      # critical step has to fail loudly on its own.
+      tar -xJf "$NODE_TARBALL" -C /usr/local/node --strip-components=1 \
+        || { echo "FATAL: node tarball extraction failed"; exit 1; }
+      ln -sf /usr/local/node/bin/node /usr/local/bin/node
+      ln -sf /usr/local/node/bin/npm  /usr/local/bin/npm
+      node --version || { echo "FATAL: node does not run"; exit 1; }
+
+      # --- Simulation payload -------------------------------------------
+      PAYLOAD="$(ls "$COURIER"/antworld-payload-*.tar.gz 2>/dev/null | head -1)"
+      if [ -z "$PAYLOAD" ]; then echo "FATAL: payload absent from courier"; exit 1; fi
+      echo "installing payload from $(basename "$PAYLOAD")"
+      # The host copies the checksum alongside the archive keeping the full
+      # name, i.e. <archive>.tar.gz.sha256 -- do NOT strip the .tar.gz first.
+      SUMFILE="${PAYLOAD}.sha256"
+      if [ -f "$SUMFILE" ]; then
+        echo "$(cat "$SUMFILE")  $PAYLOAD" | sha256sum -c - \
+          || { echo "FATAL: payload archive checksum mismatch"; exit 1; }
+        echo "payload archive sha256 VERIFIED"
+      else
+        echo "FATAL: payload checksum file absent"; exit 1
+      fi
+      install -d -o antworld -g antworld /opt/antworld
+      tar -xzf "$PAYLOAD" -C /opt/antworld \
+        || { echo "FATAL: payload extraction failed"; exit 1; }
+      chown -R antworld:antworld /opt/antworld
+      install -d -o antworld -g antworld /opt/antworld/_dev/state/kill-switches
+
+      # Verify the payload manifest inside the guest — the second half of
+      # "verify manifests on both sides of every boundary".
+      if [ -f "$COURIER/PAYLOAD-MANIFEST.txt" ]; then
+        cd /opt/antworld
+        grep -v '^#' "$COURIER/PAYLOAD-MANIFEST.txt" | sha256sum -c - > /tmp/manifest-check.txt 2>&1 || true
+        BAD=$(grep -c 'FAILED' /tmp/manifest-check.txt || true)
+        OK=$(grep -c ': OK' /tmp/manifest-check.txt || true)
+        echo "guest-side manifest verification: $OK OK, $BAD FAILED"
+        if [ "$BAD" != "0" ]; then echo "FATAL: payload manifest mismatch in guest"; exit 1; fi
+      fi
+
+      # --- No network: stop systemd waiting for one -----------------------
+      systemctl disable systemd-networkd-wait-online.service 2>/dev/null || true
+      systemctl mask    systemd-networkd-wait-online.service 2>/dev/null || true
+      systemctl disable systemd-resolved 2>/dev/null || true
+
+      # --- Remove the SSH listener ----------------------------------------
+      # The membrane audit found sshd listening on :22. It is unreachable today
+      # (loopback is the only interface), but a listener that exists only
+      # because nothing can reach it is defence by accident. If a NIC were ever
+      # attached by mistake, this would be an immediate open door -- so remove
+      # the door rather than relying on the absence of a corridor.
+      systemctl disable --now ssh 2>/dev/null || true
+      systemctl mask ssh 2>/dev/null || true
+      systemctl disable --now ssh.socket 2>/dev/null || true
+      systemctl mask ssh.socket 2>/dev/null || true
+
+      # --- Job runner -----------------------------------------------------
+      systemctl daemon-reload
+      systemctl enable antworld-job.service
+
+      echo "=== bootstrap complete $(date -u +%FT%TZ) ==="
+      mkdir -p "$COURIER/out"
+      cp "$LOG" "$COURIER/out/bootstrap.log" || true
+      # Report the INSTALLED runner's identity. write_files runs before runcmd,
+      # so this reflects what cloud-init just wrote. Without it there is no way
+      # to tell whether a re-provision actually replaced the job runner, which
+      # is exactly the ambiguity that cost a debugging cycle here.
+      ( node --version
+        echo "payload files: $(find /opt/antworld -type f | wc -l)"
+        echo "runner sha256: $(sha256sum /usr/local/sbin/antworld-run-job.sh 2>/dev/null | cut -d' ' -f1)"
+        echo "runner supports MODE=tests: $(grep -c 'MODE.*=.*tests' /usr/local/sbin/antworld-run-job.sh 2>/dev/null)"
+        echo "runner consumes job.env: $(grep -c 'job.env.consumed' /usr/local/sbin/antworld-run-job.sh 2>/dev/null)"
+        echo "runner mtime: $(stat -c %y /usr/local/sbin/antworld-run-job.sh 2>/dev/null)"
+      ) > "$COURIER/out/provision-report.txt" 2>&1 || true
+      sync
+      umount "$COURIER"
+
+  # ---------------------------------------------------------------------
+  # Job runner — the only thing that executes on every subsequent boot.
+  # ---------------------------------------------------------------------
+  - path: /usr/local/sbin/antworld-run-job.sh
+    permissions: '0755'
+    owner: root:root
+    content: |
+      #!/bin/bash
+      # Batch execution. The guest boots, does exactly what the courier's job
+      # spec says, writes results back, and powers off. There is no interactive
+      # path in or out because there is no network adapter.
+      set -uo pipefail
+      LOG=/var/log/antworld-job.log
+      exec > >(tee -a "$LOG") 2>&1
+      echo "=== antworld job $(date -u +%FT%TZ) ==="
+
+      # WAIT FOR CLOUD-INIT BEFORE DOING ANYTHING.
+      # This service and cloud-init both start at boot. On a provisioning boot
+      # with no job spec, this runner would reach its poweroff in ~10s and kill
+      # bootstrap mid-extraction -- which is exactly what happened: the courier
+      # showed BOOTSTRAP-STARTED with no bootstrap.log and no provision report,
+      # and every re-provision silently left the OLD runner installed.
+      if command -v cloud-init >/dev/null 2>&1; then
+        echo "waiting for cloud-init to finish..."
+        cloud-init status --wait >/dev/null 2>&1 || true
+        echo "cloud-init done: $(cloud-init status 2>/dev/null | head -1)"
+      fi
+
+      COURIER=/mnt/courier
+      mkdir -p "$COURIER"
+      DEV="$(blkid -L ANTWORLD || true)"
+      if [ -z "$DEV" ]; then echo "no courier attached; powering off"; systemctl poweroff; exit 0; fi
+      mount -t vfat -o rw,uid=0,gid=0 "$DEV" "$COURIER" || { echo "courier mount failed"; systemctl poweroff; exit 0; }
+
+      finish() {
+        echo "=== job end $(date -u +%FT%TZ) ==="
+        cp "$LOG" "$COURIER/out/job.log" 2>/dev/null || true
+        sync; umount "$COURIER" 2>/dev/null || true
+        # Mark this as a clean exit so the unit's ExecStopPost does NOT force a
+        # hard poweroff underneath us. Without this marker every normal
+        # completion would race a `poweroff -f` against the clean shutdown.
+        touch /run/antworld-clean
+        systemctl poweroff
+        # CODE REVIEW (PR #12, codex P1): finish must be terminal -- without
+        # this exit the shell falls through into later mode branches after
+        # unmounting the courier and can start the normal simulation anyway.
+        exit 0
+      }
+
+      mkdir -p "$COURIER/out"
+
+      # ---------------------------------------------------------------
+      # Reverse-membrane audit. Emitted on EVERY boot, before any run, so
+      # the evidence is produced by the same image that does the work
+      # rather than by a one-off inspection that could drift from it.
+      # ---------------------------------------------------------------
+      {
+        echo "# reverse-membrane audit $(date -u +%FT%TZ)"
+        echo "## kernel"; uname -a
+        echo "## network interfaces (expect loopback only)"
+        ip -o link show 2>/dev/null || cat /proc/net/dev
+        echo "## routes (expect none)"
+        ip route show 2>/dev/null || echo "(no ip tool)"
+        echo "## listening sockets (expect none)"
+        ss -lntu 2>/dev/null || echo "(no ss)"
+        echo "## host filesystem shares (expect NONE)"
+        if mount | grep -Ei 'virtiofs|9p|nfs|cifs|smb'; then echo "FAIL: host share present"; else echo "NONE"; fi
+        echo "## full mount table"
+        mount
+        echo "## private key material (expect none)"
+        # Named private-key files only. An earlier version also matched *.pem,
+        # which listed Debian's public CA bundle and buried the real signal.
+        find / -xdev \( -name 'id_rsa*' -o -name 'id_ed25519*' -o -name 'id_ecdsa*' \
+             -o -name '*_rsa' -o -name 'ssh_host_*_key' \) 2>/dev/null | head -20 || true
+        echo "(end)"
+        echo "## files actually containing a PRIVATE KEY block (expect none)"
+        grep -rl -- '-----BEGIN .*PRIVATE KEY-----' /root /home /opt /etc/ssh 2>/dev/null | head -10 || true
+        echo "(end)"
+        echo "## legacy host content (expect none)"
+        find / -xdev -iname '*SM_OS*' 2>/dev/null | head -20 || true
+        echo "(end)"
+        echo "## credential-shaped environment"
+        env | grep -Ei 'key|token|secret|password|aws|anthropic|op_' || echo "none"
+        echo "## 1Password / keychain tooling (expect absent)"
+        command -v op || echo "op: absent"
+        command -v security || echo "security: absent"
+      } > "$COURIER/out/membrane-audit.txt" 2>&1
+      echo "membrane audit written"
+
+      # Pre-start cancellation. This is NOT an interactive kill switch: it can
+      # only be honoured before the run begins, because the host cannot write to
+      # the courier while the VM is running.
+      if [ -f "$COURIER/CANCEL" ]; then
+        echo "CANCEL present on courier — pre-start cancellation honoured, not running"
+        echo "cancelled-before-start" > "$COURIER/out/STATUS"
+        finish
+      fi
+
+      # Fleet-wide halt (runbook section 9). The courier carries the halt state
+      # in; we mirror it onto the guest's own kill-switch path so the DRIVER's
+      # startup check is what refuses, exiting 3 before creating any state.
+      # Mirroring rather than reimplementing means this actually exercises the
+      # ported mechanism instead of a lookalike beside it.
+      HALT=/opt/antworld/_dev/state/kill-switches/ALL-SIMS.off
+      mkdir -p "$(dirname "$HALT")"
+      if [ -f "$COURIER/ALL-SIMS.off" ]; then
+        echo "fleet halt ARMED on courier — mirroring to $HALT"
+        cp "$COURIER/ALL-SIMS.off" "$HALT"
+      else
+        rm -f "$HALT"
+        echo "fleet halt not armed"
+      fi
+
+      if [ ! -f "$COURIER/job.env" ]; then
+        echo "no job.env on courier; nothing to do"
+        echo "no-job" > "$COURIER/out/STATUS"
+        finish
+      fi
+
+      # shellcheck disable=SC1091
+      set -a; . "$COURIER/job.env"; set +a
+
+      # CONSUME ONCE. A job spec left on the courier would otherwise re-run on
+      # every subsequent boot -- including a provisioning boot, which is how a
+      # stale 500-episode spec silently restarted itself here. Renaming it the
+      # moment it is read makes a job spec a one-shot instruction.
+      mv "$COURIER/job.env" "$COURIER/job.env.consumed" 2>/dev/null || true
+      sync
+
+      RUN_NAME="${RUN_NAME:-run}"
+      MODE="${MODE:-sim}"
+      DEADLINE_ISO="${DEADLINE_ISO:-}"
+      EPISODE_ROUNDS="${EPISODE_ROUNDS:-60}"
+      MAX_EPISODES="${MAX_EPISODES:-5}"
+      REPLICATES="${REPLICATES:-2}"
+      TICKS="${TICKS:-3000}"
+
+      # ---------------------------------------------------------------
+      # MODE=tests -- run the engine test suite instead of a simulation.
+      # This exists so host/guest parity can be compared with the SAME
+      # command on both sides; without it the guest can only run the sim
+      # and a parity claim would rest on nothing.
+      # ---------------------------------------------------------------
+      if [ "$MODE" = "tests" ]; then
+        echo "MODE=tests -- running engine test suite"
+        DST="$COURIER/out/$RUN_NAME"
+        mkdir -p "$DST"
+        cd /opt/antworld
+        runuser -u antworld -- /usr/local/bin/node --test \
+          'tools/ant-hive-world/__tests__/*.test.cjs' > "$DST/test-output.txt" 2>&1
+        RC=$?
+        echo "test runner exit = $RC"
+        # Totals and the failing-test identifiers, so a name-by-name diff
+        # against the host needs no manual transcription.
+        grep -E '^. (tests|pass|fail|suites|skipped|todo) ' "$DST/test-output.txt" \
+          > "$DST/test-totals.txt" 2>/dev/null || true
+        awk '/^. failing tests:/{f=1} f && /^test at /{print}' "$DST/test-output.txt" \
+          | sort > "$DST/test-failures.txt" 2>/dev/null || true
+        echo "--- totals ---"; cat "$DST/test-totals.txt"
+        echo "--- failing ---"; cat "$DST/test-failures.txt"
+        ( cd "$DST" && find . -type f ! -name RESULT-MANIFEST.txt -print0 \
+            | sort -z | xargs -0 sha256sum > RESULT-MANIFEST.txt )
+        echo "$RC" > "$COURIER/out/STATUS"
+        finish
+      fi
+
+      # ---------------------------------------------------------------
+      # MODE=turn -- one exploratory world turn.  A turn is a bounded
+      # invocation of run-live.js; one tick is one simulated day.  The
+      # guest keeps the authoritative run tree and checkpoint metadata
+      # under /opt/antworld.  Only the dashboard projection is copied to
+      # the courier.  Mind weights are process-local today, so a later turn
+      # MUST NOT claim continuity until the driver supplies a mind snapshot.
+      # ---------------------------------------------------------------
+      if [ "$MODE" = "turn" ]; then
+        case "$TICKS" in ''|*[!0-9]*) echo "FATAL: TICKS must be a positive integer"; echo "invalid-ticks" > "$COURIER/out/STATUS"; finish; exit 0;; esac
+        if [ "$TICKS" -lt 1 ]; then echo "FATAL: TICKS must be >= 1"; echo "invalid-ticks" > "$COURIER/out/STATUS"; finish; exit 0; fi
+        if [ -z "$DEADLINE_ISO" ]; then echo "FATAL: turn has no DEADLINE_ISO"; echo "no-deadline" > "$COURIER/out/STATUS"; finish; exit 0; fi
+
+        TURN_ROOT="/opt/antworld/_dev/state/$RUN_NAME"
+        CHECKPOINT_ROOT="/opt/antworld/_dev/state/checkpoints"
+        mkdir -p "$CHECKPOINT_ROOT"
+        # CODE REVIEW (PR #12, codex P1): the turn driver's sandbox root is
+        # derived only from RUN_NAME. If a run name is reused without a full
+        # golden restore, setupHives resets hive/world state while
+        # run-log.jsonl and other sandbox evidence are appended under the
+        # same root -- the harvested projection and checkpoint would combine
+        # two fresh-mind runs under one identity. Fail closed on a nonempty
+        # turn root: a turn is a turn.
+        if [ -d "$TURN_ROOT" ] && [ -n "$(ls -A "$TURN_ROOT" 2>/dev/null)" ]; then
+          echo "FATAL: turn root $TURN_ROOT is not empty; a reused RUN_NAME would mix separate runs' observations -- use a fresh RUN_NAME or restore the golden baseline"
+          echo "reused-turn-root" > "$COURIER/out/STATUS"
+          finish
+          exit 0
+        fi
+        echo "MODE=turn run=$RUN_NAME ticks=$TICKS deadline=$DEADLINE_ISO"
+        cd /opt/antworld
+        runuser -u antworld -- /usr/local/bin/node tools/ant-hive-world/run-live.js \
+          --ticks "$TICKS" --tick-interval-ms 0 --sandbox-root "$TURN_ROOT" --arm "$RUN_NAME"
+        RC=$?
+        echo "turn driver exit = $RC"
+
+        # Persist a guest-local, atomic checkpoint for inspection/recovery.
+        # This captures world observations and run logs, not neural weights;
+        # the explicit continuity flag prevents accidental claims of learning
+        # across a power cycle until a mind-serialization contract exists.
+        if [ -d "$TURN_ROOT" ]; then
+          CP_TMP="$CHECKPOINT_ROOT/.${RUN_NAME}.tmp.$$"
+          CP_DIR="$CHECKPOINT_ROOT/$RUN_NAME"
+          rm -rf "$CP_TMP"
+          mkdir -p "$CP_TMP"
+          cp -R "$TURN_ROOT/." "$CP_TMP/"
+          {
+            echo '{'
+            echo '  "schema_version": "orwell-turn-checkpoint-1",'
+            echo "  \"run_name\": \"$RUN_NAME\",";
+            echo "  \"ticks\": $TICKS,";
+            echo "  \"driver_exit\": $RC,";
+            echo '  "mind_state": "process-local-not-checkpointed",'
+            echo '  "resume_continuity": false'
+            echo '}'
+          } > "$CP_TMP/checkpoint.json"
+          sync
+          rm -rf "$CP_DIR"
+          mv "$CP_TMP" "$CP_DIR"
+          echo "checkpoint committed: $CP_DIR"
+        fi
+
+        # The dashboard consumes this projection; no checkpoint internals
+        # or mind weights cross the courier boundary.
+        DST="$COURIER/out/$RUN_NAME"
+        mkdir -p "$DST"
+        if [ -d "$TURN_ROOT/shared" ]; then cp -R "$TURN_ROOT/shared/." "$DST/"; fi
+        if [ -f "$TURN_ROOT/run-log.jsonl" ]; then cp "$TURN_ROOT/run-log.jsonl" "$DST/"; fi
+        printf '{"schema_version":"orwell-dashboard-projection-1","run_name":"%s","ticks":%s,"mind_state":"process-local-not-checkpointed","resume_continuity":false}\n' "$RUN_NAME" "$TICKS" > "$DST/turn-projection.json"
+        ( cd "$DST" && find . -type f ! -name RESULT-MANIFEST.txt -print0 | sort -z | xargs -0 sha256sum > RESULT-MANIFEST.txt )
+        echo "$RC" > "$COURIER/out/STATUS"
+        finish
+      fi
+
+      if [ -z "$DEADLINE_ISO" ]; then
+        echo "FATAL: job.env carries no DEADLINE_ISO; the driver requires a wall-clock bound"
+        echo "no-deadline" > "$COURIER/out/STATUS"
+        finish
+      fi
+
+      echo "run=$RUN_NAME deadline=$DEADLINE_ISO rounds=$EPISODE_ROUNDS max=$MAX_EPISODES reps=$REPLICATES"
+
+      cd /opt/antworld
+      # runuser, not sudo: sudo is not guaranteed present in a minimal cloud
+      # image, and the antworld user is deliberately not in sudoers.
+      runuser -u antworld -- /usr/local/bin/node _dev/sim-runs/carriage-overnight.js \
+        --root "/opt/antworld/_dev/state/$RUN_NAME" \
+        --deadline-iso "$DEADLINE_ISO" \
+        --episode-rounds "$EPISODE_ROUNDS" \
+        --max-episodes "$MAX_EPISODES" \
+        --replicates "$REPLICATES" \
+        --tick-interval-ms 0 --summary-every 30
+      RC=$?
+      echo "driver exit = $RC"
+      # Exit 3 is the fleet halt refusing to launch, not a failure. Record it
+      # distinctly so a halted run is never mistaken for a broken one.
+      if [ "$RC" = "3" ]; then
+        echo "driver refused to launch: fleet halt armed (expected exit 3)"
+        echo "halted-exit3" > "$COURIER/out/STATUS"
+        if [ -d "/opt/antworld/_dev/state/$RUN_NAME" ]; then
+          echo "WARNING: state directory was created despite halt — halt is NOT clean"
+        else
+          echo "confirmed: no state directory created"
+        fi
+        finish
+      fi
+
+      # Copy results out and manifest them in the guest, so the host can verify
+      # the same hashes on the far side of the boundary.
+      SRC="/opt/antworld/_dev/state/$RUN_NAME"
+      DST="$COURIER/out/$RUN_NAME"
+      mkdir -p "$DST"
+      if [ -d "$SRC" ]; then
+        cp -R "$SRC/." "$DST/"
+        ( cd "$DST" && find . -type f ! -name RESULT-MANIFEST.txt -print0 \
+            | sort -z | xargs -0 sha256sum > RESULT-MANIFEST.txt )
+        echo "results copied: $(find "$DST" -type f | wc -l) files"
+      else
+        echo "WARNING: no result directory at $SRC"
+      fi
+      echo "$RC" > "$COURIER/out/STATUS"
+      finish
+
+  - path: /etc/systemd/system/antworld-job.service
+    permissions: '0644'
+    owner: root:root
+    content: |
+      [Unit]
+      Description=ant-world batch job runner
+      # cloud-final.service ordering is load-bearing, not cosmetic: without it
+      # this unit races cloud-init on a provisioning boot and powers the guest
+      # off before bootstrap finishes. The runner also waits explicitly, so the
+      # race is closed at both the unit and the script level.
+      After=local-fs.target cloud-final.service
+      # No network dependency: this guest has no network adapter.
+
+      [Service]
+      Type=oneshot
+      ExecStart=/usr/local/sbin/antworld-run-job.sh
+      # Hard in-guest ceiling. This is the absolute deadline that does not
+      # depend on the driver honouring --deadline-iso. On expiry systemd kills
+      # the job; the host-side watchdog is the independent second layer.
+      TimeoutStartSec=14400
+      TimeoutStopSec=120
+      # If the job is killed for overrunning the timeout, still power the guest
+      # off. The marker file means this only fires on ABNORMAL termination --
+      # a clean run powers itself off and must not be force-killed mid-shutdown.
+      ExecStopPost=/bin/sh -c 'test -f /run/antworld-clean || /usr/sbin/poweroff -f'
+      StandardOutput=journal
+      StandardError=journal
+
+      [Install]
+      WantedBy=multi-user.target
+
+runcmd:
+  - [ /usr/local/sbin/antworld-bootstrap.sh ]
+
+# Provisioning ends with the guest powered off, so the host can detach the
+# mutable seed and seal the golden baseline.
+power_state:
+  mode: poweroff
+  message: antworld provisioning complete
+  timeout: 60
+  condition: true

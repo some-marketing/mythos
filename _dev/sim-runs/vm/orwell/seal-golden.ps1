@@ -52,7 +52,18 @@ $remainingDisks | Select-Object ControllerNumber, ControllerLocation, Path | For
 if ($remainingDisks.Count -ne 1) {
   throw "REFUSING to seal: expected exactly 1 remaining disk (the OS disk) after detaching the seed and courier, found $($remainingDisks.Count). Investigate before sealing -- an extra disk would be baked into the golden export."
 }
-"remaining disk count OK: 1 (OS disk)"
+# CODE REVIEW (confirmation pass, codex P1, round 6): a count-only guard
+# passes even if configuration drift detached the real OS disk and left a
+# single diagnostic/data disk in its place -- that disk would then be
+# checkpointed and exported as "the golden baseline". Verify identity, not
+# just cardinality: the sole remaining disk must be provision-vm.ps1's own
+# OS disk, at the controller location it attaches it to (0).
+$expectedOsDisk = Join-Path $Root "Disks\$VMName-os.vhdx"
+$osDrive = $remainingDisks[0]
+if ($osDrive.Path -ne $expectedOsDisk -or $osDrive.ControllerLocation -ne 0) {
+  throw "REFUSING to seal: the sole remaining disk is '$($osDrive.Path)' at controller location $($osDrive.ControllerLocation), expected the OS disk '$expectedOsDisk' at location 0. Investigate before sealing -- this would export the wrong disk as the golden baseline."
+}
+"remaining disk OK: 1 disk, identity verified as the OS disk at location 0"
 
 "=== PRODUCTION CHECKPOINT ==="
 $snapName = "golden-$(Get-Date -Format 'yyyyMMddTHHmmssZ')"

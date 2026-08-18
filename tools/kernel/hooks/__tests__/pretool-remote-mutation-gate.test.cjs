@@ -16,8 +16,21 @@ const os = require('os');
 const path = require('path');
 
 const gate = require('../pretool-remote-mutation-gate.cjs');
+const { resolveStampSecret, signStamp } = require('../lib/stamp-mac.cjs');
 
 const REAL_PROJECT = path.resolve(__dirname, '../../../..');
+
+// Codex PR#20 F1: stamps are now HMAC-signed, so every fixture this suite
+// writes must be signed too or it reads as invalid regardless of which
+// scenario the fixture is meant to exercise. Signing a deliberately-invalid
+// fixture (voided/expired/broad-scope) is harmless -- those checks fire
+// before the MAC check in stampInvalidReason() -- and required for every
+// fixture meant to be VALID.
+const STAMP_SECRET = resolveStampSecret();
+if (!STAMP_SECRET) {
+  process.stderr.write('FATAL: no operator secret resolvable -- cannot sign test fixtures\n');
+  process.exit(2);
+}
 
 let pass = 0;
 let fail = 0;
@@ -53,6 +66,7 @@ function writeStamp(id, overrides) {
     voided: false,
     superseded_by: null,
   }, overrides || {});
+  signStamp(STAMP_SECRET, stamp);
   fs.writeFileSync(
     path.join(SANDBOX, '_dev/state/remote-mutation-stamps', id + '.json'),
     JSON.stringify(stamp, null, 2) + '\n'
@@ -269,6 +283,38 @@ check('B1 no over-block: rsync FROM a variable source into a local dir is not de
   assert.strictEqual(r.status, 0, JSON.stringify(r));
 });
 
+process.stdout.write('\n=== F2: unquoted-backslash-escape bypass (codex PR#20, kernel-triad convene 20260817T184138Z) ===\n');
+check('tokenize: an escaped letter is consumed literally (backslash dropped)', () => {
+  assert.deepStrictEqual(gate.tokenize('orw\\ell'), ['orwell']);
+});
+check('tokenize: an escaped whitespace character stays part of the SAME token, not a delimiter split', () => {
+  assert.deepStrictEqual(gate.tokenize('foo\\ bar'), ['foo bar']);
+});
+check('tokenize: an escaped @ is consumed literally', () => {
+  assert.deepStrictEqual(gate.tokenize('admin\\@orwell'), ['admin@orwell']);
+});
+check('tokenize: a trailing unquoted backslash (nothing to escape) is conservatively retained, not silently dropped', () => {
+  assert.deepStrictEqual(gate.tokenize('orwell\\'), ['orwell\\']);
+});
+check('tokenize: backslash handling does not change inside single quotes (still literal, unescaped by the quote logic)', () => {
+  assert.deepStrictEqual(gate.tokenize("'orw\\ell'"), ['orw\\ell']);
+});
+check('tokenize: an ordinary unescaped command is unaffected', () => {
+  assert.deepStrictEqual(gate.tokenize('ssh orwell whoami'), ['ssh', 'orwell', 'whoami']);
+});
+check('F2 end-to-end: a shell-lexically-escaped hostname no longer bypasses the strict REMOTE_HOST equality check', () => {
+  clearStamps();
+  const r = run('ssh orw\\ell "Stop-VM -Name X"');
+  assert.strictEqual(r.status, 2, `expected deny, got ${JSON.stringify(r)}`);
+  assert.ok(r.keys.includes('ssh:mutate'), JSON.stringify(r.keys));
+});
+check('F2 end-to-end: a shell-lexically-escaped scp destination host no longer bypasses the remote-host regex match', () => {
+  clearStamps();
+  const r = run('scp ./payload.tar.gz orw\\ell:D:/HyperV/X');
+  assert.strictEqual(r.status, 2, `expected deny, got ${JSON.stringify(r)}`);
+  assert.ok(r.keys.includes('scp:push'), JSON.stringify(r.keys));
+});
+
 process.stdout.write('\n=== DENY: B2 interpreter-wrapper blindness (convene 20260805T130427Z) ===\n');
 clearStamps();
 fs.writeFileSync(
@@ -307,6 +353,73 @@ check('B2: a .ps1 handed to pwsh that cannot be resolved is denied', () => {
   const r = run('pwsh -File nonexistent-teardown.ps1');
   assert.strictEqual(r.status, 2, JSON.stringify(r));
   assert.ok(r.keys.includes('wrapper:nonexistent-teardown.ps1'), JSON.stringify(r.keys));
+});
+
+process.stdout.write('\n=== F3: local-vs-remote script classification (codex PR#20, kernel-triad convene 20260817T184138Z corrected fix) ===\n');
+// The four combinations codex asked for: {hard-mutation-token, remote-transport-evidence} x {present, absent}.
+fs.writeFileSync(
+  path.join(SANDBOX, 'gpu-preflight.ps1'),
+  "New-Item -ItemType Directory -Path 'C:\\gpu-cache' -Force | Out-Null\n"
+);
+check('F3 (hard=true, remote=false): a purely-local script with a mutation verb but ZERO remote-transport evidence is NOT gated (fixes the real false positive)', () => {
+  const r = run('pwsh -File gpu-preflight.ps1');
+  assert.strictEqual(r.status, 0, `expected proceed (not-remote), got ${JSON.stringify(r)}`);
+});
+fs.writeFileSync(
+  path.join(SANDBOX, 'custom-remote-action.ps1'),
+  'ssh orwell "./revert-to-golden.ps1"\n'
+);
+check('F3 (hard=false, remote=true): a script that shells to orwell running a CUSTOM action name (no HARD_MUTATION_TOKENS match) is STILL gated -- remote-transport evidence alone remains fully sufficient (this is the bypass gemini caught in the first proposed AND-based fix)', () => {
+  const r = run('bash custom-remote-action.ps1');
+  assert.strictEqual(r.status, 2, `expected deny, got ${JSON.stringify(r)}`);
+  assert.ok(r.keys.includes('wrapper:custom-remote-action.ps1'), JSON.stringify(r.keys));
+});
+fs.writeFileSync(
+  path.join(SANDBOX, 'both-signals.ps1'),
+  "ssh orwell \"Stop-VM -Name X\"\nNew-Item -ItemType Directory -Path 'C:\\local-cache' -Force | Out-Null\n"
+);
+check('F3 (hard=true, remote=true): both signals present is still gated', () => {
+  const r = run('bash both-signals.ps1');
+  assert.strictEqual(r.status, 2, `expected deny, got ${JSON.stringify(r)}`);
+  assert.ok(r.keys.includes('wrapper:both-signals.ps1'), JSON.stringify(r.keys));
+});
+fs.writeFileSync(
+  path.join(SANDBOX, 'genuinely-clean.ps1'),
+  "Write-Host 'nothing to see here'\n"
+);
+check('F3 (hard=false, remote=false): a genuinely clean script is not gated', () => {
+  const r = run('pwsh -File genuinely-clean.ps1');
+  assert.strictEqual(r.status, 0, `expected proceed, got ${JSON.stringify(r)}`);
+});
+check('F3: inline eval code (node -e) is UNCHANGED by the narrowing -- a hard-mutation token alone still gates, since inline code is transient and impossible to pre-audit as a stable repo artifact', () => {
+  const r = run('node -e "run(\'Stop-VM -Name ant\')"');
+  assert.strictEqual(r.status, 2, JSON.stringify(r));
+  assert.ok(r.keys.includes('interpreter:node:inline'), JSON.stringify(r.keys));
+});
+
+fs.writeFileSync(
+  path.join(SANDBOX, 'escaped-hostname-in-script-body.ps1'),
+  'ssh orw\\ell "./revert-to-golden.ps1"\n'
+);
+check('F2 (codex re-review): a shell-lexically-escaped hostname INSIDE A SCRIPT FILE BODY no longer bypasses scanScriptBody -- the command-line tokenize() fix alone did not cover this second, separate raw-text match', () => {
+  const r = run('bash escaped-hostname-in-script-body.ps1');
+  assert.strictEqual(r.status, 2, `expected deny, got ${JSON.stringify(r)}`);
+  assert.ok(r.keys.includes('wrapper:escaped-hostname-in-script-body.ps1'), JSON.stringify(r.keys));
+});
+check('F2 (codex re-review, round 2): a shell-lexically-escaped hostname behind an UNRECOGNIZED command/wrapper no longer bypasses the catch-all fail-closed check -- a THIRD, separate raw-text haystack match (unknown-exe fallback path), unpatched by both the tokenize() and scanScriptBody() fixes', () => {
+  const r = run('unknown-wrapper ssh orw\\ell "Remove-Item D:\\HyperV\\x"');
+  assert.strictEqual(r.status, 2, `expected deny, got ${JSON.stringify(r)}`);
+  assert.ok(r.keys.some((k) => k.startsWith('unknown:')), JSON.stringify(r.keys));
+});
+check('F2 (codex re-review, round 3): touchesRemoteSurface() -- the module\'s own EXPORTED fallback predicate, consulted when the gate module fails to load -- no longer misses a shell-lexically-escaped hostname (a FOURTH raw-text match site)', () => {
+  assert.strictEqual(gate.touchesRemoteSurface('ssh orw\\ell "Remove-Item D:\\HyperV\\x"'), true);
+});
+check('F2 (codex re-review, round 3 self-correction): touchesRemoteSurface() still correctly detects a REAL (non-escaped) D:\\HyperV path reference -- proves the backslash-stripped projection was NOT also (wrongly) applied to the HyperV regex, which would have made that arm permanently unmatchable', () => {
+  assert.strictEqual(gate.touchesRemoteSurface('type D:\\HyperV\\notes.txt'), true);
+});
+check('the catch-all fix (round 2) also still correctly detects a REAL (non-escaped) D:\\HyperV path reference, same self-correction as touchesRemoteSurface', () => {
+  const r = run('unknown-wrapper type D:\\HyperV\\notes.txt');
+  assert.strictEqual(r.status, 2, `expected deny, got ${JSON.stringify(r)}`);
 });
 
 fs.writeFileSync(path.join(SANDBOX, 'build.mjs'), "console.log('building the local bundle');\n");
@@ -508,6 +621,7 @@ function writeBackfillStamp(id, overrides) {
     voided: false,
     superseded_by: null,
   }, overrides || {});
+  signStamp(STAMP_SECRET, stamp);
   fs.writeFileSync(
     path.join(BACKFILL_SANDBOX, '_dev/state/remote-mutation-stamps', id + '.json'),
     JSON.stringify(stamp, null, 2) + '\n'
@@ -567,6 +681,78 @@ check('backfilled audit log recorded the backfill-stamp decisions', () => {
   assert.ok(lines.some((l) => l.decision === 'allow' && l.stamp_id === 'continuity-lane__20260805T0306Z'));
   assert.ok(lines.some((l) => l.decision === 'deny' && l.keys.includes('teardown-vm.ps1')));
   for (const l of lines) process.stdout.write('    ' + JSON.stringify(l) + '\n');
+});
+
+process.stdout.write('\n=== BACKSLASH-NEWLINE LINE CONTINUATION (kernel-gate-backslash-newline-fix, 20260818) ===\n');
+check('a multi-line, backslash-continued command collapses to ONE segment, not one per line', () => {
+  // The reproduced bug: a normal multi-flag CLI invocation written the usual
+  // way (each flag on its own line, trailing backslash) used to shred into
+  // one fragment PER LINE, each of which fell into the unrecognized-command
+  // catch-all independently. Any single line mentioning "orwell" (describing
+  // what a stamp authorizes, say) then poisoned every OTHER line's harmless
+  // fragment via the whole-command haystack check, making the gate's own
+  // documented remedy (the stamp-mint command) self-blocking.
+  const multiLine = [
+    'node tools/kernel/hooks/mint-remote-mutation-stamp.cjs \\',
+    '  --item "Mythos Convene Approval" \\',
+    '  --stamp-id "example__20260818T0000Z" \\',
+    '  --conditions "Scoped to orwell setup, read-only recon only." \\',
+    '  --expires-hours 4',
+  ].join('\n');
+  const segments = gate.splitSegments(multiLine);
+  assert.strictEqual(segments.length, 1, `expected one merged segment, got ${segments.length}: ${JSON.stringify(segments)}`);
+});
+check('the mint-remote-mutation-stamp.cjs self-blocking bug is fixed end to end: ONE coherent, stampable key instead of five nonsense per-flag keys', () => {
+  // Before the fix, this exact shape of command (real, reproduced this
+  // session) denied with FIVE separate keys -- unknown:node, unknown:--item,
+  // unknown:--stamp-id, unknown:--conditions, unknown:--expires-hours --
+  // each independently "denied", none of which named the actual thing being
+  // run or could sensibly be granted a stamp scope (what would a stamp
+  // scoped to the literal string "--conditions" even authorize?). That
+  // fragmentation, not the fact of being denied at all, was the actual bug:
+  // a command that legitimately touches the remote surface SHOULD still
+  // require a stamp -- it should just require ONE sensible one.
+  //
+  // After the fix, this correctly remains a fail-closed denial (this is a
+  // genuinely unrecognized command whose text mentions the remote host --
+  // the conservative catch-all firing here is CORRECT, not a bug), but now
+  // as exactly ONE classified segment with ONE coherent key naming the real
+  // executable (`unknown:node`), which an operator can actually reason
+  // about and grant a real stamp scope against.
+  const multiLine = [
+    'node tools/kernel/hooks/mint-remote-mutation-stamp.cjs \\',
+    '  --item "Mythos Convene Approval" \\',
+    '  --stamp-id "example__20260818T0000Z" \\',
+    '  --conditions "Scoped to orwell setup, read-only recon only." \\',
+    '  --expires-hours 4',
+  ].join('\n');
+  const result = gate.classifyCommand(multiLine, { projectDir: REAL_PROJECT });
+  process.stdout.write('    -> ' + JSON.stringify(result.mutatingKeys) + '\n');
+  assert.strictEqual(result.applicable.length, 1, `expected exactly one classified segment (was 5, one per line, before the fix), got ${result.applicable.length}: ${JSON.stringify(result.applicable.map((r) => r.key))}`);
+  assert.deepStrictEqual(result.mutatingKeys, ['unknown:node'], 'the single key should name the real executable, not a bogus per-flag fragment');
+  assert.ok(!result.mutatingKeys.some((k) => k.startsWith('unknown:--')), 'no key should be a bogus flag-shaped fragment like "unknown:--item"');
+});
+check('a hostname split across a backslash-newline is NOT an evasion path -- the merged text is exactly what a real shell would execute', () => {
+  // OMEGA/gemini's counter-example from the convene review: the FIRST,
+  // rejected version of this fix (collapse to a space) would have let
+  // `admin@or\<newline>well` evade the host-substring check by turning one
+  // token into two ("admin@or" + "well", neither containing "orwell").
+  // Collapsing to NOTHING (matching real POSIX shell deletion of
+  // backslash-newline) must instead produce the single, contiguous host
+  // substring, so this remains fail-closed exactly as before the fix.
+  const evasionAttempt = 'echo admin@or\\\nwell';
+  const segments = gate.splitSegments(evasionAttempt);
+  assert.strictEqual(segments.length, 1);
+  assert.strictEqual(segments[0], 'echo admin@orwell', `expected the shell-accurate merge, got "${segments[0]}"`);
+});
+check('a genuine command separator (&&) after a removed continuation still splits into separate segments', () => {
+  // Sanity check (codex's own verification case, convene review): the fix
+  // must not accidentally swallow REAL segment boundaries that happen to
+  // follow a continuation -- only the backslash-newline itself is removed,
+  // not the semantics of whatever comes after it.
+  const cmd = 'echo hi && \\\necho bye';
+  const segments = gate.splitSegments(cmd);
+  assert.deepStrictEqual(segments, ['echo hi', 'echo bye']);
 });
 
 process.stdout.write(`\n${pass} passed, ${fail} failed\n`);

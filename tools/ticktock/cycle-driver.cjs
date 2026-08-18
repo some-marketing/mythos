@@ -115,6 +115,19 @@ const commands = {
     const lineageUnreadable = recorded.lineage !== undefined && !Array.isArray(recorded.lineage);
     const lineage = Array.isArray(recorded.lineage) ? recorded.lineage : [];
 
+    // Codex PR#20 review: the charter's own benchmark.fingerprint_hash is the
+    // baseline it was created bound to (checkImmutability enforces the
+    // charter itself never changes, but nothing previously compared that
+    // immutable binding against the RECORDED fingerprint file's own hash).
+    // If the baseline file is edited or re-recorded after charter creation,
+    // and the new content happens to match the current colony run, bench
+    // .check() reports identical:true and the cycle proceeds even though the
+    // charter is bound to a fingerprint that no longer exists on disk.
+    const fingerprintBindingMismatch =
+      typeof recorded.fingerprint_hash === 'string'
+      && typeof charter.benchmark.fingerprint_hash === 'string'
+      && recorded.fingerprint_hash !== charter.benchmark.fingerprint_hash;
+
     // Re-baseline checks run BEFORE the comparison, per the every-cycle invariant.
     const rebaseline = bench.checkRebaselineFrequency(lineage, {
       n_threshold: charter.benchmark.rebaseline_detector.n_threshold,
@@ -143,6 +156,7 @@ const commands = {
     }
 
     const halt = rebaseline.halt_state
+      || (fingerprintBindingMismatch ? 'FINGERPRINT-BINDING-MISMATCH' : null)
       || (!lineageChain.chain_unbroken ? 'LINEAGE-CHAIN-BROKEN' : null)
       || (error ? 'BENCHMARK-ERROR' : null)
       || (result && result.identical === false ? 'BENCHMARK-DIVERGENCE' : null);
@@ -154,6 +168,7 @@ const commands = {
       cycle_index: cycleIndex,
       fingerprint_path: charter.benchmark.fingerprint_path,
       fingerprint_hash_declared: charter.benchmark.fingerprint_hash,
+      fingerprint_hash_recorded: typeof recorded.fingerprint_hash === 'string' ? recorded.fingerprint_hash : null,
       rebaseline_frequency: rebaseline,
       lineage_chain: lineageChain,
       benchmark_error: error,
@@ -219,14 +234,21 @@ const commands = {
     // Same explicit type guard as the benchmark command: a non-array lineage
     // reports a broken chain, never a vacuous clean one (C-F4b, S2).
     const unreadable = recorded.lineage !== undefined && !Array.isArray(recorded.lineage);
+    const chain = unreadable
+      ? { chain_unbroken: false, independently_verified: true, errors: [{ message: 'lineage is not an array — unreadable safety record' }], entries: 0 }
+      : bench.verifyLineageChain(Array.isArray(recorded.lineage) ? recorded.lineage : []);
     out({
       fingerprint_schema: recorded.schema,
       lineage_entries: Array.isArray(recorded.lineage) ? recorded.lineage.length : 0,
-      chain: unreadable
-        ? { chain_unbroken: false, independently_verified: true, errors: [{ message: 'lineage is not an array — unreadable safety record' }], entries: 0 }
-        : bench.verifyLineageChain(Array.isArray(recorded.lineage) ? recorded.lineage : [])
+      chain
     });
-    return unreadable ? 1 : 0;
+    // Codex PR#20 review: this used to return nonzero ONLY for the
+    // non-array case. When lineage IS an array but verifyLineageChain()
+    // itself reports chain_unbroken:false (a missing field or a broken
+    // adjacent-hash link), the command printed the failure and still exited
+    // 0 -- any shell coordinator checking exit status alone would treat a
+    // broken lineage as a passing check.
+    return (unreadable || chain.chain_unbroken === false) ? 1 : 0;
   },
 
   // THE CEILING-EXCEEDED CALL SITE. ceilings.cjs's spend accumulator and

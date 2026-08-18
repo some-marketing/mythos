@@ -82,6 +82,10 @@ const fsMod = require('fs');
 // guard is the load-bearing call site (see stampInvalidReason() below) --
 // a standalone-but-uncalled validator protects nothing.
 const { stampScopeTooBroad } = require('./validate-stamp-scope.cjs');
+// Codex PR#20 F1 (kernel-triad convene 20260817T184138Z): stamps are now
+// HMAC-signed with the same Keychain-backed operator secret ConveneReceipt/1.0
+// uses -- see tools/kernel/hooks/lib/stamp-mac.cjs for the full rationale.
+const { resolveStampSecret, verifyStampMac } = require('./lib/stamp-mac.cjs');
 
 // ── Config ───────────────────────────────────────────────────────────────────
 
@@ -319,6 +323,18 @@ function touchesRemoteSurface(command) {
   // B1: a remote-capable executable carrying an unexpanded construct is on the
   // remote surface for fail-closed purposes — the target cannot be ruled out.
   if (/\b(ssh|scp|rsync|sftp|plink|pscp|psftp)\b/.test(c) && containsShellExpansion(c)) return true;
+  // Codex re-review (2026-08-17, round 3): a FOURTH raw-text REMOTE_HOST
+  // match site, unpatched by the tokenize()/scanScriptBody()/catch-all
+  // fixes -- this is the module's own EXPORTED authoritative fallback
+  // predicate (consulted, per this function's own doc comment above, when
+  // the gate module itself fails to load, i.e. the highest-stakes fail-
+  // closed decision point in the whole file). Same backslash-stripped
+  // projection fix as the other three sites, applied ONLY to the
+  // substring checks -- NOT to the D:\HyperV regex, whose backslash is
+  // real, meaningful path content rather than a shell escape sequence;
+  // stripping it would destroy the very character that regex looks for
+  // and make that arm permanently unmatchable on the stripped text.
+  const stripped = c.replace(/\\(.)/g, '$1');
   return (
     c.includes(REMOTE_HOST) ||
     c.includes('psrun.sh') ||
@@ -326,7 +342,13 @@ function touchesRemoteSurface(command) {
     c.includes('inbound-push.sh') ||
     c.includes('build-export.sh') ||
     c.includes('pull-results.sh') ||
-    /\bd:\\hyperv/i.test(c)
+    /\bd:\\hyperv/i.test(c) ||
+    stripped.includes(REMOTE_HOST) ||
+    stripped.includes('psrun.sh') ||
+    stripped.includes('psrunfile.sh') ||
+    stripped.includes('inbound-push.sh') ||
+    stripped.includes('build-export.sh') ||
+    stripped.includes('pull-results.sh')
   );
 }
 
@@ -343,6 +365,35 @@ function splitSegments(command) {
       if (ch === quote && s[i - 1] !== '\\') quote = null;
       continue;
     }
+    // Backslash-newline line continuation (POSIX shell): `foo \` followed by
+    // a real newline is ONE logical command wrapped across lines, not two
+    // commands. Without this, any multi-flag invocation written the normal
+    // way (each flag on its own line, trailing `\`) gets shredded into one
+    // fragment per line -- each fragment typically starts with a bare flag
+    // like `--item "..."`, which is not a recognized executable and falls
+    // into the unrecognized-command catch-all below. If ANY line's argument
+    // text happens to mention the remote host, the whole-command haystack
+    // check in that catch-all then flags every OTHER line's harmless
+    // fragment as mutating too -- a real, reproduced false-positive that
+    // made this gate's own stamp-minting remedy self-blocking (a stamp
+    // authorizing an orwell-scoped action necessarily has "orwell" somewhere
+    // in its --scope/--conditions text).
+    //
+    // Convene review (kernel-gate-backslash-newline-fix, 20260818T0256Z):
+    // the FIRST version of this fix collapsed the continuation to a single
+    // SPACE, which OMEGA/gemini caught as a real, newly-introduced evasion:
+    // a real POSIX shell deletes `\<newline>` entirely (zero characters), so
+    // `admin@or\<newline>well` is the literal token `admin@orwell` to the
+    // shell -- but a space-collapse would instead produce the two tokens
+    // `admin@or` and `well`, neither of which contains the host substring,
+    // letting a hostname split across the continuation evade every check
+    // below. Collapsing to NOTHING (skip both characters, append nothing)
+    // is the version that actually matches shell semantics and closes that
+    // evasion, while still fixing the false-positive above (fewer segments
+    // than before, never more; a token that WOULD have been flagged
+    // un-merged is still flagged once merged, because merging can only make
+    // a dangerous substring MORE contiguous, never less).
+    if (ch === '\\' && s[i + 1] === '\n') { i += 1; continue; }
     if (ch === '"' || ch === "'") { quote = ch; cur += ch; continue; }
     const two = s.slice(i, i + 2);
     if (two === '&&' || two === '||') { out.push(cur); cur = ''; i += 1; continue; }
@@ -365,6 +416,28 @@ function tokenize(segment) {
     if (quote) {
       if (ch === quote && s[i - 1] !== '\\') { quote = null; continue; }
       cur += ch;
+      continue;
+    }
+    if (ch === '\\') {
+      // Unquoted backslash escapes the next character (POSIX shell lexical
+      // rule): 'orw\ell' is the literal text 'orwell' to the shell, and
+      // 'foo\ bar' is ONE token 'foo bar', not a delimiter split. Consume the
+      // escaped character (including whitespace) literally; drop the
+      // backslash. A trailing unquoted backslash (nothing left to escape) is
+      // conservatively retained as a literal backslash rather than dropped,
+      // so it cannot silently create an allow-through path. Fixes codex
+      // PR#20 F2 (kernel-triad convene 20260817T184138Z): strict REMOTE_HOST
+      // string comparisons must see the same text the shell actually
+      // resolves, not the raw escape sequence. Only applies outside quotes --
+      // quoted backslash handling above is unchanged.
+      if (i + 1 < s.length) {
+        cur += s[i + 1];
+        had = true;
+        i += 1;
+      } else {
+        cur += ch;
+        had = true;
+      }
       continue;
     }
     if (ch === '"' || ch === "'") { quote = ch; had = true; continue; }
@@ -510,20 +583,70 @@ function resolveScriptCandidates(scriptToken, projectDir) {
  * reference to the orwell host inside the script body. Found, or the body
  * cannot be read at all -> MUTATING. Resolvable and clean -> not a remote
  * concern, no gate applies.
+ *
+ * `requireTransportEvidence` (codex PR#20 F3, kernel-triad convene
+ * 20260817T184138Z, corrected after gemini caught a bypass in the first
+ * proposed fix): remote-transport evidence alone is ALWAYS fully sufficient
+ * on its own regardless of this flag -- a script/payload that shells to the
+ * remote host is remote-mutating whether or not its body happens to contain
+ * one of the hardcoded HARD_MUTATION_TOKENS strings (a custom remote script
+ * name never will).
+ *
+ * What the flag controls is whether a hard-mutation token with NO
+ * remote-transport evidence is, on its own, also sufficient:
+ *   - false (default): yes, still sufficient -- the original maximally
+ *     conservative behavior. Used for inline eval/-e/-c code, which is
+ *     transient, freshly constructed at invocation time, and impossible to
+ *     pre-audit as a stable repo artifact -- it deserves to stay maximally
+ *     suspect.
+ *   - true: no, a local mutation token alone no longer gates. Used ONLY for
+ *     resolvable script FILES read off disk (scanUnknownScript below) --
+ *     real, named, auditable repo artifacts where the false-positive this
+ *     narrowing fixes (gpu-preflight.ps1, gaming-login-bootstrap.ps1: local
+ *     mutation verbs, zero remote-transport indicators anywhere in the whole
+ *     file) is the actual problem, and the file's full content is available
+ *     to verify that absence.
  */
-function scanScriptBody(body, { origin }) {
+function scanScriptBody(body, { origin, requireTransportEvidence }) {
   const text = String(body || '');
   const lower = text.toLowerCase();
   const hard = containsHardMutation(text);
-  if (hard) {
+  // Codex re-review (2026-08-17): F2's tokenize() fix only normalized
+  // unquoted backslash escapes on the COMMAND-LINE path -- this function
+  // does its own separate raw-text substring match over a whole SCRIPT
+  // FILE's contents, and was left unpatched. 'ssh orw\ell "..."' inside a
+  // script body still evaded lower.includes(REMOTE_HOST) (a literal
+  // backslash breaks the contiguous substring), exactly the same class of
+  // bypass F2 closed on the command line. Also test a backslash-stripped
+  // projection of the text: a script file is not a single shell command
+  // line, so full tokenize() semantics don't directly apply, but shell
+  // escapes are never meaningful content in a hostname reference, so
+  // stripping them before the substring test closes the gap without
+  // over-matching (stripping cannot turn an absent "orwell" into a present
+  // one; it can only reveal one that was already there under an escape).
+  const strippedLower = lower.replace(/\\(.)/g, '$1');
+  const shellsToRemote =
+    (/\b(ssh|scp|rsync|sftp)\b/.test(lower) && lower.includes(REMOTE_HOST))
+    || (/\b(ssh|scp|rsync|sftp)\b/.test(strippedLower) && strippedLower.includes(REMOTE_HOST));
+  if (shellsToRemote) {
+    return {
+      resolved: true,
+      mutating: true,
+      evidence: hard
+        ? `${origin} shells to the ${REMOTE_HOST} remote host and contains mutating token '${hard}'`
+        : `${origin} shells to the ${REMOTE_HOST} remote host`
+    };
+  }
+  if (hard && !requireTransportEvidence) {
     return { resolved: true, mutating: true, evidence: `${origin} contains mutating token '${hard}'` };
   }
-  const shellsToRemote =
-    /\b(ssh|scp|rsync|sftp)\b/.test(lower) && lower.includes(REMOTE_HOST);
-  if (shellsToRemote) {
-    return { resolved: true, mutating: true, evidence: `${origin} shells to the ${REMOTE_HOST} remote host` };
-  }
-  return { resolved: true, mutating: false, evidence: `${origin} resolvable and clean of remote-mutation indicators` };
+  return {
+    resolved: true,
+    mutating: false,
+    evidence: hard
+      ? `${origin} contains local mutation token '${hard}' but no ${REMOTE_HOST} remote-transport reference -- not gated as remote-mutating`
+      : `${origin} resolvable and clean of remote-mutation indicators`
+  };
 }
 
 function scanUnknownScript(scriptToken, { projectDir, fs }) {
@@ -536,7 +659,7 @@ function scanUnknownScript(scriptToken, { projectDir, fs }) {
     } catch (_) {
       continue; // try the next candidate location
     }
-    return scanScriptBody(body, { origin: 'script body' });
+    return scanScriptBody(body, { origin: 'script body', requireTransportEvidence: true });
   }
   return {
     resolved: false,
@@ -787,8 +910,21 @@ function classifySegment(segment, ctx) {
   //      on remote-mutation indicators found inside it; unresolvable -> deny.
   if (!RECOGNIZED_EXES.has(exe)) {
     const haystack = `${raw} ${ctx.wholeCommand || ''}`.toLowerCase();
+    // Codex re-review (2026-08-17, round 2): a THIRD raw-text REMOTE_HOST
+    // match site, unpatched by both the tokenize() and scanScriptBody() fixes
+    // -- an unrecognized command/wrapper carrying a shell-lexically-escaped
+    // hostname (e.g. 'unknown-wrapper ssh orw\ell "..."') evaded this
+    // fail-closed catch-all entirely, reaching applies:false instead of the
+    // deny this block exists to guarantee for anything mentioning the remote
+    // host. Same backslash-stripped-projection fix as scanScriptBody(),
+    // applied ONLY to the REMOTE_HOST substring check -- NOT to the
+    // D:\HyperV regex, whose backslash is real path content, not a shell
+    // escape; stripping it would make that arm permanently unmatchable on
+    // the stripped text (round-3 self-correction before dispatch).
+    const strippedHaystack = haystack.replace(/\\(.)/g, '$1');
     const referencesRemote =
-      haystack.includes(REMOTE_HOST) || /d:[\\/]hyperv/i.test(haystack);
+      haystack.includes(REMOTE_HOST) || /d:[\\/]hyperv/i.test(haystack)
+      || strippedHaystack.includes(REMOTE_HOST);
     if (referencesRemote) {
       return {
         applies: true,
@@ -946,6 +1082,16 @@ function stampInvalidReason(stamp, { projectDir, fs, nowMs }) {
     return 'source_doc unreadable';
   }
   void STAMP_DOC_DIR;
+  // Codex PR#20 F1 (kernel-triad convene 20260817T184138Z): every other check
+  // above only inspects agent-writable content. A stamp is not actually
+  // authorized until it carries a MAC that verifies against the Keychain-
+  // backed operator secret -- the same secret ConveneReceipt/1.0 uses,
+  // resolvable only from the Keychain (never from an agent's own process
+  // env). No secret resolvable => fail closed => every stamp reads invalid.
+  const secret = resolveStampSecret();
+  if (!secret) return 'no operator secret available to verify the stamp MAC (fail-closed)';
+  const macVerdict = verifyStampMac(secret, stamp);
+  if (!macVerdict.ok) return `stamp MAC invalid: ${macVerdict.reason}`;
   return null;
 }
 
@@ -998,17 +1144,12 @@ function denyMessage({ blocked, reasons, stampsSummary, projectDir }) {
   lines.push('HOW THE OPERATOR GRANTS ONE:');
   lines.push(`  1. Write the authorization artifact: ${STAMP_DOC_DIR}/g-remote-mutation-prestamp__<slug>__<UTC>.md`);
   lines.push('     containing the verbatim operator authorization line and the binding conditions.');
-  lines.push(`  2. Write the machine-checkable sidecar: ${STATE_SUBDIR}/<stamp-id>.json`);
-  lines.push('     {');
-  lines.push(`       "schema": "${STAMP_SCHEMA}",`);
-  lines.push('       "stamp_id": "<slug>__<UTC>",');
-  lines.push('       "source_doc": "<path to the .md above>",');
-  lines.push('       "granted_at": "<ISO-8601>",');
-  lines.push('       "operator_authorization": "<verbatim operator line>",');
-  lines.push('       "scope": ["load-courier.ps1", "first-boot.ps1", "re:<optional regex>"],');
-  lines.push('       "conditions": ["<condition 1>", "..."],');
-  lines.push('       "expires_at": null,  "voided": false, "superseded_by": null');
-  lines.push('     }');
+  lines.push('  2. Mint the SIGNED stamp (codex PR#20 F1: hand-authored stamp JSON is no longer');
+  lines.push('     accepted -- a stamp is authority because its MAC recomputes, not because it parses):');
+  lines.push('     node tools/kernel/hooks/mint-remote-mutation-stamp.cjs \\');
+  lines.push('       --item "Mythos Convene Approval" --stamp-id <slug>__<UTC> \\');
+  lines.push('       --scope <entry> [--scope <entry> ...] --conditions <text> [--conditions <text> ...] \\');
+  lines.push('       --source-doc <path to the .md above> [--expires-hours <n>]');
   lines.push('  3. Re-run the command. The gate matches each mutating action key against scope.');
   lines.push('');
   lines.push(`Audit: ${STATE_SUBDIR}/audit.jsonl`);

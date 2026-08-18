@@ -20,11 +20,32 @@
 // itself is a disclosed, not-fully-closable common-mode risk (named in the
 // guard-spec, not hidden here).
 
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 
+// Reused as shared DATA/infrastructure dependencies (kernel-triad convene
+// 20260817T184138Z, codex: "canonicalize() and the shared secret-resolution
+// primitive" are acceptable to reuse; "reusing verifyStampMac() is not" --
+// this module computes and compares its own HMAC below rather than calling
+// stamp-mac.cjs's verifyStampMac()).
+const { canonicalize } = require('../../ticktock/canonical.cjs');
+const { resolveStampSecret } = require('./lib/stamp-mac.cjs');
+
 const STAMPS_DIR_REL = path.join('_dev', 'state', 'remote-mutation-stamps');
 const STAMP_SCHEMA = 'RemoteMutationStamp/1.0';
+// Independently declared, not imported from stamp-mac.cjs -- same
+// independent-constant pattern as CANARY_MUTATING_KEY below.
+const INDEPENDENT_STAMP_MAC_DOMAIN = 'RemoteMutationStamp/1.0';
+const INDEPENDENT_STAMP_MAC_MECHANISM = 'hmac-sha256';
+// Independently declared disallow-list (not imported from
+// validate-stamp-scope.cjs's GENERIC_VERB_DISALLOWLIST) -- a bare
+// single-word scope entry naming a category of tool authorizes every
+// command that classifies to that key, forever.
+const INDEPENDENT_GENERIC_VERB_DISALLOWLIST = new Set([
+  'ssh', 'scp', 'rsync', 'cat', 'ls', 'find', 'mkdir', 'mount', 'umount',
+  'read', 'open', 'powershell', 'bash', 'sh', 'curl', 'wget', 'nc', 'telnet'
+]);
 
 // Independently declared, not derived from classifyCommand() -- per kernel-
 // triad review (round 2, codex): independentScopeCovers must be able to
@@ -88,7 +109,95 @@ function fingerprintsEqual(a, b) {
  *
  * Returns a reason string if invalid, or null if valid.
  */
-function independentStampInvalidReason(stamp, nowMs, existsSyncFn) {
+/**
+ * Independently-authored MAC verification. Computes and compares its own
+ * HMAC via this module's OWN crypto calls, OWN domain constant, and OWN
+ * canonicalization-and-projection logic -- never calls stamp-mac.cjs's
+ * verifyStampMac() (kernel-triad convene 20260817T184138Z, codex: reusing
+ * that specific function would defeat the point of a second, independently-
+ * derived check on the exact property most worth cross-verifying).
+ */
+function independentVerifyStampMac(secret, stamp) {
+  if (typeof secret !== 'string' || !secret) {
+    return { ok: false, reason: 'no operator secret available to verify the stamp MAC (fail-closed)' };
+  }
+  const mac = stamp && stamp.mac;
+  if (!mac || typeof mac !== 'object' || Array.isArray(mac)) {
+    return { ok: false, reason: 'missing mac -- unsigned stamps are rejected' };
+  }
+  if (mac.mechanism !== INDEPENDENT_STAMP_MAC_MECHANISM) {
+    return { ok: false, reason: `mac.mechanism is not ${INDEPENDENT_STAMP_MAC_MECHANISM}` };
+  }
+  if (mac.domain !== INDEPENDENT_STAMP_MAC_DOMAIN) {
+    return { ok: false, reason: `mac.domain is not ${INDEPENDENT_STAMP_MAC_DOMAIN}` };
+  }
+  if (typeof mac.value !== 'string' || !mac.value) {
+    return { ok: false, reason: 'mac.value is missing' };
+  }
+  const projection = {};
+  for (const k of Object.keys(stamp)) {
+    if (k === 'mac') continue;
+    if (stamp[k] === undefined) continue;
+    projection[k] = stamp[k];
+  }
+  let recomputed;
+  try {
+    const message = INDEPENDENT_STAMP_MAC_DOMAIN + '\n' + canonicalize(projection);
+    recomputed = crypto.createHmac('sha256', secret).update(message, 'utf8').digest('hex');
+  } catch (e) {
+    return { ok: false, reason: `could not recompute stamp MAC: ${e.message}` };
+  }
+  const a = Buffer.from(recomputed, 'utf8');
+  const b = Buffer.from(String(mac.value), 'utf8');
+  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
+    return { ok: false, reason: 'mac mismatch -- stamp is forged or edited after minting (fail-closed)' };
+  }
+  return { ok: true, reason: 'mac verified' };
+}
+
+/**
+ * Independently-authored scope-breadth check. NOT imported from
+ * validate-stamp-scope.cjs's stampScopeTooBroad()/GENERIC_VERB_DISALLOWLIST
+ * -- a shared bug in that shared function would pass both legs identically,
+ * which defeats independent corroboration for exactly this property.
+ */
+function independentScopeTooBroad(stamp) {
+  if (!stamp || !Array.isArray(stamp.scope)) return null;
+  for (const entry of stamp.scope) {
+    const e = String(entry || '').trim();
+    if (!e) continue;
+    if (e.slice(0, 3) === 're:') {
+      const pattern = e.slice(3);
+      const stripped = pattern.startsWith('^') ? pattern.slice(1) : pattern;
+      if (stripped.startsWith('.*')) {
+        return `unanchored wildcard regex '${e}' -- a leading .* matches an arbitrary substring rather than one specific command shape`;
+      }
+      continue;
+    }
+    if (INDEPENDENT_GENERIC_VERB_DISALLOWLIST.has(e.toLowerCase())) {
+      return `bare generic shell verb '${e}' -- names a category of tool instead of a specific script or artifact`;
+    }
+  }
+  return null;
+}
+
+/**
+ * Freshly authored validity predicate. Interprets the same real-world facts
+ * pretool-remote-mutation-gate.cjs's stampInvalidReason() does (both must
+ * agree on what the stamp schema MEANS, or they'd be answering different
+ * questions) but via independently authored logic: a positive-conditions
+ * list reduced to the first failing condition, rather than the primary's
+ * sequential early-return chain.
+ *
+ * `repoRoot` is passed explicitly rather than stashed onto the stamp object
+ * (as an earlier revision did via stamp.__repoRoot) -- kernel-triad convene
+ * 20260817T184138Z, codex: mutating the parsed stamp before MAC verification
+ * meant the MAC projection would include caller-added metadata that was
+ * never part of the signed content, breaking every valid stamp's MAC.
+ *
+ * Returns a reason string if invalid, or null if valid.
+ */
+function independentStampInvalidReason(stamp, nowMs, existsSyncFn, repoRoot) {
   const existsSync = existsSyncFn || fs.existsSync;
   const checks = [
     [() => stamp && typeof stamp === 'object', 'not an object'],
@@ -100,7 +209,9 @@ function independentStampInvalidReason(stamp, nowMs, existsSyncFn) {
     [() => Array.isArray(stamp.conditions) && stamp.conditions.length > 0, 'no conditions named'],
     [() => stamp.voided !== true, 'voided'],
     [() => !stamp.superseded_by, `superseded by ${stamp.superseded_by}`],
-    [() => typeof stamp.source_doc === 'string' && stamp.source_doc.length > 0, 'missing source_doc']
+    [() => typeof stamp.source_doc === 'string' && stamp.source_doc.length > 0, 'missing source_doc'],
+    [() => /^g-remote-mutation-(packet|prestamp)__.*\.md$/.test(path.basename(String(stamp.source_doc || ''))),
+      'source_doc is not a g-remote-mutation packet/prestamp artifact']
   ];
   for (const [predicate, reason] of checks) {
     let result;
@@ -111,6 +222,11 @@ function independentStampInvalidReason(stamp, nowMs, existsSyncFn) {
     }
     if (!result) return reason;
   }
+
+  // Scope breadth: independently authored (not stampScopeTooBroad()), see
+  // independentScopeTooBroad() above.
+  const tooBroadReason = independentScopeTooBroad(stamp);
+  if (tooBroadReason) return `scope too broad: ${tooBroadReason}`;
 
   // Expiry: independently parsed and compared, same boundary semantics
   // (exp <= nowMs is expired) as the primary, since both must agree on what
@@ -128,12 +244,19 @@ function independentStampInvalidReason(stamp, nowMs, existsSyncFn) {
   // helper function.
   const docPath = path.isAbsolute(stamp.source_doc)
     ? stamp.source_doc
-    : path.join(stamp.__repoRoot || '', stamp.source_doc);
+    : path.join(repoRoot || '', stamp.source_doc);
   try {
     if (!existsSync(docPath)) return `source_doc missing on disk: ${stamp.source_doc}`;
   } catch (_) {
     return 'source_doc unreadable';
   }
+
+  // Provenance (codex PR#20 F1): every other check above only inspects
+  // agent-writable content. Independently verified last, matching the
+  // primary's own ordering (structural/lifecycle checks first, MAC last).
+  const secret = resolveStampSecret();
+  const macVerdict = independentVerifyStampMac(secret, stamp);
+  if (!macVerdict.ok) return `stamp MAC invalid: ${macVerdict.reason}`;
 
   return null;
 }
@@ -187,11 +310,10 @@ function independentCoverageVerdict(repoRoot, rawCommand, nowMs, opts) {
     let stamp;
     try {
       stamp = JSON.parse(fs.readFileSync(file, 'utf8'));
-      stamp.__repoRoot = repoRoot;
     } catch (err) {
       return { ok: false, reason_code: 'STAMP-UNPARSEABLE', detail: `${name}: ${err.message}`, checked };
     }
-    const invalidReason = independentStampInvalidReason(stamp, nowMs, o.existsSync);
+    const invalidReason = independentStampInvalidReason(stamp, nowMs, o.existsSync, repoRoot);
     if (invalidReason) {
       checked.push({ file: name, stamp_id: stamp.stamp_id, covers: false, invalid_reason: invalidReason });
       continue;
@@ -305,6 +427,8 @@ module.exports = {
   fingerprintStampsDir,
   fingerprintsEqual,
   independentStampInvalidReason,
+  independentScopeTooBroad,
+  independentVerifyStampMac,
   independentScopeCovers,
   independentCoverageVerdict,
   verifyStampIndependently

@@ -1819,11 +1819,20 @@ test('S3-i', 'rotation_enforcement_test', () => {
   const skipped = {
     schema: 'GenerationManifest/1.0',
     generation_id: `tt-gen-9-${CHARTER.charter_id}`,
-    cycle_index: 9,
+    // cycle_index 0 / null parent (genesis shape): this test is exclusively
+    // about rotation-field enforcement, not lineage. The prior fixture used
+    // cycle_index 9 with a placeholder parent_generation_id ('tt-gen-8-x')
+    // that was never actually written to disk -- harmless before
+    // writeGenerationManifest() verified lineage links (codex PR#20 review),
+    // but a non-genesis manifest whose parent cannot be resolved is now
+    // correctly refused with LINEAGE-LINK-BROKEN, which would misattribute
+    // this test's refusals/acceptances to the wrong check. Genesis sidesteps
+    // lineage entirely so only the rotation logic under test is exercised.
+    cycle_index: 0,
     created_at: '2026-08-05T06:00:00.000Z',
     charter_id: CHARTER.charter_id,
     charter_hash: CHARTER.charter_hash,
-    parent: { parent_generation_id: 'tt-gen-8-x', parent_manifest_hash: H64('parent') },
+    parent: { parent_generation_id: null, parent_manifest_hash: null },
     inputs: { benchmark_fingerprint_hash: FP.fingerprint_hash, benchmark_identical: true, journal_head_record_hash: null, artifact_hashes: [] },
     outputs: [], reviews: [],
     merge_decision: { clean: false, reasons: ['fixture'], decided_at: '2026-08-05T06:00:00.000Z' },

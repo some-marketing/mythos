@@ -1260,37 +1260,50 @@ function resolveIdempotency(records, idempotencyKey) {
   if (matching.length === 0) {
     return { resolution: 'execute', reason: 'no journal record carries this idempotency key', record: null };
   }
-  const completed = matching.find((r) => r.completed && r.verified_checkpoint && r.verified_checkpoint.verified === true && r.halt_state === null);
-  if (completed) {
+  // Codex PR#20 review (via effectful-phase.cjs): a producer may legitimately
+  // append MORE THAN ONE record for the same key over time -- e.g. a
+  // crash-safe pre-dispatch uncertainty marker, followed by a later record
+  // proving the effect definitely did not happen. This used to scan the
+  // WHOLE history independently for "any completed match" and then "any
+  // uncertain match" via Array.prototype.find(), which always returns the
+  // FIRST match -- so a later, more informative record (a downgrade from
+  // uncertain to definitely-not-happened) could never actually change the
+  // resolution; the earliest uncertain record won forever. Append-only
+  // history means the LATEST record for a key is always the most current,
+  // most authoritative verdict, so classify from that single record instead
+  // of scanning for the best-looking match across all of history.
+  const latest = matching[matching.length - 1];
+  const isCompleted = Boolean(latest.completed) && latest.verified_checkpoint && latest.verified_checkpoint.verified === true && latest.halt_state === null;
+  if (isCompleted) {
     return {
       resolution: 'skip',
-      reason: `phase already completed at record_index ${completed.record_index} with a verified checkpoint`,
-      record: completed
+      reason: `phase already completed at record_index ${latest.record_index} with a verified checkpoint`,
+      record: latest
     };
   }
-  const uncertain = matching.find((r) => r.halt_state === 'EFFECT-RECEIPT-MISSING'
-    || (r.dispatch && r.dispatch.dispatched === true && r.dispatch.receipt_confirmed !== true));
-  if (uncertain) {
-    const reconciled = uncertain.reconciliation && uncertain.reconciliation.resolved === true;
-    if (reconciled && uncertain.reconciliation.outcome === 'effect-happened') {
-      return { resolution: 'skip', reason: `reconciliation at record_index ${uncertain.record_index} confirmed the effect happened`, record: uncertain };
+  const isUncertain = latest.halt_state === 'EFFECT-RECEIPT-MISSING'
+    || (latest.dispatch && latest.dispatch.dispatched === true && latest.dispatch.receipt_confirmed !== true);
+  if (isUncertain) {
+    const reconciled = latest.reconciliation && latest.reconciliation.resolved === true;
+    if (reconciled && latest.reconciliation.outcome === 'effect-happened') {
+      return { resolution: 'skip', reason: `reconciliation at record_index ${latest.record_index} confirmed the effect happened`, record: latest };
     }
-    if (reconciled && uncertain.reconciliation.outcome === 'effect-did-not-happen') {
-      return { resolution: 'execute', reason: `reconciliation at record_index ${uncertain.record_index} confirmed the effect did not happen`, record: uncertain };
+    if (reconciled && latest.reconciliation.outcome === 'effect-did-not-happen') {
+      return { resolution: 'execute', reason: `reconciliation at record_index ${latest.record_index} confirmed the effect did not happen`, record: latest };
     }
     return {
       resolution: 'reconcile',
-      reason: `record_index ${uncertain.record_index} dispatched an external action with no confirmed receipt (EFFECT-RECEIPT-MISSING) -- query the external system before resuming; never auto-retry and never assume success`,
+      reason: `record_index ${latest.record_index} dispatched an external action with no confirmed receipt (EFFECT-RECEIPT-MISSING) -- query the external system before resuming; never auto-retry and never assume success`,
       halt_state: 'EFFECT-RECEIPT-MISSING',
-      record: uncertain
+      record: latest
     };
   }
-  // The key exists on a record that never dispatched: EFFECT-DID-NOT-HAPPEN.
-  // Safe to execute -- this is the case the two-state distinction buys.
+  // The key's latest record never dispatched: EFFECT-DID-NOT-HAPPEN. Safe to
+  // execute -- this is the case the two-state distinction buys.
   return {
     resolution: 'execute',
-    reason: `record_index ${matching[matching.length - 1].record_index} carries the key but never dispatched (EFFECT-DID-NOT-HAPPEN)`,
-    record: matching[matching.length - 1]
+    reason: `record_index ${latest.record_index} carries the key but never dispatched (EFFECT-DID-NOT-HAPPEN)`,
+    record: latest
   };
 }
 

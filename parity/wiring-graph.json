@@ -13314,7 +13314,7 @@
       "id": "file:tools/kernel/hooks/__tests__/pretool-remote-mutation-gate.test.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/__tests__/pretool-remote-mutation-gate.test.cjs",
-      "sha256": "ff905d566e382465217b4116104583b2c92f7ca9262fbbb299365c344a7db886",
+      "sha256": "b3b0e11187a24822dcc7830be532009e2b3ed320766d86f9fbfb91bd936ba939",
       "mode": 420
     },
     {
@@ -13357,6 +13357,13 @@
       "type": "file",
       "path": "tools/kernel/hooks/__tests__/session-start-contract-emitter.test.cjs",
       "sha256": "9cfad0534555831cbde419617e108fb5efc8468339aae1941887ff0893159f52",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/kernel/hooks/__tests__/stamp-mac.test.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/__tests__/stamp-mac.test.cjs",
+      "sha256": "87cff8767a10d6286ff48bb62fbdd50855fe90e9897e88f14c26b7527b42e3da",
       "mode": 420
     },
     {
@@ -13412,7 +13419,7 @@
       "id": "file:tools/kernel/hooks/__tests__/verify-stamp-independently.test.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/__tests__/verify-stamp-independently.test.cjs",
-      "sha256": "a7e3859aa267f8035c70fe722ad2f3e6fbd7d1e616603b9d60c2c1c8cc699251",
+      "sha256": "0025f4d2c20035e80a5e13ec6dd983a52362cebe3939eb6720d3771daf4e7261",
       "mode": 420
     },
     {
@@ -13476,6 +13483,20 @@
       "type": "file",
       "path": "tools/kernel/hooks/lib/process-tier.cjs",
       "sha256": "ba6d26a759b877d0574fcb8849c02ebc9efd81c76797b6e70cffd17c3e04f38e",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/kernel/hooks/lib/stamp-mac.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/lib/stamp-mac.cjs",
+      "sha256": "059540c89c07bceba699da38c2400d521766e6fc933198acf595320b349d0104",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/kernel/hooks/mint-remote-mutation-stamp.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/mint-remote-mutation-stamp.cjs",
+      "sha256": "d234ad452ed237c01929d401b4d57450114b560a473c131b9f03cb6f9410772a",
       "mode": 420
     },
     {
@@ -13545,7 +13566,7 @@
       "id": "file:tools/kernel/hooks/pretool-remote-mutation-gate.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/pretool-remote-mutation-gate.cjs",
-      "sha256": "53de568769c666629ba9d90a9ad8c2d3346f9839f390d038144a489e48b4c4ab",
+      "sha256": "5df0dfe31c0f93d48be5bb0fa1a93905ffd6ee57cf63faf4a0862111b6ff3bf5",
       "mode": 420
     },
     {
@@ -13615,7 +13636,7 @@
       "id": "file:tools/kernel/hooks/verify-stamp-independently.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/verify-stamp-independently.cjs",
-      "sha256": "36f43a2483bc396f0f49e2c7096e98c71b1e79a1dda28bd654d158d4d893f298",
+      "sha256": "2a39d3a502d72586f7d2b1e6e503ecf851c5d2cc7872142cabee5feb2acf9784",
       "mode": 420
     },
     {
@@ -18494,21 +18515,21 @@
       "id": "file:tools/ticktock/cycle-driver.cjs",
       "type": "file",
       "path": "tools/ticktock/cycle-driver.cjs",
-      "sha256": "64ae0dd85cb477effb3f53f4749a916a5a6bc19f6c88ac68bca0b4e0debf2db1",
+      "sha256": "640cf33ec5d3018006510ff5abf4f7fe1e167e7fe857733550c1aff606d5f7fd",
       "mode": 420
     },
     {
       "id": "file:tools/ticktock/dryrun-s3.cjs",
       "type": "file",
       "path": "tools/ticktock/dryrun-s3.cjs",
-      "sha256": "5880214e5a9d2beb85d0f4f3d69a5edf664f46b47ae256fb21e2cc65d5aad20a",
+      "sha256": "f9e4aad1bd5a32054cc0038aaba951f186d9a964d65bd03529d2fc47c19477c1",
       "mode": 420
     },
     {
       "id": "file:tools/ticktock/effectful-phase.cjs",
       "type": "file",
       "path": "tools/ticktock/effectful-phase.cjs",
-      "sha256": "360feec24a8e30f7dadd9d1700275f5044ff8d66f4ce453c1c1b712812ac3f5e",
+      "sha256": "0cdd11e77eba2dab889f313a55edc867e14c61fd4840457b64a4e012360c8457",
       "mode": 420
     },
     {
@@ -18522,7 +18543,7 @@
       "id": "file:tools/ticktock/generation-manifest.cjs",
       "type": "file",
       "path": "tools/ticktock/generation-manifest.cjs",
-      "sha256": "d5a82d45aa45fc3b6479829827cad74017330b08e779c0137e11cd78ea2ac589",
+      "sha256": "825ad2a5d007b836bb2cad286a56f7fa2c97a487c2d87e23b6c0c819c345f122",
       "mode": 420
     },
     {
@@ -18536,7 +18557,7 @@
       "id": "file:tools/ticktock/journal.cjs",
       "type": "file",
       "path": "tools/ticktock/journal.cjs",
-      "sha256": "a30bb7564a8f969b9e5b8799a8b4d804d2e2417f3b459333a537333a45e8f7de",
+      "sha256": "e9645b6895924ed8cfa487398fd49692ff721ddf01baeb2eba09e4b80aedaa81",
       "mode": 420
     },
     {
@@ -18557,7 +18578,7 @@
       "id": "file:tools/ticktock/preflight-ticktock.cjs",
       "type": "file",
       "path": "tools/ticktock/preflight-ticktock.cjs",
-      "sha256": "c8c4e046d118c351aadd962369994db296e9fef4af12be84eeeeb1e95e2b17d6",
+      "sha256": "77daecdc6dd70cde4e7a1935a22656e884181c343dcad17f1483b5aa10b9ab09",
       "mode": 420
     },
     {
@@ -18578,7 +18599,7 @@
       "id": "file:tools/ticktock/run-benchmark.js",
       "type": "file",
       "path": "tools/ticktock/run-benchmark.js",
-      "sha256": "954dda2743efe49657d65feafc518456b6f397ddff0dc821890478d66928829f",
+      "sha256": "98c528e2f2a6cdaeed67fd341b1f6fa45e362a47f770a618c0f809e35dae2e77",
       "mode": 420
     },
     {
@@ -18617,10 +18638,17 @@
       "mode": 420
     },
     {
+      "id": "file:tools/ticktock/test-effectful-phase.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-effectful-phase.cjs",
+      "sha256": "aad05bdb446073f1bb0f0fb40526d49dd9b7397f0ae72b03e57004ad14150eb9",
+      "mode": 420
+    },
+    {
       "id": "file:tools/ticktock/test-generation-manifest.cjs",
       "type": "file",
       "path": "tools/ticktock/test-generation-manifest.cjs",
-      "sha256": "ae6f697211d7994c8fb45b73f6fa95cea7aacbe40098446861ff1ba6476f55d1",
+      "sha256": "b76be1ead61c623c5fa723466898bd2db11afc5e9043f20ad560f164908210c5",
       "mode": 420
     },
     {
@@ -18655,7 +18683,7 @@
       "id": "file:tools/ticktock/test-rebaseline-frequency.cjs",
       "type": "file",
       "path": "tools/ticktock/test-rebaseline-frequency.cjs",
-      "sha256": "c5849097aad9d1ec811d16e8b263e1e1fe3bce0efa30ca3db9ec9652c5acff8d",
+      "sha256": "8cef7964a70980660f2f16d0431fdf31404d6c5e642c2f9418619aed7a9bc276",
       "mode": 420
     },
     {
@@ -25271,6 +25299,15 @@
       "declared_target": ".claude/commands/cultivate.md"
     },
     {
+      "id": "06708a8541da4914fdaffe000c2c759277ad9e58279bb064f60fba5da791cc8b",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/verify-stamp-independently.cjs",
+      "to": "file:tools/ticktock/canonical.cjs",
+      "target": "tools/ticktock/canonical.cjs",
+      "required": true,
+      "specifier": "../../ticktock/canonical.cjs"
+    },
+    {
       "id": "06743a5acb729cca198de499ba380aee45e85d882467b7da71753154ac63a642",
       "type": "static-import",
       "from": "file:tools/codex/commands/__tests__/run-plan.pairing-warning.test.js",
@@ -26078,6 +26115,15 @@
       "target": "tools/kernel/lib/arc-state-writer.cjs",
       "required": true,
       "specifier": "../lib/arc-state-writer.cjs"
+    },
+    {
+      "id": "0e74542d9e61745f036404b754807a62c248f32c5fc5fbfd9df534e1851a5b5e",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/verify-stamp-independently.test.cjs",
+      "to": "file:tools/kernel/hooks/lib/stamp-mac.cjs",
+      "target": "tools/kernel/hooks/lib/stamp-mac.cjs",
+      "required": true,
+      "specifier": "../lib/stamp-mac.cjs"
     },
     {
       "id": "0e760b9f5e832a5bcb9be1b6138ecadf2e3a065955269e50e3f08149a0f3ea0e",
@@ -27552,6 +27598,15 @@
       "specifier": "./pretool-secret-access-gate.cjs"
     },
     {
+      "id": "1e18e14510d5df6124c67469e7d98bfee76189af2d827742c3685d981fbe44bc",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/pretool-remote-mutation-gate.test.cjs",
+      "to": "file:tools/kernel/hooks/lib/stamp-mac.cjs",
+      "target": "tools/kernel/hooks/lib/stamp-mac.cjs",
+      "required": true,
+      "specifier": "../lib/stamp-mac.cjs"
+    },
+    {
       "id": "1e637f30dfbd9a3ebf86d3d2c4ea3a3704947c55d7de9df80076dd7bf11dbdb9",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/concept-init.md",
@@ -27577,6 +27632,15 @@
       "target": "tools/planning/lib/plan-visibility.js",
       "required": true,
       "specifier": "../lib/plan-visibility.js"
+    },
+    {
+      "id": "1eaa12961366bd2370c2e48716e04391afaf362343e1f056c492fa6594e59831",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-generation-manifest.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
     },
     {
       "id": "1eb14e7b70c03359557c1135c9f5f775f85f003ef0ebb70963097e6d0930c4b8",
@@ -28373,6 +28437,15 @@
       "target": "tools/mcp/crm/billing/schema.js",
       "required": true,
       "specifier": "./billing/schema"
+    },
+    {
+      "id": "25ffa959e077aa2f1141672005489634a6044dfe3332d49cb9d4b70a05c6c590",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-effectful-phase.cjs",
+      "to": "file:tools/ticktock/journal.cjs",
+      "target": "tools/ticktock/journal.cjs",
+      "required": true,
+      "specifier": "./journal.cjs"
     },
     {
       "id": "260060d37e1902499f81b32c568b1e211130eff8e624f275620d1ebf56d1e377",
@@ -30328,6 +30401,15 @@
       "specifier": "./lib/signal-normalization-proposal"
     },
     {
+      "id": "3a9a89aa4608aa534673f1fa3ddafa8f7f8707bea761ff3b2695942356f8f60b",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/mint-remote-mutation-stamp.cjs",
+      "to": "file:tools/kernel/hooks/lib/stamp-mac.cjs",
+      "target": "tools/kernel/hooks/lib/stamp-mac.cjs",
+      "required": true,
+      "specifier": "./lib/stamp-mac.cjs"
+    },
+    {
       "id": "3aa893f6b211d5c7a9ee7bb6d1e7ef423d7c4082bd0464a3a6279bcc39451d7b",
       "type": "launchd-runner",
       "from": "launchd:delesign-poll",
@@ -32173,6 +32255,15 @@
       "target": "tools/planning/schemas/plan-run-gate-decision.schema.json",
       "required": true,
       "declared_target": "tools/planning/schemas/plan-run-gate-decision.schema.json"
+    },
+    {
+      "id": "4d140c2aec2f86febc9760d4af00874f6dc6d14a0a9c51ceff04091ad3ee458c",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-effectful-phase.cjs",
+      "to": "file:tools/ticktock/effectful-phase.cjs",
+      "target": "tools/ticktock/effectful-phase.cjs",
+      "required": true,
+      "specifier": "./effectful-phase.cjs"
     },
     {
       "id": "4d196565cc7a027d0712aa2ca2b391b5066b3e26710cc28c3f402a7673c5d25b",
@@ -39573,6 +39664,15 @@
       "specifier": "../../dart-integration/lib/plan-dart-projection.js"
     },
     {
+      "id": "9957e87a051cdfb61deb18d517a24468376ec2a6d55e37fe1855273c21652b28",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/stamp-mac.test.cjs",
+      "to": "file:tools/kernel/hooks/lib/stamp-mac.cjs",
+      "target": "tools/kernel/hooks/lib/stamp-mac.cjs",
+      "required": true,
+      "specifier": "../lib/stamp-mac.cjs"
+    },
+    {
       "id": "9990595f0578744dcc035bbfd2a82c8b94296705de83d71ae773bf6ce627bb07",
       "type": "schema-definition-file",
       "from": "schema-definition:frameworks/wordpress/qa/schemas/output/llm-manifest.schema.json",
@@ -42509,6 +42609,15 @@
       "specifier": "./lib/compat-dispatch.cjs"
     },
     {
+      "id": "b60157b18d8a58537b107939d3438b5f32a03c4dce83cb1f53fcfaba1906168c",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-effectful-phase.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
+    },
+    {
       "id": "b6281ad78b28c4e2a56504978a0e0e77525f49b70dfbb81cdc46d424c5174970",
       "type": "static-import",
       "from": "file:tools/verify/verify-report-claims.cjs",
@@ -43100,6 +43209,15 @@
       "target": "tools/telemetry/dispatches/lib/detectors.cjs",
       "required": true,
       "specifier": "./lib/detectors.cjs"
+    },
+    {
+      "id": "bbd496ded854dde3ba53309c40d66145b261b4c65a1de14c99f3b32f6223555b",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/verify-stamp-independently.cjs",
+      "to": "file:tools/kernel/hooks/lib/stamp-mac.cjs",
+      "target": "tools/kernel/hooks/lib/stamp-mac.cjs",
+      "required": true,
+      "specifier": "./lib/stamp-mac.cjs"
     },
     {
       "id": "bc1b3df8df3314a394712541198bbfb8be78d1c1664a63995e4a80017147f622",
@@ -44062,6 +44180,15 @@
       "required": true,
       "declared_target": "tools/artifacts/artifact-status.js",
       "resolution": "tracked"
+    },
+    {
+      "id": "c64784791a5a07faf57321d40d0846912ff79b20e3b2ed7af872acae679524ce",
+      "type": "static-import",
+      "from": "file:tools/ticktock/preflight-ticktock.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
     },
     {
       "id": "c64c17594e18991902d490ab7ab00b8a10fc4599b077221528c5a3a5752b3058",
@@ -46906,6 +47033,15 @@
       "declared_target": ".claude/commands/bridge-speakers.md"
     },
     {
+      "id": "e30c4d217ad521a37be54ad797d54f87878db23b6c6d886aee807ec5b5a2d717",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/lib/stamp-mac.cjs",
+      "to": "file:tools/ticktock/canonical.cjs",
+      "target": "tools/ticktock/canonical.cjs",
+      "required": true,
+      "specifier": "../../../ticktock/canonical.cjs"
+    },
+    {
       "id": "e3329fc48526366dd796c47707ab91a90ab2e3dcc823ddc2f7f005b327fba797",
       "type": "static-import",
       "from": "file:tools/workspace/capture-task.js",
@@ -47285,6 +47421,15 @@
       "target": ".claude/skills/extract-skill/SKILL.md",
       "required": true,
       "declared_target": ".claude/skills/extract-skill/SKILL.md"
+    },
+    {
+      "id": "e76d90cd9368f7a691e40aaa03cbbe9c6147908185e9620a2bd741cc0a9e9246",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/pretool-remote-mutation-gate.cjs",
+      "to": "file:tools/kernel/hooks/lib/stamp-mac.cjs",
+      "target": "tools/kernel/hooks/lib/stamp-mac.cjs",
+      "required": true,
+      "specifier": "./lib/stamp-mac.cjs"
     },
     {
       "id": "e7a794d30899efa76cb20810e45c5f005cbf5af3bcb5b35f1281f2d8abc46807",
@@ -48954,6 +49099,15 @@
       "specifier": "../signal-normalization-proposal"
     },
     {
+      "id": "f69d15d22747785306cc6cc88b3c8f66916f8ce077187ad9d51b9935ba4f92a5",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-effectful-phase.cjs",
+      "to": "file:tools/ticktock/ceilings.cjs",
+      "target": "tools/ticktock/ceilings.cjs",
+      "required": true,
+      "specifier": "./ceilings.cjs"
+    },
+    {
       "id": "f6a831508ba81fd51293ab25502a2ebfadeb2b61008fcdea39b86809a6544bcb",
       "type": "static-import",
       "from": "file:tools/export-public/__tests__/storage-registration.test.cjs",
@@ -50012,8 +50166,8 @@
     }
   ],
   "counts": {
-    "nodes": 3776,
-    "edges": 2795,
+    "nodes": 3780,
+    "edges": 2809,
     "unresolved": 0
   }
 }

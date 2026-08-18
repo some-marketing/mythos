@@ -58,6 +58,14 @@ const path = require('path');
 const Ajv = require('ajv');
 
 const REVIEW_DECISION_SCHEMA = require('./ticktock-review-decision-schema.json');
+// Codex PR#20 review: charter artifacts consulted for G-TICKTOCK-REVIEW's
+// self-binding and run-roster checks were read via readJsonArtifact() (a
+// bare JSON.parse), never through charterMod.readCharter()/validateCharter().
+// If reviewer_roster.lanes is edited after charter creation while the stored
+// charter_hash/lane_binding_hash fields are left unchanged, a bare parse
+// cannot detect that -- readCharter() recomputes both hashes from the actual
+// content and refuses on mismatch, which a bare parse never attempts.
+const charterMod = require('./charter.cjs');
 
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
 
@@ -163,6 +171,42 @@ function readJsonArtifact(relPath) {
   } catch (err) {
     return { ok: false, reason_code: 'ARTIFACT-UNPARSEABLE', path: relPath, abs, detail: err.message };
   }
+}
+
+/**
+ * Same shape as readJsonArtifact(), but for charter artifacts specifically:
+ * after the bare parse, runs charterMod.checkImmutability() to RECOMPUTE
+ * charter_hash and reviewer_roster.lane_binding_hash from the actual loaded
+ * content and refuse on mismatch. Deliberately checkImmutability() (a narrow,
+ * two-hash recompute-and-compare), NOT the full charterMod.readCharter() /
+ * validateCharter() schema pipeline -- this call site only ever needs the
+ * roster/charter hash fields, and full-schema fixtures (cycle_ceiling,
+ * evaluator_versions, allowed_write_surfaces, etc.) are not part of what
+ * G-TICKTOCK-REVIEW is checking here. An edited roster with stale hash
+ * fields left in place cannot pass silently (codex PR#20 review).
+ */
+function readValidatedCharterArtifact(relPath) {
+  const abs = path.resolve(REPO_ROOT, relPath);
+  if (!fs.existsSync(abs)) {
+    return { ok: false, reason_code: 'ARTIFACT-ABSENT', path: relPath, abs };
+  }
+  let raw;
+  try {
+    raw = fs.readFileSync(abs, 'utf8');
+  } catch (err) {
+    return { ok: false, reason_code: 'ARTIFACT-UNREADABLE', path: relPath, abs, detail: err.message };
+  }
+  let doc;
+  try {
+    doc = JSON.parse(raw);
+  } catch (err) {
+    return { ok: false, reason_code: 'ARTIFACT-UNPARSEABLE', path: relPath, abs, detail: err.message };
+  }
+  const immut = charterMod.checkImmutability(doc);
+  if (!immut.ok) {
+    return { ok: false, reason_code: `CHARTER-${immut.halt_state}`, path: relPath, abs, detail: immut.detail };
+  }
+  return { ok: true, path: relPath, abs, doc };
 }
 
 // ---------------------------------------------------------------------------
@@ -495,7 +539,7 @@ function evaluateTicktockReview(invocation, opts) {
   // the minds this run's merge contract binds.
   const charterRelPath = (opts && opts.charterPath) ||
     `_dev/state/ticktock/charter__${read.doc.charter_id}.json`;
-  const charterRead = readJsonArtifact(charterRelPath);
+  const charterRead = readValidatedCharterArtifact(charterRelPath);
   if (!charterRead.ok) {
     return {
       gate_id: 'G-TICKTOCK-REVIEW',
@@ -524,7 +568,7 @@ function evaluateTicktockReview(invocation, opts) {
   // lane_id + family + model_pin — a review by different minds (or the same
   // minds under different pins) does not authorize this run's merge contract.
   if (opts && opts.runCharterPath) {
-    const runCharterRead = readJsonArtifact(opts.runCharterPath);
+    const runCharterRead = readValidatedCharterArtifact(opts.runCharterPath);
     if (!runCharterRead.ok) {
       return {
         gate_id: 'G-TICKTOCK-REVIEW',

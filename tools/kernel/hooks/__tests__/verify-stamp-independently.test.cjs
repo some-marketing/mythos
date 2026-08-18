@@ -15,6 +15,18 @@ const os = require('os');
 const path = require('path');
 
 const mod = require('../verify-stamp-independently.cjs');
+const { resolveStampSecret, signStamp } = require('../lib/stamp-mac.cjs');
+
+// Codex PR#20 F1: every fixture this suite writes must be signed or it reads
+// as invalid regardless of which scenario it's meant to exercise. Signing a
+// deliberately-invalid fixture (voided/expired/broad-scope) is harmless --
+// those checks fire before the MAC check -- and required for every fixture
+// meant to be VALID.
+const STAMP_SECRET = resolveStampSecret();
+if (!STAMP_SECRET) {
+  process.stderr.write('FATAL: no operator secret resolvable -- cannot sign test fixtures\n');
+  process.exit(2);
+}
 
 function scratchRepo() {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'vsi-test-'));
@@ -37,6 +49,7 @@ function writeStamp(stampsDir, name, overrides) {
     source_doc: null
   };
   const stamp = { ...base, ...overrides };
+  signStamp(STAMP_SECRET, stamp);
   fs.writeFileSync(path.join(stampsDir, name), JSON.stringify(stamp));
   return stamp;
 }
@@ -84,7 +97,7 @@ test('AC1 (fixture form): a primary-path failure (unreadable stamps dir simulate
 test('validity predicate: a well-formed, unexpired, unvoided stamp with a real source_doc is independently valid', () => {
   const { root, stampsDir } = scratchRepo();
   try {
-    const docPath = path.join(root, 'doc.md');
+    const docPath = path.join(root, 'g-remote-mutation-prestamp__test__20260817T000000Z.md');
     fs.writeFileSync(docPath, 'authorization doc');
     writeStamp(stampsDir, 'a.json', { source_doc: docPath, scope: ['ssh:mutate'] });
     const verdict = mod.independentCoverageVerdict(root, CANARY, Date.now());
@@ -97,7 +110,7 @@ test('validity predicate: a well-formed, unexpired, unvoided stamp with a real s
 test('validity predicate: voided stamp is independently invalid regardless of scope', () => {
   const { root, stampsDir } = scratchRepo();
   try {
-    const docPath = path.join(root, 'doc.md');
+    const docPath = path.join(root, 'g-remote-mutation-prestamp__test__20260817T000000Z.md');
     fs.writeFileSync(docPath, 'x');
     writeStamp(stampsDir, 'a.json', { source_doc: docPath, voided: true });
     const verdict = mod.independentCoverageVerdict(root, CANARY, Date.now());
@@ -110,7 +123,7 @@ test('validity predicate: voided stamp is independently invalid regardless of sc
 test('validity predicate: expired stamp (expires_at <= nowMs) is independently invalid', () => {
   const { root, stampsDir } = scratchRepo();
   try {
-    const docPath = path.join(root, 'doc.md');
+    const docPath = path.join(root, 'g-remote-mutation-prestamp__test__20260817T000000Z.md');
     fs.writeFileSync(docPath, 'x');
     writeStamp(stampsDir, 'a.json', { source_doc: docPath, expires_at: '2026-08-01T00:00:00.000Z' });
     const verdict = mod.independentCoverageVerdict(root, CANARY, Date.parse('2026-08-17T00:00:00.000Z'));
@@ -123,7 +136,7 @@ test('validity predicate: expired stamp (expires_at <= nowMs) is independently i
 test('scope predicate: exact-key match grants coverage (kernel-triad review round 2, codex -- CANARY_MUTATING_KEY constant must be independently declared, not derived from raw-text regex alone)', () => {
   const { root, stampsDir } = scratchRepo();
   try {
-    const docPath = path.join(root, 'doc.md');
+    const docPath = path.join(root, 'g-remote-mutation-prestamp__test__20260817T000000Z.md');
     fs.writeFileSync(docPath, 'x');
     writeStamp(stampsDir, 'a.json', { source_doc: docPath, scope: [mod.CANARY_MUTATING_KEY] });
     const verdict = mod.independentCoverageVerdict(root, CANARY, Date.now());
@@ -136,7 +149,7 @@ test('scope predicate: exact-key match grants coverage (kernel-triad review roun
 test('scope predicate: re:-prefixed regex scope entry grants coverage when it matches raw command text', () => {
   const { root, stampsDir } = scratchRepo();
   try {
-    const docPath = path.join(root, 'doc.md');
+    const docPath = path.join(root, 'g-remote-mutation-prestamp__test__20260817T000000Z.md');
     fs.writeFileSync(docPath, 'x');
     writeStamp(stampsDir, 'a.json', { source_doc: docPath, scope: ['re:orwell.*canary'] });
     const verdict = mod.independentCoverageVerdict(root, CANARY, Date.now());
@@ -149,7 +162,7 @@ test('scope predicate: re:-prefixed regex scope entry grants coverage when it ma
 test('scope predicate: an unrelated scope entry does not grant coverage', () => {
   const { root, stampsDir } = scratchRepo();
   try {
-    const docPath = path.join(root, 'doc.md');
+    const docPath = path.join(root, 'g-remote-mutation-prestamp__test__20260817T000000Z.md');
     fs.writeFileSync(docPath, 'x');
     writeStamp(stampsDir, 'a.json', { source_doc: docPath, scope: ['load-courier.ps1'] });
     const verdict = mod.independentCoverageVerdict(root, CANARY, Date.now());
@@ -193,7 +206,7 @@ test('AC3 (this session\'s actual incident shape): primary claims coverage, inde
 test('AC2 reverse direction: primary says not covered, independent finds a covering stamp -- also DISAGREEMENT, not silently resolved by preferring primary', () => {
   const { root, stampsDir } = scratchRepo();
   try {
-    const docPath = path.join(root, 'doc.md');
+    const docPath = path.join(root, 'g-remote-mutation-prestamp__test__20260817T000000Z.md');
     fs.writeFileSync(docPath, 'x');
     writeStamp(stampsDir, 'a.json', { source_doc: docPath, scope: [mod.CANARY_MUTATING_KEY] });
     const result = mod.verifyStampIndependently(root, CANARY, { covered: false }, {});

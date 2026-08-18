@@ -277,6 +277,34 @@ function writeGenerationManifest(manifest, opts) {
     );
   }
 
+  // 2b2. VERIFY LINEAGE LINK -- mandatory, before disk. The schema alone can
+  // only type parent_generation_id/parent_manifest_hash as ["string","null"];
+  // it cannot express "null only at cycle_index 0" (no if/then conditional
+  // existed here). Codex PR#20 review: without this call, a non-genesis
+  // manifest with a null parent was written successfully and received a
+  // read_back_verified:true receipt even though its lineage cannot be
+  // traversed -- writeGenerationManifest ran schema, rotation, and artifact
+  // checks but never invoked verifyLineageLink(). Refused here, same as
+  // rotation and artifact verification: never written and then flagged.
+  let parentManifestForLineage = null;
+  if (document.cycle_index !== 0) {
+    const parentGenId = document.parent && document.parent.parent_generation_id;
+    if (parentGenId) {
+      const parentAbsPath = path.resolve(REPO_ROOT, manifestPath(parentGenId, dir));
+      if (fs.existsSync(parentAbsPath)) {
+        try {
+          parentManifestForLineage = JSON.parse(fs.readFileSync(parentAbsPath, 'utf8'));
+        } catch (_) {
+          parentManifestForLineage = null; // unreadable/unparseable parent -- verifyLineageLink below reports it as unlinked
+        }
+      }
+    }
+  }
+  const lineage = verifyLineageLink(document, parentManifestForLineage);
+  if (!lineage.linked) {
+    throw new Error(`LINEAGE-LINK-BROKEN: ${lineage.reason}.`);
+  }
+
   // 2c. VERIFY ARTIFACTS -- default-on (B4 repair). Runs before disk for the
   // same reason the rotation check does: a manifest whose declared outputs do
   // not match what is actually on disk is never written and then flagged, it
@@ -348,6 +376,8 @@ function writeGenerationManifest(manifest, opts) {
     artifacts_verified: !skipArtifactVerification,
     artifacts_verification_skipped: skipArtifactVerification,
     artifacts_checked: artifactVerification ? artifactVerification.checked : 0,
+    lineage_link_verified: true,
+    lineage_link_reason: lineage.reason,
     rotation_accepted: true,
     rotation_exempt: rotation.exempt,
     rotation_exempt_reason: rotation.exempt_reason,

@@ -930,6 +930,23 @@ function checkRebaselineFrequency(lineageEntries, options = {}) {
 // happened that the chain does not account for.
 function verifyLineageChain(lineageEntries) {
   const errors = [];
+  // Codex PR#20 review: the adjacent-pair loop below starts at i=1 because
+  // entry 0 has no predecessor to link against -- but that also meant entry
+  // 0's own REQUIRED FIELDS were never checked by anything. For a lineage
+  // containing exactly one rebaseline (the normal first-rebaseline case),
+  // the loop performed zero validation at all, so an entry missing
+  // triggering_cycle/review_artifact/ratification_reference/reason was
+  // reported chain_unbroken:true. Required-field validation applies to
+  // EVERY entry, including the first; only the adjacent-hash-link check is
+  // genuinely inapplicable to entry 0.
+  if (lineageEntries.length > 0) {
+    const first = lineageEntries[0];
+    for (const required of ['triggering_cycle', 'review_artifact', 'ratification_reference', 'reason']) {
+      if (first[required] === undefined || first[required] === null || first[required] === '') {
+        errors.push({ index: 0, message: `lineage entry is missing "${required}" -- a re-baseline without it cannot be walked mechanically` });
+      }
+    }
+  }
   for (let i = 1; i < lineageEntries.length; i += 1) {
     const prev = lineageEntries[i - 1];
     const cur = lineageEntries[i];

@@ -13799,7 +13799,7 @@
       "id": "file:tools/kernel/hooks/__tests__/dispatch-stop-failopen.test.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/__tests__/dispatch-stop-failopen.test.cjs",
-      "sha256": "80f09aa3b92d54ca4c5e601305e08cd532ba60f894ce33e2de47d89cadb71f0a",
+      "sha256": "c6f371cd3ed2d7a21e51d23642c2a688255006db556c70dfdc8183e1ef7610e8",
       "mode": 420
     },
     {
@@ -16396,7 +16396,7 @@
       "id": "file:tools/parity/build-wiring-graph.cjs",
       "type": "file",
       "path": "tools/parity/build-wiring-graph.cjs",
-      "sha256": "12c11bee283fac5ad6bc5b94efdf4bee972f9e40dd69d62cf200efbd1b2ab100",
+      "sha256": "ff4d8beaebd80701a06588312391da7969df90a4a9c0fa1ce7b96cb6e9ea04cf",
       "mode": 420
     },
     {
@@ -20864,7 +20864,7 @@
       "name": "wordpress/seo-validation"
     },
     {
-      "id": "hook:PostToolUse:618",
+      "id": "hook:PostToolUse:620",
       "type": "hook",
       "event": "PostToolUse",
       "command_sha256": "e395bd31a35362065002007d044e98d86e484bf829d16ebe2027da8a928db52c"
@@ -20876,46 +20876,58 @@
       "command_sha256": "ce97f4fd7eb07f52a0e9c6352fab2ce0e803f0920ef184d8f42261a46580103b"
     },
     {
-      "id": "hook:SessionEnd:622",
+      "id": "hook:SessionEnd:624",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "35974852e367c31bae49591ac0aa4afd518ec624f233743462e37c4c3863b1ed"
     },
     {
-      "id": "hook:SessionEnd:623",
+      "id": "hook:SessionEnd:625",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "519f522b04afb8471aa7e7ca117deb8af91976de62b5c1f5f4f6f9f60c8c217f"
     },
     {
-      "id": "hook:SessionEnd:624",
+      "id": "hook:SessionEnd:626",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "4ee05b68abff34325a3950761939e20cf2391c7b29d640b29b95233d29943fd4"
     },
     {
-      "id": "hook:SessionStart:619",
+      "id": "hook:SessionStart:621",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "26962e5976f5c689361f18050bb4e718d507df72590fbbc620e356cde47cf86b"
     },
     {
-      "id": "hook:SessionStart:620",
+      "id": "hook:SessionStart:622",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "00253242784e7853b94e1125e7c69f31085961b2dd7b3d1fcb6b4c79d94e9baf"
     },
     {
-      "id": "hook:SessionStart:621",
+      "id": "hook:SessionStart:623",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "c738ce0e54e375f17b97f1186b95e5fd1125c0675d2f3e9238e872062f5b7076"
     },
     {
-      "id": "hook:SubagentStop:625",
+      "id": "hook:Stop:618",
+      "type": "hook",
+      "event": "Stop",
+      "command_sha256": "4f226e828c37bc4a712aab7fb0158cc46e64d013ffa001531087941dfd30cca3"
+    },
+    {
+      "id": "hook:SubagentStop:627",
       "type": "hook",
       "event": "SubagentStop",
       "command_sha256": "4ca0f2529c8dd4023ade83508a1e40a1728dbdcfa35aadf9ea953cf8ac9a587d"
+    },
+    {
+      "id": "hook:UserPromptSubmit:619",
+      "type": "hook",
+      "event": "UserPromptSubmit",
+      "command_sha256": "d4ad7e134fc41713541198d7a3573ced8aea291a0528477528b08ca3c5b1dfe7"
     },
     {
       "id": "installer-definition:frameworks/wordpress/qa/runner/tools/install-browsers.js",
@@ -25241,16 +25253,6 @@
       "resolution": "tracked"
     },
     {
-      "id": "010876cb845f35566878388ce954b78793a623b94a4f14f61c4e8bccc1a304cc",
-      "type": "hook-target",
-      "from": "hook:SessionStart:621",
-      "to": "file:tools/user/inject-mirror.cjs",
-      "target": "tools/user/inject-mirror.cjs",
-      "required": true,
-      "declared_target": "tools/user/inject-mirror.cjs",
-      "event": "SessionStart"
-    },
-    {
       "id": "010b30cc4fc72e0a32d1a8eeb743fc9727def556ce07ba0f75086bc91f020b4f",
       "type": "mcp-server",
       "from": "mcp:google-ads",
@@ -27576,6 +27578,16 @@
       "target": "tools/dart-integration/lib/plan-dart-projection.js",
       "required": true,
       "specifier": "./lib/plan-dart-projection.js"
+    },
+    {
+      "id": "18e25f4aeed59304ff7e96a0ecaaa1e64f317cab2b7f7624bc2c21c96a5d1c0a",
+      "type": "hook-target",
+      "from": "hook:Stop:618",
+      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
+      "target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "event": "Stop"
     },
     {
       "id": "18e6544664fa5062e7e47538e378a2f7126287b3110743bb105ae8cb70cdd982",
@@ -30761,16 +30773,6 @@
       "specifier": "./lib/signal-lifecycle.js"
     },
     {
-      "id": "3898743addae021125ffd83b4e179a7aa179469f975f5e7826eba36bb6a64490",
-      "type": "hook-target",
-      "from": "hook:SubagentStop:625",
-      "to": "file:.claude/hooks/subagent-telemetry-writer.cjs",
-      "target": ".claude/hooks/subagent-telemetry-writer.cjs",
-      "required": true,
-      "declared_target": ".claude/hooks/subagent-telemetry-writer.cjs",
-      "event": "SubagentStop"
-    },
-    {
       "id": "389af8c09ddcf5918dd0128a09bd3bec58b34ea19cd4093eec7c0d3b4e0bdb1b",
       "type": "manifest-target",
       "from": "manifest-path:frameworks/wordpress/analytics-tracking/.claude/skills/analytics-tracking",
@@ -32587,16 +32589,6 @@
       "target": "tools/kernel/hooks/pretool-mutation-plan-gate.cjs",
       "required": true,
       "specifier": "./pretool-mutation-plan-gate.cjs"
-    },
-    {
-      "id": "4a69ed07bd29f06e426d1b2403f1c6ed5c650a88d8d4bd7aa4c00470bfa5199f",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:623",
-      "to": "file:tools/context/repo-awareness-closeout.cjs",
-      "target": "tools/context/repo-awareness-closeout.cjs",
-      "required": true,
-      "declared_target": "tools/context/repo-awareness-closeout.cjs",
-      "event": "SessionEnd"
     },
     {
       "id": "4a93eac1a376004015b9691bae752e2d10c1406553f7771721ea7a8fd54b1386",
@@ -36079,16 +36071,6 @@
       "specifier": "../posttool-write-ledger.cjs"
     },
     {
-      "id": "6d00d4ee85d43a86503c1d70ffb236c552b82dfc3dc788880531feb158ffb8e6",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:622",
-      "to": "file:tools/hooks/session-lifecycle/session-end-close.cjs",
-      "target": "tools/hooks/session-lifecycle/session-end-close.cjs",
-      "required": true,
-      "declared_target": "tools/hooks/session-lifecycle/session-end-close.cjs",
-      "event": "SessionEnd"
-    },
-    {
       "id": "6d0272d6f7e6f08fe3965bce188ec3804dfd4e41a7492e16f3c48ac0a8f9a498",
       "type": "manifest-target",
       "from": "manifest-path:.claude/skills/dl/SKILL.md",
@@ -37597,16 +37579,6 @@
       "specifier": "../harness.js"
     },
     {
-      "id": "7bdb05ea8533d3cdc97faaec135096cedb3295e7f03810fba777ffe743461f51",
-      "type": "hook-target",
-      "from": "hook:SessionStart:620",
-      "to": "file:tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "required": true,
-      "declared_target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "event": "SessionStart"
-    },
-    {
       "id": "7c065e81f7ef4d25043f42ce44eb6505647e53c981260026ad8bd37de880bd55",
       "type": "static-import",
       "from": "file:tools/ticktock/test-preflight-live-probe.cjs",
@@ -37815,6 +37787,16 @@
       "target": "tools/telemetry/dispatches/lib/emit-span.cjs",
       "required": true,
       "specifier": "../telemetry/dispatches/lib/emit-span.cjs"
+    },
+    {
+      "id": "7e26be47a156a113bdff91d299e6676208fd2ca5eca22ad312d7bf165c5ee9af",
+      "type": "hook-target",
+      "from": "hook:PostToolUse:620",
+      "to": "file:tools/kernel/hooks/dispatch-posttool.cjs",
+      "target": "tools/kernel/hooks/dispatch-posttool.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-posttool.cjs",
+      "event": "PostToolUse"
     },
     {
       "id": "7e27ac3487187db63a6dd98d4c91c8f981ecbf8eebf3016dce89d30b56b397f6",
@@ -38745,6 +38727,16 @@
       "target": "tools/ai-bridge/lib/model-registry.js",
       "required": true,
       "specifier": "./model-registry"
+    },
+    {
+      "id": "8620d016571df905a8348f72c38996cd7d80bb23b77b87e67fd56190447c18e0",
+      "type": "hook-target",
+      "from": "hook:SessionStart:623",
+      "to": "file:tools/user/inject-mirror.cjs",
+      "target": "tools/user/inject-mirror.cjs",
+      "required": true,
+      "declared_target": "tools/user/inject-mirror.cjs",
+      "event": "SessionStart"
     },
     {
       "id": "8677095012523dec8766751b914ab17f9a0674f7e1f5baca2a06dd526eaf9c45",
@@ -39691,6 +39683,16 @@
       "required": true,
       "declared_target": "tools/codex/hook-emulator.js",
       "resolution": "tracked"
+    },
+    {
+      "id": "90acdad549ab9bec10ebb7dd28745709cb3108dee4e8b5a0a38fd23ab0810d4c",
+      "type": "hook-target",
+      "from": "hook:SubagentStop:627",
+      "to": "file:.claude/hooks/subagent-telemetry-writer.cjs",
+      "target": ".claude/hooks/subagent-telemetry-writer.cjs",
+      "required": true,
+      "declared_target": ".claude/hooks/subagent-telemetry-writer.cjs",
+      "event": "SubagentStop"
     },
     {
       "id": "90ce11dececd066783d72f1d8f4ca94aa9dc607c251709a913fadca6364ec3b0",
@@ -42005,16 +42007,6 @@
       "specifier": "../../reconciliation/lib/normalized-content-hash.cjs"
     },
     {
-      "id": "a73cba37b5d3bcf6692a838e1c010e32aac89531fe7f055ce424af8a54b5bbb3",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:624",
-      "to": "file:tools/sessions/session-end-boundary-log.cjs",
-      "target": "tools/sessions/session-end-boundary-log.cjs",
-      "required": true,
-      "declared_target": "tools/sessions/session-end-boundary-log.cjs",
-      "event": "SessionEnd"
-    },
-    {
       "id": "a7a3283534d10e3a2a5638f4f9429c82348a3831c36ee3f2fa1926f541809563",
       "type": "command-definition-file",
       "from": "command-definition:scry",
@@ -43109,6 +43101,16 @@
       "target": "frameworks/paid-media/google-ads-search-campaign-build/.claude/skills/google-ads-search-campaign-build",
       "required": true,
       "declared_target": "frameworks/paid-media/google-ads-search-campaign-build/.claude/skills/google-ads-search-campaign-build"
+    },
+    {
+      "id": "b1c59cb409a853fd6af6fcb3ef5dba51db75eda7ab50dcfffb8bd2939b5ce278",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:626",
+      "to": "file:tools/sessions/session-end-boundary-log.cjs",
+      "target": "tools/sessions/session-end-boundary-log.cjs",
+      "required": true,
+      "declared_target": "tools/sessions/session-end-boundary-log.cjs",
+      "event": "SessionEnd"
     },
     {
       "id": "b1c8f4bc66eae7747ca039cf68223593f613c5a80c651c32e28e33881451ff4c",
@@ -44783,6 +44785,16 @@
       "specifier": "../workspace/lib/args"
     },
     {
+      "id": "c16e5ac5666d51a42ec627177658c75c09326028cdb37a779077a9414b777b56",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:625",
+      "to": "file:tools/context/repo-awareness-closeout.cjs",
+      "target": "tools/context/repo-awareness-closeout.cjs",
+      "required": true,
+      "declared_target": "tools/context/repo-awareness-closeout.cjs",
+      "event": "SessionEnd"
+    },
+    {
       "id": "c1793462b5c9904162fa7c44219fb005b7a878934437a7b4f6f1bb1a1ac0c5fb",
       "type": "framework-manifest",
       "from": "framework:wordpress/design-mockup-validation",
@@ -46347,16 +46359,6 @@
       "declared_target": ".claude/commands/route.md"
     },
     {
-      "id": "d2bf50ad880cf88f1a6e3aeea8e4400edf3ec6396af559ca8d82f3998e253aa0",
-      "type": "hook-target",
-      "from": "hook:PostToolUse:618",
-      "to": "file:tools/kernel/hooks/dispatch-posttool.cjs",
-      "target": "tools/kernel/hooks/dispatch-posttool.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-posttool.cjs",
-      "event": "PostToolUse"
-    },
-    {
       "id": "d2c83857e6f1794e65f75aadd6efaad3667549bac541221d8a7ec5d832ac2692",
       "type": "static-import",
       "from": "file:tools/mcp/delesign/config.js",
@@ -47158,6 +47160,26 @@
       "specifier": "./lib.js"
     },
     {
+      "id": "db98d419e99d319228d09f145922bdf8f0fc1c191a158244d4f4511446ed9751",
+      "type": "hook-target",
+      "from": "hook:SessionStart:622",
+      "to": "file:tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "required": true,
+      "declared_target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "event": "SessionStart"
+    },
+    {
+      "id": "dbb7eb37d67288527794a4bfb62c8315cf82e9dd36e734c516399881e9736d2c",
+      "type": "hook-target",
+      "from": "hook:UserPromptSubmit:619",
+      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
+      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "event": "UserPromptSubmit"
+    },
+    {
       "id": "dbb8528b47366653ad83fedacef4b1e9d94f21527d3ff1c8817eb799412a71bb",
       "type": "schema-definition-file",
       "from": "schema-definition:frameworks/deliverables/presentation-review/schemas/output/slide-finding.schema.json",
@@ -47210,6 +47232,16 @@
       "target": ".claude/commands/el.md",
       "required": true,
       "declared_target": ".claude/commands/el.md"
+    },
+    {
+      "id": "dc95bb94a319efc972b5f8fdc3cd2c6f42fee99e4e0fc6c2e4a276dd5ee3f95d",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:624",
+      "to": "file:tools/hooks/session-lifecycle/session-end-close.cjs",
+      "target": "tools/hooks/session-lifecycle/session-end-close.cjs",
+      "required": true,
+      "declared_target": "tools/hooks/session-lifecycle/session-end-close.cjs",
+      "event": "SessionEnd"
     },
     {
       "id": "dc9fcd21524839f8bf74c7b6b4a4820f8d9e0f99fb7a6408ca77f91698fbf89d",
@@ -49087,16 +49119,6 @@
       "resolution": "tracked"
     },
     {
-      "id": "ed5cc2c555d88e14fc038e8157ff344bd9d9482f83048ad10113828a48c37731",
-      "type": "hook-target",
-      "from": "hook:SessionStart:619",
-      "to": "file:tools/kernel/hooks/dispatch-session-start.cjs",
-      "target": "tools/kernel/hooks/dispatch-session-start.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-session-start.cjs",
-      "event": "SessionStart"
-    },
-    {
       "id": "ed5d7e52fc999f49e6328d98a4484d5c95a69055856d9c4abf86a918c244dfb3",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/concept-dispatch.md",
@@ -49612,6 +49634,16 @@
       "target": "tools/telemetry/dispatches/lib/trace-context.cjs",
       "required": true,
       "specifier": "../../telemetry/dispatches/lib/trace-context.cjs"
+    },
+    {
+      "id": "f2526a3705800204dde0232165569f03685db4ed99b0c96ceaf515aed956e01c",
+      "type": "hook-target",
+      "from": "hook:SessionStart:621",
+      "to": "file:tools/kernel/hooks/dispatch-session-start.cjs",
+      "target": "tools/kernel/hooks/dispatch-session-start.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-session-start.cjs",
+      "event": "SessionStart"
     },
     {
       "id": "f259088384650860f9743b83dca55c9fa0f8fb3c9b66fea23f64343ba587c9da",
@@ -51290,8 +51322,8 @@
     }
   ],
   "counts": {
-    "nodes": 3849,
-    "edges": 2880,
+    "nodes": 3851,
+    "edges": 2882,
     "unresolved": 0
   }
 }

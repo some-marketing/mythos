@@ -9,6 +9,8 @@ let diagnostic = '';
 main({
   payload: { session_id: 'hook-test' },
   snapshotCurrentSession() { throw new Error('snapshot unavailable'); },
+  runNodeScript() {},
+  closeoutGate() { return { status: 0, message: '' }; },
   finish(status) { exitStatus = status; },
   writeError(message) { diagnostic += message; }
 });

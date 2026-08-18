@@ -118,7 +118,12 @@ fi
   echo "# verified:  $ok files, sha256 matched at both hops"
   echo "#"
   echo "# sha256  relative-path"
-  ( cd "$DEST" && find . -type f ! -name PULL-MANIFEST.txt | LC_ALL=C sort | while read -r f; do
+  # CODE REVIEW (confirmation pass, codex P2, round 5): excluding by
+  # basename anywhere in the tree meant a verified nested guest file also
+  # named PULL-MANIFEST.txt existed in the pulled result tree but was absent
+  # from the final provenance inventory. Exclude only the actual generated
+  # file at the destination root, ./PULL-MANIFEST.txt exactly.
+  ( cd "$DEST" && find . -type f ! -path './PULL-MANIFEST.txt' | LC_ALL=C sort | while read -r f; do
       printf '%s  %s\n' "$(shasum -a 256 "$f" | awk '{print $1}')" "${f#./}"
     done )
 } > "$DEST/PULL-MANIFEST.txt"

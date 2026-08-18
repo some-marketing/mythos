@@ -104,7 +104,13 @@ if (Test-Path $man) {
   # RESULT-MANIFEST.txt from the manifest it writes, so the manifest itself
   # must not appear in the coverage set -- otherwise it is always unlisted
   # and every otherwise valid harvest throws at this gate.
-  $actualFiles = @(Get-ChildItem -LiteralPath $runDir -Recurse -File | Where-Object { $_.Name -ne 'RESULT-MANIFEST.txt' })
+  # CODE REVIEW (confirmation pass, codex P2, round 5): excluding by
+  # basename anywhere under $runDir let a nested GUEST file that happens to
+  # be named RESULT-MANIFEST.txt cross hop 1 with no guest-to-host hash
+  # verification at all. Exempt only the actual manifest at $man by full
+  # path, matching the exact-path fix already applied to the harvest and
+  # pull manifests.
+  $actualFiles = @(Get-ChildItem -LiteralPath $runDir -Recurse -File | Where-Object { $_.FullName -ne $man })
   $unlisted = @($actualFiles | Where-Object { -not $manifestFiles.Contains($_.FullName.Substring($runDir.Length + 1).ToLowerInvariant()) })
   "manifest verification: $ok OK, $bad BAD, $malformed malformed, $($unlisted.Count) unlisted"
   if ($bad -gt 0 -or $malformed -gt 0 -or $ok -eq 0 -or $unlisted.Count -gt 0) {

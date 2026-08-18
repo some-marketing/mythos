@@ -39,8 +39,20 @@ if ($seedDrive) {
 Detach-Courier
 
 "=== REMAINING DISKS (should be the OS disk only) ==="
-Get-VMHardDiskDrive -VMName $VMName |
-  Select-Object ControllerNumber, ControllerLocation, Path | Format-Table -AutoSize | Out-String
+$remainingDisks = @(Get-VMHardDiskDrive -VMName $VMName)
+$remainingDisks | Select-Object ControllerNumber, ControllerLocation, Path | Format-Table -AutoSize | Out-String
+
+# CODE REVIEW (confirmation pass, codex P1): this only printed whatever
+# disks remained and proceeded regardless. An additional diagnostic or data
+# VHD left attached would be checkpointed and exported as part of the
+# golden baseline, and every experiment restored from it would silently
+# inherit an undeclared disk -- defeating the OS-only baseline and
+# potentially adding another data-transfer surface. Fail closed unless
+# exactly one disk (the OS disk) remains.
+if ($remainingDisks.Count -ne 1) {
+  throw "REFUSING to seal: expected exactly 1 remaining disk (the OS disk) after detaching the seed and courier, found $($remainingDisks.Count). Investigate before sealing -- an extra disk would be baked into the golden export."
+}
+"remaining disk count OK: 1 (OS disk)"
 
 "=== PRODUCTION CHECKPOINT ==="
 $snapName = "golden-$(Get-Date -Format 'yyyyMMddTHHmmssZ')"

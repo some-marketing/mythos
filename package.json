@@ -47,6 +47,7 @@
     "verify:parity:source": "node tools/parity/verify-parity.cjs",
     "verify:parity:ledger": "node tools/parity/check-ledger.cjs parity/reconciliation-ledger.json",
     "parity:ledger:generate": "node tools/parity/generate-reconciliation-ledger.cjs",
+    "parity:baseline:repair": "node tools/parity/surgical-baseline-repair.cjs",
     "host:manifest": "node tools/parity/build-host-activation.cjs",
     "host:manifest:validate": "node tools/parity/validate-host-activation.cjs parity/host-activation.json",
     "host:activate:dry-run": "node tools/parity/activate-host.cjs parity/host-activation.json",

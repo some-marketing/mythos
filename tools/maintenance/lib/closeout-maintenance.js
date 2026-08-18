@@ -497,10 +497,19 @@ function analyzeAndApplyCloseoutMaintenance(projectRoot, opts = {}) {
     }
   }
 
+  // A genuinely read-only caller (opts.report === false, e.g. review-closure
+  // status collection) must not dirty the worktree: archive-finished.js's
+  // preview mode otherwise appends a dry-run entry to _dev/logs/archive.jsonl
+  // "for auditability" even without --execute. Suppress that write here;
+  // --no-log has no effect on the actual archive decision or its stdout
+  // summary. Codex review, PR #18.
+  const archivePreviewArgs = opts.report === false
+    ? ['--age', String(ageDays), '--no-log']
+    : ['--age', String(ageDays)];
   const archivePreview = runNodeScript(
     projectRoot,
     'tools/artifacts/archive-finished.js',
-    ['--age', String(ageDays)],
+    archivePreviewArgs,
     opts
   );
   const archiveCandidates = parseArchiveCandidateCount(archivePreview.stdout);

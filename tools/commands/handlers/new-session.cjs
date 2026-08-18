@@ -137,11 +137,6 @@ function resolveSessionId(projectRoot) {
   return { session_id: null, session_id_source: 'unavailable' };
 }
 
-function assertSessionIdentityForNewSession(projectRoot) {
-  return require('../../sessions/lib/resolve-session-id.cjs')
-    .assertAuthoritativeSessionIdentity(projectRoot, 'new-session step 0');
-}
-
 // Read a plan-visibility freshness verdict out of repo-awareness-init --json.
 // Returns 'stale' | 'fresh' | 'unknown'. Tolerant of the two shapes the
 // snapshot has carried (nested freshness object vs. flattened status).
@@ -277,19 +272,18 @@ function runNewSessionInner(projectRoot, opts) {
     };
   }
 
-  // Identity is an execution precondition, not a SessionStart registration
-  // precondition. Enforce it immediately before step 0 so no mechanical work
-  // can run under a guessed or unavailable identity.
-  try {
-    assertSessionIdentityForNewSession(projectRoot);
-  } catch (err) {
-    return {
-      exitCode: 2,
-      packet: null,
-      stdout: '',
-      stderr: `${err.message}\n${FALLBACK_NOTE}`
-    };
-  }
+  // Identity grading is enforced at the point of actual custody-grade use
+  // (the _current-id grounding write below, gated on custody_grade ===
+  // 'authoritative'), not as a blanket precondition here. Step 0
+  // (watcher-lifecycle) already treats an unresolvable session id as a
+  // clean no-op per the canonical step-0 contract
+  // (instructions/canonical/commands/new-session.yaml): "An unresolvable
+  // session id is a clean no-op (exit 0, reported) because an unrecorded
+  // daemon could never be identity-verified later." A blanket precondition
+  // here previously hard-failed (exit 2) the entire new-session cascade for
+  // any registry-only harness (best_effort identity, no process-scoped env
+  // var) — breaking harnesses that could otherwise still run the rest of
+  // the deterministic session-open cascade. Codex review, PR #18.
 
   const exec = opts.spawn || spawnSync;
   const commands = { ...defaultCommands(), ...(opts.commands || {}) };

@@ -11,10 +11,18 @@ function validateDelegatedCompletionReceipt(payload, options = {}) {
   const errors = [];
   const receipt = payload && payload.completion_receipt && typeof payload.completion_receipt === 'object' ? payload.completion_receipt : payload;
   const status = text(payload && payload.status) || text(receipt && receipt.status);
-  if (!COMPLETED_STATUSES.has(status)) return { valid: true, accepted: false, status, errors };
+  // Normalize case for the gate membership check only (Codex review, PR #18:
+  // 'Completed'/'DONE'/etc. previously skipped receipt validation entirely
+  // because this check and validateActorReturn's identical pre-check were
+  // both case-sensitive). The returned `status` field stays as-authored.
+  if (!COMPLETED_STATUSES.has(status.toLowerCase())) return { valid: true, accepted: false, status, errors };
   if (!receipt || typeof receipt !== 'object' || Array.isArray(receipt)) return { valid: false, accepted: false, status, errors: ['completion receipt must be an object'] };
   if (receipt.schema !== RECEIPT_SCHEMA) errors.push('completion receipt schema is missing or unsupported');
-  const expectedScope = text(options.parentScope || options.scope), actualScope = text(receipt.scope);
+  // The receipt's scope identifies the delegated/child work, which may
+  // intentionally differ from the parent's own scope identity — prefer the
+  // delegated scope (options.scope) over the parent's own scope
+  // (options.parentScope) when it's available. Codex review, PR #18.
+  const expectedScope = text(options.scope || options.parentScope), actualScope = text(receipt.scope);
   if (!actualScope) errors.push('completion receipt scope is missing'); else if (expectedScope && actualScope !== expectedScope) errors.push(`completion receipt scope mismatch: expected ${expectedScope}`);
   const changedFiles = list(receipt.changed_files);
   if (changedFiles.some(entry => !entry || typeof entry !== 'object' || !text(entry.path))) errors.push('changed_files contains an invalid entry');

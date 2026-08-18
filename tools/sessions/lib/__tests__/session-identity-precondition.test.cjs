@@ -29,11 +29,28 @@ test('authoritative process identity is accepted', () => {
   }
 });
 
-test('new-session blocks before spawning step 0 without authoritative identity', () => {
+// Codex review, PR #18: new-session previously enforced authoritative
+// identity as a blanket precondition before step 0, hard-failing (exit 2)
+// the ENTIRE session-open cascade for any registry-only harness (best_effort
+// identity, no process-scoped env var) or an unresolvable identity (none).
+// That contradicts the authoritative step-0 contract in
+// instructions/canonical/commands/new-session.yaml: "An unresolvable session
+// id is a clean no-op (exit 0, reported) because an unrecorded daemon could
+// never be identity-verified later." Identity grading now applies only at
+// the point of actual custody-grade use (the _current-id grounding write),
+// not as a session-wide gate — step 0 (and the rest of the cascade) must
+// still run without an authoritative identity.
+test('new-session does not block step 0 (or the rest of the cascade) without authoritative identity', () => {
   withoutAuthoritativeIdentity(() => {
-    const result = newSession(path.resolve(__dirname, '../../../..'), '', { spawn: () => { throw new Error('must not spawn'); } });
-    assert.equal(result.exitCode, 2);
-    assert.match(result.stderr, /SESSION_IDENTITY_BLOCKED/);
+    let spawnCalls = 0;
+    const spawn = () => {
+      spawnCalls += 1;
+      return { status: 0, stdout: '{}', stderr: '' };
+    };
+    const result = newSession(path.resolve(__dirname, '../../../..'), '', { spawn });
+    assert.ok(spawnCalls > 0, 'expected step 0 to actually dispatch instead of being blocked before it runs');
+    assert.notEqual(result.exitCode, 2);
+    assert.doesNotMatch(result.stderr || '', /SESSION_IDENTITY_BLOCKED/);
   });
 });
 

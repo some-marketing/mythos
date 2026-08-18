@@ -111,7 +111,7 @@ function resolveSessionId(override, verbose) {
   try { entries = fs.readdirSync(ACTIVE_SESSIONS_DIR); } catch { return null; }
   let best = null;
   for (const f of entries) {
-    if (!/^[0-9a-f-]{36}\.json$/.test(f)) continue;
+    if (!f.endsWith('.json')) continue; // accept any session id (incl. codex-managed-*, codex-hook-emulation:*) // accept any session id (incl. codex-managed-*, codex-hook-emulation:*)
     const s = readJSON(path.join(ACTIVE_SESSIONS_DIR, f));
     if (!s || s.current_branch !== branch) continue;
     const hb = new Date(s.last_heartbeat || 0).getTime();

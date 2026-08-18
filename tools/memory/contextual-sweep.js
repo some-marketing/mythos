@@ -109,7 +109,7 @@ function loadFreshSessions(filterId) {
   try { entries = fs.readdirSync(ACTIVE_SESSIONS_DIR); }
   catch { return out; }
   for (const f of entries) {
-    if (!/^[0-9a-f-]{36}\.json$/.test(f)) continue;
+    if (!f.endsWith('.json')) continue; // accept any session id (incl. codex-managed-*, codex-hook-emulation:*) // accept any session id (incl. codex-managed-*, codex-hook-emulation:*)
     const sid = f.replace(/\.json$/, '');
     if (filterId && sid !== filterId) continue;
     const session = readJSON(path.join(ACTIVE_SESSIONS_DIR, f));
@@ -276,8 +276,14 @@ function writeHints(sid, hits) {
   const lines = hits.map(h => JSON.stringify({ ts, ...h }) + '\n').join('');
   if (lines) fs.appendFileSync(tier0Path, lines);
 
-  // Glanceable summary file (last-write-wins)
+  // Glanceable summary file (last-write-wins). Do NOT overwrite a pending
+  // summary with an empty re-sweep: the 120s job may run after the SessionStart
+  // sweep has produced hints but before contextual-inject.cjs consumes them,
+  // and an empty last-write-wins replace would erase the pending hints (codex
+  // PR review finding, 2026-08-18). Preserve the existing file when the new
+  // sweep found nothing new to emit.
   const summaryPath = path.join(HINTS_DIR, `${sid}.tier0.txt`);
+  if (hits.length === 0 && fs.existsSync(summaryPath)) return;
   const summary = [
     `# tier0 contextual hints — ${sid}`,
     `# swept ${ts} — ${hits.length} hits, top ${Math.min(hits.length, TOP_K_OUTPUT)}`,

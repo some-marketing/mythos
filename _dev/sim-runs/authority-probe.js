@@ -109,14 +109,49 @@ function positiveIntArg(flag, def) {
   return parseInt(raw, 10);
 }
 
+// CODE REVIEW (codex P2, round 11): --max-gain/--max-cap were parseFloat'd
+// with no validation, so a malformed, non-finite, zero, or negative value
+// (e.g. --max-gain nope -> NaN) passed through silently. NaN pheromone
+// deposits serialize as null, effectively disabling the max-family relay
+// while the run still completed and reported success. Require a finite
+// positive number, validated against the raw CLI string.
+function positiveFloatArg(flag, def) {
+  const raw = argVal(flag, def);
+  if (!/^[0-9]*\.?[0-9]+$/.test(String(raw))) {
+    process.stderr.write(`FAIL-CLOSED: ${flag} must be a positive number (no exponents or other trailing characters), got '${raw}'\n`);
+    process.exit(2);
+  }
+  const n = parseFloat(raw);
+  if (!Number.isFinite(n) || n <= 0) {
+    process.stderr.write(`FAIL-CLOSED: ${flag} must be a finite positive number, got '${raw}'\n`);
+    process.exit(2);
+  }
+  return n;
+}
+
+// CODE REVIEW (codex P2, round 11): --tick-interval-ms and --summary-every
+// still parsed unchecked raw strings ('nope' -> NaN silently disables
+// sleeping/periodic metrics; '1e3' truncates to 1, changing how many
+// episodes finish before the deadline) while the run still reported
+// success. Validate the raw CLI string the same way as the other numeric
+// options. Zero is legal for --tick-interval-ms (no sleep between ticks).
+function nonNegativeIntArg(flag, def) {
+  const raw = argVal(flag, def);
+  if (!/^(0|[1-9][0-9]*)$/.test(String(raw))) {
+    process.stderr.write(`FAIL-CLOSED: ${flag} must be a non-negative integer (no decimals, exponents, or other trailing characters), got '${raw}'\n`);
+    process.exit(2);
+  }
+  return parseInt(raw, 10);
+}
+
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
 const ROOT = path.resolve(argVal('--root', path.join(REPO_ROOT, '_dev', 'state', 'ant-sim-authority-probe')));
 const EPISODE_ROUNDS = positiveIntArg('--episode-rounds', '2000');
 const MAX_EPISODES = positiveIntArg('--max-episodes', '100');
 const DEADLINE_ISO = argVal('--deadline-iso', null);
 const REPLICATES = positiveIntArg('--replicates', '3');
-const TICK_INTERVAL_MS = parseInt(argVal('--tick-interval-ms', '10'), 10);
-const SUMMARY_EVERY = parseInt(argVal('--summary-every', '200'), 10);
+const TICK_INTERVAL_MS = nonNegativeIntArg('--tick-interval-ms', '10');
+const SUMMARY_EVERY = positiveIntArg('--summary-every', '200');
 const KILL_SWITCH = path.resolve(argVal('--kill-switch', path.join(REPO_ROOT, '_dev', 'state', 'kill-switches', 'ant-sim-authority-probe.off')));
 // --mechanism adds per-hive behavioural instrumentation (stockpile trajectory,
 // action mix, forage targeting). Off by default so every existing invocation is
@@ -219,11 +254,27 @@ const ARM_SPECS = {
 // four-arm attribution contrast) shares this driver instead of forking it.
 const ARMS_REQUESTED = argVal('--arms', null);
 const ARMS = ARMS_REQUESTED ? ARMS_REQUESTED.split(',').map((s) => s.trim()).filter(Boolean) : Object.keys(ARM_SPECS);
+// CODE REVIEW (codex P2, round 11): a --arms value containing only
+// separators/whitespace (e.g. "--arms ,") survived filtering as an empty
+// array, and the run then completed zero-group episodes and exited 0 with
+// no experiment data. Duplicate names also survived: two groups sharing one
+// groupId reset and then mutate the same on-disk sandbox, corrupting the
+// comparison. Require a nonempty set of unique arm names.
+if (!ARMS.length) {
+  process.stderr.write('FAIL-CLOSED: --arms resolved to an empty set (only separators/whitespace given); a run needs at least one arm\n');
+  process.exit(2);
+}
+const seenArms = new Set();
 for (const a of ARMS) {
   if (!(a in ARM_SPECS)) {
     process.stderr.write(`FAIL-CLOSED: unknown arm "${a}". Known: ${Object.keys(ARM_SPECS).join(', ')}\n`);
     process.exit(2);
   }
+  if (seenArms.has(a)) {
+    process.stderr.write(`FAIL-CLOSED: --arms names "${a}" more than once; duplicate arms would reuse the same groupId and corrupt the comparison\n`);
+    process.exit(2);
+  }
+  seenArms.add(a);
 }
 
 const RESOURCE_POOL = { food: 40, wood: 30, stone: 15 };
@@ -261,8 +312,8 @@ const RELAY_KINDS = ['food', 'wood'];
 const RELAY_PARAMS = {
   add: { gain: 0.5, cap: 2 },
   max: {
-    gain: parseFloat(argVal('--max-gain', '1.0')),
-    cap: parseFloat(argVal('--max-cap', '10')) // 10 = untrained-network.js TRAIL_SENSE_CAP
+    gain: positiveFloatArg('--max-gain', '1.0'),
+    cap: positiveFloatArg('--max-cap', '10') // 10 = untrained-network.js TRAIL_SENSE_CAP
   }
 };
 const THROTTLE_DIVISOR = 4;

@@ -97,14 +97,29 @@ function positiveIntArg(flag, def) {
   return parseInt(raw, 10);
 }
 
+// CODE REVIEW (codex P2, round 11): --tick-interval-ms and --summary-every
+// still parsed unchecked raw strings ('nope' -> NaN silently disables
+// sleeping/periodic metrics; '1e3' truncates to 1, changing how many
+// episodes finish before the deadline) while the run still reported
+// success. Validate the raw CLI string the same way as the other numeric
+// options. Zero is legal for --tick-interval-ms (no sleep between ticks).
+function nonNegativeIntArg(flag, def) {
+  const raw = argVal(flag, def);
+  if (!/^(0|[1-9][0-9]*)$/.test(String(raw))) {
+    process.stderr.write(`FAIL-CLOSED: ${flag} must be a non-negative integer (no decimals, exponents, or other trailing characters), got '${raw}'\n`);
+    process.exit(2);
+  }
+  return parseInt(raw, 10);
+}
+
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
 const ROOT = path.resolve(argVal('--root', path.join(REPO_ROOT, '_dev', 'state', 'ant-sim-overnight')));
 const EPISODE_ROUNDS = positiveIntArg('--episode-rounds', '2000');
 const MAX_EPISODES = positiveIntArg('--max-episodes', '1000');
 const DEADLINE_ISO = argVal('--deadline-iso', null);
 const REPLICATES = positiveIntArg('--replicates', '5');
-const TICK_INTERVAL_MS = parseInt(argVal('--tick-interval-ms', '10'), 10);
-const SUMMARY_EVERY = parseInt(argVal('--summary-every', '200'), 10);
+const TICK_INTERVAL_MS = nonNegativeIntArg('--tick-interval-ms', '10');
+const SUMMARY_EVERY = positiveIntArg('--summary-every', '200');
 const KILL_SWITCH = path.resolve(argVal('--kill-switch', path.join(REPO_ROOT, '_dev', 'state', 'kill-switches', 'ant-sim-overnight.off')));
 
 // FLEET-WIDE HALT — one fixed path every sim driver honours, in addition to its

@@ -85,12 +85,22 @@ function currentBranch() {
 function resolveSessionId(override, verbose) {
   if (override) return override;
 
+  // TTL-liveness check on the _current-id sidecar (repair R2, 2026-08-18):
+  // mirror resolve-session-id.cjs, which only trusts a sidecar whose target is
+  // a live registry session. A stale sidecar (env-less harness, e.g. codewhale,
+  // leaves _current-id pointing at a previous session) must fall through to the
+  // branch-match rung below, where the heartbeat registered at session open
+  // (session-start-cross-session-consumer.cjs) wins. Without this check, dreams
+  // resolve to a dead sid and the tier0 surface stays silent.
   const currentIdPath = path.join(ACTIVE_SESSIONS_DIR, '_current-id');
   if (fs.existsSync(currentIdPath)) {
     const sid = fs.readFileSync(currentIdPath, 'utf8').trim();
-    if (sid) {
+    if (sid && isLiveRegistrySession(sid)) {
       if (verbose) process.stderr.write(`contextual-inject: resolved sid via _current-id: ${sid}\n`);
       return sid;
+    }
+    if (verbose && sid) {
+      process.stderr.write(`contextual-inject: _current-id ${sid} not TTL-live; falling through to branch match\n`);
     }
   }
 
@@ -109,6 +119,23 @@ function resolveSessionId(override, verbose) {
   }
   if (verbose && best) process.stderr.write(`contextual-inject: resolved sid via branch-match: ${best.sid}\n`);
   return best ? best.sid : null;
+}
+
+/**
+ * True when the session id names a TTL-live active-session registry entry
+ * (_dev/state/active-sessions/<sid>.json with a fresh last_heartbeat). Mirrors
+ * resolve-session-id.cjs's isRegistryLive(). Fail-closed: any read error means
+ * "not live", so a stale sidecar can never win over the branch-match rung.
+ */
+function isLiveRegistrySession(sessionId) {
+  if (!sessionId) return false;
+  try {
+    const registry = require(path.join(PROJECT_ROOT, 'tools/sessions/lib/active-session-registry.js'));
+    const active = registry.listActive({});
+    return active.some((s) => String(s.session_id) === String(sessionId));
+  } catch (_) {
+    return false;
+  }
 }
 
 function sha256(buf) {

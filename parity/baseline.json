@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "e8e34ba1c81ba976a08f55f9ea1a210aaa49efac105632b5b4bfcbecb111e349",
+    "expected_tree_sha256": "a65379c60e521c7878ea195711eea15a37e69278f0a8d2c91c2b014e0ff38827",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -5732,7 +5732,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "6118f3626a23243f6429c777b227024ddad04ef803baf0eec440792f5221f987",
+        "sha256": "b8cbae9e4a9c3d484341ad6708645d32a25a5a188459764021c967f5f3c8ef13",
         "mode": 420
       },
       {
@@ -12472,7 +12472,7 @@
       },
       {
         "path": "tools/ticktock/generation-manifest.cjs",
-        "sha256": "25393213f169f70124ada8d2d575ecbb28a9e3825042e1171c8d0cd86d8dff82",
+        "sha256": "0a5d382c4c2ec1c197a0d5e4f3f1ae1a6a2173bd60b8f6e274ac5c4bf0f3cc43",
         "mode": 420
       },
       {
@@ -12482,7 +12482,7 @@
       },
       {
         "path": "tools/ticktock/journal.cjs",
-        "sha256": "bb4987ce1f4835f6de07d090d83858248593e98a1b38999041a936b0b1bc2d71",
+        "sha256": "0f1e98966521ae9ebf1423943e20149ee4491eef7217c71a66f34f5caaaaa17f",
         "mode": 420
       },
       {
@@ -12512,7 +12512,7 @@
       },
       {
         "path": "tools/ticktock/run-benchmark.js",
-        "sha256": "98c528e2f2a6cdaeed67fd341b1f6fa45e362a47f770a618c0f809e35dae2e77",
+        "sha256": "1801bbd59b320a5ac2ecff25a1ee9073d92a5dc2a4b54c698bd6d5310b2e45d9",
         "mode": 420
       },
       {
@@ -12527,7 +12527,7 @@
       },
       {
         "path": "tools/ticktock/test-ceilings.cjs",
-        "sha256": "287251bf46d931e16e3ad7d54f00bafadd4d84eacd6ed192e6aeb496b9705fc6",
+        "sha256": "6f17835e0a8a1d0f3a5ccd5f1fd7209b14cffd6f1318d08a2eef122bc2253c6e",
         "mode": 420
       },
       {
@@ -12547,7 +12547,7 @@
       },
       {
         "path": "tools/ticktock/test-generation-manifest.cjs",
-        "sha256": "010016d03c08c002576512a6c437c08f2bccc2a92feaa1d54c0834ab8127a04e",
+        "sha256": "c012fcb7938fe5d2474e0e37a3f623bcb5faf5a54b195343301dc3e2c06ed7cc",
         "mode": 420
       },
       {
@@ -12572,7 +12572,7 @@
       },
       {
         "path": "tools/ticktock/test-rebaseline-frequency.cjs",
-        "sha256": "8cef7964a70980660f2f16d0431fdf31404d6c5e642c2f9418619aed7a9bc276",
+        "sha256": "bfdaabd079bb3a5b94758f3065fdd0c12e3ee0d0a4ee7a160d0c27cd75cc64cf",
         "mode": 420
       },
       {
@@ -13734,9 +13734,9 @@
     "package_script_count": 205,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "6118f3626a23243f6429c777b227024ddad04ef803baf0eec440792f5221f987",
-    "graph_nodes": 3780,
-    "graph_edges": 2809
+    "graph_sha256": "b8cbae9e4a9c3d484341ad6708645d32a25a5a188459764021c967f5f3c8ef13",
+    "graph_nodes": 3814,
+    "graph_edges": 2816
   },
   "runtime_exclusions": [
     ".git/**",

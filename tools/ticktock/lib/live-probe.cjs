@@ -141,10 +141,17 @@ function checkWiring(repoRoot, readSettings) {
  * follows for scopeCovers()) and skip invalid stamps before checking coverage.
  * nowMs is accepted (defaulting to Date.now()) so tests can exercise expiry
  * deterministically instead of depending on wall-clock timing.
+ *
+ * stampsDirAbs (optional) overrides the stamps directory read here -- a
+ * test-only injection point, like nowMs: the stamp sidecars live in
+ * untracked _dev/state, so a fixture that needs "at least one valid stamp
+ * on disk" cannot depend on the real directory's contents and must supply
+ * its own scratch directory instead. Every real caller omits it and gets
+ * the real directory.
  */
-function verifyStampScopes(repoRoot, gateModule, nowMs) {
+function verifyStampScopes(repoRoot, gateModule, nowMs, stampsDirAbs) {
   const now = typeof nowMs === 'number' ? nowMs : Date.now();
-  const dir = path.resolve(repoRoot, STAMPS_DIR_REL);
+  const dir = stampsDirAbs ? path.resolve(stampsDirAbs) : path.resolve(repoRoot, STAMPS_DIR_REL);
   let names;
   try {
     names = fs.readdirSync(dir).filter((n) => n.endsWith('.json'));
@@ -223,7 +230,7 @@ function verifyStampScopes(repoRoot, gateModule, nowMs) {
 }
 
 /** Leg 2: require() the live gate module and evaluate() the canary in-process. */
-function directModuleProbe(repoRoot, requireGateModule, nowMs) {
+function directModuleProbe(repoRoot, requireGateModule, nowMs, stampsDirAbs) {
   let gateModule;
   try {
     gateModule = (requireGateModule || ((r) => defaultRequireGateModule(r)))(repoRoot);
@@ -233,7 +240,7 @@ function directModuleProbe(repoRoot, requireGateModule, nowMs) {
   if (!gateModule || typeof gateModule.evaluate !== 'function') {
     return { ok: false, reason_code: 'GATE-MODULE-MALFORMED', detail: 'evaluate() is not exported by the required module', scope_covered: null };
   }
-  const scopeEvidence = verifyStampScopes(repoRoot, gateModule, nowMs);
+  const scopeEvidence = verifyStampScopes(repoRoot, gateModule, nowMs, stampsDirAbs);
   if (!scopeEvidence.ok) {
     // scope_covered is knowable specifically for CANARY-COVERED-BY-STAMP
     // (the primary path's own scope-verification leg reached a definite
@@ -349,8 +356,8 @@ function independentProbe(repoRoot, nowMs, beforeFingerprint, primaryScopeCovere
  * parallel with -- not gated behind -- legs 2/3's own short-circuit chain,
  * per the plan's redesigned wiring (guard-spec.md, "Wiring (revised)").
  * opts.readSettings/requireGateModule/spawnDispatcher/requireIndependentVerifier
- * are test-only injection points; each defaults to the real dependency when
- * omitted.
+ * (and opts.stampsDir, threaded to verifyStampScopes) are test-only injection
+ * points; each defaults to the real dependency when omitted.
  */
 function runLiveProbe(repoRoot, opts) {
   const o = opts || {};
@@ -368,7 +375,7 @@ function runLiveProbe(repoRoot, opts) {
     }
   }
 
-  const direct = wiring.ok ? directModuleProbe(repoRoot, o.requireGateModule, nowMs) : null;
+  const direct = wiring.ok ? directModuleProbe(repoRoot, o.requireGateModule, nowMs, o.stampsDir) : null;
   const independent = wiring.ok
     ? independentProbe(repoRoot, nowMs, beforeFingerprint, direct ? direct.scope_covered : null, o)
     : null;

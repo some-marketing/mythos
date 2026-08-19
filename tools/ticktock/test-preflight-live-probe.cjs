@@ -156,9 +156,18 @@ check('malformed stamp sidecar (non-array scope) -> REFUSE naming STAMP-SCOPE-UN
 });
 
 check('divergent: scope-verification stub reporting canary-covered -> REFUSE naming CANARY-COVERED-BY-STAMP, spawn short-circuited (independent leg stubbed to AGREE, isolating this fixture to the direct-module leg alone -- plan pretooluse-live-second-verifier)', () => {
-  const result = pf.evaluatePretooluseLive(INVOCATION, {
+  // The stubbed scopeCovers() is only consulted once verifyStampScopes() has
+  // at least one valid stamp sidecar to check it against, and the real stamps
+  // directory is untracked _dev/state whose contents vary by checkout -- so
+  // this fixture supplies its own scratch stamp via opts.stampsDir instead of
+  // depending on whatever stamps this machine happens to hold.
+  const result = withScratchStampsDir({
+    'covering.json': { stamp_id: 'test-covering-stamp', voided: false, scope: ['stub:mutate'] }
+  }, (scratchRoot) => pf.evaluatePretooluseLive(INVOCATION, {
+    stampsDir: path.join(scratchRoot, '_dev', 'state', 'remote-mutation-stamps'),
     requireGateModule: () => ({
       classifyCommand: () => ({ mutating: [{ key: 'stub:mutate', raw: 'stub' }] }),
+      stampInvalidReason: () => null, // the scratch stamp is valid -- coverage must be checked
       scopeCovers: () => true, // simulates a stamp that (wrongly) covers the canary
       evaluate: () => ({ status: 2, reason: 'no-covering-stamp' })
     }),
@@ -169,7 +178,7 @@ check('divergent: scope-verification stub reporting canary-covered -> REFUSE nam
     requireIndependentVerifier: () => ({
       verifyStampIndependently: () => ({ ok: true, reason_code: 'CONSISTENT', detail: 'stubbed agreement', independent_covered: true, primary_covered: true, checked: [] })
     })
-  });
+  }));
   assert(result.verdict === pf.REFUSE, 'expected REFUSE when scope verification finds a covering stamp');
   assert(result.reason_code === 'CANARY-COVERED-BY-STAMP', `unexpected reason_code: ${result.reason_code}`);
   assert(result.halt_text.includes('COVERING STAMP:'), 'halt_text must identify the covering stamp');

@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "a65379c60e521c7878ea195711eea15a37e69278f0a8d2c91c2b014e0ff38827",
+    "expected_tree_sha256": "09a52b5a2b8041e22d0c4ebf984e977bc2aa363d7466363ae07a1d6c41e80609",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -5732,7 +5732,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "b8cbae9e4a9c3d484341ad6708645d32a25a5a188459764021c967f5f3c8ef13",
+        "sha256": "7152b811d0c48d58851340c81b14817105bc435f28b8610fff350d69fefe0f4e",
         "mode": 420
       },
       {
@@ -6212,7 +6212,7 @@
       },
       {
         "path": "tools/ant-hive-world/run-live.js",
-        "sha256": "1eabe9b85f1ada493f4034fb71ad17ae688fbed3c21665d161ff9360a4da9aec",
+        "sha256": "5576659e41ac13574ef35e6a3e2c058cd011a5b752031636a5ae2ef6eb0ff445",
         "mode": 420
       },
       {
@@ -6222,12 +6222,12 @@
       },
       {
         "path": "tools/ant-hive-world/train-tick.js",
-        "sha256": "332e9898ef10dca8d726e53fac31f4abdd63e7cd99db13671cf13c0ca2cd61af",
+        "sha256": "0e8dc54c382966957e0e9fa10d9c4014e40e3dae2a918e7e90c4b1fa2966d057",
         "mode": 420
       },
       {
         "path": "tools/ant-hive-world/untrained-network.js",
-        "sha256": "bc9692acf7ff4e3c8c61738af983887629d5bd841553f2672db625f0adb237ce",
+        "sha256": "aac69406a94a2d376c834203c8593346278333719ca27bfd4c805ed5796a3872",
         "mode": 420
       },
       {
@@ -12487,7 +12487,7 @@
       },
       {
         "path": "tools/ticktock/lib/live-probe.cjs",
-        "sha256": "48c889159452f7dd2ad97f2a9c2784a66f6ae8c3a8ddcd9428f78d0de4fb8e55",
+        "sha256": "8b7ea04b0d3003cdbfba50b409778ff6c9ac2bb42c71bea5afc239a2339c9308",
         "mode": 420
       },
       {
@@ -12537,7 +12537,7 @@
       },
       {
         "path": "tools/ticktock/test-drift-notice.cjs",
-        "sha256": "7584b7996a89ddf171526a03b4cb0c4ae4f33ab81ef364d5fe8d0d173404c28e",
+        "sha256": "f0e16af4b336dc7abbc919b514fc18e7ff3df61e3ed748bdbb7a61c2e170a8de",
         "mode": 420
       },
       {
@@ -12562,7 +12562,7 @@
       },
       {
         "path": "tools/ticktock/test-preflight-live-probe.cjs",
-        "sha256": "11eade4e19779df9e5509d973406f44935a351a3655b1105074aa6615c668709",
+        "sha256": "786338b65300d5b89e3d72387be017111bd21f25aa8ed03e62ae643d30ca2b68",
         "mode": 420
       },
       {
@@ -13734,7 +13734,7 @@
     "package_script_count": 205,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "b8cbae9e4a9c3d484341ad6708645d32a25a5a188459764021c967f5f3c8ef13",
+    "graph_sha256": "7152b811d0c48d58851340c81b14817105bc435f28b8610fff350d69fefe0f4e",
     "graph_nodes": 3814,
     "graph_edges": 2816
   },

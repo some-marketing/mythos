@@ -166,6 +166,54 @@ function main() {
       if (mutationGate.message) process.stderr.write(mutationGate.message + '\n');
       finish(2);
     }
+
+    // G-REMOTE-MUTATION gate (existential-safety family; Codex TT-R3-001).
+    // A mutating operation against the orwell Hyper-V host requires a stamp
+    // sidecar under _dev/state/remote-mutation-stamps/. FAIL-CLOSED by design.
+    // There is no agent-settable bypass.
+    //
+    // B3 (Codex, convene 20260805T130427Z): the load-failure branch does NOT
+    // carry its own remote-surface regex. The module's touchesRemoteSurface()
+    // is the single authoritative surface predicate, and a module that failed
+    // to load cannot supply it. A second copy here is exactly the drift Codex
+    // found — the old fallback regex matched only
+    // /orwell|psrun|psrunfile|inbound-push|build-export|pull-results/i and so
+    // would have PASSED `scp artifact D:\HyperV\...`. So: if the gate cannot
+    // load, deny every Bash call. Repair the module with Edit/Write — those
+    // lanes are ALSO gated by the convene perimeter and require a live
+    // ConveneReceipt/1.0 to touch this file, same as this Bash lane — then
+    // Bash returns. (Plan-review correction, gemini 20260805T142440Z: the
+    // original wording claimed Edit/Write "still work" unconditionally, which
+    // is false once the receipt has expired — do not repeat that trap.)
+    {
+      let rmGate = null;
+      let rmLoadError = null;
+      try {
+        rmGate = require('./pretool-remote-mutation-gate.cjs');
+      } catch (e) {
+        rmLoadError = e;
+      }
+      if (!rmGate || typeof rmGate.touchesRemoteSurface !== 'function' || typeof rmGate.main !== 'function') {
+        process.stderr.write(
+          'BLOCKED: the G-REMOTE-MUTATION gate could not be loaded (' +
+          ((rmLoadError && rmLoadError.message) || 'module did not export its surface predicate') + '). ' +
+          'ALL Bash calls are denied while it cannot load: without the module there is no ' +
+          'authoritative remote-surface predicate, and a second copy of one here would drift ' +
+          'from the module (Codex B3). Repair tools/kernel/hooks/pretool-remote-mutation-gate.cjs ' +
+          'with Edit/Write — those lanes require a live ConveneReceipt/1.0 covering this path, ' +
+          'same as this Bash lane; without one, Edit/Write are equally denied — then re-run.\n'
+        );
+        appendHookEvent({ matcher: 'Bash', event: 'remote-mutation-gate-unloadable', detail: { error: String(rmLoadError && rmLoadError.message) } });
+        finish(2);
+      }
+      const rmResult = rmGate.main({ tool: 'bash', payload });
+      if (rmResult && rmResult.status === 2) {
+        process.stderr.write((rmResult.message || 'BLOCKED by G-REMOTE-MUTATION') + '\n');
+        appendHookEvent({ matcher: 'Bash', event: 'remote-mutation-denied', detail: { keys: rmResult.keys || [] } });
+        finish(2);
+      }
+    }
+
     dangerousCommandNotice(payload);
     debriefReminder(payload);
 

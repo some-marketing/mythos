@@ -56,6 +56,17 @@ const WORLD_STATE_PATH = path.join(SANDBOX_ROOT, 'shared', 'world-state.json');
 const RUN_LOG_PATH = path.join(SANDBOX_ROOT, 'run-log.jsonl');
 const CONFIG_PATH = path.join(SANDBOX_ROOT, 'live-config.json');
 const ARM_ID = argVal('--arm', 'uninstructed');
+// --freeze-hive-learning (review finding F1): TRUE learning-off for the hive
+// networks -- trainStep() runs its forward pass but writes not one weight.
+// The /tt frozen benchmark (tools/ticktock/benchmark-colony-v1.json) passes
+// this flag; before it was honored here the driver silently accepted it and
+// trained anyway, which made the benchmark reproducible without being frozen.
+// --freeze-world-learning is accepted for the same contract; this engine's
+// world-mind (world-mind.js) holds its weights in process memory and has no
+// training path at all, so the property that flag demands -- no world-mind
+// weight ever written during the run -- already holds unconditionally.
+const FREEZE_HIVE_LEARNING = hasFlag('--freeze-hive-learning');
+const FREEZE_WORLD_LEARNING = hasFlag('--freeze-world-learning');
 const EVENT_CONTEXT = createEventContext({
   armId: ARM_ID,
   runId: processEventContext.run_id,
@@ -98,7 +109,15 @@ writeLiveConfig(CONFIG_PATH, { tick_interval_ms: TICK_INTERVAL_MS });
 // (e.g. debugging one specific run), never as the default.
 const seedAOverride = argVal('--seed-a', null);
 const seedBOverride = argVal('--seed-b', null);
-const baseSeed = Date.now();
+// --root-seed pins ALL derived streams to one value for reproducible runs --
+// the /tt frozen benchmark (tools/ticktock/benchmark-colony-v1.json) depends
+// on it: "the driver derives hive-a, hive-b and world stream seeds from this
+// one value by fixed prime offsets, so pinning it pins all three." Before it
+// was honored here the driver silently accepted the flag and drew Date.now()
+// seeds anyway, so no two benchmark runs were comparable. Absent, the
+// fresh-never-repeating default below is unchanged.
+const rootSeedArg = argVal('--root-seed', null);
+const baseSeed = rootSeedArg !== null ? (parseInt(rootSeedArg, 10) >>> 0) : Date.now();
 const seedA = seedAOverride !== null ? parseInt(seedAOverride, 10) : (baseSeed >>> 0);
 const seedB = seedBOverride !== null ? parseInt(seedBOverride, 10) : ((baseSeed + 104729) >>> 0); // + a prime offset, never identical to seedA
 
@@ -140,6 +159,8 @@ process.stdout.write(`ant-hive-world S3 first attended run starting.\n`);
 process.stdout.write(`Sandbox: ${SANDBOX_ROOT}\n`);
 process.stdout.write(`Shared resources at start: ${JSON.stringify(RESOURCE_POOL)}\n`);
 process.stdout.write(`Mind: untrained-network.js (from-scratch REINFORCE, no pretraining, no LLM).\n`);
+if (FREEZE_HIVE_LEARNING) process.stdout.write(`Hive learning: FROZEN (--freeze-hive-learning) -- trainStep() writes no weights this run.\n`);
+if (FREEZE_WORLD_LEARNING) process.stdout.write(`World learning: FROZEN (--freeze-world-learning) -- this engine's world-mind has no training path, so no world-mind weight is ever written regardless.\n`);
 process.stdout.write(FOREVER
   ? `Running until stopped (SIGINT/SIGTERM), ${TICK_INTERVAL_MS}ms between rounds. Run log: ${RUN_LOG_PATH}\n`
   : `Running ${TICKS} ticks per hive (alternating). Run log: ${RUN_LOG_PATH}\n`);
@@ -160,7 +181,7 @@ async function runTicks() {
     // dashboard's /config POST writes this same file.
     const liveConfig = readLiveConfig(CONFIG_PATH);
     for (const id of HIVE_IDS) {
-      const result = trainTick(hives[id], WORLD_STATE_PATH, networks[id], rngs[id], liveConfig, i, controllers[id]);
+      const result = trainTick(hives[id], WORLD_STATE_PATH, networks[id], rngs[id], liveConfig, i, controllers[id], { freeze: FREEZE_HIVE_LEARNING });
       process.stdout.write(`[tick ${i + 1}] ${id} -> ${result.action} applied=${result.applied} starved=${result.starved} reward=${result.reward} entropy=${result.policy_entropy?.toFixed(3)}${result.forced_exploration ? ' [forced]' : ''}${result.entropy_controller_active ? ' [ctl]' : ''}\n`);
       appendRunLog({
         tick: i + 1,

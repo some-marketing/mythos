@@ -1,0 +1,31 @@
+{
+  "schema": "TickTockCharterTemplate/1.0",
+  "template_id": "run-charter-template-v1",
+  "description": "T1 (tt-charter-template-and-spend-ledger): the checked-in template a run charter is MECHANICALLY BOUND to, not merely copied from. charter.cjs's createCharter() loads this file, stamps template_id and template_sha256 into the charter it emits, and REFUSES any spec whose allowed_write_surfaces drops a mandated_write_surfaces entry (TEMPLATE-SURFACE-DROPPED) or whose ceilings fall below the recorded floors (TEMPLATE-CEILING-UNDERSIZED). This closes the exact way gen-1's write-surface omission (missing tools/ant-hive-world/unreal-export/**, the projection payload + deploy-ledger surface every cycle writes) silently propagated into gen-2's charter: charters had been copied run-to-run with no mechanism checking the copy against a canonical source.",
+  "mandated_write_surfaces": [
+    "_dev/state/ticktock/**",
+    "_dev/reports/analysis/**",
+    "_dev/sim-runs/**",
+    "_dev/state/tt-projection-inbox/**",
+    "_dev/state/ant-hive-world-run/**",
+    "tools/ant-hive-world/unreal-export/**",
+    "_dev/state/ticktock/spend-ledgers/**"
+  ],
+  "min_max_cumulative_diff": {
+    "lines_changed": 36440,
+    "files_changed": 77
+  },
+  "min_max_external_actions": 9,
+  "derivation": {
+    "note": "Documentation, not enforcement: createCharter() strips this field before computing template_sha256, so an edit to this prose never changes the template's binding identity -- only mandated_write_surfaces, min_max_cumulative_diff, and min_max_external_actions are load-bearing.",
+    "measured_interval": "d1fef6d3f..19e43b2d6",
+    "counting_rule": "git diff --stat over the measured interval for distinct files touched and total changed lines, plus the journalled external-actions ledger value for the same interval.",
+    "exact_gen2_tuple": {
+      "lines_changed": 24293,
+      "files_changed": 51,
+      "external_actions": 6
+    },
+    "floor_formula": "ceil(1.5 * exact_gen2_tuple), per field",
+    "source": "codex-cli-run__20260814T0348Z__tt-charter-template-v5-final.md and the plan's amended_v5 changelog; reviewer-computed values adopted verbatim."
+  }
+}

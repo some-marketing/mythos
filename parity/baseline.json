@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "ae428f7efe6c8abf659b4b79b50c7514f413117700da49a0d9a1d716dcd2dbc6",
+    "expected_tree_sha256": "09a52b5a2b8041e22d0c4ebf984e977bc2aa363d7466363ae07a1d6c41e80609",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -1021,6 +1021,11 @@
         "mode": 420
       },
       {
+        "path": ".claude/commands/ticktock.md",
+        "sha256": "90b6a4e5908b7234066d052dd65e2b952d0ee94882aefabb1ec761e43f6077ea",
+        "mode": 420
+      },
+      {
         "path": ".claude/commands/triage-client-board.md",
         "sha256": "f3ad9a9ae724f8144543601701b245dad0540afb78f5c86af7bc62b19b2c2f9e",
         "mode": 420
@@ -1446,6 +1451,11 @@
         "mode": 420
       },
       {
+        "path": ".claude/skills/ticktock/SKILL.md",
+        "sha256": "5cd28b19d19b8468677c0e83fe5493b68788c41138207afbfa7562ff22462d1a",
+        "mode": 420
+      },
+      {
         "path": ".cursor/rules/llmos.mdc",
         "sha256": "fe5ab3c7eaf14782da324060f8ad4874245c1cc03b2e8dcc734723925efae247",
         "mode": 420
@@ -1533,6 +1543,11 @@
       {
         "path": "_dev/reports/analysis/meditation__2026-08-18.md",
         "sha256": "5e7037bd656067eb9d2cbbf3e5670846d09942dc34636ce26e9d9c97dd6d5faa",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/task-plans/ticktock-skill__plan.json",
+        "sha256": "f84bcddce021801674042215a9a9c84fda276cb5b238a13b773c555a6cffd3d0",
         "mode": 420
       },
       {
@@ -5717,7 +5732,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "8056aa1a3e3178ca986408318d07f6900c30e786fe3b6acfa53cce68145574bd",
+        "sha256": "7152b811d0c48d58851340c81b14817105bc435f28b8610fff350d69fefe0f4e",
         "mode": 420
       },
       {
@@ -6197,7 +6212,7 @@
       },
       {
         "path": "tools/ant-hive-world/run-live.js",
-        "sha256": "1eabe9b85f1ada493f4034fb71ad17ae688fbed3c21665d161ff9360a4da9aec",
+        "sha256": "5576659e41ac13574ef35e6a3e2c058cd011a5b752031636a5ae2ef6eb0ff445",
         "mode": 420
       },
       {
@@ -6207,12 +6222,12 @@
       },
       {
         "path": "tools/ant-hive-world/train-tick.js",
-        "sha256": "332e9898ef10dca8d726e53fac31f4abdd63e7cd99db13671cf13c0ca2cd61af",
+        "sha256": "0e8dc54c382966957e0e9fa10d9c4014e40e3dae2a918e7e90c4b1fa2966d057",
         "mode": 420
       },
       {
         "path": "tools/ant-hive-world/untrained-network.js",
-        "sha256": "bc9692acf7ff4e3c8c61738af983887629d5bd841553f2672db625f0adb237ce",
+        "sha256": "aac69406a94a2d376c834203c8593346278333719ca27bfd4c805ed5796a3872",
         "mode": 420
       },
       {
@@ -8716,6 +8731,11 @@
         "mode": 420
       },
       {
+        "path": "tools/kernel/hooks/__tests__/pretool-remote-mutation-gate.test.cjs",
+        "sha256": "b3b0e11187a24822dcc7830be532009e2b3ed320766d86f9fbfb91bd936ba939",
+        "mode": 420
+      },
+      {
         "path": "tools/kernel/hooks/__tests__/pretool-secret-access-gate.test.cjs",
         "sha256": "392fa5d05f950c3ffb42fda990c918fa6c2996f7d33017d857a4e55bffb755ab",
         "mode": 420
@@ -8731,8 +8751,23 @@
         "mode": 420
       },
       {
+        "path": "tools/kernel/hooks/__tests__/s0-inertness.test.cjs",
+        "sha256": "f1e9a6d044d9297a1304d9bc521c53c0787825d221b5f9acc362bd78ef21d2c7",
+        "mode": 420
+      },
+      {
+        "path": "tools/kernel/hooks/__tests__/s0-predicate.test.cjs",
+        "sha256": "b1e710ea8755d8cf5836499b748180628d759de899f2bc22c9ca5fa2c0e2e22c",
+        "mode": 420
+      },
+      {
         "path": "tools/kernel/hooks/__tests__/session-start-contract-emitter.test.cjs",
         "sha256": "9cfad0534555831cbde419617e108fb5efc8468339aae1941887ff0893159f52",
+        "mode": 420
+      },
+      {
+        "path": "tools/kernel/hooks/__tests__/stamp-mac.test.cjs",
+        "sha256": "87cff8767a10d6286ff48bb62fbdd50855fe90e9897e88f14c26b7527b42e3da",
         "mode": 420
       },
       {
@@ -8766,13 +8801,23 @@
         "mode": 420
       },
       {
+        "path": "tools/kernel/hooks/__tests__/validate-stamp-scope.test.cjs",
+        "sha256": "23831f488984d8a3cd686a006a826850e98bce2f45413d7b96e99e3b17a0f77d",
+        "mode": 420
+      },
+      {
+        "path": "tools/kernel/hooks/__tests__/verify-stamp-independently.test.cjs",
+        "sha256": "0025f4d2c20035e80a5e13ec6dd983a52362cebe3939eb6720d3771daf4e7261",
+        "mode": 420
+      },
+      {
         "path": "tools/kernel/hooks/dispatch-posttool.cjs",
         "sha256": "4427dbcb7e630ab0e3ebce6c68c2c6c4244c68dd064254c471fe24fcd9664e37",
         "mode": 420
       },
       {
         "path": "tools/kernel/hooks/dispatch-pretool.cjs",
-        "sha256": "8cb52f8609627abbeaab78281c94242fc91eb863f1a1b519dc61f986f5fb3018",
+        "sha256": "8c1f521643cc12a74dbb8c73be08f5101872159c4fda5de4bff17cf654521dc4",
         "mode": 420
       },
       {
@@ -8808,6 +8853,16 @@
       {
         "path": "tools/kernel/hooks/lib/process-tier.cjs",
         "sha256": "ba6d26a759b877d0574fcb8849c02ebc9efd81c76797b6e70cffd17c3e04f38e",
+        "mode": 420
+      },
+      {
+        "path": "tools/kernel/hooks/lib/stamp-mac.cjs",
+        "sha256": "059540c89c07bceba699da38c2400d521766e6fc933198acf595320b349d0104",
+        "mode": 420
+      },
+      {
+        "path": "tools/kernel/hooks/mint-remote-mutation-stamp.cjs",
+        "sha256": "d234ad452ed237c01929d401b4d57450114b560a473c131b9f03cb6f9410772a",
         "mode": 420
       },
       {
@@ -8856,6 +8911,11 @@
         "mode": 420
       },
       {
+        "path": "tools/kernel/hooks/pretool-remote-mutation-gate.cjs",
+        "sha256": "5df0dfe31c0f93d48be5bb0fa1a93905ffd6ee57cf63faf4a0862111b6ff3bf5",
+        "mode": 420
+      },
+      {
         "path": "tools/kernel/hooks/pretool-secret-access-gate.cjs",
         "sha256": "c7d1375ef0174c35fc256d46773b383d66c2aa743903c0c61c49f922dee05955",
         "mode": 420
@@ -8893,6 +8953,16 @@
       {
         "path": "tools/kernel/hooks/userpromptsubmit-ambient-router.cjs",
         "sha256": "9049c92f41ebc509a2bcc1567c1ac66c4338bd3327bb2d80f8f30d2f553b900d",
+        "mode": 420
+      },
+      {
+        "path": "tools/kernel/hooks/validate-stamp-scope.cjs",
+        "sha256": "88625c2dcc621df4f0d70bceb92f136ee0a6c59f0006fd648f401fd466605ad9",
+        "mode": 420
+      },
+      {
+        "path": "tools/kernel/hooks/verify-stamp-independently.cjs",
+        "sha256": "2a39d3a502d72586f7d2b1e6e503ecf851c5d2cc7872142cabee5feb2acf9784",
         "mode": 420
       },
       {
@@ -12331,6 +12401,201 @@
         "mode": 420
       },
       {
+        "path": "tools/ticktock/__fixtures__/charter-template-test-minimal.json",
+        "sha256": "4bfd0a53586c553b57d2fe93d692f2670689f3e2ab341fc8423accbec1236e78",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/__fixtures__/run-002r2-merge-not-clean.jsonl",
+        "sha256": "f0181452226e98b5463dccee60307b79d88349192573f608bc0ccbddf1147d00",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/__fixtures__/run-002r2-merge-not-clean.jsonl.anchor.json",
+        "sha256": "206b4f97fdf049be8dcfcc492381f7608e1ebe75ff201784b83c9621d3541faa",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/__fixtures__/stale-s4c-review-decision.20260812T040400Z.json",
+        "sha256": "6db99cf580eda1ce844e56b0c5589d9fd6ad5cf2bcee91b0c7ac505fe00af616",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/benchmark-colony-v1.json",
+        "sha256": "2b18773a5fdfb4ed217c7391ae2fa60fe567ec05199eb5b32422d7bb0c471c94",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/canonical.cjs",
+        "sha256": "1bdc45d50778c89a62ae6af37bf352095105780836ef347ef1882d9defa89450",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/ceilings.cjs",
+        "sha256": "c65c42e673efee4af46e2d52ba1c879ad31bc75748eb86c11fcd1640c240539b",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/charter-schema.json",
+        "sha256": "6290d333507ffd777888cfb3e0006d6792de6f52da9c4a382623c7154f569366",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/charter-template-run.json",
+        "sha256": "43e78d0582c94000e55d89f5bf723c7629eaea0ccaf6ec956dc493f5073d592f",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/charter.cjs",
+        "sha256": "745f06900f75df6e9c224cf40f066f37b0b9ec716873ccb988cbc65401ff0f56",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/cycle-driver.cjs",
+        "sha256": "849aae45b6faf6e191e6fb8a295a88ec7c334927ec0cb8516b8b4089bc860569",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/dryrun-s3.cjs",
+        "sha256": "f9e4aad1bd5a32054cc0038aaba951f186d9a964d65bd03529d2fc47c19477c1",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/effectful-phase.cjs",
+        "sha256": "0cdd11e77eba2dab889f313a55edc867e14c61fd4840457b64a4e012360c8457",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/generation-manifest-schema.json",
+        "sha256": "b63ba5e01896cbecf573e5067ec432443fff31ac1e3186f72e5e45cff7410798",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/generation-manifest.cjs",
+        "sha256": "0a5d382c4c2ec1c197a0d5e4f3f1ae1a6a2173bd60b8f6e274ac5c4bf0f3cc43",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/journal-schema.json",
+        "sha256": "0c6c1143556cde73567b4ce931ad5db936f702501892ec54ae2a6755b9d0a5e3",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/journal.cjs",
+        "sha256": "0f1e98966521ae9ebf1423943e20149ee4491eef7217c71a66f34f5caaaaa17f",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/lib/live-probe.cjs",
+        "sha256": "8b7ea04b0d3003cdbfba50b409778ff6c9ac2bb42c71bea5afc239a2339c9308",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/preflight-and-journal.cjs",
+        "sha256": "4af28081e63825b2f1e6c610e0ff1fc7f8d59e0dbeafd7435e12f634f160bbfc",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/preflight-ticktock.cjs",
+        "sha256": "77daecdc6dd70cde4e7a1935a22656e884181c343dcad17f1483b5aa10b9ab09",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/ratification-proposal-schema.json",
+        "sha256": "87b0c79e6306a018105edb1bc48516cf6317e8fc33ee19fbce075813a57eaf04",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/ratification-proposal.cjs",
+        "sha256": "5f5dc306d473831ba822be540c6dcd3f8608ef787754bab27f30345e0d9b83d6",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/run-benchmark.js",
+        "sha256": "1801bbd59b320a5ac2ecff25a1ee9073d92a5dc2a4b54c698bd6d5310b2e45d9",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/test-append-after-truncation.cjs",
+        "sha256": "540599bcb0223ec3e13d2bb96a4f32d89ae177c4f764880f54dd8450fac8919f",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/test-benchmark-halt-enum.cjs",
+        "sha256": "2223348c1dd484b6f9ff5228c4891929371b1107994e3f440b42a03c774c3591",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/test-ceilings.cjs",
+        "sha256": "6f17835e0a8a1d0f3a5ccd5f1fd7209b14cffd6f1318d08a2eef122bc2253c6e",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/test-cycle-driver-halts.cjs",
+        "sha256": "c2c061c0f7e92e992b24409a6ef698485d40c2e6dc0ae88d2f4afea0fd392493",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/test-drift-notice.cjs",
+        "sha256": "f0e16af4b336dc7abbc919b514fc18e7ff3df61e3ed748bdbb7a61c2e170a8de",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/test-effectful-phase.cjs",
+        "sha256": "aad05bdb446073f1bb0f0fb40526d49dd9b7397f0ae72b03e57004ad14150eb9",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/test-generation-manifest.cjs",
+        "sha256": "c012fcb7938fe5d2474e0e37a3f623bcb5faf5a54b195343301dc3e2c06ed7cc",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/test-hive-freeze.cjs",
+        "sha256": "d339cac51ce38a201e08a3c3117b17d5499e4b8e4d8d13830a30b3734b32e9a3",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/test-journal-anchor.cjs",
+        "sha256": "fcd8090bea9ab30fa4e7310aeadb1d20ce4bcfe4120a1f307ba741490972ef50",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/test-preflight-live-probe.cjs",
+        "sha256": "786338b65300d5b89e3d72387be017111bd21f25aa8ed03e62ae643d30ca2b68",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/test-ratification-proposal.cjs",
+        "sha256": "86852a380cb11defdb638736dcb58fb0a2e724d44b4d0f3f759e671c72cf4338",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/test-rebaseline-frequency.cjs",
+        "sha256": "bfdaabd079bb3a5b94758f3065fdd0c12e3ee0d0a4ee7a160d0c27cd75cc64cf",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/test-resume-terminal-halts.cjs",
+        "sha256": "f78cfdfe20b4b9bc94614eaca0130c1be80521baa5d812faf8bf0f42b3c0fa6d",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/test-write-review-decision.cjs",
+        "sha256": "a92b40a0993ef70de617c139abebd01c2fda96577e35f11eb24d612da42204ed",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/ticktock-review-decision-schema.json",
+        "sha256": "60715533fa1f31c8c1124399065b5aea82b472b8f3b4034ad3f508db5af49ce2",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/write-review-decision.cjs",
+        "sha256": "9b1c80c3c75f05bd911356c7c4288162fa559d348001e3d25ab4851cab6dc166",
+        "mode": 420
+      },
+      {
         "path": "tools/trace/lib/trace-writer.js",
         "sha256": "ace302a82b7dd29d12d1107ad7c339353b8bc66e3ab7be43236e8a7a26361ba3",
         "mode": 420
@@ -13469,9 +13734,9 @@
     "package_script_count": 205,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "8056aa1a3e3178ca986408318d07f6900c30e786fe3b6acfa53cce68145574bd",
-    "graph_nodes": 3760,
-    "graph_edges": 2736
+    "graph_sha256": "7152b811d0c48d58851340c81b14817105bc435f28b8610fff350d69fefe0f4e",
+    "graph_nodes": 3814,
+    "graph_edges": 2816
   },
   "runtime_exclusions": [
     ".git/**",

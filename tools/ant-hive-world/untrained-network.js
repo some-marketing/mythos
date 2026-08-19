@@ -253,7 +253,18 @@ function decide(network, hiveState, worldState, rng, liveConfig = {}, tickIndex)
 // s4-combination-escalation gate for the full incident. undefined
 // (or any non-finite value) leaves dLogits completely untouched --
 // byte-identical to every pre-existing caller that does not opt in.
-function trainStep(network, hiveState, worldState, actionIndex, reward, entropyBonusWeight, updateClip) {
+//
+// `options.freeze === true` (review finding F1) is TRUE LEARNING-OFF: the
+// forward pass, entropy computation, and return value are unchanged, but
+// not one weight or bias is written. This is a real freeze rather than a
+// small learning rate -- benchmark-colony-v1.json declares "learning OFF",
+// and before this parameter existed trainStep() updated weights at the
+// hard-coded LEARNING_RATE with no way to disable it, so the benchmark was
+// reproducible without being frozen. Omitting options, passing {}, or
+// passing { freeze: false } are all byte-identical to the pre-existing
+// learning behavior.
+function trainStep(network, hiveState, worldState, actionIndex, reward, entropyBonusWeight, updateClip, options = {}) {
+  const freeze = options.freeze === true;
   const weight = entropyBonusWeight === undefined ? 0 : entropyBonusWeight;
   const input = encodeState(hiveState, worldState);
   const { hiddenPre, hidden, probs } = forward(network, input);
@@ -271,21 +282,23 @@ function trainStep(network, hiveState, worldState, actionIndex, reward, entropyB
     return Math.max(-clip, Math.min(clip, raw));
   });
 
-  // Backprop into W2/b2, then hidden, then W1/b1.
+  // Backprop into W2/b2, then hidden, then W1/b1. Under freeze the same
+  // passes run (so the return contract is identical) but every weight and
+  // bias write is skipped.
   const dHidden = new Array(HIDDEN_SIZE).fill(0);
   for (let i = 0; i < OUTPUT_SIZE; i++) {
     for (let j = 0; j < HIDDEN_SIZE; j++) {
       dHidden[j] += network.W2[i][j] * dLogits[i];
-      network.W2[i][j] += LEARNING_RATE * dLogits[i] * hidden[j];
+      if (!freeze) network.W2[i][j] += LEARNING_RATE * dLogits[i] * hidden[j];
     }
-    network.b2[i] += LEARNING_RATE * dLogits[i];
+    if (!freeze) network.b2[i] += LEARNING_RATE * dLogits[i];
   }
   for (let j = 0; j < HIDDEN_SIZE; j++) {
     const dPre = dHidden[j] * reluDeriv(hiddenPre[j]);
     for (let k = 0; k < INPUT_SIZE; k++) {
-      network.W1[j][k] += LEARNING_RATE * dPre * input[k];
+      if (!freeze) network.W1[j][k] += LEARNING_RATE * dPre * input[k];
     }
-    network.b1[j] += LEARNING_RATE * dPre;
+    if (!freeze) network.b1[j] += LEARNING_RATE * dPre;
   }
   return network;
 }

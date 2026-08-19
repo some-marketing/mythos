@@ -1067,6 +1067,11 @@
       "name": "telemetry-status"
     },
     {
+      "id": "command-definition:ticktock",
+      "type": "command-definition",
+      "name": "ticktock"
+    },
+    {
       "id": "command-definition:triage-client-board",
       "type": "command-definition",
       "name": "triage-client-board"
@@ -2974,6 +2979,13 @@
       "mode": 420
     },
     {
+      "id": "file:.claude/commands/ticktock.md",
+      "type": "file",
+      "path": ".claude/commands/ticktock.md",
+      "sha256": "90b6a4e5908b7234066d052dd65e2b952d0ee94882aefabb1ec761e43f6077ea",
+      "mode": 420
+    },
+    {
       "id": "file:.claude/commands/triage-client-board.md",
       "type": "file",
       "path": ".claude/commands/triage-client-board.md",
@@ -3566,6 +3578,13 @@
       "type": "file",
       "path": ".claude/skills/store-credential/SKILL.md",
       "sha256": "fa0bdb91f8804b755806b3e39b63b24392eb5822fe36d9f06742932a186b13cd",
+      "mode": 420
+    },
+    {
+      "id": "file:.claude/skills/ticktock/SKILL.md",
+      "type": "file",
+      "path": ".claude/skills/ticktock/SKILL.md",
+      "sha256": "5cd28b19d19b8468677c0e83fe5493b68788c41138207afbfa7562ff22462d1a",
       "mode": 420
     },
     {
@@ -9984,7 +10003,7 @@
       "id": "file:tools/ant-hive-world/run-live.js",
       "type": "file",
       "path": "tools/ant-hive-world/run-live.js",
-      "sha256": "1eabe9b85f1ada493f4034fb71ad17ae688fbed3c21665d161ff9360a4da9aec",
+      "sha256": "5576659e41ac13574ef35e6a3e2c058cd011a5b752031636a5ae2ef6eb0ff445",
       "mode": 420
     },
     {
@@ -9998,14 +10017,14 @@
       "id": "file:tools/ant-hive-world/train-tick.js",
       "type": "file",
       "path": "tools/ant-hive-world/train-tick.js",
-      "sha256": "332e9898ef10dca8d726e53fac31f4abdd63e7cd99db13671cf13c0ca2cd61af",
+      "sha256": "0e8dc54c382966957e0e9fa10d9c4014e40e3dae2a918e7e90c4b1fa2966d057",
       "mode": 420
     },
     {
       "id": "file:tools/ant-hive-world/untrained-network.js",
       "type": "file",
       "path": "tools/ant-hive-world/untrained-network.js",
-      "sha256": "bc9692acf7ff4e3c8c61738af983887629d5bd841553f2672db625f0adb237ce",
+      "sha256": "aac69406a94a2d376c834203c8593346278333719ca27bfd4c805ed5796a3872",
       "mode": 420
     },
     {
@@ -13509,6 +13528,13 @@
       "mode": 420
     },
     {
+      "id": "file:tools/kernel/hooks/__tests__/pretool-remote-mutation-gate.test.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/__tests__/pretool-remote-mutation-gate.test.cjs",
+      "sha256": "b3b0e11187a24822dcc7830be532009e2b3ed320766d86f9fbfb91bd936ba939",
+      "mode": 420
+    },
+    {
       "id": "file:tools/kernel/hooks/__tests__/pretool-secret-access-gate.test.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/__tests__/pretool-secret-access-gate.test.cjs",
@@ -13530,10 +13556,31 @@
       "mode": 420
     },
     {
+      "id": "file:tools/kernel/hooks/__tests__/s0-inertness.test.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/__tests__/s0-inertness.test.cjs",
+      "sha256": "f1e9a6d044d9297a1304d9bc521c53c0787825d221b5f9acc362bd78ef21d2c7",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/kernel/hooks/__tests__/s0-predicate.test.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/__tests__/s0-predicate.test.cjs",
+      "sha256": "b1e710ea8755d8cf5836499b748180628d759de899f2bc22c9ca5fa2c0e2e22c",
+      "mode": 420
+    },
+    {
       "id": "file:tools/kernel/hooks/__tests__/session-start-contract-emitter.test.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/__tests__/session-start-contract-emitter.test.cjs",
       "sha256": "9cfad0534555831cbde419617e108fb5efc8468339aae1941887ff0893159f52",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/kernel/hooks/__tests__/stamp-mac.test.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/__tests__/stamp-mac.test.cjs",
+      "sha256": "87cff8767a10d6286ff48bb62fbdd50855fe90e9897e88f14c26b7527b42e3da",
       "mode": 420
     },
     {
@@ -13579,6 +13626,20 @@
       "mode": 420
     },
     {
+      "id": "file:tools/kernel/hooks/__tests__/validate-stamp-scope.test.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/__tests__/validate-stamp-scope.test.cjs",
+      "sha256": "23831f488984d8a3cd686a006a826850e98bce2f45413d7b96e99e3b17a0f77d",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/kernel/hooks/__tests__/verify-stamp-independently.test.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/__tests__/verify-stamp-independently.test.cjs",
+      "sha256": "0025f4d2c20035e80a5e13ec6dd983a52362cebe3939eb6720d3771daf4e7261",
+      "mode": 420
+    },
+    {
       "id": "file:tools/kernel/hooks/dispatch-posttool.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/dispatch-posttool.cjs",
@@ -13589,7 +13650,7 @@
       "id": "file:tools/kernel/hooks/dispatch-pretool.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/dispatch-pretool.cjs",
-      "sha256": "8cb52f8609627abbeaab78281c94242fc91eb863f1a1b519dc61f986f5fb3018",
+      "sha256": "8c1f521643cc12a74dbb8c73be08f5101872159c4fda5de4bff17cf654521dc4",
       "mode": 420
     },
     {
@@ -13639,6 +13700,20 @@
       "type": "file",
       "path": "tools/kernel/hooks/lib/process-tier.cjs",
       "sha256": "ba6d26a759b877d0574fcb8849c02ebc9efd81c76797b6e70cffd17c3e04f38e",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/kernel/hooks/lib/stamp-mac.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/lib/stamp-mac.cjs",
+      "sha256": "059540c89c07bceba699da38c2400d521766e6fc933198acf595320b349d0104",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/kernel/hooks/mint-remote-mutation-stamp.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/mint-remote-mutation-stamp.cjs",
+      "sha256": "d234ad452ed237c01929d401b4d57450114b560a473c131b9f03cb6f9410772a",
       "mode": 420
     },
     {
@@ -13705,6 +13780,13 @@
       "mode": 420
     },
     {
+      "id": "file:tools/kernel/hooks/pretool-remote-mutation-gate.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/pretool-remote-mutation-gate.cjs",
+      "sha256": "5df0dfe31c0f93d48be5bb0fa1a93905ffd6ee57cf63faf4a0862111b6ff3bf5",
+      "mode": 420
+    },
+    {
       "id": "file:tools/kernel/hooks/pretool-secret-access-gate.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/pretool-secret-access-gate.cjs",
@@ -13758,6 +13840,20 @@
       "type": "file",
       "path": "tools/kernel/hooks/userpromptsubmit-ambient-router.cjs",
       "sha256": "9049c92f41ebc509a2bcc1567c1ac66c4338bd3327bb2d80f8f30d2f553b900d",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/kernel/hooks/validate-stamp-scope.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/validate-stamp-scope.cjs",
+      "sha256": "88625c2dcc621df4f0d70bceb92f136ee0a6c59f0006fd648f401fd466605ad9",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/kernel/hooks/verify-stamp-independently.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/verify-stamp-independently.cjs",
+      "sha256": "2a39d3a502d72586f7d2b1e6e503ecf851c5d2cc7872142cabee5feb2acf9784",
       "mode": 420
     },
     {
@@ -18570,6 +18666,279 @@
       "mode": 420
     },
     {
+      "id": "file:tools/ticktock/__fixtures__/charter-template-test-minimal.json",
+      "type": "file",
+      "path": "tools/ticktock/__fixtures__/charter-template-test-minimal.json",
+      "sha256": "4bfd0a53586c553b57d2fe93d692f2670689f3e2ab341fc8423accbec1236e78",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/__fixtures__/run-002r2-merge-not-clean.jsonl",
+      "type": "file",
+      "path": "tools/ticktock/__fixtures__/run-002r2-merge-not-clean.jsonl",
+      "sha256": "f0181452226e98b5463dccee60307b79d88349192573f608bc0ccbddf1147d00",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/__fixtures__/run-002r2-merge-not-clean.jsonl.anchor.json",
+      "type": "file",
+      "path": "tools/ticktock/__fixtures__/run-002r2-merge-not-clean.jsonl.anchor.json",
+      "sha256": "206b4f97fdf049be8dcfcc492381f7608e1ebe75ff201784b83c9621d3541faa",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/__fixtures__/stale-s4c-review-decision.20260812T040400Z.json",
+      "type": "file",
+      "path": "tools/ticktock/__fixtures__/stale-s4c-review-decision.20260812T040400Z.json",
+      "sha256": "6db99cf580eda1ce844e56b0c5589d9fd6ad5cf2bcee91b0c7ac505fe00af616",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/benchmark-colony-v1.json",
+      "type": "file",
+      "path": "tools/ticktock/benchmark-colony-v1.json",
+      "sha256": "2b18773a5fdfb4ed217c7391ae2fa60fe567ec05199eb5b32422d7bb0c471c94",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/canonical.cjs",
+      "type": "file",
+      "path": "tools/ticktock/canonical.cjs",
+      "sha256": "1bdc45d50778c89a62ae6af37bf352095105780836ef347ef1882d9defa89450",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/ceilings.cjs",
+      "type": "file",
+      "path": "tools/ticktock/ceilings.cjs",
+      "sha256": "c65c42e673efee4af46e2d52ba1c879ad31bc75748eb86c11fcd1640c240539b",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/charter-schema.json",
+      "type": "file",
+      "path": "tools/ticktock/charter-schema.json",
+      "sha256": "6290d333507ffd777888cfb3e0006d6792de6f52da9c4a382623c7154f569366",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/charter-template-run.json",
+      "type": "file",
+      "path": "tools/ticktock/charter-template-run.json",
+      "sha256": "43e78d0582c94000e55d89f5bf723c7629eaea0ccaf6ec956dc493f5073d592f",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/charter.cjs",
+      "type": "file",
+      "path": "tools/ticktock/charter.cjs",
+      "sha256": "745f06900f75df6e9c224cf40f066f37b0b9ec716873ccb988cbc65401ff0f56",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/cycle-driver.cjs",
+      "type": "file",
+      "path": "tools/ticktock/cycle-driver.cjs",
+      "sha256": "849aae45b6faf6e191e6fb8a295a88ec7c334927ec0cb8516b8b4089bc860569",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/dryrun-s3.cjs",
+      "type": "file",
+      "path": "tools/ticktock/dryrun-s3.cjs",
+      "sha256": "f9e4aad1bd5a32054cc0038aaba951f186d9a964d65bd03529d2fc47c19477c1",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/effectful-phase.cjs",
+      "type": "file",
+      "path": "tools/ticktock/effectful-phase.cjs",
+      "sha256": "0cdd11e77eba2dab889f313a55edc867e14c61fd4840457b64a4e012360c8457",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/generation-manifest-schema.json",
+      "type": "file",
+      "path": "tools/ticktock/generation-manifest-schema.json",
+      "sha256": "b63ba5e01896cbecf573e5067ec432443fff31ac1e3186f72e5e45cff7410798",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/generation-manifest.cjs",
+      "type": "file",
+      "path": "tools/ticktock/generation-manifest.cjs",
+      "sha256": "0a5d382c4c2ec1c197a0d5e4f3f1ae1a6a2173bd60b8f6e274ac5c4bf0f3cc43",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/journal-schema.json",
+      "type": "file",
+      "path": "tools/ticktock/journal-schema.json",
+      "sha256": "0c6c1143556cde73567b4ce931ad5db936f702501892ec54ae2a6755b9d0a5e3",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/journal.cjs",
+      "type": "file",
+      "path": "tools/ticktock/journal.cjs",
+      "sha256": "0f1e98966521ae9ebf1423943e20149ee4491eef7217c71a66f34f5caaaaa17f",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/lib/live-probe.cjs",
+      "type": "file",
+      "path": "tools/ticktock/lib/live-probe.cjs",
+      "sha256": "8b7ea04b0d3003cdbfba50b409778ff6c9ac2bb42c71bea5afc239a2339c9308",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/preflight-and-journal.cjs",
+      "type": "file",
+      "path": "tools/ticktock/preflight-and-journal.cjs",
+      "sha256": "4af28081e63825b2f1e6c610e0ff1fc7f8d59e0dbeafd7435e12f634f160bbfc",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/preflight-ticktock.cjs",
+      "type": "file",
+      "path": "tools/ticktock/preflight-ticktock.cjs",
+      "sha256": "77daecdc6dd70cde4e7a1935a22656e884181c343dcad17f1483b5aa10b9ab09",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/ratification-proposal-schema.json",
+      "type": "file",
+      "path": "tools/ticktock/ratification-proposal-schema.json",
+      "sha256": "87b0c79e6306a018105edb1bc48516cf6317e8fc33ee19fbce075813a57eaf04",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/ratification-proposal.cjs",
+      "type": "file",
+      "path": "tools/ticktock/ratification-proposal.cjs",
+      "sha256": "5f5dc306d473831ba822be540c6dcd3f8608ef787754bab27f30345e0d9b83d6",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/run-benchmark.js",
+      "type": "file",
+      "path": "tools/ticktock/run-benchmark.js",
+      "sha256": "1801bbd59b320a5ac2ecff25a1ee9073d92a5dc2a4b54c698bd6d5310b2e45d9",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-append-after-truncation.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-append-after-truncation.cjs",
+      "sha256": "540599bcb0223ec3e13d2bb96a4f32d89ae177c4f764880f54dd8450fac8919f",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-benchmark-halt-enum.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-benchmark-halt-enum.cjs",
+      "sha256": "2223348c1dd484b6f9ff5228c4891929371b1107994e3f440b42a03c774c3591",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-ceilings.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-ceilings.cjs",
+      "sha256": "6f17835e0a8a1d0f3a5ccd5f1fd7209b14cffd6f1318d08a2eef122bc2253c6e",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-cycle-driver-halts.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-cycle-driver-halts.cjs",
+      "sha256": "c2c061c0f7e92e992b24409a6ef698485d40c2e6dc0ae88d2f4afea0fd392493",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-drift-notice.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-drift-notice.cjs",
+      "sha256": "f0e16af4b336dc7abbc919b514fc18e7ff3df61e3ed748bdbb7a61c2e170a8de",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-effectful-phase.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-effectful-phase.cjs",
+      "sha256": "aad05bdb446073f1bb0f0fb40526d49dd9b7397f0ae72b03e57004ad14150eb9",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-generation-manifest.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-generation-manifest.cjs",
+      "sha256": "c012fcb7938fe5d2474e0e37a3f623bcb5faf5a54b195343301dc3e2c06ed7cc",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-hive-freeze.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-hive-freeze.cjs",
+      "sha256": "d339cac51ce38a201e08a3c3117b17d5499e4b8e4d8d13830a30b3734b32e9a3",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-journal-anchor.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-journal-anchor.cjs",
+      "sha256": "fcd8090bea9ab30fa4e7310aeadb1d20ce4bcfe4120a1f307ba741490972ef50",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-preflight-live-probe.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-preflight-live-probe.cjs",
+      "sha256": "786338b65300d5b89e3d72387be017111bd21f25aa8ed03e62ae643d30ca2b68",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-ratification-proposal.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-ratification-proposal.cjs",
+      "sha256": "86852a380cb11defdb638736dcb58fb0a2e724d44b4d0f3f759e671c72cf4338",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-rebaseline-frequency.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-rebaseline-frequency.cjs",
+      "sha256": "bfdaabd079bb3a5b94758f3065fdd0c12e3ee0d0a4ee7a160d0c27cd75cc64cf",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-resume-terminal-halts.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-resume-terminal-halts.cjs",
+      "sha256": "f78cfdfe20b4b9bc94614eaca0130c1be80521baa5d812faf8bf0f42b3c0fa6d",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/test-write-review-decision.cjs",
+      "type": "file",
+      "path": "tools/ticktock/test-write-review-decision.cjs",
+      "sha256": "a92b40a0993ef70de617c139abebd01c2fda96577e35f11eb24d612da42204ed",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/ticktock-review-decision-schema.json",
+      "type": "file",
+      "path": "tools/ticktock/ticktock-review-decision-schema.json",
+      "sha256": "60715533fa1f31c8c1124399065b5aea82b472b8f3b4034ad3f508db5af49ce2",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ticktock/write-review-decision.cjs",
+      "type": "file",
+      "path": "tools/ticktock/write-review-decision.cjs",
+      "sha256": "9b1c80c3c75f05bd911356c7c4288162fa559d348001e3d25ab4851cab6dc166",
+      "mode": 420
+    },
+    {
       "id": "file:tools/trace/lib/trace-writer.js",
       "type": "file",
       "path": "tools/trace/lib/trace-writer.js",
@@ -20227,67 +20596,67 @@
       "name": "wordpress/seo-validation"
     },
     {
-      "id": "hook:PostToolUse:620",
+      "id": "hook:PostToolUse:622",
       "type": "hook",
       "event": "PostToolUse",
       "command_sha256": "e395bd31a35362065002007d044e98d86e484bf829d16ebe2027da8a928db52c"
     },
     {
-      "id": "hook:PreToolUse:617",
+      "id": "hook:PreToolUse:619",
       "type": "hook",
       "event": "PreToolUse",
       "command_sha256": "ce97f4fd7eb07f52a0e9c6352fab2ce0e803f0920ef184d8f42261a46580103b"
     },
     {
-      "id": "hook:SessionEnd:624",
+      "id": "hook:SessionEnd:626",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "35974852e367c31bae49591ac0aa4afd518ec624f233743462e37c4c3863b1ed"
     },
     {
-      "id": "hook:SessionEnd:625",
+      "id": "hook:SessionEnd:627",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "519f522b04afb8471aa7e7ca117deb8af91976de62b5c1f5f4f6f9f60c8c217f"
     },
     {
-      "id": "hook:SessionEnd:626",
+      "id": "hook:SessionEnd:628",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "4ee05b68abff34325a3950761939e20cf2391c7b29d640b29b95233d29943fd4"
     },
     {
-      "id": "hook:SessionStart:621",
+      "id": "hook:SessionStart:623",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "26962e5976f5c689361f18050bb4e718d507df72590fbbc620e356cde47cf86b"
     },
     {
-      "id": "hook:SessionStart:622",
+      "id": "hook:SessionStart:624",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "00253242784e7853b94e1125e7c69f31085961b2dd7b3d1fcb6b4c79d94e9baf"
     },
     {
-      "id": "hook:SessionStart:623",
+      "id": "hook:SessionStart:625",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "c738ce0e54e375f17b97f1186b95e5fd1125c0675d2f3e9238e872062f5b7076"
     },
     {
-      "id": "hook:Stop:618",
+      "id": "hook:Stop:620",
       "type": "hook",
       "event": "Stop",
       "command_sha256": "c0c0282a10c1ff35c525d7786ceb380c853b678494f400dbf1fc178cdddcbb19"
     },
     {
-      "id": "hook:SubagentStop:627",
+      "id": "hook:SubagentStop:629",
       "type": "hook",
       "event": "SubagentStop",
       "command_sha256": "4ca0f2529c8dd4023ade83508a1e40a1728dbdcfa35aadf9ea953cf8ac9a587d"
     },
     {
-      "id": "hook:UserPromptSubmit:619",
+      "id": "hook:UserPromptSubmit:621",
       "type": "hook",
       "event": "UserPromptSubmit",
       "command_sha256": "d647b60c73e5962cae00cf1cf2bd11d28472fdb8c47074a2e62cabf0e7e89545"
@@ -24467,6 +24836,11 @@
       "id": "skill-definition:store-credential",
       "type": "skill-definition",
       "name": "store-credential"
+    },
+    {
+      "id": "skill-definition:ticktock",
+      "type": "skill-definition",
+      "name": "ticktock"
     }
   ],
   "edges": [
@@ -24768,6 +25142,15 @@
       "target": "tools/telemetry/dispatches/lib/append-lock.cjs",
       "required": true,
       "specifier": "./append-lock.cjs"
+    },
+    {
+      "id": "0229ed42f0d397222601b584475f1751bb1405979646fdc5f226b105057f94d5",
+      "type": "static-import",
+      "from": "file:tools/ticktock/preflight-and-journal.cjs",
+      "to": "file:tools/ticktock/journal.cjs",
+      "target": "tools/ticktock/journal.cjs",
+      "required": true,
+      "specifier": "./journal.cjs"
     },
     {
       "id": "02458c7998df47bfda40658d77c178c673a2136a33595a374e8141e3194cdb9d",
@@ -25115,6 +25498,15 @@
       "declared_target": ".claude/commands/audit-framework.md"
     },
     {
+      "id": "0621fac08703aaf989e57ef840ff3bb679c6a3bacaf0f3e76493f0dd665db478",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/validate-stamp-scope.test.cjs",
+      "to": "file:tools/kernel/hooks/pretool-remote-mutation-gate.cjs",
+      "target": "tools/kernel/hooks/pretool-remote-mutation-gate.cjs",
+      "required": true,
+      "specifier": "../pretool-remote-mutation-gate.cjs"
+    },
+    {
       "id": "0636a9ed8c94ffffaaf99de0ec11776632ff6de1775dd50a98db5d5acf86a149",
       "type": "package-script-target",
       "from": "package-script:dart:plan:create-task:dry",
@@ -25141,6 +25533,15 @@
       "target": ".claude/commands/cultivate.md",
       "required": true,
       "declared_target": ".claude/commands/cultivate.md"
+    },
+    {
+      "id": "06708a8541da4914fdaffe000c2c759277ad9e58279bb064f60fba5da791cc8b",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/verify-stamp-independently.cjs",
+      "to": "file:tools/ticktock/canonical.cjs",
+      "target": "tools/ticktock/canonical.cjs",
+      "required": true,
+      "specifier": "../../ticktock/canonical.cjs"
     },
     {
       "id": "06743a5acb729cca198de499ba380aee45e85d882467b7da71753154ac63a642",
@@ -25305,6 +25706,16 @@
       "declared_target": ".claude/commands/cadence.md"
     },
     {
+      "id": "08e349fa07cf42e8a914c4c77c5547000cef47d70a03fdddd859a6c6a74933a7",
+      "type": "hook-target",
+      "from": "hook:UserPromptSubmit:621",
+      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
+      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "event": "UserPromptSubmit"
+    },
+    {
       "id": "08e52a8a32717997791fc0254cbda257850f3e641766c3c0fe9951e625f2ee39",
       "type": "operation-canonical",
       "from": "operation:claim-intake",
@@ -25312,6 +25723,15 @@
       "target": "instructions/canonical/commands/claim-intake.yaml",
       "required": true,
       "declared_target": "instructions/canonical/commands/claim-intake.yaml"
+    },
+    {
+      "id": "08e697d3bcb1d2c00706ab83438521f6cd1ace9d1e680556f526af0607b1a31e",
+      "type": "static-import",
+      "from": "file:tools/ticktock/dryrun-s3.cjs",
+      "to": "file:tools/ticktock/preflight-ticktock.cjs",
+      "target": "tools/ticktock/preflight-ticktock.cjs",
+      "required": true,
+      "specifier": "./preflight-ticktock.cjs"
     },
     {
       "id": "08f4103b96308f922f9d1a010a60bbef53508cf7da879753b89ae863e15e27a3",
@@ -25943,6 +26363,15 @@
       "specifier": "../lib/arc-state-writer.cjs"
     },
     {
+      "id": "0e74542d9e61745f036404b754807a62c248f32c5fc5fbfd9df534e1851a5b5e",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/verify-stamp-independently.test.cjs",
+      "to": "file:tools/kernel/hooks/lib/stamp-mac.cjs",
+      "target": "tools/kernel/hooks/lib/stamp-mac.cjs",
+      "required": true,
+      "specifier": "../lib/stamp-mac.cjs"
+    },
+    {
       "id": "0e760b9f5e832a5bcb9be1b6138ecadf2e3a065955269e50e3f08149a0f3ea0e",
       "type": "framework-manifest",
       "from": "framework:project-management/dart-collaboration",
@@ -26051,6 +26480,15 @@
       "required": true,
       "declared_target": "tools/ai-bridge/evidence-gather.js",
       "resolution": "tracked"
+    },
+    {
+      "id": "1085c15f159a1e70f5d4a3151bbde5ad18d44c20a6d4e4d820066aa48ec23ecc",
+      "type": "static-import",
+      "from": "file:tools/ticktock/preflight-and-journal.cjs",
+      "to": "file:tools/ticktock/preflight-ticktock.cjs",
+      "target": "tools/ticktock/preflight-ticktock.cjs",
+      "required": true,
+      "specifier": "./preflight-ticktock.cjs"
     },
     {
       "id": "109b5d66fcfe888e94801452f94fc4fd5a87d51a18dc35c66916ca0dd5fec0a4",
@@ -26280,6 +26718,15 @@
       "specifier": "./exact-comparator.cjs"
     },
     {
+      "id": "132efdaff0af6f018650e8c182090866cc6e35dffdd5a8d0fd0c9095700a1838",
+      "type": "static-import",
+      "from": "file:tools/ticktock/charter.cjs",
+      "to": "file:tools/ticktock/charter-schema.json",
+      "target": "tools/ticktock/charter-schema.json",
+      "required": true,
+      "specifier": "./charter-schema.json"
+    },
+    {
       "id": "1330ec17e1ab9888345806c40d5ca67fa69dd73398397e5b88c9f1f15e82e1d7",
       "type": "static-import",
       "from": "file:tools/signals/lib/signal-lifecycle-driver.js",
@@ -26406,6 +26853,15 @@
       "specifier": "tools/kernel/tier-ledger/tier-track-record.schema.json"
     },
     {
+      "id": "1462ab632a677d17a01b731a49a952114fd8c016d3dbc54748df128a534f6d9d",
+      "type": "static-import",
+      "from": "file:tools/ticktock/generation-manifest.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
+    },
+    {
       "id": "148d6b4c65b337fe328dc2ceb97e8d59975a8fafb7204b99ae5c4c5dd5a0eef8",
       "type": "command-alias-authority",
       "from": "command-definition:embark",
@@ -26479,6 +26935,15 @@
       "target": "tools/mcp/google-ads/client.js",
       "required": true,
       "specifier": "./client"
+    },
+    {
+      "id": "156039d9698a063ea61162c15958a685e221140f44f3d70c5bb7b1245684129a",
+      "type": "static-import",
+      "from": "file:tools/ticktock/dryrun-s3.cjs",
+      "to": "file:tools/ticktock/journal.cjs",
+      "target": "tools/ticktock/journal.cjs",
+      "required": true,
+      "specifier": "./journal.cjs"
     },
     {
       "id": "1589579c0f2339742e645a5aa91a2f51e575d6acf7f6d500dcc17b3c6e190e1a",
@@ -26746,6 +27211,15 @@
       "declared_target": ".claude/agents/framework-auditor.md"
     },
     {
+      "id": "181defdd030cd4fa4ab55f8655002ab854b23ef41ba4ead6d17595e62687cc6e",
+      "type": "static-import",
+      "from": "file:tools/ticktock/dryrun-s3.cjs",
+      "to": "file:tools/ticktock/canonical.cjs",
+      "target": "tools/ticktock/canonical.cjs",
+      "required": true,
+      "specifier": "./canonical.cjs"
+    },
+    {
       "id": "181f54ba88a547d151831c100a9130d5690e7e3e77c45e2bf1ba15cf84ee153b",
       "type": "command-definition-file",
       "from": "command-definition:crush-self-help",
@@ -26827,16 +27301,6 @@
       "specifier": "./lib/plan-dart-projection.js"
     },
     {
-      "id": "18e25f4aeed59304ff7e96a0ecaaa1e64f317cab2b7f7624bc2c21c96a5d1c0a",
-      "type": "hook-target",
-      "from": "hook:Stop:618",
-      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
-      "target": "tools/kernel/hooks/dispatch-stop.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-stop.cjs",
-      "event": "Stop"
-    },
-    {
       "id": "18e6544664fa5062e7e47538e378a2f7126287b3110743bb105ae8cb70cdd982",
       "type": "static-import",
       "from": "file:tools/planning/validate-task-plan.js",
@@ -26880,6 +27344,15 @@
       "target": ".claude/commands/audit-framework.md",
       "required": true,
       "declared_target": ".claude/commands/audit-framework.md"
+    },
+    {
+      "id": "1942bc0f2090a340129d20527b33d00de5551796206fc2e44ec45cf81c886311",
+      "type": "static-import",
+      "from": "file:tools/ticktock/cycle-driver.cjs",
+      "to": "file:tools/ticktock/journal.cjs",
+      "target": "tools/ticktock/journal.cjs",
+      "required": true,
+      "specifier": "./journal.cjs"
     },
     {
       "id": "1955c2f476bb810a1c252a909c31982741ac02389d65b66f7dd2f41645586a09",
@@ -27370,6 +27843,15 @@
       "specifier": "./pretool-secret-access-gate.cjs"
     },
     {
+      "id": "1e18e14510d5df6124c67469e7d98bfee76189af2d827742c3685d981fbe44bc",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/pretool-remote-mutation-gate.test.cjs",
+      "to": "file:tools/kernel/hooks/lib/stamp-mac.cjs",
+      "target": "tools/kernel/hooks/lib/stamp-mac.cjs",
+      "required": true,
+      "specifier": "../lib/stamp-mac.cjs"
+    },
+    {
       "id": "1e637f30dfbd9a3ebf86d3d2c4ea3a3704947c55d7de9df80076dd7bf11dbdb9",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/concept-init.md",
@@ -27395,6 +27877,15 @@
       "target": "tools/planning/lib/plan-visibility.js",
       "required": true,
       "specifier": "../lib/plan-visibility.js"
+    },
+    {
+      "id": "1eaa12961366bd2370c2e48716e04391afaf362343e1f056c492fa6594e59831",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-generation-manifest.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
     },
     {
       "id": "1eb14e7b70c03359557c1135c9f5f775f85f003ef0ebb70963097e6d0930c4b8",
@@ -27739,6 +28230,15 @@
       "target": "tools/verify/lib/signal.cjs",
       "required": true,
       "specifier": "../../../verify/lib/signal.cjs"
+    },
+    {
+      "id": "21966894abaccc7ea47a54631368cd0c929cb8239b73740999d47514cc70220b",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-rebaseline-frequency.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
     },
     {
       "id": "2196a53528dc6d99f9052f889e0a8e590d785d7cfa6013bf41e7795a43cfc216",
@@ -28094,6 +28594,15 @@
       "specifier": "../config"
     },
     {
+      "id": "24bcec0195c60d12d8fc757e9500634d4420c92f6abcf78183a3034d8044da97",
+      "type": "static-import",
+      "from": "file:tools/ticktock/charter.cjs",
+      "to": "file:tools/ticktock/canonical.cjs",
+      "target": "tools/ticktock/canonical.cjs",
+      "required": true,
+      "specifier": "./canonical.cjs"
+    },
+    {
       "id": "24d81a69bc15c6f73a7ca4ed9225dc9886090762e8c6d95fd621d2dc0634d2b9",
       "type": "static-import",
       "from": "file:tools/signals/lib/__tests__/signal-lifecycle.test.js",
@@ -28173,6 +28682,15 @@
       "target": "tools/mcp/crm/billing/schema.js",
       "required": true,
       "specifier": "./billing/schema"
+    },
+    {
+      "id": "25ffa959e077aa2f1141672005489634a6044dfe3332d49cb9d4b70a05c6c590",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-effectful-phase.cjs",
+      "to": "file:tools/ticktock/journal.cjs",
+      "target": "tools/ticktock/journal.cjs",
+      "required": true,
+      "specifier": "./journal.cjs"
     },
     {
       "id": "260060d37e1902499f81b32c568b1e211130eff8e624f275620d1ebf56d1e377",
@@ -28291,6 +28809,15 @@
       "target": "frameworks/wordpress/seo-validation/.claude/skills/seo-validation",
       "required": true,
       "declared_target": "frameworks/wordpress/seo-validation/.claude/skills/seo-validation"
+    },
+    {
+      "id": "274fd600593fd333abed81e0c4ffdd58e5984cf97058ed5af0cbd704afad8d0f",
+      "type": "static-import",
+      "from": "file:tools/ticktock/ratification-proposal.cjs",
+      "to": "file:tools/ticktock/canonical.cjs",
+      "target": "tools/ticktock/canonical.cjs",
+      "required": true,
+      "specifier": "./canonical.cjs"
     },
     {
       "id": "27768fc91bc64b1e981563d98f21eb0f5539d0a47b9fedeb294e0ea5bc9e5bc4",
@@ -28473,6 +29000,15 @@
       "target": "tools/workspace/lib/args.js",
       "required": true,
       "specifier": "../workspace/lib/args"
+    },
+    {
+      "id": "2a57ecd2ff9995ee5d6944c57329762bc0ceb13a1fb00ab1e1d52a183e4eb5ef",
+      "type": "static-import",
+      "from": "file:tools/ticktock/effectful-phase.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
     },
     {
       "id": "2a5a423f0468fd674fb091878d2510505c3eecfce14c7b7699cf82ced97f2d6d",
@@ -28884,6 +29420,16 @@
       "declared_target": ".claude/commands/opencode-self-help.md"
     },
     {
+      "id": "2ef0da825ad9c4a6fbeb915b4cafdc223fbdb39f5dd38441faa00d0368beb36f",
+      "type": "hook-target",
+      "from": "hook:SessionStart:623",
+      "to": "file:tools/kernel/hooks/dispatch-session-start.cjs",
+      "target": "tools/kernel/hooks/dispatch-session-start.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-session-start.cjs",
+      "event": "SessionStart"
+    },
+    {
       "id": "2ef6f6db04fe055a7f8899ad72c84d76a9c5104154d95fbe18852f9fa831a760",
       "type": "operation-canonical",
       "from": "operation:new-client",
@@ -28918,6 +29464,15 @@
       "target": "tools/kernel/lib/rest-trigger-evaluators.cjs",
       "required": true,
       "specifier": "../lib/rest-trigger-evaluators.cjs"
+    },
+    {
+      "id": "2fa63d3984eabbb52bb7ae9d8dce4f35374db2cd9f0d0f1a6bf7d7fb04c9e3ec",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-ceilings.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
     },
     {
       "id": "2fb3d90afec264e730fd92790f3c31151fff669e981ac557c5801f31c498400c",
@@ -29238,6 +29793,15 @@
       "declared_target": ".claude/commands/telemetry-status.md"
     },
     {
+      "id": "32b26594ecedfc79cba94cf928aa4003180f37ddbdcc3265c1469a783ad5a19f",
+      "type": "static-import",
+      "from": "file:tools/ticktock/cycle-driver.cjs",
+      "to": "file:tools/ticktock/ceilings.cjs",
+      "target": "tools/ticktock/ceilings.cjs",
+      "required": true,
+      "specifier": "./ceilings.cjs"
+    },
+    {
       "id": "32d86cf9b073d71cd0141188278940232418e27192c38f6f9950b6fe86360467",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/fw-wordpress-seo-validation.md",
@@ -29436,6 +30000,15 @@
       "target": ".claude/commands/concept-promote.md",
       "required": true,
       "declared_target": ".claude/commands/concept-promote.md"
+    },
+    {
+      "id": "34b8139688cb18846c7c02f32fbf2a41fe24c1f94fd3e88bf3df86c31550a184",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-resume-terminal-halts.cjs",
+      "to": "file:tools/ticktock/journal-schema.json",
+      "target": "tools/ticktock/journal-schema.json",
+      "required": true,
+      "specifier": "./journal-schema.json"
     },
     {
       "id": "34cda32a72868f83a611faceca3213581da9f88124aaea9082000b7ca72ee300",
@@ -29721,6 +30294,15 @@
       "specifier": "./lib/signal.cjs"
     },
     {
+      "id": "371e3ea833670115c9e51736d1f1998f96d162a3b5fda0227f3cb9583b2824e9",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-drift-notice.cjs",
+      "to": "file:tools/ticktock/run-benchmark.js",
+      "target": "tools/ticktock/run-benchmark.js",
+      "required": true,
+      "specifier": "./run-benchmark.js"
+    },
+    {
       "id": "376cfc9ccaae2f45f588c2fe28a722b94dcee178555954399a10ac0cc8d71705",
       "type": "schema-consumer",
       "from": "file:tools/image-optimize/derivative-manifest.schema.json",
@@ -29774,6 +30356,15 @@
       "target": ".claude/commands/execute-plan.md",
       "required": true,
       "declared_target": ".claude/commands/execute-plan.md"
+    },
+    {
+      "id": "37c229e60ab55e5ff4c4af6351bdae08423ad2d6368336ee04490f9c0ea43fc9",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-benchmark-halt-enum.cjs",
+      "to": "file:tools/ticktock/run-benchmark.js",
+      "target": "tools/ticktock/run-benchmark.js",
+      "required": true,
+      "specifier": "./run-benchmark.js"
     },
     {
       "id": "37deca5c7086db7adcd23f4ee391a353e27b71f5ce61028634c0e3cdc2d64d78",
@@ -30065,6 +30656,15 @@
       "specifier": "./lib/signal-normalization-proposal"
     },
     {
+      "id": "3a9a89aa4608aa534673f1fa3ddafa8f7f8707bea761ff3b2695942356f8f60b",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/mint-remote-mutation-stamp.cjs",
+      "to": "file:tools/kernel/hooks/lib/stamp-mac.cjs",
+      "target": "tools/kernel/hooks/lib/stamp-mac.cjs",
+      "required": true,
+      "specifier": "./lib/stamp-mac.cjs"
+    },
+    {
       "id": "3aa893f6b211d5c7a9ee7bb6d1e7ef423d7c4082bd0464a3a6279bcc39451d7b",
       "type": "launchd-runner",
       "from": "launchd:delesign-poll",
@@ -30081,6 +30681,16 @@
       "target": "frameworks/paid-media/meta-creative-iteration/schemas/stage5a-preregistration.schema.json",
       "required": true,
       "declared_target": "frameworks/paid-media/meta-creative-iteration/schemas/stage5a-preregistration.schema.json"
+    },
+    {
+      "id": "3ac8183998bc8ad3985d165bf0ecbaf77d3b6c8733c5d72b3b7fe6a293ce4646",
+      "type": "hook-target",
+      "from": "hook:PostToolUse:622",
+      "to": "file:tools/kernel/hooks/dispatch-posttool.cjs",
+      "target": "tools/kernel/hooks/dispatch-posttool.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-posttool.cjs",
+      "event": "PostToolUse"
     },
     {
       "id": "3ae0cd8de760abcaa78d8f41fa9191064066848dab6fc5b68cb4f0130dc242aa",
@@ -30467,6 +31077,15 @@
       "specifier": "./commands/new-runset.js"
     },
     {
+      "id": "3ecbbac25dbaafdb0b9aa010b66d2f8e41af32df11989f7c3d9e8138a6184ce2",
+      "type": "command-definition-file",
+      "from": "command-definition:ticktock",
+      "to": "file:.claude/commands/ticktock.md",
+      "target": ".claude/commands/ticktock.md",
+      "required": true,
+      "declared_target": ".claude/commands/ticktock.md"
+    },
+    {
       "id": "3ecf59ab51cb3d364dd5648e8bfff676e9dec8e5005682ea45825a26f47eef33",
       "type": "operation-canonical",
       "from": "operation:convene",
@@ -30620,6 +31239,15 @@
       "target": "frameworks/wordpress/qa/.claude/skills/qa",
       "required": true,
       "declared_target": "frameworks/wordpress/qa/.claude/skills/qa"
+    },
+    {
+      "id": "3ff001be9c83104b1a8b00fe145ac61cf677f722ab4683d47871410c52becea0",
+      "type": "static-import",
+      "from": "file:tools/ticktock/preflight-and-journal.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
     },
     {
       "id": "3ff3fa7a9283da497ac84da8e8f3e171a31f3d409c3363ea14e69497a3a59550",
@@ -30784,6 +31412,15 @@
       "target": "tools/verify/convene-unlock.cjs",
       "required": true,
       "specifier": "../../convene-unlock.cjs"
+    },
+    {
+      "id": "41543dde5ead65abddd2af283a69a7bd0de7e6e4519b806548b46f9393e283aa",
+      "type": "static-import",
+      "from": "file:tools/ticktock/journal.cjs",
+      "to": "file:tools/ticktock/canonical.cjs",
+      "target": "tools/ticktock/canonical.cjs",
+      "required": true,
+      "specifier": "./canonical.cjs"
     },
     {
       "id": "41664895e8e488ac06f608bc2db8a3b89216bddd77029e3d9da087cffda0c6c8",
@@ -31226,6 +31863,15 @@
       "required": true,
       "declared_target": "tools/workspace/generate-harness.js",
       "resolution": "tracked"
+    },
+    {
+      "id": "45d7f4ca45236e5b76d76a5a23542032955bccb8426579c0161d9e5ec914965e",
+      "type": "static-import",
+      "from": "file:tools/ticktock/cycle-driver.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
     },
     {
       "id": "45e548362839e3da85ca7d47dfed93020fe95b2408a296865d84042d06c54d9a",
@@ -31876,6 +32522,15 @@
       "declared_target": "tools/planning/schemas/plan-run-gate-decision.schema.json"
     },
     {
+      "id": "4d140c2aec2f86febc9760d4af00874f6dc6d14a0a9c51ceff04091ad3ee458c",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-effectful-phase.cjs",
+      "to": "file:tools/ticktock/effectful-phase.cjs",
+      "target": "tools/ticktock/effectful-phase.cjs",
+      "required": true,
+      "specifier": "./effectful-phase.cjs"
+    },
+    {
       "id": "4d196565cc7a027d0712aa2ca2b391b5066b3e26710cc28c3f402a7673c5d25b",
       "type": "static-import",
       "from": "file:tools/commands/smos-command-runner.cjs",
@@ -32259,6 +32914,16 @@
       "specifier": "../reconciliation/lib/normalized-content-hash.cjs"
     },
     {
+      "id": "5193ecc4a5ff3efc4ea043b209485da645ade537e215f951791de9669fb21f8e",
+      "type": "hook-target",
+      "from": "hook:Stop:620",
+      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
+      "target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "event": "Stop"
+    },
+    {
       "id": "51bedeedb9c3c881c99814dbaa76c73e1bdd495ba3edf9aa84fc19640f9ff86a",
       "type": "static-import",
       "from": "file:tools/framework-execution/transforms/exact-comparator.cjs",
@@ -32367,6 +33032,16 @@
       "specifier": "./build-improve-this-cache.cjs"
     },
     {
+      "id": "533eb6f5f16fc89adcd68a6c04c5441780ab1c7791310b7f0f4c32caf7958e57",
+      "type": "hook-target",
+      "from": "hook:PreToolUse:619",
+      "to": "file:tools/kernel/hooks/dispatch-pretool.cjs",
+      "target": "tools/kernel/hooks/dispatch-pretool.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-pretool.cjs",
+      "event": "PreToolUse"
+    },
+    {
       "id": "53459b4f6cf078ba23c5b540f721057d17e3cf29eb7057c97b19bc433503aaab",
       "type": "static-import",
       "from": "file:tools/sessions/consume-boundary.cjs",
@@ -32393,6 +33068,15 @@
       "target": ".claude/skills/evidence-loop/SKILL.md",
       "required": true,
       "declared_target": ".claude/skills/evidence-loop/SKILL.md"
+    },
+    {
+      "id": "538dc457147f832a2c07a02cb34e44e1df5abbb9222051ad661b28bb6ea8d8fe",
+      "type": "static-import",
+      "from": "file:tools/ticktock/charter.cjs",
+      "to": "file:tools/ticktock/charter-template-run.json",
+      "target": "tools/ticktock/charter-template-run.json",
+      "required": true,
+      "specifier": "./charter-template-run.json"
     },
     {
       "id": "53ade8c1bd87823ffa2e3b02052a132cc383eddc1b1c0e36350f9484de569bd7",
@@ -32884,6 +33568,15 @@
       "specifier": "./enforcement-home-registry.cjs"
     },
     {
+      "id": "582d6b7dcfad633504b8a28c56c76ca1065297b6ac4572f0601a92e5f4c0c9c8",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/s0-predicate.test.cjs",
+      "to": "file:tools/kernel/hooks/pretool-remote-mutation-gate.cjs",
+      "target": "tools/kernel/hooks/pretool-remote-mutation-gate.cjs",
+      "required": true,
+      "specifier": "../pretool-remote-mutation-gate.cjs"
+    },
+    {
       "id": "5836b93f7ea57bc76ec8055f97f97cb7b354c367a9ad607a33353482a5887a7e",
       "type": "static-import",
       "from": "file:tools/export-public/__tests__/export-public.test.cjs",
@@ -33237,6 +33930,15 @@
       "specifier": "./validate-run-plan.cjs"
     },
     {
+      "id": "5b660813ac007514a8ff2a4ba826869e68cbeb19f815bdeac6e1c62b46d43069",
+      "type": "static-import",
+      "from": "file:tools/ticktock/dryrun-s3.cjs",
+      "to": "file:tools/ticktock/ratification-proposal.cjs",
+      "target": "tools/ticktock/ratification-proposal.cjs",
+      "required": true,
+      "specifier": "./ratification-proposal.cjs"
+    },
+    {
       "id": "5b6ddca3a7b7dc1888a4c35a9a03ce5f0082d3b4614cf09bb8b4bf71afad1128",
       "type": "static-import",
       "from": "file:tools/bundle/generate-handoff-bundle.js",
@@ -33262,6 +33964,15 @@
       "target": "frameworks/paid-media/meta-creative-iteration/schemas/stage1-message-hypothesis.schema.json",
       "required": true,
       "specifier": "schemas/stage1-message-hypothesis.schema.json"
+    },
+    {
+      "id": "5b935ad2cb383a1252e0fe417f452f61d0fc01a5079a79ebfcfdee0e43f4ef2e",
+      "type": "static-import",
+      "from": "file:tools/ticktock/ratification-proposal.cjs",
+      "to": "file:tools/ticktock/ratification-proposal-schema.json",
+      "target": "tools/ticktock/ratification-proposal-schema.json",
+      "required": true,
+      "specifier": "./ratification-proposal-schema.json"
     },
     {
       "id": "5ba5160822dd9b7e49855bebe9cc4cf7cb7b84e02201b55fd398a056307c8fe6",
@@ -33343,6 +34054,16 @@
       "target": "tools/kernel/hooks/userprompt-owl-altitude.cjs",
       "required": true,
       "specifier": "./userprompt-owl-altitude.cjs"
+    },
+    {
+      "id": "5ca2f63743e505901633cf4efb4a1b0cd94c401f926f15af51efb7c5a9c6e2cc",
+      "type": "hook-target",
+      "from": "hook:SessionStart:624",
+      "to": "file:tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "required": true,
+      "declared_target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "event": "SessionStart"
     },
     {
       "id": "5d0996e0dea1c0122436ad2ee178871e23d9f380ed0e8ac14f8f1779c29f5236",
@@ -33557,6 +34278,15 @@
       "specifier": "./tools"
     },
     {
+      "id": "5ef8c915495d623991c96ed29f0a5cf3894711a8ef69eebac0aa06f474fe4c79",
+      "type": "static-import",
+      "from": "file:tools/ticktock/generation-manifest.cjs",
+      "to": "file:tools/ticktock/generation-manifest-schema.json",
+      "target": "tools/ticktock/generation-manifest-schema.json",
+      "required": true,
+      "specifier": "./generation-manifest-schema.json"
+    },
+    {
       "id": "5f54b32f8f2ebee9b0e41634a0d3353ee6f0ba136c71ad6a9800dcfd138c315e",
       "type": "static-import",
       "from": "file:tools/kernel/hooks/dispatch-posttool.cjs",
@@ -33666,6 +34396,15 @@
       "specifier": "../world-state.js"
     },
     {
+      "id": "5ff96a6198730acc7abdd620c65ad9661e811e2054dd4ef9f55dbf3fa9ac95fd",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/s0-inertness.test.cjs",
+      "to": "file:tools/kernel/hooks/pretool-remote-mutation-gate.cjs",
+      "target": "tools/kernel/hooks/pretool-remote-mutation-gate.cjs",
+      "required": true,
+      "specifier": "../pretool-remote-mutation-gate.cjs"
+    },
+    {
       "id": "5ffcc1ea5f1d10728898eefde0f9cebbf38619c40c1662f56ce351eb3ccbc73b",
       "type": "package-script-target",
       "from": "package-script:research:perplexity",
@@ -33701,6 +34440,15 @@
       "target": "tools/planning/lib/resolve-task-plan.js",
       "required": true,
       "specifier": "../planning/lib/resolve-task-plan"
+    },
+    {
+      "id": "602f4ce743a9eac97e7e5c621190d9abb10f553f8293fa165c7396a33ab06637",
+      "type": "static-import",
+      "from": "file:tools/ticktock/dryrun-s3.cjs",
+      "to": "file:tools/ticktock/ceilings.cjs",
+      "target": "tools/ticktock/ceilings.cjs",
+      "required": true,
+      "specifier": "./ceilings.cjs"
     },
     {
       "id": "607d1f7122688650593e2edf97e49755852501259f390d3e0f86e0970b26cbb2",
@@ -33829,6 +34577,15 @@
       "declared_target": "tools/verify/schemas/verification-signal-v1.0.schema.json"
     },
     {
+      "id": "61ce3bfbf71f4894539fbaa63fee70d15c855d25717e743faeaf53c457590c73",
+      "type": "static-import",
+      "from": "file:tools/ticktock/dryrun-s3.cjs",
+      "to": "file:tools/ticktock/generation-manifest.cjs",
+      "target": "tools/ticktock/generation-manifest.cjs",
+      "required": true,
+      "specifier": "./generation-manifest.cjs"
+    },
+    {
       "id": "61e3890adf6809b19c8600bcc77584515aa78bfb4b8e4a7f9ef952f18ac9e81c",
       "type": "static-import",
       "from": "file:tools/maintenance/end-session-closeout.js",
@@ -33847,6 +34604,15 @@
       "declared_target": "instructions/canonical/commands/fw-wordpress-analytics-tracking.yaml"
     },
     {
+      "id": "620a837869d75535a33fabc699d1f93a8f7469d15dd6838f0a9be05aa56eb311",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-ceilings.cjs",
+      "to": "file:tools/ticktock/ceilings.cjs",
+      "target": "tools/ticktock/ceilings.cjs",
+      "required": true,
+      "specifier": "./ceilings.cjs"
+    },
+    {
       "id": "621aa987e3b4ba39223fe26b9bedbf46c9fd3f3f04a1082ec2e4ebb5c30663b4",
       "type": "static-import",
       "from": "file:tools/kernel/loop-protocol/rerun-fixtures.cjs",
@@ -33863,6 +34629,15 @@
       "target": "tools/autonomy/schemas/task-profile.schema.json",
       "required": true,
       "declared_target": "tools/autonomy/schemas/task-profile.schema.json"
+    },
+    {
+      "id": "629e5ab567f500d3660ecf212c8d515a941983097ef4a9e3db842f5ccc99c491",
+      "type": "static-import",
+      "from": "file:tools/ticktock/preflight-ticktock.cjs",
+      "to": "file:tools/ticktock/lib/live-probe.cjs",
+      "target": "tools/ticktock/lib/live-probe.cjs",
+      "required": true,
+      "specifier": "./lib/live-probe.cjs"
     },
     {
       "id": "62e3f23f868397d5eb86238aa087ef957448f042ea013b487310d9098e09a374",
@@ -34055,6 +34830,15 @@
       "target": "tools/signals/lib/bridge-target-policy.js",
       "required": true,
       "specifier": "./bridge-target-policy"
+    },
+    {
+      "id": "6500e076591fcb9a47dab3920be45010905db16edcb2bffb1aa3301e93e47069",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/pretool-remote-mutation-gate.cjs",
+      "to": "file:tools/kernel/hooks/validate-stamp-scope.cjs",
+      "target": "tools/kernel/hooks/validate-stamp-scope.cjs",
+      "required": true,
+      "specifier": "./validate-stamp-scope.cjs"
     },
     {
       "id": "65018da8c06b32d01456efb31953ab9c5ead677bfc7675b513d4f1fa38c53397",
@@ -35584,6 +36368,15 @@
       "specifier": "./lib/io"
     },
     {
+      "id": "72c505cdec8bef502aa5ad31c5b2b0b98ba94b5e1e0148ad3b611914a63a9f01",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-preflight-live-probe.cjs",
+      "to": "file:tools/ticktock/preflight-ticktock.cjs",
+      "target": "tools/ticktock/preflight-ticktock.cjs",
+      "required": true,
+      "specifier": "./preflight-ticktock.cjs"
+    },
+    {
       "id": "72cb031c46f43f80b05a88d404eaa198b64dd246c6cebf6c0e54c82c31af24d9",
       "type": "static-import",
       "from": "file:tools/kernel/lib/autonomous-execution-wiring.js",
@@ -36349,6 +37142,15 @@
       "specifier": "../harness.js"
     },
     {
+      "id": "7c065e81f7ef4d25043f42ce44eb6505647e53c981260026ad8bd37de880bd55",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-preflight-live-probe.cjs",
+      "to": "file:tools/ticktock/lib/live-probe.cjs",
+      "target": "tools/ticktock/lib/live-probe.cjs",
+      "required": true,
+      "specifier": "./lib/live-probe.cjs"
+    },
+    {
       "id": "7c099639a7af92e5b3d9e2a4f98fa01e7d3c5463d3ac6c9994a2b4def8acde93",
       "type": "command-definition-file",
       "from": "command-definition:convene-review",
@@ -36375,6 +37177,15 @@
       "required": true,
       "declared_target": ".claude/commands/new-client.md",
       "authority": "new-client"
+    },
+    {
+      "id": "7c30c5ae3248d6b376beb2d1749b8217cde4a3ab58988210ee15842718886e76",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-rebaseline-frequency.cjs",
+      "to": "file:tools/ticktock/run-benchmark.js",
+      "target": "tools/ticktock/run-benchmark.js",
+      "required": true,
+      "specifier": "./run-benchmark.js"
     },
     {
       "id": "7c30e28912c03ec4d6a2f0dd4cf99a23f4ab0301dd0a013c5956e2c833e95c0b",
@@ -36430,6 +37241,15 @@
       "target": "tools/planning/lib/resolve-task-plan.js",
       "required": true,
       "specifier": "../../planning/lib/resolve-task-plan"
+    },
+    {
+      "id": "7cd4ece04ecf82d5a993d0ca05ecffc7c3797b974da1ef8f70703a0d122e3bf9",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-generation-manifest.cjs",
+      "to": "file:tools/ticktock/generation-manifest.cjs",
+      "target": "tools/ticktock/generation-manifest.cjs",
+      "required": true,
+      "specifier": "./generation-manifest.cjs"
     },
     {
       "id": "7ce80947899d170aba328e106400eeeb39a467a909f830411fa349157aab7c1a",
@@ -36512,16 +37332,6 @@
       "target": "tools/telemetry/dispatches/lib/emit-span.cjs",
       "required": true,
       "specifier": "../telemetry/dispatches/lib/emit-span.cjs"
-    },
-    {
-      "id": "7e26be47a156a113bdff91d299e6676208fd2ca5eca22ad312d7bf165c5ee9af",
-      "type": "hook-target",
-      "from": "hook:PostToolUse:620",
-      "to": "file:tools/kernel/hooks/dispatch-posttool.cjs",
-      "target": "tools/kernel/hooks/dispatch-posttool.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-posttool.cjs",
-      "event": "PostToolUse"
     },
     {
       "id": "7e27ac3487187db63a6dd98d4c91c8f981ecbf8eebf3016dce89d30b56b397f6",
@@ -37137,6 +37947,16 @@
       "resolution": "tracked"
     },
     {
+      "id": "83acc12f6a46b85c2a1049922dd2f240e6bad0446573be2bef2a7f09ddf47cf2",
+      "type": "hook-target",
+      "from": "hook:SessionStart:625",
+      "to": "file:tools/user/inject-mirror.cjs",
+      "target": "tools/user/inject-mirror.cjs",
+      "required": true,
+      "declared_target": "tools/user/inject-mirror.cjs",
+      "event": "SessionStart"
+    },
+    {
       "id": "83d3f8fa939e5a1f80140fad9ddeeb738e3e4e982baef3556b1627b84c8c4637",
       "type": "static-import",
       "from": "file:tools/maintenance/topology-scout.js",
@@ -37427,16 +38247,6 @@
       "specifier": "./model-registry"
     },
     {
-      "id": "8620d016571df905a8348f72c38996cd7d80bb23b77b87e67fd56190447c18e0",
-      "type": "hook-target",
-      "from": "hook:SessionStart:623",
-      "to": "file:tools/user/inject-mirror.cjs",
-      "target": "tools/user/inject-mirror.cjs",
-      "required": true,
-      "declared_target": "tools/user/inject-mirror.cjs",
-      "event": "SessionStart"
-    },
-    {
       "id": "8677095012523dec8766751b914ab17f9a0674f7e1f5baca2a06dd526eaf9c45",
       "type": "static-import",
       "from": "file:tools/commands/smos-command-runner.cjs",
@@ -37526,6 +38336,15 @@
       "target": "tools/planning/lib/resolve-task-plan.js",
       "required": true,
       "specifier": "../../planning/lib/resolve-task-plan"
+    },
+    {
+      "id": "876034eaaee57eb2430cf79bd850e10eaa2d1489ee9a8de34095c2ea3d7c55ad",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/validate-stamp-scope.test.cjs",
+      "to": "file:tools/kernel/hooks/validate-stamp-scope.cjs",
+      "target": "tools/kernel/hooks/validate-stamp-scope.cjs",
+      "required": true,
+      "specifier": "../validate-stamp-scope.cjs"
     },
     {
       "id": "87b4aeacb751c405fe1127191cf0462ee9b7eea9b8ae9f8a110006a574ac0c09",
@@ -38064,6 +38883,15 @@
       "declared_target": ".claude/skills/orchestrate-loop/SKILL.md"
     },
     {
+      "id": "8df901ede2a6b626a1d7df0cc012b41c7e6794abda8ca80ead1929951b9ea4e7",
+      "type": "static-import",
+      "from": "file:tools/ticktock/write-review-decision.cjs",
+      "to": "file:tools/ticktock/journal.cjs",
+      "target": "tools/ticktock/journal.cjs",
+      "required": true,
+      "specifier": "./journal.cjs"
+    },
+    {
       "id": "8e1f830a63896c639bd3888b8fece19f362351e381f6e1c7b568e9d8221ae5df",
       "type": "operation-canonical",
       "from": "operation:capture-task",
@@ -38080,6 +38908,15 @@
       "target": "tools/codex/commands/run-plan.js",
       "required": true,
       "specifier": "../run-plan"
+    },
+    {
+      "id": "8e76f01fc8b4ab6efd28315a22f2a46b778d0368a24d517d864d891c60b64ef9",
+      "type": "static-import",
+      "from": "file:tools/ticktock/run-benchmark.js",
+      "to": "file:tools/ticktock/canonical.cjs",
+      "target": "tools/ticktock/canonical.cjs",
+      "required": true,
+      "specifier": "./canonical.cjs"
     },
     {
       "id": "8e9aaa49841d2bcfd6e7658ebab991e23752c6dcc8510afe671bf2841e23c48b",
@@ -38329,16 +39166,6 @@
       "resolution": "tracked"
     },
     {
-      "id": "90acdad549ab9bec10ebb7dd28745709cb3108dee4e8b5a0a38fd23ab0810d4c",
-      "type": "hook-target",
-      "from": "hook:SubagentStop:627",
-      "to": "file:.claude/hooks/subagent-telemetry-writer.cjs",
-      "target": ".claude/hooks/subagent-telemetry-writer.cjs",
-      "required": true,
-      "declared_target": ".claude/hooks/subagent-telemetry-writer.cjs",
-      "event": "SubagentStop"
-    },
-    {
       "id": "90ce11dececd066783d72f1d8f4ca94aa9dc607c251709a913fadca6364ec3b0",
       "type": "framework-guardrails",
       "from": "framework:wordpress/analytics-tracking",
@@ -38393,6 +39220,15 @@
       "target": "tools/operator-guidance/schema.js",
       "required": true,
       "specifier": "./schema"
+    },
+    {
+      "id": "91a88afe375cc71a59c0dc0c6eded7ae47312076e49b1692fac585b410c9b566",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-benchmark-halt-enum.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
     },
     {
       "id": "91aa71e68aac96a3d3c31b82d84f431f38ada29af97698e0205592d07903f9e5",
@@ -38602,6 +39438,16 @@
       "target": "tools/convene/convene.js",
       "required": true,
       "specifier": "../convene"
+    },
+    {
+      "id": "93d3480f80d964ba412992a8e89c66ba4dea99f5f306fa8a1a278265ea4b60b3",
+      "type": "hook-target",
+      "from": "hook:SubagentStop:629",
+      "to": "file:.claude/hooks/subagent-telemetry-writer.cjs",
+      "target": ".claude/hooks/subagent-telemetry-writer.cjs",
+      "required": true,
+      "declared_target": ".claude/hooks/subagent-telemetry-writer.cjs",
+      "event": "SubagentStop"
     },
     {
       "id": "93df23a30507aaf912a76c658c27222df36d3d0baf11513ed018984dc5b8eec7",
@@ -38858,6 +39704,16 @@
       "declared_target": "tools/verify/schemas/mcp-requirement.schema.json"
     },
     {
+      "id": "966720a1bc3b9a818c65df168cc47ba2a901b7671c42de946790948ecc594757",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:626",
+      "to": "file:tools/hooks/session-lifecycle/session-end-close.cjs",
+      "target": "tools/hooks/session-lifecycle/session-end-close.cjs",
+      "required": true,
+      "declared_target": "tools/hooks/session-lifecycle/session-end-close.cjs",
+      "event": "SessionEnd"
+    },
+    {
       "id": "968b53f33fd662aa11196809b47fbfd5d1595b9c78b871fcd0817e46d94f2b2c",
       "type": "static-import",
       "from": "file:tools/planning/lib/__tests__/plan-run-gate.test.js",
@@ -38885,6 +39741,15 @@
       "declared_target": ".claude/guardrails.md"
     },
     {
+      "id": "96cba0e76257025500ec0878d05144207cbedb6b29a4816c5c027f94acaa4739",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-ceilings.cjs",
+      "to": "file:tools/ticktock/journal.cjs",
+      "target": "tools/ticktock/journal.cjs",
+      "required": true,
+      "specifier": "./journal.cjs"
+    },
+    {
       "id": "96cf0ca0db771113ef73c447419b6e499bfb449e372767fc217d8fdf130f6246",
       "type": "static-import",
       "from": "file:tools/sessions/write-boundary.cjs",
@@ -38910,6 +39775,15 @@
       "target": ".claude/agents/research-fetcher.md",
       "required": true,
       "declared_target": ".claude/agents/research-fetcher.md"
+    },
+    {
+      "id": "97174f1f48f203121f56bf9c18da8ea7c7a79095d3fa95764e918af42e96f454",
+      "type": "static-import",
+      "from": "file:tools/ticktock/dryrun-s3.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
     },
     {
       "id": "972b332f84b2dea1af1f6fef2d1f2eab03ed49d79ca75b87606c9948493f2948",
@@ -38985,6 +39859,15 @@
       "resolution": "tracked"
     },
     {
+      "id": "97fad472b2896e895cb72de28d811b77574e719f97239750e7aca3e074fe8141",
+      "type": "static-import",
+      "from": "file:tools/ticktock/ceilings.cjs",
+      "to": "file:tools/ticktock/journal.cjs",
+      "target": "tools/ticktock/journal.cjs",
+      "required": true,
+      "specifier": "./journal.cjs"
+    },
+    {
       "id": "981785bb40bd0a1720d38846c72508a9746e375d77e43b47b286337a63d5c8a6",
       "type": "static-import",
       "from": "file:tools/signals/lib/__tests__/run-openrouter-bridge.test.js",
@@ -39010,6 +39893,15 @@
       "target": "tools/ant-hive-world/harness.js",
       "required": true,
       "specifier": "../harness.js"
+    },
+    {
+      "id": "988bee498a463daeb862f4b70bfb38d2df060dbb42914a36a41c103b56e13950",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-ratification-proposal.cjs",
+      "to": "file:tools/ticktock/ratification-proposal.cjs",
+      "target": "tools/ticktock/ratification-proposal.cjs",
+      "required": true,
+      "specifier": "./ratification-proposal.cjs"
     },
     {
       "id": "98b5a0746051310fc745fe36f8005f979ce7157a72b811335adc76d6dda6f191",
@@ -39102,6 +39994,15 @@
       "target": "tools/dart-integration/lib/plan-dart-projection.js",
       "required": true,
       "specifier": "../../dart-integration/lib/plan-dart-projection.js"
+    },
+    {
+      "id": "9957e87a051cdfb61deb18d517a24468376ec2a6d55e37fe1855273c21652b28",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/stamp-mac.test.cjs",
+      "to": "file:tools/kernel/hooks/lib/stamp-mac.cjs",
+      "target": "tools/kernel/hooks/lib/stamp-mac.cjs",
+      "required": true,
+      "specifier": "../lib/stamp-mac.cjs"
     },
     {
       "id": "9990595f0578744dcc035bbfd2a82c8b94296705de83d71ae773bf6ce627bb07",
@@ -39201,6 +40102,15 @@
       "target": ".claude/commands/amend-plan.md",
       "required": true,
       "declared_target": ".claude/commands/amend-plan.md"
+    },
+    {
+      "id": "9a2651ec01bed1624151d5ce8c7ea098710d1bfd124166e14b8e8b0625f7c5ce",
+      "type": "static-import",
+      "from": "file:tools/ticktock/cycle-driver.cjs",
+      "to": "file:tools/ticktock/run-benchmark.js",
+      "target": "tools/ticktock/run-benchmark.js",
+      "required": true,
+      "specifier": "./run-benchmark.js"
     },
     {
       "id": "9a2693a613f27d234092ebb802fba965fe6313d93a44410a037c2eb80a4b4304",
@@ -39732,6 +40642,15 @@
       "declared_target": ".claude/skills/audio-output/SKILL.md"
     },
     {
+      "id": "9db33c8f79f3bc5241684ebd2b5e1f6c26d3c803e448c85cb7e73518a6967bdb",
+      "type": "static-import",
+      "from": "file:tools/ticktock/generation-manifest.cjs",
+      "to": "file:tools/ticktock/canonical.cjs",
+      "target": "tools/ticktock/canonical.cjs",
+      "required": true,
+      "specifier": "./canonical.cjs"
+    },
+    {
       "id": "9dbf601205d147c0b1d9eda229e3b26c76f189a76bfa642683bd1641d8b51ec9",
       "type": "command-definition-file",
       "from": "command-definition:reconcile-lessons",
@@ -39804,6 +40723,15 @@
       "declared_target": ".claude/commands/bridge-speakers.md"
     },
     {
+      "id": "9e88e6acf770ea61a3c899387725d13a5d0668eb33836a4294a9b816726087a7",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-cycle-driver-halts.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
+    },
+    {
       "id": "9ea2c5d0be5b0d410f091dc14d6772bb6bced552964524077a7355e513c9a093",
       "type": "static-import",
       "from": "file:tools/signals/run-remote-ssh-bridge.js",
@@ -39820,6 +40748,15 @@
       "target": "instructions/canonical/commands/fw-wordpress-design-research.yaml",
       "required": true,
       "declared_target": "instructions/canonical/commands/fw-wordpress-design-research.yaml"
+    },
+    {
+      "id": "9f15afa8a9a3bbda67de182308e3baca269f54af741527dd06df92574e82c617",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-append-after-truncation.cjs",
+      "to": "file:tools/ticktock/journal.cjs",
+      "target": "tools/ticktock/journal.cjs",
+      "required": true,
+      "specifier": "./journal.cjs"
     },
     {
       "id": "9f19a09341028b1e49a34c4842dd85861050398a1dfee599f3d6df2807c0d6f7",
@@ -40407,6 +41344,15 @@
       "declared_target": ".claude/commands/gauntlet.md"
     },
     {
+      "id": "a6477ff3a2c11f9245ccaa497e8ed5317b389d5ffbd7d0ee29ace9d57477970f",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-journal-anchor.cjs",
+      "to": "file:tools/ticktock/journal.cjs",
+      "target": "tools/ticktock/journal.cjs",
+      "required": true,
+      "specifier": "./journal.cjs"
+    },
+    {
       "id": "a66d216988706554b3298b044db12cfd3f66b30f6ae0fb9749f4fb11fb2f4202",
       "type": "manifest-target",
       "from": "manifest-path:.claude/agents/compliance-reviewer.md",
@@ -40605,6 +41551,15 @@
       "target": "tools/dart-integration/lib/dart-api.js",
       "required": true,
       "specifier": "../../dart-integration/lib/dart-api.js"
+    },
+    {
+      "id": "a8ad1b228260d6c7c7a6f31e1063f1cc679a442e6630ac577beb54ea767d1215",
+      "type": "static-import",
+      "from": "file:tools/ticktock/write-review-decision.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
     },
     {
       "id": "a8cf4cc22f31c8d24bfeee501a1c96cbf97addb4634e006534e7980ace4100e7",
@@ -41286,6 +42241,15 @@
       "specifier": "./lib/signal.cjs"
     },
     {
+      "id": "afbdf6fe03479890330d1a0828fbd312c8fc0af47fe8dad4321117cbca86fd4b",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-cycle-driver-halts.cjs",
+      "to": "file:tools/ticktock/journal.cjs",
+      "target": "tools/ticktock/journal.cjs",
+      "required": true,
+      "specifier": "./journal.cjs"
+    },
+    {
       "id": "afd1e263b6891a8a1fcb040fd748e2322014a2eb3b383257542b0447b2010a8e",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/plan-quest.md",
@@ -41532,16 +42496,6 @@
       "declared_target": "frameworks/paid-media/google-ads-search-campaign-build/.claude/skills/google-ads-search-campaign-build"
     },
     {
-      "id": "b1c59cb409a853fd6af6fcb3ef5dba51db75eda7ab50dcfffb8bd2939b5ce278",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:626",
-      "to": "file:tools/sessions/session-end-boundary-log.cjs",
-      "target": "tools/sessions/session-end-boundary-log.cjs",
-      "required": true,
-      "declared_target": "tools/sessions/session-end-boundary-log.cjs",
-      "event": "SessionEnd"
-    },
-    {
       "id": "b1c8f4bc66eae7747ca039cf68223593f613c5a80c651c32e28e33881451ff4c",
       "type": "package-script-target",
       "from": "package-script:test",
@@ -41778,6 +42732,15 @@
       "specifier": "../signals/lib/follow-signal"
     },
     {
+      "id": "b444cc7d09d0d06fc6c0353f03d1a1779ddbdebc589e573a78f092cc0abcd4b0",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-resume-terminal-halts.cjs",
+      "to": "file:tools/ticktock/journal.cjs",
+      "target": "tools/ticktock/journal.cjs",
+      "required": true,
+      "specifier": "./journal.cjs"
+    },
+    {
       "id": "b467fd42954f60cf682d47f4857f445c3441205196a810149d84c63d11faaf20",
       "type": "static-import",
       "from": "file:tools/client-storage/__tests__/classify.test.js",
@@ -41960,6 +42923,15 @@
       "declared_target": ".claude/commands/follow-signal.md"
     },
     {
+      "id": "b5d5ce83ab7c85e7f7f317a5ac016f84e89ebed3645db2c6e4d1e7f994c5b666",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-generation-manifest.cjs",
+      "to": "file:tools/ticktock/preflight-ticktock.cjs",
+      "target": "tools/ticktock/preflight-ticktock.cjs",
+      "required": true,
+      "specifier": "./preflight-ticktock.cjs"
+    },
+    {
       "id": "b5d8ef360d7289187fd524e800a3802ce231fb0f9239bbc41de850e27665b78c",
       "type": "static-import",
       "from": "file:tools/kernel/hooks/dispatch-pretool.cjs",
@@ -41967,6 +42939,15 @@
       "target": "tools/kernel/hooks/lib/compat-dispatch.cjs",
       "required": true,
       "specifier": "./lib/compat-dispatch.cjs"
+    },
+    {
+      "id": "b60157b18d8a58537b107939d3438b5f32a03c4dce83cb1f53fcfaba1906168c",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-effectful-phase.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
     },
     {
       "id": "b6281ad78b28c4e2a56504978a0e0e77525f49b70dfbb81cdc46d424c5174970",
@@ -42116,6 +43097,16 @@
       "specifier": "../../ms-graph/client.js"
     },
     {
+      "id": "b7a2ff1c187749797ca885528b08a05572c83015fbb0b0e0dd79dd5c7e6ce99c",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:628",
+      "to": "file:tools/sessions/session-end-boundary-log.cjs",
+      "target": "tools/sessions/session-end-boundary-log.cjs",
+      "required": true,
+      "declared_target": "tools/sessions/session-end-boundary-log.cjs",
+      "event": "SessionEnd"
+    },
+    {
       "id": "b7c52f59fdb55a28e3dfa03f636bd595ff851986c2bd07a8d62db77699ed4bc1",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/chron.md",
@@ -42159,6 +43150,15 @@
       "target": "tools/bundle/lib/bundle-paths.js",
       "required": true,
       "specifier": "../lib/bundle-paths.js"
+    },
+    {
+      "id": "b80ac623a082eebab9ed91c80826786ec3d2fc630f38eb55ee98cab87f0f137e",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/verify-stamp-independently.test.cjs",
+      "to": "file:tools/kernel/hooks/verify-stamp-independently.cjs",
+      "target": "tools/kernel/hooks/verify-stamp-independently.cjs",
+      "required": true,
+      "specifier": "../verify-stamp-independently.cjs"
     },
     {
       "id": "b842d23bd1cd94dd3b4ef412b28bc55f129d65897d9f05eddadf311afde91b0d",
@@ -42553,6 +43553,15 @@
       "specifier": "./lib/detectors.cjs"
     },
     {
+      "id": "bbd496ded854dde3ba53309c40d66145b261b4c65a1de14c99f3b32f6223555b",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/verify-stamp-independently.cjs",
+      "to": "file:tools/kernel/hooks/lib/stamp-mac.cjs",
+      "target": "tools/kernel/hooks/lib/stamp-mac.cjs",
+      "required": true,
+      "specifier": "./lib/stamp-mac.cjs"
+    },
+    {
       "id": "bc1b3df8df3314a394712541198bbfb8be78d1c1664a63995e4a80017147f622",
       "type": "schema-definition-file",
       "from": "schema-definition:frameworks/paid-media/meta-creative-iteration/schemas/stage1-message-hypothesis.schema.json",
@@ -42677,6 +43686,15 @@
       "target": "tools/ant-hive-world/lore-engine/watch.js",
       "required": true,
       "specifier": "../lore-engine/watch.js"
+    },
+    {
+      "id": "bc967b47b3b2956764ffa04b39013d0e3c6f0c3470f7aef8602a8510bf467120",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/pretool-remote-mutation-gate.test.cjs",
+      "to": "file:tools/kernel/hooks/pretool-remote-mutation-gate.cjs",
+      "target": "tools/kernel/hooks/pretool-remote-mutation-gate.cjs",
+      "required": true,
+      "specifier": "../pretool-remote-mutation-gate.cjs"
     },
     {
       "id": "bcb58cf65f6760b5e7ce3e6b7ab79cea6a437e05f51275a80c3143e8999f90ee",
@@ -42996,16 +44014,6 @@
       "specifier": "./schema"
     },
     {
-      "id": "bfaa194e7a44c46baf25328be6a1610c8a7d32cd6c371f4b47eddceebea64a1a",
-      "type": "hook-target",
-      "from": "hook:PreToolUse:617",
-      "to": "file:tools/kernel/hooks/dispatch-pretool.cjs",
-      "target": "tools/kernel/hooks/dispatch-pretool.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-pretool.cjs",
-      "event": "PreToolUse"
-    },
-    {
       "id": "bfbd3f7bd664cac0ad3b56539e6ce20eca90183d5d42e3f5571124641607f9a4",
       "type": "static-import",
       "from": "file:tools/ai-bridge/lib/model-runtime.js",
@@ -43122,16 +44130,6 @@
       "target": "tools/workspace/lib/args.js",
       "required": true,
       "specifier": "../workspace/lib/args"
-    },
-    {
-      "id": "c16e5ac5666d51a42ec627177658c75c09326028cdb37a779077a9414b777b56",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:625",
-      "to": "file:tools/context/repo-awareness-closeout.cjs",
-      "target": "tools/context/repo-awareness-closeout.cjs",
-      "required": true,
-      "declared_target": "tools/context/repo-awareness-closeout.cjs",
-      "event": "SessionEnd"
     },
     {
       "id": "c1793462b5c9904162fa7c44219fb005b7a878934437a7b4f6f1bb1a1ac0c5fb",
@@ -43506,6 +44504,15 @@
       "resolution": "tracked"
     },
     {
+      "id": "c64784791a5a07faf57321d40d0846912ff79b20e3b2ed7af872acae679524ce",
+      "type": "static-import",
+      "from": "file:tools/ticktock/preflight-ticktock.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
+    },
+    {
       "id": "c64c17594e18991902d490ab7ab00b8a10fc4599b077221528c5a3a5752b3058",
       "type": "package-script-target",
       "from": "package-script:signals:watch:landing-pad",
@@ -43597,6 +44604,15 @@
       "required": true,
       "declared_target": "tools/launchd/install.sh",
       "resolution": "tracked"
+    },
+    {
+      "id": "c728ef04963323a869e95eaea0036973bb61df78b75c022c2a70ef6b838dcced",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-benchmark-halt-enum.cjs",
+      "to": "file:tools/ticktock/journal.cjs",
+      "target": "tools/ticktock/journal.cjs",
+      "required": true,
+      "specifier": "./journal.cjs"
     },
     {
       "id": "c7291b5e3b9748799a192c8ddba13c3f24985e08a05d22ed9cdb0112a3221e97",
@@ -44043,6 +45059,15 @@
       "specifier": "../../../kernel/hooks/session-start-tier-stamp.cjs"
     },
     {
+      "id": "cc7a01412d1476e44e0de5c795c4b2155a627bd0134c2fcd09ba8617488df146",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/dispatch-pretool.cjs",
+      "to": "file:tools/kernel/hooks/pretool-remote-mutation-gate.cjs",
+      "target": "tools/kernel/hooks/pretool-remote-mutation-gate.cjs",
+      "required": true,
+      "specifier": "./pretool-remote-mutation-gate.cjs"
+    },
+    {
       "id": "cc8dcc9e7913d5cccd587bac60917a623a77f24ad5e6d80e989ee8ec3dbd9bb9",
       "type": "static-import",
       "from": "file:tools/kernel/fire-reflex.cjs",
@@ -44442,6 +45467,15 @@
       "target": "frameworks/media/video-editing/guardrails.md",
       "required": true,
       "declared_target": "frameworks/media/video-editing/guardrails.md"
+    },
+    {
+      "id": "d054a1a169591c8ae4c74b751232e73c5e54c8a3dc20cc5af0a62e024b0cfd42",
+      "type": "static-import",
+      "from": "file:tools/ticktock/preflight-ticktock.cjs",
+      "to": "file:tools/ticktock/ticktock-review-decision-schema.json",
+      "target": "tools/ticktock/ticktock-review-decision-schema.json",
+      "required": true,
+      "specifier": "./ticktock-review-decision-schema.json"
     },
     {
       "id": "d08051a1a07b80b0e153d3889629c020b21f090019f45735e8feea0abedfa40a",
@@ -44882,6 +45916,16 @@
       "declared_target": "frameworks/wordpress/qa/schemas/output/summary-json.schema.json"
     },
     {
+      "id": "d57a60c92dc804b242c1ba01dd234c381fbe13db81fa0dc7f8e176fef0e7249f",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:627",
+      "to": "file:tools/context/repo-awareness-closeout.cjs",
+      "target": "tools/context/repo-awareness-closeout.cjs",
+      "required": true,
+      "declared_target": "tools/context/repo-awareness-closeout.cjs",
+      "event": "SessionEnd"
+    },
+    {
       "id": "d583bb997ca12f760873dead02b5616a2f5339b41fbc79ceba7ca405ba595fbb",
       "type": "schema-definition-file",
       "from": "schema-definition:tools/framework-execution/compiler/compiler-observation.schema.json",
@@ -45128,6 +46172,15 @@
       "target": "tools/signals/lib/live-signal-scanner.js",
       "required": true,
       "specifier": "../live-signal-scanner"
+    },
+    {
+      "id": "d8102ea7265f84cc0992c2fae3029ca59c1a255c0d37b7c579d78e47e099c478",
+      "type": "static-import",
+      "from": "file:tools/ticktock/journal.cjs",
+      "to": "file:tools/ticktock/charter.cjs",
+      "target": "tools/ticktock/charter.cjs",
+      "required": true,
+      "specifier": "./charter.cjs"
     },
     {
       "id": "d81dc2bca909a4ff51b08eab2f9b846eec435f28cc295443fd8afb8507ffec15",
@@ -45418,26 +46471,6 @@
       "specifier": "./lib.js"
     },
     {
-      "id": "db98d419e99d319228d09f145922bdf8f0fc1c191a158244d4f4511446ed9751",
-      "type": "hook-target",
-      "from": "hook:SessionStart:622",
-      "to": "file:tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "required": true,
-      "declared_target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "event": "SessionStart"
-    },
-    {
-      "id": "dbb7eb37d67288527794a4bfb62c8315cf82e9dd36e734c516399881e9736d2c",
-      "type": "hook-target",
-      "from": "hook:UserPromptSubmit:619",
-      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
-      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-userprompt.cjs",
-      "event": "UserPromptSubmit"
-    },
-    {
       "id": "dbb8528b47366653ad83fedacef4b1e9d94f21527d3ff1c8817eb799412a71bb",
       "type": "schema-definition-file",
       "from": "schema-definition:frameworks/deliverables/presentation-review/schemas/output/slide-finding.schema.json",
@@ -45490,16 +46523,6 @@
       "target": ".claude/commands/el.md",
       "required": true,
       "declared_target": ".claude/commands/el.md"
-    },
-    {
-      "id": "dc95bb94a319efc972b5f8fdc3cd2c6f42fee99e4e0fc6c2e4a276dd5ee3f95d",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:624",
-      "to": "file:tools/hooks/session-lifecycle/session-end-close.cjs",
-      "target": "tools/hooks/session-lifecycle/session-end-close.cjs",
-      "required": true,
-      "declared_target": "tools/hooks/session-lifecycle/session-end-close.cjs",
-      "event": "SessionEnd"
     },
     {
       "id": "dc9fcd21524839f8bf74c7b6b4a4820f8d9e0f99fb7a6408ca77f91698fbf89d",
@@ -46321,6 +47344,15 @@
       "declared_target": ".claude/commands/bridge-speakers.md"
     },
     {
+      "id": "e30c4d217ad521a37be54ad797d54f87878db23b6c6d886aee807ec5b5a2d717",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/lib/stamp-mac.cjs",
+      "to": "file:tools/ticktock/canonical.cjs",
+      "target": "tools/ticktock/canonical.cjs",
+      "required": true,
+      "specifier": "../../../ticktock/canonical.cjs"
+    },
+    {
       "id": "e3329fc48526366dd796c47707ab91a90ab2e3dcc823ddc2f7f005b327fba797",
       "type": "static-import",
       "from": "file:tools/workspace/capture-task.js",
@@ -46702,6 +47734,15 @@
       "declared_target": ".claude/skills/extract-skill/SKILL.md"
     },
     {
+      "id": "e76d90cd9368f7a691e40aaa03cbbe9c6147908185e9620a2bd741cc0a9e9246",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/pretool-remote-mutation-gate.cjs",
+      "to": "file:tools/kernel/hooks/lib/stamp-mac.cjs",
+      "target": "tools/kernel/hooks/lib/stamp-mac.cjs",
+      "required": true,
+      "specifier": "./lib/stamp-mac.cjs"
+    },
+    {
       "id": "e7a794d30899efa76cb20810e45c5f005cbf5af3bcb5b35f1281f2d8abc46807",
       "type": "command-definition-file",
       "from": "command-definition:next-step",
@@ -46992,6 +48033,15 @@
       "target": "tools/autonomy/schemas/actor-registry.schema.json",
       "required": true,
       "specifier": "schemas/actor-registry.schema.json"
+    },
+    {
+      "id": "eaa686dfa974cc294064b73dcb1e30c9b7d6c479294c5014d015b9e6815005ce",
+      "type": "static-import",
+      "from": "file:tools/ticktock/journal.cjs",
+      "to": "file:tools/ticktock/journal-schema.json",
+      "target": "tools/ticktock/journal-schema.json",
+      "required": true,
+      "specifier": "./journal-schema.json"
     },
     {
       "id": "eab1ba2aa2519b8935eefe5881cba7f0e1d3502f7df4238ed2d8ebe4064de6d6",
@@ -47714,6 +48764,15 @@
       "specifier": "./native-promotion-gate.cjs"
     },
     {
+      "id": "f192ef301c9692005c381826ae2dfb7867a9d78461f56247b5cd49c60b685648",
+      "type": "static-import",
+      "from": "file:tools/ticktock/cycle-driver.cjs",
+      "to": "file:tools/ticktock/generation-manifest.cjs",
+      "target": "tools/ticktock/generation-manifest.cjs",
+      "required": true,
+      "specifier": "./generation-manifest.cjs"
+    },
+    {
       "id": "f1a22ffe9409bafbf88533921d538d07c849937d0cb42f09425e7ea34b87691f",
       "type": "static-import",
       "from": "file:tools/verify/lib/__tests__/completion-audit-packet.test.cjs",
@@ -47775,16 +48834,6 @@
       "target": "tools/telemetry/dispatches/lib/trace-context.cjs",
       "required": true,
       "specifier": "../../telemetry/dispatches/lib/trace-context.cjs"
-    },
-    {
-      "id": "f2526a3705800204dde0232165569f03685db4ed99b0c96ceaf515aed956e01c",
-      "type": "hook-target",
-      "from": "hook:SessionStart:621",
-      "to": "file:tools/kernel/hooks/dispatch-session-start.cjs",
-      "target": "tools/kernel/hooks/dispatch-session-start.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-session-start.cjs",
-      "event": "SessionStart"
     },
     {
       "id": "f259088384650860f9743b83dca55c9fa0f8fb3c9b66fea23f64343ba587c9da",
@@ -48351,6 +49400,15 @@
       "specifier": "../signal-normalization-proposal"
     },
     {
+      "id": "f69d15d22747785306cc6cc88b3c8f66916f8ce077187ad9d51b9935ba4f92a5",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-effectful-phase.cjs",
+      "to": "file:tools/ticktock/ceilings.cjs",
+      "target": "tools/ticktock/ceilings.cjs",
+      "required": true,
+      "specifier": "./ceilings.cjs"
+    },
+    {
       "id": "f6a831508ba81fd51293ab25502a2ebfadeb2b61008fcdea39b86809a6544bcb",
       "type": "static-import",
       "from": "file:tools/export-public/__tests__/storage-registration.test.cjs",
@@ -48725,6 +49783,15 @@
       "specifier": "../launcher-stub.js"
     },
     {
+      "id": "f9e9646dcaba94b06f81371ca9d4b0e63f550eb6d33ebf524620b3366aceca39",
+      "type": "skill-definition-file",
+      "from": "skill-definition:ticktock",
+      "to": "file:.claude/skills/ticktock/SKILL.md",
+      "target": ".claude/skills/ticktock/SKILL.md",
+      "required": true,
+      "declared_target": ".claude/skills/ticktock/SKILL.md"
+    },
+    {
       "id": "f9e9a9698c4d08e9afcd7d4cdb6bd89e91130540c4b3748201c9f64abee2e522",
       "type": "static-import",
       "from": "file:tools/seo-validation/run.js",
@@ -48741,6 +49808,15 @@
       "target": "tools/signals/lib/actor-auto.js",
       "required": true,
       "specifier": "./lib/actor-auto"
+    },
+    {
+      "id": "fa15d055ae71ae7859b12e81850c3217fc016606079b8fe9cd00bf16aa9f1d0c",
+      "type": "static-import",
+      "from": "file:tools/ticktock/test-benchmark-halt-enum.cjs",
+      "to": "file:tools/ticktock/journal-schema.json",
+      "target": "tools/ticktock/journal-schema.json",
+      "required": true,
+      "specifier": "./journal-schema.json"
     },
     {
       "id": "fa1fa53348025ba97013fe4ef2bfbf2a96e96b799585bb4dd611caa6f58d2677",
@@ -48934,6 +50010,15 @@
       "target": "tools/ai-bridge/lib/dispatchers.js",
       "required": true,
       "specifier": "./lib/dispatchers"
+    },
+    {
+      "id": "fbd2fd3f22f9b34e160dd33dda0f191ab4d96f773581fe7901502c0fda45464f",
+      "type": "static-import",
+      "from": "file:tools/ticktock/dryrun-s3.cjs",
+      "to": "file:tools/ticktock/run-benchmark.js",
+      "target": "tools/ticktock/run-benchmark.js",
+      "required": true,
+      "specifier": "./run-benchmark.js"
     },
     {
       "id": "fc0375ea9a67ce7622217c1a1dc4131bec4f168ff9d0e9ccd6163877178c4d2f",
@@ -49164,6 +50249,15 @@
       "specifier": "../workspace/lib/args"
     },
     {
+      "id": "fe31ca4c51e703cf4eb23962231e6d1e6ab9ae489a9bfc468c150792ac8ab005",
+      "type": "static-import",
+      "from": "file:tools/ticktock/effectful-phase.cjs",
+      "to": "file:tools/ticktock/journal.cjs",
+      "target": "tools/ticktock/journal.cjs",
+      "required": true,
+      "specifier": "./journal.cjs"
+    },
+    {
       "id": "fe3687e81a0ac4385d508eb6c0573fd3bc868b8b772f9db1bb71cd3f9cee0106",
       "type": "static-import",
       "from": "file:tools/commands/handlers/review-task-plan.cjs",
@@ -49373,8 +50467,8 @@
     }
   ],
   "counts": {
-    "nodes": 3760,
-    "edges": 2736,
+    "nodes": 3814,
+    "edges": 2816,
     "unresolved": 0
   }
 }

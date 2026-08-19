@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "d266b5d6cd87fffa0c3ebc83e3c294c473788cd2f031bf2e3074b189d984e5b7",
+    "expected_tree_sha256": "ae428f7efe6c8abf659b4b79b50c7514f413117700da49a0d9a1d716dcd2dbc6",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -1539,6 +1539,161 @@
         "path": "_dev/reports/analysis/verify-evidence__mythos-memory-dreaming__2026-08-18.json",
         "sha256": "5c6cc84caf845fd6a0d0209c8fb3f3c813ed8db6feb10c6463da2e9f196ecbed",
         "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/authority-probe.js",
+        "sha256": "b658d59d9b800f8f50e9c1e51949c3fc5725b2c18a9f1405f6938a54fd9b2c3a",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/carriage-overnight.js",
+        "sha256": "1c7da01e795fe591b16fb7fa40461ddef849fe53652a9e966d46ff56a5173856",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/summarize-authority-probe.js",
+        "sha256": "80e4b3feeee6156b19e1f012949835d29e7f60f38b6642c3dd54e7982bc1eb4b",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/summarize-carriage.js",
+        "sha256": "316777d4dd8583307c3cadb10e7f3bcd55bb8c3322fbe4fdf21a9159b93f59e1",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/ant-world.yaml",
+        "sha256": "b6b4d646b0c84fb2695ecd39e11a19d580e54b4b2a0556b211d93ec8316a28e4",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/README.md",
+        "sha256": "6a1f4b0aaba27a5181059cdbc6bef304a629d9bb1dc0f51fa3220fea2863a3e6",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/attach-courier.ps1",
+        "sha256": "38f0632c4f0d96eb6d2e6b4d74280128867f6c39b12e765003062e6451189e83",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/build-export.sh",
+        "sha256": "30d2476f9e335cd7b38a2c9e4af45d875eebaa16dbf8ccebec5deedfefb45186",
+        "mode": 493
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/check-provisioning.ps1",
+        "sha256": "76418528ff0f24453bb251df2379afb5f2ae430d5563b1ecf9e1404d4757549c",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/cloud-init/meta-data",
+        "sha256": "53eadc9283e496a2cd48df09fd7f4655f9e553542736a2aae77a4702379de3a3",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/cloud-init/network-config",
+        "sha256": "546efccf061f610aaf4b4dbdfe7dcb3a0683b1ff44e4b5bc6d76061e17aa354a",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/cloud-init/user-data",
+        "sha256": "8b7dbddfa5efd6ae5fe44f01e2dd1c98b6a5a1062fab2c558d13f1a68f7d9b0f",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/console-capture.ps1",
+        "sha256": "660721aa4903518728d838b96f1426cc697d56764032d549ae7216634aa7d953",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/convert-image.ps1",
+        "sha256": "e5c8cc1a8f5a81f61bc9dffb978fb0be2f6e83b9ba1f08085a2380789efcf7ad",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/courier-lib.ps1",
+        "sha256": "5153ee7c9778f7047e034f39b44dad0721ebcf6518d1b25c9ac2dfe0737eb8c2",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/first-boot.ps1",
+        "sha256": "284e3583c6e910673911e29052baf7d8388858510faaa96fdd104b47622edae0",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/harvest-results.ps1",
+        "sha256": "d6129486bdbedab6fa2f31b1909ed278b47141b846682aa737e0905eaab0647e",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/inbound-push.sh",
+        "sha256": "295dabf5b0c087f7e57dee85a4e7eadf9967c60810fd94669393ade181f757f2",
+        "mode": 493
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/load-courier.ps1",
+        "sha256": "1bad6b391036ad0a79c029e92bc5f086e096f04bf01736075b0cea670fef396b",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/provision-vm.ps1",
+        "sha256": "e87dea803bd3f392762bd720a27292275d1c2eb7bf4b07a1584e55460a6dd52d",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/psrun.sh",
+        "sha256": "972c58ce96ec4cba9d6e76d6ef90bb4366b6befbc73121527bfe34db1206e939",
+        "mode": 493
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/psrunfile.sh",
+        "sha256": "f10bed08c2178499c84be810b42d99c58da0af7635b70a43c6adfc9779286392",
+        "mode": 493
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/pull-results.sh",
+        "sha256": "bebdc40d339063b8771f768cd90c37d0ae109e3068c8dcbcc0b3260a6c1e55dc",
+        "mode": 493
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/refresh-seed.ps1",
+        "sha256": "f288a6ca0e853c14b9f75908ed8288bc4991052891c752a156dea3f1631bc26b",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/revert-to-golden.ps1",
+        "sha256": "d179a2075f817cafba343666eff626c5cd229848ddb23071fa1b3d5fb11cc7fd",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/run-job.ps1",
+        "sha256": "dcb246f2ff374b437da0892371a18f9e1f97ec2dd9657fcd26ee327d00fd0aa4",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/seal-golden.ps1",
+        "sha256": "012bd606c6a0fff62d6e25893879e3116872c707ebb9be81d3d71783a3c4353d",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/teardown-vm.ps1",
+        "sha256": "d5248b5756ead9037cb83680ae93ae0c501babae04f1de0f6adae95bf9d175cc",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/orwell/verify-membrane.ps1",
+        "sha256": "72c5466813b442cbb657d99029723f44c049b0175855149d9b23dda8d6343af8",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/vm/pull-results.sh",
+        "sha256": "cf220dd460c6e816930a5ad8fd251013ff1ac7158c00a748fcfd942e2f43688d",
+        "mode": 493
+      },
+      {
+        "path": "_dev/sim-runs/vm/revert-to-golden.sh",
+        "sha256": "a52dabe052a3201815d7caca780bed1f03bf789cf9378a69a8d2cb1497ee64df",
+        "mode": 493
       },
       {
         "path": "config/workspace.json",
@@ -5562,7 +5717,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "6b4084a9de4df7e903b8abd213afe4daf72c53162df94c63e8f473b7c87a62be",
+        "sha256": "8056aa1a3e3178ca986408318d07f6900c30e786fe3b6acfa53cce68145574bd",
         "mode": 420
       },
       {
@@ -13314,8 +13469,8 @@
     "package_script_count": 205,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "6b4084a9de4df7e903b8abd213afe4daf72c53162df94c63e8f473b7c87a62be",
-    "graph_nodes": 3729,
+    "graph_sha256": "8056aa1a3e3178ca986408318d07f6900c30e786fe3b6acfa53cce68145574bd",
+    "graph_nodes": 3760,
     "graph_edges": 2736
   },
   "runtime_exclusions": [

@@ -208,7 +208,12 @@ function computeControllerWeight(controllerState, scheduleWeight, liveConfig = {
 // fresh by the run loop at startup, mutated in place here (hysteresis flag +
 // previous tick's own-hive policy_entropy_post_update). Absent -> the
 // controller code path is fully inert.
-function trainTick(hive, worldStatePath, network, rng, liveConfig = {}, tickIndex, controllerState) {
+// `options` (optional): { freeze: true } is passed straight through to
+// trainStep() as TRUE learning-off (review finding F1) -- decide(), the world
+// tick, upkeep, and reward all run unchanged, but no weight is written. It is
+// an explicit run-level parameter rather than a liveConfig key on purpose: a
+// frozen benchmark run must not be un-freezable mid-run from the dashboard.
+function trainTick(hive, worldStatePath, network, rng, liveConfig = {}, tickIndex, controllerState, options = {}) {
   const hiveState = JSON.parse(fs.readFileSync(hive.hiveStatePath, 'utf8'));
   const worldState = require('./world-state.js').readWorldState(worldStatePath);
   const action = decide(network, hiveState, worldState, rng, liveConfig, tickIndex);
@@ -238,7 +243,7 @@ function trainTick(hive, worldStatePath, network, rng, liveConfig = {}, tickInde
   // passed straight through to trainStep()'s new optional last parameter;
   // undefined (absent from liveConfig) leaves trainStep() fully inert on
   // this argument -- see untrained-network.js's trainStep() comment.
-  trainStep(network, hiveState, worldState, action._action_index, reward, entropyBonusWeight, liveConfig.update_clip);
+  trainStep(network, hiveState, worldState, action._action_index, reward, entropyBonusWeight, liveConfig.update_clip, { freeze: options.freeze === true });
 
   // policy_entropy_post_update (plan ant-hive-world-exploration-fix-hiveb-
   // collapse, S1): the entropy of the SAME network/state pair evaluated

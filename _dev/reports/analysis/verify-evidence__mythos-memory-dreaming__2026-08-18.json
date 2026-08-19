@@ -1,0 +1,47 @@
+{
+  "schema": "VerifyEvidence/1.0",
+  "integration": "mythos-memory-dreaming",
+  "verified_at": "2026-08-18T14:28:00.000Z",
+  "verifier": "session 89244726 (codewhale) — meditation 2026-08-18 repair pass",
+  "checks": [
+    {
+      "id": "rebuild_db",
+      "pass": true,
+      "command": "node tools/memory/build-memory-db.js",
+      "observation": "exit 0, 0.42s; memory.sqlite + dream-report.md + dream-seen.json rewritten (mtime 10:54 and re-verified 11:23)",
+      "gate": "exit 0 and dream report written"
+    },
+    {
+      "id": "freshness",
+      "pass": true,
+      "observation": "dream-report.md mtime 2026-08-18T13:54Z (newer than session start); corpus 186 nodes / 10,732 associations",
+      "gate": "dream report newer than session start"
+    },
+    {
+      "id": "dream_hints_surface",
+      "pass": true,
+      "observation": "After wiring ca.somemarketing.mythos.contextual-sweep (launchd, StartInterval 120): contextual-inject --dry-run emits 10 [dream] entries with shared rare terms (previously 0 — sweep had no caller, zero .tier0.txt existed)",
+      "gate": "hint output includes >=1 dream entry"
+    },
+    {
+      "id": "scheduling",
+      "pass": true,
+      "observation": "launchctl list shows ca.somemarketing.mythos.contextual-sweep (pid 135, exit 0); job produced 89244726...tier0.txt at 11:27; dream-rebuild job also loaded",
+      "gate": "scheduled job loaded and valid"
+    },
+    {
+      "id": "entity_persistence",
+      "pass": true,
+      "observation": "agent-state.js register-agent → write-state → read-state roundtrip deterministic; PII marker 'email' rejected (Privacy floor enforced)",
+      "gate": "state write/read deterministic; privacy floor rejects PII"
+    },
+    {
+      "id": "vault_sync",
+      "pass": true,
+      "observation": "ca.somemarketing.mythos.obsidian-vault-sync log written 10:56 (7,550 vault files, 83 memory files); stderr empty",
+      "gate": "sync job runs against correct paths"
+    }
+  ],
+  "note": "Contract-path drift: framework manifest output_contract names reports/dreaming-system/{memory-db,archive}/; actual artifacts live at _dev/state/memory-db/ and _dev/state/contextual-hints/. Verify evidence placed in _dev/reports/analysis/ (repo report surface) pending a decision to align the manifest contract.",
+  "all_pass": true
+}

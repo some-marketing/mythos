@@ -109,7 +109,7 @@ function loadFreshSessions(filterId) {
   try { entries = fs.readdirSync(ACTIVE_SESSIONS_DIR); }
   catch { return out; }
   for (const f of entries) {
-    if (!/^[0-9a-f-]{36}\.json$/.test(f)) continue;
+    if (!f.endsWith('.json')) continue; // accept any session id (incl. codex-managed-*, codex-hook-emulation:*) // accept any session id (incl. codex-managed-*, codex-hook-emulation:*)
     const sid = f.replace(/\.json$/, '');
     if (filterId && sid !== filterId) continue;
     const session = readJSON(path.join(ACTIVE_SESSIONS_DIR, f));
@@ -269,6 +269,37 @@ function scoreSession(session, ledger, signals, memories, args) {
   return hits.slice(0, TOP_K_OUTPUT);
 }
 
+function pendingPath(sid) {
+  return path.join(HINTS_DIR, `${sid}.tier0.pending.json`);
+}
+
+function loadPending(sid) {
+  try { return JSON.parse(fs.readFileSync(pendingPath(sid), 'utf8')); }
+  catch { return []; }
+}
+
+function savePending(sid, pending) {
+  fs.writeFileSync(pendingPath(sid), JSON.stringify(pending));
+}
+
+// True when the CURRENT summaryPath content has already been read and
+// recorded by contextual-inject.cjs (its <sid>.injected.txt receipt records
+// the sha256 of the exact hint-file content it emitted). Fail-safe: any
+// missing/unreadable receipt or summary is treated as "nothing pending to
+// preserve" so a first-ever sweep still writes cleanly.
+function isSummaryConsumed(sid, summaryPath) {
+  if (!fs.existsSync(summaryPath)) return true; // nothing pending to preserve
+  const injectedPath = path.join(HINTS_DIR, `${sid}.injected.txt`);
+  if (!fs.existsSync(injectedPath)) return false; // summary exists but no consumption receipt yet
+  try {
+    const record = JSON.parse(fs.readFileSync(injectedPath, 'utf8'));
+    const currentSha = crypto.createHash('sha256').update(fs.readFileSync(summaryPath)).digest('hex');
+    return record.source_hint_sha256 === currentSha;
+  } catch {
+    return false;
+  }
+}
+
 function writeHints(sid, hits) {
   if (!fs.existsSync(HINTS_DIR)) fs.mkdirSync(HINTS_DIR, { recursive: true });
   const tier0Path = path.join(HINTS_DIR, `${sid}.tier0.jsonl`);
@@ -276,17 +307,78 @@ function writeHints(sid, hits) {
   const lines = hits.map(h => JSON.stringify({ ts, ...h }) + '\n').join('');
   if (lines) fs.appendFileSync(tier0Path, lines);
 
-  // Glanceable summary file (last-write-wins)
+  // Glanceable summary file. A resumed SessionStart sweep and the 120s
+  // launchd sweep can both run before contextual-inject.cjs has consumed the
+  // prior summary; a plain last-write-wins replace would silently drop those
+  // unconsumed hits (codex PR #21 review findings, 2026-08-18 — both the
+  // empty-batch case and the nonempty-batch case). Merge into whatever is
+  // still pending (not yet reflected in an <sid>.injected.txt receipt)
+  // instead of overwriting it. New hits can never collide by hit_id with the
+  // pending set: appendHistory() below marks every hit_id this call emits as
+  // seen, and scoreSession() already excludes seen hit_ids from `hits`.
   const summaryPath = path.join(HINTS_DIR, `${sid}.tier0.txt`);
+  const consumed = isSummaryConsumed(sid, summaryPath);
+  // Dedup by hit_id defensively: the SessionStart sweep and the 120s launchd
+  // sweep can score the same session concurrently (owner review finding,
+  // 2026-08-18) off the same on-disk history snapshot, so both may compute
+  // an overlapping `hits` set before either has written. A Map keyed by
+  // hit_id makes the merge idempotent under that overlap regardless of the
+  // single-flight lock in main().
+  const merged = new Map();
+  for (const h of (consumed ? [] : loadPending(sid))) merged.set(h.hit_id, h);
+  for (const h of hits) merged.set(h.hit_id, h);
+  const pending = [...merged.values()]
+    .sort((a, b) => b.score - a.score)
+    .slice(0, TOP_K_OUTPUT);
+
+  if (pending.length === 0) {
+    if (fs.existsSync(summaryPath)) return;
+  }
+  savePending(sid, pending);
   const summary = [
     `# tier0 contextual hints — ${sid}`,
-    `# swept ${ts} — ${hits.length} hits, top ${Math.min(hits.length, TOP_K_OUTPUT)}`,
+    `# swept ${ts} — ${pending.length} pending hits, top ${Math.min(pending.length, TOP_K_OUTPUT)}`,
     '',
-    ...hits.map(h => `${h.score.toFixed(3)}  ${h.source.padEnd(7)}  ${h.ref.padEnd(50).slice(0, 50)}  ${h.label || ''}`)
+    ...pending.map(h => `${h.score.toFixed(3)}  ${h.source.padEnd(7)}  ${h.ref.padEnd(50).slice(0, 50)}  ${h.label || ''}`)
   ].join('\n') + '\n';
   fs.writeFileSync(summaryPath, summary);
 
   appendHistory(sid, hits.map(h => h.hit_id));
+}
+
+// Single-flight lock so the synchronous SessionStart sweep and the 120s
+// launchd sweep (owner review finding, 2026-08-18: both invocation paths are
+// live at once) cannot interleave their read-merge-write of one session's
+// pending/summary files. fs.openSync(..., 'wx') is atomic create-exclusive;
+// a concurrent holder makes this throw EEXIST and the caller skips this pass
+// (advisory Tier 0 — losing one sweep pass is harmless, corrupting the
+// pending file is not). A lock older than STALE_LOCK_MS is treated as
+// abandoned (crashed holder) and stolen rather than starving the sweep.
+const STALE_LOCK_MS = 60000;
+
+function withSessionLock(sid, fn) {
+  if (!fs.existsSync(HINTS_DIR)) fs.mkdirSync(HINTS_DIR, { recursive: true });
+  const lockPath = path.join(HINTS_DIR, `${sid}.sweep.lock`);
+  let fd;
+  try {
+    fd = fs.openSync(lockPath, 'wx');
+  } catch (e) {
+    if (e.code !== 'EEXIST') throw e;
+    try {
+      if (Date.now() - fs.statSync(lockPath).mtimeMs <= STALE_LOCK_MS) return { skipped: true };
+      fs.unlinkSync(lockPath);
+      fd = fs.openSync(lockPath, 'wx');
+    } catch {
+      return { skipped: true };
+    }
+  }
+  try {
+    fn();
+    return { skipped: false };
+  } finally {
+    fs.closeSync(fd);
+    try { fs.unlinkSync(lockPath); } catch { /* already gone */ }
+  }
 }
 
 function main() {
@@ -306,9 +398,24 @@ function main() {
 
   const report = { swept_at: new Date().toISOString(), sessions: [] };
   for (const s of sessions) {
-    const hits = scoreSession(s, ledger, signals, memories, args);
-    report.sessions.push({ session_id: s.session_id, branch: s.current_branch, actor_type: s.actor_type, hits });
-    if (!args.dry_run) writeHints(s.session_id, hits);
+    if (args.dry_run) {
+      const hits = scoreSession(s, ledger, signals, memories, args);
+      report.sessions.push({ session_id: s.session_id, branch: s.current_branch, actor_type: s.actor_type, hits });
+      continue;
+    }
+    // Score AND write under one lock: scoring reads hit-history to exclude
+    // already-seen hits, so an unlocked score+write allows the SessionStart
+    // and 120s sweeps to both compute against the same stale history and
+    // duplicate a hit into `pending` before either writes it back.
+    let hits = [];
+    const result = withSessionLock(s.session_id, () => {
+      hits = scoreSession(s, ledger, signals, memories, args);
+      writeHints(s.session_id, hits);
+    });
+    if (result.skipped && args.verbose) {
+      process.stderr.write(`contextual-sweep: ${s.session_id} locked by a concurrent sweep, skipped this pass\n`);
+    }
+    report.sessions.push({ session_id: s.session_id, branch: s.current_branch, actor_type: s.actor_type, hits, skipped: result.skipped });
   }
 
   if (args.json) {
@@ -323,4 +430,11 @@ function main() {
   }
 }
 
-main();
+// Guarded so tests can require() this module (for writeHints/withSessionLock
+// regression coverage) without triggering a full sweep of the real repo's
+// active sessions as a side effect of the import.
+if (require.main === module) {
+  main();
+}
+
+module.exports = { writeHints, withSessionLock, isSummaryConsumed, HINTS_DIR };

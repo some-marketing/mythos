@@ -1,0 +1,5 @@
+# This guest has zero network adapters by design (re-review condition 1).
+# An explicit empty v2 config stops cloud-init from probing for or generating
+# any interface configuration at boot.
+version: 2
+ethernets: {}

@@ -309,3 +309,35 @@ test('a block that no approval postdates is still reported as the rejection reas
   assert.equal(result.status, 'rejected');
   assert.match(result.detail, /PREDATES/);
 });
+
+test('FALSIFIER: mixed-provenance blocks each individually postdated by a different approval must not fall through to missing', () => {
+  // Round-4 review P2 counterexample: a timestamped block+approval pair
+  // (approval genuinely postdates its block) alongside an untimestamped
+  // block+approval pair (approval postdates its block only by append order).
+  // liveApproval correctly finds no SINGLE approval that postdates BOTH
+  // blocks together, so authorization must still fail — but the old
+  // per-block `some()` filter resolved each block individually and emptied
+  // unresolvedBlocking, silently reporting 'missing' as if no distinct_reviews
+  // entry existed at all.
+  const entries = [
+    at('2026-08-01T00:00:00Z', 'AMEND_REQUIRED'),
+    at('2026-08-02T00:00:00Z', 'APPROVE'),
+    { actor: 'codex', verdict: 'REJECT' },
+    { actor: 'codex', verdict: 'APPROVE' }
+  ];
+  const result = assessDistinctReview(ROOT, 'fixture-plan', marker(entries));
+  assert.notEqual(result.status, 'satisfied');
+  assert.notEqual(result.status, 'missing');
+  assert.equal(result.status, 'rejected');
+  assert.doesNotMatch(result.detail, /PREDATES/);
+});
+
+test('an approval incomparable to a block (mixed timestamp presence) is never described as predating it', () => {
+  const entries = [
+    at('2026-08-01T00:00:00Z', 'AMEND_REQUIRED'),
+    { actor: 'codex', verdict: 'APPROVE' }
+  ];
+  const result = assessDistinctReview(ROOT, 'fixture-plan', marker(entries));
+  assert.equal(result.status, 'rejected');
+  assert.doesNotMatch(result.detail, /PREDATES/);
+});

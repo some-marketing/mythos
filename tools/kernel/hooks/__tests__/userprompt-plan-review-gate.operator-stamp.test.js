@@ -150,3 +150,23 @@ test('assessOperatorStampEnforcement: OFF by default, ON via flag, present vs mi
     );
   });
 });
+
+// Round-4 review P1: this hook's own diagnostic text documents the CURRENT
+// flag name MYTHOS_ENFORCE_OPERATOR_STAMP, but the shared lib
+// (tools/planning/lib/plan-review-state.js) may only recognize the legacy
+// SMOS_ENFORCE_OPERATOR_STAMP name in a given tree. Enforcement must not
+// silently stay OFF when an operator sets the documented name.
+test('FALSIFIER: MYTHOS_ENFORCE_OPERATOR_STAMP alone (no legacy SMOS var set) enables enforcement', () => {
+  const MYTHOS_FLAG = 'MYTHOS_ENFORCE_OPERATOR_STAMP';
+  const prevMythos = process.env[MYTHOS_FLAG];
+  const prevLegacy = process.env[FLAG];
+  delete process.env[FLAG];
+  process.env[MYTHOS_FLAG] = '1';
+  try {
+    assert.strictEqual(gate.assessOperatorStampEnforcement({ operator_stamp: null }).enforced, true);
+    assert.strictEqual(gate.assessOperatorStampEnforcement({ operator_stamp: null }).status, 'missing');
+  } finally {
+    if (prevMythos === undefined) delete process.env[MYTHOS_FLAG]; else process.env[MYTHOS_FLAG] = prevMythos;
+    if (prevLegacy === undefined) delete process.env[FLAG]; else process.env[FLAG] = prevLegacy;
+  }
+});

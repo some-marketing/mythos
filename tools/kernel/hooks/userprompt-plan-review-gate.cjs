@@ -432,14 +432,33 @@ function assessDistinctReview(projectRoot, planId, marker) {
     return acc === null || reviewIsAfter(r, acc) ? r : acc;
   }, null) || unresolvedBlocking[0] || null;
 
+  // Round-4 review P2: "no approval postdates it" is not the same claim as
+  // "an approval PREDATES it" — reviewIsAfter() returns false both for a
+  // genuinely earlier entry AND for one that is merely INCOMPARABLE (mixed
+  // timestamp/append-order provenance). Only assert PREDATES when a
+  // provable, comparably-ordered earlier approval exists; otherwise say so
+  // honestly rather than inventing a history that cannot be established.
+  const describeSupersession = function (blockingEntry) {
+    const supersedingApproval = byClass.approving.find(function (a) { return reviewIsAfter(a, blockingEntry); });
+    if (supersedingApproval) {
+      return ' (a later approving verdict exists but does not authorize because other unresolved evidence remains outstanding)';
+    }
+    const predatingApproval = byClass.approving.find(function (a) { return reviewIsAfter(blockingEntry, a); });
+    if (predatingApproval) {
+      return ' (an earlier approving verdict exists but PREDATES this block and does not revive)';
+    }
+    if (byClass.approving.length > 0) {
+      return ' (an approving verdict exists but its ordering relative to this block cannot be determined and does not authorize)';
+    }
+    return '';
+  };
+
   if (latestBlocking) {
-    // latestBlocking is drawn only from unresolvedBlocking, so by
-    // construction no approval postdates it — any approval that exists
-    // genuinely PREDATES it, so the claim below is always true.
-    const superseded = byClass.approving.length > 0
-      ? ' (an earlier approving verdict exists but PREDATES this block and does not revive)'
-      : '';
-    return { status: 'rejected', source: 'marker.distinct_reviews', detail: describe(latestBlocking) + superseded };
+    return {
+      status: 'rejected',
+      source: 'marker.distinct_reviews',
+      detail: describe(latestBlocking) + describeSupersession(latestBlocking)
+    };
   }
 
   if (byClass.pending.length > 0 || pendingList.length > 0) {
@@ -457,7 +476,50 @@ function assessDistinctReview(projectRoot, planId, marker) {
     };
   }
 
+  // Round-4 review P2 (multi-block partial-postdate fail-through): when
+  // blocking entries carry MIXED ordering provenance, separate approvals can
+  // each postdate one blocking entry individually — e.g. a timestamped
+  // block+approval pair alongside an untimestamped block+approval pair —
+  // even though liveApproval (above) correctly found no SINGLE approval that
+  // postdates every non-authorizing entry together. unresolvedBlocking's
+  // per-block `some()` check then excludes every blocking entry, and with no
+  // pending/unclassified entry left to blame either, this used to fall all
+  // the way through to 'missing' — falsely reporting that no distinct_reviews
+  // entry exists at all. It is never 'missing' while a recorded blocking
+  // verdict exists and authorization still failed; report it as rejected.
+  if (byClass.blocking.length > 0) {
+    const anyBlocking = byClass.blocking.reduce(function (acc, r) {
+      return acc === null || reviewIsAfter(r, acc) ? r : acc;
+    }, null) || byClass.blocking[0];
+    return {
+      status: 'rejected',
+      source: 'marker.distinct_reviews',
+      detail: describe(anyBlocking) + describeSupersession(anyBlocking)
+    };
+  }
+
   return { status: 'missing', source: null, detail: null };
+}
+
+// Round-4 review P1: this hook's own messages already documented
+// MYTHOS_ENFORCE_OPERATOR_STAMP (the operator-facing flag name), but the
+// shared lib's isOperatorStampEnforcementEnabled() only recognizes the legacy
+// SMOS_ENFORCE_OPERATOR_STAMP name — so enabling the documented flag left the
+// safety floor OFF, and disabling it (per the hook's own diagnostic text) did
+// nothing. Checked here through the same MYTHOS-first/SMOS-fallback
+// readCompatEnv() this file already uses elsewhere, so enforcement no longer
+// depends on the shared lib recognizing the current name; an OR with the
+// lib's own check keeps any of its future flag names honored too.
+function isOperatorStampEnforcementEnabledCompat(prs) {
+  const raw = String(readCompatEnv('MYTHOS_ENFORCE_OPERATOR_STAMP', 'SMOS_ENFORCE_OPERATOR_STAMP') || '')
+    .trim()
+    .toLowerCase();
+  if (raw === '1' || raw === 'true' || raw === 'yes' || raw === 'on') return true;
+  try {
+    return Boolean(prs && typeof prs.isOperatorStampEnforcementEnabled === 'function' && prs.isOperatorStampEnforcementEnabled());
+  } catch (_) {
+    return false;
+  }
 }
 
 /**
@@ -469,8 +531,7 @@ function assessDistinctReview(projectRoot, planId, marker) {
 function assessOperatorStampEnforcement(marker) {
   try {
     const prs = require(path.join(PROJECT_ROOT, 'tools', 'planning', 'lib', 'plan-review-state.js'));
-    if (prs && typeof prs.isOperatorStampEnforcementEnabled === 'function' &&
-        prs.isOperatorStampEnforcementEnabled()) {
+    if (isOperatorStampEnforcementEnabledCompat(prs)) {
       const a = prs.assessOperatorStamp(marker);
       return { enforced: true, status: a.status, detail: a.detail };
     }
@@ -526,7 +587,7 @@ function sharedGateMode() {
 
 function collectSharedHookGate(projectRoot, planId, parsed, planJson, marker, review, bigness, resolved, convene) {
   const prs = require(path.join(PROJECT_ROOT, 'tools', 'planning', 'lib', 'plan-review-state.js'));
-  const stampEnforced = prs.isOperatorStampEnforcementEnabled();
+  const stampEnforced = isOperatorStampEnforcementEnabledCompat(prs);
   const tripsPerimeter = stampEnforced ? planTripsConsequentialPerimeter(planJson) : false;
   let stampVerification = tripsPerimeter ? 'missing' : 'not_required';
   if (tripsPerimeter && prs.assessOperatorStamp(marker).status === 'present') {

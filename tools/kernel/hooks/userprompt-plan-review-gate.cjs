@@ -2,13 +2,18 @@
 'use strict';
 
 /**
- * userprompt-plan-review-gate.cjs — mechanical gate on the plan lifecycle:
+ * userprompt-plan-review-gate.cjs — ADVISORY gate on the plan lifecycle:
  *   plan -> codex (distinct-mind) review -> operator stamp -> (if BIG) /convene -> /run-plan
+ *
+ * CAPABILITY CLASS: ADVISORY, not BLOCKING. This hook always exits 0 (see
+ * BLOCKING SEMANTICS below), so it injects an unmissable directive into model
+ * context rather than halting the turn. Enforcement depends on the coordinator
+ * honouring that directive. Do not describe it as mechanical enforcement.
  *
  * PURPOSE
  *   2026-06-10 failure case: sdag-ads-approval-portal-mvp reached operator
  *   approval with ZERO distinct-mind review. Operator rule: the gate must be a
- *   mechanical hook, not memory/instructions. This hook fires on every
+ *   hook, not memory/instructions. This hook fires on every
  *   UserPromptSubmit, short-circuits instantly on non-/run-plan prompts, and on
  *   /run-plan checks durable artifacts for (a) a distinct-mind (codex) review
  *   and (b) for BIG plans, a convene artifact.
@@ -35,13 +40,17 @@
  *     "convene_review": { "artifact": "<path>", "at": "<ISO>" }   // BIG plans
  *     "big": true            // optional explicit BIG flag (client-facing /
  *                            // always-on-infra / multi-actor criteria)
- *   distinct_reviews is the AUTHORITY. A satisfying entry has a verdict
- *   matching /approve|pass|accept|lgtm|ok/i. "pending"/"in flight" entries and
- *   distinct_reviews_pending do NOT satisfy the gate (honest in-flight state).
- *   LEGACY FALLBACK for plans predating the schema: a file in
- *   _dev/reports/analysis/ named review-progress__*, codex-last-message__*, or
- *   codex-cli-run__* whose filename contains the plan id counts as a distinct
- *   review of last resort (the hook says so when it relies on it).
+ *   distinct_reviews is the ONLY AUTHORITY. A satisfying entry carries an
+ *   approving verdict (see classifyVerdict) AND postdates the most recent
+ *   blocking verdict — approval does not survive a later block. Blocking,
+ *   pending, negated, and unrecognized verdicts all fail closed.
+ *
+ *   There is NO legacy filename fallback. It was removed 2026-08-20 (convene run
+ *   20260820T153136Z-plan-review-gate-verdict-vocabulary): it satisfied the gate
+ *   from a filename alone, never opening the file, and since those artifacts are
+ *   written by every bridge run INCLUDING failed ones, a failed review deposited
+ *   the file that then authorized the plan. A review is evidence only once it is
+ *   recorded in the marker with a verdict.
  *
  * BIG DETECTION (mechanical)
  *   BIG = plan JSON routing_expectations.risk_tier === "high"
@@ -72,14 +81,175 @@ const path = require('path');
 
 const PROJECT_ROOT = path.resolve(__dirname, '../../..');
 
+// MYTHOS_* is authoritative. The SMOS names remain a read-only compatibility
+// fallback for existing launchd or shell callers.
+function readCompatEnv(currentName, legacyName) {
+  if (Object.prototype.hasOwnProperty.call(process.env, currentName)) return process.env[currentName];
+  return process.env[legacyName];
+}
+
 // Prompt matchers: a /run-plan invocation at start of prompt (with or without
 // the leading slash) or an explicit /run-plan anywhere in the prompt.
 const RUN_PLAN_LEAD = /^\s*\/?run-plan\b(?:\s+([a-z0-9][a-z0-9_-]*))?/i;
 const RUN_PLAN_ANYWHERE = /(?<![`'"\w])\/run-plan\b(?:\s+([a-z0-9][a-z0-9_-]*))?/i;
 const OVERRIDE_FLAG = '--skip-distinct-review';
 
-const SATISFYING_VERDICT = /approve|pass|accept|lgtm|\bok\b/i;
-const LEGACY_ARTIFACT_PREFIXES = ['review-progress__', 'codex-last-message__', 'codex-cli-run__'];
+// Verdict vocabulary. Authorized by convene run
+// _dev/reports/analysis/convene-runs/20260820T153136Z-plan-review-gate-verdict-vocabulary/.
+//
+// The declared enum is APPROVE | AMEND_REQUIRED | REJECT | NO_VERDICT, but
+// reviewers write prose. An audit of every recorded verdict in this repo also
+// found: CHANGES_REQUIRED, CHANGES_REQUESTED, "changes-required",
+// REJECT_PENDING_AMENDMENT, NEEDS_AMENDMENT, AMENDED, "blocked for amendment",
+// SOUND, "APPROVED WITH NONBLOCKING FOLLOW-UPS".
+//
+// The defect this replaces: approval was matched first, with unanchored
+// substrings, and anything matching neither pattern fell THROUGH both buckets
+// into a filename-glob fallback that opened the gate. AMEND_REQUIRED matched
+// neither, so "amend this plan" read as authorization. Of the 26 plans that
+// reached the gate through that fallback, 25 should not have been passing and
+// 20 carried artifacts declaring an explicitly blocking verdict.
+//
+// Rules, in order:
+//   1. Match anchored TOKENS, never substrings ("bypass" is not "pass").
+//   2. Blocking and negated-approval beat an approving word in the same string,
+//      so "APPROVE or AMEND_REQUIRED" blocks. The safe direction is closed.
+//   3. An unrecognized verdict is UNCLASSIFIED and fails closed. On an
+//      authorization gate, an unknown value is absence of authorization.
+// AUTHORIZATION IS NOT PROSE. An earlier revision searched arbitrary narrative
+// for an approval word, and distinct-family review broke it with real corpus
+// entries: "PASS on 3 of 4 ... NEW MAJOR ... NEW MAJOR" authorized while
+// carrying unresolved major findings, and "...final /review-task-plan pass
+// required before /run-plan" authorized while explicitly demanding another
+// review. Corpus compatibility is not authorization semantics.
+//
+// So approval now requires a CANONICAL VERDICT FORM: the whole string is an
+// approval token, optionally followed by a short hyphenated/spaced qualifier
+// (APPROVE-FOR-RUN, PASS-WITH-CONDITIONS, APPROVED-WITH-MINOR). Narrative
+// verdicts no longer authorize — they fall to `unclassified` and fail closed,
+// and are migrated deliberately rather than normalized automatically.
+// CLOSED ENUMERATION, not a pattern. Three review rounds each broke a regex I
+// had convinced myself was tight: `approv\w*` admitted APPROVAL, `accept\w*`
+// admitted ACCEPTABLE, and three free qualifier words admitted APPROVE-UNSAFE
+// and APPROVE-WITH-MAJOR-FINDINGS. Wildcards cannot express "these exact
+// verdicts authorize and nothing else", so the head and the qualifier are both
+// enumerated. Adding a form is a deliberate edit here, reviewed like any other.
+const APPROVAL_HEADS = [
+  'APPROVE', 'APPROVED', 'ACCEPT', 'ACCEPTED',
+  'PASS', 'PASSED', 'LGTM', 'OK', 'SOUND', 'CLEAN', 'CLEAR'
+];
+// Qualifiers observed on real approving verdicts in this repository. A verdict
+// whose qualifier is not on this list does not authorize — it is unclassified
+// and fails closed, to be re-recorded in a recognized form.
+const APPROVAL_QUALIFIERS = [
+  'FOR-RUN', 'WITH-CHANGES', 'WITH-CHANGES-APPLIED', 'WITH-MINOR',
+  'WITH-CONDITIONS', 'WITH-NONBLOCKING-FOLLOW-UPS', 'WITH-NONBLOCKING-FOLLOWUPS'
+];
+const APPROVAL_TOKEN = '(?:' + APPROVAL_HEADS.join('|') + ')';
+const SATISFYING_VERDICT = new RegExp(
+  '^\\s*' + APPROVAL_TOKEN
+  + '(?:[-_\\s](?:' + APPROVAL_QUALIFIERS.join('|').replace(/-/g, '[-_\\s]') + '))?'
+  + '\\s*[.!]?\\s*$',
+  'i'
+);
+// Blocking stays prose-TOLERANT: a false block is the safe direction, and
+// blocking verdicts in the corpus routinely carry their findings inline.
+// Narrowed twice after review. Bare `needs\w*` blocked "APPROVED; a follow-up
+// needs documentation" and bare `hold` blocked "stakeholders hold no
+// objections"; both are now specific phrases. Bare `block\w*` matched inside
+// "non-blocking" and "no blocking findings", so those two forms are excluded.
+const BLOCKING_VERDICT = /\b(amend\w*|reject\w*|fail\w*|(?<!non[-\s])(?<!no\s)block\w*|denied|deny|no[_\s-]?verdict|changes?[_\s-]?(?:required|requested)|needs[_\s-]?(?:amendment|revision|rework|changes|work)|revise|revision|on[_\s-]hold)\b/i;
+const PENDING_VERDICT = /pending|in.flight/i;
+// Negation must cover EVERY approval token, not just approve/accept — "not OK",
+// "not LGTM", "not sound" and "not clean" all read as approvals otherwise.
+//
+// The refusal idiom "pass on" is matched ONLY when it governs an authorization
+// word ("I pass on authorizing this plan"). A bare `pass on` guard is wrong:
+// "PASS on 3 of 4 round-1 findings" is a real recorded APPROVAL in this repo,
+// and blocking it was a regression caught against the live corpus.
+// Order-independent: a negation word ANYWHERE alongside an approval token
+// ANYWHERE disqualifies. Written as two lookaheads so "not OK" and "OK-not-
+// really" are both caught — a one-directional pattern only caught the first.
+const NEGATED_APPROVAL = new RegExp(
+  '(?:^(?=[\\s\\S]*\\b(?:not|never|cannot|can\'t|no|without|isn\'t|aren\'t|nor)\\b)'
+  + '(?=[\\s\\S]*\\b' + APPROVAL_TOKEN + '\\b))'
+  + '|(?:\\bpass(?:es|ed)?\\s+on\\s+(?:approv|authoriz|accept|sign))',
+  'i'
+);
+
+/**
+ * Classify one recorded verdict string.
+ *
+ * @returns {'approving'|'blocking'|'pending'|'unclassified'}
+ */
+function classifyVerdict(verdict) {
+  const text = String(verdict || '').trim();
+  if (!text) return 'pending';
+  if (BLOCKING_VERDICT.test(text)) return 'blocking';
+  if (PENDING_VERDICT.test(text)) return 'pending';
+  // Negation is checked ONLY against a canonical-form approval. Applied to
+  // arbitrary prose it misfires — "CLEAN - two non-blocking advisories, not
+  // scoped to this plan" contains both a negation word and an approval word
+  // while being neither an approval nor a block. Prose cannot authorize at all
+  // now, so it needs no negation guard: it simply falls through and fails
+  // closed as unclassified.
+  if (SATISFYING_VERDICT.test(text)) {
+    return NEGATED_APPROVAL.test(text) ? 'unclassified' : 'approving';
+  }
+  return 'unclassified';
+}
+
+/**
+ * Order two review entries, where each is a WRAPPER { review, index } and never
+ * the marker object itself. The sequence number lives outside the caller's data
+ * on purpose: a marker is untrusted input, so an entry carrying its own
+ * `__index` must not be able to overwrite its position in the ordering.
+ *
+ * Ordering provenance must be UNIFORM. If both entries carry a parseable `at`,
+ * timestamps decide. If NEITHER does, append order stands in. If exactly one
+ * does, the two are not comparable and this returns false — fail closed —
+ * because mixing the two modes let a stale approval with a real timestamp
+ * jump ahead of a later block whose timestamp was missing or malformed.
+ */
+// Round-4 review finding (MAJOR): raw Date.parse() accepts calendar-invalid
+// dates by silently normalizing them (2026-02-30T00:00:00Z parses as
+// 2026-03-02T00:00:00.000Z), which let a malformed "approval" timestamp
+// masquerade as later than a real block. The marker's ISO timestamp contract
+// requires a real calendar date, so ordering must validate the calendar
+// fields itself rather than trust JS Date normalization.
+const ISO_TIMESTAMP_RE = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d{1,3})?(?:Z|[+-]\d{2}:\d{2})$/;
+
+function isLeapYear(year) {
+  return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+}
+
+function parseStrictIsoTimestamp(value) {
+  const text = String(value || '');
+  const m = ISO_TIMESTAMP_RE.exec(text);
+  if (!m) return NaN;
+  const year = Number(m[1]);
+  const month = Number(m[2]);
+  const day = Number(m[3]);
+  const hour = Number(m[4]);
+  const minute = Number(m[5]);
+  const second = Number(m[6]);
+  if (month < 1 || month > 12) return NaN;
+  const daysInMonth = [31, isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  if (day < 1 || day > daysInMonth[month - 1]) return NaN;
+  if (hour > 23 || minute > 59 || second > 59) return NaN;
+  const parsed = Date.parse(text);
+  return Number.isFinite(parsed) ? parsed : NaN;
+}
+
+function reviewIsAfter(candidate, reference) {
+  const a = parseStrictIsoTimestamp(candidate.review && candidate.review.at);
+  const b = parseStrictIsoTimestamp(reference.review && reference.review.at);
+  const aOk = Number.isFinite(a);
+  const bOk = Number.isFinite(b);
+  if (aOk && bOk) return a > b;
+  if (!aOk && !bOk) return candidate.index > reference.index;
+  return false;
+}
 
 function readStdin() {
   try { return fs.readFileSync(0, 'utf8'); } catch (_) { return ''; }
@@ -133,21 +303,18 @@ function findMarker(projectRoot, planId, clientCode) {
   return { path: candidates[0], marker: null };
 }
 
-/** Legacy fallback: artifact in _dev/reports/analysis/ with codex provenance + plan id in filename. */
-function findLegacyReviewArtifact(projectRoot, planId) {
-  try {
-    const dir = path.join(projectRoot, '_dev', 'reports', 'analysis');
-    if (!fs.existsSync(dir)) return null;
-    const files = fs.readdirSync(dir);
-    for (const f of files) {
-      if (!f.includes(planId)) continue;
-      for (const prefix of LEGACY_ARTIFACT_PREFIXES) {
-        if (f.startsWith(prefix)) return path.join('_dev', 'reports', 'analysis', f);
-      }
-    }
-  } catch (_) { /* best-effort */ }
-  return null;
-}
+// The legacy artifact-glob fallback was REMOVED here (convene run
+// 20260820T153136Z-plan-review-gate-verdict-vocabulary, unanimous).
+//
+// It satisfied the gate whenever a file in _dev/reports/analysis/ merely had the
+// plan id in its NAME and a codex-run prefix. It never opened the file. Those
+// artifacts are written by every bridge run INCLUDING runs that fail, so a
+// failed review deposited the file that then authorized the plan.
+//
+// Body-parsing was considered and rejected: prompt echoes ("give APPROVE or
+// AMEND_REQUIRED") are structurally indistinguishable from real verdict
+// declarations, so a body regex cannot be authoritative. A review is evidence
+// only when it is recorded in the marker's distinct_reviews[] with a verdict.
 
 /** Convene evidence: marker.convene_review OR convene-runs dir containing plan id. */
 function findConveneEvidence(projectRoot, planId, marker) {
@@ -200,37 +367,159 @@ function resolveConveneReviewDir(projectRoot, conveneReview) {
   return null;
 }
 
-/** Classify the distinct-review state from the marker (+ legacy fallback). */
+/**
+ * Classify the distinct-review state from the marker. The marker is the ONLY
+ * evidence source; there is no filename fallback (see the note above).
+ *
+ * Approval is not immortal. A satisfying entry authorizes the plan only if it
+ * POSTDATES the most recent blocking verdict — otherwise an old APPROVE would
+ * survive a later CHANGES_REQUIRED and re-authorize a plan that was just told to
+ * amend. Falsifier pair: [APPROVE, CHANGES_REQUIRED] must block;
+ * [AMEND_REQUIRED, APPROVE] must pass.
+ */
 function assessDistinctReview(projectRoot, planId, marker) {
-  const reviews = (marker && Array.isArray(marker.distinct_reviews)) ? marker.distinct_reviews : [];
-  const satisfied = reviews.filter(function (r) {
-    return r && typeof r.verdict === 'string' && SATISFYING_VERDICT.test(r.verdict) && !/pending|in.flight/i.test(r.verdict);
-  });
-  if (satisfied.length > 0) {
-    const r = satisfied[0];
-    return { status: 'satisfied', source: 'marker.distinct_reviews', detail: (r.actor || 'unknown actor') + ' verdict "' + r.verdict + '" (' + (r.artifact || 'no artifact ref') + ')' };
-  }
-  const rejected = reviews.filter(function (r) {
-    return r && typeof r.verdict === 'string' && /reject|fail|block/i.test(r.verdict);
-  });
-  if (rejected.length > 0) {
-    const r = rejected[0];
-    return { status: 'rejected', source: 'marker.distinct_reviews', detail: (r.actor || 'unknown actor') + ' verdict "' + r.verdict + '" (' + (r.artifact || 'no artifact ref') + ')' };
-  }
-  const pendingInline = reviews.filter(function (r) {
-    return r && (!r.verdict || /pending|in.flight/i.test(String(r.verdict)));
-  });
+  const raw = (marker && Array.isArray(marker.distinct_reviews)) ? marker.distinct_reviews : [];
+  // Wrap, never decorate: the sequence number lives OUTSIDE the marker object so
+  // untrusted marker data cannot supply its own index and reorder itself.
+  const reviews = raw
+    .filter(function (r) { return r && typeof r === 'object'; })
+    .map(function (r, index) { return { review: r, index: index }; });
+
+  const byClass = { approving: [], blocking: [], pending: [], unclassified: [] };
+  for (const r of reviews) byClass[classifyVerdict(r.review.verdict)].push(r);
+
+  const describe = function (r) {
+    return (r.review.actor || 'unknown actor') + ' verdict "' + String(r.review.verdict || '') + '" ('
+      + (r.review.artifact || 'no artifact ref') + ')';
+  };
+
   const pendingList = (marker && Array.isArray(marker.distinct_reviews_pending)) ? marker.distinct_reviews_pending : [];
-  if (pendingInline.length > 0 || pendingList.length > 0) {
-    const p = pendingInline[0] || pendingList[0];
+
+  // Authorization is proven against EVERY NON-AUTHORIZING entry — blocking,
+  // pending, AND unclassified alike. Two separate mistakes were made here:
+  //
+  //   - Folding the blocking set to one "latest" member. reviewIsAfter reports
+  //     incomparable pairs as false, so that set is only PARTIALLY ordered and a
+  //     maximum silently discarded blocks an approval could then slip past.
+  //     `every` is the only safe quantifier over a partial order.
+  //   - Quantifying over blocking ONLY, so [APPROVE, pending] and
+  //     [APPROVE, "see major findings"] both authorized — contradicting this
+  //     hook's own contract that pending and unrecognized verdicts fail closed.
+  //
+  // A populated distinct_reviews_pending[] carries no ordering at all, so it
+  // blocks outright rather than being compared.
+  const nonAuthorizing = byClass.blocking.concat(byClass.pending, byClass.unclassified);
+  const liveApproval = pendingList.length > 0 ? undefined : byClass.approving.find(function (approval) {
+    return nonAuthorizing.every(function (other) { return reviewIsAfter(approval, other); });
+  });
+
+  if (liveApproval) {
+    return { status: 'satisfied', source: 'marker.distinct_reviews', detail: describe(liveApproval) };
+  }
+
+  // Round-4 review finding (MODERATE): reporting always blamed the blocking
+  // verdict and always claimed "PREDATES this block" whenever ANY approval
+  // existed, even when that approval actually postdated the block and the
+  // real withholding entry was a later pending/unclassified one. Only a
+  // blocking entry that no approval postdates is still the reason
+  // authorization fails; a blocking entry an approval already postdates is
+  // resolved and must fall through to whichever entry is genuinely
+  // withholding (handled by the pending/unclassified branches below).
+  const unresolvedBlocking = byClass.blocking.filter(function (r) {
+    return !byClass.approving.some(function (a) { return reviewIsAfter(a, r); });
+  });
+  const latestBlocking = unresolvedBlocking.reduce(function (acc, r) {
+    return acc === null || reviewIsAfter(r, acc) ? r : acc;
+  }, null) || unresolvedBlocking[0] || null;
+
+  // Round-4 review P2: "no approval postdates it" is not the same claim as
+  // "an approval PREDATES it" — reviewIsAfter() returns false both for a
+  // genuinely earlier entry AND for one that is merely INCOMPARABLE (mixed
+  // timestamp/append-order provenance). Only assert PREDATES when a
+  // provable, comparably-ordered earlier approval exists; otherwise say so
+  // honestly rather than inventing a history that cannot be established.
+  const describeSupersession = function (blockingEntry) {
+    const supersedingApproval = byClass.approving.find(function (a) { return reviewIsAfter(a, blockingEntry); });
+    if (supersedingApproval) {
+      return ' (a later approving verdict exists but does not authorize because other unresolved evidence remains outstanding)';
+    }
+    const predatingApproval = byClass.approving.find(function (a) { return reviewIsAfter(blockingEntry, a); });
+    if (predatingApproval) {
+      return ' (an earlier approving verdict exists but PREDATES this block and does not revive)';
+    }
+    if (byClass.approving.length > 0) {
+      return ' (an approving verdict exists but its ordering relative to this block cannot be determined and does not authorize)';
+    }
+    return '';
+  };
+
+  if (latestBlocking) {
+    return {
+      status: 'rejected',
+      source: 'marker.distinct_reviews',
+      detail: describe(latestBlocking) + describeSupersession(latestBlocking)
+    };
+  }
+
+  if (byClass.pending.length > 0 || pendingList.length > 0) {
+    const p = byClass.pending.length > 0 ? byClass.pending[0].review : pendingList[0];
     return { status: 'pending', source: 'marker', detail: (p.actor || 'unknown actor') + ' review in flight (' + (p.artifact || p.note || 'no ref') + ')' };
   }
-  // Legacy artifact-glob fallback for plans predating the marker schema.
-  const legacy = findLegacyReviewArtifact(projectRoot, planId);
-  if (legacy) {
-    return { status: 'satisfied-legacy', source: 'artifact-glob', detail: legacy + ' (legacy fallback; record it in marker.distinct_reviews to make this authoritative)' };
+
+  // Fail closed: a verdict we cannot classify is not an approval.
+  if (byClass.unclassified.length > 0) {
+    const u = byClass.unclassified[0];
+    return {
+      status: 'unclassified',
+      source: 'marker.distinct_reviews',
+      detail: describe(u) + ' — this verdict string is not recognized as an approval, so it does not open the gate'
+    };
   }
+
+  // Round-4 review P2 (multi-block partial-postdate fail-through): when
+  // blocking entries carry MIXED ordering provenance, separate approvals can
+  // each postdate one blocking entry individually — e.g. a timestamped
+  // block+approval pair alongside an untimestamped block+approval pair —
+  // even though liveApproval (above) correctly found no SINGLE approval that
+  // postdates every non-authorizing entry together. unresolvedBlocking's
+  // per-block `some()` check then excludes every blocking entry, and with no
+  // pending/unclassified entry left to blame either, this used to fall all
+  // the way through to 'missing' — falsely reporting that no distinct_reviews
+  // entry exists at all. It is never 'missing' while a recorded blocking
+  // verdict exists and authorization still failed; report it as rejected.
+  if (byClass.blocking.length > 0) {
+    const anyBlocking = byClass.blocking.reduce(function (acc, r) {
+      return acc === null || reviewIsAfter(r, acc) ? r : acc;
+    }, null) || byClass.blocking[0];
+    return {
+      status: 'rejected',
+      source: 'marker.distinct_reviews',
+      detail: describe(anyBlocking) + describeSupersession(anyBlocking)
+    };
+  }
+
   return { status: 'missing', source: null, detail: null };
+}
+
+// Round-4 review P1: this hook's own messages already documented
+// MYTHOS_ENFORCE_OPERATOR_STAMP (the operator-facing flag name), but the
+// shared lib's isOperatorStampEnforcementEnabled() only recognizes the legacy
+// SMOS_ENFORCE_OPERATOR_STAMP name — so enabling the documented flag left the
+// safety floor OFF, and disabling it (per the hook's own diagnostic text) did
+// nothing. Checked here through the same MYTHOS-first/SMOS-fallback
+// readCompatEnv() this file already uses elsewhere, so enforcement no longer
+// depends on the shared lib recognizing the current name; an OR with the
+// lib's own check keeps any of its future flag names honored too.
+function isOperatorStampEnforcementEnabledCompat(prs) {
+  const raw = String(readCompatEnv('MYTHOS_ENFORCE_OPERATOR_STAMP', 'SMOS_ENFORCE_OPERATOR_STAMP') || '')
+    .trim()
+    .toLowerCase();
+  if (raw === '1' || raw === 'true' || raw === 'yes' || raw === 'on') return true;
+  try {
+    return Boolean(prs && typeof prs.isOperatorStampEnforcementEnabled === 'function' && prs.isOperatorStampEnforcementEnabled());
+  } catch (_) {
+    return false;
+  }
 }
 
 /**
@@ -242,8 +531,7 @@ function assessDistinctReview(projectRoot, planId, marker) {
 function assessOperatorStampEnforcement(marker) {
   try {
     const prs = require(path.join(PROJECT_ROOT, 'tools', 'planning', 'lib', 'plan-review-state.js'));
-    if (prs && typeof prs.isOperatorStampEnforcementEnabled === 'function' &&
-        prs.isOperatorStampEnforcementEnabled()) {
+    if (isOperatorStampEnforcementEnabledCompat(prs)) {
       const a = prs.assessOperatorStamp(marker);
       return { enforced: true, status: a.status, detail: a.detail };
     }
@@ -299,7 +587,7 @@ function sharedGateMode() {
 
 function collectSharedHookGate(projectRoot, planId, parsed, planJson, marker, review, bigness, resolved, convene) {
   const prs = require(path.join(PROJECT_ROOT, 'tools', 'planning', 'lib', 'plan-review-state.js'));
-  const stampEnforced = prs.isOperatorStampEnforcementEnabled();
+  const stampEnforced = isOperatorStampEnforcementEnabledCompat(prs);
   const tripsPerimeter = stampEnforced ? planTripsConsequentialPerimeter(planJson) : false;
   let stampVerification = tripsPerimeter ? 'missing' : 'not_required';
   if (tripsPerimeter && prs.assessOperatorStamp(marker).status === 'present') {
@@ -312,7 +600,9 @@ function collectSharedHookGate(projectRoot, planId, parsed, planJson, marker, re
     }
   }
   return prs.collectPlanRunGateDecision(projectRoot, planId, {
-    legacyReviewPresent: review.status === 'satisfied-legacy',
+    // Always false: the legacy artifact-glob fallback was retired, so no review
+    // can be "present" on filename evidence alone.
+    legacyReviewPresent: false,
     requiresConvene: bigness.big,
     convenePresent: Boolean(convene),
     operatorOverridePresent: parsed.override,
@@ -431,7 +721,7 @@ function evaluateGate(prompt, projectRoot, sessionId) {
   // REJECT_HOLLOW_COMPLETION (kernel convene 20260629T214856Z): a convene-run
   // DIRECTORY only counts as evidence if it carries a real synthesis.md (not just
   // the mechanically-written synthesis-skeleton.md, and not a keyword-padded fake).
-  // Gated behind the DEFAULT-OFF flag SMOS_REQUIRE_CONVENE_SYNTHESIS so the default
+  // Gated behind the DEFAULT-OFF flag MYTHOS_REQUIRE_CONVENE_SYNTHESIS so the default
   // path is byte-unchanged: the env is read ONLY here, and conveneHollowReason
   // stays null unless the flag is on AND a resolvable convene-run dir fails
   // validation. Covers BOTH evidence sources — the auto-discovered convene-runs dir
@@ -440,7 +730,7 @@ function evaluateGate(prompt, projectRoot, sessionId) {
   // marker.convene_review with no resolvable dir path is left as-is (not assessable
   // => preserve the operator-authored record).
   let conveneHollowReason = null;
-  if (bigness.big && convene && process.env.SMOS_REQUIRE_CONVENE_SYNTHESIS) {
+  if (bigness.big && convene && readCompatEnv('MYTHOS_REQUIRE_CONVENE_SYNTHESIS', 'SMOS_REQUIRE_CONVENE_SYNTHESIS')) {
     let dirToValidate = null;
     if (convene.source === 'convene-runs') {
       dirToValidate = path.join(projectRoot, convene.ref);
@@ -482,8 +772,13 @@ function evaluateGate(prompt, projectRoot, sessionId) {
   const missing = [];
   if (!parsed.override && review.status === 'missing') {
     missing.push({
-      what: 'DISTINCT-MIND (codex) REVIEW — no distinct_reviews entry in ' + found.path + ' and no legacy codex artifact in _dev/reports/analysis/ names this plan.',
+      what: 'DISTINCT-MIND (codex) REVIEW — no distinct_reviews entry in ' + found.path + '. A review artifact sitting in _dev/reports/analysis/ is NOT evidence; only a recorded verdict is.',
       fix: 'Produce it: /dispatch-bridge — dispatch a codex review of ' + planId + ' (target: codex; prompt: review the plan at ' + path.relative(projectRoot, resolved.jsonPath) + '), then record {actor, artifact, at, verdict} in marker.distinct_reviews.'
+    });
+  } else if (!parsed.override && review.status === 'unclassified') {
+    missing.push({
+      what: 'DISTINCT-MIND REVIEW VERDICT NOT RECOGNIZED — ' + review.detail + '. An unrecognized verdict is absence of authorization, not approval.',
+      fix: 'Record the verdict using recognized wording (APPROVE / AMEND_REQUIRED / REJECT), or obtain a fresh approving distinct review, then re-run /run-plan ' + planId + '.'
     });
   } else if (!parsed.override && review.status === 'pending') {
     missing.push({
@@ -504,7 +799,7 @@ function evaluateGate(prompt, projectRoot, sessionId) {
   } else if (!parsed.override && bigness.big && conveneHollowReason) {
     // REJECT_HOLLOW_COMPLETION: a convene-run dir exists (auto-discovered OR pointed
     // at by marker.convene_review) but its synthesis is missing/skeleton/padded.
-    // Only reachable when SMOS_REQUIRE_CONVENE_SYNTHESIS is ON.
+  // Only reachable when MYTHOS_REQUIRE_CONVENE_SYNTHESIS is ON.
     missing.push({
       what: 'REJECT_HOLLOW_COMPLETION — BIG plan convene evidence (' + convene.source + ': ' + convene.ref + ') is HOLLOW: ' + conveneHollowReason + '. A skeleton-only or keyword-padded convene (synthesis skipped/faked) is NOT convene evidence.',
       fix: 'Complete the synthesis: the ORIGIN actor writes a real synthesis.md (NOT synthesis-skeleton.md) — referencing the convened slots with cross-verification catches and net findings — then re-run /run-plan ' + planId + '.'
@@ -515,7 +810,7 @@ function evaluateGate(prompt, projectRoot, sessionId) {
   // separate from distinct-review and convene (Stamp != convene). It was named in
   // this hook's pipeline text but never CHECKED, so a marker with
   // operator_stamp:null passed. Now enforced — but only when the default-OFF
-  // feature flag SMOS_ENFORCE_OPERATOR_STAMP is deliberately turned on (bootstrap
+  // feature flag MYTHOS_ENFORCE_OPERATOR_STAMP is deliberately turned on (bootstrap
   // safety: Stage B, not built yet, is what produces a verifiable stamp; enforcing
   // before that exists would jam every /run-plan). PRESENCE-only here; run-time
   // authenticity re-verification is Stage B/D, not built here.
@@ -527,14 +822,19 @@ function evaluateGate(prompt, projectRoot, sessionId) {
   const stamp = assessOperatorStampEnforcement(marker);
   if (stamp.enforced && stamp.status !== 'present' && planTripsConsequentialPerimeter(planJson)) {
     missing.push({
-      what: 'OPERATOR STAMP — ' + stamp.detail + ' (gate flag SMOS_ENFORCE_OPERATOR_STAMP is ON; plan trips the consequential perimeter). Stamp != convene; this is a separate requirement.',
+      what: 'OPERATOR STAMP — ' + stamp.detail + ' (gate flag MYTHOS_ENFORCE_OPERATOR_STAMP is ON; plan trips the consequential perimeter). Stamp != convene; this is a separate requirement.',
       fix: 'Obtain the operator approval stamp for ' + planId + ' (out-of-band proof: an operator-authored Dart approval comment, or the /stamp HMAC fallback per the plan-approval-surface concept), then re-run /run-plan ' + planId + '. NOTE: presence is necessary but run-time authenticity re-verification is Stage B/D.'
     });
   }
 
   if (missing.length > 0) {
     const lines = [
-      '████ [plan-review-gate] DO NOT EXECUTE /run-plan ' + planId + ' — MECHANICAL GATE FAILED ████',
+      // ADVISORY, not MECHANICAL: this hook exits 0 by contract, so it injects
+      // context rather than halting the turn. Claiming "MECHANICAL GATE FAILED"
+      // overstated its capability class. Enforcement depends on the coordinator
+      // honouring this notice; making /run-plan genuinely unable to execute is a
+      // separate change requiring harness-level proof.
+      '████ [plan-review-gate] DO NOT EXECUTE /run-plan ' + planId + ' — ADVISORY REVIEW GATE FAILED ████',
       'Operator pipeline rule (2026-06-10): plan -> codex distinct review -> operator stamp -> (if BIG) /convene -> /run-plan.',
       'A producer cannot validate its own acceptance-grade outcome. The following requirements are UNMET:'
     ];
@@ -580,7 +880,7 @@ function main() {
 }
 
 // Exposed for unit testing.
-module.exports = { parsePrompt, evaluateGate, assessDistinctReview, isBig, findConveneEvidence, assessOperatorStampEnforcement, planTripsConsequentialPerimeter, collectSharedHookGate, appendHookComparison, sharedGateMode };
+module.exports = { parsePrompt, evaluateGate, assessDistinctReview, classifyVerdict, isBig, findConveneEvidence, assessOperatorStampEnforcement, planTripsConsequentialPerimeter, collectSharedHookGate, appendHookComparison, sharedGateMode };
 
 if (require.main === module) {
   try {

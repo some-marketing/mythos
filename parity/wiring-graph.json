@@ -13904,7 +13904,7 @@
       "id": "file:tools/kernel/hooks/__tests__/userprompt-plan-review-gate.operator-stamp.test.js",
       "type": "file",
       "path": "tools/kernel/hooks/__tests__/userprompt-plan-review-gate.operator-stamp.test.js",
-      "sha256": "b86ac604a99a5ef7b4216e7f1624a64da267293e3f8d73968017fedca7530c47",
+      "sha256": "e04943b50dbeaedfca0def734a556d86846e54ebec6fdd9ae633ddf6505841ec",
       "mode": 420
     },
     {
@@ -13920,6 +13920,13 @@
       "path": "tools/kernel/hooks/__tests__/userprompt-plan-review-gate.test.cjs",
       "sha256": "5060352c19b89c2dfb8bd8a5fb8f89377d724e99cf7ce685e1d8c8d946aca52b",
       "mode": 493
+    },
+    {
+      "id": "file:tools/kernel/hooks/__tests__/userprompt-plan-review-gate.verdict-vocabulary.test.js",
+      "type": "file",
+      "path": "tools/kernel/hooks/__tests__/userprompt-plan-review-gate.verdict-vocabulary.test.js",
+      "sha256": "a9100b2dcb7257df823da72cbec065c58e0cd45c4767253f80c42bbd71123891",
+      "mode": 420
     },
     {
       "id": "file:tools/kernel/hooks/__tests__/userpromptsubmit-ambient-router.test.cjs",
@@ -14107,8 +14114,8 @@
       "id": "file:tools/kernel/hooks/userprompt-plan-review-gate.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/userprompt-plan-review-gate.cjs",
-      "sha256": "9a35eeb7d744b1226b6974162525b8992aaf4bd29d731a027df4a0eaba954561",
-      "mode": 493
+      "sha256": "b519f6c15c948b86c7936d712ca3c16a7c02e128ac56e7b8a00ba15f709d5be2",
+      "mode": 420
     },
     {
       "id": "file:tools/kernel/hooks/userpromptsubmit-ambient-router.cjs",
@@ -41032,6 +41039,15 @@
       "specifier": "../signal-lifecycle-driver"
     },
     {
+      "id": "9d07429653b8521d14e76c5a510dcb1c550b67d46586d50ec966aa42f589954b",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/userprompt-plan-review-gate.verdict-vocabulary.test.js",
+      "to": "file:tools/kernel/hooks/userprompt-plan-review-gate.cjs",
+      "target": "tools/kernel/hooks/userprompt-plan-review-gate.cjs",
+      "required": true,
+      "specifier": "../userprompt-plan-review-gate.cjs"
+    },
+    {
       "id": "9d077060f165721b042b7cf94a7517b181f0aeb9b2698e5798d04fee12ef67d4",
       "type": "static-import",
       "from": "file:tools/sessions/__tests__/boundary-markers.test.js",
@@ -51322,8 +51338,8 @@
     }
   ],
   "counts": {
-    "nodes": 3851,
-    "edges": 2882,
+    "nodes": 3852,
+    "edges": 2883,
     "unresolved": 0
   }
 }

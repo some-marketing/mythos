@@ -3723,14 +3723,14 @@
       "id": "file:AGENTS.md",
       "type": "file",
       "path": "AGENTS.md",
-      "sha256": "1bbdf5682011ffa2f85d8cc178c52c36e1a0a523353e1209afeef0486114384d",
+      "sha256": "5ef390e01d8058eeda8ca8bb09666242cf4cc6f19468c32fa6be5786df159942",
       "mode": 420
     },
     {
       "id": "file:CLAUDE.md",
       "type": "file",
       "path": "CLAUDE.md",
-      "sha256": "42743446dda980699e3c3e0347163fd4a6c70db976aeb23f7849513433d3c2a4",
+      "sha256": "5cf832914532316647bad4638b92599e1b26656cc24809d7a5828f95a79ee925",
       "mode": 420
     },
     {
@@ -7888,7 +7888,7 @@
       "id": "file:INSTRUCTIONS.md",
       "type": "file",
       "path": "INSTRUCTIONS.md",
-      "sha256": "0ce96f9a85ca1f9535ea70b13bde33bf1ae6ea0e42ce905adbabc0ed4a54ad39",
+      "sha256": "cb80939b3b687518c4aebd6ba9122b8f944150a0ac3d6bcc67e5789863510f64",
       "mode": 420
     },
     {
@@ -9309,7 +9309,7 @@
       "id": "file:instructions/generated/claude/CLAUDE.md",
       "type": "file",
       "path": "instructions/generated/claude/CLAUDE.md",
-      "sha256": "42743446dda980699e3c3e0347163fd4a6c70db976aeb23f7849513433d3c2a4",
+      "sha256": "5cf832914532316647bad4638b92599e1b26656cc24809d7a5828f95a79ee925",
       "mode": 420
     },
     {
@@ -9337,7 +9337,7 @@
       "id": "file:OPENCODE.md",
       "type": "file",
       "path": "OPENCODE.md",
-      "sha256": "918135edea99b387e0f7cdeda4b4c294a62b06c0bc80650fa79a6f33657823ff",
+      "sha256": "c0600d6fa29e4b9d2fdac64af7544a1544c55fb16bbc2ae02f0cb000bf42c7e2",
       "mode": 420
     },
     {
@@ -13026,7 +13026,7 @@
       "id": "file:tools/instructions/__tests__/aliases.test.js",
       "type": "file",
       "path": "tools/instructions/__tests__/aliases.test.js",
-      "sha256": "b3deeb5260fd6f7d10ae40eca07fc2f457669059d6819feaf64952e714699e29",
+      "sha256": "fc46e8fd6a798187313aebdb6c4b7c5ff32adb41e44125fa8e8c56e88062c9c7",
       "mode": 420
     },
     {
@@ -13040,7 +13040,7 @@
       "id": "file:tools/instructions/lib/engine.js",
       "type": "file",
       "path": "tools/instructions/lib/engine.js",
-      "sha256": "7227f30359cfe1db26af3e5bac35fa687732da4d2a53c75de83d4d8f0ebb54a9",
+      "sha256": "cc5246016adb9f69214462dc9e17bcf37fdd4dcdf16da05e9d24ceee0e8edae6",
       "mode": 420
     },
     {
@@ -13054,7 +13054,7 @@
       "id": "file:tools/instructions/lib/render.js",
       "type": "file",
       "path": "tools/instructions/lib/render.js",
-      "sha256": "910d481b4f13e4d79580825144fdceb403bb5f83807d10693c8018aec994cf25",
+      "sha256": "10d77aeaab442f34a9a0b906ecedc2bed48e73adf18daab49afce9597f3cce38",
       "mode": 420
     },
     {

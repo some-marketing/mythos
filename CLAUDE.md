@@ -229,8 +229,8 @@ Command names are mechanical aliases. The typed alias is provenance; authority, 
 - `/oa` -> `/orchestrate-loop` [compatibility]; authority: `/orchestrate-loop`
 - `/council-of-owls` -> `/orchestrate-loop` [compatibility]; authority: `/orchestrate-loop`
 - `/deliberate` -> `/orchestrate-loop` [compatibility]; authority: `/orchestrate-loop`
-- `/dl` -> `/deliberate` [compatibility]; authority: `/deliberate`
-- `/oc` -> `/council-of-owls` [compatibility]; authority: `/council-of-owls`
+- `/dl` -> `/deliberate` [compatibility]; executes: `/orchestrate-loop`; authority: `/orchestrate-loop`
+- `/oc` -> `/council-of-owls` [compatibility]; executes: `/orchestrate-loop`; authority: `/orchestrate-loop`
 - `/help-me-route` -> `/route` [compatibility]; authority: `/route`
 - `/blueprint` -> `/blueprint` [compatibility]; authority: `/blueprint`
 - `/el` -> `/evidence-loop` [compatibility]; authority: `/evidence-loop`

@@ -55,12 +55,20 @@ function renderAliasGroup(aliases, prefix) {
   // primary alias still reports the underlying canonical id.
   const primaryAuthorityById = new Map();
   for (const alias of aliases) {
-    if (alias.status === 'primary') primaryAuthorityById.set(alias.id, alias.resolves_to);
+    if (alias.status === 'primary') {
+      primaryAuthorityById.set(alias.id, alias.authority_source || alias.resolves_to);
+    }
   }
   const authorityOf = (alias) => {
+    if (alias.authority_source) return alias.authority_source;
     const target = alias.resolves_to;
     return primaryAuthorityById.has(target) ? primaryAuthorityById.get(target) : target;
   };
+  const executionNote = (alias) => (
+    alias.execution_target && alias.execution_target !== alias.resolves_to
+      ? `; executes: \`${prefix}${alias.execution_target}\``
+      : ''
+  );
 
   const primaries = aliases.filter((a) => a.status === 'primary');
   const crossAliases = aliases.filter((a) => a.status === 'cross-alias');
@@ -68,13 +76,13 @@ function renderAliasGroup(aliases, prefix) {
 
   const lines = [];
   for (const alias of primaries) {
-    lines.push(`- \`${prefix}${alias.id}\` (\`${prefix}${authorityOf(alias)}\`) [primary]; authority: \`${prefix}${authorityOf(alias)}\``);
+    lines.push(`- \`${prefix}${alias.id}\` (\`${prefix}${alias.resolves_to}\`) [primary]${executionNote(alias)}; authority: \`${prefix}${authorityOf(alias)}\``);
   }
   for (const alias of crossAliases) {
-    lines.push(`- \`${prefix}${alias.id}\` -> \`${prefix}${alias.resolves_to}\` [cross-alias]; authority: \`${prefix}${authorityOf(alias)}\``);
+    lines.push(`- \`${prefix}${alias.id}\` -> \`${prefix}${alias.resolves_to}\` [cross-alias]${executionNote(alias)}; authority: \`${prefix}${authorityOf(alias)}\``);
   }
   for (const alias of compatibility) {
-    lines.push(`- \`${prefix}${alias.id}\` -> \`${prefix}${alias.resolves_to}\` [${alias.status || 'compatibility'}]; authority: \`${prefix}${authorityOf(alias)}\``);
+    lines.push(`- \`${prefix}${alias.id}\` -> \`${prefix}${alias.resolves_to}\` [${alias.status || 'compatibility'}]${executionNote(alias)}; authority: \`${prefix}${authorityOf(alias)}\``);
   }
   return lines;
 }

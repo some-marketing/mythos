@@ -34,11 +34,28 @@ test('no aliases -> no section (stays mythos-compatible)', () => {
 
 test('parseAliasRegistry returns all four domains as arrays (JSON form)', () => {
   const raw = JSON.stringify({
-    aliases: { 'plan-quest': { resolves_to: 'plan-task', status: 'primary' } },
+    aliases: {
+      'plan-quest': { resolves_to: 'plan-task', status: 'primary' },
+      dl: {
+        resolves_to: 'deliberate',
+        execution_target: 'orchestrate-loop',
+        authority_source: 'orchestrate-loop',
+        status: 'compatibility'
+      }
+    },
     framework_aliases: { 'page-glamour': { resolves_to: 'wordpress/page-cro', status: 'primary' } }
   });
   assert.deepEqual(parseAliasRegistry(raw), {
-    aliases: [{ id: 'plan-quest', resolves_to: 'plan-task', status: 'primary' }],
+    aliases: [
+      { id: 'plan-quest', resolves_to: 'plan-task', status: 'primary' },
+      {
+        id: 'dl',
+        resolves_to: 'deliberate',
+        execution_target: 'orchestrate-loop',
+        authority_source: 'orchestrate-loop',
+        status: 'compatibility'
+      }
+    ],
     framework_aliases: [{ id: 'page-glamour', resolves_to: 'wordpress/page-cro', status: 'primary' }],
     skill_aliases: [],
     tool_aliases: []
@@ -72,22 +89,35 @@ test('loads the shipped command registry without undefined aliases', () => {
   assert.ok(aliases.every((a) => a.id && a.resolves_to));
 
   const find = (id) => aliases.find((a) => a.id === id);
-  assert.deepEqual(find('owl'), { id: 'owl', resolves_to: 'orchestrate-loop', status: 'compatibility' });
-  assert.deepEqual(find('oil'), { id: 'oil', resolves_to: 'outward-inward', status: 'primary' });
-  assert.deepEqual(find('chi'), { id: 'chi', resolves_to: 'outward-inward', status: 'primary' });
+  assert.equal(find('owl').resolves_to, 'orchestrate-loop');
+  assert.equal(find('owl').authority_source, 'orchestrate-loop');
+  assert.equal(find('oil').resolves_to, 'outward-inward');
+  assert.equal(find('oil').authority_source, 'outward-inward');
+  assert.equal(find('chi').resolves_to, 'outward-inward');
+  assert.equal(find('chi').authority_source, 'outward-inward');
+  assert.equal(find('dl').execution_target, 'orchestrate-loop');
+  assert.equal(find('dl').authority_source, 'orchestrate-loop');
 });
 
 test('command aliases render primaries first, then cross-alias, then compatibility', () => {
   const aliases = [
     { id: 'legacy', resolves_to: 'route', status: 'compatibility' },
     { id: 'plan-quest', resolves_to: 'plan-task', status: 'primary' },
-    { id: 'draft-contract', resolves_to: 'plan-task', status: 'cross-alias' }
+    { id: 'draft-contract', resolves_to: 'plan-task', status: 'cross-alias' },
+    {
+      id: 'dl',
+      resolves_to: 'deliberate',
+      execution_target: 'orchestrate-loop',
+      authority_source: 'orchestrate-loop',
+      status: 'compatibility'
+    }
   ];
   const lines = commandAliasSection(aliases).split('\n').filter((l) => l.startsWith('- '));
   assert.deepEqual(lines, [
     '- `/plan-quest` (`/plan-task`) [primary]; authority: `/plan-task`',
     '- `/draft-contract` -> `/plan-task` [cross-alias]; authority: `/plan-task`',
-    '- `/legacy` -> `/route` [compatibility]; authority: `/route`'
+    '- `/legacy` -> `/route` [compatibility]; authority: `/route`',
+    '- `/dl` -> `/deliberate` [compatibility]; executes: `/orchestrate-loop`; authority: `/orchestrate-loop`'
   ]);
 });
 

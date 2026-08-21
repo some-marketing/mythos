@@ -1,0 +1,117 @@
+{
+  "type": "object",
+  "required": [
+    "baseline_inventory",
+    "change_proposal",
+    "delta_spec",
+    "dependency_acceptance_map",
+    "review"
+  ],
+  "properties": {
+    "baseline_inventory": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "change_proposal": {
+      "type": "object"
+    },
+    "delta_spec": {
+      "type": "object",
+      "required": [
+        "added",
+        "modified",
+        "removed",
+        "preserved_invariants"
+      ],
+      "properties": {
+        "added": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "modified": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "removed": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "preserved_invariants": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "dependency_acceptance_map": {
+      "type": "object",
+      "required": [
+        "read_first",
+        "dependencies",
+        "acceptance_criteria"
+      ],
+      "properties": {
+        "read_first": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "acceptance_criteria": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "waves": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "review": {
+      "type": "object",
+      "required": [
+        "verdict",
+        "findings",
+        "falsifier"
+      ],
+      "properties": {
+        "verdict": {
+          "type": "string",
+          "enum": [
+            "PASS",
+            "CONCERNS",
+            "FAIL"
+          ]
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "falsifier": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

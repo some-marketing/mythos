@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "595273f783df38550f3fde2b83f10bc96de02e87ea5e1cc26c73f1423631eaac",
+    "expected_tree_sha256": "9b2f206aa0e04927fe85cbdcfc53d0d26c4e9354bb1371ce92cd78ae698d806a",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -1758,6 +1758,306 @@
       {
         "path": "docs/homebrew/README.md",
         "sha256": "f32dda49a3d656fc414431575b301f7b04e83cb1186650b8803551fff7e9ef2b",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/README.md",
+        "sha256": "4435fbe18cad6dc2bcea6abd59d737ba0a824a1f3b9c98bcc7ed8cb93f4d7ef0",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/candidate.json",
+        "sha256": "6421ace062a6d3043b48465f5e402334fcfb1cf9c011c9734c3aeb4d42a4bdc2",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/evidence/capture-summary.json",
+        "sha256": "3a6113fe62afa365841d44148aee7889ac30a8267a2ea25c6225614be882a500",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/evidence/source-receipt.json",
+        "sha256": "4eba909f9aba841d539d15bc0b852328f5a2b8f6f6fac6edd481b55248ec615d",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/learning/README.md",
+        "sha256": "1f1141f683be86d45fb62074f061db1a073dbfdcc61a9de7c2f993b8e9929722",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/learning/learning-ledger.json",
+        "sha256": "b6028d91ce46ae6f8e9c24e3a49db6659eaca290df5f98e610c60900a5299030",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/learning/signals/signal-preflight-20260821T150734Z.json",
+        "sha256": "6b585e7b3db0052cc6950ac2f87c7e4612b7fd4f056c7d644b8a50591c704806",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/learning/signals/signal-preflight-20260821T151820Z.json",
+        "sha256": "df610d8a7adade55d27a139bab9a75ac86179baedfe79bfb31b8218a6e00af0f",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/proposed_framework/guardrails.md",
+        "sha256": "96bea91e05f310332abba0a7b4bf5eda41aecc986a408e4d899e574590641329",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/proposed_framework/manifest.json",
+        "sha256": "2c16b60e8a91f38e7c8620a4d6ed42dc8d1b48bd4ed6270759eb85313caa5249",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/proposed_framework/prompts/01_SCOPE_AND_INTENT.md",
+        "sha256": "6eee7932a8f202183c522a99600e32121c8a5b8f4a420162949e440ba0aec710",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/proposed_framework/prompts/02_DISCOVERY_EVIDENCE.md",
+        "sha256": "4ffc71a2380615940ea06b3cb1ef9311240c56a85a0fcd0a346c71d3890609e7",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/proposed_framework/prompts/03_PRODUCT_BRIEF_AND_PRFAQ.md",
+        "sha256": "17478a4daadd9bbd253b253d425bf9844b1c04082498c7a5d15243d841f22e35",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/proposed_framework/prompts/04_READINESS_REVIEW.md",
+        "sha256": "906bdeb74abc289783862067895c13a610eecabc727de3c0412fba56a8cb6407",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/input.schema.json",
+        "sha256": "7ff74921dcfd794b0bba61e8fb6b617260183d28ebe7465ab3f90f907d9f53c4",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-intake.schema.json",
+        "sha256": "185c4ed0cd2ede3d58afaf95022605e0d127853782de851f5e2d0ad09ff8b6ff",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/readiness-review.schema.json",
+        "sha256": "c9d6ef8637e6e97e3ce0805f7fda8282b45821dcc0ff34e3410bcc0de343bdc5",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/replay_cases/neutral-internal-tool/case.json",
+        "sha256": "5e8e06aee6d7c9b331a49eb22831b390064e034069cfedbe46a37c4aa52c19b9",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/replay_cases/neutral-internal-tool/inputs/context.md",
+        "sha256": "cefc255895f045a1d2208de5cd0f8c07b476bbebe828afa247def135d42c7516",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/replay_cases/neutral-internal-tool/inputs/intake.json",
+        "sha256": "887524863f3a1f9c67cb2fefa3e31b5b497efeea7cb29b6657ab476679878a99",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/replay_cases/neutral-internal-tool/notes.md",
+        "sha256": "0957d7db6a0a65fd602c264ad9062ee91fe00f0eaff51b4185865a2c5ee7dc0c",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/replay_runs/20260821T150734Z__neutral-internal-tool__neutral-internal-tool/execution_log.jsonl",
+        "sha256": "b789efa5bf3d6877cd33e58896367291cb0b84b0a038fc302fe107093c600331",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/replay_runs/20260821T150734Z__neutral-internal-tool__neutral-internal-tool/manual_interventions.jsonl",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/replay_runs/20260821T150734Z__neutral-internal-tool__neutral-internal-tool/run.json",
+        "sha256": "1a66b3327577b07cd1f1cc0f89ad52745086b2b5697b60cbc6a47cb1d8de6831",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/replay_runs/20260821T150734Z__neutral-internal-tool__neutral-internal-tool/summary.md",
+        "sha256": "7c454b6a905aa825199f0df9e67d642efcb9b5d498fb6b49fe0bc8e5e40c809c",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/replay_runs/20260821T151820Z__neutral-internal-tool__neutral-internal-tool/execution_log.jsonl",
+        "sha256": "376c9b0f0bdc9b9ad7f61e4e120f89bba10bbb206532ee68f6b899f566b8eecd",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/replay_runs/20260821T151820Z__neutral-internal-tool__neutral-internal-tool/manual_interventions.jsonl",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/replay_runs/20260821T151820Z__neutral-internal-tool__neutral-internal-tool/run.json",
+        "sha256": "52aa805d1316a900bcacc00bdc6c30b53997e8035b5241efbcdc3ae3a4ec3c9e",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/replay_runs/20260821T151820Z__neutral-internal-tool__neutral-internal-tool/summary.md",
+        "sha256": "7c454b6a905aa825199f0df9e67d642efcb9b5d498fb6b49fe0bc8e5e40c809c",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/README.md",
+        "sha256": "a54c87c01d6de8893c2aadee3b67f22a9f7aaddaa5344e13a1cc5c386a0c75cb",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/candidate.json",
+        "sha256": "cdbdd334d2005a14c982d2b42f5ca66e4671eef9f66332c1aad4ac9e3e43dc4b",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/evidence/capture-summary.json",
+        "sha256": "de331dd1238534c1c573720e3a4a71af101468a6f6b0273b9623de1294df8faf",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/evidence/source-receipt-gsd.json",
+        "sha256": "6ad28b6a34ac3febabeea8c782c65c6d8ee2f88e5110d5ad87286a0466374800",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/evidence/source-receipt.json",
+        "sha256": "ef1556bbf75e9e25c6962ea7941fbbba649f9686832bfe52c86a862647ad948b",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/learning/README.md",
+        "sha256": "1f1141f683be86d45fb62074f061db1a073dbfdcc61a9de7c2f993b8e9929722",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/learning/learning-ledger.json",
+        "sha256": "2052b684ecf55912b9256b728c9d4ad943d564f923f8029614505bc518246f2a",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/learning/signals/signal-preflight-20260821T150735Z.json",
+        "sha256": "7e78a67e895b07136ac68b3126d346257733f571f5f9608fc7b13676aa26ac16",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/learning/signals/signal-preflight-20260821T151820Z.json",
+        "sha256": "db8eccfb847187d6753f55d3ee874c96b6613c7243ffef8c9992e4d7091b48cb",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/proposed_framework/guardrails.md",
+        "sha256": "82300d6e03dc112f4a55927c82c2ac4620f337af733de45d1e6d70b8cc5ecacb",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/proposed_framework/manifest.json",
+        "sha256": "0089caf6ba3567ae08674b6b918d62dc5a9ce4b412b61bce91f7165139e9afeb",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/proposed_framework/prompts/01_BASELINE_INVENTORY.md",
+        "sha256": "a7844ec68b0f8e452d938ec2d4d5eb7828e1de8f63fd5c3c2551c1ef27599f35",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/proposed_framework/prompts/02_CHANGE_PROPOSAL.md",
+        "sha256": "3ff46ac54b978ce96a63417366edca06103892da0b82c1a96b754d9969a2327a",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/proposed_framework/prompts/03_DELTA_REQUIREMENTS.md",
+        "sha256": "5f80d4a21b222d8518e63f7d313e20c5f223792ec3e7a1c0e3a8c0940de1bfc1",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/proposed_framework/prompts/04_DEPENDENCY_AND_ACCEPTANCE_MAP.md",
+        "sha256": "eb8e343f0d80dc0ea86922aaf7a659802ccdf7b537b874234e3b271f160234de",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/proposed_framework/prompts/05_INDEPENDENT_REVIEW.md",
+        "sha256": "f89de813e5c8c980491e7acd0e56896ba07e6be75b0835769277add79feed990",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/input.schema.json",
+        "sha256": "c6c366442a3a199f28f6ee68800078624ed9a7265e437160159af793a4da8926",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-specification.schema.json",
+        "sha256": "6e4b0bcf8663029699e47860afa553d02fd053d57f7ccb363dc82a9d3deac13a",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/review.schema.json",
+        "sha256": "c9d6ef8637e6e97e3ce0805f7fda8282b45821dcc0ff34e3410bcc0de343bdc5",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/replay_cases/neutral-retention-change/case.json",
+        "sha256": "b6d9847d40c687cf60387843dc74839575a65f4f344bbc97920ae05ff720106d",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/replay_cases/neutral-retention-change/inputs/baseline.md",
+        "sha256": "d562b17a77ea3b1d2850940b4ade130de78bc0c02dced7c3f35fe28da33a06c1",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/replay_cases/neutral-retention-change/inputs/intake.json",
+        "sha256": "44d3e4ef6afbfdfafd2bbf53f9099833218716965251f483482ac0c3c5180025",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/replay_cases/neutral-retention-change/notes.md",
+        "sha256": "ca171925f7c784e0fd546ba212dcec66094c9dd363299f882de7cdbfa98fc83b",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/replay_runs/20260821T150735Z__neutral-retention-change__neutral-retention-change/execution_log.jsonl",
+        "sha256": "9d1395b7a8b2c0c42fcbfebe5e6bf9e47c291bf04356bff777d480cc43d77830",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/replay_runs/20260821T150735Z__neutral-retention-change__neutral-retention-change/manual_interventions.jsonl",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/replay_runs/20260821T150735Z__neutral-retention-change__neutral-retention-change/run.json",
+        "sha256": "a5f2d18fd12387dd73b7d60bd34e8862c77201e7950e426af7a074d1bbd29ae0",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/replay_runs/20260821T150735Z__neutral-retention-change__neutral-retention-change/summary.md",
+        "sha256": "ad2136f359dea238c1360bb85ee9c8e1f3752b9fe4fee96135280db822567c98",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/replay_runs/20260821T151820Z__neutral-retention-change__neutral-retention-change/execution_log.jsonl",
+        "sha256": "d22430e5fa609dd2a449a49dec5328d9855ef562c7657bee4801be54c2302577",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/replay_runs/20260821T151820Z__neutral-retention-change__neutral-retention-change/manual_interventions.jsonl",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/replay_runs/20260821T151820Z__neutral-retention-change__neutral-retention-change/run.json",
+        "sha256": "3566f78858cf8954290fffb996e708777f7e9b3f761f315c2c25324efc696450",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/replay_runs/20260821T151820Z__neutral-retention-change__neutral-retention-change/summary.md",
+        "sha256": "ad2136f359dea238c1360bb85ee9c8e1f3752b9fe4fee96135280db822567c98",
         "mode": 420
       },
       {
@@ -5762,7 +6062,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "025f8c270b807cff7d0d1912dfe9de6fff11a3f8eb48dda3233e8314d8245a81",
+        "sha256": "7d5c83475e33b2ba08f4e7a1e2ebc20f5627b46d508a902f8749c8f1e3e0b490",
         "mode": 420
       },
       {
@@ -13446,6 +13746,11 @@
         "mode": 420
       },
       {
+        "path": "tools/workspace/__tests__/candidate-root.test.js",
+        "sha256": "d6578c78fd97460409e80b515cc335b5f0e30cc73d3aad07a404df0b20b8fe12",
+        "mode": 420
+      },
+      {
         "path": "tools/workspace/candidate-status.js",
         "sha256": "7a156954be8eca456ddde8c3e200ca9619e9d0915b2538d51e2aa3e12ad9ab96",
         "mode": 420
@@ -13502,7 +13807,7 @@
       },
       {
         "path": "tools/workspace/lib/output-contract.js",
-        "sha256": "9d68f7be2f6b0a9c4f3a7582715ac80c384a1216562f98171046857c0ce1d751",
+        "sha256": "ccf80399e56e6ab6b62f6f4b2123dc97b4fc5ae1c90a1f666aac223cff04d319",
         "mode": 420
       },
       {
@@ -13527,7 +13832,7 @@
       },
       {
         "path": "tools/workspace/lib/workspace.js",
-        "sha256": "de07e1b024a6a7afee2fd1af1bafb8ae3f081199d9d67a42e3f0b9e1bbee7fe1",
+        "sha256": "61f3077039e150ff99dfd20c44547410cc682f145d574daed25e6a90a1debba1",
         "mode": 420
       },
       {
@@ -13769,9 +14074,9 @@
     "package_script_count": 205,
     "command_alias_registry_sha256": "4a7ed7af401f9b4695dcd2dca5ca64f4a0dae975d0b94f95e24e9b5f3a6ce3fc",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "025f8c270b807cff7d0d1912dfe9de6fff11a3f8eb48dda3233e8314d8245a81",
-    "graph_nodes": 3831,
-    "graph_edges": 2832
+    "graph_sha256": "7d5c83475e33b2ba08f4e7a1e2ebc20f5627b46d508a902f8749c8f1e3e0b490",
+    "graph_nodes": 3898,
+    "graph_edges": 2842
   },
   "runtime_exclusions": [
     ".git/**",
@@ -13790,7 +14095,6 @@
     "_dev/reports/analysis/public-export/**",
     "_dev/reports/lifecycle/**",
     "_dev/reports/signals/**",
-    "_dev/reports/telemetry/**",
     "_dev/scratch/**",
     "_dev/state/**",
     "_dev/tmp/**",

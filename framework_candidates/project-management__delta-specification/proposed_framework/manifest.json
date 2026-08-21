@@ -1,0 +1,129 @@
+{
+  "service_category": "project-management",
+  "framework_name": "delta-specification",
+  "version": "0.1.0-candidate",
+  "description": "Produce a reviewable behavior-level delta specification for a brownfield change without applying that change.",
+  "prompt_count": 5,
+  "input_contract": {
+    "required": [
+      {
+        "name": "change_request",
+        "description": "Requested behavioral change."
+      },
+      {
+        "name": "baseline_sources",
+        "description": "Authoritative evidence of current behavior."
+      },
+      {
+        "name": "affected_consumers",
+        "description": "Known consumers of the behavior or contract."
+      }
+    ],
+    "optional": [
+      {
+        "name": "constraints",
+        "description": "Known restrictions and non-goals."
+      },
+      {
+        "name": "risk_level",
+        "description": "Risk classification used to calibrate specification depth."
+      }
+    ]
+  },
+  "output_contract": {
+    "directories": [
+      "outputs/delta-specification/"
+    ],
+    "artifacts": [
+      "outputs/delta-specification/baseline-inventory.json",
+      "outputs/delta-specification/change-proposal.json",
+      "outputs/delta-specification/delta-spec.json",
+      "outputs/delta-specification/dependency-acceptance-map.json",
+      "outputs/delta-specification/review.json"
+    ]
+  },
+  "output_contract_v2": {
+    "directories": [
+      {
+        "path": "outputs/delta-specification/",
+        "required": true,
+        "description": "All delta-specification artifacts"
+      }
+    ],
+    "artifacts": [
+      {
+        "name": "baseline-inventory.json",
+        "path_pattern": "outputs/delta-specification/baseline-inventory.json",
+        "required": true
+      },
+      {
+        "name": "change-proposal.json",
+        "path_pattern": "outputs/delta-specification/change-proposal.json",
+        "required": true
+      },
+      {
+        "name": "delta-spec.json",
+        "path_pattern": "outputs/delta-specification/delta-spec.json",
+        "required": true
+      },
+      {
+        "name": "dependency-acceptance-map.json",
+        "path_pattern": "outputs/delta-specification/dependency-acceptance-map.json",
+        "required": true
+      },
+      {
+        "name": "review.json",
+        "path_pattern": "outputs/delta-specification/review.json",
+        "required": true
+      }
+    ],
+    "bundle_types": [
+      {
+        "type_id": "delta-specification-output",
+        "path_pattern": "outputs/delta-specification",
+        "required_files": [
+          "baseline-inventory.json",
+          "change-proposal.json",
+          "delta-spec.json",
+          "dependency-acceptance-map.json",
+          "review.json"
+        ],
+        "file_schemas": {
+          "review.json": "review.schema.json"
+        },
+        "description": "Complete delta-specification output with provenance-bound independent review"
+      }
+    ]
+  },
+  "execution_modes": [
+    "RUN_ONLY",
+    "REVIEW_ONLY"
+  ],
+  "mcp_requirements": [],
+  "prompt_chain": {
+    "baseline": [
+      "01_BASELINE_INVENTORY"
+    ],
+    "proposal": [
+      "02_CHANGE_PROPOSAL"
+    ],
+    "specification": [
+      "03_DELTA_REQUIREMENTS"
+    ],
+    "dependency_mapping": [
+      "04_DEPENDENCY_AND_ACCEPTANCE_MAP"
+    ],
+    "review": [
+      "05_INDEPENDENT_REVIEW"
+    ]
+  },
+  "source_learning": {
+    "repository": "Fission-AI/OpenSpec",
+    "observed_run": "chi-openspec-vs-mythos-20260821T143000Z",
+    "learning_disposition": "framework_candidate",
+    "implementation_readiness": "bounded_experiment",
+    "comparative_pattern": "open-gsd/gsd-core dependency-wave planning",
+    "comparative_observed_run": "chi-gsd-core-vs-mythos-20260821T133000Z"
+  },
+  "promotion_status": "candidate-only"
+}

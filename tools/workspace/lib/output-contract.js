@@ -93,6 +93,39 @@ function simpleGlob(baseDir, pattern) {
   return allFiles.filter((f) => regex.test(f));
 }
 
+function validateDistinctReviewProvenance(content, label) {
+  const fields = ['actor_id', 'harness_id', 'model_provider_family'];
+  const producers = content.producer_provenance;
+  const reviewer = content.reviewer_provenance;
+
+  if (!Array.isArray(producers) || producers.length === 0) {
+    throw new Error(`${label}.producer_provenance must contain at least one producer`);
+  }
+  if (!reviewer || typeof reviewer !== 'object' || Array.isArray(reviewer)) {
+    throw new Error(`${label}.reviewer_provenance must be an object`);
+  }
+  for (const [index, producer] of producers.entries()) {
+    if (!producer || typeof producer !== 'object' || Array.isArray(producer)) {
+      throw new Error(`${label}.producer_provenance[${index}] must be an object`);
+    }
+    for (const field of fields) {
+      if (typeof producer[field] !== 'string' || producer[field].trim() === '') {
+        throw new Error(`${label}.producer_provenance[${index}].${field} must be a non-empty string`);
+      }
+    }
+  }
+  for (const field of fields) {
+    if (typeof reviewer[field] !== 'string' || reviewer[field].trim() === '') {
+      throw new Error(`${label}.reviewer_provenance.${field} must be a non-empty string`);
+    }
+    for (const [index, producer] of producers.entries()) {
+      if (reviewer[field] === producer[field]) {
+        throw new Error(`${label}.reviewer_provenance.${field} must differ from producer_provenance[${index}].${field}`);
+      }
+    }
+  }
+}
+
 /**
  * Check directories and glob-matched artifacts exist under outputRoot.
  */
@@ -203,6 +236,9 @@ function inspectBundle(bundleRoot, bundleType, frameworkRoot) {
 
     try {
       validateRequiredFields(content, schema, fileName);
+      if (schema.x_mythos_distinct_review_provenance === true) {
+        validateDistinctReviewProvenance(content, fileName);
+      }
     } catch (err) {
       findings.push({
         severity: 'blocker',

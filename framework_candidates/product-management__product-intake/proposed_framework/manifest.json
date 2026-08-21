@@ -1,0 +1,139 @@
+{
+  "service_category": "product-management",
+  "framework_name": "product-intake",
+  "version": "0.1.0-candidate",
+  "description": "Convert an early product idea into evidence-backed product-definition artifacts and a readiness verdict without prescribing implementation.",
+  "prompt_count": 4,
+  "input_contract": {
+    "required": [
+      {
+        "name": "problem_statement",
+        "description": "Observed or reported problem to investigate."
+      },
+      {
+        "name": "intended_users",
+        "description": "People expected to experience the problem or consume the outcome."
+      },
+      {
+        "name": "constraints",
+        "description": "Known boundaries, risks, and non-negotiable limits."
+      }
+    ],
+    "optional": [
+      {
+        "name": "available_evidence",
+        "description": "Research, observations, feedback, or prior artifacts."
+      },
+      {
+        "name": "known_alternatives",
+        "description": "Existing workarounds or competing approaches."
+      },
+      {
+        "name": "desired_outcome",
+        "description": "Outcome the product definition should make possible or help evaluate."
+      },
+      {
+        "name": "risk_level",
+        "description": "Risk classification used to calibrate intake and review depth."
+      }
+    ]
+  },
+  "output_contract": {
+    "directories": [
+      "outputs/product-intake/"
+    ],
+    "artifacts": [
+      "outputs/product-intake/scope-and-intent.json",
+      "outputs/product-intake/hypothesis-tests.json",
+      "outputs/product-intake/product-brief.json",
+      "outputs/product-intake/evidence-ledger.json",
+      "outputs/product-intake/prfaq.md",
+      "outputs/product-intake/readiness-review.json"
+    ]
+  },
+  "output_contract_v2": {
+    "directories": [
+      {
+        "path": "outputs/product-intake/",
+        "required": true,
+        "description": "All product-intake artifacts"
+      }
+    ],
+    "artifacts": [
+      {
+        "name": "scope-and-intent.json",
+        "path_pattern": "outputs/product-intake/scope-and-intent.json",
+        "required": true
+      },
+      {
+        "name": "hypothesis-tests.json",
+        "path_pattern": "outputs/product-intake/hypothesis-tests.json",
+        "required": true
+      },
+      {
+        "name": "product-brief.json",
+        "path_pattern": "outputs/product-intake/product-brief.json",
+        "required": true
+      },
+      {
+        "name": "evidence-ledger.json",
+        "path_pattern": "outputs/product-intake/evidence-ledger.json",
+        "required": true
+      },
+      {
+        "name": "prfaq.md",
+        "path_pattern": "outputs/product-intake/prfaq.md",
+        "required": true
+      },
+      {
+        "name": "readiness-review.json",
+        "path_pattern": "outputs/product-intake/readiness-review.json",
+        "required": true
+      }
+    ],
+    "bundle_types": [
+      {
+        "type_id": "product-intake-output",
+        "path_pattern": "outputs/product-intake",
+        "required_files": [
+          "scope-and-intent.json",
+          "hypothesis-tests.json",
+          "product-brief.json",
+          "evidence-ledger.json",
+          "prfaq.md",
+          "readiness-review.json"
+        ],
+        "file_schemas": {
+          "readiness-review.json": "readiness-review.schema.json"
+        },
+        "description": "Complete product-intake output with provenance-bound readiness review"
+      }
+    ]
+  },
+  "execution_modes": [
+    "RUN_ONLY",
+    "REVIEW_ONLY"
+  ],
+  "mcp_requirements": [],
+  "prompt_chain": {
+    "intake": [
+      "01_SCOPE_AND_INTENT"
+    ],
+    "evidence": [
+      "02_DISCOVERY_EVIDENCE"
+    ],
+    "synthesis": [
+      "03_PRODUCT_BRIEF_AND_PRFAQ"
+    ],
+    "review": [
+      "04_READINESS_REVIEW"
+    ]
+  },
+  "source_learning": {
+    "repository": "bmad-code-org/BMAD-METHOD",
+    "observed_run": "chi-bmad-method-vs-mythos-20260821T142500Z",
+    "learning_disposition": "framework_candidate",
+    "implementation_readiness": "bounded_experiment"
+  },
+  "promotion_status": "candidate-only"
+}

@@ -1,0 +1,18 @@
+{
+  "problem_statement": "A small operations team repeatedly loses track of decisions made during weekly planning and wants a lightweight way to preserve decisions and unresolved questions.",
+  "intended_users": [
+    "operations coordinator",
+    "team lead"
+  ],
+  "desired_outcome": "A bounded product definition suitable for deciding whether any implementation work is justified.",
+  "constraints": [
+    "No client data",
+    "No implementation proposal",
+    "Use only supplied evidence"
+  ],
+  "known_alternatives": [
+    "shared notes document",
+    "existing task board comments"
+  ],
+  "risk_level": "low"
+}

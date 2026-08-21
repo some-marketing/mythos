@@ -1,0 +1,9 @@
+{
+  "entry_id": "signal-preflight-20260821T151820Z",
+  "framework_id": "product-management/product-intake",
+  "signal_type": "structural_check",
+  "result": "pass",
+  "details": "Preflight check across 1 case(s): pass",
+  "source": "replay-candidate",
+  "captured_at": "2026-08-21T15:18:20.000Z"
+}

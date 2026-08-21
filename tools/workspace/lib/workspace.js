@@ -1,6 +1,8 @@
 'use strict';
 
+const fs = require('fs');
 const path = require('path');
+const { resolveCanonicalRoot } = require('../../lib/canonical-root.cjs');
 const {
   ensureDir,
   exists,
@@ -86,11 +88,20 @@ function requireCandidateRoot(inputPath) {
     die(`Not a candidate root (missing candidate.json): ${candidateRoot}`);
   }
   if (path.basename(path.dirname(candidateRoot)) !== 'framework_candidates') {
-    die(`Candidate root must live under <project>/framework_candidates/: ${candidateRoot}`);
+    die(`Candidate root must live under <project-or-repo>/framework_candidates/: ${candidateRoot}`);
   }
   const projectRoot = path.dirname(path.dirname(candidateRoot));
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  if (fs.realpathSync.native(projectRoot) === fs.realpathSync.native(repositoryRoot)) {
+    return {
+      candidateRoot,
+      projectRoot: repositoryRoot,
+      workspaceRoot: repositoryRoot,
+      candidateScope: 'repository'
+    };
+  }
   const { workspaceRoot } = requireProjectRoot(projectRoot);
-  return { candidateRoot, projectRoot, workspaceRoot };
+  return { candidateRoot, projectRoot, workspaceRoot, candidateScope: 'project' };
 }
 
 function relPosix(fromPath, toPath) {

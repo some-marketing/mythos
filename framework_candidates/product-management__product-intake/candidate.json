@@ -1,0 +1,32 @@
+{
+  "candidate_id": "product-management__product-intake",
+  "service_category": "product-management",
+  "framework_name": "product-intake",
+  "status": "seed",
+  "source_captures": [
+    "chi-bmad-method-vs-mythos-20260821T142500Z"
+  ],
+  "source_origins": [
+    "https://github.com/bmad-code-org/BMAD-METHOD"
+  ],
+  "created_at": "2026-08-21T15:00:32Z",
+  "updated_at": "2026-08-21T15:18:20.000Z",
+  "owner": "operator",
+  "promotion_ready": false,
+  "blocking_issues": [
+    "At least 3 source captures or replay cases are required; found 2."
+  ],
+  "replay_summary": {
+    "total": 2,
+    "pass": 2,
+    "fail": 0,
+    "partial": 0,
+    "manual_intervention": 0,
+    "preflight_only": true,
+    "passed_case_ids": [
+      "neutral-internal-tool"
+    ]
+  },
+  "sanitization_passed": true,
+  "learning_required": "required"
+}

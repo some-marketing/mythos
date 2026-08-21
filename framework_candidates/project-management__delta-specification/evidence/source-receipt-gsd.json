@@ -1,0 +1,18 @@
+{
+  "schema": "CandidateSourceReceipt/1.0",
+  "source_repository": "open-gsd/gsd-core",
+  "source_url": "https://github.com/open-gsd/gsd-core",
+  "chi_run_id": "chi-gsd-core-vs-mythos-20260821T133000Z",
+  "relationship": "comparative_hardening",
+  "promotion_evidence_unit": false,
+  "observed_artifacts": {
+    "README.md": "66fe062ee3705af835b09ffa8da112fd14bc8a6025f0d4fb22b4291d353268a9",
+    "docs/AGENTS.md": "bc189324ef1389304b4a4152bbd6fd89c5d532add3c9c273233000f8ca7b4497",
+    "docs/explanation/context-engineering.md": "ab69ce6fe028b81fa6a2ecf2cb01555010168cb347f099aa9ff93fb4a61904ec",
+    "docs/explanation/the-phase-loop.md": "4b82eb65d7583e634d7efffee9a711809411d0d36e3d587bbae2374281ebb6de"
+  },
+  "custody": "observed-public-input",
+  "external_code_copied": false,
+  "external_code_executed": false,
+  "recorded_at": "2026-08-21T15:00:32Z"
+}

@@ -1,0 +1,21 @@
+{
+  "source_captures": [
+    "chi-bmad-method-vs-mythos-20260821T142500Z"
+  ],
+  "learning_disposition": "framework_candidate",
+  "implementation_readiness": "bounded_experiment",
+  "imported_pattern": "Upstream product intake producing a product brief, PRFAQ, evidence ledger, open questions, and readiness verdict.",
+  "closest_mythos_surfaces": [
+    "blueprint",
+    "plan-task",
+    "meta/reviewed-change-loop"
+  ],
+  "observed_gap": "No registered framework produces reusable upstream product-definition artifacts before change planning.",
+  "transfer_hypothesis": "A bounded product-intake workflow will separate evidence, assumptions, and product decisions more clearly than routing an ambiguous product idea directly into implementation planning.",
+  "cheapest_falsifier": "Run the same neutral intake through this candidate and the current blueprint/plan path; close the candidate if the existing path is equally clear with less ceremony.",
+  "source_limitations": [
+    "Source evidence is documentation-level.",
+    "The external repository was not installed or executed.",
+    "The original χ packet was self-reviewed before later system-level convene review."
+  ]
+}

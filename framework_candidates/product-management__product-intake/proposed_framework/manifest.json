@@ -1,0 +1,70 @@
+{
+  "service_category": "product-management",
+  "framework_name": "product-intake",
+  "version": "0.1.0-candidate",
+  "description": "Convert an early product idea into evidence-backed product-definition artifacts and a readiness verdict without prescribing implementation.",
+  "prompt_count": 4,
+  "input_contract": {
+    "required": [
+      {
+        "name": "problem_statement",
+        "description": "Observed or reported problem to investigate."
+      },
+      {
+        "name": "intended_users",
+        "description": "People expected to experience the problem or consume the outcome."
+      },
+      {
+        "name": "constraints",
+        "description": "Known boundaries, risks, and non-negotiable limits."
+      }
+    ],
+    "optional": [
+      {
+        "name": "available_evidence",
+        "description": "Research, observations, feedback, or prior artifacts."
+      },
+      {
+        "name": "known_alternatives",
+        "description": "Existing workarounds or competing approaches."
+      }
+    ]
+  },
+  "output_contract": {
+    "directories": [
+      "outputs/product-intake/"
+    ],
+    "artifacts": [
+      "outputs/product-intake/product-brief.json",
+      "outputs/product-intake/evidence-ledger.json",
+      "outputs/product-intake/prfaq.md",
+      "outputs/product-intake/readiness-review.json"
+    ]
+  },
+  "execution_modes": [
+    "FINDINGS_ONLY",
+    "REVIEW_ONLY"
+  ],
+  "mcp_requirements": [],
+  "prompt_chain": {
+    "intake": [
+      "01_SCOPE_AND_INTENT"
+    ],
+    "evidence": [
+      "02_DISCOVERY_EVIDENCE"
+    ],
+    "synthesis": [
+      "03_PRODUCT_BRIEF_AND_PRFAQ"
+    ],
+    "review": [
+      "04_READINESS_REVIEW"
+    ]
+  },
+  "source_learning": {
+    "repository": "bmad-code-org/BMAD-METHOD",
+    "observed_run": "chi-bmad-method-vs-mythos-20260821T142500Z",
+    "learning_disposition": "framework_candidate",
+    "implementation_readiness": "bounded_experiment"
+  },
+  "promotion_status": "candidate-only"
+}

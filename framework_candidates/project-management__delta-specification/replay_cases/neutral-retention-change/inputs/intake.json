@@ -1,0 +1,16 @@
+{
+  "change_request": "Update a generic document-retention workflow to support a configurable retention period.",
+  "baseline_sources": [
+    "baseline.md"
+  ],
+  "affected_consumers": [
+    "workflow operator",
+    "audit reviewer"
+  ],
+  "constraints": [
+    "No implementation instructions",
+    "Preserve current export behavior",
+    "Do not infer missing baseline facts"
+  ],
+  "risk_level": "medium"
+}

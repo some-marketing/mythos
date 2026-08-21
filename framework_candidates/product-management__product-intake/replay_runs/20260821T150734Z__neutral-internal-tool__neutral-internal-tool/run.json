@@ -1,0 +1,13 @@
+{
+  "run_id": "20260821T150734Z__neutral-internal-tool__neutral-internal-tool",
+  "case_id": "neutral-internal-tool",
+  "candidate_id": "product-management__product-intake",
+  "started_at": "2026-08-21T15:07:34.957Z",
+  "finished_at": "2026-08-21T15:07:34.957Z",
+  "result": "pass",
+  "run_type": "preflight",
+  "manual_intervention_count": 0,
+  "blocking_failures": [],
+  "prompt_failures": [],
+  "preflight_warnings": []
+}

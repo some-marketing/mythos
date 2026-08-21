@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "e6bed2a1018d84331755bfe4e1ac698fe582da7b3bc2f48be126f698959bf457",
+    "expected_tree_sha256": "2a73844cf27998a99252576eb0b3617efc07e11c1134cbaafd571012f3d96665",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -812,7 +812,7 @@
       },
       {
         "path": ".claude/commands/outward-inward.md",
-        "sha256": "6ce8dee20fb4ef4ec72f99db941a1479a4f27f33e52e39b35c8b4a1f40772d0f",
+        "sha256": "603f77d6ad350d36a21dce201e5efb1250077c880b61dc541b3c074dfa8778d7",
         "mode": 420
       },
       {
@@ -1427,7 +1427,7 @@
       },
       {
         "path": ".claude/skills/outward-inward-loop/SKILL.md",
-        "sha256": "1751f814673d010dbabdc35d7b851df0a46d137b38fe17fd6a8ef7d6d8dee1d3",
+        "sha256": "b0dfe2b79366536520b1f1a920bf6a02dfbf5329471507536dd7fb09eb3bf9e9",
         "mode": 420
       },
       {
@@ -4742,7 +4742,7 @@
       },
       {
         "path": "instructions/canonical/command-aliases.yaml",
-        "sha256": "6c6a60716f339e10799b78e35aeb0330b1e78a55caec3e809829fb928df83349",
+        "sha256": "4a7ed7af401f9b4695dcd2dca5ca64f4a0dae975d0b94f95e24e9b5f3a6ce3fc",
         "mode": 420
       },
       {
@@ -5223,6 +5223,11 @@
       {
         "path": "instructions/canonical/commands/orchestrate.yaml",
         "sha256": "79d11f92dd85b3580ac4933d9ca4231f64e71faeb8c64d9161d9a87bfbfb6381",
+        "mode": 420
+      },
+      {
+        "path": "instructions/canonical/commands/outward-inward.yaml",
+        "sha256": "03241f112cfd06294503f5b805c2db646d2cf1b2da084262cc8d2c5c117fb06a",
         "mode": 420
       },
       {
@@ -5757,7 +5762,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "7bfe6ca43c8bc4a65f6a108ab3aaf3a2b68af4781175461218a32c60774e5b41",
+        "sha256": "886224006399e445a7f6471c1f52aa4cde2f75c48d95ae44cf2dc657429e499e",
         "mode": 420
       },
       {
@@ -7188,6 +7193,11 @@
       {
         "path": "tools/commands/__tests__/mythos-command-runner.test.cjs",
         "sha256": "8ad85e7f6c2bd8e3fa24473ca082517b2fe56c4b21b442de6fd67c707934a5e6",
+        "mode": 420
+      },
+      {
+        "path": "tools/commands/__tests__/outward-inward-command.test.cjs",
+        "sha256": "c634a1ba73e833b59bb1e8afdce0ff86cc933790c6b94c21f4f2e9a4ae8d91e7",
         "mode": 420
       },
       {
@@ -13757,11 +13767,11 @@
   },
   "wiring": {
     "package_script_count": 205,
-    "command_alias_registry_sha256": "6c6a60716f339e10799b78e35aeb0330b1e78a55caec3e809829fb928df83349",
+    "command_alias_registry_sha256": "4a7ed7af401f9b4695dcd2dca5ca64f4a0dae975d0b94f95e24e9b5f3a6ce3fc",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "7bfe6ca43c8bc4a65f6a108ab3aaf3a2b68af4781175461218a32c60774e5b41",
-    "graph_nodes": 3829,
-    "graph_edges": 2828
+    "graph_sha256": "886224006399e445a7f6471c1f52aa4cde2f75c48d95ae44cf2dc657429e499e",
+    "graph_nodes": 3831,
+    "graph_edges": 2831
   },
   "runtime_exclusions": [
     ".git/**",

@@ -29,7 +29,7 @@ Reject fewer than two distinct sources, an unspecified purpose, private/breached
 
 ## Phase pattern
 
-Use the identity-stable phase order below. Persist phase entry/exit, inputs, outputs, and halts under `_dev/state/outward-inward/<run_id>/` so a stopped run resumes from evidence rather than memory.
+Use the identity-stable phase order below. In `PATCH_ALLOWED`, persist phase entry/exit, inputs, outputs, and halts under `_dev/state/outward-inward/<run_id>/` so a stopped run resumes from evidence rather than memory. In `FINDINGS_ONLY` or `REVIEW_ONLY`, retain phase evidence in-session and do not write repository state.
 
 1. **ORIENT** — Parse arguments, declare purpose, scope, sources, allowed operations, and stop conditions. Compute a run id from the normalized source manifest and purpose.
 2. **TICK** — Retrieve each source through its appropriate read-only surface. Record retrieval receipts, content hashes, access limitations, and any unavailable source. Never silently substitute a different source.
@@ -83,9 +83,9 @@ For each disposition record: what the source pattern is, what it does, the close
 
 After pattern-level classification, a source-level rollup must preserve every pattern's axis pair. Recommend a source for the framework-candidate lifecycle only when at least one material pattern is `framework_candidate`; never let one positive pattern auto-adopt the rest of the source. Candidate writes and promotion remain subject to their existing execution-mode, review, replay, and rank gates.
 
-## Required artifacts
+## Result contract
 
-Produce a bundle under `_dev/reports/analysis/outward-inward/<run_id>/`:
+In `PATCH_ALLOWED`, produce a bundle under `_dev/reports/analysis/outward-inward/<run_id>/`. In `FINDINGS_ONLY` or `REVIEW_ONLY`, return the same logical result in-session without creating or updating repository files:
 
 - `source-manifest.json` — normalized inputs, provenance, hashes, and scope.
 - `observation-ledger.jsonl` — atomic observations with source citations.
@@ -94,7 +94,7 @@ Produce a bundle under `_dev/reports/analysis/outward-inward/<run_id>/`:
 - `improvement-proposals.json` — proposed changes or learning actions with `learning_disposition`, `implementation_readiness`, owned paths when applicable, non-goals, risk, acceptance criteria, and the next evidence action.
 - `run-receipt.json` — phase receipts, halts, reviewer identity, and separate Axis 1/Axis 2 disposition rollups.
 
-If a phase halts, write the halt and its evidence before stopping. A partial bundle is a valid outcome; do not fill missing evidence with inference.
+If a write-capable phase halts, write the halt and its evidence before stopping. In a no-write mode, return the halt and evidence in-session. A partial result is a valid outcome; do not fill missing evidence with inference.
 
 ## Review and safety gates
 
@@ -113,7 +113,7 @@ If a phase halts, write the halt and its evidence before stopping. A partial bun
 - Every material claim retains source provenance, limitations, and a cheapest falsifier.
 - Similarity triggers comparison instead of automatic dismissal, while absence alone never creates transfer value.
 - Repository changes occur only through explicit `PATCH_ALLOWED` scope and independent review.
-- The run leaves a resumable artifact bundle or an evidence-backed halt.
+- The run returns in-session findings in a no-write mode, or leaves a resumable artifact bundle or evidence-backed halt in `PATCH_ALLOWED`.
 
 </success_criteria>
 

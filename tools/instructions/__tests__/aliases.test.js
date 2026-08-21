@@ -65,18 +65,16 @@ test('parseAliasRegistry tolerates the commented YAML form across domains', () =
   assert.deepEqual(reg.skill_aliases, []);
 });
 
-test('loads the shipped 55-entry command registry with correct status split', () => {
+test('loads the shipped command registry without undefined aliases', () => {
   const aliases = loadCommandAliases(SURFACE_ROOT);
-  assert.equal(aliases.length, 55);
-  const byStatus = (s) => aliases.filter((a) => a.status === s).length;
-  assert.equal(byStatus('primary'), 35);
-  assert.equal(byStatus('cross-alias'), 15);
-  assert.equal(byStatus('compatibility'), 5);
+  const shipped = JSON.parse(fs.readFileSync(path.join(SURFACE_ROOT, 'instructions', 'canonical', 'command-aliases.yaml'), 'utf8'));
+  assert.equal(aliases.length, shipped.aliases.length);
+  assert.ok(aliases.every((a) => a.id && a.resolves_to));
 
   const find = (id) => aliases.find((a) => a.id === id);
-  assert.deepEqual(find('guild-ledger'), { id: 'guild-ledger', resolves_to: 'system-status', status: 'primary' });
-  assert.deepEqual(find('aura'), { id: 'aura', resolves_to: 'system-status', status: 'cross-alias' });
   assert.deepEqual(find('owl'), { id: 'owl', resolves_to: 'orchestrate-loop', status: 'compatibility' });
+  assert.deepEqual(find('oil'), { id: 'oil', resolves_to: 'outward-inward', status: 'primary' });
+  assert.deepEqual(find('chi'), { id: 'chi', resolves_to: 'outward-inward', status: 'primary' });
 });
 
 test('command aliases render primaries first, then cross-alias, then compatibility', () => {

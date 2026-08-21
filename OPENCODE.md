@@ -225,15 +225,17 @@ Mythos could otherwise quietly stop deserving the trust it asks for.
 
 Command names are mechanical aliases. The typed alias is provenance; authority, state, errors, evidence, and closeout belong to the resolved generic command.
 
-- `/0` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/1` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/2` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/3` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/4` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/5` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/6` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/7` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/8` -> `/undefined` [compatibility]; authority: `/undefined`
+- `/oil` (`/outward-inward`) [primary]; authority: `/outward-inward`
+- `/chi` (`/outward-inward`) [primary]; authority: `/outward-inward`
+- `/owl` -> `/orchestrate-loop` [compatibility]; authority: `/orchestrate-loop`
+- `/oa` -> `/orchestrate-loop` [compatibility]; authority: `/orchestrate-loop`
+- `/council-of-owls` -> `/orchestrate-loop` [compatibility]; authority: `/orchestrate-loop`
+- `/deliberate` -> `/orchestrate-loop` [compatibility]; authority: `/orchestrate-loop`
+- `/dl` -> `/deliberate` [compatibility]; authority: `/deliberate`
+- `/oc` -> `/council-of-owls` [compatibility]; authority: `/council-of-owls`
+- `/help-me-route` -> `/route` [compatibility]; authority: `/route`
+- `/blueprint` -> `/blueprint` [compatibility]; authority: `/blueprint`
+- `/el` -> `/evidence-loop` [compatibility]; authority: `/evidence-loop`
 
 ## OpenCode Notes
 - Adapter targets are configurable via `instructions/adapters/targets.local.yaml`.

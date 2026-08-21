@@ -7958,7 +7958,7 @@
       "id": "file:instructions/canonical/command-index.md",
       "type": "file",
       "path": "instructions/canonical/command-index.md",
-      "sha256": "b661345b4497d27e7152a9fb262ba8cfd0e9509087938cc5fbb618f9546160b5",
+      "sha256": "9ed4357cc84e9986dc5da4c8bc0a1a8bbe9643d63eb886289eaa7d83e2b46aba",
       "mode": 420
     },
     {
@@ -9274,7 +9274,7 @@
       "id": "file:instructions/canonical/system.yaml",
       "type": "file",
       "path": "instructions/canonical/system.yaml",
-      "sha256": "b8d1391f0014efdbb28c875fdefede1a03713dea0e9d5f77cf76334809030d06",
+      "sha256": "057b4975299b2c1493a196443efa61a33a82a64a3d0776abdbff0b06dc52280f",
       "mode": 420
     },
     {

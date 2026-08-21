@@ -6,7 +6,7 @@ Establish an evidence-backed inventory of current behavior before describing any
 
 ## Mode
 
-FINDINGS_ONLY
+RUN_ONLY
 
 ## Inputs
 

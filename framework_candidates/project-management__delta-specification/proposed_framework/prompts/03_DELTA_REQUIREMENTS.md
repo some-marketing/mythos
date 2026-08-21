@@ -6,7 +6,7 @@ Express the requested behavioral change as explicit added, modified, and removed
 
 ## Mode
 
-FINDINGS_ONLY
+RUN_ONLY
 
 ## Inputs
 

@@ -6,7 +6,7 @@ Turn an early request into a bounded product-intake question without assuming th
 
 ## Mode
 
-FINDINGS_ONLY
+RUN_ONLY
 
 ## Inputs
 

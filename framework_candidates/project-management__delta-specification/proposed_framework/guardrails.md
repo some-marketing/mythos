@@ -2,7 +2,7 @@
 
 ## Candidate status
 
-This is an Iron research candidate. It produces specification and review artifacts only. It does not authorize implementation, merging, archiving, repository mutation, or promotion.
+This is an Iron research candidate. It writes only the contracted reports under `outputs/delta-specification/`. It does not authorize implementation, merging, archiving, source or framework mutation, or promotion.
 
 ## Core constraints
 

@@ -6,7 +6,7 @@ Define the intended behavioral change, boundaries, affected consumers, and succe
 
 ## Mode
 
-FINDINGS_ONLY
+RUN_ONLY
 
 ## Inputs
 

@@ -1,12 +1,23 @@
 {
   "type": "object",
   "required": [
+    "scope_and_intent",
+    "hypothesis_tests",
     "product_brief",
     "evidence_ledger",
     "prfaq",
     "readiness_review"
   ],
   "properties": {
+    "scope_and_intent": {
+      "type": "object"
+    },
+    "hypothesis_tests": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
     "product_brief": {
       "type": "object",
       "required": [

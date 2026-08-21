@@ -43,7 +43,7 @@
     ]
   },
   "execution_modes": [
-    "FINDINGS_ONLY",
+    "RUN_ONLY",
     "REVIEW_ONLY"
   ],
   "mcp_requirements": [],

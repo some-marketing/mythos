@@ -6,7 +6,7 @@ Synthesize the bounded intake into a concise product brief and future-facing que
 
 ## Mode
 
-FINDINGS_ONLY
+RUN_ONLY
 
 ## Inputs
 

@@ -6,7 +6,7 @@ Map reading prerequisites, dependencies, acceptance criteria, and optional execu
 
 ## Mode
 
-FINDINGS_ONLY
+RUN_ONLY
 
 ## Inputs
 

@@ -6,7 +6,7 @@ Build a provenance-aware evidence ledger and identify the cheapest checks that d
 
 ## Mode
 
-FINDINGS_ONLY
+RUN_ONLY
 
 ## Inputs
 

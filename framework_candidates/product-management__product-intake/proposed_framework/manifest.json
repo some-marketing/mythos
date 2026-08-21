@@ -35,6 +35,8 @@
       "outputs/product-intake/"
     ],
     "artifacts": [
+      "outputs/product-intake/scope-and-intent.json",
+      "outputs/product-intake/hypothesis-tests.json",
       "outputs/product-intake/product-brief.json",
       "outputs/product-intake/evidence-ledger.json",
       "outputs/product-intake/prfaq.md",
@@ -42,7 +44,7 @@
     ]
   },
   "execution_modes": [
-    "FINDINGS_ONLY",
+    "RUN_ONLY",
     "REVIEW_ONLY"
   ],
   "mcp_requirements": [],

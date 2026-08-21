@@ -1,10 +1,10 @@
 {
-  "change_request": "Update a generic document-retention workflow to support a configurable retention period.",
+  "change_request": "Update a generic document-retention workflow to support a configurable retention period, hide expired bundles from the default list, and remove the legacy fixed-duration assumption while preserving export receipts.",
   "baseline_sources": [
     "baseline.md"
   ],
   "affected_consumers": [
-    "workflow operator",
+    "document-workflow user",
     "audit reviewer"
   ],
   "constraints": [

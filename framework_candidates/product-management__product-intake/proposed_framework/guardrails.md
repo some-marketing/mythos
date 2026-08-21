@@ -2,7 +2,7 @@
 
 ## Candidate status
 
-This is an Iron research candidate. It produces findings and review artifacts only. It does not authorize implementation, repository mutation, product launch, or promotion.
+This is an Iron research candidate. It writes only the contracted reports under `outputs/product-intake/`. It does not authorize implementation, source or framework mutation, product launch, or promotion.
 
 ## Core constraints
 

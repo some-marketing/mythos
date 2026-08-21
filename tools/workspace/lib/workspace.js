@@ -1,5 +1,6 @@
 'use strict';
 
+const fs = require('fs');
 const path = require('path');
 const { resolveCanonicalRoot } = require('../../lib/canonical-root.cjs');
 const {
@@ -91,7 +92,7 @@ function requireCandidateRoot(inputPath) {
   }
   const projectRoot = path.dirname(path.dirname(candidateRoot));
   const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
-  if (projectRoot === repositoryRoot) {
+  if (fs.realpathSync.native(projectRoot) === fs.realpathSync.native(repositoryRoot)) {
     return {
       candidateRoot,
       projectRoot: repositoryRoot,

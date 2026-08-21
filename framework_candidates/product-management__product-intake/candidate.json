@@ -10,15 +10,15 @@
     "https://github.com/bmad-code-org/BMAD-METHOD"
   ],
   "created_at": "2026-08-21T15:00:32Z",
-  "updated_at": "2026-08-21T15:07:34.960Z",
+  "updated_at": "2026-08-21T15:18:20.000Z",
   "owner": "operator",
   "promotion_ready": false,
   "blocking_issues": [
     "At least 3 source captures or replay cases are required; found 2."
   ],
   "replay_summary": {
-    "total": 1,
-    "pass": 1,
+    "total": 2,
+    "pass": 2,
     "fail": 0,
     "partial": 0,
     "manual_intervention": 0,

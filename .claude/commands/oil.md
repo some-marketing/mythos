@@ -1,6 +1,6 @@
 ---
 description: Short form of /outward-inward
-allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, Task]
+mode: COORDINATOR
 ---
 
 <objective>

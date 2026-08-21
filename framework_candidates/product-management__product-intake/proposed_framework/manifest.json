@@ -27,6 +27,10 @@
       {
         "name": "known_alternatives",
         "description": "Existing workarounds or competing approaches."
+      },
+      {
+        "name": "desired_outcome",
+        "description": "Outcome the product definition should make possible or help evaluate."
       }
     ]
   },

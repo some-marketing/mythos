@@ -1973,7 +1973,7 @@
       "id": "file:.claude/commands/chi.md",
       "type": "file",
       "path": ".claude/commands/chi.md",
-      "sha256": "0c78c8c366501a86df0483f44c8d86d3d2f712f42b91486750c8aba1ceb0cbae",
+      "sha256": "c8c1c2a5e78c8eb05fdfd2f0d73e65e7695bd31ebb5e31b97fcad3e39bc99d41",
       "mode": 420
     },
     {
@@ -2680,7 +2680,7 @@
       "id": "file:.claude/commands/oil.md",
       "type": "file",
       "path": ".claude/commands/oil.md",
-      "sha256": "b4d7c3620d0b184dc436f5d8a395dd88a976ec2671a189dab09f90f535eb8d1f",
+      "sha256": "727eb6eda4cc9678c56ce7dceedd44950e65db151b78d86ef8613062142a314b",
       "mode": 420
     },
     {
@@ -2715,7 +2715,7 @@
       "id": "file:.claude/commands/outward-inward.md",
       "type": "file",
       "path": ".claude/commands/outward-inward.md",
-      "sha256": "603f77d6ad350d36a21dce201e5efb1250077c880b61dc541b3c074dfa8778d7",
+      "sha256": "964fb629c0a1ff12e9d1faff0e7c8c3119b458c8fb648a8c151e3ba502e332ec",
       "mode": 420
     },
     {
@@ -3583,7 +3583,7 @@
       "id": "file:.claude/skills/outward-inward-loop/SKILL.md",
       "type": "file",
       "path": ".claude/skills/outward-inward-loop/SKILL.md",
-      "sha256": "b0dfe2b79366536520b1f1a920bf6a02dfbf5329471507536dd7fb09eb3bf9e9",
+      "sha256": "1d0a25c52c557a6e74bb4df5dee14d1285097f71171ecc5a87ed4b7a5fc9a085",
       "mode": 420
     },
     {
@@ -3828,7 +3828,7 @@
       "id": "file:framework_candidates/product-management__product-intake/proposed_framework/manifest.json",
       "type": "file",
       "path": "framework_candidates/product-management__product-intake/proposed_framework/manifest.json",
-      "sha256": "984548e4106c0a0e1ac79eabc1608381c19de467e0530e8fc88f17edc00aeafb",
+      "sha256": "58b46082dd8a100c75d2961a984c8d0016ae0e38f1324abafd8d4c9efe22eeec",
       "mode": 420
     },
     {
@@ -8364,7 +8364,7 @@
       "id": "file:instructions/canonical/command-index.md",
       "type": "file",
       "path": "instructions/canonical/command-index.md",
-      "sha256": "b661345b4497d27e7152a9fb262ba8cfd0e9509087938cc5fbb618f9546160b5",
+      "sha256": "9ed4357cc84e9986dc5da4c8bc0a1a8bbe9643d63eb886289eaa7d83e2b46aba",
       "mode": 420
     },
     {
@@ -9036,7 +9036,7 @@
       "id": "file:instructions/canonical/commands/outward-inward.yaml",
       "type": "file",
       "path": "instructions/canonical/commands/outward-inward.yaml",
-      "sha256": "03241f112cfd06294503f5b805c2db646d2cf1b2da084262cc8d2c5c117fb06a",
+      "sha256": "45b3f8b2c2e1121146afd1408a94bc99cdd718525f3a106a3157b336b6b92f9a",
       "mode": 420
     },
     {
@@ -9680,7 +9680,7 @@
       "id": "file:instructions/canonical/system.yaml",
       "type": "file",
       "path": "instructions/canonical/system.yaml",
-      "sha256": "b8d1391f0014efdbb28c875fdefede1a03713dea0e9d5f77cf76334809030d06",
+      "sha256": "057b4975299b2c1493a196443efa61a33a82a64a3d0776abdbff0b06dc52280f",
       "mode": 420
     },
     {
@@ -11556,7 +11556,7 @@
       "id": "file:tools/codex/lib/managed-command-registry.js",
       "type": "file",
       "path": "tools/codex/lib/managed-command-registry.js",
-      "sha256": "195ac06e84587b58208d3f949f4363742d3ea3b4d1471a491e45033ee7a18abd",
+      "sha256": "2c3c6e1d9e2297eeb214c3baba70a0859beae10250b5c63299a54e21521f69e6",
       "mode": 420
     },
     {
@@ -11808,7 +11808,7 @@
       "id": "file:tools/commands/__tests__/outward-inward-command.test.cjs",
       "type": "file",
       "path": "tools/commands/__tests__/outward-inward-command.test.cjs",
-      "sha256": "c634a1ba73e833b59bb1e8afdce0ff86cc933790c6b94c21f4f2e9a4ae8d91e7",
+      "sha256": "9043cef2373cdc98d33bd834585f79aeac37908ae24cdcb8ff869591635be0bb",
       "mode": 420
     },
     {
@@ -16610,7 +16610,7 @@
       "id": "file:tools/parity/build-baseline.cjs",
       "type": "file",
       "path": "tools/parity/build-baseline.cjs",
-      "sha256": "6b0eab3b51c6cb73efabd21e62751ddb7a260c7112e734f64cc6c83e966d4797",
+      "sha256": "2ac85252fd0b6525d03b899e99c28d0ee6e3fdaa08ef6fb1100fd620b2648eb0",
       "mode": 420
     },
     {
@@ -43929,6 +43929,15 @@
       "specifier": "./debrief-close-span-projection.cjs"
     },
     {
+      "id": "b94ff247fcfd926dda6e4437ec9c4f1ba244e742db97393f68c0f192d6f6fca2",
+      "type": "static-import",
+      "from": "file:tools/commands/__tests__/outward-inward-command.test.cjs",
+      "to": "file:tools/codex/lib/managed-command-registry.js",
+      "target": "tools/codex/lib/managed-command-registry.js",
+      "required": true,
+      "specifier": "../../codex/lib/managed-command-registry.js"
+    },
+    {
       "id": "b9701a56a7dc0356eb89921755cbce5a9ff79ca6b8bb67769248416d89a121b0",
       "type": "command-alias-authority",
       "from": "command-definition:identify",
@@ -51202,7 +51211,7 @@
   ],
   "counts": {
     "nodes": 3894,
-    "edges": 2838,
+    "edges": 2839,
     "unresolved": 0
   }
 }

@@ -1,0 +1,1 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","type":"object","required":["type","name"],"properties":{"type":{"enum":["organization","domain","project","technology","event","person-public-role","other"]},"name":{"type":"string","minLength":1},"identifiers":{"type":"array","items":{"type":"string"}}},"additionalProperties":false}

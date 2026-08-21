@@ -42,6 +42,43 @@
       "outputs/delta-specification/review.json"
     ]
   },
+  "output_contract_v2": {
+    "directories": [
+      {
+        "path": "outputs/delta-specification/",
+        "required": true,
+        "description": "All delta-specification artifacts"
+      }
+    ],
+    "artifacts": [
+      {
+        "name": "baseline-inventory.json",
+        "path_pattern": "outputs/delta-specification/baseline-inventory.json",
+        "required": true
+      },
+      {
+        "name": "change-proposal.json",
+        "path_pattern": "outputs/delta-specification/change-proposal.json",
+        "required": true
+      },
+      {
+        "name": "delta-spec.json",
+        "path_pattern": "outputs/delta-specification/delta-spec.json",
+        "required": true
+      },
+      {
+        "name": "dependency-acceptance-map.json",
+        "path_pattern": "outputs/delta-specification/dependency-acceptance-map.json",
+        "required": true
+      },
+      {
+        "name": "review.json",
+        "path_pattern": "outputs/delta-specification/review.json",
+        "required": true
+      }
+    ],
+    "bundle_types": []
+  },
   "execution_modes": [
     "RUN_ONLY",
     "REVIEW_ONLY"

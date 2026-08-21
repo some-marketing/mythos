@@ -7,6 +7,7 @@ const path = require('node:path');
 const test = require('node:test');
 
 const { resolveCanonicalRoot } = require('../../lib/canonical-root.cjs');
+const { inspectOutputDir, loadOutputContract } = require('../lib/output-contract');
 const { requireCandidateRoot } = require('../lib/workspace');
 
 test('recognizes candidates staged at the repository framework_candidates root', () => {
@@ -65,8 +66,10 @@ test('preserves project-scoped framework candidate resolution', (t) => {
   assert.equal(result.candidateScope, 'project');
 });
 
-test('imported candidates authorize report outputs and declare consumed artifacts', () => {
+test('imported candidates authorize report outputs and declare consumed artifacts', (t) => {
   const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const emptyOutputRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-candidate-output-'));
+  t.after(() => fs.rmSync(emptyOutputRoot, { recursive: true, force: true }));
   const candidateSpecs = [
     {
       root: 'product-management__product-intake',
@@ -99,8 +102,22 @@ test('imported candidates authorize report outputs and declare consumed artifact
       candidate.root,
       'proposed_framework'
     );
-    const manifest = JSON.parse(fs.readFileSync(path.join(proposedRoot, 'manifest.json'), 'utf8'));
+    const manifestPath = path.join(proposedRoot, 'manifest.json');
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
     assert.ok(manifest.execution_modes.includes('RUN_ONLY'));
+    assert.ok(manifest.output_contract_v2);
+    assert.ok(manifest.output_contract_v2.directories.every((entry) => entry.required));
+    assert.ok(manifest.output_contract_v2.artifacts.every((entry) => entry.required && entry.path_pattern));
+    assert.deepEqual(
+      manifest.output_contract_v2.artifacts.map((entry) => entry.path_pattern),
+      manifest.output_contract.artifacts
+    );
+    const loaded = loadOutputContract(manifestPath);
+    assert.equal(loaded.compatibility, false);
+    const missingArtifacts = inspectOutputDir(emptyOutputRoot, loaded.contract)
+      .filter((finding) => finding.code === 'ARTIFACT_MISSING');
+    assert.equal(missingArtifacts.length, manifest.output_contract_v2.artifacts.length);
+    assert.ok(missingArtifacts.every((finding) => finding.severity === 'blocker'));
     for (const artifact of candidate.requiredArtifacts) {
       assert.ok(manifest.output_contract.artifacts.includes(artifact));
     }
@@ -108,6 +125,36 @@ test('imported candidates authorize report outputs and declare consumed artifact
       const content = fs.readFileSync(path.join(proposedRoot, 'prompts', prompt), 'utf8');
       assert.match(content, /## Mode\n\nRUN_ONLY/);
     }
+  }
+});
+
+test('imported candidate review gates require distinct minds and complete intake', () => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const productRoot = path.join(
+    repositoryRoot,
+    'framework_candidates',
+    'product-management__product-intake',
+    'proposed_framework'
+  );
+  const productManifest = JSON.parse(fs.readFileSync(path.join(productRoot, 'manifest.json'), 'utf8'));
+  assert.ok(productManifest.input_contract.optional.some((entry) => entry.name === 'risk_level'));
+
+  const reviewPrompts = [
+    path.join(productRoot, 'prompts', '04_READINESS_REVIEW.md'),
+    path.join(
+      repositoryRoot,
+      'framework_candidates',
+      'project-management__delta-specification',
+      'proposed_framework',
+      'prompts',
+      '05_INDEPENDENT_REVIEW.md'
+    )
+  ];
+  for (const promptPath of reviewPrompts) {
+    const content = fs.readFileSync(promptPath, 'utf8');
+    assert.match(content, /actor id, harness id, and model-provider family/);
+    assert.match(content, /same-provider subagent is not a distinct reviewing mind/);
+    assert.match(content, /missing provenance forces `FAIL`/);
   }
 });
 

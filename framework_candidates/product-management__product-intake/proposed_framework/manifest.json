@@ -31,6 +31,10 @@
       {
         "name": "desired_outcome",
         "description": "Outcome the product definition should make possible or help evaluate."
+      },
+      {
+        "name": "risk_level",
+        "description": "Risk classification used to calibrate intake and review depth."
       }
     ]
   },
@@ -46,6 +50,48 @@
       "outputs/product-intake/prfaq.md",
       "outputs/product-intake/readiness-review.json"
     ]
+  },
+  "output_contract_v2": {
+    "directories": [
+      {
+        "path": "outputs/product-intake/",
+        "required": true,
+        "description": "All product-intake artifacts"
+      }
+    ],
+    "artifacts": [
+      {
+        "name": "scope-and-intent.json",
+        "path_pattern": "outputs/product-intake/scope-and-intent.json",
+        "required": true
+      },
+      {
+        "name": "hypothesis-tests.json",
+        "path_pattern": "outputs/product-intake/hypothesis-tests.json",
+        "required": true
+      },
+      {
+        "name": "product-brief.json",
+        "path_pattern": "outputs/product-intake/product-brief.json",
+        "required": true
+      },
+      {
+        "name": "evidence-ledger.json",
+        "path_pattern": "outputs/product-intake/evidence-ledger.json",
+        "required": true
+      },
+      {
+        "name": "prfaq.md",
+        "path_pattern": "outputs/product-intake/prfaq.md",
+        "required": true
+      },
+      {
+        "name": "readiness-review.json",
+        "path_pattern": "outputs/product-intake/readiness-review.json",
+        "required": true
+      }
+    ],
+    "bundle_types": []
   },
   "execution_modes": [
     "RUN_ONLY",

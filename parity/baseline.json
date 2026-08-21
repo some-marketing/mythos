@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "a1ee3d544b222345730283b0b77785ed0db6484ccd701d3c6bc7cd003ca9d37f",
+    "expected_tree_sha256": "90c48b8eb3ddea78b7f6dc9ca201c16bbd149327c65cffbfab19e898a83ab640",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -1802,12 +1802,12 @@
       },
       {
         "path": "framework_candidates/product-management__product-intake/proposed_framework/guardrails.md",
-        "sha256": "dc13d3460a9092b41da356d87715116c8c1be32f8811392606cb0b04b546671e",
+        "sha256": "96bea91e05f310332abba0a7b4bf5eda41aecc986a408e4d899e574590641329",
         "mode": 420
       },
       {
         "path": "framework_candidates/product-management__product-intake/proposed_framework/manifest.json",
-        "sha256": "58b46082dd8a100c75d2961a984c8d0016ae0e38f1324abafd8d4c9efe22eeec",
+        "sha256": "be4c5bf43c16516022c0dc8df1734641121972c8eb3d4bb61fbf181253bf8f7e",
         "mode": 420
       },
       {
@@ -1827,7 +1827,7 @@
       },
       {
         "path": "framework_candidates/product-management__product-intake/proposed_framework/prompts/04_READINESS_REVIEW.md",
-        "sha256": "7e51d1d10c8be52c29bd697db735808157e810f8a77535b3272c8d56ee949ce5",
+        "sha256": "83ef3c916ac675f4bce69d62b5a9fcbb8b9be6f8450ed00481e67a9a34c05985",
         "mode": 420
       },
       {
@@ -1947,12 +1947,12 @@
       },
       {
         "path": "framework_candidates/project-management__delta-specification/proposed_framework/guardrails.md",
-        "sha256": "19d6c4b41bc436cb984c06e2d7ae297953c2cbe91678b3d89d41383151bf8e7c",
+        "sha256": "82300d6e03dc112f4a55927c82c2ac4620f337af733de45d1e6d70b8cc5ecacb",
         "mode": 420
       },
       {
         "path": "framework_candidates/project-management__delta-specification/proposed_framework/manifest.json",
-        "sha256": "42bc9549029d3607fb85f88dd56e2d5ef8a09b80fb60e1a326c19e2fab3071a3",
+        "sha256": "ce384b882f84c5b2bacfa91e2868e647a7fd38851f877a2b21629397fab5320b",
         "mode": 420
       },
       {
@@ -1977,7 +1977,7 @@
       },
       {
         "path": "framework_candidates/project-management__delta-specification/proposed_framework/prompts/05_INDEPENDENT_REVIEW.md",
-        "sha256": "14aa22a23eb62eb848806120ed6438c1c235382fa299ec71668edff1d32a4a97",
+        "sha256": "e9be4a6f10637207ce45bb2172b8d3beeee6fdc5ebaa2854e948c4044f75344f",
         "mode": 420
       },
       {
@@ -6052,7 +6052,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "8ef5d937eea05b1268b67cc8552b5b7ac0bbf9b16007faab9bc698231fdbd683",
+        "sha256": "493ce004addfc6f9803e7c5c74c9f540a7fc2e401cc9b6eec03b8ebef7069f3f",
         "mode": 420
       },
       {
@@ -13737,7 +13737,7 @@
       },
       {
         "path": "tools/workspace/__tests__/candidate-root.test.js",
-        "sha256": "168b9eb6cd2cd26633ff8561688587a93acd4e12542c134d11e56b6a524043d2",
+        "sha256": "718f56adb28f396fae7b5a045a25d15f4cf05645e62b0b3f5fe8eb8af21c97db",
         "mode": 420
       },
       {
@@ -14064,9 +14064,9 @@
     "package_script_count": 205,
     "command_alias_registry_sha256": "4a7ed7af401f9b4695dcd2dca5ca64f4a0dae975d0b94f95e24e9b5f3a6ce3fc",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "8ef5d937eea05b1268b67cc8552b5b7ac0bbf9b16007faab9bc698231fdbd683",
+    "graph_sha256": "493ce004addfc6f9803e7c5c74c9f540a7fc2e401cc9b6eec03b8ebef7069f3f",
     "graph_nodes": 3894,
-    "graph_edges": 2839
+    "graph_edges": 2840
   },
   "runtime_exclusions": [
     ".git/**",

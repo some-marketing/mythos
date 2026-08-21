@@ -16,4 +16,4 @@ This is an Iron research candidate. It writes only the contracted reports under 
 
 ## Review boundary
 
-Prompt 04 must be run by an actor distinct from the producer of Prompts 01–03. Its verdict is advisory until replay and operator feedback exist.
+Prompt 04 must be run by a reviewer whose actor id, harness id, and model-provider family are all distinct from every producer of Prompts 01–03. A new context or same-provider subagent does not satisfy this boundary. The review artifact must record the compared provenance, and missing or non-distinct provenance forbids `PASS`. Its verdict is advisory until replay and operator feedback exist.

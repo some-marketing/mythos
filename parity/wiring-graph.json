@@ -127,7 +127,7 @@
       "id": "alias:chi",
       "type": "command-alias",
       "name": "chi",
-      "authority": "outward-inward-loop"
+      "authority": "outward-inward"
     },
     {
       "id": "alias:council-of-owls",
@@ -175,7 +175,7 @@
       "id": "alias:oil",
       "type": "command-alias",
       "name": "oil",
-      "authority": "outward-inward-loop"
+      "authority": "outward-inward"
     },
     {
       "id": "alias:owl",
@@ -2715,7 +2715,7 @@
       "id": "file:.claude/commands/outward-inward.md",
       "type": "file",
       "path": ".claude/commands/outward-inward.md",
-      "sha256": "6ce8dee20fb4ef4ec72f99db941a1479a4f27f33e52e39b35c8b4a1f40772d0f",
+      "sha256": "603f77d6ad350d36a21dce201e5efb1250077c880b61dc541b3c074dfa8778d7",
       "mode": 420
     },
     {
@@ -3583,7 +3583,7 @@
       "id": "file:.claude/skills/outward-inward-loop/SKILL.md",
       "type": "file",
       "path": ".claude/skills/outward-inward-loop/SKILL.md",
-      "sha256": "1751f814673d010dbabdc35d7b851df0a46d137b38fe17fd6a8ef7d6d8dee1d3",
+      "sha256": "b0dfe2b79366536520b1f1a920bf6a02dfbf5329471507536dd7fb09eb3bf9e9",
       "mode": 420
     },
     {
@@ -8287,7 +8287,7 @@
       "id": "file:instructions/canonical/command-aliases.yaml",
       "type": "file",
       "path": "instructions/canonical/command-aliases.yaml",
-      "sha256": "6c6a60716f339e10799b78e35aeb0330b1e78a55caec3e809829fb928df83349",
+      "sha256": "4a7ed7af401f9b4695dcd2dca5ca64f4a0dae975d0b94f95e24e9b5f3a6ce3fc",
       "mode": 420
     },
     {
@@ -8960,6 +8960,13 @@
       "type": "file",
       "path": "instructions/canonical/commands/orchestrate.yaml",
       "sha256": "79d11f92dd85b3580ac4933d9ca4231f64e71faeb8c64d9161d9a87bfbfb6381",
+      "mode": 420
+    },
+    {
+      "id": "file:instructions/canonical/commands/outward-inward.yaml",
+      "type": "file",
+      "path": "instructions/canonical/commands/outward-inward.yaml",
+      "sha256": "03241f112cfd06294503f5b805c2db646d2cf1b2da084262cc8d2c5c117fb06a",
       "mode": 420
     },
     {
@@ -11725,6 +11732,13 @@
       "type": "file",
       "path": "tools/commands/__tests__/mythos-command-runner.test.cjs",
       "sha256": "8ad85e7f6c2bd8e3fa24473ca082517b2fe56c4b21b442de6fd67c707934a5e6",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/commands/__tests__/outward-inward-command.test.cjs",
+      "type": "file",
+      "path": "tools/commands/__tests__/outward-inward-command.test.cjs",
+      "sha256": "c634a1ba73e833b59bb1e8afdce0ff86cc933790c6b94c21f4f2e9a4ae8d91e7",
       "mode": 420
     },
     {
@@ -32847,6 +32861,15 @@
       "specifier": "../claude/lib/hook-telemetry.cjs"
     },
     {
+      "id": "4b11b9873e9c1afc62a109c6bc98d30cd1ebc493f51bee350004c2630caec1aa",
+      "type": "static-import",
+      "from": "file:tools/commands/__tests__/outward-inward-command.test.cjs",
+      "to": "file:tools/commands/mythos-command-runner.cjs",
+      "target": "tools/commands/mythos-command-runner.cjs",
+      "required": true,
+      "specifier": "../mythos-command-runner.cjs"
+    },
+    {
       "id": "4b1554c2646dc99fafd532afc2daa5f6403d4391fbaeb1237e8d92c4c2bde699",
       "type": "static-import",
       "from": "file:tools/sessions/__tests__/boundary-markers.test.js",
@@ -38486,6 +38509,15 @@
       "target": "tools/maintenance/lib/end-session-closeout.js",
       "required": true,
       "specifier": "../maintenance/lib/end-session-closeout"
+    },
+    {
+      "id": "834882c32b2cec7be00632f00b02edbe8660c1375d981d9d24799a65e2d2a67c",
+      "type": "static-import",
+      "from": "file:tools/commands/__tests__/outward-inward-command.test.cjs",
+      "to": "file:tools/commands/lib/command-aliases.cjs",
+      "target": "tools/commands/lib/command-aliases.cjs",
+      "required": true,
+      "specifier": "../lib/command-aliases.cjs"
     },
     {
       "id": "835258cfc5090099d51ab1171ab8368b8a366cd56b4dc8fdc58e2369c1d8f07b",
@@ -46010,6 +46042,15 @@
       "specifier": "../workspace/lib/args"
     },
     {
+      "id": "cf8452a07e1a2f5d05284f17f97a928aa82fb9d7978f1938b8e14f9fb99a5e63",
+      "type": "static-import",
+      "from": "file:tools/commands/__tests__/outward-inward-command.test.cjs",
+      "to": "file:tools/commands/lib/command-registry.cjs",
+      "target": "tools/commands/lib/command-registry.cjs",
+      "required": true,
+      "specifier": "../lib/command-registry.cjs"
+    },
+    {
       "id": "cf8b21ac6fd53863ad771123c6f2f9f30c61d59b0c6e8d14c24441e06e15a443",
       "type": "package-script-target",
       "from": "package-script:verify:parity:source",
@@ -51090,8 +51131,8 @@
     }
   ],
   "counts": {
-    "nodes": 3882,
-    "edges": 2835,
+    "nodes": 3884,
+    "edges": 2838,
     "unresolved": 0
   }
 }

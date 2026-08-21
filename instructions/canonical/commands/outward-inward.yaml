@@ -1,0 +1,54 @@
+{
+  "id": "outward-inward",
+  "description": "Compare two or more named sources outwardly, then map evidence inward to Mythos learning, framework candidates, and improvement opportunities",
+  "mode": "FINDINGS_ONLY",
+  "objective": "Run a provenance-preserving, two-axis comparison over heterogeneous sources. Judge learning and transfer value separately from implementation readiness, and never treat similarity to Mythos as a prerequisite for usefulness.",
+  "scope_resolution": {
+    "default": "Require two or more distinct named sources and an explicit comparison purpose.",
+    "arguments": {
+      "file:<path>": "Read a local file as observed source material.",
+      "url:<https-url>": "Retrieve a public source read-only and record its locator and retrieval evidence.",
+      "note:<title-or-id>": "Resolve a named note without treating it as canonical authority.",
+      "framework:<path>": "Read a Mythos framework or instruction surface as a comparison source.",
+      "artifact:<path>": "Read an existing run or analysis artifact as observed evidence.",
+      "--purpose <text>": "Declare the bounded comparison question.",
+      "--mode PATCH_ALLOWED": "Permit only the explicitly declared repository write set after findings, proposal, and independent review."
+    }
+  },
+  "process": [
+    "Resolve aliases mechanically through instructions/canonical/command-aliases.yaml. The outward-inward command is authoritative; .claude/skills/outward-inward-loop/SKILL.md supplies detailed phase guidance and cannot widen this contract.",
+    "ORIENT — validate at least two distinct sources, the purpose, allowed operations, stop conditions, custody, and execution mode.",
+    "TICK through RESEARCH — retrieve read-only, record provenance and limitations, extract atomic observations, normalize claims, and seek corroboration and counterevidence.",
+    "TOCK and IMPROVE — compare source mechanisms, then map evidence to Mythos gaps, framework candidates, adaptations, comparative hardening, or durable pattern learning. Similarity creates a comparison obligation and is never evidence against transfer value.",
+    "SHIP — assign each material pattern a learning/transfer disposition and a separate implementation-readiness state. PATCH_ALLOWED may apply only an explicitly bounded change after independent review; FINDINGS_ONLY and REVIEW_ONLY never write repository state.",
+    "SCHEDULE — return next evidence actions, unresolved questions, and re-run triggers without activating or graduating work.",
+    "In FINDINGS_ONLY or REVIEW_ONLY, return the logical source manifest, observations, comparison, internal map, proposals, receipt, and any halt evidence in-session without writing files. In PATCH_ALLOWED, persist the declared bundle under _dev/reports/analysis/outward-inward/<run_id>/ and resumable phase state under _dev/state/outward-inward/<run_id>/."
+  ],
+  "success_criteria": [
+    "Every material pattern receives separate learning/transfer and implementation-readiness dispositions",
+    "Every material claim retains provenance, limitations, and a cheapest falsifier",
+    "Similarity triggers comparison rather than automatic dismissal",
+    "FINDINGS_ONLY and REVIEW_ONLY complete without repository writes",
+    "PATCH_ALLOWED writes remain inside the declared write set and receive independent review",
+    "The user receives either in-session findings or a declared write-capable artifact bundle with truthful halt and replay status"
+  ],
+  "boundaries": [
+    "Never install or execute retrieved source code merely to perform the comparison",
+    "Never contact, identify, surveil, or deanonymize a private person",
+    "Never expose credentials, secrets, or unnecessary personal data",
+    "Never let the command's own synthesis validate its acceptance-grade output",
+    "Never treat a scheduled follow-up as activation or graduation"
+  ],
+  "handoff": {
+    "framework_candidate": "stage under framework_candidates/ and use the normal replay, learning, and promotion gates",
+    "ready_to_blueprint": "/blueprint <bounded proposal>",
+    "bounded_experiment": "run the cheapest declared comparative test without creating durable mechanism",
+    "patch_requested": "rerun with explicit PATCH_ALLOWED mode, bounded write set, and independent review",
+    "research_only": "preserve the re-run trigger without activating work"
+  },
+  "artifacts": [
+    "FINDINGS_ONLY or REVIEW_ONLY: in-session findings only",
+    "PATCH_ALLOWED: _dev/reports/analysis/outward-inward/<run_id>/",
+    "PATCH_ALLOWED resumable state: _dev/state/outward-inward/<run_id>/"
+  ]
+}

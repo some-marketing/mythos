@@ -1,5 +1,7 @@
 # Guardrails
 
+- Execution modes: `FINDINGS_ONLY`, `REVIEW_ONLY`. This framework never writes, executes, or dispatches outside those modes.
+- Use observational reporting throughout: record observations and hypotheses, not diagnoses or conclusions about the target.
 - Public, lawful, purpose-bound discovery only.
 - Every run must declare target, purpose, scope, and stop conditions.
 - No doxxing, stalking, deanonymization, credential recovery, sensitive-trait inference, or private-person profiling.

@@ -1,5 +1,7 @@
 # Guardrails
 
+- Execution modes: `FINDINGS_ONLY`, `REVIEW_ONLY`. This framework never writes, executes, or dispatches outside those modes.
+- Use observational reporting throughout: record observations and hypotheses, not diagnoses or conclusions about the subject's legitimacy.
 - Public-business research only; no private-person profiling.
 - Do not search breached, credential, broker, or restricted datasets.
 - Do not infer sensitive traits or identity from a single identifier.

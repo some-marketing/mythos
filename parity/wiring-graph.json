@@ -3024,7 +3024,7 @@
       "id": "file:.claude/guardrails.md",
       "type": "file",
       "path": ".claude/guardrails.md",
-      "sha256": "028de2152a2b9f3af5ea9a750c38910572e4651f2456d664888f5f039c6b09e7",
+      "sha256": "9b3a06934b46a33e1ae4357c127b28ccfe81a061005ef0e60c7fdfe7919c54b1",
       "mode": 420
     },
     {
@@ -3661,14 +3661,14 @@
       "id": "file:AGENTS.md",
       "type": "file",
       "path": "AGENTS.md",
-      "sha256": "a0ad920bb923dc75d57fd4edaf520ef00f286555a6e72ea0d746d6a240384529",
+      "sha256": "8ef082f3cf0a84bd2d689e0c3842833ed95aa200a44b430d3037aaae34ee0696",
       "mode": 420
     },
     {
       "id": "file:CLAUDE.md",
       "type": "file",
       "path": "CLAUDE.md",
-      "sha256": "4dc4c5d3d956dcda72ce6ed2f3b65f4f9592ad2cbc05569072d5f77e9254c19a",
+      "sha256": "853a429fb94becc2b56eb50dc5c21806f3209d4557dd8f083c567fc149c70b81",
       "mode": 420
     },
     {
@@ -5461,6 +5461,328 @@
       "type": "file",
       "path": "frameworks/project-management/feedback-to-tasks/prompts/05_TASK_FORMATTING.md",
       "sha256": "94cb9665c19b3f828c9b25b7bedffd706cbbe37c63c89266b3b88d94e30361f7",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/business-identity-verification/.claude/agents/business-identity-verification/evidence-review-agent.md",
+      "type": "file",
+      "path": "frameworks/research/business-identity-verification/.claude/agents/business-identity-verification/evidence-review-agent.md",
+      "sha256": "a71265fcccc5e42e9bddd45b99b45a06d601a57d95ce15498d275962583a0e66",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/business-identity-verification/.claude/agents/business-identity-verification/identity-intake-agent.md",
+      "type": "file",
+      "path": "frameworks/research/business-identity-verification/.claude/agents/business-identity-verification/identity-intake-agent.md",
+      "sha256": "a26d2776d44d9ca2a55a187afdb99f0e4b0ce97d2d3a6a491853fba43d092ac7",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/business-identity-verification/.claude/agents/business-identity-verification/public-search-agent.md",
+      "type": "file",
+      "path": "frameworks/research/business-identity-verification/.claude/agents/business-identity-verification/public-search-agent.md",
+      "sha256": "e97a046b1db2d9ec4d5b6b80b01158f3a2474142b3c2b77e1d6e13031e7f163c",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/business-identity-verification/.claude/commands/business-identity-verification/run.md",
+      "type": "file",
+      "path": "frameworks/research/business-identity-verification/.claude/commands/business-identity-verification/run.md",
+      "sha256": "f39bb3d6b5e9e87cb4178d4944baab602aea894ba722e6cd7de5f7e624546634",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/business-identity-verification/.claude/skills/business-identity-verification/SKILL.md",
+      "type": "file",
+      "path": "frameworks/research/business-identity-verification/.claude/skills/business-identity-verification/SKILL.md",
+      "sha256": "a0aeb839ef152a2be01f81746eff75713bf56e21494cfe937ef12c4eee5eeee2",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/business-identity-verification/docs/README.md",
+      "type": "file",
+      "path": "frameworks/research/business-identity-verification/docs/README.md",
+      "sha256": "f51c9c44807cf69f3fa82ae01d7a5c81193caf6991f499e3b85f701be279d184",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/business-identity-verification/guardrails.md",
+      "type": "file",
+      "path": "frameworks/research/business-identity-verification/guardrails.md",
+      "sha256": "a6e06b0221468d654cce0635be843f826ecefc5c017e210abc5a2342300e718b",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/business-identity-verification/manifest.json",
+      "type": "file",
+      "path": "frameworks/research/business-identity-verification/manifest.json",
+      "sha256": "52a94111e3c19074efd6b22973ab00a5ae07e0e5eecf7a32f1f47f657fd35179",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/business-identity-verification/prompts/01_INTAKE.md",
+      "type": "file",
+      "path": "frameworks/research/business-identity-verification/prompts/01_INTAKE.md",
+      "sha256": "d4c05f0372c733e627e35ed845aecc3abd3fcc1dbe0016f0aa595661a0d8b945",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/business-identity-verification/prompts/02_PUBLIC_SEARCH.md",
+      "type": "file",
+      "path": "frameworks/research/business-identity-verification/prompts/02_PUBLIC_SEARCH.md",
+      "sha256": "3a36e9dc617bbdc83d66836b6fd1e2b181377dcb97ba0d7cacb25ed282dfd468",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/business-identity-verification/prompts/03_EVIDENCE_REVIEW.md",
+      "type": "file",
+      "path": "frameworks/research/business-identity-verification/prompts/03_EVIDENCE_REVIEW.md",
+      "sha256": "eec1ad336e61c987d159fdf9c7b79ed189599f91588e33047885686a09947946",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/business-identity-verification/schemas/output/evidence-log.schema.json",
+      "type": "file",
+      "path": "frameworks/research/business-identity-verification/schemas/output/evidence-log.schema.json",
+      "sha256": "67db4a8e86245fd76b35b3abaa545fdec80ab2be62845fac0e15b10421c0f3c4",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/business-identity-verification/schemas/output/report.schema.json",
+      "type": "file",
+      "path": "frameworks/research/business-identity-verification/schemas/output/report.schema.json",
+      "sha256": "63dbd3e97507d5006fc37199f08c3cf0117bf62d5a9cb514bcdff4c78e67ee3e",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/business-identity-verification/schemas/subject.schema.json",
+      "type": "file",
+      "path": "frameworks/research/business-identity-verification/schemas/subject.schema.json",
+      "sha256": "3b27c94ce36d866915e1c6e858630a270adc075dfb2d4b401c7e90695f680a5f",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/contractor-credential-review/.claude/agents/contractor-credential-review/credential-search-agent.md",
+      "type": "file",
+      "path": "frameworks/research/contractor-credential-review/.claude/agents/contractor-credential-review/credential-search-agent.md",
+      "sha256": "df433594139f0627f3553aad9d85bf79d34e6fd36cfe7b5956f3237805870645",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/contractor-credential-review/.claude/agents/contractor-credential-review/risk-review-agent.md",
+      "type": "file",
+      "path": "frameworks/research/contractor-credential-review/.claude/agents/contractor-credential-review/risk-review-agent.md",
+      "sha256": "af9ef18f6e6139a121493822e346dabc20f6b72eee9631ca711764ca1065ad91",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/contractor-credential-review/.claude/agents/contractor-credential-review/scope-intake-agent.md",
+      "type": "file",
+      "path": "frameworks/research/contractor-credential-review/.claude/agents/contractor-credential-review/scope-intake-agent.md",
+      "sha256": "2005ea1392c1ff530fcd290642a1525649bc6e0e18e7a1042a55e66371b70d96",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/contractor-credential-review/.claude/commands/contractor-credential-review/run.md",
+      "type": "file",
+      "path": "frameworks/research/contractor-credential-review/.claude/commands/contractor-credential-review/run.md",
+      "sha256": "59d5932a518643cf907e5be360b79fb73a15ca9c1357951f47759b3d0440c732",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/contractor-credential-review/.claude/skills/contractor-credential-review/SKILL.md",
+      "type": "file",
+      "path": "frameworks/research/contractor-credential-review/.claude/skills/contractor-credential-review/SKILL.md",
+      "sha256": "e1611b02a9a4e1dcc9cf6753abcc83c76dfc6859f2fface602c1512201190f61",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/contractor-credential-review/docs/README.md",
+      "type": "file",
+      "path": "frameworks/research/contractor-credential-review/docs/README.md",
+      "sha256": "15d62e8740156c4cfa4e0473cbf0043f9f2499062366bcafed0640fc95180149",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/contractor-credential-review/guardrails.md",
+      "type": "file",
+      "path": "frameworks/research/contractor-credential-review/guardrails.md",
+      "sha256": "abd8b3f8ae6e51e69980370b61eb669149b986d0890e13a8a54cf5194e6749de",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/contractor-credential-review/manifest.json",
+      "type": "file",
+      "path": "frameworks/research/contractor-credential-review/manifest.json",
+      "sha256": "465b5a27a24296efddeba9fd9c6301496c853335199ecf7985dd7939763da644",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/contractor-credential-review/prompts/01_INTAKE.md",
+      "type": "file",
+      "path": "frameworks/research/contractor-credential-review/prompts/01_INTAKE.md",
+      "sha256": "1a9b643aceabc4e42f54595d3b4d95fd8d94a15517d24fa5ad689ad8d055f4fd",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/contractor-credential-review/prompts/02_CREDENTIAL_SEARCH.md",
+      "type": "file",
+      "path": "frameworks/research/contractor-credential-review/prompts/02_CREDENTIAL_SEARCH.md",
+      "sha256": "1c4c2b90d7f670eaca3b7ffd165f71333c763e2cc5e3560d7b97bef2e9214002",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/contractor-credential-review/prompts/03_RISK_REVIEW.md",
+      "type": "file",
+      "path": "frameworks/research/contractor-credential-review/prompts/03_RISK_REVIEW.md",
+      "sha256": "940b198fa1512e991abcbf784482066c316426deec618e0e5b25cf2d2beda054",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/contractor-credential-review/schemas/jurisdiction.schema.json",
+      "type": "file",
+      "path": "frameworks/research/contractor-credential-review/schemas/jurisdiction.schema.json",
+      "sha256": "e0b6678f0fc7d482baf8f98d68d383a5eb4bbe343e000a7b6e1912b72f8143b0",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/contractor-credential-review/schemas/output/evidence-log.schema.json",
+      "type": "file",
+      "path": "frameworks/research/contractor-credential-review/schemas/output/evidence-log.schema.json",
+      "sha256": "a6511a988086612bced01111ba287a1a78e5bafb1576c7f8a9ef82e9539285ff",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/contractor-credential-review/schemas/output/report.schema.json",
+      "type": "file",
+      "path": "frameworks/research/contractor-credential-review/schemas/output/report.schema.json",
+      "sha256": "57fa76f6b8e65f74524c016811d177d3a29c11b00ad72cc544575e5fe917884a",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/contractor-credential-review/schemas/subject.schema.json",
+      "type": "file",
+      "path": "frameworks/research/contractor-credential-review/schemas/subject.schema.json",
+      "sha256": "32afc3cab6d595bea9a1eb382a00221b588dfa964948ed18648a349bd8f6132b",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/osint-discovery/.claude/agents/osint-discovery/discovery-agent.md",
+      "type": "file",
+      "path": "frameworks/research/osint-discovery/.claude/agents/osint-discovery/discovery-agent.md",
+      "sha256": "be6ad51acbd724424987037c33859a1db254cec121c3586868115ff7967b3f84",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/osint-discovery/.claude/agents/osint-discovery/scope-agent.md",
+      "type": "file",
+      "path": "frameworks/research/osint-discovery/.claude/agents/osint-discovery/scope-agent.md",
+      "sha256": "2fb6ed35499c7b7c5f499cb301bf21772b20b825209b47231e135d0e371d62b2",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/osint-discovery/.claude/agents/osint-discovery/source-plan-agent.md",
+      "type": "file",
+      "path": "frameworks/research/osint-discovery/.claude/agents/osint-discovery/source-plan-agent.md",
+      "sha256": "e11579532a573d641ed04101725b97b13e35998b47a569f7222a985c9f4d943a",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/osint-discovery/.claude/agents/osint-discovery/synthesis-agent.md",
+      "type": "file",
+      "path": "frameworks/research/osint-discovery/.claude/agents/osint-discovery/synthesis-agent.md",
+      "sha256": "cb314d06db41385a3322efd4493231f13d02e6a0d6297037b1dbc263ed3b5259",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/osint-discovery/.claude/commands/osint-discovery/run.md",
+      "type": "file",
+      "path": "frameworks/research/osint-discovery/.claude/commands/osint-discovery/run.md",
+      "sha256": "8e33f9fc6e3896e203a33bb07ede96a5031072f6db32833a6c26075596c5ec88",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/osint-discovery/.claude/skills/osint-discovery/SKILL.md",
+      "type": "file",
+      "path": "frameworks/research/osint-discovery/.claude/skills/osint-discovery/SKILL.md",
+      "sha256": "8aca4fa240e388e7ea263e02ad63304c08709491f463e2b86898b59a90b02041",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/osint-discovery/docs/README.md",
+      "type": "file",
+      "path": "frameworks/research/osint-discovery/docs/README.md",
+      "sha256": "82ed24fc579d4871930090703bb59a997bf679710d24ea037fa4fc6f7b3ddd9b",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/osint-discovery/guardrails.md",
+      "type": "file",
+      "path": "frameworks/research/osint-discovery/guardrails.md",
+      "sha256": "51276a8955769dc823f298b794f45c30cdad56b1336474e67674ddc95a37f7b1",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/osint-discovery/manifest.json",
+      "type": "file",
+      "path": "frameworks/research/osint-discovery/manifest.json",
+      "sha256": "98dd2ed076596790cd2110ce6809f4e40c3747684b5d3c3182df33f2662ab3c4",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/osint-discovery/prompts/01_SCOPE.md",
+      "type": "file",
+      "path": "frameworks/research/osint-discovery/prompts/01_SCOPE.md",
+      "sha256": "2e3bbd8677b4e27d6b5f3a334ad7295e37a8317883fbb0e6d3f82d6ec1150a51",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/osint-discovery/prompts/02_SOURCE_PLAN.md",
+      "type": "file",
+      "path": "frameworks/research/osint-discovery/prompts/02_SOURCE_PLAN.md",
+      "sha256": "28fc73d6cc1487bd9c183727819dc0d7ff3ab7718ffd323ac8f6f2d5115dfff6",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/osint-discovery/prompts/03_DISCOVERY.md",
+      "type": "file",
+      "path": "frameworks/research/osint-discovery/prompts/03_DISCOVERY.md",
+      "sha256": "1f1d36948744c4fb73b08d2b05b4ee19a7ae49dfbe14671177fe41ba73737238",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/osint-discovery/prompts/04_SYNTHESIS.md",
+      "type": "file",
+      "path": "frameworks/research/osint-discovery/prompts/04_SYNTHESIS.md",
+      "sha256": "69c15325d3a75ea4c725f63c4a94d614a0300958617524ff20ad25236118c06b",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/osint-discovery/schemas/output/discovery-report.schema.json",
+      "type": "file",
+      "path": "frameworks/research/osint-discovery/schemas/output/discovery-report.schema.json",
+      "sha256": "b0acd91ad8d03cba8ea1ca4b60f74f01fe1add5923d94de2e39972abdb884b59",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/osint-discovery/schemas/output/evidence-log.schema.json",
+      "type": "file",
+      "path": "frameworks/research/osint-discovery/schemas/output/evidence-log.schema.json",
+      "sha256": "f8215d23352917c09574185109ac2ca35176791c864b7680f75aa99d5143dbff",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/osint-discovery/schemas/scope.schema.json",
+      "type": "file",
+      "path": "frameworks/research/osint-discovery/schemas/scope.schema.json",
+      "sha256": "50baeb642c7fa4eacb8bfc24a965bc612e1675028924e33250ec6bd464d98fd7",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/research/osint-discovery/schemas/target.schema.json",
+      "type": "file",
+      "path": "frameworks/research/osint-discovery/schemas/target.schema.json",
+      "sha256": "2f8afba085f1fae4890f0a231c98972bfcd44597125ae03bea312fe67dc13079",
       "mode": 420
     },
     {
@@ -7826,7 +8148,7 @@
       "id": "file:INSTRUCTIONS.md",
       "type": "file",
       "path": "INSTRUCTIONS.md",
-      "sha256": "ee58663578b5a761b4bd8df84e843d39eabbf13810737ed48bf4193df4ce8505",
+      "sha256": "f24d710dab995154c44c14f18012b109a7317a3d9d4e7605a2f5bbdb73d045dd",
       "mode": 420
     },
     {
@@ -9006,6 +9328,27 @@
       "mode": 420
     },
     {
+      "id": "file:instructions/canonical/frameworks/research/business-identity-verification.yaml",
+      "type": "file",
+      "path": "instructions/canonical/frameworks/research/business-identity-verification.yaml",
+      "sha256": "ccf31c3bd47154572cf7a1afd644fce88d405fdceff88c4b261ebc8a55090d94",
+      "mode": 420
+    },
+    {
+      "id": "file:instructions/canonical/frameworks/research/contractor-credential-review.yaml",
+      "type": "file",
+      "path": "instructions/canonical/frameworks/research/contractor-credential-review.yaml",
+      "sha256": "6b40ea7f5d9c655e3e5c3ba1330d0fc240e2b59cdb547188b4b6948dae3819dc",
+      "mode": 420
+    },
+    {
+      "id": "file:instructions/canonical/frameworks/research/osint-discovery.yaml",
+      "type": "file",
+      "path": "instructions/canonical/frameworks/research/osint-discovery.yaml",
+      "sha256": "030c5415d9838dd78746a59a9c021e1701efcacadcc88c8cc552990948735ae9",
+      "mode": 420
+    },
+    {
       "id": "file:instructions/canonical/frameworks/wordpress/design-mockup-validation.yaml",
       "type": "file",
       "path": "instructions/canonical/frameworks/wordpress/design-mockup-validation.yaml",
@@ -9205,7 +9548,7 @@
       "id": "file:instructions/canonical/system.yaml",
       "type": "file",
       "path": "instructions/canonical/system.yaml",
-      "sha256": "b8d1391f0014efdbb28c875fdefede1a03713dea0e9d5f77cf76334809030d06",
+      "sha256": "2403daa3bcd8ed7c4e2a2e034f5e73ea7a7e8f10a84b2e329e66f92979b59a1b",
       "mode": 420
     },
     {
@@ -9247,7 +9590,7 @@
       "id": "file:instructions/generated/manifest.json",
       "type": "file",
       "path": "instructions/generated/manifest.json",
-      "sha256": "9d6710100d39a648f457db238ad34eefcd112f01ede7047c5a6be314a273873e",
+      "sha256": "d9b27fdb59309acd67d6b561554350752706fa73eff59ea6a6b72fb12be77c32",
       "mode": 420
     },
     {
@@ -9268,7 +9611,7 @@
       "id": "file:OPENCODE.md",
       "type": "file",
       "path": "OPENCODE.md",
-      "sha256": "874aafb39fa44cdb23a034949adda43f3a9dd9fee70cf8933b8324f78fd53790",
+      "sha256": "36aa262556d4a42765657f8bc90675c045bea6ab31cc2bb209bf616c1ee08435",
       "mode": 420
     },
     {
@@ -20546,6 +20889,21 @@
       "name": "project-management/feedback-to-tasks"
     },
     {
+      "id": "framework:research/business-identity-verification",
+      "type": "framework-registration",
+      "name": "research/business-identity-verification"
+    },
+    {
+      "id": "framework:research/contractor-credential-review",
+      "type": "framework-registration",
+      "name": "research/contractor-credential-review"
+    },
+    {
+      "id": "framework:research/osint-discovery",
+      "type": "framework-registration",
+      "name": "research/osint-discovery"
+    },
+    {
       "id": "framework:wordpress/analytics-tracking",
       "type": "framework-registration",
       "name": "wordpress/analytics-tracking"
@@ -20596,67 +20954,67 @@
       "name": "wordpress/seo-validation"
     },
     {
-      "id": "hook:PostToolUse:622",
+      "id": "hook:PostToolUse:633",
       "type": "hook",
       "event": "PostToolUse",
       "command_sha256": "e395bd31a35362065002007d044e98d86e484bf829d16ebe2027da8a928db52c"
     },
     {
-      "id": "hook:PreToolUse:619",
+      "id": "hook:PreToolUse:630",
       "type": "hook",
       "event": "PreToolUse",
       "command_sha256": "ce97f4fd7eb07f52a0e9c6352fab2ce0e803f0920ef184d8f42261a46580103b"
     },
     {
-      "id": "hook:SessionEnd:626",
+      "id": "hook:SessionEnd:637",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "35974852e367c31bae49591ac0aa4afd518ec624f233743462e37c4c3863b1ed"
     },
     {
-      "id": "hook:SessionEnd:627",
+      "id": "hook:SessionEnd:638",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "519f522b04afb8471aa7e7ca117deb8af91976de62b5c1f5f4f6f9f60c8c217f"
     },
     {
-      "id": "hook:SessionEnd:628",
+      "id": "hook:SessionEnd:639",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "4ee05b68abff34325a3950761939e20cf2391c7b29d640b29b95233d29943fd4"
     },
     {
-      "id": "hook:SessionStart:623",
+      "id": "hook:SessionStart:634",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "26962e5976f5c689361f18050bb4e718d507df72590fbbc620e356cde47cf86b"
     },
     {
-      "id": "hook:SessionStart:624",
+      "id": "hook:SessionStart:635",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "00253242784e7853b94e1125e7c69f31085961b2dd7b3d1fcb6b4c79d94e9baf"
     },
     {
-      "id": "hook:SessionStart:625",
+      "id": "hook:SessionStart:636",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "c738ce0e54e375f17b97f1186b95e5fd1125c0675d2f3e9238e872062f5b7076"
     },
     {
-      "id": "hook:Stop:620",
+      "id": "hook:Stop:631",
       "type": "hook",
       "event": "Stop",
       "command_sha256": "c0c0282a10c1ff35c525d7786ceb380c853b678494f400dbf1fc178cdddcbb19"
     },
     {
-      "id": "hook:SubagentStop:629",
+      "id": "hook:SubagentStop:640",
       "type": "hook",
       "event": "SubagentStop",
       "command_sha256": "4ca0f2529c8dd4023ade83508a1e40a1728dbdcfa35aadf9ea953cf8ac9a587d"
     },
     {
-      "id": "hook:UserPromptSubmit:621",
+      "id": "hook:UserPromptSubmit:632",
       "type": "hook",
       "event": "UserPromptSubmit",
       "command_sha256": "d647b60c73e5962cae00cf1cf2bd11d28472fdb8c47074a2e62cabf0e7e89545"
@@ -24158,6 +24516,61 @@
       "name": "frameworks/project-management/dart-collaboration/schemas/task-index.schema.json"
     },
     {
+      "id": "schema-definition:frameworks/research/business-identity-verification/schemas/output/evidence-log.schema.json",
+      "type": "schema-definition",
+      "name": "frameworks/research/business-identity-verification/schemas/output/evidence-log.schema.json"
+    },
+    {
+      "id": "schema-definition:frameworks/research/business-identity-verification/schemas/output/report.schema.json",
+      "type": "schema-definition",
+      "name": "frameworks/research/business-identity-verification/schemas/output/report.schema.json"
+    },
+    {
+      "id": "schema-definition:frameworks/research/business-identity-verification/schemas/subject.schema.json",
+      "type": "schema-definition",
+      "name": "frameworks/research/business-identity-verification/schemas/subject.schema.json"
+    },
+    {
+      "id": "schema-definition:frameworks/research/contractor-credential-review/schemas/jurisdiction.schema.json",
+      "type": "schema-definition",
+      "name": "frameworks/research/contractor-credential-review/schemas/jurisdiction.schema.json"
+    },
+    {
+      "id": "schema-definition:frameworks/research/contractor-credential-review/schemas/output/evidence-log.schema.json",
+      "type": "schema-definition",
+      "name": "frameworks/research/contractor-credential-review/schemas/output/evidence-log.schema.json"
+    },
+    {
+      "id": "schema-definition:frameworks/research/contractor-credential-review/schemas/output/report.schema.json",
+      "type": "schema-definition",
+      "name": "frameworks/research/contractor-credential-review/schemas/output/report.schema.json"
+    },
+    {
+      "id": "schema-definition:frameworks/research/contractor-credential-review/schemas/subject.schema.json",
+      "type": "schema-definition",
+      "name": "frameworks/research/contractor-credential-review/schemas/subject.schema.json"
+    },
+    {
+      "id": "schema-definition:frameworks/research/osint-discovery/schemas/output/discovery-report.schema.json",
+      "type": "schema-definition",
+      "name": "frameworks/research/osint-discovery/schemas/output/discovery-report.schema.json"
+    },
+    {
+      "id": "schema-definition:frameworks/research/osint-discovery/schemas/output/evidence-log.schema.json",
+      "type": "schema-definition",
+      "name": "frameworks/research/osint-discovery/schemas/output/evidence-log.schema.json"
+    },
+    {
+      "id": "schema-definition:frameworks/research/osint-discovery/schemas/scope.schema.json",
+      "type": "schema-definition",
+      "name": "frameworks/research/osint-discovery/schemas/scope.schema.json"
+    },
+    {
+      "id": "schema-definition:frameworks/research/osint-discovery/schemas/target.schema.json",
+      "type": "schema-definition",
+      "name": "frameworks/research/osint-discovery/schemas/target.schema.json"
+    },
+    {
       "id": "schema-definition:frameworks/wordpress/design-mockup-validation/schemas/intake.schema.json",
       "type": "schema-definition",
       "name": "frameworks/wordpress/design-mockup-validation/schemas/intake.schema.json"
@@ -25706,16 +26119,6 @@
       "declared_target": ".claude/commands/cadence.md"
     },
     {
-      "id": "08e349fa07cf42e8a914c4c77c5547000cef47d70a03fdddd859a6c6a74933a7",
-      "type": "hook-target",
-      "from": "hook:UserPromptSubmit:621",
-      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
-      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-userprompt.cjs",
-      "event": "UserPromptSubmit"
-    },
-    {
       "id": "08e52a8a32717997791fc0254cbda257850f3e641766c3c0fe9951e625f2ee39",
       "type": "operation-canonical",
       "from": "operation:claim-intake",
@@ -26654,6 +27057,15 @@
       "declared_target": ".claude/skills/owl/SKILL.md"
     },
     {
+      "id": "12625b37ad92a1a949bf1f1295bfcfdfb6c404a92dc85ea974ab001ee2f30803",
+      "type": "schema-definition-file",
+      "from": "schema-definition:frameworks/research/contractor-credential-review/schemas/output/evidence-log.schema.json",
+      "to": "file:frameworks/research/contractor-credential-review/schemas/output/evidence-log.schema.json",
+      "target": "frameworks/research/contractor-credential-review/schemas/output/evidence-log.schema.json",
+      "required": true,
+      "declared_target": "frameworks/research/contractor-credential-review/schemas/output/evidence-log.schema.json"
+    },
+    {
       "id": "127d1d89e15be117bcce50514f7aa54fe04da3ffef7e89079d877583bde7d1a8",
       "type": "static-import",
       "from": "file:tools/planning/hooks/post-write-plan-diagram-publication.cjs",
@@ -26935,6 +27347,16 @@
       "target": "tools/mcp/google-ads/client.js",
       "required": true,
       "specifier": "./client"
+    },
+    {
+      "id": "1550fd2b87763dbaa1c31ae4c782d70d7fe6d0f23e3c4f1e60d4601e06df668e",
+      "type": "hook-target",
+      "from": "hook:PreToolUse:630",
+      "to": "file:tools/kernel/hooks/dispatch-pretool.cjs",
+      "target": "tools/kernel/hooks/dispatch-pretool.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-pretool.cjs",
+      "event": "PreToolUse"
     },
     {
       "id": "156039d9698a063ea61162c15958a685e221140f44f3d70c5bb7b1245684129a",
@@ -28829,6 +29251,16 @@
       "declared_target": "instructions/canonical/commands/fw-deliverables-version-reconciliation.yaml"
     },
     {
+      "id": "2800f3c3ceaf9bbb89353fae0b87b8608ac77fd7a5b50bd0ce7023627310ecf3",
+      "type": "hook-target",
+      "from": "hook:Stop:631",
+      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
+      "target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "event": "Stop"
+    },
+    {
       "id": "2823243573845089b897c1ac05fca65d5470769023b2a3461bbe50c2acbd192e",
       "type": "static-import",
       "from": "file:tools/sessions/lib/__tests__/active-session-registry-cascade-span.test.js",
@@ -29420,16 +29852,6 @@
       "declared_target": ".claude/commands/opencode-self-help.md"
     },
     {
-      "id": "2ef0da825ad9c4a6fbeb915b4cafdc223fbdb39f5dd38441faa00d0368beb36f",
-      "type": "hook-target",
-      "from": "hook:SessionStart:623",
-      "to": "file:tools/kernel/hooks/dispatch-session-start.cjs",
-      "target": "tools/kernel/hooks/dispatch-session-start.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-session-start.cjs",
-      "event": "SessionStart"
-    },
-    {
       "id": "2ef6f6db04fe055a7f8899ad72c84d76a9c5104154d95fbe18852f9fa831a760",
       "type": "operation-canonical",
       "from": "operation:new-client",
@@ -29455,6 +29877,16 @@
       "target": "tools/planning/lib/plan-visibility.js",
       "required": true,
       "specifier": "../plan-visibility"
+    },
+    {
+      "id": "2f42dd77835815820026104e2df75c603b8ba458be7d573bf0b9077291c16c59",
+      "type": "hook-target",
+      "from": "hook:UserPromptSubmit:632",
+      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
+      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "event": "UserPromptSubmit"
     },
     {
       "id": "2f526b266f52c78d3b111bba56dfe711ba8c126b1d265618804c9aa341bf4050",
@@ -30681,16 +31113,6 @@
       "target": "frameworks/paid-media/meta-creative-iteration/schemas/stage5a-preregistration.schema.json",
       "required": true,
       "declared_target": "frameworks/paid-media/meta-creative-iteration/schemas/stage5a-preregistration.schema.json"
-    },
-    {
-      "id": "3ac8183998bc8ad3985d165bf0ecbaf77d3b6c8733c5d72b3b7fe6a293ce4646",
-      "type": "hook-target",
-      "from": "hook:PostToolUse:622",
-      "to": "file:tools/kernel/hooks/dispatch-posttool.cjs",
-      "target": "tools/kernel/hooks/dispatch-posttool.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-posttool.cjs",
-      "event": "PostToolUse"
     },
     {
       "id": "3ae0cd8de760abcaa78d8f41fa9191064066848dab6fc5b68cb4f0130dc242aa",
@@ -31986,6 +32408,16 @@
       "declared_target": "tools/signals/schemas/actor-capability-receipt.schema.json"
     },
     {
+      "id": "4686fc8f310b1e449245011cf812a446a3014ffa83ac5e74900b741c8caab0f6",
+      "type": "hook-target",
+      "from": "hook:SessionStart:636",
+      "to": "file:tools/user/inject-mirror.cjs",
+      "target": "tools/user/inject-mirror.cjs",
+      "required": true,
+      "declared_target": "tools/user/inject-mirror.cjs",
+      "event": "SessionStart"
+    },
+    {
       "id": "46a42c1633351cac248dc97c10e4dc8306db7989a5d654013d7c2c4ab2a471e9",
       "type": "command-definition-file",
       "from": "command-definition:review-active-workstreams",
@@ -32140,6 +32572,15 @@
       "target": ".claude/commands/commune.md",
       "required": true,
       "declared_target": ".claude/commands/commune.md"
+    },
+    {
+      "id": "48c197fa586e0ae7ed5d005571106119630ff3697838a6c898ccb2aa2aa67f76",
+      "type": "schema-definition-file",
+      "from": "schema-definition:frameworks/research/business-identity-verification/schemas/output/report.schema.json",
+      "to": "file:frameworks/research/business-identity-verification/schemas/output/report.schema.json",
+      "target": "frameworks/research/business-identity-verification/schemas/output/report.schema.json",
+      "required": true,
+      "declared_target": "frameworks/research/business-identity-verification/schemas/output/report.schema.json"
     },
     {
       "id": "4917dcff0a5161b9c134c646bb5168ff005eb56bd3a27dbe36a3d300fe48224e",
@@ -32706,6 +33147,16 @@
       "specifier": "./lib/step-plan-renderer.cjs"
     },
     {
+      "id": "4f8da1793748936e5510ed0703e6a926bc16db683f3f327defda42047e86c061",
+      "type": "hook-target",
+      "from": "hook:SubagentStop:640",
+      "to": "file:.claude/hooks/subagent-telemetry-writer.cjs",
+      "target": ".claude/hooks/subagent-telemetry-writer.cjs",
+      "required": true,
+      "declared_target": ".claude/hooks/subagent-telemetry-writer.cjs",
+      "event": "SubagentStop"
+    },
+    {
       "id": "4f8e2a90066d96845fc6ade3da88b78cd8159c490110271f7a90f0df44a86d5d",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/contract-ledger.md",
@@ -32740,6 +33191,16 @@
       "target": "tools/verify/lib/run-evidence-index.cjs",
       "required": true,
       "specifier": "./lib/run-evidence-index.cjs"
+    },
+    {
+      "id": "4fd0a7e5461ebdd92a85502b45fcbb757f59c1ff097636bd8804b04bcb8dfe2c",
+      "type": "hook-target",
+      "from": "hook:SessionStart:635",
+      "to": "file:tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "required": true,
+      "declared_target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "event": "SessionStart"
     },
     {
       "id": "4fd90ca4e8a62068ea165557cf94c9e0908407f3159fd6a30de2c38a6dac4cb8",
@@ -32914,16 +33375,6 @@
       "specifier": "../reconciliation/lib/normalized-content-hash.cjs"
     },
     {
-      "id": "5193ecc4a5ff3efc4ea043b209485da645ade537e215f951791de9669fb21f8e",
-      "type": "hook-target",
-      "from": "hook:Stop:620",
-      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
-      "target": "tools/kernel/hooks/dispatch-stop.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-stop.cjs",
-      "event": "Stop"
-    },
-    {
       "id": "51bedeedb9c3c881c99814dbaa76c73e1bdd495ba3edf9aa84fc19640f9ff86a",
       "type": "static-import",
       "from": "file:tools/framework-execution/transforms/exact-comparator.cjs",
@@ -33030,16 +33481,6 @@
       "target": "tools/context/build-improve-this-cache.cjs",
       "required": true,
       "specifier": "./build-improve-this-cache.cjs"
-    },
-    {
-      "id": "533eb6f5f16fc89adcd68a6c04c5441780ab1c7791310b7f0f4c32caf7958e57",
-      "type": "hook-target",
-      "from": "hook:PreToolUse:619",
-      "to": "file:tools/kernel/hooks/dispatch-pretool.cjs",
-      "target": "tools/kernel/hooks/dispatch-pretool.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-pretool.cjs",
-      "event": "PreToolUse"
     },
     {
       "id": "53459b4f6cf078ba23c5b540f721057d17e3cf29eb7057c97b19bc433503aaab",
@@ -33392,6 +33833,16 @@
       "target": "tools/ant-hive-world/event-schema.js",
       "required": true,
       "specifier": "./event-schema.js"
+    },
+    {
+      "id": "56b265153979ff340a3c0c57f420438d8f5839725f3ed07272e46546cbd17068",
+      "type": "hook-target",
+      "from": "hook:SessionStart:634",
+      "to": "file:tools/kernel/hooks/dispatch-session-start.cjs",
+      "target": "tools/kernel/hooks/dispatch-session-start.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-session-start.cjs",
+      "event": "SessionStart"
     },
     {
       "id": "56cfc786d38bbde0f357f81616fdf8f77a5d6ab03dfa327635c11cdf0d2901f2",
@@ -33858,6 +34309,15 @@
       "declared_target": ".claude/commands/convene.md"
     },
     {
+      "id": "5ab454c6812ec4bd9b8bfd367f2b77b5307e8015a65c73077934b43f3d10cc50",
+      "type": "framework-guardrails",
+      "from": "framework:research/osint-discovery",
+      "to": "file:frameworks/research/osint-discovery/guardrails.md",
+      "target": "frameworks/research/osint-discovery/guardrails.md",
+      "required": true,
+      "declared_target": "frameworks/research/osint-discovery/guardrails.md"
+    },
+    {
       "id": "5abc3dd04c58b365219ac35d98dd44de86e2f2499f4c0f1e17a8a821ac982238",
       "type": "command-definition-file",
       "from": "command-definition:context-check",
@@ -33955,6 +34415,15 @@
       "target": "tools/memory/schemas/adapter-role.schema.json",
       "required": true,
       "declared_target": "tools/memory/schemas/adapter-role.schema.json"
+    },
+    {
+      "id": "5b7ff9665fe96e1ab7fa668c3c865bcdac10a831701d9faff0a50fcb8caf22de",
+      "type": "schema-definition-file",
+      "from": "schema-definition:frameworks/research/contractor-credential-review/schemas/jurisdiction.schema.json",
+      "to": "file:frameworks/research/contractor-credential-review/schemas/jurisdiction.schema.json",
+      "target": "frameworks/research/contractor-credential-review/schemas/jurisdiction.schema.json",
+      "required": true,
+      "declared_target": "frameworks/research/contractor-credential-review/schemas/jurisdiction.schema.json"
     },
     {
       "id": "5b8c842ce1231b94bacf965485871a6e823ba7f496943e90b90a0e28324e66e5",
@@ -34056,14 +34525,22 @@
       "specifier": "./userprompt-owl-altitude.cjs"
     },
     {
-      "id": "5ca2f63743e505901633cf4efb4a1b0cd94c401f926f15af51efb7c5a9c6e2cc",
-      "type": "hook-target",
-      "from": "hook:SessionStart:624",
-      "to": "file:tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "id": "5cb079385e763fc7c36b6b4b0b41be7fc7a35cc87b1a5facc68f43defe564069",
+      "type": "framework-manifest",
+      "from": "framework:research/contractor-credential-review",
+      "to": "file:frameworks/research/contractor-credential-review/manifest.json",
+      "target": "frameworks/research/contractor-credential-review/manifest.json",
       "required": true,
-      "declared_target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "event": "SessionStart"
+      "declared_target": "frameworks/research/contractor-credential-review/manifest.json"
+    },
+    {
+      "id": "5cd7476b995165462ed5972bb9b939ec828b12a8ed348bae5efbb44f32c0a280",
+      "type": "schema-definition-file",
+      "from": "schema-definition:frameworks/research/osint-discovery/schemas/scope.schema.json",
+      "to": "file:frameworks/research/osint-discovery/schemas/scope.schema.json",
+      "target": "frameworks/research/osint-discovery/schemas/scope.schema.json",
+      "required": true,
+      "declared_target": "frameworks/research/osint-discovery/schemas/scope.schema.json"
     },
     {
       "id": "5d0996e0dea1c0122436ad2ee178871e23d9f380ed0e8ac14f8f1779c29f5236",
@@ -36053,6 +36530,16 @@
       "specifier": "./config"
     },
     {
+      "id": "704cca2c5099c3422ae4afebea198784259877bad9a4e0bb07141a829d33a898",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:637",
+      "to": "file:tools/hooks/session-lifecycle/session-end-close.cjs",
+      "target": "tools/hooks/session-lifecycle/session-end-close.cjs",
+      "required": true,
+      "declared_target": "tools/hooks/session-lifecycle/session-end-close.cjs",
+      "event": "SessionEnd"
+    },
+    {
       "id": "704e5600f78e140e421b0b454101fd0722646141a89ed97f12180df34f93169b",
       "type": "static-import",
       "from": "file:tools/signals/lib/signal-lifecycle.js",
@@ -36506,6 +36993,15 @@
       "specifier": "schemas/signal-normalization-proposal.schema.json"
     },
     {
+      "id": "748e52fae2c4cbcd7084510182e3f022c6ea28e8e4c99f473b2b0c90e6d3d74b",
+      "type": "framework-manifest",
+      "from": "framework:research/osint-discovery",
+      "to": "file:frameworks/research/osint-discovery/manifest.json",
+      "target": "frameworks/research/osint-discovery/manifest.json",
+      "required": true,
+      "declared_target": "frameworks/research/osint-discovery/manifest.json"
+    },
+    {
       "id": "749c2cbc54322ebfb151b73b069cd612e611f458847f6d9ff40f99dd292d3c0a",
       "type": "static-import",
       "from": "file:tools/mcp/meta-ads/config.js",
@@ -36531,6 +37027,15 @@
       "target": "tools/reconciliation/lib/evidence-binding.cjs",
       "required": true,
       "specifier": "../reconciliation/lib/evidence-binding.cjs"
+    },
+    {
+      "id": "74c85093708e71206ee4523dad6eeae5626d38a1557c67ba022739c4f9ec558d",
+      "type": "schema-definition-file",
+      "from": "schema-definition:frameworks/research/osint-discovery/schemas/output/discovery-report.schema.json",
+      "to": "file:frameworks/research/osint-discovery/schemas/output/discovery-report.schema.json",
+      "target": "frameworks/research/osint-discovery/schemas/output/discovery-report.schema.json",
+      "required": true,
+      "declared_target": "frameworks/research/osint-discovery/schemas/output/discovery-report.schema.json"
     },
     {
       "id": "74d7694a96d71ee50544cbdc47775a59a12bfdb780ac411ef70000035b59939f",
@@ -36786,6 +37291,15 @@
       "target": "tools/image-optimize/lib/engine.cjs",
       "required": true,
       "specifier": "./lib/engine.cjs"
+    },
+    {
+      "id": "771649da90cc5a149bdb049bc11d6d5643d2b51ac7cc840972da5e730d80633e",
+      "type": "schema-definition-file",
+      "from": "schema-definition:frameworks/research/osint-discovery/schemas/output/evidence-log.schema.json",
+      "to": "file:frameworks/research/osint-discovery/schemas/output/evidence-log.schema.json",
+      "target": "frameworks/research/osint-discovery/schemas/output/evidence-log.schema.json",
+      "required": true,
+      "declared_target": "frameworks/research/osint-discovery/schemas/output/evidence-log.schema.json"
     },
     {
       "id": "773a1565dd50e93b555ae5437674cf2738e1f06ba2fb2a2e23febd010f68c596",
@@ -37947,16 +38461,6 @@
       "resolution": "tracked"
     },
     {
-      "id": "83acc12f6a46b85c2a1049922dd2f240e6bad0446573be2bef2a7f09ddf47cf2",
-      "type": "hook-target",
-      "from": "hook:SessionStart:625",
-      "to": "file:tools/user/inject-mirror.cjs",
-      "target": "tools/user/inject-mirror.cjs",
-      "required": true,
-      "declared_target": "tools/user/inject-mirror.cjs",
-      "event": "SessionStart"
-    },
-    {
       "id": "83d3f8fa939e5a1f80140fad9ddeeb738e3e4e982baef3556b1627b84c8c4637",
       "type": "static-import",
       "from": "file:tools/maintenance/topology-scout.js",
@@ -38964,6 +39468,15 @@
       "specifier": "./actor-work-order"
     },
     {
+      "id": "8f535f47da0cad938df867b83c865e9f1d6245094f2fe303f29b0690fbaecc1d",
+      "type": "framework-guardrails",
+      "from": "framework:research/contractor-credential-review",
+      "to": "file:frameworks/research/contractor-credential-review/guardrails.md",
+      "target": "frameworks/research/contractor-credential-review/guardrails.md",
+      "required": true,
+      "declared_target": "frameworks/research/contractor-credential-review/guardrails.md"
+    },
+    {
       "id": "8f61dabfd26168572df356eb2f7a5d00114a4645767bdbb298359b6824048aba",
       "type": "static-import",
       "from": "file:tools/kernel/__tests__/detect-network-egress.test.cjs",
@@ -39440,16 +39953,6 @@
       "specifier": "../convene"
     },
     {
-      "id": "93d3480f80d964ba412992a8e89c66ba4dea99f5f306fa8a1a278265ea4b60b3",
-      "type": "hook-target",
-      "from": "hook:SubagentStop:629",
-      "to": "file:.claude/hooks/subagent-telemetry-writer.cjs",
-      "target": ".claude/hooks/subagent-telemetry-writer.cjs",
-      "required": true,
-      "declared_target": ".claude/hooks/subagent-telemetry-writer.cjs",
-      "event": "SubagentStop"
-    },
-    {
       "id": "93df23a30507aaf912a76c658c27222df36d3d0baf11513ed018984dc5b8eec7",
       "type": "static-import",
       "from": "file:tools/codex/commands/__tests__/run-plan.operator-stamp.test.js",
@@ -39587,6 +40090,16 @@
       "specifier": "../generate-blank-hive-seed.js"
     },
     {
+      "id": "94fbec3b9d6078e8534c52f867c363bd8551b5d9010c2b5f0df3e94f93cd76a3",
+      "type": "hook-target",
+      "from": "hook:PostToolUse:633",
+      "to": "file:tools/kernel/hooks/dispatch-posttool.cjs",
+      "target": "tools/kernel/hooks/dispatch-posttool.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-posttool.cjs",
+      "event": "PostToolUse"
+    },
+    {
       "id": "952c1ce2036f220ad904c95fa3848107ae42dc6fa3418bb67e5867b6f91db969",
       "type": "operation-canonical",
       "from": "operation:fw-project-management-dart-collaboration",
@@ -39702,16 +40215,6 @@
       "target": "tools/verify/schemas/mcp-requirement.schema.json",
       "required": true,
       "declared_target": "tools/verify/schemas/mcp-requirement.schema.json"
-    },
-    {
-      "id": "966720a1bc3b9a818c65df168cc47ba2a901b7671c42de946790948ecc594757",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:626",
-      "to": "file:tools/hooks/session-lifecycle/session-end-close.cjs",
-      "target": "tools/hooks/session-lifecycle/session-end-close.cjs",
-      "required": true,
-      "declared_target": "tools/hooks/session-lifecycle/session-end-close.cjs",
-      "event": "SessionEnd"
     },
     {
       "id": "968b53f33fd662aa11196809b47fbfd5d1595b9c78b871fcd0817e46d94f2b2c",
@@ -43097,16 +43600,6 @@
       "specifier": "../../ms-graph/client.js"
     },
     {
-      "id": "b7a2ff1c187749797ca885528b08a05572c83015fbb0b0e0dd79dd5c7e6ce99c",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:628",
-      "to": "file:tools/sessions/session-end-boundary-log.cjs",
-      "target": "tools/sessions/session-end-boundary-log.cjs",
-      "required": true,
-      "declared_target": "tools/sessions/session-end-boundary-log.cjs",
-      "event": "SessionEnd"
-    },
-    {
       "id": "b7c52f59fdb55a28e3dfa03f636bd595ff851986c2bd07a8d62db77699ed4bc1",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/chron.md",
@@ -44458,6 +44951,15 @@
       "declared_target": "instructions/canonical/commands/whats-next.yaml"
     },
     {
+      "id": "c4fd9441f11fded7b34b3d10039ad00912e1e99ccc046330ff9002c65f854d21",
+      "type": "schema-definition-file",
+      "from": "schema-definition:frameworks/research/osint-discovery/schemas/target.schema.json",
+      "to": "file:frameworks/research/osint-discovery/schemas/target.schema.json",
+      "target": "frameworks/research/osint-discovery/schemas/target.schema.json",
+      "required": true,
+      "declared_target": "frameworks/research/osint-discovery/schemas/target.schema.json"
+    },
+    {
       "id": "c5233c7ba04a07a7e844687519ecfa2e7b8b7ac3e389f2ef9d734d5f9dab0412",
       "type": "static-import",
       "from": "file:tools/workspace/lib/models.js",
@@ -45059,6 +45561,15 @@
       "specifier": "../../../kernel/hooks/session-start-tier-stamp.cjs"
     },
     {
+      "id": "cc6160c92aaafd4828632878d961366e658d6ae569b8e418fa1e4a9b94dcb904",
+      "type": "framework-manifest",
+      "from": "framework:research/business-identity-verification",
+      "to": "file:frameworks/research/business-identity-verification/manifest.json",
+      "target": "frameworks/research/business-identity-verification/manifest.json",
+      "required": true,
+      "declared_target": "frameworks/research/business-identity-verification/manifest.json"
+    },
+    {
       "id": "cc7a01412d1476e44e0de5c795c4b2155a627bd0134c2fcd09ba8617488df146",
       "type": "static-import",
       "from": "file:tools/kernel/hooks/dispatch-pretool.cjs",
@@ -45239,6 +45750,15 @@
       "target": ".claude/commands/inscribe-lore.md",
       "required": true,
       "declared_target": ".claude/commands/inscribe-lore.md"
+    },
+    {
+      "id": "cd987e48edcc66726a13b2fadd24c7561834b18aa66c74db947aa0127cba320f",
+      "type": "framework-guardrails",
+      "from": "framework:research/business-identity-verification",
+      "to": "file:frameworks/research/business-identity-verification/guardrails.md",
+      "target": "frameworks/research/business-identity-verification/guardrails.md",
+      "required": true,
+      "declared_target": "frameworks/research/business-identity-verification/guardrails.md"
     },
     {
       "id": "cda51e9034cc6bd936fab4ef2d0e23ebd97fee8dbd26bf62af546f49405c3f9b",
@@ -45540,6 +46060,15 @@
       "target": "tools/planning/lib/handoff-authority-assessment.js",
       "required": true,
       "specifier": "../handoff-authority-assessment"
+    },
+    {
+      "id": "d12105e960de52ac53ff79b6f258a4e61a1fe2ffb292739cad4b1e92506a1b19",
+      "type": "schema-definition-file",
+      "from": "schema-definition:frameworks/research/business-identity-verification/schemas/subject.schema.json",
+      "to": "file:frameworks/research/business-identity-verification/schemas/subject.schema.json",
+      "target": "frameworks/research/business-identity-verification/schemas/subject.schema.json",
+      "required": true,
+      "declared_target": "frameworks/research/business-identity-verification/schemas/subject.schema.json"
     },
     {
       "id": "d122ff4243abcc2da387a683842d6ace157906cfd649282124c3d3bbc1b120e2",
@@ -45914,16 +46443,6 @@
       "target": "frameworks/wordpress/qa/schemas/output/summary-json.schema.json",
       "required": true,
       "declared_target": "frameworks/wordpress/qa/schemas/output/summary-json.schema.json"
-    },
-    {
-      "id": "d57a60c92dc804b242c1ba01dd234c381fbe13db81fa0dc7f8e176fef0e7249f",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:627",
-      "to": "file:tools/context/repo-awareness-closeout.cjs",
-      "target": "tools/context/repo-awareness-closeout.cjs",
-      "required": true,
-      "declared_target": "tools/context/repo-awareness-closeout.cjs",
-      "event": "SessionEnd"
     },
     {
       "id": "d583bb997ca12f760873dead02b5616a2f5339b41fbc79ceba7ca405ba595fbb",
@@ -46318,6 +46837,16 @@
       "specifier": "./lib/dart-api"
     },
     {
+      "id": "da1b45b5a4e22ed50e611000bf81a3d8ebca4d0c90e49af7ee0ea6bff0b8654a",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:638",
+      "to": "file:tools/context/repo-awareness-closeout.cjs",
+      "target": "tools/context/repo-awareness-closeout.cjs",
+      "required": true,
+      "declared_target": "tools/context/repo-awareness-closeout.cjs",
+      "event": "SessionEnd"
+    },
+    {
       "id": "da443cc907220e3696cea19b9872680385106c7c5eb4e0642158877d90c63d0a",
       "type": "static-import",
       "from": "file:tools/ant-hive-world/world-mind.js",
@@ -46514,6 +47043,15 @@
       "target": ".claude/skills/extract-skill/SKILL.md",
       "required": true,
       "declared_target": ".claude/skills/extract-skill/SKILL.md"
+    },
+    {
+      "id": "dc4bb8dcc45517915002dd00c8444cca2fd2cddf8edf6d38e1a3aeb23f3a7857",
+      "type": "schema-definition-file",
+      "from": "schema-definition:frameworks/research/contractor-credential-review/schemas/output/report.schema.json",
+      "to": "file:frameworks/research/contractor-credential-review/schemas/output/report.schema.json",
+      "target": "frameworks/research/contractor-credential-review/schemas/output/report.schema.json",
+      "required": true,
+      "declared_target": "frameworks/research/contractor-credential-review/schemas/output/report.schema.json"
     },
     {
       "id": "dc83f01fd60e17731c32a3eef5d22ceaeff4990c8bd9993b2b120e0c1a3f508b",
@@ -46740,6 +47278,15 @@
       "target": "tools/kernel/cascade-span/cascade-span.schema.json",
       "required": true,
       "declared_target": "tools/kernel/cascade-span/cascade-span.schema.json"
+    },
+    {
+      "id": "de72023dd96dc61c61add5f41d677de7af3c54db5215f17f170988929c69b9ad",
+      "type": "schema-definition-file",
+      "from": "schema-definition:frameworks/research/contractor-credential-review/schemas/subject.schema.json",
+      "to": "file:frameworks/research/contractor-credential-review/schemas/subject.schema.json",
+      "target": "frameworks/research/contractor-credential-review/schemas/subject.schema.json",
+      "required": true,
+      "declared_target": "frameworks/research/contractor-credential-review/schemas/subject.schema.json"
     },
     {
       "id": "dea4e600d6a28aecaa1750d98c63c075970299772ffa582c8dd5c47e4bf9a391",
@@ -47472,6 +48019,15 @@
       "specifier": "./lib/resolve-task-plan.js"
     },
     {
+      "id": "e49342bc1c46b50df1728a6ec6789de65e573b4bdecfc81b0e15deaf3808f7f2",
+      "type": "schema-definition-file",
+      "from": "schema-definition:frameworks/research/business-identity-verification/schemas/output/evidence-log.schema.json",
+      "to": "file:frameworks/research/business-identity-verification/schemas/output/evidence-log.schema.json",
+      "target": "frameworks/research/business-identity-verification/schemas/output/evidence-log.schema.json",
+      "required": true,
+      "declared_target": "frameworks/research/business-identity-verification/schemas/output/evidence-log.schema.json"
+    },
+    {
       "id": "e49fb53e7b0a385e4a9d8a007fb3241320baf4aac747215785cf3b565ff6de7b",
       "type": "static-import",
       "from": "file:tools/instructions/generate.js",
@@ -47705,6 +48261,16 @@
       "target": "tools/dart-integration/lib/dart-api.js",
       "required": true,
       "specifier": "../dart-integration/lib/dart-api.js"
+    },
+    {
+      "id": "e70f5ecc125b5d0f29d6a85fd5a93eb9d6627a829bd2e8a84e80c86db5427eec",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:639",
+      "to": "file:tools/sessions/session-end-boundary-log.cjs",
+      "target": "tools/sessions/session-end-boundary-log.cjs",
+      "required": true,
+      "declared_target": "tools/sessions/session-end-boundary-log.cjs",
+      "event": "SessionEnd"
     },
     {
       "id": "e71dc718997e417cef3347ec74fd5ffab85538c489fb047a6bef5607b897e22e",
@@ -50467,8 +51033,8 @@
     }
   ],
   "counts": {
-    "nodes": 3814,
-    "edges": 2816,
+    "nodes": 3877,
+    "edges": 2833,
     "unresolved": 0
   }
 }

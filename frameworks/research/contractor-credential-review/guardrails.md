@@ -1,5 +1,7 @@
 # Guardrails
 
+- Execution modes: `FINDINGS_ONLY`, `REVIEW_ONLY`. This framework never writes, executes, or dispatches outside those modes.
+- Use observational reporting throughout: record observations and hypotheses about credentials and reputation, not diagnoses or verdicts on the contractor's trustworthiness.
 - Public records and published business claims only.
 - Do not investigate a private person beyond the public business role needed for the task.
 - Do not contact, impersonate, surveil, or deanonymize the subject.

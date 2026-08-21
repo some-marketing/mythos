@@ -6,11 +6,11 @@
   "prompt_count": 3,
   "input_contract": {"required": [{"name":"subject","description":"Candidate business name, known aliases, public domain or phone if supplied by the operator"}], "optional": [{"name":"search_context","description":"Jurisdiction, source note, and explicit research purpose"}]},
   "output_contract": {"directories":["outputs/business-identity-verification/"],"artifacts":["outputs/business-identity-verification/report.json","outputs/business-identity-verification/evidence-log.json"]},
-  "output_contract_v2": {"directories":[{"path":"outputs/business-identity-verification/","required":true,"description":"Evidence-backed public business identity report"}],"artifacts":[{"name":"report.json","path_pattern":"outputs/business-identity-verification/report.json","required":true},{"name":"evidence-log.json","path_pattern":"outputs/business-identity-verification/evidence-log.json","required":true}],"bundle_types":[]},
+  "output_contract_v2": {"directories":[{"path":"outputs/business-identity-verification/","required":true,"description":"Evidence-backed public business identity report"}],"artifacts":[{"name":"report.json","path_pattern":"outputs/business-identity-verification/report.json","required":true},{"name":"evidence-log.json","path_pattern":"outputs/business-identity-verification/evidence-log.json","required":true}],"bundle_types":[{"type_id":"business-identity-verification-report-bundle","path_pattern":"outputs/business-identity-verification","required_files":["report.json","evidence-log.json"],"file_schemas":{"report.json":"report.schema.json","evidence-log.json":"evidence-log.schema.json"},"description":"Public business identity report paired with its sourced evidence log"}]},
   "execution_modes": ["FINDINGS_ONLY","REVIEW_ONLY"],
   "mcp_requirements": [],
   "prompt_chain": {"intake":["01_INTAKE"],"research":["02_PUBLIC_SEARCH"],"review":["03_EVIDENCE_REVIEW"]},
   "skills": ["business-identity-verification/SKILL.md"],
-  "commands": ["run","status","identity-intake","public-search","evidence-review"],
+  "commands": ["run"],
   "agents": ["identity-intake-agent","public-search-agent","evidence-review-agent"]
 }

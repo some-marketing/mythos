@@ -1,5 +1,6 @@
 {
   "type": "object",
+  "x_mythos_distinct_review_provenance": true,
   "required": [
     "verdict",
     "findings",

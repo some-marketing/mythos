@@ -3870,14 +3870,14 @@
       "id": "file:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-intake.schema.json",
       "type": "file",
       "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-intake.schema.json",
-      "sha256": "d84bab556ccf7edd9fb2846ba94d8ebbae5af14c57dafb6c399b3d51577be525",
+      "sha256": "185c4ed0cd2ede3d58afaf95022605e0d127853782de851f5e2d0ad09ff8b6ff",
       "mode": 420
     },
     {
       "id": "file:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/readiness-review.schema.json",
       "type": "file",
       "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/readiness-review.schema.json",
-      "sha256": "9f685e60ac1a0adafe467bfd51e1a78f9bebd42cabdd2c3b76245d9af62fb70c",
+      "sha256": "c9d6ef8637e6e97e3ce0805f7fda8282b45821dcc0ff34e3410bcc0de343bdc5",
       "mode": 420
     },
     {
@@ -4087,14 +4087,14 @@
       "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-specification.schema.json",
       "type": "file",
       "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-specification.schema.json",
-      "sha256": "88613a40d6551ce0b758536bf10f8b4bdb004f658d039465c5b18e2c92a0403c",
+      "sha256": "6e4b0bcf8663029699e47860afa553d02fd053d57f7ccb363dc82a9d3deac13a",
       "mode": 420
     },
     {
       "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/review.schema.json",
       "type": "file",
       "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/review.schema.json",
-      "sha256": "9f685e60ac1a0adafe467bfd51e1a78f9bebd42cabdd2c3b76245d9af62fb70c",
+      "sha256": "c9d6ef8637e6e97e3ce0805f7fda8282b45821dcc0ff34e3410bcc0de343bdc5",
       "mode": 420
     },
     {
@@ -20572,7 +20572,7 @@
       "id": "file:tools/workspace/__tests__/candidate-root.test.js",
       "type": "file",
       "path": "tools/workspace/__tests__/candidate-root.test.js",
-      "sha256": "11e7c11c2329159b9e4457575eed4384d583c45f10366d4ff4ffab42ba48d0ae",
+      "sha256": "d6578c78fd97460409e80b515cc335b5f0e30cc73d3aad07a404df0b20b8fe12",
       "mode": 420
     },
     {
@@ -20656,7 +20656,7 @@
       "id": "file:tools/workspace/lib/output-contract.js",
       "type": "file",
       "path": "tools/workspace/lib/output-contract.js",
-      "sha256": "9d68f7be2f6b0a9c4f3a7582715ac80c384a1216562f98171046857c0ce1d751",
+      "sha256": "ccf80399e56e6ab6b62f6f4b2123dc97b4fc5ae1c90a1f666aac223cff04d319",
       "mode": 420
     },
     {

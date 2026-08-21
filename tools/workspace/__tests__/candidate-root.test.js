@@ -158,7 +158,7 @@ test('imported candidate review gates require distinct minds and complete intake
   }
 });
 
-test('imported candidate review schemas reject provenance-free PASS verdicts', (t) => {
+test('imported candidate review schemas reject incomplete or non-distinct PASS verdicts', (t) => {
   const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
   const candidates = [
     {
@@ -190,6 +190,49 @@ test('imported candidate review schemas reject provenance-free PASS verdicts', (
 
     const findings = inspectBundle(bundleRoot, bundleType, proposedRoot);
     assert.ok(findings.some((finding) => finding.code === 'BUNDLE_SCHEMA_FAIL'));
+
+    fs.writeFileSync(path.join(bundleRoot, candidate.reviewFile), JSON.stringify({
+      verdict: 'PASS',
+      findings: [],
+      falsifier: 'none',
+      producer_provenance: [{}],
+      reviewer_provenance: {}
+    }));
+    const hollowFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+    assert.ok(hollowFindings.some((finding) =>
+      finding.code === 'BUNDLE_SCHEMA_FAIL' && /non-empty string/.test(finding.message)
+    ));
+
+    const producer = {
+      actor_id: 'producer-actor',
+      harness_id: 'producer-harness',
+      model_provider_family: 'producer-family'
+    };
+    fs.writeFileSync(path.join(bundleRoot, candidate.reviewFile), JSON.stringify({
+      verdict: 'PASS',
+      findings: [],
+      falsifier: 'none',
+      producer_provenance: [producer],
+      reviewer_provenance: { ...producer }
+    }));
+    const sameMindFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+    assert.ok(sameMindFindings.some((finding) =>
+      finding.code === 'BUNDLE_SCHEMA_FAIL' && /must differ/.test(finding.message)
+    ));
+
+    fs.writeFileSync(path.join(bundleRoot, candidate.reviewFile), JSON.stringify({
+      verdict: 'PASS',
+      findings: [],
+      falsifier: 'none',
+      producer_provenance: [producer],
+      reviewer_provenance: {
+        actor_id: 'reviewer-actor',
+        harness_id: 'reviewer-harness',
+        model_provider_family: 'reviewer-family'
+      }
+    }));
+    const distinctMindFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+    assert.ok(!distinctMindFindings.some((finding) => finding.code === 'BUNDLE_SCHEMA_FAIL'));
   }
 });
 

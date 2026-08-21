@@ -26,7 +26,7 @@ REVIEW_ONLY
 
 ## Outputs
 
-- `readiness-review.json`, including the recorded producer and reviewer provenance used for the distinct-mind check
+- `readiness-review.json`, including `producer_provenance` and `reviewer_provenance` used for the distinct-mind check
 
 ## Success criteria
 

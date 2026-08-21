@@ -91,7 +91,9 @@
       "required": [
         "verdict",
         "findings",
-        "falsifier"
+        "falsifier",
+        "producer_provenance",
+        "reviewer_provenance"
       ],
       "properties": {
         "verdict": {
@@ -110,6 +112,26 @@
         },
         "falsifier": {
           "type": "string"
+        },
+        "producer_provenance": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "actor_id",
+              "harness_id",
+              "model_provider_family"
+            ]
+          }
+        },
+        "reviewer_provenance": {
+          "type": "object",
+          "required": [
+            "actor_id",
+            "harness_id",
+            "model_provider_family"
+          ]
         }
       }
     }

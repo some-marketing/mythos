@@ -7,7 +7,7 @@ const path = require('node:path');
 const test = require('node:test');
 
 const { resolveCanonicalRoot } = require('../../lib/canonical-root.cjs');
-const { inspectOutputDir, loadOutputContract } = require('../lib/output-contract');
+const { inspectBundle, inspectOutputDir, loadOutputContract } = require('../lib/output-contract');
 const { requireCandidateRoot } = require('../lib/workspace');
 
 test('recognizes candidates staged at the repository framework_candidates root', () => {
@@ -155,6 +155,41 @@ test('imported candidate review gates require distinct minds and complete intake
     assert.match(content, /actor id, harness id, and model-provider family/);
     assert.match(content, /same-provider subagent is not a distinct reviewing mind/);
     assert.match(content, /missing provenance forces `FAIL`/);
+  }
+});
+
+test('imported candidate review schemas reject provenance-free PASS verdicts', (t) => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const candidates = [
+    {
+      root: 'product-management__product-intake',
+      bundle: 'product-intake-output',
+      reviewFile: 'readiness-review.json'
+    },
+    {
+      root: 'project-management__delta-specification',
+      bundle: 'delta-specification-output',
+      reviewFile: 'review.json'
+    }
+  ];
+
+  for (const candidate of candidates) {
+    const proposedRoot = path.join(repositoryRoot, 'framework_candidates', candidate.root, 'proposed_framework');
+    const manifest = JSON.parse(fs.readFileSync(path.join(proposedRoot, 'manifest.json'), 'utf8'));
+    const bundleType = manifest.output_contract_v2.bundle_types
+      .find((entry) => entry.type_id === candidate.bundle);
+    const bundleRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-candidate-review-'));
+    t.after(() => fs.rmSync(bundleRoot, { recursive: true, force: true }));
+
+    for (const file of bundleType.required_files) {
+      const content = file === candidate.reviewFile
+        ? JSON.stringify({ verdict: 'PASS', findings: [], falsifier: 'none' })
+        : file.endsWith('.json') ? '{}\n' : '\n';
+      fs.writeFileSync(path.join(bundleRoot, file), content);
+    }
+
+    const findings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+    assert.ok(findings.some((finding) => finding.code === 'BUNDLE_SCHEMA_FAIL'));
   }
 });
 

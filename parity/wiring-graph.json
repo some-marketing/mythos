@@ -3828,7 +3828,7 @@
       "id": "file:framework_candidates/product-management__product-intake/proposed_framework/manifest.json",
       "type": "file",
       "path": "framework_candidates/product-management__product-intake/proposed_framework/manifest.json",
-      "sha256": "be4c5bf43c16516022c0dc8df1734641121972c8eb3d4bb61fbf181253bf8f7e",
+      "sha256": "2c16b60e8a91f38e7c8620a4d6ed42dc8d1b48bd4ed6270759eb85313caa5249",
       "mode": 420
     },
     {
@@ -3856,7 +3856,7 @@
       "id": "file:framework_candidates/product-management__product-intake/proposed_framework/prompts/04_READINESS_REVIEW.md",
       "type": "file",
       "path": "framework_candidates/product-management__product-intake/proposed_framework/prompts/04_READINESS_REVIEW.md",
-      "sha256": "83ef3c916ac675f4bce69d62b5a9fcbb8b9be6f8450ed00481e67a9a34c05985",
+      "sha256": "906bdeb74abc289783862067895c13a610eecabc727de3c0412fba56a8cb6407",
       "mode": 420
     },
     {
@@ -3870,7 +3870,14 @@
       "id": "file:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-intake.schema.json",
       "type": "file",
       "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-intake.schema.json",
-      "sha256": "185c4ed0cd2ede3d58afaf95022605e0d127853782de851f5e2d0ad09ff8b6ff",
+      "sha256": "d84bab556ccf7edd9fb2846ba94d8ebbae5af14c57dafb6c399b3d51577be525",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/readiness-review.schema.json",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/readiness-review.schema.json",
+      "sha256": "9f685e60ac1a0adafe467bfd51e1a78f9bebd42cabdd2c3b76245d9af62fb70c",
       "mode": 420
     },
     {
@@ -4031,7 +4038,7 @@
       "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/manifest.json",
       "type": "file",
       "path": "framework_candidates/project-management__delta-specification/proposed_framework/manifest.json",
-      "sha256": "ce384b882f84c5b2bacfa91e2868e647a7fd38851f877a2b21629397fab5320b",
+      "sha256": "0089caf6ba3567ae08674b6b918d62dc5a9ce4b412b61bce91f7165139e9afeb",
       "mode": 420
     },
     {
@@ -4066,7 +4073,7 @@
       "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/prompts/05_INDEPENDENT_REVIEW.md",
       "type": "file",
       "path": "framework_candidates/project-management__delta-specification/proposed_framework/prompts/05_INDEPENDENT_REVIEW.md",
-      "sha256": "e9be4a6f10637207ce45bb2172b8d3beeee6fdc5ebaa2854e948c4044f75344f",
+      "sha256": "f89de813e5c8c980491e7acd0e56896ba07e6be75b0835769277add79feed990",
       "mode": 420
     },
     {
@@ -4080,7 +4087,14 @@
       "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-specification.schema.json",
       "type": "file",
       "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-specification.schema.json",
-      "sha256": "6e4b0bcf8663029699e47860afa553d02fd053d57f7ccb363dc82a9d3deac13a",
+      "sha256": "88613a40d6551ce0b758536bf10f8b4bdb004f658d039465c5b18e2c92a0403c",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/review.schema.json",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/review.schema.json",
+      "sha256": "9f685e60ac1a0adafe467bfd51e1a78f9bebd42cabdd2c3b76245d9af62fb70c",
       "mode": 420
     },
     {
@@ -20558,7 +20572,7 @@
       "id": "file:tools/workspace/__tests__/candidate-root.test.js",
       "type": "file",
       "path": "tools/workspace/__tests__/candidate-root.test.js",
-      "sha256": "718f56adb28f396fae7b5a045a25d15f4cf05645e62b0b3f5fe8eb8af21c97db",
+      "sha256": "11e7c11c2329159b9e4457575eed4384d583c45f10366d4ff4ffab42ba48d0ae",
       "mode": 420
     },
     {
@@ -21085,67 +21099,67 @@
       "name": "wordpress/seo-validation"
     },
     {
-      "id": "hook:PostToolUse:632",
+      "id": "hook:PostToolUse:634",
       "type": "hook",
       "event": "PostToolUse",
       "command_sha256": "e395bd31a35362065002007d044e98d86e484bf829d16ebe2027da8a928db52c"
     },
     {
-      "id": "hook:PreToolUse:629",
+      "id": "hook:PreToolUse:631",
       "type": "hook",
       "event": "PreToolUse",
       "command_sha256": "ce97f4fd7eb07f52a0e9c6352fab2ce0e803f0920ef184d8f42261a46580103b"
     },
     {
-      "id": "hook:SessionEnd:636",
+      "id": "hook:SessionEnd:638",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "35974852e367c31bae49591ac0aa4afd518ec624f233743462e37c4c3863b1ed"
     },
     {
-      "id": "hook:SessionEnd:637",
+      "id": "hook:SessionEnd:639",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "519f522b04afb8471aa7e7ca117deb8af91976de62b5c1f5f4f6f9f60c8c217f"
     },
     {
-      "id": "hook:SessionEnd:638",
+      "id": "hook:SessionEnd:640",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "4ee05b68abff34325a3950761939e20cf2391c7b29d640b29b95233d29943fd4"
     },
     {
-      "id": "hook:SessionStart:633",
+      "id": "hook:SessionStart:635",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "26962e5976f5c689361f18050bb4e718d507df72590fbbc620e356cde47cf86b"
     },
     {
-      "id": "hook:SessionStart:634",
+      "id": "hook:SessionStart:636",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "00253242784e7853b94e1125e7c69f31085961b2dd7b3d1fcb6b4c79d94e9baf"
     },
     {
-      "id": "hook:SessionStart:635",
+      "id": "hook:SessionStart:637",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "c738ce0e54e375f17b97f1186b95e5fd1125c0675d2f3e9238e872062f5b7076"
     },
     {
-      "id": "hook:Stop:630",
+      "id": "hook:Stop:632",
       "type": "hook",
       "event": "Stop",
       "command_sha256": "c0c0282a10c1ff35c525d7786ceb380c853b678494f400dbf1fc178cdddcbb19"
     },
     {
-      "id": "hook:SubagentStop:639",
+      "id": "hook:SubagentStop:641",
       "type": "hook",
       "event": "SubagentStop",
       "command_sha256": "4ca0f2529c8dd4023ade83508a1e40a1728dbdcfa35aadf9ea953cf8ac9a587d"
     },
     {
-      "id": "hook:UserPromptSubmit:631",
+      "id": "hook:UserPromptSubmit:633",
       "type": "hook",
       "event": "UserPromptSubmit",
       "command_sha256": "d647b60c73e5962cae00cf1cf2bd11d28472fdb8c47074a2e62cabf0e7e89545"
@@ -24607,6 +24621,11 @@
       "name": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-intake.schema.json"
     },
     {
+      "id": "schema-definition:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/readiness-review.schema.json",
+      "type": "schema-definition",
+      "name": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/readiness-review.schema.json"
+    },
+    {
       "id": "schema-definition:framework_candidates/project-management__delta-specification/proposed_framework/schemas/input.schema.json",
       "type": "schema-definition",
       "name": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/input.schema.json"
@@ -24615,6 +24634,11 @@
       "id": "schema-definition:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-specification.schema.json",
       "type": "schema-definition",
       "name": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-specification.schema.json"
+    },
+    {
+      "id": "schema-definition:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/review.schema.json",
+      "type": "schema-definition",
+      "name": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/review.schema.json"
     },
     {
       "id": "schema-definition:frameworks/deliverables/presentation-review/schemas/intake.schema.json",
@@ -25822,16 +25846,6 @@
       "target": ".claude/commands/scaffold-framework.md",
       "required": true,
       "declared_target": ".claude/commands/scaffold-framework.md"
-    },
-    {
-      "id": "03c1c2c80de37871f6ec5a7a6af8d6b579bcfe2bcf4bc7ed70e8b4a9475f5f6b",
-      "type": "hook-target",
-      "from": "hook:UserPromptSubmit:631",
-      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
-      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-userprompt.cjs",
-      "event": "UserPromptSubmit"
     },
     {
       "id": "03c573a29ae0c864fe2104c293fe19cfff4657d9555587204c42f7120daca99f",
@@ -29807,16 +29821,6 @@
       "specifier": "./pretool-git-custody-gate.cjs"
     },
     {
-      "id": "2cc22dafee57bb065b4e53078aa985ffcc930172e67d9e7941f90bd142f0600a",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:638",
-      "to": "file:tools/sessions/session-end-boundary-log.cjs",
-      "target": "tools/sessions/session-end-boundary-log.cjs",
-      "required": true,
-      "declared_target": "tools/sessions/session-end-boundary-log.cjs",
-      "event": "SessionEnd"
-    },
-    {
       "id": "2ce18c895495196565f4028d82857cd4df2c2c9e9f26effb659926b33f3337c3",
       "type": "static-import",
       "from": "file:tools/bundle/generate-handoff-bundle.js",
@@ -29842,16 +29846,6 @@
       "target": "tools/verify/schemas/governance-definitions.schema.json",
       "required": true,
       "declared_target": "tools/verify/schemas/governance-definitions.schema.json"
-    },
-    {
-      "id": "2d59c0f950ce48ee0e7fe7e3ad4aa57690765c53295258839ce6a67fd6733141",
-      "type": "hook-target",
-      "from": "hook:SessionStart:635",
-      "to": "file:tools/user/inject-mirror.cjs",
-      "target": "tools/user/inject-mirror.cjs",
-      "required": true,
-      "declared_target": "tools/user/inject-mirror.cjs",
-      "event": "SessionStart"
     },
     {
       "id": "2d62e8b17ee46eff97cf510a445864ae7dfd645e0ad64ff5fa48642c51752701",
@@ -30153,6 +30147,16 @@
       "target": "tools/claude/lib/hook-telemetry.cjs",
       "required": true,
       "specifier": "../../claude/lib/hook-telemetry.cjs"
+    },
+    {
+      "id": "30a55cd797d1a5c8b412fffb6b8d9ea9ed760d766da9babfdc953027649d07ac",
+      "type": "hook-target",
+      "from": "hook:UserPromptSubmit:633",
+      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
+      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "event": "UserPromptSubmit"
     },
     {
       "id": "30a956de284a552fe624d99f03fb6e5a7e641afaf1a2b4d8fa14aaf9b7b42453",
@@ -31255,6 +31259,16 @@
       "specifier": "./lib/signal-normalization-proposal"
     },
     {
+      "id": "3a8daf37ec01a4681df452368326b6bcc19246c548174c070c1db95bc731c7f3",
+      "type": "hook-target",
+      "from": "hook:PostToolUse:634",
+      "to": "file:tools/kernel/hooks/dispatch-posttool.cjs",
+      "target": "tools/kernel/hooks/dispatch-posttool.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-posttool.cjs",
+      "event": "PostToolUse"
+    },
+    {
       "id": "3a9a89aa4608aa534673f1fa3ddafa8f7f8707bea761ff3b2695942356f8f60b",
       "type": "static-import",
       "from": "file:tools/kernel/hooks/mint-remote-mutation-stamp.cjs",
@@ -32048,16 +32062,6 @@
       "specifier": "./actor-auto"
     },
     {
-      "id": "41b73995f48e693b942af3fee1746716e7e4d7919fc1afdbc63b70f1c431bb5c",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:637",
-      "to": "file:tools/context/repo-awareness-closeout.cjs",
-      "target": "tools/context/repo-awareness-closeout.cjs",
-      "required": true,
-      "declared_target": "tools/context/repo-awareness-closeout.cjs",
-      "event": "SessionEnd"
-    },
-    {
       "id": "41bdd49e528bd34000979436f46af495a62ea0626586d8254a739239ce6b9007",
       "type": "static-import",
       "from": "file:tools/maintenance/lib/closeout-maintenance.js",
@@ -32322,16 +32326,6 @@
       "target": "tools/bundle/templates/cursorrules.js",
       "required": true,
       "specifier": "../templates/cursorrules.js"
-    },
-    {
-      "id": "44aad973750d09c6970a68ac9e55f229199239d0d2d96ad71fc832dfe9514a98",
-      "type": "hook-target",
-      "from": "hook:SubagentStop:639",
-      "to": "file:.claude/hooks/subagent-telemetry-writer.cjs",
-      "target": ".claude/hooks/subagent-telemetry-writer.cjs",
-      "required": true,
-      "declared_target": ".claude/hooks/subagent-telemetry-writer.cjs",
-      "event": "SubagentStop"
     },
     {
       "id": "44c39b555d180ecb837bdca9cc0fc29e34f3ff829a89ec959ff1cd2aa313ead3",
@@ -33067,6 +33061,16 @@
       "specifier": "./lib/model-runtime"
     },
     {
+      "id": "4c1ff8a063d296c9a451235775a53b1c0062e190ecda37f03379314ac8afd7f5",
+      "type": "hook-target",
+      "from": "hook:PreToolUse:631",
+      "to": "file:tools/kernel/hooks/dispatch-pretool.cjs",
+      "target": "tools/kernel/hooks/dispatch-pretool.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-pretool.cjs",
+      "event": "PreToolUse"
+    },
+    {
       "id": "4c69697fd438ffb7592abd67eaaaf4710d0c62231a77426c7661c93cb180294e",
       "type": "static-import",
       "from": "file:tools/google-ads/pmax-url-exclusions.js",
@@ -33783,6 +33787,16 @@
       "target": "tools/kernel/loop-protocol/iteration-cap.js",
       "required": true,
       "specifier": "./iteration-cap.js"
+    },
+    {
+      "id": "543cfe6c22a34c721b3b81d4c85ae0f21559dbfac80b7b97ed42c2fb777c6d01",
+      "type": "hook-target",
+      "from": "hook:SubagentStop:641",
+      "to": "file:.claude/hooks/subagent-telemetry-writer.cjs",
+      "target": ".claude/hooks/subagent-telemetry-writer.cjs",
+      "required": true,
+      "declared_target": ".claude/hooks/subagent-telemetry-writer.cjs",
+      "event": "SubagentStop"
     },
     {
       "id": "543e1612d9cc46aed35a0de971de754dbd0c6bf7a9607a192a364c9aa958699e",
@@ -36295,6 +36309,15 @@
       "specifier": "../posttool-write-ledger.cjs"
     },
     {
+      "id": "6cbb0feb813504719767067ce27bf4299b5c47e7f270b3a93fac7f27db938a1a",
+      "type": "schema-definition-file",
+      "from": "schema-definition:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/review.schema.json",
+      "to": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/review.schema.json",
+      "target": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/review.schema.json",
+      "required": true,
+      "declared_target": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/review.schema.json"
+    },
+    {
       "id": "6d0272d6f7e6f08fe3965bce188ec3804dfd4e41a7492e16f3c48ac0a8f9a498",
       "type": "manifest-target",
       "from": "manifest-path:.claude/skills/dl/SKILL.md",
@@ -37203,6 +37226,16 @@
       "specifier": "../../../codex/commands/run-plan"
     },
     {
+      "id": "75449fc3fc225858ee1d2a8df4ac88c9e591a87b789397bfd1b88729906964ec",
+      "type": "hook-target",
+      "from": "hook:Stop:632",
+      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
+      "target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "event": "Stop"
+    },
+    {
       "id": "7548056eeddc0b6ad1aa078494e35142a2b08f9b538ffde766e6f6b905742886",
       "type": "package-script-target",
       "from": "package-script:signals:run:actor",
@@ -37930,16 +37963,6 @@
       "target": ".claude/commands/scaffold-framework.md",
       "required": true,
       "declared_target": ".claude/commands/scaffold-framework.md"
-    },
-    {
-      "id": "7d1eb1b1f6ce0cf0abe4ea8ffda6241a44e8805d5160203e729772d3eff16b22",
-      "type": "hook-target",
-      "from": "hook:SessionStart:634",
-      "to": "file:tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "required": true,
-      "declared_target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "event": "SessionStart"
     },
     {
       "id": "7d82e2a9efd86b388fac223d6c79a9a59a9fe3f7aa28334f3eea6a67b786e046",
@@ -39117,6 +39140,16 @@
       "target": "parity/baseline.schema.json",
       "required": true,
       "declared_target": "parity/baseline.schema.json"
+    },
+    {
+      "id": "89207cff876d18a556d4372fc190b6d7aec0bce17e047f797d759f783f11255a",
+      "type": "hook-target",
+      "from": "hook:SessionStart:637",
+      "to": "file:tools/user/inject-mirror.cjs",
+      "target": "tools/user/inject-mirror.cjs",
+      "required": true,
+      "declared_target": "tools/user/inject-mirror.cjs",
+      "event": "SessionStart"
     },
     {
       "id": "893a885c50e82e4b710fc307a2a4d176ae44b9e7eaf7e933c1ee07cc3dfb06c8",
@@ -41609,6 +41642,16 @@
       "specifier": "../codex/commands/orchestrate"
     },
     {
+      "id": "a18bd480ab835ff3ae6ff3d7e87dd5f272544e13d3a923b313c8359dc6121529",
+      "type": "hook-target",
+      "from": "hook:SessionStart:636",
+      "to": "file:tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "required": true,
+      "declared_target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "event": "SessionStart"
+    },
+    {
       "id": "a18cdb01e41ea8478f0a97ede8f9ee2721bf598ba3334ec789cb91c03d15ec1c",
       "type": "manifest-target",
       "from": "manifest-path:frameworks/wordpress/livecanvas-rebuild/guardrails.md",
@@ -41974,6 +42017,16 @@
       "target": "frameworks/wordpress/content-editing/guardrails.md",
       "required": true,
       "declared_target": "frameworks/wordpress/content-editing/guardrails.md"
+    },
+    {
+      "id": "a63767d18966aab2b5bdc3b30a2520da78af4a39852c3862cd9d26dc2e3f761f",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:639",
+      "to": "file:tools/context/repo-awareness-closeout.cjs",
+      "target": "tools/context/repo-awareness-closeout.cjs",
+      "required": true,
+      "declared_target": "tools/context/repo-awareness-closeout.cjs",
+      "event": "SessionEnd"
     },
     {
       "id": "a63a1254a5cbf96eff0d1ce0db994b618306b4c242e7c8e2bd4966fc180b68be",
@@ -43491,16 +43544,6 @@
       "declared_target": "frameworks/wordpress/livecanvas-rebuild/.claude/commands/livecanvas-rebuild"
     },
     {
-      "id": "b561f560ef321ad9fbc0af8349f33ce2418115c7bfc9015d81eb060ddbbab08b",
-      "type": "hook-target",
-      "from": "hook:PreToolUse:629",
-      "to": "file:tools/kernel/hooks/dispatch-pretool.cjs",
-      "target": "tools/kernel/hooks/dispatch-pretool.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-pretool.cjs",
-      "event": "PreToolUse"
-    },
-    {
       "id": "b56620891057aac70a9542e284c208a4b2905773372c57d7395bed3cac8e5a4f",
       "type": "static-import",
       "from": "file:tools/verify/verify-framework.cjs",
@@ -43992,16 +44035,6 @@
       "target": "tools/dart-integration/lib/dart-api.js",
       "required": true,
       "specifier": "./lib/dart-api"
-    },
-    {
-      "id": "ba02061153e9d5830e2940431c430256fa48a683938fe2fa57849e922f38cbf8",
-      "type": "hook-target",
-      "from": "hook:Stop:630",
-      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
-      "target": "tools/kernel/hooks/dispatch-stop.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-stop.cjs",
-      "event": "Stop"
     },
     {
       "id": "ba2e3e0dc5a10ec759fe823ba118c19bd4b2f9677cda5b2dc7e90d4b63a065b9",
@@ -44774,6 +44807,16 @@
       "specifier": "./gaql-allowlist"
     },
     {
+      "id": "c11b971c3ddf7f33a190548094133184cc034c68bbadd42b30111e3012b3295a",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:638",
+      "to": "file:tools/hooks/session-lifecycle/session-end-close.cjs",
+      "target": "tools/hooks/session-lifecycle/session-end-close.cjs",
+      "required": true,
+      "declared_target": "tools/hooks/session-lifecycle/session-end-close.cjs",
+      "event": "SessionEnd"
+    },
+    {
       "id": "c135197a8115a7c7045ff9f74909c76175cec8ef2567576a834b7ca910789e1e",
       "type": "command-definition-file",
       "from": "command-definition:claim-intake",
@@ -45238,6 +45281,15 @@
       "specifier": ".base"
     },
     {
+      "id": "c68c28dbf6a02a2ae2ad89b3ded157c3c5e2af8ad7bbaad8a1e0ac9483e2559c",
+      "type": "schema-definition-file",
+      "from": "schema-definition:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/readiness-review.schema.json",
+      "to": "file:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/readiness-review.schema.json",
+      "target": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/readiness-review.schema.json",
+      "required": true,
+      "declared_target": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/readiness-review.schema.json"
+    },
+    {
       "id": "c6b643c45084abd4f8a6c37ca697d1869357f17acbc51129906b4e41ca2da641",
       "type": "static-import",
       "from": "file:tools/maintenance/lib/__tests__/maintenance-disposition.test.js",
@@ -45491,16 +45543,6 @@
       "target": "tools/verify/lib/guardrail-precedence.cjs",
       "required": true,
       "specifier": "./lib/guardrail-precedence.cjs"
-    },
-    {
-      "id": "c952ca44124d2123d7910947202e3e13428d4bca288ec21783627369be26d78d",
-      "type": "hook-target",
-      "from": "hook:PostToolUse:632",
-      "to": "file:tools/kernel/hooks/dispatch-posttool.cjs",
-      "target": "tools/kernel/hooks/dispatch-posttool.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-posttool.cjs",
-      "event": "PostToolUse"
     },
     {
       "id": "c95cfa78423bef916913c6ef7914a57af675a5858e73706cca70cff44a400198",
@@ -46084,16 +46126,6 @@
       "declared_target": ".claude/skills/execute-framework/SKILL.md"
     },
     {
-      "id": "cf3cc62dc6204c2237db5e63c5dd47e89ec361b812f66227a3617fd1bef39787",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:636",
-      "to": "file:tools/hooks/session-lifecycle/session-end-close.cjs",
-      "target": "tools/hooks/session-lifecycle/session-end-close.cjs",
-      "required": true,
-      "declared_target": "tools/hooks/session-lifecycle/session-end-close.cjs",
-      "event": "SessionEnd"
-    },
-    {
       "id": "cf4d9eea5f3964533c7bdaf0eea4e411f9a260f05fafbdcff682217da245c50f",
       "type": "static-import",
       "from": "file:tools/convene/lib/artifacts.js",
@@ -46594,6 +46626,16 @@
       "target": "tools/commands/lib/command-aliases.cjs",
       "required": true,
       "specifier": "./lib/command-aliases.cjs"
+    },
+    {
+      "id": "d52be147a33198e6981a2287f4d8224769cec2399a5d47f65983492e669ca499",
+      "type": "hook-target",
+      "from": "hook:SessionStart:635",
+      "to": "file:tools/kernel/hooks/dispatch-session-start.cjs",
+      "target": "tools/kernel/hooks/dispatch-session-start.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-session-start.cjs",
+      "event": "SessionStart"
     },
     {
       "id": "d53e15f29927f5ef8e79c449a7c547f1ede453622762aabe1cebd8e4a3198234",
@@ -47482,16 +47524,6 @@
       "target": "tools/dart-integration/lib/perimeter-classifier-stub.js",
       "required": true,
       "specifier": "./perimeter-classifier-stub"
-    },
-    {
-      "id": "deb9fd3632deab917a98560f99ec9945f70daabea0042984aa21a5ae6c6b74aa",
-      "type": "hook-target",
-      "from": "hook:SessionStart:633",
-      "to": "file:tools/kernel/hooks/dispatch-session-start.cjs",
-      "target": "tools/kernel/hooks/dispatch-session-start.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-session-start.cjs",
-      "event": "SessionStart"
     },
     {
       "id": "ded720f0651c21dfe45b1ca6cb7bce8ea5584a0b66281da27b98adf32d850e24",
@@ -49160,6 +49192,16 @@
       "target": "tools/ant-hive-world/world-state.js",
       "required": true,
       "specifier": "./world-state.js"
+    },
+    {
+      "id": "ee6e30e0c472f00dcb0436506c5c9baf084352b9325066074ef08cf6c5b9b59d",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:640",
+      "to": "file:tools/sessions/session-end-boundary-log.cjs",
+      "target": "tools/sessions/session-end-boundary-log.cjs",
+      "required": true,
+      "declared_target": "tools/sessions/session-end-boundary-log.cjs",
+      "event": "SessionEnd"
     },
     {
       "id": "ee913084009def8d67c8635de3938e06009e27142a8654dad00bab33377b333b",
@@ -51219,8 +51261,8 @@
     }
   ],
   "counts": {
-    "nodes": 3894,
-    "edges": 2840,
+    "nodes": 3898,
+    "edges": 2842,
     "unresolved": 0
   }
 }

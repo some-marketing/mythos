@@ -77,7 +77,23 @@
         "required": true
       }
     ],
-    "bundle_types": []
+    "bundle_types": [
+      {
+        "type_id": "delta-specification-output",
+        "path_pattern": "outputs/delta-specification",
+        "required_files": [
+          "baseline-inventory.json",
+          "change-proposal.json",
+          "delta-spec.json",
+          "dependency-acceptance-map.json",
+          "review.json"
+        ],
+        "file_schemas": {
+          "review.json": "review.schema.json"
+        },
+        "description": "Complete delta-specification output with provenance-bound independent review"
+      }
+    ]
   },
   "execution_modes": [
     "RUN_ONLY",

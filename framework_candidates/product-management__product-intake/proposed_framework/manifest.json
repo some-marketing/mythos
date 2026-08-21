@@ -91,7 +91,24 @@
         "required": true
       }
     ],
-    "bundle_types": []
+    "bundle_types": [
+      {
+        "type_id": "product-intake-output",
+        "path_pattern": "outputs/product-intake",
+        "required_files": [
+          "scope-and-intent.json",
+          "hypothesis-tests.json",
+          "product-brief.json",
+          "evidence-ledger.json",
+          "prfaq.md",
+          "readiness-review.json"
+        ],
+        "file_schemas": {
+          "readiness-review.json": "readiness-review.schema.json"
+        },
+        "description": "Complete product-intake output with provenance-bound readiness review"
+      }
+    ]
   },
   "execution_modes": [
     "RUN_ONLY",

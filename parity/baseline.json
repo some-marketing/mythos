@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "90c48b8eb3ddea78b7f6dc9ca201c16bbd149327c65cffbfab19e898a83ab640",
+    "expected_tree_sha256": "ded3ac200e6a86d61d89543aab9f36a55cb9e1f336e6878c2c93eb77c41c9dc8",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -1807,7 +1807,7 @@
       },
       {
         "path": "framework_candidates/product-management__product-intake/proposed_framework/manifest.json",
-        "sha256": "be4c5bf43c16516022c0dc8df1734641121972c8eb3d4bb61fbf181253bf8f7e",
+        "sha256": "2c16b60e8a91f38e7c8620a4d6ed42dc8d1b48bd4ed6270759eb85313caa5249",
         "mode": 420
       },
       {
@@ -1827,7 +1827,7 @@
       },
       {
         "path": "framework_candidates/product-management__product-intake/proposed_framework/prompts/04_READINESS_REVIEW.md",
-        "sha256": "83ef3c916ac675f4bce69d62b5a9fcbb8b9be6f8450ed00481e67a9a34c05985",
+        "sha256": "906bdeb74abc289783862067895c13a610eecabc727de3c0412fba56a8cb6407",
         "mode": 420
       },
       {
@@ -1837,7 +1837,12 @@
       },
       {
         "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-intake.schema.json",
-        "sha256": "185c4ed0cd2ede3d58afaf95022605e0d127853782de851f5e2d0ad09ff8b6ff",
+        "sha256": "d84bab556ccf7edd9fb2846ba94d8ebbae5af14c57dafb6c399b3d51577be525",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/readiness-review.schema.json",
+        "sha256": "9f685e60ac1a0adafe467bfd51e1a78f9bebd42cabdd2c3b76245d9af62fb70c",
         "mode": 420
       },
       {
@@ -1952,7 +1957,7 @@
       },
       {
         "path": "framework_candidates/project-management__delta-specification/proposed_framework/manifest.json",
-        "sha256": "ce384b882f84c5b2bacfa91e2868e647a7fd38851f877a2b21629397fab5320b",
+        "sha256": "0089caf6ba3567ae08674b6b918d62dc5a9ce4b412b61bce91f7165139e9afeb",
         "mode": 420
       },
       {
@@ -1977,7 +1982,7 @@
       },
       {
         "path": "framework_candidates/project-management__delta-specification/proposed_framework/prompts/05_INDEPENDENT_REVIEW.md",
-        "sha256": "e9be4a6f10637207ce45bb2172b8d3beeee6fdc5ebaa2854e948c4044f75344f",
+        "sha256": "f89de813e5c8c980491e7acd0e56896ba07e6be75b0835769277add79feed990",
         "mode": 420
       },
       {
@@ -1987,7 +1992,12 @@
       },
       {
         "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-specification.schema.json",
-        "sha256": "6e4b0bcf8663029699e47860afa553d02fd053d57f7ccb363dc82a9d3deac13a",
+        "sha256": "88613a40d6551ce0b758536bf10f8b4bdb004f658d039465c5b18e2c92a0403c",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/review.schema.json",
+        "sha256": "9f685e60ac1a0adafe467bfd51e1a78f9bebd42cabdd2c3b76245d9af62fb70c",
         "mode": 420
       },
       {
@@ -6052,7 +6062,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "493ce004addfc6f9803e7c5c74c9f540a7fc2e401cc9b6eec03b8ebef7069f3f",
+        "sha256": "7916543180b368cb614c585c861cd7ae3001d31f59e46fde73d43c86a296ce0c",
         "mode": 420
       },
       {
@@ -13737,7 +13747,7 @@
       },
       {
         "path": "tools/workspace/__tests__/candidate-root.test.js",
-        "sha256": "718f56adb28f396fae7b5a045a25d15f4cf05645e62b0b3f5fe8eb8af21c97db",
+        "sha256": "11e7c11c2329159b9e4457575eed4384d583c45f10366d4ff4ffab42ba48d0ae",
         "mode": 420
       },
       {
@@ -14064,9 +14074,9 @@
     "package_script_count": 205,
     "command_alias_registry_sha256": "4a7ed7af401f9b4695dcd2dca5ca64f4a0dae975d0b94f95e24e9b5f3a6ce3fc",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "493ce004addfc6f9803e7c5c74c9f540a7fc2e401cc9b6eec03b8ebef7069f3f",
-    "graph_nodes": 3894,
-    "graph_edges": 2840
+    "graph_sha256": "7916543180b368cb614c585c861cd7ae3001d31f59e46fde73d43c86a296ce0c",
+    "graph_nodes": 3898,
+    "graph_edges": 2842
   },
   "runtime_exclusions": [
     ".git/**",

@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "09a52b5a2b8041e22d0c4ebf984e977bc2aa363d7466363ae07a1d6c41e80609",
+    "expected_tree_sha256": "9f8de8961de170a5ffec029faa54805d5594f7a6c3f64bbf6dd89ff9f9144cd1",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -278,6 +278,11 @@
       {
         "path": ".claude/commands/charter-quest.md",
         "sha256": "f26fc93fc0ffa26093e1b556776ed83719557a33a9e6dc66d060b9b4c66882ed",
+        "mode": 420
+      },
+      {
+        "path": ".claude/commands/chi.md",
+        "sha256": "c8c1c2a5e78c8eb05fdfd2f0d73e65e7695bd31ebb5e31b97fcad3e39bc99d41",
         "mode": 420
       },
       {
@@ -781,6 +786,11 @@
         "mode": 420
       },
       {
+        "path": ".claude/commands/oil.md",
+        "sha256": "727eb6eda4cc9678c56ce7dceedd44950e65db151b78d86ef8613062142a314b",
+        "mode": 420
+      },
+      {
         "path": ".claude/commands/open-contract.md",
         "sha256": "f956a8e02c306ab4aa72069a1142cf42e81700dd74c938d032c89b6f57156056",
         "mode": 420
@@ -798,6 +808,11 @@
       {
         "path": ".claude/commands/orchestrate.md",
         "sha256": "a1750dc96ec958c9f37a71de97a6e07fa0797b21bce5f5af4cc2793d6a3c276c",
+        "mode": 420
+      },
+      {
+        "path": ".claude/commands/outward-inward.md",
+        "sha256": "964fb629c0a1ff12e9d1faff0e7c8c3119b458c8fb648a8c151e3ba502e332ec",
         "mode": 420
       },
       {
@@ -1062,7 +1077,7 @@
       },
       {
         "path": ".claude/project-claude.yml",
-        "sha256": "6786368b527bca263075bbc1f153928133460de2f49fb62e51402d60bfd99ba9",
+        "sha256": "1f079838e60fce505f80b734fc0e83cb470e35a402ae384b430d54af41c02f53",
         "mode": 420
       },
       {
@@ -1411,6 +1426,16 @@
         "mode": 420
       },
       {
+        "path": ".claude/skills/outward-inward-loop/SKILL.md",
+        "sha256": "6a4cb64e007878d258f0d2553349139fe053703b3cd4d91e8abee2896d7ed04d",
+        "mode": 420
+      },
+      {
+        "path": ".claude/skills/outward-inward-loop/references/tt-adaptation.md",
+        "sha256": "a2b3b66dc5b9fedf6cc2ff12a3e2699f7ecdfa6776ccee05574693edd1141ffb",
+        "mode": 420
+      },
+      {
         "path": ".claude/skills/owl/SKILL.md",
         "sha256": "46de321e6eb7ff8a435ff99ee86dcfc30a467d8583556a2de316c3b82f74eeaf",
         "mode": 420
@@ -1507,17 +1532,17 @@
       },
       {
         "path": "AGENTS.md",
-        "sha256": "a0ad920bb923dc75d57fd4edaf520ef00f286555a6e72ea0d746d6a240384529",
+        "sha256": "5ef390e01d8058eeda8ca8bb09666242cf4cc6f19468c32fa6be5786df159942",
         "mode": 420
       },
       {
         "path": "CLAUDE.md",
-        "sha256": "4dc4c5d3d956dcda72ce6ed2f3b65f4f9592ad2cbc05569072d5f77e9254c19a",
+        "sha256": "5cf832914532316647bad4638b92599e1b26656cc24809d7a5828f95a79ee925",
         "mode": 420
       },
       {
         "path": "INSTRUCTIONS.md",
-        "sha256": "ee58663578b5a761b4bd8df84e843d39eabbf13810737ed48bf4193df4ce8505",
+        "sha256": "cb80939b3b687518c4aebd6ba9122b8f944150a0ac3d6bcc67e5789863510f64",
         "mode": 420
       },
       {
@@ -1527,7 +1552,7 @@
       },
       {
         "path": "OPENCODE.md",
-        "sha256": "874aafb39fa44cdb23a034949adda43f3a9dd9fee70cf8933b8324f78fd53790",
+        "sha256": "c0600d6fa29e4b9d2fdac64af7544a1544c55fb16bbc2ae02f0cb000bf42c7e2",
         "mode": 420
       },
       {
@@ -4717,12 +4742,12 @@
       },
       {
         "path": "instructions/canonical/command-aliases.yaml",
-        "sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
+        "sha256": "4a7ed7af401f9b4695dcd2dca5ca64f4a0dae975d0b94f95e24e9b5f3a6ce3fc",
         "mode": 420
       },
       {
         "path": "instructions/canonical/command-index.md",
-        "sha256": "b661345b4497d27e7152a9fb262ba8cfd0e9509087938cc5fbb618f9546160b5",
+        "sha256": "9ed4357cc84e9986dc5da4c8bc0a1a8bbe9643d63eb886289eaa7d83e2b46aba",
         "mode": 420
       },
       {
@@ -5201,6 +5226,11 @@
         "mode": 420
       },
       {
+        "path": "instructions/canonical/commands/outward-inward.yaml",
+        "sha256": "2d37dcca6d98680738d910a7537f8f8266bbf17155d01ff7656608922b183a5b",
+        "mode": 420
+      },
+      {
         "path": "instructions/canonical/commands/owl.yaml",
         "sha256": "4982354d90944f74d3315df3b915391ca0e6b8c556bffd6d131d13646d1bdc68",
         "mode": 420
@@ -5657,7 +5687,7 @@
       },
       {
         "path": "instructions/canonical/system.yaml",
-        "sha256": "b8d1391f0014efdbb28c875fdefede1a03713dea0e9d5f77cf76334809030d06",
+        "sha256": "057b4975299b2c1493a196443efa61a33a82a64a3d0776abdbff0b06dc52280f",
         "mode": 420
       },
       {
@@ -5682,7 +5712,7 @@
       },
       {
         "path": "instructions/generated/claude/CLAUDE.md",
-        "sha256": "4dc4c5d3d956dcda72ce6ed2f3b65f4f9592ad2cbc05569072d5f77e9254c19a",
+        "sha256": "5cf832914532316647bad4638b92599e1b26656cc24809d7a5828f95a79ee925",
         "mode": 420
       },
       {
@@ -5732,7 +5762,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "7152b811d0c48d58851340c81b14817105bc435f28b8610fff350d69fefe0f4e",
+        "sha256": "af1b79c6de2a129ea191841a513616cf2a5b6f91b1a3294775a1854f264a9be7",
         "mode": 420
       },
       {
@@ -6987,7 +7017,7 @@
       },
       {
         "path": "tools/codex/lib/managed-command-registry.js",
-        "sha256": "195ac06e84587b58208d3f949f4363742d3ea3b4d1471a491e45033ee7a18abd",
+        "sha256": "2c3c6e1d9e2297eeb214c3baba70a0859beae10250b5c63299a54e21521f69e6",
         "mode": 420
       },
       {
@@ -7163,6 +7193,11 @@
       {
         "path": "tools/commands/__tests__/mythos-command-runner.test.cjs",
         "sha256": "8ad85e7f6c2bd8e3fa24473ca082517b2fe56c4b21b442de6fd67c707934a5e6",
+        "mode": 420
+      },
+      {
+        "path": "tools/commands/__tests__/outward-inward-command.test.cjs",
+        "sha256": "bc0b2e5b0b36138def497468d8494ad95cb5947236ed4fb65fde5f72334dc648",
         "mode": 420
       },
       {
@@ -8322,7 +8357,7 @@
       },
       {
         "path": "tools/instructions/__tests__/aliases.test.js",
-        "sha256": "25df9ce388a49714ab406aab3199a93da158e700e0f62bc00123657ca5a7b84d",
+        "sha256": "fc46e8fd6a798187313aebdb6c4b7c5ff32adb41e44125fa8e8c56e88062c9c7",
         "mode": 420
       },
       {
@@ -8332,7 +8367,7 @@
       },
       {
         "path": "tools/instructions/lib/engine.js",
-        "sha256": "16d1669c85d85703172feba7502e53135c83e765bd2dbaf57cbc5df7dc2ccc33",
+        "sha256": "cc5246016adb9f69214462dc9e17bcf37fdd4dcdf16da05e9d24ceee0e8edae6",
         "mode": 420
       },
       {
@@ -8342,7 +8377,7 @@
       },
       {
         "path": "tools/instructions/lib/render.js",
-        "sha256": "910d481b4f13e4d79580825144fdceb403bb5f83807d10693c8018aec994cf25",
+        "sha256": "10d77aeaab442f34a9a0b906ecedc2bed48e73adf18daab49afce9597f3cce38",
         "mode": 420
       },
       {
@@ -10587,7 +10622,7 @@
       },
       {
         "path": "tools/parity/build-baseline.cjs",
-        "sha256": "6b0eab3b51c6cb73efabd21e62751ddb7a260c7112e734f64cc6c83e966d4797",
+        "sha256": "2ac85252fd0b6525d03b899e99c28d0ee6e3fdaa08ef6fb1100fd620b2648eb0",
         "mode": 420
       },
       {
@@ -13732,11 +13767,11 @@
   },
   "wiring": {
     "package_script_count": 205,
-    "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
+    "command_alias_registry_sha256": "4a7ed7af401f9b4695dcd2dca5ca64f4a0dae975d0b94f95e24e9b5f3a6ce3fc",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "7152b811d0c48d58851340c81b14817105bc435f28b8610fff350d69fefe0f4e",
-    "graph_nodes": 3814,
-    "graph_edges": 2816
+    "graph_sha256": "af1b79c6de2a129ea191841a513616cf2a5b6f91b1a3294775a1854f264a9be7",
+    "graph_nodes": 3831,
+    "graph_edges": 2832
   },
   "runtime_exclusions": [
     ".git/**",
@@ -13755,6 +13790,7 @@
     "_dev/reports/analysis/public-export/**",
     "_dev/reports/lifecycle/**",
     "_dev/reports/signals/**",
+    "_dev/reports/telemetry/**",
     "_dev/scratch/**",
     "_dev/state/**",
     "_dev/tmp/**",

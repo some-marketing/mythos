@@ -122,6 +122,32 @@
         "orchestrate-loop"
       ],
       "notes": "Shortest operator shorthand for the Evidence Loop profile. The typed alias is provenance; Evidence Loop owns the profile contract and orchestrate-loop owns lifecycle state."
+    },
+    {
+      "id": "oil",
+      "kind": "terminal_alias",
+      "target": "outward-inward",
+      "execution_target": "outward-inward",
+      "authority_source": "outward-inward",
+      "status": "primary",
+      "expansion_edges": [
+        "oil",
+        "outward-inward"
+      ],
+      "notes": "Operator shorthand for the outward-inward improvement loop. The typed alias is provenance; authority belongs to outward-inward."
+    },
+    {
+      "id": "chi",
+      "kind": "terminal_alias",
+      "target": "outward-inward",
+      "execution_target": "outward-inward",
+      "authority_source": "outward-inward",
+      "status": "primary",
+      "expansion_edges": [
+        "chi",
+        "outward-inward"
+      ],
+      "notes": "Operator shorthand for the outward-inward improvement loop. The typed alias is provenance; authority belongs to outward-inward."
     }
   ]
 }

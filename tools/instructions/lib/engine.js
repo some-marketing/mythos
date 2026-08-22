@@ -63,9 +63,21 @@ function parseAliasRegistry(raw) {
   for (const key of ALIAS_DOMAIN_KEYS) {
     const domainMap = maps[key];
     if (!domainMap || typeof domainMap !== 'object') continue;
+    if (Array.isArray(domainMap)) {
+      out[key] = domainMap.map((entry) => ({
+        id: entry && entry.id,
+        resolves_to: entry && (entry.resolves_to || entry.target),
+        ...(entry && entry.execution_target ? { execution_target: entry.execution_target } : {}),
+        ...(entry && entry.authority_source ? { authority_source: entry.authority_source } : {}),
+        status: entry && (entry.status || 'compatibility')
+      }));
+      continue;
+    }
     out[key] = Object.entries(domainMap).map(([id, entry]) => ({
       id,
       resolves_to: entry && entry.resolves_to,
+      ...(entry && entry.execution_target ? { execution_target: entry.execution_target } : {}),
+      ...(entry && entry.authority_source ? { authority_source: entry.authority_source } : {}),
       status: entry && entry.status
     }));
   }

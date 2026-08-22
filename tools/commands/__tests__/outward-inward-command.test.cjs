@@ -51,4 +51,6 @@ test('coordinator contract keeps default analysis write-free', () => {
   assert.doesNotMatch(contract, /--mode PATCH_ALLOWED/);
   assert.match(contract, /delegated FINDINGS_ONLY and REVIEW_ONLY lanes never write repository state/);
   assert.match(contract, /return the logical source manifest.*in-session/);
+  assert.match(contract, /rewriter actor id and attester actor id/);
+  assert.match(contract, /block execution when they match or either identity is missing/);
 });

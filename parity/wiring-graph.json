@@ -3583,7 +3583,7 @@
       "id": "file:.claude/skills/outward-inward-loop/SKILL.md",
       "type": "file",
       "path": ".claude/skills/outward-inward-loop/SKILL.md",
-      "sha256": "1d0a25c52c557a6e74bb4df5dee14d1285097f71171ecc5a87ed4b7a5fc9a085",
+      "sha256": "6a4cb64e007878d258f0d2553349139fe053703b3cd4d91e8abee2896d7ed04d",
       "mode": 420
     },
     {
@@ -8630,7 +8630,7 @@
       "id": "file:instructions/canonical/commands/outward-inward.yaml",
       "type": "file",
       "path": "instructions/canonical/commands/outward-inward.yaml",
-      "sha256": "45b3f8b2c2e1121146afd1408a94bc99cdd718525f3a106a3157b336b6b92f9a",
+      "sha256": "2d37dcca6d98680738d910a7537f8f8266bbf17155d01ff7656608922b183a5b",
       "mode": 420
     },
     {
@@ -11402,7 +11402,7 @@
       "id": "file:tools/commands/__tests__/outward-inward-command.test.cjs",
       "type": "file",
       "path": "tools/commands/__tests__/outward-inward-command.test.cjs",
-      "sha256": "9043cef2373cdc98d33bd834585f79aeac37908ae24cdcb8ff869591635be0bb",
+      "sha256": "bc0b2e5b0b36138def497468d8494ad95cb5947236ed4fb65fde5f72334dc648",
       "mode": 420
     },
     {

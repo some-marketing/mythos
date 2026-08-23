@@ -46,7 +46,7 @@ test('direct deterministic runner reports outward-inward as agentic', () => {
   }
 });
 
-test('coordinator contract keeps default analysis write-free', () => {
+test('coordinator contract keeps default analysis write-free and reports execution capability honestly', () => {
   const canonical = loadCanonicalCommand(ROOT, 'outward-inward').spec;
   const contract = JSON.stringify(canonical);
   assert.doesNotMatch(contract, /--mode PATCH_ALLOWED/);
@@ -54,10 +54,12 @@ test('coordinator contract keeps default analysis write-free', () => {
   assert.match(contract, /return the logical source manifest.*in-session/);
   assert.match(contract, /rewriter_actor_id.*attester_actor_id/);
   assert.match(contract, /validate-prompt-provenance-receipt\.cjs/);
-  assert.match(contract, /non-zero exit blocks execution/i);
+  assert.equal(canonical.capability_status.prompt_receipt_validator, 'ADVISORY');
+  assert.equal(canonical.capability_status.comparative_execution, 'ABSENT');
+  assert.match(contract, /record execution_blocked until a registered runner invokes the provenance validator/);
 });
 
-test('prompt-provenance receipt gate blocks missing or matching identities', () => {
+test('prompt-provenance receipt validator rejects missing or matching identities', () => {
   const expectedPrompts = [
     { prompt_id: '01_SCOPE', prompt_sha256: 'a'.repeat(64) },
     { prompt_id: '02_REVIEW', prompt_sha256: 'b'.repeat(64) }

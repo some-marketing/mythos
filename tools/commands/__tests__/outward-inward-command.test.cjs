@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
 
@@ -8,7 +10,7 @@ const { runMythosCommand } = require('../mythos-command-runner.cjs');
 const { loadCanonicalCommand } = require('../lib/command-registry.cjs');
 const { resolveCommandAlias } = require('../lib/command-aliases.cjs');
 const { isManaged } = require('../../codex/lib/managed-command-registry.js');
-const { validatePromptProvenanceReceipt } = require('../validate-prompt-provenance-receipt.cjs');
+const { loadSourceEnvelope, validatePromptProvenanceReceipt } = require('../validate-prompt-provenance-receipt.cjs');
 
 const ROOT = path.resolve(__dirname, '..', '..', '..');
 
@@ -64,11 +66,17 @@ test('prompt-provenance receipt validator rejects missing or matching identities
     { prompt_id: '01_SCOPE', prompt_sha256: 'a'.repeat(64) },
     { prompt_id: '02_REVIEW', prompt_sha256: 'b'.repeat(64) }
   ];
+  const expectedSourceEnvelope = {
+    source_envelope_id: 'chi-source-envelope',
+    source_envelope_sha256: 'c'.repeat(64)
+  };
   const receipt = {
     schema: 'PromptProvenanceReceipt/1.0',
     prompts: [{
       prompt_id: '01_SCOPE',
       prompt_sha256: 'a'.repeat(64),
+      source_envelope_id: 'chi-source-envelope',
+      source_envelope_sha256: 'c'.repeat(64),
       rewriter_actor_id: 'rewriter',
       rewriter_model_provider_family: 'anthropic',
       attester_actor_id: 'rewriter',
@@ -76,21 +84,46 @@ test('prompt-provenance receipt validator rejects missing or matching identities
       attestation: 'pass'
     }]
   };
-  assert.equal(validatePromptProvenanceReceipt(receipt, []).ok, false);
+  assert.equal(validatePromptProvenanceReceipt(receipt, [], expectedSourceEnvelope).ok, false);
   assert.equal(validatePromptProvenanceReceipt(receipt, expectedPrompts).ok, false);
+  assert.equal(validatePromptProvenanceReceipt(receipt, expectedPrompts, expectedSourceEnvelope).ok, false);
   receipt.prompts[0].attester_actor_id = 'attester';
   receipt.prompts[0].attester_model_provider_family = 'openai';
-  assert.equal(validatePromptProvenanceReceipt(receipt, expectedPrompts).ok, false);
+  assert.equal(validatePromptProvenanceReceipt(receipt, expectedPrompts, expectedSourceEnvelope).ok, false);
   receipt.prompts.push({
     prompt_id: '02_REVIEW',
     prompt_sha256: 'stale',
+    source_envelope_id: 'chi-source-envelope',
+    source_envelope_sha256: 'stale',
     rewriter_actor_id: 'rewriter',
     rewriter_model_provider_family: 'anthropic',
     attester_actor_id: 'attester',
     attester_model_provider_family: 'openai',
     attestation: 'pass'
   });
-  assert.equal(validatePromptProvenanceReceipt(receipt, expectedPrompts).ok, false);
+  assert.equal(validatePromptProvenanceReceipt(receipt, expectedPrompts, expectedSourceEnvelope).ok, false);
   receipt.prompts[1].prompt_sha256 = 'b'.repeat(64);
-  assert.equal(validatePromptProvenanceReceipt(receipt, expectedPrompts).ok, true);
+  assert.equal(validatePromptProvenanceReceipt(receipt, expectedPrompts, expectedSourceEnvelope).ok, false);
+  receipt.prompts[1].source_envelope_sha256 = 'c'.repeat(64);
+  assert.equal(validatePromptProvenanceReceipt(receipt, expectedPrompts, expectedSourceEnvelope).ok, true);
+});
+
+test('source envelope loader requires hashed source revisions', (t) => {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-source-envelope-'));
+  t.after(() => fs.rmSync(tempRoot, { recursive: true, force: true }));
+  const manifestPath = path.join(tempRoot, 'source-manifest.json');
+  fs.writeFileSync(manifestPath, JSON.stringify({
+    schema: 'PromptProvenanceSourceManifest/1.0',
+    source_envelope_id: 'chi-source-envelope',
+    sources: [{ source_id: 'source-a', content_sha256: 'd'.repeat(64) }]
+  }));
+  const envelope = loadSourceEnvelope(manifestPath);
+  assert.equal(envelope.source_envelope_id, 'chi-source-envelope');
+  assert.match(envelope.source_envelope_sha256, /^[a-f0-9]{64}$/);
+  fs.writeFileSync(manifestPath, JSON.stringify({
+    schema: 'PromptProvenanceSourceManifest/1.0',
+    source_envelope_id: 'chi-source-envelope',
+    sources: []
+  }));
+  assert.throws(() => loadSourceEnvelope(manifestPath), /at least one source/);
 });

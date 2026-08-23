@@ -11745,7 +11745,7 @@
       "id": "file:tools/commands/__tests__/outward-inward-command.test.cjs",
       "type": "file",
       "path": "tools/commands/__tests__/outward-inward-command.test.cjs",
-      "sha256": "32b2a95b4d228a0aecd8dbd94c3ec1c16b63b9b189c8c309a3f485a37fdeb9e5",
+      "sha256": "0de974d2fd283a0a0eaf87b75a9a488659436c371a494cfa0b74dcee6be6e41a",
       "mode": 420
     },
     {
@@ -11871,7 +11871,7 @@
       "id": "file:tools/commands/validate-prompt-provenance-receipt.cjs",
       "type": "file",
       "path": "tools/commands/validate-prompt-provenance-receipt.cjs",
-      "sha256": "eb72eb35ee3141b99523c14010d5f78bde703ebc533db75c9423dd671e438297",
+      "sha256": "64aef59b37e71ded6d125d99566caa014b44cbf932a5ef6eb428ec60fedccbd4",
       "mode": 420
     },
     {

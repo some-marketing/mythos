@@ -446,6 +446,54 @@ test('delta bundle consistency rejects cyclic dependency graphs', (t) => {
   assert.ok(referenceFindings.some((finding) =>
     finding.code === 'DELTA_ACCEPTANCE_MISSING' && /B/.test(finding.message)
   ));
+
+  fs.writeFileSync(path.join(bundleRoot, 'delta-spec.json'), JSON.stringify({
+    added: [
+      { requirement_id: 'DUP', requirement: 'First behavior.', scenarios: ['First is observable.'] },
+      { requirement_id: 'DUP', requirement: 'Second behavior.', scenarios: ['Second is observable.'] }
+    ],
+    modified: [],
+    removed: [],
+    preserved_invariants: []
+  }));
+  fs.writeFileSync(path.join(bundleRoot, 'dependency-acceptance-map.json'), JSON.stringify({
+    read_first: [],
+    dependencies: [],
+    acceptance_criteria: [
+      { criterion_id: 'AC-DUP', delta_id: 'DUP', condition: 'Run duplicate.', observable_result: 'Duplicate passes.' }
+    ]
+  }));
+  const duplicateFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+  assert.ok(duplicateFindings.some((finding) => finding.code === 'DELTA_ID_DUPLICATE'));
+
+  fs.writeFileSync(path.join(bundleRoot, 'baseline-inventory.json'), JSON.stringify([
+    { baseline_requirement_id: 'BASE-1', behavior: 'First baseline.', source_locator: 'source-a', authority: 'canonical', consumers: [] },
+    { baseline_requirement_id: 'BASE-1', behavior: 'Duplicate baseline.', source_locator: 'source-b', authority: 'canonical', consumers: [] }
+  ]));
+  fs.writeFileSync(path.join(bundleRoot, 'delta-spec.json'), JSON.stringify({
+    added: [],
+    modified: [{
+      requirement_id: 'MOD-1',
+      baseline_requirement_id: 'DOES-NOT-EXIST',
+      behavioral_difference: 'Behavior changes.',
+      requirement: 'System MUST change.',
+      scenarios: ['Change is observable.']
+    }],
+    removed: [],
+    preserved_invariants: []
+  }));
+  fs.writeFileSync(path.join(bundleRoot, 'dependency-acceptance-map.json'), JSON.stringify({
+    read_first: [],
+    dependencies: [],
+    acceptance_criteria: [
+      { criterion_id: 'AC-MOD', delta_id: 'MOD-1', condition: 'Run modified behavior.', observable_result: 'Modified behavior passes.' }
+    ]
+  }));
+  const baselineFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+  assert.ok(baselineFindings.some((finding) =>
+    finding.code === 'BASELINE_REF_UNKNOWN' && /DOES-NOT-EXIST/.test(finding.message)
+  ));
+  assert.ok(baselineFindings.some((finding) => finding.code === 'BASELINE_ID_DUPLICATE'));
 });
 
 test('delta replay keeps current-state baseline separate from requested behavior', () => {

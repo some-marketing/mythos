@@ -4,12 +4,14 @@
   "items": {
     "type": "object",
     "required": [
+      "baseline_requirement_id",
       "behavior",
       "source_locator",
       "authority",
       "consumers"
     ],
     "properties": {
+      "baseline_requirement_id": { "type": "string", "minLength": 1 },
       "behavior": { "type": "string", "minLength": 1 },
       "source_locator": { "type": "string", "minLength": 1 },
       "authority": { "type": "string", "minLength": 1 },

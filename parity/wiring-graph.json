@@ -4171,7 +4171,7 @@
       "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/prompts/01_BASELINE_INVENTORY.md",
       "type": "file",
       "path": "framework_candidates/project-management__delta-specification/proposed_framework/prompts/01_BASELINE_INVENTORY.md",
-      "sha256": "a7844ec68b0f8e452d938ec2d4d5eb7828e1de8f63fd5c3c2551c1ef27599f35",
+      "sha256": "95f4d2fb57ce2cbf7336e2d72f9363237012f8e1bebde9a8cc83bebbba00ca36",
       "mode": 420
     },
     {
@@ -4213,7 +4213,7 @@
       "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/baseline-inventory.schema.json",
       "type": "file",
       "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/baseline-inventory.schema.json",
-      "sha256": "10e62b1d4a8bc729677ce1d0b7d8e91fdf775888d4d225668868f6baf1e7a70c",
+      "sha256": "5af61aa556c8657111419c61ad79403bd35f738cea02f66c1befe99483a8d02a",
       "mode": 420
     },
     {
@@ -4234,7 +4234,7 @@
       "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-specification.schema.json",
       "type": "file",
       "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-specification.schema.json",
-      "sha256": "04394bcbd7b63549c87b211da51c82614139702c8769a48676abce35762e5f8b",
+      "sha256": "5011264d72fff8435d963f7e66dd40b829a96a29fdec78561ce8c13792cb10ea",
       "mode": 420
     },
     {
@@ -21076,7 +21076,7 @@
       "id": "file:tools/workspace/__tests__/candidate-root.test.js",
       "type": "file",
       "path": "tools/workspace/__tests__/candidate-root.test.js",
-      "sha256": "baa7fc31e48d0a7c2ba36cf4b1dba5d6e2456bbd1c5e9cca07cc2e91c648bdfe",
+      "sha256": "7d6b363641e056f190b610fcb49292789c54c921f2163fc0291daf771f3fbb19",
       "mode": 420
     },
     {
@@ -21160,7 +21160,7 @@
       "id": "file:tools/workspace/lib/output-contract.js",
       "type": "file",
       "path": "tools/workspace/lib/output-contract.js",
-      "sha256": "129c634d4af53a6fc26f6fb2bb92632da2d8b510c7d8a26a60fea788cb8c6e65",
+      "sha256": "748e662f35cca7d9b191b4ede238ac36bf673702df1b8efbb371426de9c97ce4",
       "mode": 420
     },
     {

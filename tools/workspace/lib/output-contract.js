@@ -265,16 +265,63 @@ function checkBundleConsistency(bundleRoot, frameworkRoot) {
 
   const deltaSpecPath = path.join(bundleRoot, 'delta-spec.json');
   const dependencyMapPath = path.join(bundleRoot, 'dependency-acceptance-map.json');
+  const baselineInventoryPath = path.join(bundleRoot, 'baseline-inventory.json');
   if (isFile(deltaSpecPath) && isFile(dependencyMapPath)) {
     try {
       const deltaSpec = readJson(deltaSpecPath);
       const dependencyMap = readJson(dependencyMapPath);
-      const deltaIds = new Set(
-        ['added', 'modified', 'removed']
-          .flatMap((section) => Array.isArray(deltaSpec[section]) ? deltaSpec[section] : [])
-          .map((entry) => entry && entry.requirement_id)
-          .filter(Boolean)
-      );
+      const deltaEntries = ['added', 'modified', 'removed']
+        .flatMap((section) => (Array.isArray(deltaSpec[section]) ? deltaSpec[section] : [])
+          .map((entry) => ({ ...entry, section })));
+      const deltaIdCounts = new Map();
+      for (const entry of deltaEntries) {
+        if (!entry.requirement_id) continue;
+        deltaIdCounts.set(entry.requirement_id, (deltaIdCounts.get(entry.requirement_id) || 0) + 1);
+      }
+      for (const [deltaId, count] of deltaIdCounts) {
+        if (count > 1) {
+          findings.push({
+            severity: 'blocker',
+            code: 'DELTA_ID_DUPLICATE',
+            message: `Delta requirement_id is duplicated across added, modified, or removed entries: ${deltaId}`,
+            path: deltaSpecPath
+          });
+        }
+      }
+      const deltaIds = new Set(deltaIdCounts.keys());
+
+      if (isFile(baselineInventoryPath)) {
+        const baselineInventory = readJson(baselineInventoryPath);
+        const baselineIdCounts = new Map();
+        for (const entry of Array.isArray(baselineInventory) ? baselineInventory : []) {
+          if (!entry.baseline_requirement_id) continue;
+          baselineIdCounts.set(
+            entry.baseline_requirement_id,
+            (baselineIdCounts.get(entry.baseline_requirement_id) || 0) + 1
+          );
+        }
+        for (const [baselineId, count] of baselineIdCounts) {
+          if (count > 1) {
+            findings.push({
+              severity: 'blocker',
+              code: 'BASELINE_ID_DUPLICATE',
+              message: `Baseline requirement id is duplicated: ${baselineId}`,
+              path: baselineInventoryPath
+            });
+          }
+        }
+        const baselineIds = new Set(baselineIdCounts.keys());
+        for (const entry of deltaEntries.filter((candidate) => candidate.section === 'modified' || candidate.section === 'removed')) {
+          if (!baselineIds.has(entry.baseline_requirement_id)) {
+            findings.push({
+              severity: 'blocker',
+              code: 'BASELINE_REF_UNKNOWN',
+              message: `${entry.section} delta ${entry.requirement_id} references an unknown baseline requirement: ${entry.baseline_requirement_id}`,
+              path: deltaSpecPath
+            });
+          }
+        }
+      }
       const graph = new Map(Array.from(deltaIds, (id) => [id, []]));
       for (const dependency of Array.isArray(dependencyMap.dependencies) ? dependencyMap.dependencies : []) {
         if (!deltaIds.has(dependency.delta_id)) {

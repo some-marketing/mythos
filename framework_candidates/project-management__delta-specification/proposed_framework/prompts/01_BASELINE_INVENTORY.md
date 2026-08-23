@@ -17,7 +17,7 @@ RUN_ONLY
 ## Steps
 
 1. Inventory every baseline source and its authority.
-2. Extract observable current behaviors and contract surfaces.
+2. Assign each observable current behavior a unique, stable `baseline_requirement_id`, then extract its contract surfaces.
 3. Map each behavior to known consumers.
 4. Identify conflicts, stale sources, missing facts, and ambiguous ownership.
 5. Separate direct observations from interpretations.
@@ -30,5 +30,6 @@ RUN_ONLY
 ## Success criteria
 
 - Every baseline behavior cites a source locator.
+- Every baseline behavior has a unique `baseline_requirement_id` that later modified or removed requirements can cite.
 - Unknown behavior remains explicitly unknown.
 - No requested change is smuggled into the baseline.

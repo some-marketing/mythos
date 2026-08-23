@@ -27,7 +27,11 @@
     "source_origins": { "type": "array" },
     "created_at": { "type": "string" },
     "updated_at": { "type": "string" },
-    "owner": { "type": "string" },
+    "owner": {
+      "type": "string",
+      "enum": ["human framework steward"],
+      "description": "Human role accountable for candidate feedback, replay interpretation, and promotion decisions"
+    },
     "promotion_ready": { "type": "boolean" },
     "blocking_issues": { "type": "array" },
     "replay_summary": { "type": "object" },

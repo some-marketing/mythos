@@ -8,6 +8,7 @@ const test = require('node:test');
 
 const { resolveCanonicalRoot } = require('../../lib/canonical-root.cjs');
 const { inspectBundle, inspectOutputDir, loadOutputContract } = require('../lib/output-contract');
+const { loadSchema, validateRequiredFields } = require('../lib/models');
 const { requireCandidateRoot } = require('../lib/workspace');
 
 test('recognizes candidates staged at the repository framework_candidates root', () => {
@@ -163,6 +164,22 @@ test('imported candidate review gates require distinct minds and complete intake
     assert.match(content, /same-provider subagent is not a distinct reviewing mind/);
     assert.match(content, /missing provenance forces `FAIL`/);
   }
+});
+
+test('candidate ownership requires a human framework steward', () => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const candidate = JSON.parse(fs.readFileSync(path.join(
+    repositoryRoot,
+    'framework_candidates',
+    'product-management__product-intake',
+    'candidate.json'
+  ), 'utf8'));
+  const schema = loadSchema('candidate.schema.json');
+  assert.doesNotThrow(() => validateRequiredFields(candidate, schema, 'candidate.json'));
+  assert.throws(
+    () => validateRequiredFields({ ...candidate, owner: 'automated actor' }, schema, 'candidate.json'),
+    /owner must be one of: human framework steward/
+  );
 });
 
 test('imported candidate review schemas reject incomplete or non-distinct PASS verdicts', (t) => {

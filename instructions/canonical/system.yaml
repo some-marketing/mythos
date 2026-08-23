@@ -66,6 +66,21 @@
       "guardrails": "frameworks/project-management/feedback-to-tasks/guardrails.md"
     },
     {
+      "id": "research/business-identity-verification",
+      "manifest": "frameworks/research/business-identity-verification/manifest.json",
+      "guardrails": "frameworks/research/business-identity-verification/guardrails.md"
+    },
+    {
+      "id": "research/contractor-credential-review",
+      "manifest": "frameworks/research/contractor-credential-review/manifest.json",
+      "guardrails": "frameworks/research/contractor-credential-review/guardrails.md"
+    },
+    {
+      "id": "research/osint-discovery",
+      "manifest": "frameworks/research/osint-discovery/manifest.json",
+      "guardrails": "frameworks/research/osint-discovery/guardrails.md"
+    },
+    {
       "id": "wordpress/design-mockup-validation",
       "manifest": "frameworks/wordpress/design-mockup-validation/manifest.json",
       "guardrails": "frameworks/wordpress/design-mockup-validation/guardrails.md"

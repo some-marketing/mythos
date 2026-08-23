@@ -429,6 +429,23 @@ test('delta bundle consistency rejects cyclic dependency graphs', (t) => {
   assert.ok(findings.some((finding) =>
     finding.code === 'DELTA_DEPENDENCY_CYCLE' && /A -> B -> A|B -> A -> B/.test(finding.message)
   ));
+
+  fs.writeFileSync(path.join(bundleRoot, 'dependency-acceptance-map.json'), JSON.stringify({
+    read_first: [],
+    dependencies: [
+      { delta_id: 'A', depends_on: ['UNKNOWN'], rationale: 'Invalid reference for regression coverage.' }
+    ],
+    acceptance_criteria: [
+      { criterion_id: 'AC-A', delta_id: 'A', condition: 'Run A.', observable_result: 'A passes.' }
+    ]
+  }));
+  const referenceFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+  assert.ok(referenceFindings.some((finding) =>
+    finding.code === 'DELTA_REF_UNKNOWN' && /UNKNOWN/.test(finding.message)
+  ));
+  assert.ok(referenceFindings.some((finding) =>
+    finding.code === 'DELTA_ACCEPTANCE_MISSING' && /B/.test(finding.message)
+  ));
 });
 
 test('delta replay keeps current-state baseline separate from requested behavior', () => {

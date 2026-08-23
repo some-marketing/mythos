@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "17065c394dc8acd3ea2ad9095ad4811ce82fbbb9539b14731a935b8ebdbcb593",
+    "expected_tree_sha256": "c44f0ddb219ca14033073185bf80bc89e1a71bd000275ef688235411267e793f",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -6417,7 +6417,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "42f3b82f8cb90fc59cf9f4ac62dc4585dab57b105295a61fe11a583bacdcb893",
+        "sha256": "91a871f29f8a0226e00bfa6421b0d0bcabb82b97d4e5c9726cac5f11521b121a",
         "mode": 420
       },
       {
@@ -14107,7 +14107,7 @@
       },
       {
         "path": "tools/workspace/__tests__/candidate-root.test.js",
-        "sha256": "5ed9e74fe32d7613b7f8328d58432a48e0204fcfffc47057d224b0c609f92c50",
+        "sha256": "baa7fc31e48d0a7c2ba36cf4b1dba5d6e2456bbd1c5e9cca07cc2e91c648bdfe",
         "mode": 420
       },
       {
@@ -14434,7 +14434,7 @@
     "package_script_count": 205,
     "command_alias_registry_sha256": "4a7ed7af401f9b4695dcd2dca5ca64f4a0dae975d0b94f95e24e9b5f3a6ce3fc",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "42f3b82f8cb90fc59cf9f4ac62dc4585dab57b105295a61fe11a583bacdcb893",
+    "graph_sha256": "91a871f29f8a0226e00bfa6421b0d0bcabb82b97d4e5c9726cac5f11521b121a",
     "graph_nodes": 3992,
     "graph_edges": 2871
   },

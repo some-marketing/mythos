@@ -8,6 +8,7 @@ const test = require('node:test');
 
 const { resolveCanonicalRoot } = require('../../lib/canonical-root.cjs');
 const { inspectBundle, inspectOutputDir, loadOutputContract } = require('../lib/output-contract');
+const { collectCandidateBlockingIssues } = require('../lib/capture-candidate');
 const { loadSchema, validateRequiredFields } = require('../lib/models');
 const { requireCandidateRoot } = require('../lib/workspace');
 
@@ -166,7 +167,7 @@ test('imported candidate review gates require distinct minds and complete intake
   }
 });
 
-test('candidate ownership requires a human framework steward', () => {
+test('legacy candidate owners remain readable but block promotion until migrated', () => {
   const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
   const candidate = JSON.parse(fs.readFileSync(path.join(
     repositoryRoot,
@@ -176,10 +177,21 @@ test('candidate ownership requires a human framework steward', () => {
   ), 'utf8'));
   const schema = loadSchema('candidate.schema.json');
   assert.doesNotThrow(() => validateRequiredFields(candidate, schema, 'candidate.json'));
-  assert.throws(
-    () => validateRequiredFields({ ...candidate, owner: 'automated actor' }, schema, 'candidate.json'),
-    /owner must be one of: human framework steward/
+  const legacyCandidate = { ...candidate, owner: 'unknown' };
+  assert.doesNotThrow(() => validateRequiredFields(legacyCandidate, schema, 'candidate.json'));
+  const blocking = collectCandidateBlockingIssues(
+    path.join(repositoryRoot, 'framework_candidates', 'product-management__product-intake'),
+    legacyCandidate,
+    { workspaceRoot: repositoryRoot, projectRoot: repositoryRoot }
   );
+  assert.ok(blocking.issues.includes(
+    'Candidate owner must be migrated to human framework steward before promotion.'
+  ));
+  assert.ok(!collectCandidateBlockingIssues(
+    path.join(repositoryRoot, 'framework_candidates', 'product-management__product-intake'),
+    candidate,
+    { workspaceRoot: repositoryRoot, projectRoot: repositoryRoot }
+  ).issues.some((issue) => /owner must be migrated/.test(issue)));
 });
 
 test('imported candidate review schemas reject incomplete or non-distinct PASS verdicts', (t) => {
@@ -234,14 +246,19 @@ test('imported candidate review schemas reject incomplete or non-distinct PASS v
     const producer = {
       actor_id: 'producer-actor',
       harness_id: 'producer-harness',
-      model_provider_family: 'producer-family'
+      model_provider_family: 'Anthropic'
     };
     fs.writeFileSync(path.join(bundleRoot, candidate.reviewFile), JSON.stringify({
       verdict: 'PASS',
       findings: [],
       falsifier: 'none',
       producer_provenance: [producer],
-      reviewer_provenance: { ...producer }
+      reviewer_provenance: {
+        ...producer,
+        actor_id: 'reviewer-actor',
+        harness_id: 'reviewer-harness',
+        model_provider_family: ' anthropic '
+      }
     }));
     const sameMindFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
     assert.ok(sameMindFindings.some((finding) =>
@@ -289,6 +306,28 @@ test('imported candidate producer schemas reject empty JSON artifacts', (t) => {
       assert.ok(findings.some((finding) =>
         finding.code === 'BUNDLE_SCHEMA_FAIL' && finding.path === path.join(bundleRoot, file)
       ), `${root}/${file} should reject an empty JSON object`);
+    }
+
+    if (root === 'project-management__delta-specification') {
+      fs.writeFileSync(path.join(bundleRoot, 'delta-spec.json'), JSON.stringify({
+        added: [{}],
+        modified: [{}],
+        removed: [{}],
+        preserved_invariants: []
+      }));
+      fs.writeFileSync(path.join(bundleRoot, 'dependency-acceptance-map.json'), JSON.stringify({
+        read_first: [],
+        dependencies: [{}],
+        acceptance_criteria: [{}]
+      }));
+      const nestedFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+      for (const file of ['delta-spec.json', 'dependency-acceptance-map.json']) {
+        assert.ok(nestedFindings.some((finding) =>
+          finding.code === 'BUNDLE_SCHEMA_FAIL' &&
+          finding.path === path.join(bundleRoot, file) &&
+          /missing required fields/.test(finding.message)
+        ), `${root}/${file} should reject hollow nested entries`);
+      }
     }
   }
 });

@@ -3583,7 +3583,7 @@
       "id": "file:.claude/skills/outward-inward-loop/SKILL.md",
       "type": "file",
       "path": ".claude/skills/outward-inward-loop/SKILL.md",
-      "sha256": "d379b44df75b36ac8b16c4806e72f48e3d2a74e3a532f1482ed435e5bc0162d7",
+      "sha256": "d7c1a6959ff8bb2ded76ea1e6d79e90674576c9d37fe4e8bc00e21e82b7a7f7b",
       "mode": 420
     },
     {
@@ -4129,21 +4129,21 @@
       "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-spec.schema.json",
       "type": "file",
       "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-spec.schema.json",
-      "sha256": "0f9be7106186fee01a065533d3273def8c340707d7baa17fff88471b71ea7d7a",
+      "sha256": "b0205adac61c4a1c8a1249c5b179d20d93ca16e357d61c265e6669417e65ff6d",
       "mode": 420
     },
     {
       "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-specification.schema.json",
       "type": "file",
       "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-specification.schema.json",
-      "sha256": "6e4b0bcf8663029699e47860afa553d02fd053d57f7ccb363dc82a9d3deac13a",
+      "sha256": "04394bcbd7b63549c87b211da51c82614139702c8769a48676abce35762e5f8b",
       "mode": 420
     },
     {
       "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/dependency-acceptance-map.schema.json",
       "type": "file",
       "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/dependency-acceptance-map.schema.json",
-      "sha256": "65e6d00d7c4c8db4cd1be83d80dbc07d4239d3edc00ea390f7abd2927890184a",
+      "sha256": "15ef4d3329b49e4d77820cb8e733b714f333e62046111593fa7ea2c5b5764287",
       "mode": 420
     },
     {
@@ -9106,7 +9106,7 @@
       "id": "file:instructions/canonical/commands/outward-inward.yaml",
       "type": "file",
       "path": "instructions/canonical/commands/outward-inward.yaml",
-      "sha256": "58f8b2e1b58db7536862d39e7d81e9ea8b3b27c85b2096441e0f47897258514e",
+      "sha256": "6c9f0c87747de29be5240e890e110613e7ff25d64629a470b6d5ace7ebf259e6",
       "mode": 420
     },
     {
@@ -11878,7 +11878,7 @@
       "id": "file:tools/commands/__tests__/outward-inward-command.test.cjs",
       "type": "file",
       "path": "tools/commands/__tests__/outward-inward-command.test.cjs",
-      "sha256": "1fe5016df430586ea9e8fe16099a7aa31550676e5a5f57e3eca543ea22b73883",
+      "sha256": "dcf845ded39349ef1508fcfdc69fbb695f48a15708660a2b47646a07ed4bed02",
       "mode": 420
     },
     {
@@ -12004,7 +12004,7 @@
       "id": "file:tools/commands/validate-prompt-provenance-receipt.cjs",
       "type": "file",
       "path": "tools/commands/validate-prompt-provenance-receipt.cjs",
-      "sha256": "03fd24033c8cf4299f0094cf1a3d0ff50c9a41eb484f23b536153f8ba57946cc",
+      "sha256": "eb72eb35ee3141b99523c14010d5f78bde703ebc533db75c9423dd671e438297",
       "mode": 420
     },
     {
@@ -20635,7 +20635,7 @@
       "id": "file:tools/workspace/__tests__/candidate-root.test.js",
       "type": "file",
       "path": "tools/workspace/__tests__/candidate-root.test.js",
-      "sha256": "622dbf129a83b8ab33a108c3de7ed55a28a3659a8bceee2bda0b181038f605fe",
+      "sha256": "2300e6998763f2c457a80091f2f380258be2e3152fdf92c49418785a39a7dc7f",
       "mode": 420
     },
     {
@@ -20691,7 +20691,7 @@
       "id": "file:tools/workspace/lib/capture-candidate.js",
       "type": "file",
       "path": "tools/workspace/lib/capture-candidate.js",
-      "sha256": "b93d7e6e7edc96d4a87d57ed8034bbcb49de6c9b0d9723f59aa6630aef229427",
+      "sha256": "1ae1d356069d22a629588463a3a4136931ccacc331b5445728fb81584c02f015",
       "mode": 420
     },
     {
@@ -20719,7 +20719,7 @@
       "id": "file:tools/workspace/lib/output-contract.js",
       "type": "file",
       "path": "tools/workspace/lib/output-contract.js",
-      "sha256": "ccf80399e56e6ab6b62f6f4b2123dc97b4fc5ae1c90a1f666aac223cff04d319",
+      "sha256": "516cf84aee2f02d1c5b36d2a2277f5463f3f23fdda21afa4ac702ee8b515d978",
       "mode": 420
     },
     {
@@ -20810,7 +20810,7 @@
       "id": "file:tools/workspace/schemas/candidate.schema.json",
       "type": "file",
       "path": "tools/workspace/schemas/candidate.schema.json",
-      "sha256": "e61a58488d294b2d549f5c209f5bf9eb75b931dd7d9fdddb07f187c0e0beb3fe",
+      "sha256": "4fa61955e0738fa2fe86d63faf10f85dc7fbf3df99107d52d5ec9f012d6f7a4f",
       "mode": 420
     },
     {
@@ -38852,6 +38852,15 @@
       "specifier": "tools/autonomy/schemas/operator-continuity.schema.json"
     },
     {
+      "id": "8489ac2804184f8a202890a6fde154af290d5f3c9936684fb740df02efe65152",
+      "type": "static-import",
+      "from": "file:tools/workspace/__tests__/candidate-root.test.js",
+      "to": "file:tools/workspace/lib/capture-candidate.js",
+      "target": "tools/workspace/lib/capture-candidate.js",
+      "required": true,
+      "specifier": "../lib/capture-candidate"
+    },
+    {
       "id": "84a95e8fe7c70e20a162364bd69ca496848dd6a2aa434df395fa2dfe28757420",
       "type": "package-script-target",
       "from": "package-script:instructions:check",
@@ -51464,7 +51473,7 @@
   ],
   "counts": {
     "nodes": 3915,
-    "edges": 2853,
+    "edges": 2854,
     "unresolved": 0
   }
 }

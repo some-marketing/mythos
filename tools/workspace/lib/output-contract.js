@@ -95,6 +95,7 @@ function simpleGlob(baseDir, pattern) {
 
 function validateDistinctReviewProvenance(content, label) {
   const fields = ['actor_id', 'harness_id', 'model_provider_family'];
+  const normalizeIdentity = (value) => value.trim().toLowerCase();
   const producers = content.producer_provenance;
   const reviewer = content.reviewer_provenance;
 
@@ -119,7 +120,7 @@ function validateDistinctReviewProvenance(content, label) {
       throw new Error(`${label}.reviewer_provenance.${field} must be a non-empty string`);
     }
     for (const [index, producer] of producers.entries()) {
-      if (reviewer[field] === producer[field]) {
+      if (normalizeIdentity(reviewer[field]) === normalizeIdentity(producer[field])) {
         throw new Error(`${label}.reviewer_provenance.${field} must differ from producer_provenance[${index}].${field}`);
       }
     }

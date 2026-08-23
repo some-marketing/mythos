@@ -54,22 +54,40 @@ test('coordinator contract keeps default analysis write-free', () => {
   assert.match(contract, /return the logical source manifest.*in-session/);
   assert.match(contract, /rewriter_actor_id.*attester_actor_id/);
   assert.match(contract, /validate-prompt-provenance-receipt\.cjs/);
-  assert.match(contract, /Non-zero exit blocks execution/);
+  assert.match(contract, /non-zero exit blocks execution/i);
 });
 
 test('prompt-provenance receipt gate blocks missing or matching identities', () => {
+  const expectedPrompts = [
+    { prompt_id: '01_SCOPE', prompt_sha256: 'a'.repeat(64) },
+    { prompt_id: '02_REVIEW', prompt_sha256: 'b'.repeat(64) }
+  ];
   const receipt = {
     schema: 'PromptProvenanceReceipt/1.0',
     prompts: [{
       prompt_id: '01_SCOPE',
+      prompt_sha256: 'a'.repeat(64),
       rewriter_actor_id: 'rewriter',
+      rewriter_model_provider_family: 'anthropic',
       attester_actor_id: 'rewriter',
+      attester_model_provider_family: 'Anthropic ',
       attestation: 'pass'
     }]
   };
-  assert.equal(validatePromptProvenanceReceipt(receipt).ok, false);
-  delete receipt.prompts[0].attester_actor_id;
-  assert.equal(validatePromptProvenanceReceipt(receipt).ok, false);
+  assert.equal(validatePromptProvenanceReceipt(receipt, expectedPrompts).ok, false);
   receipt.prompts[0].attester_actor_id = 'attester';
-  assert.equal(validatePromptProvenanceReceipt(receipt).ok, true);
+  receipt.prompts[0].attester_model_provider_family = 'openai';
+  assert.equal(validatePromptProvenanceReceipt(receipt, expectedPrompts).ok, false);
+  receipt.prompts.push({
+    prompt_id: '02_REVIEW',
+    prompt_sha256: 'stale',
+    rewriter_actor_id: 'rewriter',
+    rewriter_model_provider_family: 'anthropic',
+    attester_actor_id: 'attester',
+    attester_model_provider_family: 'openai',
+    attestation: 'pass'
+  });
+  assert.equal(validatePromptProvenanceReceipt(receipt, expectedPrompts).ok, false);
+  receipt.prompts[1].prompt_sha256 = 'b'.repeat(64);
+  assert.equal(validatePromptProvenanceReceipt(receipt, expectedPrompts).ok, true);
 });

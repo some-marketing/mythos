@@ -29,8 +29,8 @@
     "updated_at": { "type": "string" },
     "owner": {
       "type": "string",
-      "enum": ["human framework steward"],
-      "description": "Human role accountable for candidate feedback, replay interpretation, and promotion decisions"
+      "minLength": 1,
+      "description": "Accountable owner. Legacy values remain readable, but promotion requires human framework steward."
     },
     "promotion_ready": { "type": "boolean" },
     "blocking_issues": { "type": "array" },

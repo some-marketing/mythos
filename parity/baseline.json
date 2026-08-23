@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "13ee642701e8cd4f954ba527eb63df00e80d95dc99f07b92ada5b7c6efbbe44e",
+    "expected_tree_sha256": "1312eeb76bcc89ebf9f29a2eb52afba23a758b62286d2a776656738fb124e2ec",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -1581,6 +1581,11 @@
         "mode": 420
       },
       {
+        "path": "_dev/reports/telemetry/dispatches.jsonl",
+        "sha256": "5159faff876f89ec7ab3734a8c94f6513077fcc5663c5ad5305e969530960466",
+        "mode": 420
+      },
+      {
         "path": "_dev/sim-runs/authority-probe.js",
         "sha256": "b658d59d9b800f8f50e9c1e51949c3fc5725b2c18a9f1405f6938a54fd9b2c3a",
         "mode": 420
@@ -1776,6 +1781,41 @@
         "mode": 420
       },
       {
+        "path": "framework_candidates/product-management__product-intake/evidence/chi-bmad-method-vs-mythos-20260821T142500Z/CAPTURE_META.json",
+        "sha256": "788f2815951df687348b705d08e6196184afe14f044b87dfd9823d36e7497d6e",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/evidence/chi-bmad-method-vs-mythos-20260821T142500Z/context.md",
+        "sha256": "98d1a9927bed3f995a4b7e3fb86cf25d9e227a215aaf7f55a589c3e415242437",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/evidence/chi-bmad-method-vs-mythos-20260821T142500Z/decisions.jsonl",
+        "sha256": "87587fffee1d050ac876c36e4c0bc0128b7ec5408d2c7ed66b14d6b446cf80e9",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/evidence/chi-bmad-method-vs-mythos-20260821T142500Z/goal.md",
+        "sha256": "fbec771037fd8fe7e58bc251db6507452aa447d8cea19ae013824828ea40b0ea",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/evidence/chi-bmad-method-vs-mythos-20260821T142500Z/retrospective.md",
+        "sha256": "eb44700aae35c5dd5f6aae0a78ad9e79dfa494fbfc1d916a94ae2a9e32f482d1",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/evidence/chi-bmad-method-vs-mythos-20260821T142500Z/steps.jsonl",
+        "sha256": "f3d055b152630b0c286d4bff0e4fe63970771f8f502af9af302018ea98265556",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/evidence/chi-bmad-method-vs-mythos-20260821T142500Z/success_criteria.json",
+        "sha256": "b3995a010b169710f44e777d5e4f42739a573ed79bc2812d14fb638960e2b95e",
+        "mode": 420
+      },
+      {
         "path": "framework_candidates/product-management__product-intake/evidence/source-receipt.json",
         "sha256": "4eba909f9aba841d539d15bc0b852328f5a2b8f6f6fac6edd481b55248ec615d",
         "mode": 420
@@ -1938,6 +1978,41 @@
       {
         "path": "framework_candidates/project-management__delta-specification/evidence/capture-summary.json",
         "sha256": "de331dd1238534c1c573720e3a4a71af101468a6f6b0273b9623de1294df8faf",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/evidence/chi-openspec-vs-mythos-20260821T143000Z/CAPTURE_META.json",
+        "sha256": "21fe2603479a9da13b196c123dca2e79656905bc7193baf381f33de14f999922",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/evidence/chi-openspec-vs-mythos-20260821T143000Z/context.md",
+        "sha256": "dee88ac8b0703ffed6ecac9078ff2758a0fee6db9b300c76953b69e4120bf984",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/evidence/chi-openspec-vs-mythos-20260821T143000Z/decisions.jsonl",
+        "sha256": "bdab72020105267009ec974d9a866fbbfc7c3999d798da091be8ce41e13cabb2",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/evidence/chi-openspec-vs-mythos-20260821T143000Z/goal.md",
+        "sha256": "35de46a96ef52bb221e0acbdd37824f2d74bc9dcfc9c8e5478144ff04d34c320",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/evidence/chi-openspec-vs-mythos-20260821T143000Z/retrospective.md",
+        "sha256": "fef41f70c596672eda07817482007d35d4337c31fd65ab3479112765fcf66a7b",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/evidence/chi-openspec-vs-mythos-20260821T143000Z/steps.jsonl",
+        "sha256": "f347e69c204e3b031e840d2fcbc42382811e167fa4a451d869f2114eb4241dbe",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/evidence/chi-openspec-vs-mythos-20260821T143000Z/success_criteria.json",
+        "sha256": "6726254a44b18ad6d42b62ccfdcb247965b565778e1f6c17de19d0f60b29f7ee",
         "mode": 420
       },
       {
@@ -6347,7 +6422,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "072c7ed982f0f5524f1540fce8d10889f7e7a7762af4bcccd44d25520bd96ce8",
+        "sha256": "a120546940f4703503307bfbe733eefc6ecead28d754f2d3c581055a4c19457e",
         "mode": 420
       },
       {
@@ -14037,7 +14112,7 @@
       },
       {
         "path": "tools/workspace/__tests__/candidate-root.test.js",
-        "sha256": "2300e6998763f2c457a80091f2f380258be2e3152fdf92c49418785a39a7dc7f",
+        "sha256": "45f20c3c54986693df2eddc28b92f4f78488ba7224de12ff931c764f81ce35ab",
         "mode": 420
       },
       {
@@ -14092,7 +14167,7 @@
       },
       {
         "path": "tools/workspace/lib/models.js",
-        "sha256": "a3aa54c93b8e201bbcb16ec92d63f5da2f8368a73fb2876188b8443a190b77e8",
+        "sha256": "acceba3c612c819b14c96acc4ae8b4383b04a333e9a88fd1cb6effb9a5c12fcf",
         "mode": 420
       },
       {
@@ -14364,8 +14439,8 @@
     "package_script_count": 205,
     "command_alias_registry_sha256": "4a7ed7af401f9b4695dcd2dca5ca64f4a0dae975d0b94f95e24e9b5f3a6ce3fc",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "072c7ed982f0f5524f1540fce8d10889f7e7a7762af4bcccd44d25520bd96ce8",
-    "graph_nodes": 3978,
+    "graph_sha256": "a120546940f4703503307bfbe733eefc6ecead28d754f2d3c581055a4c19457e",
+    "graph_nodes": 3992,
     "graph_edges": 2871
   },
   "runtime_exclusions": [

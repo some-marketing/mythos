@@ -194,6 +194,41 @@ test('legacy candidate owners remain readable but block promotion until migrated
   ).issues.some((issue) => /owner must be migrated/.test(issue)));
 });
 
+test('schema validation preserves implicit object semantics', () => {
+  const schema = {
+    properties: {
+      wrapper: {
+        required: ['value'],
+        properties: { value: { type: 'string' } }
+      }
+    }
+  };
+  assert.throws(
+    () => validateRequiredFields({ wrapper: {} }, schema, 'implicit-object'),
+    /implicit-object\.wrapper is missing required fields: value/
+  );
+});
+
+test('imported source captures have promotion-readable normalized evidence bundles', () => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  for (const root of [
+    'product-management__product-intake',
+    'project-management__delta-specification'
+  ]) {
+    const candidateRoot = path.join(repositoryRoot, 'framework_candidates', root);
+    const candidate = JSON.parse(fs.readFileSync(path.join(candidateRoot, 'candidate.json'), 'utf8'));
+    for (const captureId of candidate.source_captures) {
+      const evidenceRoot = path.join(candidateRoot, 'evidence', captureId);
+      for (const file of ['CAPTURE_META.json', 'goal.md', 'context.md', 'steps.jsonl', 'success_criteria.json']) {
+        assert.ok(fs.existsSync(path.join(evidenceRoot, file)), `${root}/${captureId}/${file} should exist`);
+      }
+      const steps = fs.readFileSync(path.join(evidenceRoot, 'steps.jsonl'), 'utf8')
+        .trim().split('\n').filter(Boolean).map((line) => JSON.parse(line));
+      assert.ok(steps.length >= 2, `${root}/${captureId} should have at least two substantive steps`);
+    }
+  }
+});
+
 test('imported candidate review schemas reject incomplete or non-distinct PASS verdicts', (t) => {
   const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
   const candidates = [

@@ -18,10 +18,11 @@ function validateRequiredFields(obj, schema, label) {
 }
 
 function validateValue(value, rule, label) {
+  const ruleType = rule.type || (rule.properties || Array.isArray(rule.required) ? 'object' : undefined);
   if (Array.isArray(rule.enum) && !rule.enum.includes(value)) {
     throw new Error(`${label} must be one of: ${rule.enum.join(', ')}`);
   }
-  if (rule.type === 'array') {
+  if (ruleType === 'array') {
     if (!Array.isArray(value)) throw new Error(`${label} must be an array`);
     if (Number.isInteger(rule.minItems) && value.length < rule.minItems) {
       throw new Error(`${label} must contain at least ${rule.minItems} items`);
@@ -31,7 +32,7 @@ function validateValue(value, rule, label) {
     }
     return;
   }
-  if (rule.type === 'object') {
+  if (ruleType === 'object') {
     if (typeof value !== 'object' || value === null || Array.isArray(value)) {
       throw new Error(`${label} must be an object`);
     }
@@ -45,17 +46,17 @@ function validateValue(value, rule, label) {
     }
     return;
   }
-  if (rule.type === 'string') {
+  if (ruleType === 'string') {
     if (typeof value !== 'string') throw new Error(`${label} must be a string`);
     if (Number.isInteger(rule.minLength) && value.length < rule.minLength) {
       throw new Error(`${label} must contain at least ${rule.minLength} characters`);
     }
     return;
   }
-  if (rule.type === 'boolean' && typeof value !== 'boolean') {
+  if (ruleType === 'boolean' && typeof value !== 'boolean') {
     throw new Error(`${label} must be a boolean`);
   }
-  if (rule.type === 'integer' && !Number.isInteger(value)) {
+  if (ruleType === 'integer' && !Number.isInteger(value)) {
     throw new Error(`${label} must be an integer`);
   }
 }

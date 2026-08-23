@@ -104,6 +104,10 @@
           "readiness-review.json"
         ],
         "file_schemas": {
+          "scope-and-intent.json": "scope-and-intent.schema.json",
+          "hypothesis-tests.json": "hypothesis-tests.schema.json",
+          "product-brief.json": "product-brief.schema.json",
+          "evidence-ledger.json": "evidence-ledger.schema.json",
           "readiness-review.json": "readiness-review.schema.json"
         },
         "description": "Complete product-intake output with provenance-bound readiness review"

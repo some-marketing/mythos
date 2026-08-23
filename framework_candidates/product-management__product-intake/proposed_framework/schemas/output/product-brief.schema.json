@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "required": [
+    "problem",
+    "users",
+    "capabilities",
+    "constraints",
+    "non_goals",
+    "success_signals"
+  ],
+  "properties": {
+    "problem": { "type": "string", "minLength": 1 },
+    "users": { "type": "array", "items": { "type": "string" } },
+    "capabilities": { "type": "array", "items": { "type": "string" } },
+    "constraints": { "type": "array", "items": { "type": "string" } },
+    "non_goals": { "type": "array", "items": { "type": "string" } },
+    "success_signals": { "type": "array", "items": { "type": "string" } }
+  }
+}

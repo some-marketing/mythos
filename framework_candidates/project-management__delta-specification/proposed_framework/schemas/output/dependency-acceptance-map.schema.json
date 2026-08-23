@@ -1,0 +1,14 @@
+{
+  "type": "object",
+  "required": [
+    "read_first",
+    "dependencies",
+    "acceptance_criteria"
+  ],
+  "properties": {
+    "read_first": { "type": "array", "items": { "type": "string" } },
+    "dependencies": { "type": "array", "items": { "type": "object" } },
+    "acceptance_criteria": { "type": "array", "items": { "type": "object" } },
+    "waves": { "type": "array", "items": { "type": "object" } }
+  }
+}

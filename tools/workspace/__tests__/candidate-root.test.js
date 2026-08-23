@@ -112,6 +112,13 @@ test('imported candidates authorize report outputs and declare consumed artifact
       manifest.output_contract_v2.artifacts.map((entry) => entry.path_pattern),
       manifest.output_contract.artifacts
     );
+    const bundleType = manifest.output_contract_v2.bundle_types[0];
+    assert.deepEqual(
+      Object.keys(bundleType.file_schemas).sort(),
+      bundleType.required_files.filter((file) => file.endsWith('.json')).sort()
+    );
+    const candidateRecord = JSON.parse(fs.readFileSync(path.join(proposedRoot, '..', 'candidate.json'), 'utf8'));
+    assert.equal(candidateRecord.owner, 'human framework steward');
     const loaded = loadOutputContract(manifestPath);
     assert.equal(loaded.compatibility, false);
     const missingArtifacts = inspectOutputDir(emptyOutputRoot, loaded.contract)
@@ -188,8 +195,11 @@ test('imported candidate review schemas reject incomplete or non-distinct PASS v
       fs.writeFileSync(path.join(bundleRoot, file), content);
     }
 
+    const reviewSchemaFailed = (findings) => findings.some((finding) =>
+      finding.code === 'BUNDLE_SCHEMA_FAIL' && finding.path === path.join(bundleRoot, candidate.reviewFile)
+    );
     const findings = inspectBundle(bundleRoot, bundleType, proposedRoot);
-    assert.ok(findings.some((finding) => finding.code === 'BUNDLE_SCHEMA_FAIL'));
+    assert.ok(reviewSchemaFailed(findings));
 
     fs.writeFileSync(path.join(bundleRoot, candidate.reviewFile), JSON.stringify({
       verdict: 'PASS',
@@ -200,7 +210,8 @@ test('imported candidate review schemas reject incomplete or non-distinct PASS v
     }));
     const hollowFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
     assert.ok(hollowFindings.some((finding) =>
-      finding.code === 'BUNDLE_SCHEMA_FAIL' && /non-empty string/.test(finding.message)
+      finding.path === path.join(bundleRoot, candidate.reviewFile) &&
+      finding.code === 'BUNDLE_SCHEMA_FAIL' && /missing required fields|non-empty string/.test(finding.message)
     ));
 
     const producer = {
@@ -217,6 +228,7 @@ test('imported candidate review schemas reject incomplete or non-distinct PASS v
     }));
     const sameMindFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
     assert.ok(sameMindFindings.some((finding) =>
+      finding.path === path.join(bundleRoot, candidate.reviewFile) &&
       finding.code === 'BUNDLE_SCHEMA_FAIL' && /must differ/.test(finding.message)
     ));
 
@@ -232,7 +244,35 @@ test('imported candidate review schemas reject incomplete or non-distinct PASS v
       }
     }));
     const distinctMindFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
-    assert.ok(!distinctMindFindings.some((finding) => finding.code === 'BUNDLE_SCHEMA_FAIL'));
+    assert.ok(!reviewSchemaFailed(distinctMindFindings));
+  }
+});
+
+test('imported candidate producer schemas reject empty JSON artifacts', (t) => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const roots = [
+    'product-management__product-intake',
+    'project-management__delta-specification'
+  ];
+
+  for (const root of roots) {
+    const proposedRoot = path.join(repositoryRoot, 'framework_candidates', root, 'proposed_framework');
+    const manifest = JSON.parse(fs.readFileSync(path.join(proposedRoot, 'manifest.json'), 'utf8'));
+    const bundleType = manifest.output_contract_v2.bundle_types[0];
+    const bundleRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-candidate-producer-'));
+    t.after(() => fs.rmSync(bundleRoot, { recursive: true, force: true }));
+
+    for (const file of bundleType.required_files) {
+      const content = file.endsWith('.json') ? '{}\n' : '\n';
+      fs.writeFileSync(path.join(bundleRoot, file), content);
+    }
+
+    const findings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+    for (const file of Object.keys(bundleType.file_schemas).filter((file) => !/review/.test(file))) {
+      assert.ok(findings.some((finding) =>
+        finding.code === 'BUNDLE_SCHEMA_FAIL' && finding.path === path.join(bundleRoot, file)
+      ), `${root}/${file} should reject an empty JSON object`);
+    }
   }
 });
 

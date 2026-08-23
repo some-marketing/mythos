@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "9b2f206aa0e04927fe85cbdcfc53d0d26c4e9354bb1371ce92cd78ae698d806a",
+    "expected_tree_sha256": "8c12463ef5f69fb26f80b7000d9550db8796898793abcc2270a6a813f9df22df",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -1427,7 +1427,7 @@
       },
       {
         "path": ".claude/skills/outward-inward-loop/SKILL.md",
-        "sha256": "1d0a25c52c557a6e74bb4df5dee14d1285097f71171ecc5a87ed4b7a5fc9a085",
+        "sha256": "6a4cb64e007878d258f0d2553349139fe053703b3cd4d91e8abee2896d7ed04d",
         "mode": 420
       },
       {
@@ -1767,7 +1767,7 @@
       },
       {
         "path": "framework_candidates/product-management__product-intake/candidate.json",
-        "sha256": "6421ace062a6d3043b48465f5e402334fcfb1cf9c011c9734c3aeb4d42a4bdc2",
+        "sha256": "ff1c09347b055183a7a7da6e3cf6dbe4d2179a0371c001ca2a7e0b9fc2f02fbe",
         "mode": 420
       },
       {
@@ -1807,7 +1807,7 @@
       },
       {
         "path": "framework_candidates/product-management__product-intake/proposed_framework/manifest.json",
-        "sha256": "2c16b60e8a91f38e7c8620a4d6ed42dc8d1b48bd4ed6270759eb85313caa5249",
+        "sha256": "e412e01295c29f25c6c03704b630387807fb3c1f9426376926e830a0bb2f0eca",
         "mode": 420
       },
       {
@@ -1836,6 +1836,21 @@
         "mode": 420
       },
       {
+        "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/evidence-ledger.schema.json",
+        "sha256": "feb2cb0fedaa539fd25d3b7488a9f99e431dd9594338be282576d2ba1a2f8993",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/hypothesis-tests.schema.json",
+        "sha256": "6378f93a4da38cd78457092e48f53e5a2de51fc7aa8ec783db6951607508e3fd",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-brief.schema.json",
+        "sha256": "8f8e04a70964808c9918edcd6b2d5ffc8fa817e9b340682536de2f3befebd2a6",
+        "mode": 420
+      },
+      {
         "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-intake.schema.json",
         "sha256": "185c4ed0cd2ede3d58afaf95022605e0d127853782de851f5e2d0ad09ff8b6ff",
         "mode": 420
@@ -1843,6 +1858,11 @@
       {
         "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/readiness-review.schema.json",
         "sha256": "c9d6ef8637e6e97e3ce0805f7fda8282b45821dcc0ff34e3410bcc0de343bdc5",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/scope-and-intent.schema.json",
+        "sha256": "e8e457030380cc96ad8394ed157bfdfce4fca4b092bcc5076bb8218ec5bc1acf",
         "mode": 420
       },
       {
@@ -1912,7 +1932,7 @@
       },
       {
         "path": "framework_candidates/project-management__delta-specification/candidate.json",
-        "sha256": "cdbdd334d2005a14c982d2b42f5ca66e4671eef9f66332c1aad4ac9e3e43dc4b",
+        "sha256": "9ea051f6cc481ddd66fedcf500114f19027ef08242ad507ba89a08fcfa421a83",
         "mode": 420
       },
       {
@@ -1957,7 +1977,7 @@
       },
       {
         "path": "framework_candidates/project-management__delta-specification/proposed_framework/manifest.json",
-        "sha256": "0089caf6ba3567ae08674b6b918d62dc5a9ce4b412b61bce91f7165139e9afeb",
+        "sha256": "a89c633c950b7c48cc676aee47cf727fc4b1aae896d66ae0bdcb6d922d21f053",
         "mode": 420
       },
       {
@@ -1991,8 +2011,28 @@
         "mode": 420
       },
       {
+        "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/baseline-inventory.schema.json",
+        "sha256": "10e62b1d4a8bc729677ce1d0b7d8e91fdf775888d4d225668868f6baf1e7a70c",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/change-proposal.schema.json",
+        "sha256": "6fa44ea55dffe1a6be0c0a9eb5af7a2d34dee27eca2a4e965fba300d7916c576",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-spec.schema.json",
+        "sha256": "0f9be7106186fee01a065533d3273def8c340707d7baa17fff88471b71ea7d7a",
+        "mode": 420
+      },
+      {
         "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-specification.schema.json",
         "sha256": "6e4b0bcf8663029699e47860afa553d02fd053d57f7ccb363dc82a9d3deac13a",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/dependency-acceptance-map.schema.json",
+        "sha256": "65e6d00d7c4c8db4cd1be83d80dbc07d4239d3edc00ea390f7abd2927890184a",
         "mode": 420
       },
       {
@@ -5527,7 +5567,7 @@
       },
       {
         "path": "instructions/canonical/commands/outward-inward.yaml",
-        "sha256": "45b3f8b2c2e1121146afd1408a94bc99cdd718525f3a106a3157b336b6b92f9a",
+        "sha256": "2d37dcca6d98680738d910a7537f8f8266bbf17155d01ff7656608922b183a5b",
         "mode": 420
       },
       {
@@ -6062,7 +6102,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "7d5c83475e33b2ba08f4e7a1e2ebc20f5627b46d508a902f8749c8f1e3e0b490",
+        "sha256": "a609b90436fc63fa1522a5ddc4fb90597d2ae4738d3a6715ec5f44c985c4421e",
         "mode": 420
       },
       {
@@ -7497,7 +7537,7 @@
       },
       {
         "path": "tools/commands/__tests__/outward-inward-command.test.cjs",
-        "sha256": "9043cef2373cdc98d33bd834585f79aeac37908ae24cdcb8ff869591635be0bb",
+        "sha256": "bc0b2e5b0b36138def497468d8494ad95cb5947236ed4fb65fde5f72334dc648",
         "mode": 420
       },
       {
@@ -13747,7 +13787,7 @@
       },
       {
         "path": "tools/workspace/__tests__/candidate-root.test.js",
-        "sha256": "d6578c78fd97460409e80b515cc335b5f0e30cc73d3aad07a404df0b20b8fe12",
+        "sha256": "8dc93e628083fda3003e27802771c06891e92092229c7d31ebdf27804a7f7774",
         "mode": 420
       },
       {
@@ -13802,7 +13842,7 @@
       },
       {
         "path": "tools/workspace/lib/models.js",
-        "sha256": "f13294690860f8d8bd353f4e9948372fa5fdae7cebfa48c13e4ecf18d63b0abf",
+        "sha256": "a3aa54c93b8e201bbcb16ec92d63f5da2f8368a73fb2876188b8443a190b77e8",
         "mode": 420
       },
       {
@@ -14074,9 +14114,9 @@
     "package_script_count": 205,
     "command_alias_registry_sha256": "4a7ed7af401f9b4695dcd2dca5ca64f4a0dae975d0b94f95e24e9b5f3a6ce3fc",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "7d5c83475e33b2ba08f4e7a1e2ebc20f5627b46d508a902f8749c8f1e3e0b490",
-    "graph_nodes": 3898,
-    "graph_edges": 2842
+    "graph_sha256": "a609b90436fc63fa1522a5ddc4fb90597d2ae4738d3a6715ec5f44c985c4421e",
+    "graph_nodes": 3914,
+    "graph_edges": 2850
   },
   "runtime_exclusions": [
     ".git/**",

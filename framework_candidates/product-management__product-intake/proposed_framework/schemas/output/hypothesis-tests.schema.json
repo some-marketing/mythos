@@ -1,0 +1,16 @@
+{
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "hypothesis",
+      "falsifier",
+      "next_test"
+    ],
+    "properties": {
+      "hypothesis": { "type": "string", "minLength": 1 },
+      "falsifier": { "type": "string", "minLength": 1 },
+      "next_test": { "type": "string", "minLength": 1 }
+    }
+  }
+}

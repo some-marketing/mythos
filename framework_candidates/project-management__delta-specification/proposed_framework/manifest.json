@@ -89,6 +89,10 @@
           "review.json"
         ],
         "file_schemas": {
+          "baseline-inventory.json": "baseline-inventory.schema.json",
+          "change-proposal.json": "change-proposal.schema.json",
+          "delta-spec.json": "delta-spec.schema.json",
+          "dependency-acceptance-map.json": "dependency-acceptance-map.schema.json",
           "review.json": "review.schema.json"
         },
         "description": "Complete delta-specification output with provenance-bound independent review"

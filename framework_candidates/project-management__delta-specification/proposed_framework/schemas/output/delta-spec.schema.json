@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "required": [
+    "added",
+    "modified",
+    "removed",
+    "preserved_invariants"
+  ],
+  "properties": {
+    "added": { "type": "array", "items": { "type": "object" } },
+    "modified": { "type": "array", "items": { "type": "object" } },
+    "removed": { "type": "array", "items": { "type": "object" } },
+    "preserved_invariants": { "type": "array", "items": { "type": "string" } }
+  }
+}

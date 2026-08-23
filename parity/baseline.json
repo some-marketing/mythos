@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "1312eeb76bcc89ebf9f29a2eb52afba23a758b62286d2a776656738fb124e2ec",
+    "expected_tree_sha256": "5d843ed20591d4b0b3e2a65d615e6bce063a684afcaca0b7326f79831de11f72",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -1578,11 +1578,6 @@
       {
         "path": "_dev/reports/analysis/verify-evidence__mythos-memory-dreaming__2026-08-18.json",
         "sha256": "5c6cc84caf845fd6a0d0209c8fb3f3c813ed8db6feb10c6463da2e9f196ecbed",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/telemetry/dispatches.jsonl",
-        "sha256": "5159faff876f89ec7ab3734a8c94f6513077fcc5663c5ad5305e969530960466",
         "mode": 420
       },
       {

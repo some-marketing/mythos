@@ -51,6 +51,9 @@ function validateValue(value, rule, label) {
     if (Number.isInteger(rule.minLength) && value.length < rule.minLength) {
       throw new Error(`${label} must contain at least ${rule.minLength} characters`);
     }
+    if (typeof rule.pattern === 'string' && !new RegExp(rule.pattern).test(value)) {
+      throw new Error(`${label} must match pattern: ${rule.pattern}`);
+    }
     return;
   }
   if (ruleType === 'boolean' && typeof value !== 'boolean') {

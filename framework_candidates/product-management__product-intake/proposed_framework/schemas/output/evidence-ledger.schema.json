@@ -20,7 +20,7 @@
           "open_question"
         ]
       },
-      "provenance": { "type": "string" },
+      "provenance": { "type": "string", "minLength": 1, "pattern": "\\S" },
       "limitations": { "type": "array", "items": { "type": "string" } }
     }
   }

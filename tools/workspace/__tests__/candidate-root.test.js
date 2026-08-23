@@ -367,6 +367,70 @@ test('imported candidate producer schemas reject empty JSON artifacts', (t) => {
   }
 });
 
+test('product evidence provenance rejects blank values', (t) => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const proposedRoot = path.join(
+    repositoryRoot,
+    'framework_candidates',
+    'product-management__product-intake',
+    'proposed_framework'
+  );
+  const manifest = JSON.parse(fs.readFileSync(path.join(proposedRoot, 'manifest.json'), 'utf8'));
+  const bundleType = manifest.output_contract_v2.bundle_types[0];
+  const bundleRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-product-provenance-'));
+  t.after(() => fs.rmSync(bundleRoot, { recursive: true, force: true }));
+  fs.writeFileSync(path.join(bundleRoot, 'evidence-ledger.json'), JSON.stringify([{
+    claim: 'Observed behavior',
+    classification: 'observation',
+    provenance: '   ',
+    limitations: []
+  }]));
+  const findings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+  assert.ok(findings.some((finding) =>
+    finding.code === 'BUNDLE_SCHEMA_FAIL' &&
+    finding.path === path.join(bundleRoot, 'evidence-ledger.json') &&
+    /must match pattern/.test(finding.message)
+  ));
+});
+
+test('delta bundle consistency rejects cyclic dependency graphs', (t) => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const proposedRoot = path.join(
+    repositoryRoot,
+    'framework_candidates',
+    'project-management__delta-specification',
+    'proposed_framework'
+  );
+  const manifest = JSON.parse(fs.readFileSync(path.join(proposedRoot, 'manifest.json'), 'utf8'));
+  const bundleType = manifest.output_contract_v2.bundle_types[0];
+  const bundleRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-delta-cycle-'));
+  t.after(() => fs.rmSync(bundleRoot, { recursive: true, force: true }));
+  fs.writeFileSync(path.join(bundleRoot, 'delta-spec.json'), JSON.stringify({
+    added: [
+      { requirement_id: 'A', requirement: 'System MUST emit A.', scenarios: ['A is observable.'] },
+      { requirement_id: 'B', requirement: 'System MUST emit B.', scenarios: ['B is observable.'] }
+    ],
+    modified: [],
+    removed: [],
+    preserved_invariants: []
+  }));
+  fs.writeFileSync(path.join(bundleRoot, 'dependency-acceptance-map.json'), JSON.stringify({
+    read_first: [],
+    dependencies: [
+      { delta_id: 'A', depends_on: ['B'], rationale: 'A requires B.' },
+      { delta_id: 'B', depends_on: ['A'], rationale: 'B requires A.' }
+    ],
+    acceptance_criteria: [
+      { criterion_id: 'AC-A', delta_id: 'A', condition: 'Run A.', observable_result: 'A passes.' },
+      { criterion_id: 'AC-B', delta_id: 'B', condition: 'Run B.', observable_result: 'B passes.' }
+    ]
+  }));
+  const findings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+  assert.ok(findings.some((finding) =>
+    finding.code === 'DELTA_DEPENDENCY_CYCLE' && /A -> B -> A|B -> A -> B/.test(finding.message)
+  ));
+});
+
 test('delta replay keeps current-state baseline separate from requested behavior', () => {
   const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
   const inputsRoot = path.join(

@@ -3919,7 +3919,7 @@
       "id": "file:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/evidence-ledger.schema.json",
       "type": "file",
       "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/evidence-ledger.schema.json",
-      "sha256": "feb2cb0fedaa539fd25d3b7488a9f99e431dd9594338be282576d2ba1a2f8993",
+      "sha256": "90676a9441f71fcbfb02537781646ab560137c12f4b58e88626f44c74edb5d63",
       "mode": 420
     },
     {
@@ -21076,7 +21076,7 @@
       "id": "file:tools/workspace/__tests__/candidate-root.test.js",
       "type": "file",
       "path": "tools/workspace/__tests__/candidate-root.test.js",
-      "sha256": "45f20c3c54986693df2eddc28b92f4f78488ba7224de12ff931c764f81ce35ab",
+      "sha256": "5ed9e74fe32d7613b7f8328d58432a48e0204fcfffc47057d224b0c609f92c50",
       "mode": 420
     },
     {
@@ -21153,14 +21153,14 @@
       "id": "file:tools/workspace/lib/models.js",
       "type": "file",
       "path": "tools/workspace/lib/models.js",
-      "sha256": "acceba3c612c819b14c96acc4ae8b4383b04a333e9a88fd1cb6effb9a5c12fcf",
+      "sha256": "18e8b373a01a8ca6da7228761dfc18372c947a92add4713ff75db3e45eba7e83",
       "mode": 420
     },
     {
       "id": "file:tools/workspace/lib/output-contract.js",
       "type": "file",
       "path": "tools/workspace/lib/output-contract.js",
-      "sha256": "516cf84aee2f02d1c5b36d2a2277f5463f3f23fdda21afa4ac702ee8b515d978",
+      "sha256": "129c634d4af53a6fc26f6fb2bb92632da2d8b510c7d8a26a60fea788cb8c6e65",
       "mode": 420
     },
     {

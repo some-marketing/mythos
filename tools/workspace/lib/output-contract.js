@@ -263,6 +263,96 @@ function inspectBundle(bundleRoot, bundleType, frameworkRoot) {
 function checkBundleConsistency(bundleRoot, frameworkRoot) {
   const findings = [];
 
+  const deltaSpecPath = path.join(bundleRoot, 'delta-spec.json');
+  const dependencyMapPath = path.join(bundleRoot, 'dependency-acceptance-map.json');
+  if (isFile(deltaSpecPath) && isFile(dependencyMapPath)) {
+    try {
+      const deltaSpec = readJson(deltaSpecPath);
+      const dependencyMap = readJson(dependencyMapPath);
+      const deltaIds = new Set(
+        ['added', 'modified', 'removed']
+          .flatMap((section) => Array.isArray(deltaSpec[section]) ? deltaSpec[section] : [])
+          .map((entry) => entry && entry.requirement_id)
+          .filter(Boolean)
+      );
+      const graph = new Map(Array.from(deltaIds, (id) => [id, []]));
+      for (const dependency of Array.isArray(dependencyMap.dependencies) ? dependencyMap.dependencies : []) {
+        if (!deltaIds.has(dependency.delta_id)) {
+          findings.push({
+            severity: 'blocker',
+            code: 'DELTA_REF_UNKNOWN',
+            message: `Dependency delta_id does not reference an emitted delta: ${dependency.delta_id}`,
+            path: dependencyMapPath
+          });
+          continue;
+        }
+        for (const requiredId of Array.isArray(dependency.depends_on) ? dependency.depends_on : []) {
+          if (!deltaIds.has(requiredId)) {
+            findings.push({
+              severity: 'blocker',
+              code: 'DELTA_REF_UNKNOWN',
+              message: `Dependency depends_on does not reference an emitted delta: ${requiredId}`,
+              path: dependencyMapPath
+            });
+          } else {
+            graph.get(dependency.delta_id).push(requiredId);
+          }
+        }
+      }
+
+      const acceptedIds = new Set();
+      for (const criterion of Array.isArray(dependencyMap.acceptance_criteria) ? dependencyMap.acceptance_criteria : []) {
+        if (!deltaIds.has(criterion.delta_id)) {
+          findings.push({
+            severity: 'blocker',
+            code: 'DELTA_REF_UNKNOWN',
+            message: `Acceptance criterion does not reference an emitted delta: ${criterion.delta_id}`,
+            path: dependencyMapPath
+          });
+        } else {
+          acceptedIds.add(criterion.delta_id);
+        }
+      }
+      for (const deltaId of deltaIds) {
+        if (!acceptedIds.has(deltaId)) {
+          findings.push({
+            severity: 'blocker',
+            code: 'DELTA_ACCEPTANCE_MISSING',
+            message: `Emitted delta has no acceptance criterion: ${deltaId}`,
+            path: dependencyMapPath
+          });
+        }
+      }
+
+      const visited = new Set();
+      const visiting = new Set();
+      let cycle = null;
+      function visit(node, trail) {
+        if (cycle || visited.has(node)) return;
+        if (visiting.has(node)) {
+          const start = trail.indexOf(node);
+          cycle = [...trail.slice(start), node];
+          return;
+        }
+        visiting.add(node);
+        for (const dependency of graph.get(node) || []) visit(dependency, [...trail, node]);
+        visiting.delete(node);
+        visited.add(node);
+      }
+      for (const node of graph.keys()) visit(node, []);
+      if (cycle) {
+        findings.push({
+          severity: 'blocker',
+          code: 'DELTA_DEPENDENCY_CYCLE',
+          message: `Delta dependency graph contains a cycle: ${cycle.join(' -> ')}`,
+          path: dependencyMapPath
+        });
+      }
+    } catch {
+      // Invalid JSON is reported by file schema validation.
+    }
+  }
+
   // Load manifest and index if they exist
   const manifestPath = path.join(bundleRoot, 'LLM_MANIFEST.json');
   const indexPath = path.join(bundleRoot, 'INDEX.json');

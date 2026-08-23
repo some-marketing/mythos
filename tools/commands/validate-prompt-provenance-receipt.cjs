@@ -59,7 +59,9 @@ function validatePromptProvenanceReceipt(receipt, expectedPrompts = []) {
       errors.push(`${label}.attestation must be pass`);
     }
   }
-  if (expectedPrompts.length > 0) {
+  if (!Array.isArray(expectedPrompts) || expectedPrompts.length === 0) {
+    errors.push('expected prompt inventory must contain at least one runnable prompt');
+  } else {
     const expected = new Map(expectedPrompts.map((prompt) => [prompt.prompt_id, prompt.prompt_sha256]));
     const observed = new Map();
     for (const prompt of receipt.prompts) {

@@ -76,6 +76,7 @@ test('prompt-provenance receipt validator rejects missing or matching identities
       attestation: 'pass'
     }]
   };
+  assert.equal(validatePromptProvenanceReceipt(receipt, []).ok, false);
   assert.equal(validatePromptProvenanceReceipt(receipt, expectedPrompts).ok, false);
   receipt.prompts[0].attester_actor_id = 'attester';
   receipt.prompts[0].attester_model_provider_family = 'openai';

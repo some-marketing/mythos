@@ -8,6 +8,7 @@ const { runMythosCommand } = require('../mythos-command-runner.cjs');
 const { loadCanonicalCommand } = require('../lib/command-registry.cjs');
 const { resolveCommandAlias } = require('../lib/command-aliases.cjs');
 const { isManaged } = require('../../codex/lib/managed-command-registry.js');
+const { validatePromptProvenanceReceipt } = require('../validate-prompt-provenance-receipt.cjs');
 
 const ROOT = path.resolve(__dirname, '..', '..', '..');
 
@@ -51,6 +52,24 @@ test('coordinator contract keeps default analysis write-free', () => {
   assert.doesNotMatch(contract, /--mode PATCH_ALLOWED/);
   assert.match(contract, /delegated FINDINGS_ONLY and REVIEW_ONLY lanes never write repository state/);
   assert.match(contract, /return the logical source manifest.*in-session/);
-  assert.match(contract, /rewriter actor id and attester actor id/);
-  assert.match(contract, /block execution when they match or either identity is missing/);
+  assert.match(contract, /rewriter_actor_id.*attester_actor_id/);
+  assert.match(contract, /validate-prompt-provenance-receipt\.cjs/);
+  assert.match(contract, /Non-zero exit blocks execution/);
+});
+
+test('prompt-provenance receipt gate blocks missing or matching identities', () => {
+  const receipt = {
+    schema: 'PromptProvenanceReceipt/1.0',
+    prompts: [{
+      prompt_id: '01_SCOPE',
+      rewriter_actor_id: 'rewriter',
+      attester_actor_id: 'rewriter',
+      attestation: 'pass'
+    }]
+  };
+  assert.equal(validatePromptProvenanceReceipt(receipt).ok, false);
+  delete receipt.prompts[0].attester_actor_id;
+  assert.equal(validatePromptProvenanceReceipt(receipt).ok, false);
+  receipt.prompts[0].attester_actor_id = 'attester';
+  assert.equal(validatePromptProvenanceReceipt(receipt).ok, true);
 });

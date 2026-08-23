@@ -3583,7 +3583,7 @@
       "id": "file:.claude/skills/outward-inward-loop/SKILL.md",
       "type": "file",
       "path": ".claude/skills/outward-inward-loop/SKILL.md",
-      "sha256": "6a4cb64e007878d258f0d2553349139fe053703b3cd4d91e8abee2896d7ed04d",
+      "sha256": "d379b44df75b36ac8b16c4806e72f48e3d2a74e3a532f1482ed435e5bc0162d7",
       "mode": 420
     },
     {
@@ -8630,7 +8630,7 @@
       "id": "file:instructions/canonical/commands/outward-inward.yaml",
       "type": "file",
       "path": "instructions/canonical/commands/outward-inward.yaml",
-      "sha256": "2d37dcca6d98680738d910a7537f8f8266bbf17155d01ff7656608922b183a5b",
+      "sha256": "58f8b2e1b58db7536862d39e7d81e9ea8b3b27c85b2096441e0f47897258514e",
       "mode": 420
     },
     {
@@ -11402,7 +11402,7 @@
       "id": "file:tools/commands/__tests__/outward-inward-command.test.cjs",
       "type": "file",
       "path": "tools/commands/__tests__/outward-inward-command.test.cjs",
-      "sha256": "bc0b2e5b0b36138def497468d8494ad95cb5947236ed4fb65fde5f72334dc648",
+      "sha256": "1fe5016df430586ea9e8fe16099a7aa31550676e5a5f57e3eca543ea22b73883",
       "mode": 420
     },
     {
@@ -11522,6 +11522,13 @@
       "type": "file",
       "path": "tools/commands/smos-command-runner.cjs",
       "sha256": "38d9f9230b8f4edae45bb646bccf0f5a741b3a803ee78a170b63df8a6e6b64a3",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/commands/validate-prompt-provenance-receipt.cjs",
+      "type": "file",
+      "path": "tools/commands/validate-prompt-provenance-receipt.cjs",
+      "sha256": "03fd24033c8cf4299f0094cf1a3d0ff50c9a41eb484f23b536153f8ba57946cc",
       "mode": 420
     },
     {
@@ -31744,6 +31751,15 @@
       "authority": "debrief-run"
     },
     {
+      "id": "439a682f4e7e0a30c7999ef49417481df2a91c358fe142e616cb254cb9ace891",
+      "type": "static-import",
+      "from": "file:tools/commands/__tests__/outward-inward-command.test.cjs",
+      "to": "file:tools/commands/validate-prompt-provenance-receipt.cjs",
+      "target": "tools/commands/validate-prompt-provenance-receipt.cjs",
+      "required": true,
+      "specifier": "../validate-prompt-provenance-receipt.cjs"
+    },
+    {
       "id": "43a973716ab14e840ee467e3c46fa7d2a52dd7b31124876baa61d9848a4f1342",
       "type": "package-script-target",
       "from": "package-script:workspace:capture:status",
@@ -41361,6 +41377,15 @@
       "specifier": "../../lib/resolve-credential.cjs"
     },
     {
+      "id": "a4066dfea35f3c6059a0c4e2cf8d05cf4f409b2436dedfb8d9893ee93f5f1ec8",
+      "type": "static-import",
+      "from": "file:tools/commands/validate-prompt-provenance-receipt.cjs",
+      "to": "file:tools/workspace/lib/args.js",
+      "target": "tools/workspace/lib/args.js",
+      "required": true,
+      "specifier": "../workspace/lib/args"
+    },
+    {
       "id": "a40ad677ffb92ef5ad94da781ceaa82b0a9461263589ad09c6182b0bf788cda8",
       "type": "static-import",
       "from": "file:tools/planning/check-existing-work.js",
@@ -50714,8 +50739,8 @@
     }
   ],
   "counts": {
-    "nodes": 3831,
-    "edges": 2832,
+    "nodes": 3832,
+    "edges": 2834,
     "unresolved": 0
   }
 }

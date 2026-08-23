@@ -1,0 +1,11 @@
+{
+  "id": "research/osint-discovery",
+  "manifest_path": "frameworks/research/osint-discovery/manifest.json",
+  "description": "Route lawful public-source discovery for a bounded target at any research scope.",
+  "inputs": ["target.json", "scope.json"],
+  "outputs": ["outputs/osint-discovery/discovery-report.json", "outputs/osint-discovery/evidence-log.json"],
+  "modes": ["FINDINGS_ONLY", "REVIEW_ONLY"],
+  "operations": ["scope", "source-plan", "discovery", "synthesis"],
+  "agent_profiles": ["scope-agent", "source-plan-agent", "discovery-agent", "synthesis-agent"],
+  "guardrail_overrides": ["Public sources only", "Target and purpose must be bounded", "Evidence and uncertainty required"]
+}

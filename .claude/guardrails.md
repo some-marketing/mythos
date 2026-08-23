@@ -1064,6 +1064,9 @@ When new disciplines emerge in future sessions and are named by the operator or 
 | meta/execution-normalization | 11 | REVIEW_ONLY, RUN_ONLY, PATCH_ALLOWED, COORDINATOR | none |
 | project-management/dart-collaboration | 2 | REVIEW_ONLY, PATCH_ALLOWED | none |
 | project-management/feedback-to-tasks | 5 | FINDINGS_ONLY, RUN_ONLY, PATCH_ALLOWED | dart, notion |
+| research/business-identity-verification | 3 | FINDINGS_ONLY, REVIEW_ONLY | none |
+| research/contractor-credential-review | 3 | FINDINGS_ONLY, REVIEW_ONLY | none |
+| research/osint-discovery | 4 | FINDINGS_ONLY, REVIEW_ONLY | none |
 | wordpress/design-mockup-validation | 3 | RUN_ONLY, REVIEW_ONLY, PATCH_ALLOWED | playwright |
 | wordpress/design-research | 3 | FINDINGS_ONLY, PATCH_ALLOWED | playwright |
 | wordpress/documentation | 4 | FINDINGS_ONLY, PATCH_ALLOWED, REVIEW_ONLY | playwright, notion |

@@ -26,7 +26,33 @@ function loadExpectedPrompts(candidatePath) {
   });
 }
 
-function validatePromptProvenanceReceipt(receipt, expectedPrompts = []) {
+function loadSourceEnvelope(sourceManifestPath) {
+  const bytes = fs.readFileSync(path.resolve(sourceManifestPath));
+  const manifest = JSON.parse(bytes.toString('utf8'));
+  if (manifest.schema !== 'PromptProvenanceSourceManifest/1.0') {
+    throw new Error('source manifest schema must be PromptProvenanceSourceManifest/1.0');
+  }
+  if (typeof manifest.source_envelope_id !== 'string' || manifest.source_envelope_id.trim() === '') {
+    throw new Error('source manifest source_envelope_id must be a non-empty string');
+  }
+  if (!Array.isArray(manifest.sources) || manifest.sources.length === 0) {
+    throw new Error('source manifest sources must contain at least one source');
+  }
+  for (const [index, source] of manifest.sources.entries()) {
+    if (typeof source.source_id !== 'string' || source.source_id.trim() === '') {
+      throw new Error(`source manifest sources[${index}].source_id must be a non-empty string`);
+    }
+    if (typeof source.content_sha256 !== 'string' || !/^[a-f0-9]{64}$/i.test(source.content_sha256)) {
+      throw new Error(`source manifest sources[${index}].content_sha256 must be a SHA-256 digest`);
+    }
+  }
+  return {
+    source_envelope_id: manifest.source_envelope_id,
+    source_envelope_sha256: crypto.createHash('sha256').update(bytes).digest('hex')
+  };
+}
+
+function validatePromptProvenanceReceipt(receipt, expectedPrompts = [], expectedSourceEnvelope = null) {
   const errors = [];
   if (!receipt || receipt.schema !== 'PromptProvenanceReceipt/1.0') {
     errors.push('schema must be PromptProvenanceReceipt/1.0');
@@ -40,6 +66,8 @@ function validatePromptProvenanceReceipt(receipt, expectedPrompts = []) {
     for (const field of [
       'prompt_id',
       'prompt_sha256',
+      'source_envelope_id',
+      'source_envelope_sha256',
       'rewriter_actor_id',
       'rewriter_model_provider_family',
       'attester_actor_id',
@@ -58,6 +86,19 @@ function validatePromptProvenanceReceipt(receipt, expectedPrompts = []) {
     if (prompt.attestation !== 'pass') {
       errors.push(`${label}.attestation must be pass`);
     }
+    if (expectedSourceEnvelope) {
+      if (prompt.source_envelope_id !== expectedSourceEnvelope.source_envelope_id) {
+        errors.push(`${label}.source_envelope_id does not match the current source manifest`);
+      }
+      if (prompt.source_envelope_sha256 !== expectedSourceEnvelope.source_envelope_sha256) {
+        errors.push(`${label}.source_envelope_sha256 does not match the current source manifest`);
+      }
+    }
+  }
+  if (!expectedSourceEnvelope ||
+      typeof expectedSourceEnvelope.source_envelope_id !== 'string' ||
+      !/^[a-f0-9]{64}$/i.test(expectedSourceEnvelope.source_envelope_sha256 || '')) {
+    errors.push('expected source envelope must include a non-empty identity and SHA-256 digest');
   }
   if (!Array.isArray(expectedPrompts) || expectedPrompts.length === 0) {
     errors.push('expected prompt inventory must contain at least one runnable prompt');
@@ -81,8 +122,8 @@ function validatePromptProvenanceReceipt(receipt, expectedPrompts = []) {
 
 function main() {
   const args = parseArgs(process.argv);
-  if (!args.receipt || !args.candidate) {
-    process.stderr.write('Usage: validate-prompt-provenance-receipt.cjs --receipt <path> --candidate <candidate-or-framework-root>\n');
+  if (!args.receipt || !args.candidate || !args['source-manifest']) {
+    process.stderr.write('Usage: validate-prompt-provenance-receipt.cjs --receipt <path> --candidate <candidate-or-framework-root> --source-manifest <path>\n');
     process.exit(2);
   }
   const receiptPath = path.resolve(args.receipt);
@@ -94,13 +135,15 @@ function main() {
     process.exit(2);
   }
   let expectedPrompts;
+  let expectedSourceEnvelope;
   try {
     expectedPrompts = loadExpectedPrompts(args.candidate);
+    expectedSourceEnvelope = loadSourceEnvelope(args['source-manifest']);
   } catch (err) {
-    process.stderr.write(`Unable to load candidate prompt inventory: ${err.message}\n`);
+    process.stderr.write(`Unable to load prompt provenance inputs: ${err.message}\n`);
     process.exit(2);
   }
-  const result = validatePromptProvenanceReceipt(receipt, expectedPrompts);
+  const result = validatePromptProvenanceReceipt(receipt, expectedPrompts, expectedSourceEnvelope);
   if (!result.ok) {
     process.stderr.write(result.errors.join('\n') + '\n');
     process.exit(1);
@@ -110,4 +153,4 @@ function main() {
 
 if (require.main === module) main();
 
-module.exports = { loadExpectedPrompts, validatePromptProvenanceReceipt };
+module.exports = { loadExpectedPrompts, loadSourceEnvelope, validatePromptProvenanceReceipt };

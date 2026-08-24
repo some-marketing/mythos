@@ -1,0 +1,15 @@
+{
+  "schema": "CandidateSourceReceipt/1.0",
+  "source_repository": "bmad-code-org/BMAD-METHOD",
+  "source_url": "https://github.com/bmad-code-org/BMAD-METHOD",
+  "chi_run_id": "chi-bmad-method-vs-mythos-20260821T142500Z",
+  "observed_artifacts": {
+    "README.md": "c1c3467ddc0274d239899b279bcd951d0eb502762594067d86e00d0ee4419079",
+    "docs/reference/workflow-map.md": "84927b828a99db51e7dd451c2db08df1e55dd451c72cd143308afe75c04dd3e7",
+    "docs/reference/commands.md": "688a87c956e98508869b554809b2163e4b003a729db1a7521ef03cb00cb7321a"
+  },
+  "custody": "observed-public-input",
+  "external_code_copied": false,
+  "external_code_executed": false,
+  "recorded_at": "2026-08-21T15:00:32Z"
+}

@@ -1,0 +1,8 @@
+{
+  "criteria": [
+    "Source custody and limitations remain explicit.",
+    "The staged framework is Mythos-authored and contains no copied external executable code.",
+    "Promotion remains blocked until independent replay and evidence thresholds are satisfied."
+  ],
+  "notes": ["This capture supports candidate provenance; it is not comparative-effectiveness evidence."]
+}

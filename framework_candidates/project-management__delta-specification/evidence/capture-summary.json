@@ -1,0 +1,28 @@
+{
+  "source_captures": [
+    "chi-openspec-vs-mythos-20260821T143000Z"
+  ],
+  "learning_disposition": "framework_candidate",
+  "implementation_readiness": "bounded_experiment",
+  "imported_pattern": "Brownfield behavior changes represented as added, modified, and removed requirements with scenarios.",
+  "comparative_hardening": {
+    "source": "open-gsd/gsd-core",
+    "chi_run_id": "chi-gsd-core-vs-mythos-20260821T133000Z",
+    "promotion_evidence_unit": false,
+    "pattern": "Use read_first, depends_on, acceptance criteria, and execution waves only where dependency evidence supports them.",
+    "disposition": "comparative_hardening"
+  },
+  "closest_mythos_surfaces": [
+    "plan-task",
+    "meta/execution-normalization",
+    "meta/reviewed-change-loop"
+  ],
+  "observed_gap": "No registered framework produces a first-class delta-specification artifact for brownfield changes.",
+  "transfer_hypothesis": "Explicit delta semantics will reduce ambiguity about what behavior changes while retaining Mythos review and execution-mode gates.",
+  "cheapest_falsifier": "Represent the same neutral change with this candidate and the current plan path; close the candidate if the current path preserves equivalent delta semantics with less ceremony.",
+  "source_limitations": [
+    "Source evidence is documentation-level.",
+    "The external repository was not installed or executed.",
+    "Actual generated OpenSpec skills and CLI behavior were not inspected."
+  ]
+}

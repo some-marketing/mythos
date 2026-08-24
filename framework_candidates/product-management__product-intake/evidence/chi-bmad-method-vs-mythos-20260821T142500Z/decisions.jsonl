@@ -1,0 +1,1 @@
+{"decision_id":"candidate-disposition","decision":"Stage a framework candidate rather than copy the source implementation.","rationale":"The pattern addresses an observed gap, while source execution and direct code import remain prohibited."}

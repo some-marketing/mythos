@@ -1,0 +1,15 @@
+{
+  "schema": "CandidateSourceReceipt/1.0",
+  "source_repository": "Fission-AI/OpenSpec",
+  "source_url": "https://github.com/Fission-AI/OpenSpec",
+  "chi_run_id": "chi-openspec-vs-mythos-20260821T143000Z",
+  "observed_artifacts": {
+    "README.md": "07c4ee1a265b7c67b0c5f5b6494b795b42d6e67502d11b394ec4e3c63a46acb2",
+    "docs/concepts.md": "370f8ef1a1142cd1d250588f4a27f740e4fda66c6e4e15f68bbfcb86c47cf0b7",
+    "docs/agent-contract.md": "174a34d11771f77fee084dbe744b1d7b76417427934c3eea4328565789682415"
+  },
+  "custody": "observed-public-input",
+  "external_code_copied": false,
+  "external_code_executed": false,
+  "recorded_at": "2026-08-21T15:00:32Z"
+}

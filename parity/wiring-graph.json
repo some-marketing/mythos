@@ -3709,7 +3709,7 @@
       "id": "file:.github/workflows/parity.yml",
       "type": "file",
       "path": ".github/workflows/parity.yml",
-      "sha256": "cc447d96c62e9163da5129b80c2a368c1c4d1174ea2ce2143e39ae2809a541e1",
+      "sha256": "5f6d22a76b1d787e9b0843e788d9fd483e51ff0ae1a3d8d91d12cf5bff240dd5",
       "mode": 420
     },
     {
@@ -3766,6 +3766,566 @@
       "type": "file",
       "path": "docs/USER-SPACE-GUIDE.md",
       "sha256": "fa68ffd8d86dbd43858c5076c498c26138288d4caff5074827d34d52123ef429",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/candidate.json",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/candidate.json",
+      "sha256": "ff1c09347b055183a7a7da6e3cf6dbe4d2179a0371c001ca2a7e0b9fc2f02fbe",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/evidence/capture-summary.json",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/evidence/capture-summary.json",
+      "sha256": "3a6113fe62afa365841d44148aee7889ac30a8267a2ea25c6225614be882a500",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/evidence/chi-bmad-method-vs-mythos-20260821T142500Z/CAPTURE_META.json",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/evidence/chi-bmad-method-vs-mythos-20260821T142500Z/CAPTURE_META.json",
+      "sha256": "788f2815951df687348b705d08e6196184afe14f044b87dfd9823d36e7497d6e",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/evidence/chi-bmad-method-vs-mythos-20260821T142500Z/context.md",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/evidence/chi-bmad-method-vs-mythos-20260821T142500Z/context.md",
+      "sha256": "98d1a9927bed3f995a4b7e3fb86cf25d9e227a215aaf7f55a589c3e415242437",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/evidence/chi-bmad-method-vs-mythos-20260821T142500Z/decisions.jsonl",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/evidence/chi-bmad-method-vs-mythos-20260821T142500Z/decisions.jsonl",
+      "sha256": "87587fffee1d050ac876c36e4c0bc0128b7ec5408d2c7ed66b14d6b446cf80e9",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/evidence/chi-bmad-method-vs-mythos-20260821T142500Z/goal.md",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/evidence/chi-bmad-method-vs-mythos-20260821T142500Z/goal.md",
+      "sha256": "fbec771037fd8fe7e58bc251db6507452aa447d8cea19ae013824828ea40b0ea",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/evidence/chi-bmad-method-vs-mythos-20260821T142500Z/retrospective.md",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/evidence/chi-bmad-method-vs-mythos-20260821T142500Z/retrospective.md",
+      "sha256": "eb44700aae35c5dd5f6aae0a78ad9e79dfa494fbfc1d916a94ae2a9e32f482d1",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/evidence/chi-bmad-method-vs-mythos-20260821T142500Z/steps.jsonl",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/evidence/chi-bmad-method-vs-mythos-20260821T142500Z/steps.jsonl",
+      "sha256": "f3d055b152630b0c286d4bff0e4fe63970771f8f502af9af302018ea98265556",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/evidence/chi-bmad-method-vs-mythos-20260821T142500Z/success_criteria.json",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/evidence/chi-bmad-method-vs-mythos-20260821T142500Z/success_criteria.json",
+      "sha256": "b3995a010b169710f44e777d5e4f42739a573ed79bc2812d14fb638960e2b95e",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/evidence/source-receipt.json",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/evidence/source-receipt.json",
+      "sha256": "4eba909f9aba841d539d15bc0b852328f5a2b8f6f6fac6edd481b55248ec615d",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/learning/learning-ledger.json",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/learning/learning-ledger.json",
+      "sha256": "b6028d91ce46ae6f8e9c24e3a49db6659eaca290df5f98e610c60900a5299030",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/learning/README.md",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/learning/README.md",
+      "sha256": "1f1141f683be86d45fb62074f061db1a073dbfdcc61a9de7c2f993b8e9929722",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/learning/signals/signal-preflight-20260821T150734Z.json",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/learning/signals/signal-preflight-20260821T150734Z.json",
+      "sha256": "6b585e7b3db0052cc6950ac2f87c7e4612b7fd4f056c7d644b8a50591c704806",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/learning/signals/signal-preflight-20260821T151820Z.json",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/learning/signals/signal-preflight-20260821T151820Z.json",
+      "sha256": "df610d8a7adade55d27a139bab9a75ac86179baedfe79bfb31b8218a6e00af0f",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/proposed_framework/guardrails.md",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/proposed_framework/guardrails.md",
+      "sha256": "96bea91e05f310332abba0a7b4bf5eda41aecc986a408e4d899e574590641329",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/proposed_framework/manifest.json",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/proposed_framework/manifest.json",
+      "sha256": "e412e01295c29f25c6c03704b630387807fb3c1f9426376926e830a0bb2f0eca",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/proposed_framework/prompts/01_SCOPE_AND_INTENT.md",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/proposed_framework/prompts/01_SCOPE_AND_INTENT.md",
+      "sha256": "6eee7932a8f202183c522a99600e32121c8a5b8f4a420162949e440ba0aec710",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/proposed_framework/prompts/02_DISCOVERY_EVIDENCE.md",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/proposed_framework/prompts/02_DISCOVERY_EVIDENCE.md",
+      "sha256": "4ffc71a2380615940ea06b3cb1ef9311240c56a85a0fcd0a346c71d3890609e7",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/proposed_framework/prompts/03_PRODUCT_BRIEF_AND_PRFAQ.md",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/proposed_framework/prompts/03_PRODUCT_BRIEF_AND_PRFAQ.md",
+      "sha256": "17478a4daadd9bbd253b253d425bf9844b1c04082498c7a5d15243d841f22e35",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/proposed_framework/prompts/04_READINESS_REVIEW.md",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/proposed_framework/prompts/04_READINESS_REVIEW.md",
+      "sha256": "906bdeb74abc289783862067895c13a610eecabc727de3c0412fba56a8cb6407",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/proposed_framework/schemas/input.schema.json",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/input.schema.json",
+      "sha256": "7ff74921dcfd794b0bba61e8fb6b617260183d28ebe7465ab3f90f907d9f53c4",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/evidence-ledger.schema.json",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/evidence-ledger.schema.json",
+      "sha256": "90676a9441f71fcbfb02537781646ab560137c12f4b58e88626f44c74edb5d63",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/hypothesis-tests.schema.json",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/hypothesis-tests.schema.json",
+      "sha256": "6378f93a4da38cd78457092e48f53e5a2de51fc7aa8ec783db6951607508e3fd",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-brief.schema.json",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-brief.schema.json",
+      "sha256": "8f8e04a70964808c9918edcd6b2d5ffc8fa817e9b340682536de2f3befebd2a6",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/readiness-review.schema.json",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/readiness-review.schema.json",
+      "sha256": "c9d6ef8637e6e97e3ce0805f7fda8282b45821dcc0ff34e3410bcc0de343bdc5",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/scope-and-intent.schema.json",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/scope-and-intent.schema.json",
+      "sha256": "e8e457030380cc96ad8394ed157bfdfce4fca4b092bcc5076bb8218ec5bc1acf",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/README.md",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/README.md",
+      "sha256": "4435fbe18cad6dc2bcea6abd59d737ba0a824a1f3b9c98bcc7ed8cb93f4d7ef0",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/replay_cases/neutral-internal-tool/case.json",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/replay_cases/neutral-internal-tool/case.json",
+      "sha256": "5e8e06aee6d7c9b331a49eb22831b390064e034069cfedbe46a37c4aa52c19b9",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/replay_cases/neutral-internal-tool/inputs/context.md",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/replay_cases/neutral-internal-tool/inputs/context.md",
+      "sha256": "cefc255895f045a1d2208de5cd0f8c07b476bbebe828afa247def135d42c7516",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/replay_cases/neutral-internal-tool/inputs/intake.json",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/replay_cases/neutral-internal-tool/inputs/intake.json",
+      "sha256": "887524863f3a1f9c67cb2fefa3e31b5b497efeea7cb29b6657ab476679878a99",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/replay_cases/neutral-internal-tool/notes.md",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/replay_cases/neutral-internal-tool/notes.md",
+      "sha256": "0957d7db6a0a65fd602c264ad9062ee91fe00f0eaff51b4185865a2c5ee7dc0c",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/replay_runs/20260821T150734Z__neutral-internal-tool__neutral-internal-tool/execution_log.jsonl",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/replay_runs/20260821T150734Z__neutral-internal-tool__neutral-internal-tool/execution_log.jsonl",
+      "sha256": "b789efa5bf3d6877cd33e58896367291cb0b84b0a038fc302fe107093c600331",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/replay_runs/20260821T150734Z__neutral-internal-tool__neutral-internal-tool/manual_interventions.jsonl",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/replay_runs/20260821T150734Z__neutral-internal-tool__neutral-internal-tool/manual_interventions.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/replay_runs/20260821T150734Z__neutral-internal-tool__neutral-internal-tool/run.json",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/replay_runs/20260821T150734Z__neutral-internal-tool__neutral-internal-tool/run.json",
+      "sha256": "1a66b3327577b07cd1f1cc0f89ad52745086b2b5697b60cbc6a47cb1d8de6831",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/replay_runs/20260821T150734Z__neutral-internal-tool__neutral-internal-tool/summary.md",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/replay_runs/20260821T150734Z__neutral-internal-tool__neutral-internal-tool/summary.md",
+      "sha256": "7c454b6a905aa825199f0df9e67d642efcb9b5d498fb6b49fe0bc8e5e40c809c",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/replay_runs/20260821T151820Z__neutral-internal-tool__neutral-internal-tool/execution_log.jsonl",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/replay_runs/20260821T151820Z__neutral-internal-tool__neutral-internal-tool/execution_log.jsonl",
+      "sha256": "376c9b0f0bdc9b9ad7f61e4e120f89bba10bbb206532ee68f6b899f566b8eecd",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/replay_runs/20260821T151820Z__neutral-internal-tool__neutral-internal-tool/manual_interventions.jsonl",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/replay_runs/20260821T151820Z__neutral-internal-tool__neutral-internal-tool/manual_interventions.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/replay_runs/20260821T151820Z__neutral-internal-tool__neutral-internal-tool/run.json",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/replay_runs/20260821T151820Z__neutral-internal-tool__neutral-internal-tool/run.json",
+      "sha256": "52aa805d1316a900bcacc00bdc6c30b53997e8035b5241efbcdc3ae3a4ec3c9e",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/product-management__product-intake/replay_runs/20260821T151820Z__neutral-internal-tool__neutral-internal-tool/summary.md",
+      "type": "file",
+      "path": "framework_candidates/product-management__product-intake/replay_runs/20260821T151820Z__neutral-internal-tool__neutral-internal-tool/summary.md",
+      "sha256": "7c454b6a905aa825199f0df9e67d642efcb9b5d498fb6b49fe0bc8e5e40c809c",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/candidate.json",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/candidate.json",
+      "sha256": "9ea051f6cc481ddd66fedcf500114f19027ef08242ad507ba89a08fcfa421a83",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/evidence/capture-summary.json",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/evidence/capture-summary.json",
+      "sha256": "de331dd1238534c1c573720e3a4a71af101468a6f6b0273b9623de1294df8faf",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/evidence/chi-openspec-vs-mythos-20260821T143000Z/CAPTURE_META.json",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/evidence/chi-openspec-vs-mythos-20260821T143000Z/CAPTURE_META.json",
+      "sha256": "21fe2603479a9da13b196c123dca2e79656905bc7193baf381f33de14f999922",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/evidence/chi-openspec-vs-mythos-20260821T143000Z/context.md",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/evidence/chi-openspec-vs-mythos-20260821T143000Z/context.md",
+      "sha256": "dee88ac8b0703ffed6ecac9078ff2758a0fee6db9b300c76953b69e4120bf984",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/evidence/chi-openspec-vs-mythos-20260821T143000Z/decisions.jsonl",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/evidence/chi-openspec-vs-mythos-20260821T143000Z/decisions.jsonl",
+      "sha256": "bdab72020105267009ec974d9a866fbbfc7c3999d798da091be8ce41e13cabb2",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/evidence/chi-openspec-vs-mythos-20260821T143000Z/goal.md",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/evidence/chi-openspec-vs-mythos-20260821T143000Z/goal.md",
+      "sha256": "35de46a96ef52bb221e0acbdd37824f2d74bc9dcfc9c8e5478144ff04d34c320",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/evidence/chi-openspec-vs-mythos-20260821T143000Z/retrospective.md",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/evidence/chi-openspec-vs-mythos-20260821T143000Z/retrospective.md",
+      "sha256": "fef41f70c596672eda07817482007d35d4337c31fd65ab3479112765fcf66a7b",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/evidence/chi-openspec-vs-mythos-20260821T143000Z/steps.jsonl",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/evidence/chi-openspec-vs-mythos-20260821T143000Z/steps.jsonl",
+      "sha256": "f347e69c204e3b031e840d2fcbc42382811e167fa4a451d869f2114eb4241dbe",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/evidence/chi-openspec-vs-mythos-20260821T143000Z/success_criteria.json",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/evidence/chi-openspec-vs-mythos-20260821T143000Z/success_criteria.json",
+      "sha256": "6726254a44b18ad6d42b62ccfdcb247965b565778e1f6c17de19d0f60b29f7ee",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/evidence/source-receipt-gsd.json",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/evidence/source-receipt-gsd.json",
+      "sha256": "6ad28b6a34ac3febabeea8c782c65c6d8ee2f88e5110d5ad87286a0466374800",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/evidence/source-receipt.json",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/evidence/source-receipt.json",
+      "sha256": "ef1556bbf75e9e25c6962ea7941fbbba649f9686832bfe52c86a862647ad948b",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/learning/learning-ledger.json",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/learning/learning-ledger.json",
+      "sha256": "2052b684ecf55912b9256b728c9d4ad943d564f923f8029614505bc518246f2a",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/learning/README.md",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/learning/README.md",
+      "sha256": "1f1141f683be86d45fb62074f061db1a073dbfdcc61a9de7c2f993b8e9929722",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/learning/signals/signal-preflight-20260821T150735Z.json",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/learning/signals/signal-preflight-20260821T150735Z.json",
+      "sha256": "7e78a67e895b07136ac68b3126d346257733f571f5f9608fc7b13676aa26ac16",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/learning/signals/signal-preflight-20260821T151820Z.json",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/learning/signals/signal-preflight-20260821T151820Z.json",
+      "sha256": "db8eccfb847187d6753f55d3ee874c96b6613c7243ffef8c9992e4d7091b48cb",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/guardrails.md",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/proposed_framework/guardrails.md",
+      "sha256": "82300d6e03dc112f4a55927c82c2ac4620f337af733de45d1e6d70b8cc5ecacb",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/manifest.json",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/proposed_framework/manifest.json",
+      "sha256": "a89c633c950b7c48cc676aee47cf727fc4b1aae896d66ae0bdcb6d922d21f053",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/prompts/01_BASELINE_INVENTORY.md",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/proposed_framework/prompts/01_BASELINE_INVENTORY.md",
+      "sha256": "95f4d2fb57ce2cbf7336e2d72f9363237012f8e1bebde9a8cc83bebbba00ca36",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/prompts/02_CHANGE_PROPOSAL.md",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/proposed_framework/prompts/02_CHANGE_PROPOSAL.md",
+      "sha256": "3ff46ac54b978ce96a63417366edca06103892da0b82c1a96b754d9969a2327a",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/prompts/03_DELTA_REQUIREMENTS.md",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/proposed_framework/prompts/03_DELTA_REQUIREMENTS.md",
+      "sha256": "5f80d4a21b222d8518e63f7d313e20c5f223792ec3e7a1c0e3a8c0940de1bfc1",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/prompts/04_DEPENDENCY_AND_ACCEPTANCE_MAP.md",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/proposed_framework/prompts/04_DEPENDENCY_AND_ACCEPTANCE_MAP.md",
+      "sha256": "eb8e343f0d80dc0ea86922aaf7a659802ccdf7b537b874234e3b271f160234de",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/prompts/05_INDEPENDENT_REVIEW.md",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/proposed_framework/prompts/05_INDEPENDENT_REVIEW.md",
+      "sha256": "f89de813e5c8c980491e7acd0e56896ba07e6be75b0835769277add79feed990",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/input.schema.json",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/input.schema.json",
+      "sha256": "c6c366442a3a199f28f6ee68800078624ed9a7265e437160159af793a4da8926",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/baseline-inventory.schema.json",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/baseline-inventory.schema.json",
+      "sha256": "5af61aa556c8657111419c61ad79403bd35f738cea02f66c1befe99483a8d02a",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/change-proposal.schema.json",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/change-proposal.schema.json",
+      "sha256": "6fa44ea55dffe1a6be0c0a9eb5af7a2d34dee27eca2a4e965fba300d7916c576",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-spec.schema.json",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-spec.schema.json",
+      "sha256": "b0205adac61c4a1c8a1249c5b179d20d93ca16e357d61c265e6669417e65ff6d",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/dependency-acceptance-map.schema.json",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/dependency-acceptance-map.schema.json",
+      "sha256": "15ef4d3329b49e4d77820cb8e733b714f333e62046111593fa7ea2c5b5764287",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/review.schema.json",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/review.schema.json",
+      "sha256": "c9d6ef8637e6e97e3ce0805f7fda8282b45821dcc0ff34e3410bcc0de343bdc5",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/README.md",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/README.md",
+      "sha256": "a54c87c01d6de8893c2aadee3b67f22a9f7aaddaa5344e13a1cc5c386a0c75cb",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/replay_cases/neutral-retention-change/case.json",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/replay_cases/neutral-retention-change/case.json",
+      "sha256": "b6d9847d40c687cf60387843dc74839575a65f4f344bbc97920ae05ff720106d",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/replay_cases/neutral-retention-change/inputs/baseline.md",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/replay_cases/neutral-retention-change/inputs/baseline.md",
+      "sha256": "d562b17a77ea3b1d2850940b4ade130de78bc0c02dced7c3f35fe28da33a06c1",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/replay_cases/neutral-retention-change/inputs/intake.json",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/replay_cases/neutral-retention-change/inputs/intake.json",
+      "sha256": "44d3e4ef6afbfdfafd2bbf53f9099833218716965251f483482ac0c3c5180025",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/replay_cases/neutral-retention-change/notes.md",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/replay_cases/neutral-retention-change/notes.md",
+      "sha256": "ca171925f7c784e0fd546ba212dcec66094c9dd363299f882de7cdbfa98fc83b",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/replay_runs/20260821T150735Z__neutral-retention-change__neutral-retention-change/execution_log.jsonl",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/replay_runs/20260821T150735Z__neutral-retention-change__neutral-retention-change/execution_log.jsonl",
+      "sha256": "9d1395b7a8b2c0c42fcbfebe5e6bf9e47c291bf04356bff777d480cc43d77830",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/replay_runs/20260821T150735Z__neutral-retention-change__neutral-retention-change/manual_interventions.jsonl",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/replay_runs/20260821T150735Z__neutral-retention-change__neutral-retention-change/manual_interventions.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/replay_runs/20260821T150735Z__neutral-retention-change__neutral-retention-change/run.json",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/replay_runs/20260821T150735Z__neutral-retention-change__neutral-retention-change/run.json",
+      "sha256": "a5f2d18fd12387dd73b7d60bd34e8862c77201e7950e426af7a074d1bbd29ae0",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/replay_runs/20260821T150735Z__neutral-retention-change__neutral-retention-change/summary.md",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/replay_runs/20260821T150735Z__neutral-retention-change__neutral-retention-change/summary.md",
+      "sha256": "ad2136f359dea238c1360bb85ee9c8e1f3752b9fe4fee96135280db822567c98",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/replay_runs/20260821T151820Z__neutral-retention-change__neutral-retention-change/execution_log.jsonl",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/replay_runs/20260821T151820Z__neutral-retention-change__neutral-retention-change/execution_log.jsonl",
+      "sha256": "d22430e5fa609dd2a449a49dec5328d9855ef562c7657bee4801be54c2302577",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/replay_runs/20260821T151820Z__neutral-retention-change__neutral-retention-change/manual_interventions.jsonl",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/replay_runs/20260821T151820Z__neutral-retention-change__neutral-retention-change/manual_interventions.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/replay_runs/20260821T151820Z__neutral-retention-change__neutral-retention-change/run.json",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/replay_runs/20260821T151820Z__neutral-retention-change__neutral-retention-change/run.json",
+      "sha256": "3566f78858cf8954290fffb996e708777f7e9b3f761f315c2c25324efc696450",
+      "mode": 420
+    },
+    {
+      "id": "file:framework_candidates/project-management__delta-specification/replay_runs/20260821T151820Z__neutral-retention-change__neutral-retention-change/summary.md",
+      "type": "file",
+      "path": "framework_candidates/project-management__delta-specification/replay_runs/20260821T151820Z__neutral-retention-change__neutral-retention-change/summary.md",
+      "sha256": "ad2136f359dea238c1360bb85ee9c8e1f3752b9fe4fee96135280db822567c98",
       "mode": 420
     },
     {
@@ -9694,7 +10254,7 @@
       "id": "file:package.json",
       "type": "file",
       "path": "package.json",
-      "sha256": "0174a03e6beef86c68242f440c13a64f2a4fc92221f2f442a05faeb692bcc3ee",
+      "sha256": "22f8d45c2f50d4a6fa8830a85f0360d835c387206521fc1c64bd8cc46680c32a",
       "mode": 420
     },
     {
@@ -20499,6 +21059,13 @@
       "mode": 420
     },
     {
+      "id": "file:tools/workspace/__tests__/candidate-root.test.js",
+      "type": "file",
+      "path": "tools/workspace/__tests__/candidate-root.test.js",
+      "sha256": "e2e820b5f07574b71d59b956e0c9d63ac86be062e8f7e07aeb3f8f4ef4503492",
+      "mode": 420
+    },
+    {
       "id": "file:tools/workspace/candidate-status.js",
       "type": "file",
       "path": "tools/workspace/candidate-status.js",
@@ -20551,7 +21118,7 @@
       "id": "file:tools/workspace/lib/capture-candidate.js",
       "type": "file",
       "path": "tools/workspace/lib/capture-candidate.js",
-      "sha256": "b93d7e6e7edc96d4a87d57ed8034bbcb49de6c9b0d9723f59aa6630aef229427",
+      "sha256": "1ae1d356069d22a629588463a3a4136931ccacc331b5445728fb81584c02f015",
       "mode": 420
     },
     {
@@ -20572,14 +21139,14 @@
       "id": "file:tools/workspace/lib/models.js",
       "type": "file",
       "path": "tools/workspace/lib/models.js",
-      "sha256": "3aec1420e3373883f244fb1f5f1ffdd3d7a57005cbcddbc98da34c6f4fe64511",
+      "sha256": "18e8b373a01a8ca6da7228761dfc18372c947a92add4713ff75db3e45eba7e83",
       "mode": 420
     },
     {
       "id": "file:tools/workspace/lib/output-contract.js",
       "type": "file",
       "path": "tools/workspace/lib/output-contract.js",
-      "sha256": "9d68f7be2f6b0a9c4f3a7582715ac80c384a1216562f98171046857c0ce1d751",
+      "sha256": "748e662f35cca7d9b191b4ede238ac36bf673702df1b8efbb371426de9c97ce4",
       "mode": 420
     },
     {
@@ -20614,7 +21181,7 @@
       "id": "file:tools/workspace/lib/workspace.js",
       "type": "file",
       "path": "tools/workspace/lib/workspace.js",
-      "sha256": "de07e1b024a6a7afee2fd1af1bafb8ae3f081199d9d67a42e3f0b9e1bbee7fe1",
+      "sha256": "06dfc4f627c5d6f72ac141a3c20a18719cb92b53937ab7fe71972efe543a5459",
       "mode": 420
     },
     {
@@ -20649,7 +21216,7 @@
       "id": "file:tools/workspace/scaffold-candidate.js",
       "type": "file",
       "path": "tools/workspace/scaffold-candidate.js",
-      "sha256": "c0b97f6b49a6b91770363e0d8a2db4d72db04d1ce065c342beabed1d70a82ff5",
+      "sha256": "ebbf79dfc5a0eb969d4114a1f23a675e4b66d78bdcc005a9e4921c8f4318e6c9",
       "mode": 420
     },
     {
@@ -20670,7 +21237,7 @@
       "id": "file:tools/workspace/schemas/candidate.schema.json",
       "type": "file",
       "path": "tools/workspace/schemas/candidate.schema.json",
-      "sha256": "d50a287b8fa1ebaf14e8e33d79bd8d97d2b8e23c141c181d41b351828157ce7e",
+      "sha256": "4fa61955e0738fa2fe86d63faf10f85dc7fbf3df99107d52d5ec9f012d6f7a4f",
       "mode": 420
     },
     {
@@ -21037,67 +21604,67 @@
       "name": "wordpress/seo-validation"
     },
     {
-      "id": "hook:PostToolUse:639",
+      "id": "hook:PostToolUse:652",
       "type": "hook",
       "event": "PostToolUse",
       "command_sha256": "e395bd31a35362065002007d044e98d86e484bf829d16ebe2027da8a928db52c"
     },
     {
-      "id": "hook:PreToolUse:636",
+      "id": "hook:PreToolUse:649",
       "type": "hook",
       "event": "PreToolUse",
       "command_sha256": "ce97f4fd7eb07f52a0e9c6352fab2ce0e803f0920ef184d8f42261a46580103b"
     },
     {
-      "id": "hook:SessionEnd:643",
+      "id": "hook:SessionEnd:656",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "35974852e367c31bae49591ac0aa4afd518ec624f233743462e37c4c3863b1ed"
     },
     {
-      "id": "hook:SessionEnd:644",
+      "id": "hook:SessionEnd:657",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "519f522b04afb8471aa7e7ca117deb8af91976de62b5c1f5f4f6f9f60c8c217f"
     },
     {
-      "id": "hook:SessionEnd:645",
+      "id": "hook:SessionEnd:658",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "4ee05b68abff34325a3950761939e20cf2391c7b29d640b29b95233d29943fd4"
     },
     {
-      "id": "hook:SessionStart:640",
+      "id": "hook:SessionStart:653",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "26962e5976f5c689361f18050bb4e718d507df72590fbbc620e356cde47cf86b"
     },
     {
-      "id": "hook:SessionStart:641",
+      "id": "hook:SessionStart:654",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "00253242784e7853b94e1125e7c69f31085961b2dd7b3d1fcb6b4c79d94e9baf"
     },
     {
-      "id": "hook:SessionStart:642",
+      "id": "hook:SessionStart:655",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "c738ce0e54e375f17b97f1186b95e5fd1125c0675d2f3e9238e872062f5b7076"
     },
     {
-      "id": "hook:Stop:637",
+      "id": "hook:Stop:650",
       "type": "hook",
       "event": "Stop",
       "command_sha256": "c0c0282a10c1ff35c525d7786ceb380c853b678494f400dbf1fc178cdddcbb19"
     },
     {
-      "id": "hook:SubagentStop:646",
+      "id": "hook:SubagentStop:659",
       "type": "hook",
       "event": "SubagentStop",
       "command_sha256": "4ca0f2529c8dd4023ade83508a1e40a1728dbdcfa35aadf9ea953cf8ac9a587d"
     },
     {
-      "id": "hook:UserPromptSubmit:638",
+      "id": "hook:UserPromptSubmit:651",
       "type": "hook",
       "event": "UserPromptSubmit",
       "command_sha256": "d647b60c73e5962cae00cf1cf2bd11d28472fdb8c47074a2e62cabf0e7e89545"
@@ -24300,7 +24867,7 @@
       "id": "package-script:test",
       "type": "package-script",
       "name": "test",
-      "command_sha256": "c9eb3b25ef6ae6a1ae2b2e49f6c2741ae7126e89d74770452d1f1762559919d0"
+      "command_sha256": "ceda2e7402d4c78ae8cfd87202c8dd14649bbd7dcbe059bdaa2e4d6f2a0cdec3"
     },
     {
       "id": "package-script:test:planning",
@@ -24547,6 +25114,66 @@
       "type": "package-script",
       "name": "workspace:validate",
       "command_sha256": "fc01cbb73a7ad9914e6bcf8c78ebf66b9f3a5f2cede214cf363204012ef941b3"
+    },
+    {
+      "id": "schema-definition:framework_candidates/product-management__product-intake/proposed_framework/schemas/input.schema.json",
+      "type": "schema-definition",
+      "name": "framework_candidates/product-management__product-intake/proposed_framework/schemas/input.schema.json"
+    },
+    {
+      "id": "schema-definition:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/evidence-ledger.schema.json",
+      "type": "schema-definition",
+      "name": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/evidence-ledger.schema.json"
+    },
+    {
+      "id": "schema-definition:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/hypothesis-tests.schema.json",
+      "type": "schema-definition",
+      "name": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/hypothesis-tests.schema.json"
+    },
+    {
+      "id": "schema-definition:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-brief.schema.json",
+      "type": "schema-definition",
+      "name": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-brief.schema.json"
+    },
+    {
+      "id": "schema-definition:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/readiness-review.schema.json",
+      "type": "schema-definition",
+      "name": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/readiness-review.schema.json"
+    },
+    {
+      "id": "schema-definition:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/scope-and-intent.schema.json",
+      "type": "schema-definition",
+      "name": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/scope-and-intent.schema.json"
+    },
+    {
+      "id": "schema-definition:framework_candidates/project-management__delta-specification/proposed_framework/schemas/input.schema.json",
+      "type": "schema-definition",
+      "name": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/input.schema.json"
+    },
+    {
+      "id": "schema-definition:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/baseline-inventory.schema.json",
+      "type": "schema-definition",
+      "name": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/baseline-inventory.schema.json"
+    },
+    {
+      "id": "schema-definition:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/change-proposal.schema.json",
+      "type": "schema-definition",
+      "name": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/change-proposal.schema.json"
+    },
+    {
+      "id": "schema-definition:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-spec.schema.json",
+      "type": "schema-definition",
+      "name": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-spec.schema.json"
+    },
+    {
+      "id": "schema-definition:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/dependency-acceptance-map.schema.json",
+      "type": "schema-definition",
+      "name": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/dependency-acceptance-map.schema.json"
+    },
+    {
+      "id": "schema-definition:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/review.schema.json",
+      "type": "schema-definition",
+      "name": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/review.schema.json"
     },
     {
       "id": "schema-definition:frameworks/deliverables/presentation-review/schemas/intake.schema.json",
@@ -25584,6 +26211,16 @@
       "specifier": "../repair-ladder.cjs"
     },
     {
+      "id": "019e4a37165011a4a2f46489d7dd7d7b91bf0e801c99992483029fd5e4836c14",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:657",
+      "to": "file:tools/context/repo-awareness-closeout.cjs",
+      "target": "tools/context/repo-awareness-closeout.cjs",
+      "required": true,
+      "declared_target": "tools/context/repo-awareness-closeout.cjs",
+      "event": "SessionEnd"
+    },
+    {
       "id": "01cacc410e20b921eafaf90292b9a5aced405cf5dae7278f9afd100339e9cbba",
       "type": "static-import",
       "from": "file:tools/image-optimize/__tests__/preflight.test.cjs",
@@ -25745,6 +26382,15 @@
       "required": true,
       "declared_target": "tools/preflight/host-state.cjs",
       "resolution": "tracked"
+    },
+    {
+      "id": "02e45be431b49bbab01658867ae581894f0f2eabbaad785ed6f816551f507358",
+      "type": "schema-definition-file",
+      "from": "schema-definition:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/evidence-ledger.schema.json",
+      "to": "file:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/evidence-ledger.schema.json",
+      "target": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/evidence-ledger.schema.json",
+      "required": true,
+      "declared_target": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/evidence-ledger.schema.json"
     },
     {
       "id": "03383245624918fafd9c46678ba987d1dad6aa28f9919f2b7557679e5362d43f",
@@ -26983,16 +27629,6 @@
       "declared_target": ".claude/commands/create-plan.md"
     },
     {
-      "id": "1054ff87a03d432a7d0dd0b6f9851895f819693871823ad804d97a5c21c7d552",
-      "type": "hook-target",
-      "from": "hook:PostToolUse:639",
-      "to": "file:tools/kernel/hooks/dispatch-posttool.cjs",
-      "target": "tools/kernel/hooks/dispatch-posttool.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-posttool.cjs",
-      "event": "PostToolUse"
-    },
-    {
       "id": "1055fdb6276c28f9d4aa1a815394e4d590682529281fdc41c68bdc86c6fbe196",
       "type": "package-script-target",
       "from": "package-script:ai:evidence:gather",
@@ -27418,6 +28054,15 @@
       "target": "tools/mcp/meta-ads/config.js",
       "required": true,
       "specifier": "./config"
+    },
+    {
+      "id": "14aa9219f32b22264ccf46b0a6f7747fef691d615188bde5a21834780b6f8cbb",
+      "type": "schema-definition-file",
+      "from": "schema-definition:framework_candidates/project-management__delta-specification/proposed_framework/schemas/input.schema.json",
+      "to": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/input.schema.json",
+      "target": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/input.schema.json",
+      "required": true,
+      "declared_target": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/input.schema.json"
     },
     {
       "id": "14b87a5d1ffaf97b51cb5614603d573f5d652601089010884e7bf119e83698f2",
@@ -27912,6 +28557,15 @@
       "specifier": "./lib/response-parser"
     },
     {
+      "id": "1987fdcc00d1f2e02030e3257d689083f99bc5b1e333f12ff7ebe98755661f35",
+      "type": "static-import",
+      "from": "file:tools/workspace/__tests__/candidate-root.test.js",
+      "to": "file:tools/workspace/lib/workspace.js",
+      "target": "tools/workspace/lib/workspace.js",
+      "required": true,
+      "specifier": "../lib/workspace"
+    },
+    {
       "id": "19b9e3ad33be3f8b3988ffdbb393dfa9e1b05a23d1ece34b473f9ef53fe499b2",
       "type": "static-import",
       "from": "file:tools/lint/fabricated-attributions.cjs",
@@ -27973,16 +28627,6 @@
       "target": "tools/seo-validation/lib/mobile.js",
       "required": true,
       "specifier": "./lib/mobile"
-    },
-    {
-      "id": "1a681bdfd5d2a848d7faf9f95cef377dba8f85fd3431a86ac78227a1d9469fd7",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:645",
-      "to": "file:tools/sessions/session-end-boundary-log.cjs",
-      "target": "tools/sessions/session-end-boundary-log.cjs",
-      "required": true,
-      "declared_target": "tools/sessions/session-end-boundary-log.cjs",
-      "event": "SessionEnd"
     },
     {
       "id": "1a93c7ff890d9ad525334f49db473375b65c21d05666e01213856db0b3cabc48",
@@ -29614,16 +30258,6 @@
       "specifier": "../lib.cjs"
     },
     {
-      "id": "2b0451a4db76e219a81198fbfbc3862bb73ee0e9e64ec6bb89b9c71dcb0a8a3a",
-      "type": "hook-target",
-      "from": "hook:PreToolUse:636",
-      "to": "file:tools/kernel/hooks/dispatch-pretool.cjs",
-      "target": "tools/kernel/hooks/dispatch-pretool.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-pretool.cjs",
-      "event": "PreToolUse"
-    },
-    {
       "id": "2b1917a12a2a4a3aa22d345217e4480b259c14fe4f8e601e7cd70ec2c1ccb56a",
       "type": "operation-canonical",
       "from": "operation:generate-harness",
@@ -30413,6 +31047,15 @@
       "target": "tools/planning/lib/resolve-task-plan.js",
       "required": true,
       "specifier": "../../planning/lib/resolve-task-plan"
+    },
+    {
+      "id": "334dc71d85c7703f8b1578cb8d5b5c2b38e186fe89f93eefd1319200f4a3ebca",
+      "type": "schema-definition-file",
+      "from": "schema-definition:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/change-proposal.schema.json",
+      "to": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/change-proposal.schema.json",
+      "target": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/change-proposal.schema.json",
+      "required": true,
+      "declared_target": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/change-proposal.schema.json"
     },
     {
       "id": "336bd881a1e4240f76c00e65db462084ffa1d4c40866aaf369b7af9510e3527d",
@@ -31917,6 +32560,15 @@
       "specifier": "./lib/adapters"
     },
     {
+      "id": "40b2e90917b33cd496a95d3e1bc1c31d09e86bf410abbbb1689bb5ed9914ed5d",
+      "type": "static-import",
+      "from": "file:tools/workspace/__tests__/candidate-root.test.js",
+      "to": "file:tools/lib/canonical-root.cjs",
+      "target": "tools/lib/canonical-root.cjs",
+      "required": true,
+      "specifier": "../../lib/canonical-root.cjs"
+    },
+    {
       "id": "40f0fc10b269290948e1e0fc972ff32b7d55bab8c6b81d3f0a6274d3f95aa37b",
       "type": "operation-canonical",
       "from": "operation:improve-framework",
@@ -32125,6 +32777,16 @@
       "target": "tools/body/private-surface-prebash.cjs",
       "required": true,
       "specifier": "../../body/private-surface-prebash.cjs"
+    },
+    {
+      "id": "4314ee774ef1f897e84879d49f268a376d5e7101fd616c868b6eba579bd8f8bf",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:656",
+      "to": "file:tools/hooks/session-lifecycle/session-end-close.cjs",
+      "target": "tools/hooks/session-lifecycle/session-end-close.cjs",
+      "required": true,
+      "declared_target": "tools/hooks/session-lifecycle/session-end-close.cjs",
+      "event": "SessionEnd"
     },
     {
       "id": "433423affe5a80b45e3c01be5098fb9cd1852a521d3150411a958c3798a30e19",
@@ -32383,16 +33045,6 @@
       "target": ".claude/commands/initiate-status.md",
       "required": true,
       "declared_target": ".claude/commands/initiate-status.md"
-    },
-    {
-      "id": "45698aec3d387607f3f9289e07fb8abde8d31ece77910b51389fb7f6ee88e8bc",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:643",
-      "to": "file:tools/hooks/session-lifecycle/session-end-close.cjs",
-      "target": "tools/hooks/session-lifecycle/session-end-close.cjs",
-      "required": true,
-      "declared_target": "tools/hooks/session-lifecycle/session-end-close.cjs",
-      "event": "SessionEnd"
     },
     {
       "id": "45756978875e407e15f38bd5e2849ac9915b9346b9bd0388694a6156d7a2fafe",
@@ -32872,16 +33524,6 @@
       "declared_target": ".claude/agents/framework-auditor.md"
     },
     {
-      "id": "4aa0c7ea7a795dd7a10c5e9f26ec964d75d7cdf4d329a7054520a91fa21d3a01",
-      "type": "hook-target",
-      "from": "hook:Stop:637",
-      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
-      "target": "tools/kernel/hooks/dispatch-stop.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-stop.cjs",
-      "event": "Stop"
-    },
-    {
       "id": "4ac91450d61a84b4193179674f93e3388b4d4f11bd11e2c45a2f29f42f2b4fa8",
       "type": "static-import",
       "from": "file:tools/sessions/consume-boundary.cjs",
@@ -33025,6 +33667,15 @@
       "target": "tools/bundle/lib/bundle-paths.js",
       "required": true,
       "specifier": "./lib/bundle-paths.js"
+    },
+    {
+      "id": "4bffdf489b995c215134dd1f1ce1ff9e6d25c3422443318f9d6a80dd7f48d132",
+      "type": "schema-definition-file",
+      "from": "schema-definition:framework_candidates/product-management__product-intake/proposed_framework/schemas/input.schema.json",
+      "to": "file:framework_candidates/product-management__product-intake/proposed_framework/schemas/input.schema.json",
+      "target": "framework_candidates/product-management__product-intake/proposed_framework/schemas/input.schema.json",
+      "required": true,
+      "declared_target": "framework_candidates/product-management__product-intake/proposed_framework/schemas/input.schema.json"
     },
     {
       "id": "4c1ee9703e1d82649a3673ada486314e359f6d8a71b82a694e6bb53fdc35086b",
@@ -34768,16 +35419,6 @@
       "specifier": "../operator-approval-verify"
     },
     {
-      "id": "5e194a1129a0f439606a7988dcd5b57853ca9d9d99a6b41fd4a9f3709994012f",
-      "type": "hook-target",
-      "from": "hook:SessionStart:640",
-      "to": "file:tools/kernel/hooks/dispatch-session-start.cjs",
-      "target": "tools/kernel/hooks/dispatch-session-start.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-session-start.cjs",
-      "event": "SessionStart"
-    },
-    {
       "id": "5e224663df8698fe4db148a6a5199ef76e482994d11dd815513202819cf4c95e",
       "type": "package-script-target",
       "from": "package-script:dart:operator-responses",
@@ -35454,6 +36095,16 @@
       "declared_target": "tools/verify/schemas/review-packet.schema.json"
     },
     {
+      "id": "64aef5c35204564b862abf35a647e10334c74c6a4fcdb11851e3555af9347997",
+      "type": "hook-target",
+      "from": "hook:Stop:650",
+      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
+      "target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "event": "Stop"
+    },
+    {
       "id": "64fcd4ee17957c98fa5de34b4a601ee8cb096197aff585a9d2713eb77f0c2fb4",
       "type": "static-import",
       "from": "file:tools/workspace/candidate-status.js",
@@ -36127,6 +36778,16 @@
       "declared_target": ".claude/commands/framework-phase.md"
     },
     {
+      "id": "6b0e90175ad9de57716d128f88d13d40b3e31ea307250e95985d430d36fe5fae",
+      "type": "hook-target",
+      "from": "hook:PostToolUse:652",
+      "to": "file:tools/kernel/hooks/dispatch-posttool.cjs",
+      "target": "tools/kernel/hooks/dispatch-posttool.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-posttool.cjs",
+      "event": "PostToolUse"
+    },
+    {
       "id": "6b17b2d7434c98e551bd8a5d82e0e844bea9fce4c7cc357e38a166d141507b63",
       "type": "static-import",
       "from": "file:tools/soul-space/validate-soul-space.js",
@@ -36308,6 +36969,15 @@
       "target": "tools/kernel/hooks/posttool-write-ledger.cjs",
       "required": true,
       "specifier": "../posttool-write-ledger.cjs"
+    },
+    {
+      "id": "6cbb0feb813504719767067ce27bf4299b5c47e7f270b3a93fac7f27db938a1a",
+      "type": "schema-definition-file",
+      "from": "schema-definition:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/review.schema.json",
+      "to": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/review.schema.json",
+      "target": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/review.schema.json",
+      "required": true,
+      "declared_target": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/review.schema.json"
     },
     {
       "id": "6d0272d6f7e6f08fe3965bce188ec3804dfd4e41a7492e16f3c48ac0a8f9a498",
@@ -38211,6 +38881,16 @@
       "specifier": "../planning/where-plan-dashboard"
     },
     {
+      "id": "7fd142f414761debfc9c41e371e5fc8e857a7246933ef2cdd0f0bce8fed8dd69",
+      "type": "hook-target",
+      "from": "hook:SessionStart:655",
+      "to": "file:tools/user/inject-mirror.cjs",
+      "target": "tools/user/inject-mirror.cjs",
+      "required": true,
+      "declared_target": "tools/user/inject-mirror.cjs",
+      "event": "SessionStart"
+    },
+    {
       "id": "7ffe1d7585a9fae6de7da4baae2e8be33969e3059757058671f766b86d3b487e",
       "type": "manifest-target",
       "from": "manifest-path:frameworks/wordpress/analytics-tracking/.claude/commands/analytics-tracking",
@@ -38741,6 +39421,15 @@
       "specifier": "tools/autonomy/schemas/operator-continuity.schema.json"
     },
     {
+      "id": "8489ac2804184f8a202890a6fde154af290d5f3c9936684fb740df02efe65152",
+      "type": "static-import",
+      "from": "file:tools/workspace/__tests__/candidate-root.test.js",
+      "to": "file:tools/workspace/lib/capture-candidate.js",
+      "target": "tools/workspace/lib/capture-candidate.js",
+      "required": true,
+      "specifier": "../lib/capture-candidate"
+    },
+    {
       "id": "84a95e8fe7c70e20a162364bd69ca496848dd6a2aa434df395fa2dfe28757420",
       "type": "package-script-target",
       "from": "package-script:instructions:check",
@@ -39077,6 +39766,15 @@
       "declared_target": "tools/workspace/schemas/output-contract-v2.schema.json"
     },
     {
+      "id": "88642c2c7c75ac6cd1a1c4a3af00c3d6bcf4a053e3d9b3a51a5b5005b6e9ed9d",
+      "type": "schema-definition-file",
+      "from": "schema-definition:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-brief.schema.json",
+      "to": "file:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-brief.schema.json",
+      "target": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-brief.schema.json",
+      "required": true,
+      "declared_target": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-brief.schema.json"
+    },
+    {
       "id": "8869425a0605e8db829731972f60b4378411afbea54d7c8ea115282c320baf21",
       "type": "command-definition-file",
       "from": "command-definition:ground-in-philosophy",
@@ -39203,6 +39901,16 @@
       "target": "tools/signals/lib/signal-lifecycle.js",
       "required": true,
       "specifier": "../signal-lifecycle"
+    },
+    {
+      "id": "8a39f7483d692afe47b6b016d488a3287a364eca74cad57b5380d30b60b5e34a",
+      "type": "hook-target",
+      "from": "hook:SubagentStop:659",
+      "to": "file:.claude/hooks/subagent-telemetry-writer.cjs",
+      "target": ".claude/hooks/subagent-telemetry-writer.cjs",
+      "required": true,
+      "declared_target": ".claude/hooks/subagent-telemetry-writer.cjs",
+      "event": "SubagentStop"
     },
     {
       "id": "8a3aeef43fd2f120c987e13805c68cf510166c38229e0e491233834eff1d6cde",
@@ -39583,16 +40291,6 @@
       "target": "instructions/canonical/commands/capture-task.yaml",
       "required": true,
       "declared_target": "instructions/canonical/commands/capture-task.yaml"
-    },
-    {
-      "id": "8e403d3b809dba700487fa2687bbccbfaf449aec849ce848b5f372c680400b9e",
-      "type": "hook-target",
-      "from": "hook:SessionStart:642",
-      "to": "file:tools/user/inject-mirror.cjs",
-      "target": "tools/user/inject-mirror.cjs",
-      "required": true,
-      "declared_target": "tools/user/inject-mirror.cjs",
-      "event": "SessionStart"
     },
     {
       "id": "8e6ea3a13079d6de0358fd93dea09ff03e50fe4e73921162d97119abdf837428",
@@ -40024,16 +40722,6 @@
       "target": "tools/planning/lib/plan-visibility.js",
       "required": true,
       "specifier": "./lib/plan-visibility"
-    },
-    {
-      "id": "92e5e247887f4ce5488285c1763811a91f624c97bb4938144cd459c6634334e6",
-      "type": "hook-target",
-      "from": "hook:UserPromptSubmit:638",
-      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
-      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-userprompt.cjs",
-      "event": "UserPromptSubmit"
     },
     {
       "id": "92ed6c7a8df5d41e76b0ca502faef39cce40d49ddf49a52686c398254c693a7c",
@@ -40606,6 +41294,15 @@
       "specifier": "./ratification-proposal.cjs"
     },
     {
+      "id": "98a5c2527b5a62ece835bf487024abbc38b566274d46ad7df65edd5042e42a97",
+      "type": "schema-definition-file",
+      "from": "schema-definition:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/dependency-acceptance-map.schema.json",
+      "to": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/dependency-acceptance-map.schema.json",
+      "target": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/dependency-acceptance-map.schema.json",
+      "required": true,
+      "declared_target": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/dependency-acceptance-map.schema.json"
+    },
+    {
       "id": "98b5a0746051310fc745fe36f8005f979ce7157a72b811335adc76d6dda6f191",
       "type": "static-import",
       "from": "file:tools/kernel/enforcement-home/__tests__/build-p4-s3-review-bundle.test.cjs",
@@ -40660,6 +41357,15 @@
       "declared_target": ".claude/commands/plan-active-workstreams.md"
     },
     {
+      "id": "9917db29d33dc40213a7e29ccf1f37a7de517200c253e51a334752f0539d6a67",
+      "type": "schema-definition-file",
+      "from": "schema-definition:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/baseline-inventory.schema.json",
+      "to": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/baseline-inventory.schema.json",
+      "target": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/baseline-inventory.schema.json",
+      "required": true,
+      "declared_target": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/baseline-inventory.schema.json"
+    },
+    {
       "id": "9926732da01d67e5a57edb8095cb13720403fd7dd53771fc0b0068c3c4663a1a",
       "type": "package-script-target",
       "from": "package-script:plans:audiences:enrich",
@@ -40696,6 +41402,15 @@
       "target": "tools/dart-integration/lib/plan-dart-projection.js",
       "required": true,
       "specifier": "../../dart-integration/lib/plan-dart-projection.js"
+    },
+    {
+      "id": "99570f6d7dfda219374d7158999f2eb16480ecb2f9378a0aaf88e225859adb8f",
+      "type": "schema-definition-file",
+      "from": "schema-definition:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/scope-and-intent.schema.json",
+      "to": "file:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/scope-and-intent.schema.json",
+      "target": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/scope-and-intent.schema.json",
+      "required": true,
+      "declared_target": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/scope-and-intent.schema.json"
     },
     {
       "id": "9957e87a051cdfb61deb18d517a24468376ec2a6d55e37fe1855273c21652b28",
@@ -41504,16 +42219,6 @@
       "target": "tools/reconciliation/lib/evidence-binding.cjs",
       "required": true,
       "specifier": "../lib/evidence-binding.cjs"
-    },
-    {
-      "id": "9f7b79841c178eb7dde2a75bd00f11e9295bd3fd397ab526ad51480511f5c6cc",
-      "type": "hook-target",
-      "from": "hook:SessionStart:641",
-      "to": "file:tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "required": true,
-      "declared_target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "event": "SessionStart"
     },
     {
       "id": "9f85def4cffe5d6046266d380dbbd007323b7c85315602363b085467b94a2c50",
@@ -43144,6 +43849,16 @@
       "resolution": "tracked"
     },
     {
+      "id": "b0e29d260567797a87a1510b9d6984350f509d0e03f6b9e04d52f574caab2bbb",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:658",
+      "to": "file:tools/sessions/session-end-boundary-log.cjs",
+      "target": "tools/sessions/session-end-boundary-log.cjs",
+      "required": true,
+      "declared_target": "tools/sessions/session-end-boundary-log.cjs",
+      "event": "SessionEnd"
+    },
+    {
       "id": "b0fcca811c13aa571b4f6202443030025f624b4312fd0161e0129250cfa180e1",
       "type": "static-import",
       "from": "file:tools/kernel/enforcement-home/debrief-soak-runner.cjs",
@@ -44615,6 +45330,16 @@
       "declared_target": ".claude/commands/oc.md"
     },
     {
+      "id": "be95d002b30145b044dce812ebd40337916121a4b1678952ec92b5db910d5b3b",
+      "type": "hook-target",
+      "from": "hook:SessionStart:654",
+      "to": "file:tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "required": true,
+      "declared_target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "event": "SessionStart"
+    },
+    {
       "id": "bedfa0f54f97e7ca72447814f5581cdbf1ffe748196722c3d5a2f78044bc1c0f",
       "type": "package-script-target",
       "from": "package-script:lint:spans",
@@ -45205,6 +45930,15 @@
       "declared_target": "frameworks/research/osint-discovery/schemas/target.schema.json"
     },
     {
+      "id": "c512ef43153ca555bfec7e49a76cf72ec2e3ecb2acd8a145e3dc0f2adebe57a7",
+      "type": "schema-definition-file",
+      "from": "schema-definition:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/hypothesis-tests.schema.json",
+      "to": "file:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/hypothesis-tests.schema.json",
+      "target": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/hypothesis-tests.schema.json",
+      "required": true,
+      "declared_target": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/hypothesis-tests.schema.json"
+    },
+    {
       "id": "c5233c7ba04a07a7e844687519ecfa2e7b8b7ac3e389f2ef9d734d5f9dab0412",
       "type": "static-import",
       "from": "file:tools/workspace/lib/models.js",
@@ -45296,6 +46030,15 @@
       "target": "tools/credentials/providers/base.py",
       "required": true,
       "specifier": ".base"
+    },
+    {
+      "id": "c68c28dbf6a02a2ae2ad89b3ded157c3c5e2af8ad7bbaad8a1e0ac9483e2559c",
+      "type": "schema-definition-file",
+      "from": "schema-definition:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/readiness-review.schema.json",
+      "to": "file:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/readiness-review.schema.json",
+      "target": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/readiness-review.schema.json",
+      "required": true,
+      "declared_target": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/readiness-review.schema.json"
     },
     {
       "id": "c6b643c45084abd4f8a6c37ca697d1869357f17acbc51129906b4e41ca2da641",
@@ -45977,6 +46720,16 @@
       "target": "tools/signals/lib/pipeline-loop.js",
       "required": true,
       "specifier": "../signals/lib/pipeline-loop"
+    },
+    {
+      "id": "cd852a1e62ca1d12dfd50c3fc884dc1697b25352d5c09ce8b73811ff01b789f2",
+      "type": "hook-target",
+      "from": "hook:UserPromptSubmit:651",
+      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
+      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "event": "UserPromptSubmit"
     },
     {
       "id": "cd8c3998503dc16ddc8f2221b7d8712ea29e10624d543d7070a3e696889f1c2e",
@@ -46699,6 +47452,15 @@
       "declared_target": "frameworks/wordpress/qa/schemas/output/summary-json.schema.json"
     },
     {
+      "id": "d563132fb055f13ae690ae5355da4a583b2298fdafb94c3addb89307e7549e20",
+      "type": "schema-definition-file",
+      "from": "schema-definition:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-spec.schema.json",
+      "to": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-spec.schema.json",
+      "target": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-spec.schema.json",
+      "required": true,
+      "declared_target": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-spec.schema.json"
+    },
+    {
       "id": "d583bb997ca12f760873dead02b5616a2f5339b41fbc79ceba7ca405ba595fbb",
       "type": "schema-definition-file",
       "from": "schema-definition:tools/framework-execution/compiler/compiler-observation.schema.json",
@@ -46917,6 +47679,15 @@
       "required": true,
       "declared_target": "tools/verify/verify-command.cjs",
       "resolution": "tracked"
+    },
+    {
+      "id": "d7a9bec48128878f79cbe57a004b43d3b9e252f49cc679177db132cdb05cbc80",
+      "type": "static-import",
+      "from": "file:tools/workspace/lib/workspace.js",
+      "to": "file:tools/lib/canonical-root.cjs",
+      "target": "tools/lib/canonical-root.cjs",
+      "required": true,
+      "specifier": "../../lib/canonical-root.cjs"
     },
     {
       "id": "d7c01f87e5841b5a9500e66e8bc09313b0e8c490f239e02854f46ac4d83ac4cd",
@@ -48090,16 +48861,6 @@
       "specifier": "./userprompt-plan-review-gate.cjs"
     },
     {
-      "id": "e2a9b2b4272739211d2180af3d89dcd709adb3f3bc356d548a6c3ed8d76a9be2",
-      "type": "hook-target",
-      "from": "hook:SubagentStop:646",
-      "to": "file:.claude/hooks/subagent-telemetry-writer.cjs",
-      "target": ".claude/hooks/subagent-telemetry-writer.cjs",
-      "required": true,
-      "declared_target": ".claude/hooks/subagent-telemetry-writer.cjs",
-      "event": "SubagentStop"
-    },
-    {
       "id": "e2bdd83481ab9536f3cefdf2a0f4a603eca8a9bd3c5a6b66c4e4a586bd8be4f7",
       "type": "manifest-target",
       "from": "manifest-path:.claude/skills/oa/SKILL.md",
@@ -48316,16 +49077,6 @@
       "target": ".claude/commands/deliberate.md",
       "required": true,
       "declared_target": ".claude/commands/deliberate.md"
-    },
-    {
-      "id": "e4feaf179728ab5027e2ba483cb1fc25a35bf693a05703910b46acff8b3549e8",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:644",
-      "to": "file:tools/context/repo-awareness-closeout.cjs",
-      "target": "tools/context/repo-awareness-closeout.cjs",
-      "required": true,
-      "declared_target": "tools/context/repo-awareness-closeout.cjs",
-      "event": "SessionEnd"
     },
     {
       "id": "e501fd881d8319ad1a3811badea95991d8366c68a99cddf0856c07c1578e3441",
@@ -49119,6 +49870,16 @@
       "specifier": "../workspace/lib/args"
     },
     {
+      "id": "ece77f1ff44c4b644a18178995814d4d701f86b9d9fca6ead3a8f9f3c6d141e6",
+      "type": "package-script-target",
+      "from": "package-script:test",
+      "to": "file:tools/workspace/__tests__/candidate-root.test.js",
+      "target": "tools/workspace/__tests__/candidate-root.test.js",
+      "required": true,
+      "declared_target": "tools/workspace/__tests__/candidate-root.test.js",
+      "resolution": "tracked"
+    },
+    {
       "id": "ed1f5534c883fb5ec13335ca41d94c700f424bd5dc3a037f1d7be257b3219bdc",
       "type": "operation-command",
       "from": "operation:new-project",
@@ -49237,6 +49998,15 @@
       "target": ".claude/skills/canonical-path-authority-gate/SKILL.md",
       "required": true,
       "declared_target": ".claude/skills/canonical-path-authority-gate/SKILL.md"
+    },
+    {
+      "id": "ee4bcefbdf5bf1a0c1cc814b891beda3e73edcc73a8412e571fa6888bdc315a1",
+      "type": "static-import",
+      "from": "file:tools/workspace/__tests__/candidate-root.test.js",
+      "to": "file:tools/workspace/lib/output-contract.js",
+      "target": "tools/workspace/lib/output-contract.js",
+      "required": true,
+      "specifier": "../lib/output-contract"
     },
     {
       "id": "ee4f6b209a39a4d3a9748a3285ffcd66b894ce09ff5add5e0ac7421dbfcea90f",
@@ -49983,6 +50753,15 @@
       "specifier": "./lib/pipeline-loop"
     },
     {
+      "id": "f4a624f4d7b34ef51916a20e72164452eeae4fdb112c53b3e09085c4603b7c2b",
+      "type": "static-import",
+      "from": "file:tools/workspace/__tests__/candidate-root.test.js",
+      "to": "file:tools/workspace/lib/models.js",
+      "target": "tools/workspace/lib/models.js",
+      "required": true,
+      "specifier": "../lib/models"
+    },
+    {
       "id": "f4d7631ee2272ec2c04b2acfeed99219976958781d9774a62ba0838cf8363982",
       "type": "static-import",
       "from": "file:tools/mcp/meta-ads/edit-creative-text.js",
@@ -50648,6 +51427,16 @@
       "specifier": "./lib/actor-auto"
     },
     {
+      "id": "f9f1bf6355453dd83839bc545d7b07dc9baf8d0aa82b4b9756c6f3b86ff64d47",
+      "type": "hook-target",
+      "from": "hook:PreToolUse:649",
+      "to": "file:tools/kernel/hooks/dispatch-pretool.cjs",
+      "target": "tools/kernel/hooks/dispatch-pretool.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-pretool.cjs",
+      "event": "PreToolUse"
+    },
+    {
       "id": "fa15d055ae71ae7859b12e81850c3217fc016606079b8fe9cd00bf16aa9f1d0c",
       "type": "static-import",
       "from": "file:tools/ticktock/test-benchmark-halt-enum.cjs",
@@ -50655,6 +51444,16 @@
       "target": "tools/ticktock/journal-schema.json",
       "required": true,
       "specifier": "./journal-schema.json"
+    },
+    {
+      "id": "fa19db139abbb32cab8bf5e8b9879925e7c0e20e28d57f57223de74c6f62779b",
+      "type": "hook-target",
+      "from": "hook:SessionStart:653",
+      "to": "file:tools/kernel/hooks/dispatch-session-start.cjs",
+      "target": "tools/kernel/hooks/dispatch-session-start.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-session-start.cjs",
+      "event": "SessionStart"
     },
     {
       "id": "fa1fa53348025ba97013fe4ef2bfbf2a96e96b799585bb4dd611caa6f58d2677",
@@ -51305,8 +52104,8 @@
     }
   ],
   "counts": {
-    "nodes": 3895,
-    "edges": 2851,
+    "nodes": 3988,
+    "edges": 2870,
     "unresolved": 0
   }
 }

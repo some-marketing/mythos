@@ -20,6 +20,6 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run verify:parity
-      - run: node --test tools/parity/__tests__/verify-parity.test.cjs tools/parity/__tests__/reconciliation-ledger.test.cjs
+      - run: node --test tools/parity/__tests__/verify-parity.test.cjs tools/parity/__tests__/reconciliation-ledger.test.cjs tools/workspace/__tests__/candidate-root.test.js
       - run: node tools/kernel/hooks/__tests__/pretool-orchestrator-worker-gate.test.cjs
       - run: node tools/signals/lib/__tests__/review-task-plan-narrative.test.cjs

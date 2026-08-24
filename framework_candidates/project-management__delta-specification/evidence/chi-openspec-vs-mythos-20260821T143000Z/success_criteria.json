@@ -1,0 +1,8 @@
+{
+  "criteria": [
+    "Added, modified, and removed requirements remain structurally distinct.",
+    "Source custody and comparative-hardening provenance remain explicit.",
+    "Promotion remains blocked until independent replay and evidence thresholds are satisfied."
+  ],
+  "notes": ["This capture supports candidate provenance; it is not comparative-effectiveness evidence."]
+}

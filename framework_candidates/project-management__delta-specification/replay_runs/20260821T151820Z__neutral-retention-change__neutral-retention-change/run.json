@@ -1,0 +1,13 @@
+{
+  "run_id": "20260821T151820Z__neutral-retention-change__neutral-retention-change",
+  "case_id": "neutral-retention-change",
+  "candidate_id": "project-management__delta-specification",
+  "started_at": "2026-08-21T15:18:20.000Z",
+  "finished_at": "2026-08-21T15:18:20.000Z",
+  "result": "pass",
+  "run_type": "preflight",
+  "manual_intervention_count": 0,
+  "blocking_failures": [],
+  "prompt_failures": [],
+  "preflight_warnings": []
+}

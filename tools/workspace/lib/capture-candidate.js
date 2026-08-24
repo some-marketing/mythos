@@ -91,6 +91,9 @@ function loadCandidate(candidateRoot) {
 
 function collectCandidateBlockingIssues(candidateRoot, candidate, { workspaceRoot, projectRoot } = {}) {
   const issues = [];
+  if (candidate.owner !== 'human framework steward') {
+    issues.push('Candidate owner must be migrated to human framework steward before promotion.');
+  }
   const proposedFrameworkRoot = path.join(candidateRoot, 'proposed_framework');
   const required = ['manifest.json', 'guardrails.md', 'prompts', 'schemas'];
   for (const rel of required) {

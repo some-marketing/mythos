@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "required": [
+    "requested_outcome",
+    "affected_behaviors",
+    "affected_consumers",
+    "constraints",
+    "non_goals",
+    "risks",
+    "success_signals",
+    "specification_depth"
+  ],
+  "properties": {
+    "requested_outcome": { "type": "string", "minLength": 1 },
+    "affected_behaviors": { "type": "array", "items": { "type": "string" } },
+    "affected_consumers": { "type": "array", "items": { "type": "string" } },
+    "constraints": { "type": "array", "items": { "type": "string" } },
+    "non_goals": { "type": "array", "items": { "type": "string" } },
+    "risks": { "type": "array", "items": { "type": "string" } },
+    "success_signals": { "type": "array", "items": { "type": "string" } },
+    "specification_depth": { "type": "string", "enum": ["Lite", "Full"] }
+  }
+}

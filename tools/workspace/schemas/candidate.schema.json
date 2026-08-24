@@ -27,7 +27,11 @@
     "source_origins": { "type": "array" },
     "created_at": { "type": "string" },
     "updated_at": { "type": "string" },
-    "owner": { "type": "string" },
+    "owner": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Accountable owner. Legacy values remain readable, but promotion requires human framework steward."
+    },
     "promotion_ready": { "type": "boolean" },
     "blocking_issues": { "type": "array" },
     "replay_summary": { "type": "object" },

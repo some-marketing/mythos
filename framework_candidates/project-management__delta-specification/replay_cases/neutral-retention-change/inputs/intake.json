@@ -1,0 +1,16 @@
+{
+  "change_request": "Update a generic document-retention workflow to support a configurable retention period, hide expired bundles from the default list, and remove the legacy fixed-duration assumption while preserving export receipts.",
+  "baseline_sources": [
+    "baseline.md"
+  ],
+  "affected_consumers": [
+    "document-workflow user",
+    "audit reviewer"
+  ],
+  "constraints": [
+    "No implementation instructions",
+    "Preserve current export behavior",
+    "Do not infer missing baseline facts"
+  ],
+  "risk_level": "medium"
+}

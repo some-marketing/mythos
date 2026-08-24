@@ -1,0 +1,50 @@
+{
+  "type": "object",
+  "x_mythos_distinct_review_provenance": true,
+  "required": [
+    "verdict",
+    "findings",
+    "falsifier",
+    "producer_provenance",
+    "reviewer_provenance"
+  ],
+  "properties": {
+    "verdict": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "CONCERNS",
+        "FAIL"
+      ]
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "falsifier": {
+      "type": "string"
+    },
+    "producer_provenance": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "actor_id",
+          "harness_id",
+          "model_provider_family"
+        ]
+      }
+    },
+    "reviewer_provenance": {
+      "type": "object",
+      "required": [
+        "actor_id",
+        "harness_id",
+        "model_provider_family"
+      ]
+    }
+  }
+}

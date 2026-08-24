@@ -3709,7 +3709,7 @@
       "id": "file:.github/workflows/parity.yml",
       "type": "file",
       "path": ".github/workflows/parity.yml",
-      "sha256": "cc447d96c62e9163da5129b80c2a368c1c4d1174ea2ce2143e39ae2809a541e1",
+      "sha256": "5f6d22a76b1d787e9b0843e788d9fd483e51ff0ae1a3d8d91d12cf5bff240dd5",
       "mode": 420
     },
     {
@@ -3934,13 +3934,6 @@
       "type": "file",
       "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-brief.schema.json",
       "sha256": "8f8e04a70964808c9918edcd6b2d5ffc8fa817e9b340682536de2f3befebd2a6",
-      "mode": 420
-    },
-    {
-      "id": "file:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-intake.schema.json",
-      "type": "file",
-      "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-intake.schema.json",
-      "sha256": "185c4ed0cd2ede3d58afaf95022605e0d127853782de851f5e2d0ad09ff8b6ff",
       "mode": 420
     },
     {
@@ -4228,13 +4221,6 @@
       "type": "file",
       "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-spec.schema.json",
       "sha256": "b0205adac61c4a1c8a1249c5b179d20d93ca16e357d61c265e6669417e65ff6d",
-      "mode": 420
-    },
-    {
-      "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-specification.schema.json",
-      "type": "file",
-      "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-specification.schema.json",
-      "sha256": "5011264d72fff8435d963f7e66dd40b829a96a29fdec78561ce8c13792cb10ea",
       "mode": 420
     },
     {
@@ -10268,7 +10254,7 @@
       "id": "file:package.json",
       "type": "file",
       "path": "package.json",
-      "sha256": "0174a03e6beef86c68242f440c13a64f2a4fc92221f2f442a05faeb692bcc3ee",
+      "sha256": "22f8d45c2f50d4a6fa8830a85f0360d835c387206521fc1c64bd8cc46680c32a",
       "mode": 420
     },
     {
@@ -21618,67 +21604,67 @@
       "name": "wordpress/seo-validation"
     },
     {
-      "id": "hook:PostToolUse:653",
+      "id": "hook:PostToolUse:652",
       "type": "hook",
       "event": "PostToolUse",
       "command_sha256": "e395bd31a35362065002007d044e98d86e484bf829d16ebe2027da8a928db52c"
     },
     {
-      "id": "hook:PreToolUse:650",
+      "id": "hook:PreToolUse:649",
       "type": "hook",
       "event": "PreToolUse",
       "command_sha256": "ce97f4fd7eb07f52a0e9c6352fab2ce0e803f0920ef184d8f42261a46580103b"
     },
     {
-      "id": "hook:SessionEnd:657",
+      "id": "hook:SessionEnd:656",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "35974852e367c31bae49591ac0aa4afd518ec624f233743462e37c4c3863b1ed"
     },
     {
-      "id": "hook:SessionEnd:658",
+      "id": "hook:SessionEnd:657",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "519f522b04afb8471aa7e7ca117deb8af91976de62b5c1f5f4f6f9f60c8c217f"
     },
     {
-      "id": "hook:SessionEnd:659",
+      "id": "hook:SessionEnd:658",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "4ee05b68abff34325a3950761939e20cf2391c7b29d640b29b95233d29943fd4"
     },
     {
-      "id": "hook:SessionStart:654",
+      "id": "hook:SessionStart:653",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "26962e5976f5c689361f18050bb4e718d507df72590fbbc620e356cde47cf86b"
     },
     {
-      "id": "hook:SessionStart:655",
+      "id": "hook:SessionStart:654",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "00253242784e7853b94e1125e7c69f31085961b2dd7b3d1fcb6b4c79d94e9baf"
     },
     {
-      "id": "hook:SessionStart:656",
+      "id": "hook:SessionStart:655",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "c738ce0e54e375f17b97f1186b95e5fd1125c0675d2f3e9238e872062f5b7076"
     },
     {
-      "id": "hook:Stop:651",
+      "id": "hook:Stop:650",
       "type": "hook",
       "event": "Stop",
       "command_sha256": "c0c0282a10c1ff35c525d7786ceb380c853b678494f400dbf1fc178cdddcbb19"
     },
     {
-      "id": "hook:SubagentStop:660",
+      "id": "hook:SubagentStop:659",
       "type": "hook",
       "event": "SubagentStop",
       "command_sha256": "4ca0f2529c8dd4023ade83508a1e40a1728dbdcfa35aadf9ea953cf8ac9a587d"
     },
     {
-      "id": "hook:UserPromptSubmit:652",
+      "id": "hook:UserPromptSubmit:651",
       "type": "hook",
       "event": "UserPromptSubmit",
       "command_sha256": "d647b60c73e5962cae00cf1cf2bd11d28472fdb8c47074a2e62cabf0e7e89545"
@@ -24881,7 +24867,7 @@
       "id": "package-script:test",
       "type": "package-script",
       "name": "test",
-      "command_sha256": "c9eb3b25ef6ae6a1ae2b2e49f6c2741ae7126e89d74770452d1f1762559919d0"
+      "command_sha256": "ceda2e7402d4c78ae8cfd87202c8dd14649bbd7dcbe059bdaa2e4d6f2a0cdec3"
     },
     {
       "id": "package-script:test:planning",
@@ -25150,11 +25136,6 @@
       "name": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-brief.schema.json"
     },
     {
-      "id": "schema-definition:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-intake.schema.json",
-      "type": "schema-definition",
-      "name": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-intake.schema.json"
-    },
-    {
       "id": "schema-definition:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/readiness-review.schema.json",
       "type": "schema-definition",
       "name": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/readiness-review.schema.json"
@@ -25183,11 +25164,6 @@
       "id": "schema-definition:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-spec.schema.json",
       "type": "schema-definition",
       "name": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-spec.schema.json"
-    },
-    {
-      "id": "schema-definition:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-specification.schema.json",
-      "type": "schema-definition",
-      "name": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-specification.schema.json"
     },
     {
       "id": "schema-definition:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/dependency-acceptance-map.schema.json",
@@ -26208,16 +26184,6 @@
       "specifier": "./client"
     },
     {
-      "id": "014fecd33549cc13321c0f3fae42781e82c9d78a4524ef9d3060674c85076d8a",
-      "type": "hook-target",
-      "from": "hook:SubagentStop:660",
-      "to": "file:.claude/hooks/subagent-telemetry-writer.cjs",
-      "target": ".claude/hooks/subagent-telemetry-writer.cjs",
-      "required": true,
-      "declared_target": ".claude/hooks/subagent-telemetry-writer.cjs",
-      "event": "SubagentStop"
-    },
-    {
       "id": "017d3172a1c280b7a8d00f4bbb9f707aaec4f6ab717e961bc50708d12ba1caf0",
       "type": "static-import",
       "from": "file:tools/verify/verify-report-claims.cjs",
@@ -26243,6 +26209,16 @@
       "target": "tools/maintenance/repair-ladder.cjs",
       "required": true,
       "specifier": "../repair-ladder.cjs"
+    },
+    {
+      "id": "019e4a37165011a4a2f46489d7dd7d7b91bf0e801c99992483029fd5e4836c14",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:657",
+      "to": "file:tools/context/repo-awareness-closeout.cjs",
+      "target": "tools/context/repo-awareness-closeout.cjs",
+      "required": true,
+      "declared_target": "tools/context/repo-awareness-closeout.cjs",
+      "event": "SessionEnd"
     },
     {
       "id": "01cacc410e20b921eafaf90292b9a5aced405cf5dae7278f9afd100339e9cbba",
@@ -28171,15 +28147,6 @@
       "target": "tools/workspace/lib/args.js",
       "required": true,
       "specifier": "../workspace/lib/args"
-    },
-    {
-      "id": "15c898497f7d6057e29edd8e46e8e5031dd4bb3d08f9bae5bcaeec44c6200cdb",
-      "type": "schema-definition-file",
-      "from": "schema-definition:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-specification.schema.json",
-      "to": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-specification.schema.json",
-      "target": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-specification.schema.json",
-      "required": true,
-      "declared_target": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-specification.schema.json"
     },
     {
       "id": "15e25deb563c71f94662d57d9ad190628c99f41ec03917fecc5375f006374813",
@@ -30590,16 +30557,6 @@
       "declared_target": ".claude/commands/new-client.md"
     },
     {
-      "id": "2e4a2390922734d7ec0800c9e4a37347f9b7588a02ebf2a616e814df6474e088",
-      "type": "hook-target",
-      "from": "hook:Stop:651",
-      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
-      "target": "tools/kernel/hooks/dispatch-stop.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-stop.cjs",
-      "event": "Stop"
-    },
-    {
       "id": "2e66b82dc55aebf49946879c47935e3bc95b1af1b6f1672ad8f7f446da863f4e",
       "type": "package-script-target",
       "from": "package-script:workspace:run:init",
@@ -31676,16 +31633,6 @@
       "resolution": "tracked"
     },
     {
-      "id": "3828c88a1c464a0574baf1d5ba87ea1564cda3d95b5a1516df260463c8f3d21c",
-      "type": "hook-target",
-      "from": "hook:UserPromptSubmit:652",
-      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
-      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-userprompt.cjs",
-      "event": "UserPromptSubmit"
-    },
-    {
       "id": "3870e75c080b2c03ef1a4b1f4b958cf121127dd64a507943f9cea9171eb64f89",
       "type": "schema-definition-file",
       "from": "schema-definition:frameworks/paid-media/meta-creative-iteration/schemas/stage6-readout-narrative.schema.json",
@@ -31828,16 +31775,6 @@
       "target": ".claude/commands/plan-task.md",
       "required": true,
       "declared_target": ".claude/commands/plan-task.md"
-    },
-    {
-      "id": "39b101726562c51ebba7735851e6be151dcc4e2598f32fc6762142bfc003b6b3",
-      "type": "hook-target",
-      "from": "hook:SessionStart:654",
-      "to": "file:tools/kernel/hooks/dispatch-session-start.cjs",
-      "target": "tools/kernel/hooks/dispatch-session-start.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-session-start.cjs",
-      "event": "SessionStart"
     },
     {
       "id": "39c01d773ec700bf53166b2a92077cf21b8fea468b96bac2359939ae41c9f078",
@@ -32312,16 +32249,6 @@
       "target": "tools/ai-bridge/lib/plan-audience-framing-lint.cjs",
       "required": true,
       "specifier": "./lib/plan-audience-framing-lint.cjs"
-    },
-    {
-      "id": "3e3e370ec5055f7b3dfd749704c773887830fbb678701526e64258eff2816262",
-      "type": "hook-target",
-      "from": "hook:SessionStart:655",
-      "to": "file:tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "required": true,
-      "declared_target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "event": "SessionStart"
     },
     {
       "id": "3e53abc8200deb19c345c717760e6710e2c695bd77ef969663a6083f059ea9f7",
@@ -32850,6 +32777,16 @@
       "target": "tools/body/private-surface-prebash.cjs",
       "required": true,
       "specifier": "../../body/private-surface-prebash.cjs"
+    },
+    {
+      "id": "4314ee774ef1f897e84879d49f268a376d5e7101fd616c868b6eba579bd8f8bf",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:656",
+      "to": "file:tools/hooks/session-lifecycle/session-end-close.cjs",
+      "target": "tools/hooks/session-lifecycle/session-end-close.cjs",
+      "required": true,
+      "declared_target": "tools/hooks/session-lifecycle/session-end-close.cjs",
+      "event": "SessionEnd"
     },
     {
       "id": "433423affe5a80b45e3c01be5098fb9cd1852a521d3150411a958c3798a30e19",
@@ -34122,16 +34059,6 @@
       "target": "tools/framework-execution/compiler/compiler-observation.schema.json",
       "required": true,
       "specifier": "compiler-observation.schema.json"
-    },
-    {
-      "id": "508778bca2e176c5c73af1680880f296fc75cbb296844e2a68091a71936d8179",
-      "type": "hook-target",
-      "from": "hook:PostToolUse:653",
-      "to": "file:tools/kernel/hooks/dispatch-posttool.cjs",
-      "target": "tools/kernel/hooks/dispatch-posttool.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-posttool.cjs",
-      "event": "PostToolUse"
     },
     {
       "id": "50b612b3c273ee8d79378cb90370f539900f2c28f88f72414782c3ff3134d85c",
@@ -36168,6 +36095,16 @@
       "declared_target": "tools/verify/schemas/review-packet.schema.json"
     },
     {
+      "id": "64aef5c35204564b862abf35a647e10334c74c6a4fcdb11851e3555af9347997",
+      "type": "hook-target",
+      "from": "hook:Stop:650",
+      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
+      "target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "event": "Stop"
+    },
+    {
       "id": "64fcd4ee17957c98fa5de34b4a601ee8cb096197aff585a9d2713eb77f0c2fb4",
       "type": "static-import",
       "from": "file:tools/workspace/candidate-status.js",
@@ -36841,6 +36778,16 @@
       "declared_target": ".claude/commands/framework-phase.md"
     },
     {
+      "id": "6b0e90175ad9de57716d128f88d13d40b3e31ea307250e95985d430d36fe5fae",
+      "type": "hook-target",
+      "from": "hook:PostToolUse:652",
+      "to": "file:tools/kernel/hooks/dispatch-posttool.cjs",
+      "target": "tools/kernel/hooks/dispatch-posttool.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-posttool.cjs",
+      "event": "PostToolUse"
+    },
+    {
       "id": "6b17b2d7434c98e551bd8a5d82e0e844bea9fce4c7cc357e38a166d141507b63",
       "type": "static-import",
       "from": "file:tools/soul-space/validate-soul-space.js",
@@ -37160,16 +37107,6 @@
       "target": "tools/client-storage/classify.js",
       "required": true,
       "specifier": "../classify.js"
-    },
-    {
-      "id": "6e47e1d05a16fad3f198c9ce1a47b5ad3c34241f916ffcf10f52a0f48b02f0c0",
-      "type": "hook-target",
-      "from": "hook:SessionStart:656",
-      "to": "file:tools/user/inject-mirror.cjs",
-      "target": "tools/user/inject-mirror.cjs",
-      "required": true,
-      "declared_target": "tools/user/inject-mirror.cjs",
-      "event": "SessionStart"
     },
     {
       "id": "6e5e5928122a8ecfe8f565b10ab1e5169f3178f899c72073e90eabc488a95f3f",
@@ -38944,6 +38881,16 @@
       "specifier": "../planning/where-plan-dashboard"
     },
     {
+      "id": "7fd142f414761debfc9c41e371e5fc8e857a7246933ef2cdd0f0bce8fed8dd69",
+      "type": "hook-target",
+      "from": "hook:SessionStart:655",
+      "to": "file:tools/user/inject-mirror.cjs",
+      "target": "tools/user/inject-mirror.cjs",
+      "required": true,
+      "declared_target": "tools/user/inject-mirror.cjs",
+      "event": "SessionStart"
+    },
+    {
       "id": "7ffe1d7585a9fae6de7da4baae2e8be33969e3059757058671f766b86d3b487e",
       "type": "manifest-target",
       "from": "manifest-path:frameworks/wordpress/analytics-tracking/.claude/commands/analytics-tracking",
@@ -39023,16 +38970,6 @@
       "target": "frameworks/meta/dreaming-system/manifest.json",
       "required": true,
       "declared_target": "frameworks/meta/dreaming-system/manifest.json"
-    },
-    {
-      "id": "80d5ca88377c08985152732ca6e9ee359e60cc7c08e4bafde831eeae349014aa",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:659",
-      "to": "file:tools/sessions/session-end-boundary-log.cjs",
-      "target": "tools/sessions/session-end-boundary-log.cjs",
-      "required": true,
-      "declared_target": "tools/sessions/session-end-boundary-log.cjs",
-      "event": "SessionEnd"
     },
     {
       "id": "80e130a727d45b94fa6a679e9d1347b3efa4af5f5855f74f7bd62e50a446b3f5",
@@ -39966,6 +39903,16 @@
       "specifier": "../signal-lifecycle"
     },
     {
+      "id": "8a39f7483d692afe47b6b016d488a3287a364eca74cad57b5380d30b60b5e34a",
+      "type": "hook-target",
+      "from": "hook:SubagentStop:659",
+      "to": "file:.claude/hooks/subagent-telemetry-writer.cjs",
+      "target": ".claude/hooks/subagent-telemetry-writer.cjs",
+      "required": true,
+      "declared_target": ".claude/hooks/subagent-telemetry-writer.cjs",
+      "event": "SubagentStop"
+    },
+    {
       "id": "8a3aeef43fd2f120c987e13805c68cf510166c38229e0e491233834eff1d6cde",
       "type": "command-definition-file",
       "from": "command-definition:execute-plan",
@@ -40056,16 +40003,6 @@
       "target": "frameworks/paid-media/meta-creative-iteration/schemas/stage6-readout.schema.json",
       "required": true,
       "specifier": "schemas/stage6-readout.schema.json"
-    },
-    {
-      "id": "8b2dfe24849e07d7ba9a16617c64d99ebf1e5a286f0eda4e0575693a4b445eaa",
-      "type": "hook-target",
-      "from": "hook:PreToolUse:650",
-      "to": "file:tools/kernel/hooks/dispatch-pretool.cjs",
-      "target": "tools/kernel/hooks/dispatch-pretool.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-pretool.cjs",
-      "event": "PreToolUse"
     },
     {
       "id": "8b502fa314f902b861b986858e2c1aec7a8acf2c32b847b4b7f1fe78a771c610",
@@ -41219,16 +41156,6 @@
       "target": ".claude/agents/research-fetcher.md",
       "required": true,
       "declared_target": ".claude/agents/research-fetcher.md"
-    },
-    {
-      "id": "97021aa6d6106e044e75d658c669a987664fc8e168bcbb001e2beeecaf131fe5",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:657",
-      "to": "file:tools/hooks/session-lifecycle/session-end-close.cjs",
-      "target": "tools/hooks/session-lifecycle/session-end-close.cjs",
-      "required": true,
-      "declared_target": "tools/hooks/session-lifecycle/session-end-close.cjs",
-      "event": "SessionEnd"
     },
     {
       "id": "97174f1f48f203121f56bf9c18da8ea7c7a79095d3fa95764e918af42e96f454",
@@ -43922,6 +43849,16 @@
       "resolution": "tracked"
     },
     {
+      "id": "b0e29d260567797a87a1510b9d6984350f509d0e03f6b9e04d52f574caab2bbb",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:658",
+      "to": "file:tools/sessions/session-end-boundary-log.cjs",
+      "target": "tools/sessions/session-end-boundary-log.cjs",
+      "required": true,
+      "declared_target": "tools/sessions/session-end-boundary-log.cjs",
+      "event": "SessionEnd"
+    },
+    {
       "id": "b0fcca811c13aa571b4f6202443030025f624b4312fd0161e0129250cfa180e1",
       "type": "static-import",
       "from": "file:tools/kernel/enforcement-home/debrief-soak-runner.cjs",
@@ -44968,15 +44905,6 @@
       "specifier": "../schemas/recursive-actor-work-order.schema.json"
     },
     {
-      "id": "bb13bcf4b335be5aaae3f14c460be46ff55f1614717958331997c58eb5f1b0ae",
-      "type": "schema-definition-file",
-      "from": "schema-definition:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-intake.schema.json",
-      "to": "file:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-intake.schema.json",
-      "target": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-intake.schema.json",
-      "required": true,
-      "declared_target": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-intake.schema.json"
-    },
-    {
       "id": "bb15d92eb38c585aca6765da45891b9b43ca8e51c8d4e6ec7987a3a0f4d26f4e",
       "type": "installer-definition-file",
       "from": "installer-definition:tools/launchd/install.sh",
@@ -45400,6 +45328,16 @@
       "target": ".claude/commands/oc.md",
       "required": true,
       "declared_target": ".claude/commands/oc.md"
+    },
+    {
+      "id": "be95d002b30145b044dce812ebd40337916121a4b1678952ec92b5db910d5b3b",
+      "type": "hook-target",
+      "from": "hook:SessionStart:654",
+      "to": "file:tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "required": true,
+      "declared_target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "event": "SessionStart"
     },
     {
       "id": "bedfa0f54f97e7ca72447814f5581cdbf1ffe748196722c3d5a2f78044bc1c0f",
@@ -46782,6 +46720,16 @@
       "target": "tools/signals/lib/pipeline-loop.js",
       "required": true,
       "specifier": "../signals/lib/pipeline-loop"
+    },
+    {
+      "id": "cd852a1e62ca1d12dfd50c3fc884dc1697b25352d5c09ce8b73811ff01b789f2",
+      "type": "hook-target",
+      "from": "hook:UserPromptSubmit:651",
+      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
+      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "event": "UserPromptSubmit"
     },
     {
       "id": "cd8c3998503dc16ddc8f2221b7d8712ea29e10624d543d7070a3e696889f1c2e",
@@ -49922,6 +49870,16 @@
       "specifier": "../workspace/lib/args"
     },
     {
+      "id": "ece77f1ff44c4b644a18178995814d4d701f86b9d9fca6ead3a8f9f3c6d141e6",
+      "type": "package-script-target",
+      "from": "package-script:test",
+      "to": "file:tools/workspace/__tests__/candidate-root.test.js",
+      "target": "tools/workspace/__tests__/candidate-root.test.js",
+      "required": true,
+      "declared_target": "tools/workspace/__tests__/candidate-root.test.js",
+      "resolution": "tracked"
+    },
+    {
       "id": "ed1f5534c883fb5ec13335ca41d94c700f424bd5dc3a037f1d7be257b3219bdc",
       "type": "operation-command",
       "from": "operation:new-project",
@@ -50249,16 +50207,6 @@
       "target": "tools/ant-hive-world/generate-blank-hive-seed.js",
       "required": true,
       "specifier": "../generate-blank-hive-seed.js"
-    },
-    {
-      "id": "efdb1de342cecc2489d543be90d3994f9963e4f2693ec84374486531588dceda",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:658",
-      "to": "file:tools/context/repo-awareness-closeout.cjs",
-      "target": "tools/context/repo-awareness-closeout.cjs",
-      "required": true,
-      "declared_target": "tools/context/repo-awareness-closeout.cjs",
-      "event": "SessionEnd"
     },
     {
       "id": "efdd0fc674c1f2798f654bdff691696c6efe123176bbaa3567cc3a4c7509d662",
@@ -51479,6 +51427,16 @@
       "specifier": "./lib/actor-auto"
     },
     {
+      "id": "f9f1bf6355453dd83839bc545d7b07dc9baf8d0aa82b4b9756c6f3b86ff64d47",
+      "type": "hook-target",
+      "from": "hook:PreToolUse:649",
+      "to": "file:tools/kernel/hooks/dispatch-pretool.cjs",
+      "target": "tools/kernel/hooks/dispatch-pretool.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-pretool.cjs",
+      "event": "PreToolUse"
+    },
+    {
       "id": "fa15d055ae71ae7859b12e81850c3217fc016606079b8fe9cd00bf16aa9f1d0c",
       "type": "static-import",
       "from": "file:tools/ticktock/test-benchmark-halt-enum.cjs",
@@ -51486,6 +51444,16 @@
       "target": "tools/ticktock/journal-schema.json",
       "required": true,
       "specifier": "./journal-schema.json"
+    },
+    {
+      "id": "fa19db139abbb32cab8bf5e8b9879925e7c0e20e28d57f57223de74c6f62779b",
+      "type": "hook-target",
+      "from": "hook:SessionStart:653",
+      "to": "file:tools/kernel/hooks/dispatch-session-start.cjs",
+      "target": "tools/kernel/hooks/dispatch-session-start.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-session-start.cjs",
+      "event": "SessionStart"
     },
     {
       "id": "fa1fa53348025ba97013fe4ef2bfbf2a96e96b799585bb4dd611caa6f58d2677",
@@ -52136,8 +52104,8 @@
     }
   ],
   "counts": {
-    "nodes": 3992,
-    "edges": 2871,
+    "nodes": 3988,
+    "edges": 2870,
     "unresolved": 0
   }
 }

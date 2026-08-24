@@ -3583,7 +3583,7 @@
       "id": "file:.claude/skills/outward-inward-loop/SKILL.md",
       "type": "file",
       "path": ".claude/skills/outward-inward-loop/SKILL.md",
-      "sha256": "f5bb96ce8276e241f654e67f4bbb5b358ae21be2afb89a682e8a0b307e3789c7",
+      "sha256": "a1df064fb4442531da2e5fc622dde119795ab689ceb5c286aec2cbd4704d6c5b",
       "mode": 420
     },
     {
@@ -8952,7 +8952,7 @@
       "id": "file:instructions/canonical/commands/outward-inward.yaml",
       "type": "file",
       "path": "instructions/canonical/commands/outward-inward.yaml",
-      "sha256": "4645d5a39e2131d32b8abd07501c037c39b9487ecb38bde5fed7a99ab7b3436a",
+      "sha256": "8584ada3b534deb089a2d0de4301258288a56b77d7c02f1d645ee01743a623ba",
       "mode": 420
     },
     {
@@ -11745,7 +11745,7 @@
       "id": "file:tools/commands/__tests__/outward-inward-command.test.cjs",
       "type": "file",
       "path": "tools/commands/__tests__/outward-inward-command.test.cjs",
-      "sha256": "68451e434f858136af2d666a4a0ac52d5be2e287256cf2e73f22083d7b538a94",
+      "sha256": "b01b236fda5d422011d1971dbcc1428c84b51b82992a90335ea4dce4de9de316",
       "mode": 420
     },
     {
@@ -11871,7 +11871,7 @@
       "id": "file:tools/commands/validate-prompt-provenance-receipt.cjs",
       "type": "file",
       "path": "tools/commands/validate-prompt-provenance-receipt.cjs",
-      "sha256": "b547e5b8a0a9c9afae0beb060ad5833a23c3bda35cb7e20a6a17db74a671fb3d",
+      "sha256": "a191d8e03c85bb408e762f4efab979a160d0a948800722921a4ea440041972e5",
       "mode": 420
     },
     {

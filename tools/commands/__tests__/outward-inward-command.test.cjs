@@ -68,7 +68,15 @@ test('prompt-provenance receipt validator rejects missing or matching identities
   ];
   const expectedSourceEnvelope = {
     source_envelope_id: 'chi-source-envelope',
-    source_envelope_sha256: 'c'.repeat(64)
+    source_envelope_sha256: 'c'.repeat(64),
+    sources: {
+      'source-a': 'd'.repeat(64),
+      'source-b': 'e'.repeat(64)
+    },
+    prompt_sources: {
+      '01_SCOPE': ['source-a'],
+      '02_REVIEW': ['source-b']
+    }
   };
   const receipt = {
     schema: 'PromptProvenanceReceipt/1.0',
@@ -77,6 +85,7 @@ test('prompt-provenance receipt validator rejects missing or matching identities
       prompt_sha256: 'a'.repeat(64),
       source_envelope_id: 'chi-source-envelope',
       source_envelope_sha256: 'c'.repeat(64),
+      source_revisions: [{ source_id: 'source-a', content_sha256: 'd'.repeat(64) }],
       rewriter_actor_id: 'rewriter',
       rewriter_model_provider_family: 'anthropic',
       attester_actor_id: 'rewriter',
@@ -95,6 +104,7 @@ test('prompt-provenance receipt validator rejects missing or matching identities
     prompt_sha256: 'stale',
     source_envelope_id: 'chi-source-envelope',
     source_envelope_sha256: 'stale',
+    source_revisions: [{ source_id: 'source-a', content_sha256: 'd'.repeat(64) }],
     rewriter_actor_id: 'rewriter',
     rewriter_model_provider_family: 'anthropic',
     attester_actor_id: 'attester',
@@ -105,6 +115,8 @@ test('prompt-provenance receipt validator rejects missing or matching identities
   receipt.prompts[1].prompt_sha256 = 'b'.repeat(64);
   assert.equal(validatePromptProvenanceReceipt(receipt, expectedPrompts, expectedSourceEnvelope).ok, false);
   receipt.prompts[1].source_envelope_sha256 = 'c'.repeat(64);
+  assert.equal(validatePromptProvenanceReceipt(receipt, expectedPrompts, expectedSourceEnvelope).ok, false);
+  receipt.prompts[1].source_revisions = [{ source_id: 'source-b', content_sha256: 'e'.repeat(64) }];
   assert.equal(validatePromptProvenanceReceipt(receipt, expectedPrompts, expectedSourceEnvelope).ok, true);
 });
 
@@ -115,15 +127,18 @@ test('source envelope loader requires hashed source revisions', (t) => {
   fs.writeFileSync(manifestPath, JSON.stringify({
     schema: 'PromptProvenanceSourceManifest/1.0',
     source_envelope_id: 'chi-source-envelope',
-    sources: [{ source_id: 'source-a', content_sha256: 'd'.repeat(64) }]
+    sources: [{ source_id: 'source-a', content_sha256: 'd'.repeat(64) }],
+    prompt_sources: { '01_SCOPE': ['source-a'] }
   }));
   const envelope = loadSourceEnvelope(manifestPath);
   assert.equal(envelope.source_envelope_id, 'chi-source-envelope');
   assert.match(envelope.source_envelope_sha256, /^[a-f0-9]{64}$/);
+  assert.deepEqual(envelope.prompt_sources, { '01_SCOPE': ['source-a'] });
   fs.writeFileSync(manifestPath, JSON.stringify({
     schema: 'PromptProvenanceSourceManifest/1.0',
     source_envelope_id: 'chi-source-envelope',
-    sources: []
+    sources: [],
+    prompt_sources: {}
   }));
   assert.throws(() => loadSourceEnvelope(manifestPath), /at least one source/);
 });

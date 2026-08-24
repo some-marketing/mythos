@@ -95,6 +95,7 @@ Use slash-style operation names such as `/run-framework` and `/new-project` as M
 - `opencode-self-help` (REVIEW_ONLY): `instructions/canonical/commands/opencode-self-help.yaml`
 - `orchestrate-loop` (COORDINATOR): `instructions/canonical/commands/orchestrate-loop.yaml`
 - `orchestrate` (COORDINATOR): `instructions/canonical/commands/orchestrate.yaml`
+- `outward-inward` (COORDINATOR): `instructions/canonical/commands/outward-inward.yaml`
 - `owl` (COORDINATOR): `instructions/canonical/commands/owl.yaml`
 - `pi-self-help` (REVIEW_ONLY): `instructions/canonical/commands/pi-self-help.yaml`
 - `plan-active-workstreams` (REVIEW_ONLY): `instructions/canonical/commands/plan-active-workstreams.yaml`

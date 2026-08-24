@@ -74,6 +74,8 @@ required_skills:
       name: orchestrate
     - path: .claude/skills/orchestrate-loop/SKILL.md
       name: orchestrate-loop
+    - path: .claude/skills/outward-inward-loop/SKILL.md
+      name: outward-inward-loop
     - path: .claude/skills/owl/SKILL.md
       name: owl
     - path: .claude/skills/plan-task/SKILL.md
@@ -165,6 +167,7 @@ required_commands:
     - path: .claude/commands/charter-quest.md
     - path: .claude/commands/chron.md
     - path: .claude/commands/chronicle.md
+    - path: .claude/commands/chi.md
     - path: .claude/commands/claim-intake.md
     - path: .claude/commands/claim-spoils.md
     - path: .claude/commands/clean-house.md
@@ -263,10 +266,12 @@ required_commands:
     - path: .claude/commands/normalize-signals.md
     - path: .claude/commands/oa.md
     - path: .claude/commands/oc.md
+    - path: .claude/commands/oil.md
     - path: .claude/commands/open-contract.md
     - path: .claude/commands/opencode-self-help.md
     - path: .claude/commands/orchestrate-loop.md
     - path: .claude/commands/orchestrate.md
+    - path: .claude/commands/outward-inward.md
     - path: .claude/commands/owl.md
     - path: .claude/commands/pi-self-help.md
     - path: .claude/commands/plan-active-workstreams.md

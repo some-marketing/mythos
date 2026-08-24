@@ -202,6 +202,9 @@ Mythos could otherwise quietly stop deserving the trust it asks for.
 | meta/execution-normalization | 11 | REVIEW_ONLY, RUN_ONLY, PATCH_ALLOWED, COORDINATOR | none |
 | project-management/dart-collaboration | 2 | REVIEW_ONLY, PATCH_ALLOWED | none |
 | project-management/feedback-to-tasks | 5 | FINDINGS_ONLY, RUN_ONLY, PATCH_ALLOWED | dart, notion |
+| research/business-identity-verification | 3 | FINDINGS_ONLY, REVIEW_ONLY | none |
+| research/contractor-credential-review | 3 | FINDINGS_ONLY, REVIEW_ONLY | none |
+| research/osint-discovery | 4 | FINDINGS_ONLY, REVIEW_ONLY | none |
 | wordpress/design-mockup-validation | 3 | RUN_ONLY, REVIEW_ONLY, PATCH_ALLOWED | playwright |
 | wordpress/design-research | 3 | FINDINGS_ONLY, PATCH_ALLOWED | playwright |
 | wordpress/documentation | 4 | FINDINGS_ONLY, PATCH_ALLOWED, REVIEW_ONLY | playwright, notion |
@@ -223,12 +226,14 @@ Mythos could otherwise quietly stop deserving the trust it asks for.
 
 Command names are mechanical aliases. The typed alias is provenance; authority, state, errors, evidence, and closeout belong to the resolved generic command.
 
-- `/0` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/1` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/2` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/3` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/4` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/5` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/6` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/7` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/8` -> `/undefined` [compatibility]; authority: `/undefined`
+- `/oil` (`/outward-inward`) [primary]; authority: `/outward-inward`
+- `/chi` (`/outward-inward`) [primary]; authority: `/outward-inward`
+- `/owl` -> `/orchestrate-loop` [compatibility]; authority: `/orchestrate-loop`
+- `/oa` -> `/orchestrate-loop` [compatibility]; authority: `/orchestrate-loop`
+- `/council-of-owls` -> `/orchestrate-loop` [compatibility]; authority: `/orchestrate-loop`
+- `/deliberate` -> `/orchestrate-loop` [compatibility]; authority: `/orchestrate-loop`
+- `/dl` -> `/deliberate` [compatibility]; executes: `/orchestrate-loop`; authority: `/orchestrate-loop`
+- `/oc` -> `/council-of-owls` [compatibility]; executes: `/orchestrate-loop`; authority: `/orchestrate-loop`
+- `/help-me-route` -> `/route` [compatibility]; authority: `/route`
+- `/blueprint` -> `/blueprint` [compatibility]; authority: `/blueprint`
+- `/el` -> `/evidence-loop` [compatibility]; authority: `/evidence-loop`

@@ -6,7 +6,7 @@
  */
 
 const path = require('path');
-const { listAliasIds } = require('../../commands/lib/command-aliases.cjs');
+const { listAliasIds, resolveCommandAlias } = require('../../commands/lib/command-aliases.cjs');
 
 const PROJECT_ROOT = path.resolve(__dirname, '..', '..', '..');
 
@@ -25,10 +25,19 @@ const MANAGED_COMMANDS = new Set([
   'telemetry-status'
 ]);
 
+// Agentic instruction workflows that intentionally bypass the deterministic
+// command runner while remaining canonical alias targets.
+const UNMANAGED_ALIAS_TARGETS = new Set([
+  'outward-inward'
+]);
+
 function managedSet(projectRoot = PROJECT_ROOT) {
   const commands = new Set(MANAGED_COMMANDS);
   for (const aliasId of listAliasIds(projectRoot)) {
-    commands.add(aliasId);
+    const resolution = resolveCommandAlias(projectRoot, aliasId);
+    if (!UNMANAGED_ALIAS_TARGETS.has(resolution.executionCommand)) {
+      commands.add(aliasId);
+    }
   }
   return commands;
 }
@@ -47,5 +56,6 @@ function listManaged(projectRoot = PROJECT_ROOT) {
 module.exports = {
   isManaged,
   listManaged,
-  MANAGED_COMMANDS
+  MANAGED_COMMANDS,
+  UNMANAGED_ALIAS_TARGETS
 };

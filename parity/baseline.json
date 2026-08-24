@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "5b84265b1a755ab41fc2bf87468a9c336e5e70174a91137b1ce32ab2412bf217",
+    "expected_tree_sha256": "f9f90051a0e4805d4f5be0ebaf817d456ac6a1ffba6810dd08be26bcc4d55968",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -278,6 +278,11 @@
       {
         "path": ".claude/commands/charter-quest.md",
         "sha256": "f26fc93fc0ffa26093e1b556776ed83719557a33a9e6dc66d060b9b4c66882ed",
+        "mode": 420
+      },
+      {
+        "path": ".claude/commands/chi.md",
+        "sha256": "c8c1c2a5e78c8eb05fdfd2f0d73e65e7695bd31ebb5e31b97fcad3e39bc99d41",
         "mode": 420
       },
       {
@@ -781,6 +786,11 @@
         "mode": 420
       },
       {
+        "path": ".claude/commands/oil.md",
+        "sha256": "727eb6eda4cc9678c56ce7dceedd44950e65db151b78d86ef8613062142a314b",
+        "mode": 420
+      },
+      {
         "path": ".claude/commands/open-contract.md",
         "sha256": "f956a8e02c306ab4aa72069a1142cf42e81700dd74c938d032c89b6f57156056",
         "mode": 420
@@ -798,6 +808,11 @@
       {
         "path": ".claude/commands/orchestrate.md",
         "sha256": "a1750dc96ec958c9f37a71de97a6e07fa0797b21bce5f5af4cc2793d6a3c276c",
+        "mode": 420
+      },
+      {
+        "path": ".claude/commands/outward-inward.md",
+        "sha256": "964fb629c0a1ff12e9d1faff0e7c8c3119b458c8fb648a8c151e3ba502e332ec",
         "mode": 420
       },
       {
@@ -1062,7 +1077,7 @@
       },
       {
         "path": ".claude/project-claude.yml",
-        "sha256": "6786368b527bca263075bbc1f153928133460de2f49fb62e51402d60bfd99ba9",
+        "sha256": "1f079838e60fce505f80b734fc0e83cb470e35a402ae384b430d54af41c02f53",
         "mode": 420
       },
       {
@@ -1411,6 +1426,16 @@
         "mode": 420
       },
       {
+        "path": ".claude/skills/outward-inward-loop/SKILL.md",
+        "sha256": "a1df064fb4442531da2e5fc622dde119795ab689ceb5c286aec2cbd4704d6c5b",
+        "mode": 420
+      },
+      {
+        "path": ".claude/skills/outward-inward-loop/references/tt-adaptation.md",
+        "sha256": "a2b3b66dc5b9fedf6cc2ff12a3e2699f7ecdfa6776ccee05574693edd1141ffb",
+        "mode": 420
+      },
+      {
         "path": ".claude/skills/owl/SKILL.md",
         "sha256": "46de321e6eb7ff8a435ff99ee86dcfc30a467d8583556a2de316c3b82f74eeaf",
         "mode": 420
@@ -1507,17 +1532,17 @@
       },
       {
         "path": "AGENTS.md",
-        "sha256": "8ef082f3cf0a84bd2d689e0c3842833ed95aa200a44b430d3037aaae34ee0696",
+        "sha256": "8f1ffd20dd55a9084f7cbc4e4d79b8c3d3cc4173ae26dacdccc0c2f5b7b7869d",
         "mode": 420
       },
       {
         "path": "CLAUDE.md",
-        "sha256": "853a429fb94becc2b56eb50dc5c21806f3209d4557dd8f083c567fc149c70b81",
+        "sha256": "b3cdfc2d9c35b790708bac03ade18801ffaeba79d6318a727fc401ff623a1158",
         "mode": 420
       },
       {
         "path": "INSTRUCTIONS.md",
-        "sha256": "f24d710dab995154c44c14f18012b109a7317a3d9d4e7605a2f5bbdb73d045dd",
+        "sha256": "4d47e45c250c39406613f199c1432755d0005d2bb6242e35fb44dccd2534c17c",
         "mode": 420
       },
       {
@@ -1527,7 +1552,7 @@
       },
       {
         "path": "OPENCODE.md",
-        "sha256": "36aa262556d4a42765657f8bc90675c045bea6ab31cc2bb209bf616c1ee08435",
+        "sha256": "d6c1c46375c5206271bea04b7e8a33f7710fca1bd3f32775833ba09095f5c105",
         "mode": 420
       },
       {
@@ -4947,12 +4972,12 @@
       },
       {
         "path": "instructions/canonical/command-aliases.yaml",
-        "sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
+        "sha256": "4a7ed7af401f9b4695dcd2dca5ca64f4a0dae975d0b94f95e24e9b5f3a6ce3fc",
         "mode": 420
       },
       {
         "path": "instructions/canonical/command-index.md",
-        "sha256": "b661345b4497d27e7152a9fb262ba8cfd0e9509087938cc5fbb618f9546160b5",
+        "sha256": "9ed4357cc84e9986dc5da4c8bc0a1a8bbe9643d63eb886289eaa7d83e2b46aba",
         "mode": 420
       },
       {
@@ -5431,6 +5456,11 @@
         "mode": 420
       },
       {
+        "path": "instructions/canonical/commands/outward-inward.yaml",
+        "sha256": "8584ada3b534deb089a2d0de4301258288a56b77d7c02f1d645ee01743a623ba",
+        "mode": 420
+      },
+      {
         "path": "instructions/canonical/commands/owl.yaml",
         "sha256": "4982354d90944f74d3315df3b915391ca0e6b8c556bffd6d131d13646d1bdc68",
         "mode": 420
@@ -5902,7 +5932,7 @@
       },
       {
         "path": "instructions/canonical/system.yaml",
-        "sha256": "2403daa3bcd8ed7c4e2a2e034f5e73ea7a7e8f10a84b2e329e66f92979b59a1b",
+        "sha256": "c69c5eaa985dec7fd841f6426c4014e9b5bc0965df6370fe3ad160c344f5cd9a",
         "mode": 420
       },
       {
@@ -5922,17 +5952,17 @@
       },
       {
         "path": "instructions/generated/claude/.claude.guardrails.md",
-        "sha256": "028de2152a2b9f3af5ea9a750c38910572e4651f2456d664888f5f039c6b09e7",
+        "sha256": "9b3a06934b46a33e1ae4357c127b28ccfe81a061005ef0e60c7fdfe7919c54b1",
         "mode": 420
       },
       {
         "path": "instructions/generated/claude/CLAUDE.md",
-        "sha256": "4dc4c5d3d956dcda72ce6ed2f3b65f4f9592ad2cbc05569072d5f77e9254c19a",
+        "sha256": "b3cdfc2d9c35b790708bac03ade18801ffaeba79d6318a727fc401ff623a1158",
         "mode": 420
       },
       {
         "path": "instructions/generated/manifest.json",
-        "sha256": "d9b27fdb59309acd67d6b561554350752706fa73eff59ea6a6b72fb12be77c32",
+        "sha256": "9d6710100d39a648f457db238ad34eefcd112f01ede7047c5a6be314a273873e",
         "mode": 420
       },
       {
@@ -5977,7 +6007,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "4daa51e6f1adb2cc9c1f9eeda30193260ac815bfd12d7b7bdffb40483e7d3b28",
+        "sha256": "1fe335e1cc65345c1d9c4b2e8afda49f2d7c26f4030c04a38e824c0769a0495f",
         "mode": 420
       },
       {
@@ -7232,7 +7262,7 @@
       },
       {
         "path": "tools/codex/lib/managed-command-registry.js",
-        "sha256": "195ac06e84587b58208d3f949f4363742d3ea3b4d1471a491e45033ee7a18abd",
+        "sha256": "2c3c6e1d9e2297eeb214c3baba70a0859beae10250b5c63299a54e21521f69e6",
         "mode": 420
       },
       {
@@ -7411,6 +7441,11 @@
         "mode": 420
       },
       {
+        "path": "tools/commands/__tests__/outward-inward-command.test.cjs",
+        "sha256": "b01b236fda5d422011d1971dbcc1428c84b51b82992a90335ea4dce4de9de316",
+        "mode": 420
+      },
+      {
         "path": "tools/commands/__tests__/route-fixtures.cjs",
         "sha256": "6e53bd1e4dca54e43b5f6cd0018a2877955d354ea52bb61f8731c8512e283e40",
         "mode": 420
@@ -7488,6 +7523,11 @@
       {
         "path": "tools/commands/smos-command-runner.cjs",
         "sha256": "38d9f9230b8f4edae45bb646bccf0f5a741b3a803ee78a170b63df8a6e6b64a3",
+        "mode": 420
+      },
+      {
+        "path": "tools/commands/validate-prompt-provenance-receipt.cjs",
+        "sha256": "a191d8e03c85bb408e762f4efab979a160d0a948800722921a4ea440041972e5",
         "mode": 420
       },
       {
@@ -8567,7 +8607,7 @@
       },
       {
         "path": "tools/instructions/__tests__/aliases.test.js",
-        "sha256": "25df9ce388a49714ab406aab3199a93da158e700e0f62bc00123657ca5a7b84d",
+        "sha256": "fc46e8fd6a798187313aebdb6c4b7c5ff32adb41e44125fa8e8c56e88062c9c7",
         "mode": 420
       },
       {
@@ -8577,7 +8617,7 @@
       },
       {
         "path": "tools/instructions/lib/engine.js",
-        "sha256": "16d1669c85d85703172feba7502e53135c83e765bd2dbaf57cbc5df7dc2ccc33",
+        "sha256": "cc5246016adb9f69214462dc9e17bcf37fdd4dcdf16da05e9d24ceee0e8edae6",
         "mode": 420
       },
       {
@@ -8587,7 +8627,7 @@
       },
       {
         "path": "tools/instructions/lib/render.js",
-        "sha256": "910d481b4f13e4d79580825144fdceb403bb5f83807d10693c8018aec994cf25",
+        "sha256": "10d77aeaab442f34a9a0b906ecedc2bed48e73adf18daab49afce9597f3cce38",
         "mode": 420
       },
       {
@@ -10832,7 +10872,7 @@
       },
       {
         "path": "tools/parity/build-baseline.cjs",
-        "sha256": "6b0eab3b51c6cb73efabd21e62751ddb7a260c7112e734f64cc6c83e966d4797",
+        "sha256": "2ac85252fd0b6525d03b899e99c28d0ee6e3fdaa08ef6fb1100fd620b2648eb0",
         "mode": 420
       },
       {
@@ -13977,11 +14017,11 @@
   },
   "wiring": {
     "package_script_count": 205,
-    "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
+    "command_alias_registry_sha256": "4a7ed7af401f9b4695dcd2dca5ca64f4a0dae975d0b94f95e24e9b5f3a6ce3fc",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "4daa51e6f1adb2cc9c1f9eeda30193260ac815bfd12d7b7bdffb40483e7d3b28",
-    "graph_nodes": 3877,
-    "graph_edges": 2833
+    "graph_sha256": "1fe335e1cc65345c1d9c4b2e8afda49f2d7c26f4030c04a38e824c0769a0495f",
+    "graph_nodes": 3895,
+    "graph_edges": 2851
   },
   "runtime_exclusions": [
     ".git/**",
@@ -14000,6 +14040,7 @@
     "_dev/reports/analysis/public-export/**",
     "_dev/reports/lifecycle/**",
     "_dev/reports/signals/**",
+    "_dev/reports/telemetry/**",
     "_dev/scratch/**",
     "_dev/state/**",
     "_dev/tmp/**",

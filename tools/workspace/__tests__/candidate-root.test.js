@@ -60,12 +60,19 @@ test('preserves project-scoped framework candidate resolution', (t) => {
   fs.writeFileSync(path.join(projectRoot, 'project.json'), '{}\n');
   fs.writeFileSync(path.join(candidateRoot, 'candidate.json'), '{}\n');
 
-  const result = requireCandidateRoot(candidateRoot);
+  let repositoryResolutionAttempted = false;
+  const result = requireCandidateRoot(candidateRoot, {
+    resolveRepositoryRoot: () => {
+      repositoryResolutionAttempted = true;
+      throw new Error('project-scoped candidates must not resolve the canonical repository');
+    }
+  });
 
   assert.equal(result.candidateRoot, candidateRoot);
   assert.equal(result.projectRoot, projectRoot);
   assert.equal(result.workspaceRoot, workspaceRoot);
   assert.equal(result.candidateScope, 'project');
+  assert.equal(repositoryResolutionAttempted, false);
 });
 
 test('imported candidates authorize report outputs and declare consumed artifacts', (t) => {

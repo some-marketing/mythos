@@ -38,6 +38,7 @@ function loadSourceEnvelope(sourceManifestPath) {
   if (!Array.isArray(manifest.sources) || manifest.sources.length === 0) {
     throw new Error('source manifest sources must contain at least one source');
   }
+  const sources = new Map();
   for (const [index, source] of manifest.sources.entries()) {
     if (typeof source.source_id !== 'string' || source.source_id.trim() === '') {
       throw new Error(`source manifest sources[${index}].source_id must be a non-empty string`);
@@ -45,10 +46,30 @@ function loadSourceEnvelope(sourceManifestPath) {
     if (typeof source.content_sha256 !== 'string' || !/^[a-f0-9]{64}$/i.test(source.content_sha256)) {
       throw new Error(`source manifest sources[${index}].content_sha256 must be a SHA-256 digest`);
     }
+    if (sources.has(source.source_id)) throw new Error(`source manifest source_id is duplicated: ${source.source_id}`);
+    sources.set(source.source_id, source.content_sha256);
+  }
+  if (!manifest.prompt_sources || typeof manifest.prompt_sources !== 'object' || Array.isArray(manifest.prompt_sources)) {
+    throw new Error('source manifest prompt_sources must map prompt ids to source ids');
+  }
+  for (const [promptId, sourceIds] of Object.entries(manifest.prompt_sources)) {
+    if (!Array.isArray(sourceIds) || sourceIds.length === 0) {
+      throw new Error(`source manifest prompt_sources.${promptId} must contain at least one source id`);
+    }
+    if (new Set(sourceIds).size !== sourceIds.length) {
+      throw new Error(`source manifest prompt_sources.${promptId} contains duplicate source ids`);
+    }
+    for (const sourceId of sourceIds) {
+      if (!sources.has(sourceId)) {
+        throw new Error(`source manifest prompt_sources.${promptId} references unknown source: ${sourceId}`);
+      }
+    }
   }
   return {
     source_envelope_id: manifest.source_envelope_id,
-    source_envelope_sha256: crypto.createHash('sha256').update(bytes).digest('hex')
+    source_envelope_sha256: crypto.createHash('sha256').update(bytes).digest('hex'),
+    sources: Object.fromEntries(sources),
+    prompt_sources: manifest.prompt_sources
   };
 }
 
@@ -93,12 +114,39 @@ function validatePromptProvenanceReceipt(receipt, expectedPrompts = [], expected
       if (prompt.source_envelope_sha256 !== expectedSourceEnvelope.source_envelope_sha256) {
         errors.push(`${label}.source_envelope_sha256 does not match the current source manifest`);
       }
+      const expectedSourceIds = expectedSourceEnvelope.prompt_sources?.[prompt.prompt_id];
+      if (!Array.isArray(expectedSourceIds) || expectedSourceIds.length === 0) {
+        errors.push(`${label} has no source assignment in the current source manifest`);
+      } else if (!Array.isArray(prompt.source_revisions) || prompt.source_revisions.length === 0) {
+        errors.push(`${label}.source_revisions must contain the source revisions assigned to this prompt`);
+      } else {
+        const observedSources = new Map();
+        for (const [sourceIndex, source] of prompt.source_revisions.entries()) {
+          if (!source || typeof source.source_id !== 'string' ||
+              typeof source.content_sha256 !== 'string' || !/^[a-f0-9]{64}$/i.test(source.content_sha256)) {
+            errors.push(`${label}.source_revisions[${sourceIndex}] must contain source_id and content_sha256`);
+            continue;
+          }
+          if (observedSources.has(source.source_id)) errors.push(`${label} contains duplicate source revision: ${source.source_id}`);
+          observedSources.set(source.source_id, source.content_sha256);
+        }
+        for (const sourceId of expectedSourceIds) {
+          if (!observedSources.has(sourceId)) errors.push(`${label} is missing assigned source revision: ${sourceId}`);
+          else if (observedSources.get(sourceId) !== expectedSourceEnvelope.sources?.[sourceId]) {
+            errors.push(`${label} has a stale source revision: ${sourceId}`);
+          }
+        }
+        for (const sourceId of observedSources.keys()) {
+          if (!expectedSourceIds.includes(sourceId)) errors.push(`${label} includes an unassigned source revision: ${sourceId}`);
+        }
+      }
     }
   }
   if (!expectedSourceEnvelope ||
       typeof expectedSourceEnvelope.source_envelope_id !== 'string' ||
-      !/^[a-f0-9]{64}$/i.test(expectedSourceEnvelope.source_envelope_sha256 || '')) {
-    errors.push('expected source envelope must include a non-empty identity and SHA-256 digest');
+      !/^[a-f0-9]{64}$/i.test(expectedSourceEnvelope.source_envelope_sha256 || '') ||
+      !expectedSourceEnvelope.sources || !expectedSourceEnvelope.prompt_sources) {
+    errors.push('expected source envelope must include identity, digest, sources, and prompt assignments');
   }
   if (!Array.isArray(expectedPrompts) || expectedPrompts.length === 0) {
     errors.push('expected prompt inventory must contain at least one runnable prompt');
@@ -112,9 +160,15 @@ function validatePromptProvenanceReceipt(receipt, expectedPrompts = [], expected
     for (const [promptId, promptSha256] of expected) {
       if (!observed.has(promptId)) errors.push(`missing prompt receipt: ${promptId}`);
       else if (observed.get(promptId) !== promptSha256) errors.push(`stale prompt hash: ${promptId}`);
+      if (!Array.isArray(expectedSourceEnvelope?.prompt_sources?.[promptId])) {
+        errors.push(`missing source assignment for expected prompt: ${promptId}`);
+      }
     }
     for (const promptId of observed.keys()) {
       if (!expected.has(promptId)) errors.push(`unexpected prompt receipt: ${promptId}`);
+    }
+    for (const promptId of Object.keys(expectedSourceEnvelope?.prompt_sources || {})) {
+      if (!expected.has(promptId)) errors.push(`unexpected prompt source assignment: ${promptId}`);
     }
   }
   return { ok: errors.length === 0, errors };

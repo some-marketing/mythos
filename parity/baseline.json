@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "5b84265b1a755ab41fc2bf87468a9c336e5e70174a91137b1ce32ab2412bf217",
+    "expected_tree_sha256": "1cd35af46fedb6aacbf7cfd39a4bc732496c530f2c28dccb67084b6b6bfd525c",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -5977,7 +5977,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "4daa51e6f1adb2cc9c1f9eeda30193260ac815bfd12d7b7bdffb40483e7d3b28",
+        "sha256": "a72696e22740012dc274a6571c4e27e4232c9c8fb4b0012719939744a705cc0d",
         "mode": 420
       },
       {
@@ -10906,6 +10906,51 @@
         "mode": 420
       },
       {
+        "path": "tools/planning/__fixtures__/completion-grammar/README.md",
+        "sha256": "b6ae930ae3378d04a1507563fcb3e2bfc75d1e01bd7d5f729724d55b6308f68e",
+        "mode": 420
+      },
+      {
+        "path": "tools/planning/__fixtures__/completion-grammar/cases.cjs",
+        "sha256": "cb47ae0c14d8ae2482364ab512fe4ba3505795ce79dd74ec6b3816d77f43d394",
+        "mode": 420
+      },
+      {
+        "path": "tools/planning/__fixtures__/completion-grammar/outcome-complete.json",
+        "sha256": "a6f2fa311255a25ff86f3431b59f0401dc824b5bc4ce39c244145d30b8e54683",
+        "mode": 420
+      },
+      {
+        "path": "tools/planning/__fixtures__/completion-grammar/plan-bridge-blocked.json",
+        "sha256": "440d38d43ced80e6cf87393a81ed1ff8641521ff01dceaef4a949997990f5946",
+        "mode": 420
+      },
+      {
+        "path": "tools/planning/__fixtures__/completion-grammar/plan-bridge-no-evidence.json",
+        "sha256": "db2caedf863567a5507d785588993a535056e4fdace2ac838aed260341091a43",
+        "mode": 420
+      },
+      {
+        "path": "tools/planning/__fixtures__/completion-grammar/plan-complete.json",
+        "sha256": "aeaeb0b3879fcf405a2a2c70f4ba59196d3b761a41dc3d9b8f11936acb5f8e9e",
+        "mode": 420
+      },
+      {
+        "path": "tools/planning/__fixtures__/completion-grammar/plan-debrief-only.json",
+        "sha256": "eb63c87a666c5aebbe80e8a983e3e6a3410fdb78286d00d05f2c2713265a8f12",
+        "mode": 420
+      },
+      {
+        "path": "tools/planning/__fixtures__/completion-grammar/plan-declared-complete.json",
+        "sha256": "f8380e72de28d23b24b321787c934f15cec9ee2c6bf81a543aa68085870eced3",
+        "mode": 420
+      },
+      {
+        "path": "tools/planning/__fixtures__/completion-grammar/plan-steps-done.json",
+        "sha256": "6e498f0429cbeb4a58f30cf69ee1c478bec491a8b436ebb4092c3aef02049014",
+        "mode": 420
+      },
+      {
         "path": "tools/planning/__fixtures__/gemini-draft-plan.md",
         "sha256": "c74997cd1bd9a24d110359cc72a3e095983b0277a3c754651ba54f8dfe67acc8",
         "mode": 420
@@ -10928,6 +10973,11 @@
       {
         "path": "tools/planning/__tests__/harness-plan-output-contract.test.js",
         "sha256": "6ac29cd999198d4a884a2a74bfa10917a45a49d387bb273fd2880d92903f9d67",
+        "mode": 420
+      },
+      {
+        "path": "tools/planning/__tests__/plan-visibility-completion-grammar.test.cjs",
+        "sha256": "63314dbb3088341fa67727a1812a73bd98126ab281a1221d5cb3c6b3da0b1427",
         "mode": 420
       },
       {
@@ -11117,7 +11167,7 @@
       },
       {
         "path": "tools/planning/lib/completion-classifier.js",
-        "sha256": "3499e74c9d085607a6d544e743f0899bd8112ccbdbf36344a6a9b61c4f7b29a3",
+        "sha256": "8a5c2601a3811bafa8c29d76f8eaaef3c18aff08ef46aead343c152d3494f644",
         "mode": 420
       },
       {
@@ -11192,7 +11242,7 @@
       },
       {
         "path": "tools/planning/lib/plan-visibility.js",
-        "sha256": "d5fc73caa9d2800a2d677743e2f84db44f735f25af500c225a1cf4b74e7def0a",
+        "sha256": "748a112f22b856d87bd46b437f243b57dc9b41db0a72814c67a9016ea0f9f8b5",
         "mode": 420
       },
       {
@@ -13979,9 +14029,9 @@
     "package_script_count": 205,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "4daa51e6f1adb2cc9c1f9eeda30193260ac815bfd12d7b7bdffb40483e7d3b28",
-    "graph_nodes": 3877,
-    "graph_edges": 2833
+    "graph_sha256": "a72696e22740012dc274a6571c4e27e4232c9c8fb4b0012719939744a705cc0d",
+    "graph_nodes": 3887,
+    "graph_edges": 2838
   },
   "runtime_exclusions": [
     ".git/**",

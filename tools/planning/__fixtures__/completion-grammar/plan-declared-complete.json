@@ -1,0 +1,16 @@
+{
+  "schema_version": "TaskPlan/1.0",
+  "task_id": "cg-declared-complete",
+  "title": "Completion grammar FALSIFIER: plan declares itself complete",
+  "scope_type": "system",
+  "status": "complete",
+  "produced_by_actor_id": "fixture-producer",
+  "produced_by_actor_type": "intelligence",
+  "produced_by_harness_id": "fixture-producer-harness",
+  "routing_expectations": { "risk_tier": "low", "review_lane": "operator-gate" },
+  "bounded_plan": {
+    "steps": [
+      { "step_id": "S1", "status": "done", "description": "Declared done.", "mode": "PATCH_ALLOWED" }
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "schema_version": "TaskPlan/1.0",
+  "task_id": "cg-bridge-no-evidence",
+  "title": "Completion grammar FALSIFIER: codex-bridge lane blocked-looking, but no execution evidence at all",
+  "scope_type": "system",
+  "produced_by_actor_id": "fixture-producer",
+  "produced_by_actor_type": "intelligence",
+  "produced_by_harness_id": "fixture-producer-harness",
+  "routing_expectations": { "risk_tier": "medium", "review_lane": "codex-bridge" },
+  "bounded_plan": {
+    "steps": [
+      { "step_id": "S1", "status": "planned", "description": "Not started.", "mode": "PATCH_ALLOWED" }
+    ]
+  }
+}

@@ -169,7 +169,7 @@ function checkCompletionReviewReceipt(projectRoot, taskId, outcomeParsed) {
  * @param {object} planJson
  * @returns {{ satisfied: boolean, lane: string|null, found: string[], missing: string[] }}
  */
-function checkReviewLaneArtifacts(projectRoot, planJson) {
+function checkReviewLaneArtifacts(projectRoot, planJson, readContext) {
   const routing = planJson.routing_expectations;
   if (!routing || !routing.review_lane) {
     return { satisfied: true, lane: null, found: [], missing: [] };
@@ -228,7 +228,7 @@ function checkReviewLaneArtifacts(projectRoot, planJson) {
       missing.push(promptPath);
     }
 
-    const feedback = findBridgeFeedbackArtifacts(projectRoot, scope);
+    const feedback = findBridgeFeedbackArtifacts(projectRoot, scope, readContext);
     found.push(...feedback.found);
     missing.push(...feedback.missing);
   } else if (lane === 'operator-gate') {
@@ -249,7 +249,25 @@ function checkReviewLaneArtifacts(projectRoot, planJson) {
   };
 }
 
-function findBridgeFeedbackArtifacts(projectRoot, scope) {
+// A collection owns this context and discards it after the build. Only
+// directory filenames are memoized; outcome and review contents stay live.
+function createCompletionReadContext(projectRoot) {
+  return { projectRoot: path.resolve(projectRoot), directoryEntries: new Map() };
+}
+
+function readEvidenceDirectory(projectRoot, directory, readContext) {
+  if (readContext && (readContext.projectRoot !== path.resolve(projectRoot) ||
+      !(readContext.directoryEntries instanceof Map))) {
+    throw new Error('Completion read context does not match project root');
+  }
+  const key = path.resolve(directory);
+  if (readContext && readContext.directoryEntries.has(key)) return readContext.directoryEntries.get(key);
+  const entries = fs.existsSync(directory) ? fs.readdirSync(directory) : [];
+  if (readContext) readContext.directoryEntries.set(key, entries);
+  return entries;
+}
+
+function findBridgeFeedbackArtifacts(projectRoot, scope, readContext) {
   const analysisDir = path.join(projectRoot, ANALYSIS_DIR);
   const signalDir = path.join(projectRoot, SIGNAL_DIR);
   const safeScope = String(scope || '');
@@ -259,7 +277,7 @@ function findBridgeFeedbackArtifacts(projectRoot, scope) {
   let resultFound = false;
   if (fs.existsSync(analysisDir)) {
     const resultPattern = new RegExp('^(codex|claude)-cli-run__.+__' + escapeRegExp(safeScope) + '\\.result\\.json$');
-    for (const name of fs.readdirSync(analysisDir)) {
+    for (const name of readEvidenceDirectory(projectRoot, analysisDir, readContext)) {
       if (!resultPattern.test(name)) continue;
       const resultPath = path.join(analysisDir, name);
       const parsed = readJsonSafe(resultPath);
@@ -276,8 +294,7 @@ function findBridgeFeedbackArtifacts(projectRoot, scope) {
 
   let feedbackSignalFound = false;
   for (const dir of [signalDir, path.join(signalDir, 'closed')]) {
-    if (!fs.existsSync(dir)) continue;
-    for (const name of fs.readdirSync(dir)) {
+    for (const name of readEvidenceDirectory(projectRoot, dir, readContext)) {
       if (!name.startsWith('ready-for-review__') || !name.endsWith('__' + safeScope + '.json')) continue;
       const signalPath = path.join(dir, name);
       const parsed = readJsonSafe(signalPath);
@@ -315,19 +332,17 @@ function deriveCodexBridgeScope(planJson) {
 }
 
 /**
- * Determine whether a plan has any execution evidence.
- * Execution evidence is any of:
- * - outcome_delta exists (even if not completed)
- * - bounded_plan.steps with evidence of execution (approval, step completion markers)
- * - approval/approved fields present
+ * Plan-local execution evidence must be an object-shaped outcome delta.
+ * Approval, review artifacts and bare step statuses are declarations, not
+ * execution evidence. classifyPlanState separately recognizes parsed durable
+ * task outcomes (which also bind post-execution review receipts).
  * @param {object} planJson
  * @returns {boolean}
  */
 function hasExecutionEvidence(planJson) {
-  if (planJson.outcome_delta) return true;
-  if (planJson.approval && planJson.approval.status) return true;
-  if (planJson.approved && planJson.approved.by) return true;
-  return false;
+  return planJson.outcome_delta !== null &&
+    typeof planJson.outcome_delta === 'object' &&
+    !Array.isArray(planJson.outcome_delta);
 }
 
 /**
@@ -343,7 +358,7 @@ function hasExecutionEvidence(planJson) {
  * @param {object} planJson
  * @returns {{ blocked: boolean, reason: string|null }}
  */
-function checkBridgeBlocked(projectRoot, planJson) {
+function checkBridgeBlocked(projectRoot, planJson, readContext) {
   const routing = planJson.routing_expectations;
   if (!routing || routing.review_lane !== 'codex-bridge') {
     return { blocked: false, reason: null };
@@ -375,7 +390,7 @@ function checkBridgeBlocked(projectRoot, planJson) {
     };
   }
 
-  const feedback = findBridgeFeedbackArtifacts(projectRoot, scope);
+  const feedback = findBridgeFeedbackArtifacts(projectRoot, scope, readContext);
   if (feedback.missing.length === 0) {
     return { blocked: false, reason: null };
   }
@@ -574,6 +589,10 @@ function checkVerdictEnvelope(projectRoot, taskId, outcomeParsed) {
  */
 function classifyPlanState(projectRoot, planJson, options) {
   const opts = options || {};
+  if (opts.readContext && (opts.readContext.projectRoot !== path.resolve(projectRoot) ||
+      !(opts.readContext.directoryEntries instanceof Map))) {
+    throw new Error('Completion read context does not match project root');
+  }
   const taskId = planJson.task_id;
 
   if (!taskId) {
@@ -602,8 +621,8 @@ function classifyPlanState(projectRoot, planJson, options) {
     outcomeDeltaCompleted = planOutcomeDelta.completed;
     outcomeDeltaSource = 'plan.outcome_delta.completed';
   }
-  const reviewLane = checkReviewLaneArtifacts(projectRoot, planJson);
-  const bridgeCheck = checkBridgeBlocked(projectRoot, planJson);
+  const reviewLane = checkReviewLaneArtifacts(projectRoot, planJson, opts.readContext);
+  const bridgeCheck = checkBridgeBlocked(projectRoot, planJson, opts.readContext);
   const executionEvidence = hasExecutionEvidence(planJson) || (outcomeParsed !== null);
 
   // Read completion_evidence from task-outcome artifact (canonical location)
@@ -884,6 +903,7 @@ function resolveCompletedAt(projectRoot, planJson) {
 }
 
 module.exports = {
+  createCompletionReadContext,
   classifyPlanState,
   isExecutable,
   isDistinctIntelligence,

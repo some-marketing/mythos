@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "5b84265b1a755ab41fc2bf87468a9c336e5e70174a91137b1ce32ab2412bf217",
+    "expected_tree_sha256": "67f87ce216a8cbc7841be42278763d59968e2dce399dbbf3d6da96ac9eeaf161",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -1052,7 +1052,7 @@
       },
       {
         "path": ".claude/guardrails.md",
-        "sha256": "9b3a06934b46a33e1ae4357c127b28ccfe81a061005ef0e60c7fdfe7919c54b1",
+        "sha256": "996c11eef57fba5a279cb7bf3cecbf107e35f709f6079b907beb39d6fad781e3",
         "mode": 420
       },
       {
@@ -1062,7 +1062,7 @@
       },
       {
         "path": ".claude/project-claude.yml",
-        "sha256": "6786368b527bca263075bbc1f153928133460de2f49fb62e51402d60bfd99ba9",
+        "sha256": "5e4d3c09b8d68745ec88ebe0f58920e404947a690570136f6b4ba332348f639b",
         "mode": 420
       },
       {
@@ -1507,17 +1507,17 @@
       },
       {
         "path": "AGENTS.md",
-        "sha256": "8ef082f3cf0a84bd2d689e0c3842833ed95aa200a44b430d3037aaae34ee0696",
+        "sha256": "d1609b6cc2d8615c65c1858eb3c1dfd5adca42282fd50504477bb2efb5380065",
         "mode": 420
       },
       {
         "path": "CLAUDE.md",
-        "sha256": "853a429fb94becc2b56eb50dc5c21806f3209d4557dd8f083c567fc149c70b81",
+        "sha256": "e0d5ee62eddcf07aaa9c1bc7907531f3088db36728a3b1f2c9ca8f1c443c761b",
         "mode": 420
       },
       {
         "path": "INSTRUCTIONS.md",
-        "sha256": "f24d710dab995154c44c14f18012b109a7317a3d9d4e7605a2f5bbdb73d045dd",
+        "sha256": "c94ecbf9a5211dd8d03b4d2a7d984fa194180ade7a050d6f862db52bdafd68e9",
         "mode": 420
       },
       {
@@ -1527,7 +1527,7 @@
       },
       {
         "path": "OPENCODE.md",
-        "sha256": "36aa262556d4a42765657f8bc90675c045bea6ab31cc2bb209bf616c1ee08435",
+        "sha256": "bad87c30b7519f204a63bed99507508191c9803cf452c63b1164aa1582f7e136",
         "mode": 420
       },
       {
@@ -3876,6 +3876,126 @@
         "mode": 420
       },
       {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/client-review-agent.md",
+        "sha256": "313e1410efaeff8ca407586f4ec964ead3e3340b4165f14dcdcceb82b6eb7c59",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/design-spec-agent.md",
+        "sha256": "9ca19b3d1246c9270785a321f1ddc0a348c10265c525a5f79a0bd5d5a3c6655f",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/intake-and-research-agent.md",
+        "sha256": "34799fe9eee230bb9c276338a788582cefbc450a2865b9475ee77c3782675cd3",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/page-build-agent.md",
+        "sha256": "7ab0c9f2b4bc522f291ea54428364b2211d0d8f26580d4e7a1a97f36e5adff53",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/theme-tokens-agent.md",
+        "sha256": "92e14e31023a2213db789fa9728595ab54b285de3d01b47cfa5ecc7df60d43dc",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/client-review.md",
+        "sha256": "4f1ec031a7f51eb4af5526388f8e941f650e15775227455573e05c1a6aef0b8f",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/design-spec.md",
+        "sha256": "1d2696579c7950c2bce75bdee212869dfbccadd7f5f7c7f9ab1546edb8c4112a",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/intake-and-research.md",
+        "sha256": "b7a0307e8fdffbcb65144644ed73c52ae5fc5d07ba3237921a0e9102737e5fa3",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/page-build.md",
+        "sha256": "7ae48ace9cb282be92ecdaa0fbaedd64a2b2e3c487e45048bd68203345f51094",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/run.md",
+        "sha256": "6a7eea333be7d17d77549b5cf0bd041876d28f8771b0dc9e56e7d87c126a362b",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/status.md",
+        "sha256": "f3f7ec5ce333bb04beba8d072355955a0b83f3bfd24329a2150a68606357542f",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/theme-tokens.md",
+        "sha256": "1646d850480bacd6971757073c9a835830a5fb489b8a81395cb0d4d94441dfb6",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/skills/livecanvas-onepager-build/SKILL.md",
+        "sha256": "4c8821b1206b3940527e3667f1f4a8988f473d17872def8d811997e6d23ee14c",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/README.md",
+        "sha256": "bcf9e3164c70301db8a83493b7ba2c27ccf04aa7e3b0c7903e9afa72b49254c7",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/docs/client-communication-brief.md",
+        "sha256": "e2e21684a8ff40e7a9f4426412709bdfb0bbf2edd9c009492d195da6bc400178",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/docs/picostrap-livecanvas-recipe.md",
+        "sha256": "11b3fbf70203dd88a95fa845a24ccb7090dca09ce88776dc8381a031cd0d1ab3",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/guardrails.md",
+        "sha256": "d3659baee8d6e1a1563516fe524bfcc8d5d726da99569a5e00f0fefb06601516",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/manifest.json",
+        "sha256": "8a0f9c8442ec476f8d3d74df59cd133169c58ebee4d7569acba100bafca91809",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/prompts/01_INTAKE_AND_RESEARCH.md",
+        "sha256": "258278b182f56120ed9ad94f4fe0e26adb0b0b533c23c0afafb7d0fc35a698ac",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/prompts/02_DESIGN_SPEC.md",
+        "sha256": "766ef88527b66000c6ad9f89af7aec2f97fae828215f5f63a8d5a35d5db121e5",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/prompts/03_THEME_TOKENS.md",
+        "sha256": "0a484133f9d616c3e27da013fbd61416673e03a28ed32ce1a121a4d1f53f56ed",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/prompts/04_PAGE_BUILD.md",
+        "sha256": "435be245edaf0481fc5fba825f5ffe5366236eb3792b249c4c1e83a535cca781",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/prompts/05_CLIENT_REVIEW.md",
+        "sha256": "758fb0c6fe8bb16c3c50afa9d9f42da557a711c17eb99a5273d68a7b58acb5df",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/schemas/draft-receipt.schema.json",
+        "sha256": "47c8ef69886770c08851880c41807fa25e2fba0de6f4a7f4a1967fe47fde1fa3",
+        "mode": 420
+      },
+      {
         "path": "frameworks/wordpress/livecanvas-rebuild/.claude/agents/livecanvas-rebuild/audit-agent.md",
         "sha256": "a28e07bd3408b29a1a86e5dc96a94a0b5e879ee7aaf15c96d01cf02f7a436779",
         "mode": 420
@@ -5776,6 +5896,11 @@
         "mode": 420
       },
       {
+        "path": "instructions/canonical/frameworks/wordpress/livecanvas-onepager-build.yaml",
+        "sha256": "6c4be6cfe5a367e92462d3380ef32b4069d0081653e2831fb2ad53cb0ab80f96",
+        "mode": 420
+      },
+      {
         "path": "instructions/canonical/frameworks/wordpress/qa.yaml",
         "sha256": "fe7206cf1c78886f74ebc611c3a6386a17886bf6a742e2e39715f8ebf4eeb823",
         "mode": 420
@@ -5902,7 +6027,7 @@
       },
       {
         "path": "instructions/canonical/system.yaml",
-        "sha256": "2403daa3bcd8ed7c4e2a2e034f5e73ea7a7e8f10a84b2e329e66f92979b59a1b",
+        "sha256": "4872c667fed2bb7cdeafc8b1ab649256170c0ca661e03616349a03e03d6f3890",
         "mode": 420
       },
       {
@@ -5977,7 +6102,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "4daa51e6f1adb2cc9c1f9eeda30193260ac815bfd12d7b7bdffb40483e7d3b28",
+        "sha256": "d9cd516cce6c406d53205ee49847ad7cac79b9f8cdd2febc8c96930ee77761e7",
         "mode": 420
       },
       {
@@ -13979,9 +14104,9 @@
     "package_script_count": 205,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "4daa51e6f1adb2cc9c1f9eeda30193260ac815bfd12d7b7bdffb40483e7d3b28",
-    "graph_nodes": 3877,
-    "graph_edges": 2833
+    "graph_sha256": "d9cd516cce6c406d53205ee49847ad7cac79b9f8cdd2febc8c96930ee77761e7",
+    "graph_nodes": 3934,
+    "graph_edges": 2855
   },
   "runtime_exclusions": [
     ".git/**",

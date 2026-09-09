@@ -218,6 +218,7 @@ Mythos could otherwise quietly stop deserving the trust it asks for.
 | wordpress/seo-audit | 5 | FINDINGS_ONLY, RUN_ONLY, REVIEW_ONLY | playwright |
 | paid-media/google-ads-search-campaign-build | 6 | FINDINGS_ONLY, REVIEW_ONLY, PATCH_ALLOWED, RUN_ONLY | google-ads |
 | paid-media/meta-creative-iteration | 9 | FINDINGS_ONLY, REVIEW_ONLY, PATCH_ALLOWED | meta-ads, delesign, claude-in-chrome |
+| wordpress/livecanvas-onepager-build | 5 | FINDINGS_ONLY, RUN_ONLY, REVIEW_ONLY, PATCH_ALLOWED | claude-in-chrome, gmail |
 | wordpress/livecanvas-rebuild | 5 | FINDINGS_ONLY, PATCH_ALLOWED | playwright |
 | media/video-editing | 6 | FINDINGS_ONLY, PATCH_ALLOWED, REVIEW_ONLY | none |
 | meta/dreaming-system | 7 | FINDINGS_ONLY, REVIEW_ONLY, PATCH_ALLOWED, RUN_ONLY | none |

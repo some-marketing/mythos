@@ -146,6 +146,11 @@
       "guardrails": "frameworks/paid-media/meta-creative-iteration/guardrails.md"
     },
     {
+      "id": "wordpress/livecanvas-onepager-build",
+      "manifest": "frameworks/wordpress/livecanvas-onepager-build/manifest.json",
+      "guardrails": "frameworks/wordpress/livecanvas-onepager-build/guardrails.md"
+    },
+    {
       "id": "wordpress/livecanvas-rebuild",
       "manifest": "frameworks/wordpress/livecanvas-rebuild/manifest.json",
       "guardrails": "frameworks/wordpress/livecanvas-rebuild/guardrails.md"

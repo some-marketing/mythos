@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "0c09c0e1da3bd60c51def8ae99648fe31f6443386ac71a84e8746a996f2464df",
+    "expected_tree_sha256": "67f87ce216a8cbc7841be42278763d59968e2dce399dbbf3d6da96ac9eeaf161",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -3942,7 +3942,7 @@
       },
       {
         "path": "frameworks/wordpress/livecanvas-onepager-build/README.md",
-        "sha256": "904b45492ec3a09829dc23562fe3174972d177b52e28270c04e27526ba480dee",
+        "sha256": "bcf9e3164c70301db8a83493b7ba2c27ccf04aa7e3b0c7903e9afa72b49254c7",
         "mode": 420
       },
       {
@@ -3957,12 +3957,12 @@
       },
       {
         "path": "frameworks/wordpress/livecanvas-onepager-build/guardrails.md",
-        "sha256": "a92e1e9eabedeb9e328f24c02ad929bbbe496672d7a871a22bc3b8f40c34b231",
+        "sha256": "d3659baee8d6e1a1563516fe524bfcc8d5d726da99569a5e00f0fefb06601516",
         "mode": 420
       },
       {
         "path": "frameworks/wordpress/livecanvas-onepager-build/manifest.json",
-        "sha256": "c36868a9696dd6ff5e8dc1b7f86bc8a9caa69712fea9bfd13b6be0d3eb357f38",
+        "sha256": "8a0f9c8442ec476f8d3d74df59cd133169c58ebee4d7569acba100bafca91809",
         "mode": 420
       },
       {
@@ -3987,7 +3987,12 @@
       },
       {
         "path": "frameworks/wordpress/livecanvas-onepager-build/prompts/05_CLIENT_REVIEW.md",
-        "sha256": "dfb5c8f7c3e3d56d7e376f1b1d3a1617c5efa283e650ff731c94d05f8ff0848b",
+        "sha256": "758fb0c6fe8bb16c3c50afa9d9f42da557a711c17eb99a5273d68a7b58acb5df",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/schemas/draft-receipt.schema.json",
+        "sha256": "47c8ef69886770c08851880c41807fa25e2fba0de6f4a7f4a1967fe47fde1fa3",
         "mode": 420
       },
       {
@@ -6097,7 +6102,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "6c021d7193f3f2f332f7297a3b22f6bf341aba6aadc359861fa7ac43fbad81de",
+        "sha256": "d9cd516cce6c406d53205ee49847ad7cac79b9f8cdd2febc8c96930ee77761e7",
         "mode": 420
       },
       {
@@ -14099,9 +14104,9 @@
     "package_script_count": 205,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "6c021d7193f3f2f332f7297a3b22f6bf341aba6aadc359861fa7ac43fbad81de",
-    "graph_nodes": 3932,
-    "graph_edges": 2853
+    "graph_sha256": "d9cd516cce6c406d53205ee49847ad7cac79b9f8cdd2febc8c96930ee77761e7",
+    "graph_nodes": 3934,
+    "graph_edges": 2855
   },
   "runtime_exclusions": [
     ".git/**",

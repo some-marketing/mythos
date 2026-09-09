@@ -26,7 +26,9 @@
 - No third-party brand marks in photos on the page (crop them out or skip the photo).
 
 ## Execution modes
-- `FINDINGS_ONLY`: research, photo rating, licence checks, live-site review.
+- `FINDINGS_ONLY`: licence checks, live-site review, any observation that produces no file.
+- `RUN_ONLY`: Stage 1 — research runs, photo rating, the context-bundle index and research
+  reports (reports-only writes; no site is touched).
 - `REVIEW_ONLY`: design-spec review, copy-provenance audit, mobile check.
 - `PATCH_ALLOWED`: Customizer token writes, media uploads, LiveCanvas page/partial injection,
   Reading-settings toggle, Gmail *draft* creation. Sending email is the operator's action.

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "mythos/frameworks/wordpress/livecanvas-onepager-build/draft-receipt",
+  "title": "LiveCanvas one-pager — client review email draft receipt",
+  "description": "Written by Stage 5 to outputs/email-to-client__draft-receipt.json after the Gmail draft is created. Carries ids and gate evidence only — never the email body, never a credential, never the recipient's address in clear.",
+  "type": "object",
+  "required": ["schema", "created_at", "draft_id", "thread_id", "subject", "recipient_sha256", "demo_gate", "sent_by_framework"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "const": "LiveCanvasOnepagerDraftReceipt/1.0" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "draft_id": { "type": "string", "minLength": 1 },
+    "thread_id": { "type": "string", "minLength": 1 },
+    "subject": { "type": "string", "minLength": 1 },
+    "recipient_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$", "description": "sha256 of the lowercased recipient address; the address itself stays in client.json" },
+    "draft_file": { "type": "string", "description": "repo-relative path of the pre-edit draft markdown" },
+    "demo_gate": {
+      "type": "object",
+      "required": ["checked_at", "anonymous_status", "gated_status", "noindex_present", "reading_setting_discourage"],
+      "additionalProperties": false,
+      "properties": {
+        "checked_at": { "type": "string", "format": "date-time" },
+        "anonymous_status": { "type": "integer", "enum": [401, 403] },
+        "gated_status": { "type": "integer", "const": 200 },
+        "noindex_present": { "const": true },
+        "reading_setting_discourage": { "const": true }
+      }
+    },
+    "sent_by_framework": { "const": false, "description": "Always false: the framework never sends" },
+    "operator_edits_note": { "type": "string", "description": "repo-relative path of the sanitized operator-edits note, if the operator supplied the sent text" }
+  }
+}

@@ -17,7 +17,7 @@ For gutting an existing bloated multi-page site, use `wordpress/livecanvas-rebui
 
 | Stage | Prompt | Mode | Purpose |
 |---|---|---|---|
-| 1 | `01_INTAKE_AND_RESEARCH.md` | FINDINGS_ONLY | Context bundle (transcript, answers, assets, photo rating), research with brand facts pinned |
+| 1 | `01_INTAKE_AND_RESEARCH.md` | RUN_ONLY | Context bundle (transcript, answers, assets, photo rating), research with brand facts pinned (reports-only writes) |
 | 2 | `02_DESIGN_SPEC.md` | REVIEW_ONLY → PATCH_ALLOWED | Concept, sourced copy, visual spec (tokens, font-licence reality), wireframe; distinct-mind review |
 | 3 | `03_THEME_TOKENS.md` | PATCH_ALLOWED | Picostrap Customizer tokens via the JS API; verified in `bundle.css` |
 | 4 | `04_PAGE_BUILD.md` | PATCH_ALLOWED | Media, page HTML, header/footer partials, favicon via the LiveCanvas API; curl-verified; XS emulator check |

@@ -43,17 +43,26 @@ operator; do not draft, do not put the demo link anywhere.
    - First-name sign-off; the signature carries the company.
 3. Register: follow `docs/client-communication-brief.md` (casual, contractions, short asides in
    parentheses, invite input at the end of a bullet, no over-precision, first-name sign-off).
-4. Hand the draft to the operator. After they edit and send, read the sent version back, replace
-   the demo password (and any other credential) with the fixed placeholder `[DEMO_PASSWORD]`
-   **before** comparing, then diff the sanitized sent text against the draft and record only the
-   sanitized differences in the project's `outputs/` next to the draft (a dated "operator edits"
-   note). Confirm the note contains no credential before saving it. Style observations belong to
-   the project record; they are not written into the framework or into operator-personal memory
-   by this framework.
+4. Write `outputs/email-to-client__draft-receipt.json` conforming to
+   `schemas/draft-receipt.schema.json`: draft id, thread id, subject, sha256 of the recipient
+   address, the demo-gate check results from the prerequisite, `sent_by_framework: false`. No
+   email body, no credential, no clear-text address.
+5. Hand the draft to the operator. **The framework does not read the operator's mailbox.** It
+   does not fetch the sent message, the thread, or any other mail. If the operator wants the
+   edits recorded, they either paste the sent text into the session or explicitly instruct a
+   retrieval naming the exact thread id from the receipt; only then read that one thread, replace
+   the demo password (and any other credential) with `[DEMO_PASSWORD]` before comparing, diff the
+   sanitized text against the draft, and record only the sanitized differences in a dated
+   "operator edits" note under the project's `outputs/`, referenced from the receipt's
+   `operator_edits_note`. Confirm the note contains no credential before saving. Style
+   observations belong to the project record; they are never written into the framework or into
+   operator-personal memory by this framework.
 
 ## Outputs
 - `outputs/email-to-client__design-direction-review.md` (pre-edit draft, for provenance)
-- Gmail draft id / thread id recorded in the capture
+- `outputs/email-to-client__draft-receipt.json` (schema: `schemas/draft-receipt.schema.json`)
+- Optional `outputs/email-to-client__operator-edits__<date>.md` (sanitized; only if the operator
+  supplied or authorized retrieval of the sent text)
 
 ## Success Criteria
 - Under ~350 words. Every design bullet names its source. Every ask is concrete.

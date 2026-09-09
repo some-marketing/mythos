@@ -2,7 +2,7 @@
 name: design-spec
 description: "— Design Spec"
 skill: livecanvas-onepager-build
-mode: FINDINGS_ONLY
+mode: PATCH_ALLOWED
 ---
 
 Execute a specific phase of the framework prompt chain as defined by the phase prompt and the manifest contract.

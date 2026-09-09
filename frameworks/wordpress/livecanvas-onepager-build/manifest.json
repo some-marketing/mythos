@@ -39,7 +39,10 @@
       "captures/"
     ],
     "artifacts": [
+      "context-bundle/README.md",
       "outputs/design-research-report.md",
+      "outputs/design-research-brief.pdf",
+      "outputs/open-gates.md",
       "plans/<slug>__concept.md",
       "plans/<slug>__content.md",
       "plans/<slug>__visual-spec.md",
@@ -51,11 +54,15 @@
       "outputs/header-partial__lc-html__v1.html",
       "outputs/footer-partial__lc-html__v1.html",
       "outputs/recordings/*.gif",
-      "outputs/email-to-client__design-direction-review.md"
+      "outputs/recordings/desktop__*.jpg",
+      "outputs/recordings/xs__*.jpg",
+      "outputs/email-to-client__design-direction-review.md",
+      "outputs/email-to-client__draft-receipt.json"
     ]
   },
   "execution_modes": [
     "FINDINGS_ONLY",
+    "RUN_ONLY",
     "REVIEW_ONLY",
     "PATCH_ALLOWED"
   ],

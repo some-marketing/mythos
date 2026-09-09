@@ -6,7 +6,10 @@ the AI research) into one buildable spec, sourced line by line, and get it revie
 mind before anything is built.
 
 ## Mode
-REVIEW_ONLY for the reconciliation and review; PATCH_ALLOWED only for writing the plan documents.
+PATCH_ALLOWED
+
+(Writes are scoped to the plan documents under `plans/`. The reconciliation and the review
+verdict are analysis; no site is touched in this stage.)
 
 ## Inputs
 - Stage 1 context bundle and research reports

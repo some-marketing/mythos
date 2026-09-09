@@ -5,7 +5,10 @@ Assemble one context bundle the whole build can cite, then run design/market res
 client's real brand facts pinned so the research cannot re-guess them.
 
 ## Mode
-FINDINGS_ONLY
+RUN_ONLY
+
+(Reports-only writes: this stage creates the context bundle index, the photo table and the
+research reports under the project. It applies no fixes to any site.)
 
 ## Inputs
 - `client.json`, `intake.json`

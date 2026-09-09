@@ -3084,7 +3084,7 @@
       "id": "file:.claude/guardrails.md",
       "type": "file",
       "path": ".claude/guardrails.md",
-      "sha256": "8f84b1b7581ce40ae773ab66cb581916406364e564779106b82b85b24aad8aff",
+      "sha256": "996c11eef57fba5a279cb7bf3cecbf107e35f709f6079b907beb39d6fad781e3",
       "mode": 420
     },
     {
@@ -3721,14 +3721,14 @@
       "id": "file:AGENTS.md",
       "type": "file",
       "path": "AGENTS.md",
-      "sha256": "a29f9aa3f25db8c463f88bd6e5de02c09b83a0ea96336fa947d8a396b6e507bd",
+      "sha256": "d1609b6cc2d8615c65c1858eb3c1dfd5adca42282fd50504477bb2efb5380065",
       "mode": 420
     },
     {
       "id": "file:CLAUDE.md",
       "type": "file",
       "path": "CLAUDE.md",
-      "sha256": "4480c127b8999a0512d626a898f21eadd561816eb95d3d51224e546e9d8f2821",
+      "sha256": "e0d5ee62eddcf07aaa9c1bc7907531f3088db36728a3b1f2c9ca8f1c443c761b",
       "mode": 420
     },
     {
@@ -6766,21 +6766,21 @@
       "id": "file:frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/client-review-agent.md",
       "type": "file",
       "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/client-review-agent.md",
-      "sha256": "ce543ab9b4bed7df57a78ff64ba96bab7b441fa89d31e017699676029d1fdc48",
+      "sha256": "313e1410efaeff8ca407586f4ec964ead3e3340b4165f14dcdcceb82b6eb7c59",
       "mode": 420
     },
     {
       "id": "file:frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/design-spec-agent.md",
       "type": "file",
       "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/design-spec-agent.md",
-      "sha256": "020214e6be6f76dc29244204e4bbc06977478a0de4e91c10a87ee07a37107a1c",
+      "sha256": "9ca19b3d1246c9270785a321f1ddc0a348c10265c525a5f79a0bd5d5a3c6655f",
       "mode": 420
     },
     {
       "id": "file:frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/intake-and-research-agent.md",
       "type": "file",
       "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/intake-and-research-agent.md",
-      "sha256": "8e85880a09cc255b39cfb953368064870033d25e92bc541d9e1bd638481736e0",
+      "sha256": "34799fe9eee230bb9c276338a788582cefbc450a2865b9475ee77c3782675cd3",
       "mode": 420
     },
     {
@@ -6801,21 +6801,21 @@
       "id": "file:frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/client-review.md",
       "type": "file",
       "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/client-review.md",
-      "sha256": "e44c9b8d9efbf67db6af88552661a1bbed3584623f9c3f1271d4bad57b596ff4",
+      "sha256": "4f1ec031a7f51eb4af5526388f8e941f650e15775227455573e05c1a6aef0b8f",
       "mode": 420
     },
     {
       "id": "file:frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/design-spec.md",
       "type": "file",
       "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/design-spec.md",
-      "sha256": "fb8ac1efc9ee45d49337f7be2bd38074191eac334dd5a4237edc076657f97606",
+      "sha256": "1d2696579c7950c2bce75bdee212869dfbccadd7f5f7c7f9ab1546edb8c4112a",
       "mode": 420
     },
     {
       "id": "file:frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/intake-and-research.md",
       "type": "file",
       "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/intake-and-research.md",
-      "sha256": "a0349c70270307db363d8ffe359130a8a0b04677b3536f8f297bec2ec9155882",
+      "sha256": "b7a0307e8fdffbcb65144644ed73c52ae5fc5d07ba3237921a0e9102737e5fa3",
       "mode": 420
     },
     {
@@ -6850,7 +6850,7 @@
       "id": "file:frameworks/wordpress/livecanvas-onepager-build/.claude/skills/livecanvas-onepager-build/SKILL.md",
       "type": "file",
       "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/skills/livecanvas-onepager-build/SKILL.md",
-      "sha256": "f4dc32f87623d6dfa526e26d6f9295184f1397de21d6a5a46ffd3d36bf0c6f47",
+      "sha256": "4c8821b1206b3940527e3667f1f4a8988f473d17872def8d811997e6d23ee14c",
       "mode": 420
     },
     {
@@ -6878,28 +6878,28 @@
       "id": "file:frameworks/wordpress/livecanvas-onepager-build/manifest.json",
       "type": "file",
       "path": "frameworks/wordpress/livecanvas-onepager-build/manifest.json",
-      "sha256": "14ddc7c47b0fa4862d1c3626c0f83dbaf3ff8ddc816bdc2033dbff52e8d6c2ac",
+      "sha256": "c36868a9696dd6ff5e8dc1b7f86bc8a9caa69712fea9bfd13b6be0d3eb357f38",
       "mode": 420
     },
     {
       "id": "file:frameworks/wordpress/livecanvas-onepager-build/prompts/01_INTAKE_AND_RESEARCH.md",
       "type": "file",
       "path": "frameworks/wordpress/livecanvas-onepager-build/prompts/01_INTAKE_AND_RESEARCH.md",
-      "sha256": "b55bed68eb292f147b5f260807f959376a7aa05aa531f5f1aa858a2ce153c37b",
+      "sha256": "258278b182f56120ed9ad94f4fe0e26adb0b0b533c23c0afafb7d0fc35a698ac",
       "mode": 420
     },
     {
       "id": "file:frameworks/wordpress/livecanvas-onepager-build/prompts/02_DESIGN_SPEC.md",
       "type": "file",
       "path": "frameworks/wordpress/livecanvas-onepager-build/prompts/02_DESIGN_SPEC.md",
-      "sha256": "2ff5e67a8bb113c7bfa3fccb90f2742c20683b742eab97468b961cf33a82b8cd",
+      "sha256": "766ef88527b66000c6ad9f89af7aec2f97fae828215f5f63a8d5a35d5db121e5",
       "mode": 420
     },
     {
       "id": "file:frameworks/wordpress/livecanvas-onepager-build/prompts/03_THEME_TOKENS.md",
       "type": "file",
       "path": "frameworks/wordpress/livecanvas-onepager-build/prompts/03_THEME_TOKENS.md",
-      "sha256": "9bceca5fe0152725970c4ed7be4f304ad68d37db48a2332a238ef1422da117e9",
+      "sha256": "0a484133f9d616c3e27da013fbd61416673e03a28ed32ce1a121a4d1f53f56ed",
       "mode": 420
     },
     {
@@ -6913,7 +6913,7 @@
       "id": "file:frameworks/wordpress/livecanvas-onepager-build/prompts/05_CLIENT_REVIEW.md",
       "type": "file",
       "path": "frameworks/wordpress/livecanvas-onepager-build/prompts/05_CLIENT_REVIEW.md",
-      "sha256": "68f6f8b0f17b05f7f65accab1af27ccc7cac4c2a78ea2f415b75deeffc1ddebe",
+      "sha256": "dfb5c8f7c3e3d56d7e376f1b1d3a1617c5efa283e650ff731c94d05f8ff0848b",
       "mode": 420
     },
     {
@@ -8369,7 +8369,7 @@
       "id": "file:INSTRUCTIONS.md",
       "type": "file",
       "path": "INSTRUCTIONS.md",
-      "sha256": "946fd44b5e9dd11a4542a58981006dfdf3773131f1dc03d933c03691c7a9e42e",
+      "sha256": "c94ecbf9a5211dd8d03b4d2a7d984fa194180ade7a050d6f862db52bdafd68e9",
       "mode": 420
     },
     {
@@ -9594,7 +9594,7 @@
       "id": "file:instructions/canonical/frameworks/wordpress/livecanvas-onepager-build.yaml",
       "type": "file",
       "path": "instructions/canonical/frameworks/wordpress/livecanvas-onepager-build.yaml",
-      "sha256": "3fe2274d77b3728365448f66f7d00403f2e8c5d6b5ebe798c0eca7a90ca68808",
+      "sha256": "6c4be6cfe5a367e92462d3380ef32b4069d0081653e2831fb2ad53cb0ab80f96",
       "mode": 420
     },
     {
@@ -9839,7 +9839,7 @@
       "id": "file:OPENCODE.md",
       "type": "file",
       "path": "OPENCODE.md",
-      "sha256": "1a470552be979981dcde27aa8546a841c235ff1a3a9ea099eb2661d0be731664",
+      "sha256": "bad87c30b7519f204a63bed99507508191c9803cf452c63b1164aa1582f7e136",
       "mode": 420
     },
     {

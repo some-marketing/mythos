@@ -2,12 +2,13 @@
 name: intake-and-research-agent
 description: "Assemble one context bundle the whole build can cite, then run design/market research with the"
 model: sonnet
-mode: FINDINGS_ONLY
+mode: RUN_ONLY
 tools:
   - Read
   - Write
   - Glob
   - Grep
+  - Bash
 ---
 
 # Intake And Research Agent
@@ -25,6 +26,6 @@ Assemble one context bundle the whole build can cite, then run design/market res
 
 ## Rules
 
-- Follow execution mode: FINDINGS_ONLY
+- Follow execution mode: RUN_ONLY
 - Every output must cite its source data
 - Follow all constraints in guardrails.md

@@ -2,7 +2,7 @@
 name: intake-and-research
 description: "— Intake and Research"
 skill: livecanvas-onepager-build
-mode: FINDINGS_ONLY
+mode: RUN_ONLY
 ---
 
 Execute a specific phase of the framework prompt chain as defined by the phase prompt and the manifest contract.

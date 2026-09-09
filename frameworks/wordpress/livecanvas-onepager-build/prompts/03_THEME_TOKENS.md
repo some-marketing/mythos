@@ -26,7 +26,8 @@ PATCH_ALLOWED
    family; curl the homepage and confirm `@font-face` rules for both families (Picostrap
    self-generates them from Fontsource for Google-Font names; no loader tag needed).
 5. Turn on "Discourage search engines" in Reading settings. Hand the hosting-level password gate to
-   the operator and record it as open until confirmed.
+   the operator and record it as an OPEN gate in the capture. Stage 5 cannot start until both the
+   noindex and the password gate are confirmed by the checks in its prerequisite section.
 6. Write `outputs/picostrap-customizer-setting-map.md`: every setting id, the value applied, and
    the verification evidence. Record a GIF of the pass.
 

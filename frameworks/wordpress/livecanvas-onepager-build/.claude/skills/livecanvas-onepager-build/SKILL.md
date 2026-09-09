@@ -12,6 +12,7 @@ Build a new one-page marketing site for a local trades/service business on WordP
 
 <execution_modes>
   <mode name="FINDINGS_ONLY">findings only</mode>
+  <mode name="RUN_ONLY">run only</mode>
   <mode name="REVIEW_ONLY">review only</mode>
   <mode name="PATCH_ALLOWED">patch allowed</mode>
 </execution_modes>
@@ -43,7 +44,10 @@ Build a new one-page marketing site for a local trades/service business on WordP
 
 <outputs>
 
+- context-bundle/README.md
 - outputs/design-research-report.md
+- outputs/design-research-brief.pdf
+- outputs/open-gates.md
 - plans/<slug>__concept.md
 - plans/<slug>__content.md
 - plans/<slug>__visual-spec.md
@@ -55,7 +59,10 @@ Build a new one-page marketing site for a local trades/service business on WordP
 - outputs/header-partial__lc-html__v1.html
 - outputs/footer-partial__lc-html__v1.html
 - outputs/recordings/*.gif
+- outputs/recordings/desktop__*.jpg
+- outputs/recordings/xs__*.jpg
 - outputs/email-to-client__design-direction-review.md
+- outputs/email-to-client__draft-receipt.json
 
 </outputs>
 </quick_start>

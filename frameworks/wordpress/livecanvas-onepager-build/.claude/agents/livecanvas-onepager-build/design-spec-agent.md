@@ -2,12 +2,13 @@
 name: design-spec-agent
 description: "Turn three partially conflicting inputs (the client's words, the client's existing brand assets,"
 model: sonnet
-mode: FINDINGS_ONLY
+mode: PATCH_ALLOWED
 tools:
   - Read
   - Write
   - Glob
   - Grep
+  - Bash
 ---
 
 # Design Spec Agent
@@ -25,6 +26,6 @@ Turn three partially conflicting inputs (the client's words, the client's existi
 
 ## Rules
 
-- Follow execution mode: FINDINGS_ONLY
+- Follow execution mode: PATCH_ALLOWED
 - Every output must cite its source data
 - Follow all constraints in guardrails.md

@@ -5,11 +5,22 @@ Get the client to review the design direction before the build goes deeper, with
 explains the why, names what is placeholder, and asks for exactly what is still needed.
 
 ## Mode
-PATCH_ALLOWED (create a Gmail *draft* in the operator's account). Sending is the operator's action.
+PATCH_ALLOWED
+
+(The only write is a Gmail *draft* in the operator's account plus the project-side draft file.
+Sending is the operator's action; this stage never sends.)
+
+## Prerequisite — confirmed demo gate (hard stop)
+Before anything else, prove the demo is gated:
+- an anonymous `curl -sI https://<demo>/` returns 401/403 (hosting-level password gate), and
+- a gated fetch (netrc file outside the repo, see the recipe §2b) returns 200 with a
+  `<meta name="robots" content="noindex…">` tag, and the WordPress Reading setting is on.
+Record both results in the capture. If either check fails, STOP and hand the gate back to the
+operator; do not draft, do not put the demo link anywhere.
 
 ## Inputs
-- The live demo URL. The demo MUST be noindexed and password-gated before the link goes to the
-  client; include the password in the email body only, never in any file under the project.
+- The live demo URL, gated as above. Include the password in the email body only, never in any
+  file under the project.
 - Open gates from Stages 2–4 (hero photo, owner photo, extra photos, unconfirmed facts)
 - `docs/client-communication-brief.md` (the agency's client-email register; project-scoped, not
   operator-personal memory)

@@ -3,8 +3,8 @@
   "manifest_path": "frameworks/wordpress/livecanvas-onepager-build/manifest.json",
   "description": "Build a new one-page marketing site for a local trades/service business on WordPress + Picostrap 5 + LiveCanvas, from a kickoff form, a call, brand assets and client photos; every Customizer/LiveCanvas save is verified on the public URL and checked at phone width; the client review email is drafted only.",
   "inputs": ["client.json", "intake.json", "context-bundle/"],
-  "outputs": ["outputs/design-research-report.md", "plans/<slug>__concept.md", "plans/<slug>__content.md", "plans/<slug>__visual-spec.md", "plans/<slug>__wireframe.md", "plans/<slug>__plan.json", "plans/<slug>__plan.md", "outputs/picostrap-customizer-setting-map.md", "outputs/home-page__lc-html__v1.html", "outputs/header-partial__lc-html__v1.html", "outputs/footer-partial__lc-html__v1.html", "outputs/recordings/*.gif", "outputs/email-to-client__design-direction-review.md"],
-  "modes": ["FINDINGS_ONLY", "REVIEW_ONLY", "PATCH_ALLOWED"],
+  "outputs": ["context-bundle/README.md", "outputs/design-research-report.md", "outputs/design-research-brief.pdf", "outputs/open-gates.md", "plans/<slug>__concept.md", "plans/<slug>__content.md", "plans/<slug>__visual-spec.md", "plans/<slug>__wireframe.md", "plans/<slug>__plan.json", "plans/<slug>__plan.md", "outputs/picostrap-customizer-setting-map.md", "outputs/home-page__lc-html__v1.html", "outputs/header-partial__lc-html__v1.html", "outputs/footer-partial__lc-html__v1.html", "outputs/recordings/*.gif", "outputs/recordings/desktop__*.jpg", "outputs/recordings/xs__*.jpg", "outputs/email-to-client__design-direction-review.md", "outputs/email-to-client__draft-receipt.json"],
+  "modes": ["FINDINGS_ONLY", "RUN_ONLY", "REVIEW_ONLY", "PATCH_ALLOWED"],
   "operations": ["intake-and-research", "design-spec", "theme-tokens", "page-build", "client-review"],
   "agent_profiles": ["intake-and-research-agent", "design-spec-agent", "theme-tokens-agent", "page-build-agent", "client-review-agent"],
   "guardrail_overrides": [

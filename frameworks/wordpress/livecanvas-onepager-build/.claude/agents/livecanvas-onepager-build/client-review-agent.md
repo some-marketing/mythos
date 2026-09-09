@@ -2,12 +2,13 @@
 name: client-review-agent
 description: "Get the client to review the design direction before the build goes deeper, with an email that"
 model: sonnet
-mode: FINDINGS_ONLY
+mode: PATCH_ALLOWED
 tools:
   - Read
   - Write
   - Glob
   - Grep
+  - Bash
 ---
 
 # Client Review Agent
@@ -25,6 +26,6 @@ Get the client to review the design direction before the build goes deeper, with
 
 ## Rules
 
-- Follow execution mode: FINDINGS_ONLY
+- Follow execution mode: PATCH_ALLOWED
 - Every output must cite its source data
 - Follow all constraints in guardrails.md

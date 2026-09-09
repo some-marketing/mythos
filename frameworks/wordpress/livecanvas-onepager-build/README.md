@@ -1,7 +1,7 @@
 # wordpress/livecanvas-onepager-build — Framework Candidate
 
 **Status:** candidate (`v0.1.0`) — Iron. One reference run; not yet replayed.
-**Origin:** distilled from the Bay Road Electrical (`clients/BRE/`) one-pager build, 2026-09-09.
+**Origin:** distilled from the first reference run (client code `BRE`, `clients/BRE/`), 2026-09-09.
 Capture bundle: `clients/BRE/projects/wordpress__content-editing__one-pager-site/captures/20260909T134835Z__livecanvas-onepager-build`.
 
 ## When to use

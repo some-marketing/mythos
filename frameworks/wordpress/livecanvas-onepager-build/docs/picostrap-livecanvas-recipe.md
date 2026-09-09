@@ -77,6 +77,18 @@ theme CSS in `#previewiframe`; scroll it with
 `document.querySelector('#previewiframe').contentWindow.scrollTo(0,0)`. `resize_window` on the
 Chrome tab does not change the viewport.
 
+## 2b. Verifying against a password-gated demo
+
+The public-URL curl checks above assume the demo answers anonymously. Once the hosting-level
+password gate is on, run them with `curl --netrc-file <path outside the repo> …`, where the netrc
+file (mode 600, e.g. `~/.config/mythos/demo-gates/<CODE>.netrc`) holds
+`machine <demo-host> login <user> password <pass>` and is written by the operator or by
+`op read` redirected straight into that file — never echoed. Do not pass credentials as command
+arguments in any form: `curl -u "$USER:$PASS"` is expanded by the invoking shell before any
+resolver runs, so the values land in the argument list and in tool logs. Never paste credentials
+into a command, a log, a capture or any file under the project, and never drop the gate to make a
+check easier.
+
 ## 3. Media
 
 `wp-admin/media-new.php?browser-uploader` exposes a plain `<input type=file>`; upload, click

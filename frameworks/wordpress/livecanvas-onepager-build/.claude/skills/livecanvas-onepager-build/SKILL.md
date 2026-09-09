@@ -1,14 +1,14 @@
 ---
 name: livecanvas-onepager-build
 description: >
-  Build a new one-page marketing site for a local trades/service business on WordPress + Picostrap 5 + LiveCanvas: intake and research with brand facts pinned, a reviewed design spec (sourced copy, hex tokens, font-licence reality), design tokens applied through the Customizer API, page and header/footer partials injected through the LiveCanvas editor API with every save verified on the public URL, a phone-first check in the editor's device emulator, and a client design-direction review email. Distilled from the first Bay Road Electrical (client code BRE) run, 2026-09-09.
+  Build a new one-page marketing site for a local trades/service business on WordPress + Picostrap 5 + LiveCanvas: intake and research with brand facts pinned, a reviewed design spec (sourced copy, hex tokens, font-licence reality), design tokens applied through the Customizer API, page and header/footer partials injected through the LiveCanvas editor API with every save verified on the public URL, a phone-first check in the editor's device emulator, and a client design-direction review email drafted for the operator to send. Distilled from the first reference run (client code BRE), 2026-09-09.
 ---
 
 <skill>
 <objective>
-Build a new one-page marketing site for a local trades/service business on WordPress + Picostrap 5 + LiveCanvas: intake and research with brand facts pinned, a reviewed design spec (sourced copy, hex tokens, font-licence reality), design tokens applied through the Customizer API, page and header/footer partials injected through the LiveCanvas editor API with every save verified on the public URL, a phone-first check in the editor's device emulator, and a client design-direction review email. Distilled from the first Bay Road Electrical (client code BRE) run, 2026-09-09.
+Build a new one-page marketing site for a local trades/service business on WordPress + Picostrap 5 + LiveCanvas: intake and research with brand facts pinned, a reviewed design spec (sourced copy, hex tokens, font-licence reality), design tokens applied through the Customizer API, page and header/footer partials injected through the LiveCanvas editor API with every save verified on the public URL, a phone-first check in the editor's device emulator, and a client design-direction review email drafted for the operator to send. Distilled from the first reference run (client code BRE), 2026-09-09.
 </objective>
-<mcp_requirements>claude-in-chrome</mcp_requirements>
+<mcp_requirements>claude-in-chrome, gmail</mcp_requirements>
 
 <execution_modes>
   <mode name="FINDINGS_ONLY">findings only</mode>
@@ -19,7 +19,7 @@ Build a new one-page marketing site for a local trades/service business on WordP
 <quick_start>
 <what_this_skill_does>
 
-Build a new one-page marketing site for a local trades/service business on WordPress + Picostrap 5 + LiveCanvas: intake and research with brand facts pinned, a reviewed design spec (sourced copy, hex tokens, font-licence reality), design tokens applied through the Customizer API, page and header/footer partials injected through the LiveCanvas editor API with every save verified on the public URL, a phone-first check in the editor's device emulator, and a client design-direction review email. Distilled from the first Bay Road Electrical (client code BRE) run, 2026-09-09.
+Build a new one-page marketing site for a local trades/service business on WordPress + Picostrap 5 + LiveCanvas: intake and research with brand facts pinned, a reviewed design spec (sourced copy, hex tokens, font-licence reality), design tokens applied through the Customizer API, page and header/footer partials injected through the LiveCanvas editor API with every save verified on the public URL, a phone-first check in the editor's device emulator, and a client design-direction review email drafted for the operator to send. Distilled from the first reference run (client code BRE), 2026-09-09.
 
 </what_this_skill_does>
 
@@ -48,6 +48,8 @@ Build a new one-page marketing site for a local trades/service business on WordP
 - plans/<slug>__content.md
 - plans/<slug>__visual-spec.md
 - plans/<slug>__wireframe.md
+- plans/<slug>__plan.json
+- plans/<slug>__plan.md
 - outputs/picostrap-customizer-setting-map.md
 - outputs/home-page__lc-html__v1.html
 - outputs/header-partial__lc-html__v1.html

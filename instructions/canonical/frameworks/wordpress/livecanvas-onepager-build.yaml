@@ -1,0 +1,19 @@
+{
+  "id": "wordpress/livecanvas-onepager-build",
+  "manifest_path": "frameworks/wordpress/livecanvas-onepager-build/manifest.json",
+  "description": "Build a new one-page marketing site for a local trades/service business on WordPress + Picostrap 5 + LiveCanvas, from a kickoff form, a call, brand assets and client photos; every Customizer/LiveCanvas save is verified on the public URL and checked at phone width; the client review email is drafted only.",
+  "inputs": ["client.json", "intake.json", "context-bundle/"],
+  "outputs": ["outputs/design-research-report.md", "plans/<slug>__concept.md", "plans/<slug>__content.md", "plans/<slug>__visual-spec.md", "plans/<slug>__wireframe.md", "plans/<slug>__plan.json", "plans/<slug>__plan.md", "outputs/picostrap-customizer-setting-map.md", "outputs/home-page__lc-html__v1.html", "outputs/header-partial__lc-html__v1.html", "outputs/footer-partial__lc-html__v1.html", "outputs/recordings/*.gif", "outputs/email-to-client__design-direction-review.md"],
+  "modes": ["FINDINGS_ONLY", "REVIEW_ONLY", "PATCH_ALLOWED"],
+  "operations": ["intake-and-research", "design-spec", "theme-tokens", "page-build", "client-review"],
+  "agent_profiles": ["intake-and-research-agent", "design-spec-agent", "theme-tokens-agent", "page-build-agent", "client-review-agent"],
+  "guardrail_overrides": [
+    "Client data stays under clients/<CODE>/; only the client code may appear in the framework",
+    "Demo must be noindexed and password-gated before the client link is shared; gated-site verification uses a sanctioned credential resolver, never inlined or logged",
+    "Every Customizer/LiveCanvas save is curl-verified on the public URL or it is unverified",
+    "Phone-width check in the LiveCanvas XS emulator on every build pass",
+    "Every claim on the page (credentials, testimonials, review counts, service area, heritage) traces to an approved source; owner photo requires the client's explicit recorded consent",
+    "Stage 5 drafts the client email only; autonomous sending is prohibited",
+    "A client-facing plan is BIG: distinct-mind review verdict and convene evidence before the build is treated as accepted"
+  ]
+}

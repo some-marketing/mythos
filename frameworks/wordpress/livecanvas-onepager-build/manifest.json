@@ -3,7 +3,7 @@
   "framework_name": "livecanvas-onepager-build",
   "version": "0.1.0",
   "status": "candidate",
-  "description": "Build a new one-page marketing site for a local trades/service business on WordPress + Picostrap 5 + LiveCanvas: intake and research with brand facts pinned, a reviewed design spec (sourced copy, hex tokens, font-licence reality), design tokens applied through the Customizer API, page and header/footer partials injected through the LiveCanvas editor API with every save verified on the public URL, a phone-first check in the editor's device emulator, and a client design-direction review email. Distilled from the first Bay Road Electrical (client code BRE) run, 2026-09-09.",
+  "description": "Build a new one-page marketing site for a local trades/service business on WordPress + Picostrap 5 + LiveCanvas: intake and research with brand facts pinned, a reviewed design spec (sourced copy, hex tokens, font-licence reality), design tokens applied through the Customizer API, page and header/footer partials injected through the LiveCanvas editor API with every save verified on the public URL, a phone-first check in the editor's device emulator, and a client design-direction review email drafted for the operator to send. Distilled from the first reference run (client code BRE), 2026-09-09.",
   "prompt_count": 5,
   "input_contract": {
     "required": [
@@ -44,6 +44,8 @@
       "plans/<slug>__content.md",
       "plans/<slug>__visual-spec.md",
       "plans/<slug>__wireframe.md",
+      "plans/<slug>__plan.json",
+      "plans/<slug>__plan.md",
       "outputs/picostrap-customizer-setting-map.md",
       "outputs/home-page__lc-html__v1.html",
       "outputs/header-partial__lc-html__v1.html",
@@ -58,8 +60,10 @@
     "PATCH_ALLOWED"
   ],
   "mcp_requirements": [
-    "claude-in-chrome"
+    "claude-in-chrome",
+    "gmail"
   ],
+  "mcp_requirements_note": "claude-in-chrome for Customizer/LiveCanvas/media work in an already-authenticated admin session; gmail (the operator's connected account) for Stage 5 draft creation only — the framework never sends.",
   "prompt_chain": {
     "intake": [
       "01_INTAKE_AND_RESEARCH"

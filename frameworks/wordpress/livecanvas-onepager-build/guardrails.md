@@ -10,11 +10,19 @@
   captures. Use an already-authenticated browser session or a 1Password item title.
 - Never write client names, emails, phone numbers, addresses or photos into this framework tree.
   Client data lives under `clients/<CODE>/` only. Reference runs may cite the client code.
-- Everything the client sees on the demo is a publishing decision: the demo must have
-  "discourage search engines" on and a hosting-level password gate before the link is shared.
-- No photo of the owner on the page unless the client has said yes. No testimonials, review
-  counts, service-area towns, credentials or claims that do not trace to an approved source
-  (questionnaire, call transcript, live-site copy, or a client message).
+- Everything the client sees on the demo is a publishing decision: the demo MUST have
+  "discourage search engines" on AND a hosting-level password gate before the link is shared.
+  Verification against a gated demo runs the curl checks with credentials supplied through a
+  sanctioned resolver (`op run --env-file`, a netrc file outside the repo) — never inlined in a
+  command, log, capture or file under the project, and never by disabling the gate.
+- No photo of the owner on the page without the client's explicit consent recorded in the
+  project (a message or call note), not merely an "approved source". No testimonials, review
+  counts, service-area towns, credentials or any other claim that does not trace to an approved
+  source (questionnaire, call transcript, live-site copy, or a client message).
+- Stage 5 creates a Gmail draft only. Autonomous sending of email to a client is prohibited.
+- A plan for a client-facing surface is BIG: it needs a distinct-mind review verdict and convene
+  evidence before Stage 4 is treated as accepted; building ahead of that gate under explicit
+  operator instruction must be recorded as such in the capture.
 - No third-party brand marks in photos on the page (crop them out or skip the photo).
 
 ## Execution modes

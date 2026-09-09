@@ -1247,6 +1247,51 @@
       "path": "frameworks/project-management/feedback-to-tasks/.claude/skills/feedback-to-tasks"
     },
     {
+      "id": "directory:frameworks/research/business-identity-verification/.claude/agents/business-identity-verification",
+      "type": "directory",
+      "path": "frameworks/research/business-identity-verification/.claude/agents/business-identity-verification"
+    },
+    {
+      "id": "directory:frameworks/research/business-identity-verification/.claude/commands/business-identity-verification",
+      "type": "directory",
+      "path": "frameworks/research/business-identity-verification/.claude/commands/business-identity-verification"
+    },
+    {
+      "id": "directory:frameworks/research/business-identity-verification/.claude/skills/business-identity-verification",
+      "type": "directory",
+      "path": "frameworks/research/business-identity-verification/.claude/skills/business-identity-verification"
+    },
+    {
+      "id": "directory:frameworks/research/contractor-credential-review/.claude/agents/contractor-credential-review",
+      "type": "directory",
+      "path": "frameworks/research/contractor-credential-review/.claude/agents/contractor-credential-review"
+    },
+    {
+      "id": "directory:frameworks/research/contractor-credential-review/.claude/commands/contractor-credential-review",
+      "type": "directory",
+      "path": "frameworks/research/contractor-credential-review/.claude/commands/contractor-credential-review"
+    },
+    {
+      "id": "directory:frameworks/research/contractor-credential-review/.claude/skills/contractor-credential-review",
+      "type": "directory",
+      "path": "frameworks/research/contractor-credential-review/.claude/skills/contractor-credential-review"
+    },
+    {
+      "id": "directory:frameworks/research/osint-discovery/.claude/agents/osint-discovery",
+      "type": "directory",
+      "path": "frameworks/research/osint-discovery/.claude/agents/osint-discovery"
+    },
+    {
+      "id": "directory:frameworks/research/osint-discovery/.claude/commands/osint-discovery",
+      "type": "directory",
+      "path": "frameworks/research/osint-discovery/.claude/commands/osint-discovery"
+    },
+    {
+      "id": "directory:frameworks/research/osint-discovery/.claude/skills/osint-discovery",
+      "type": "directory",
+      "path": "frameworks/research/osint-discovery/.claude/skills/osint-discovery"
+    },
+    {
       "id": "directory:frameworks/wordpress/analytics-tracking/.claude/agents/analytics-tracking",
       "type": "directory",
       "path": "frameworks/wordpress/analytics-tracking/.claude/agents/analytics-tracking"
@@ -1320,6 +1365,21 @@
       "id": "directory:frameworks/wordpress/documentation/.claude/skills/documentation",
       "type": "directory",
       "path": "frameworks/wordpress/documentation/.claude/skills/documentation"
+    },
+    {
+      "id": "directory:frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build",
+      "type": "directory",
+      "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build"
+    },
+    {
+      "id": "directory:frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build",
+      "type": "directory",
+      "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build"
+    },
+    {
+      "id": "directory:frameworks/wordpress/livecanvas-onepager-build/.claude/skills/livecanvas-onepager-build",
+      "type": "directory",
+      "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/skills/livecanvas-onepager-build"
     },
     {
       "id": "directory:frameworks/wordpress/livecanvas-rebuild/.claude/agents/livecanvas-rebuild",
@@ -3024,7 +3084,7 @@
       "id": "file:.claude/guardrails.md",
       "type": "file",
       "path": ".claude/guardrails.md",
-      "sha256": "9b3a06934b46a33e1ae4357c127b28ccfe81a061005ef0e60c7fdfe7919c54b1",
+      "sha256": "8f84b1b7581ce40ae773ab66cb581916406364e564779106b82b85b24aad8aff",
       "mode": 420
     },
     {
@@ -3038,7 +3098,7 @@
       "id": "file:.claude/project-claude.yml",
       "type": "file",
       "path": ".claude/project-claude.yml",
-      "sha256": "6786368b527bca263075bbc1f153928133460de2f49fb62e51402d60bfd99ba9",
+      "sha256": "5e4d3c09b8d68745ec88ebe0f58920e404947a690570136f6b4ba332348f639b",
       "mode": 420
     },
     {
@@ -3661,14 +3721,14 @@
       "id": "file:AGENTS.md",
       "type": "file",
       "path": "AGENTS.md",
-      "sha256": "8ef082f3cf0a84bd2d689e0c3842833ed95aa200a44b430d3037aaae34ee0696",
+      "sha256": "a29f9aa3f25db8c463f88bd6e5de02c09b83a0ea96336fa947d8a396b6e507bd",
       "mode": 420
     },
     {
       "id": "file:CLAUDE.md",
       "type": "file",
       "path": "CLAUDE.md",
-      "sha256": "853a429fb94becc2b56eb50dc5c21806f3209d4557dd8f083c567fc149c70b81",
+      "sha256": "4480c127b8999a0512d626a898f21eadd561816eb95d3d51224e546e9d8f2821",
       "mode": 420
     },
     {
@@ -6703,6 +6763,167 @@
       "mode": 420
     },
     {
+      "id": "file:frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/client-review-agent.md",
+      "type": "file",
+      "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/client-review-agent.md",
+      "sha256": "ce543ab9b4bed7df57a78ff64ba96bab7b441fa89d31e017699676029d1fdc48",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/design-spec-agent.md",
+      "type": "file",
+      "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/design-spec-agent.md",
+      "sha256": "020214e6be6f76dc29244204e4bbc06977478a0de4e91c10a87ee07a37107a1c",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/intake-and-research-agent.md",
+      "type": "file",
+      "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/intake-and-research-agent.md",
+      "sha256": "8e85880a09cc255b39cfb953368064870033d25e92bc541d9e1bd638481736e0",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/page-build-agent.md",
+      "type": "file",
+      "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/page-build-agent.md",
+      "sha256": "7ab0c9f2b4bc522f291ea54428364b2211d0d8f26580d4e7a1a97f36e5adff53",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/theme-tokens-agent.md",
+      "type": "file",
+      "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/theme-tokens-agent.md",
+      "sha256": "92e14e31023a2213db789fa9728595ab54b285de3d01b47cfa5ecc7df60d43dc",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/client-review.md",
+      "type": "file",
+      "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/client-review.md",
+      "sha256": "e44c9b8d9efbf67db6af88552661a1bbed3584623f9c3f1271d4bad57b596ff4",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/design-spec.md",
+      "type": "file",
+      "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/design-spec.md",
+      "sha256": "fb8ac1efc9ee45d49337f7be2bd38074191eac334dd5a4237edc076657f97606",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/intake-and-research.md",
+      "type": "file",
+      "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/intake-and-research.md",
+      "sha256": "a0349c70270307db363d8ffe359130a8a0b04677b3536f8f297bec2ec9155882",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/page-build.md",
+      "type": "file",
+      "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/page-build.md",
+      "sha256": "7ae48ace9cb282be92ecdaa0fbaedd64a2b2e3c487e45048bd68203345f51094",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/run.md",
+      "type": "file",
+      "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/run.md",
+      "sha256": "6a7eea333be7d17d77549b5cf0bd041876d28f8771b0dc9e56e7d87c126a362b",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/status.md",
+      "type": "file",
+      "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/status.md",
+      "sha256": "f3f7ec5ce333bb04beba8d072355955a0b83f3bfd24329a2150a68606357542f",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/theme-tokens.md",
+      "type": "file",
+      "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/theme-tokens.md",
+      "sha256": "1646d850480bacd6971757073c9a835830a5fb489b8a81395cb0d4d94441dfb6",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/wordpress/livecanvas-onepager-build/.claude/skills/livecanvas-onepager-build/SKILL.md",
+      "type": "file",
+      "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/skills/livecanvas-onepager-build/SKILL.md",
+      "sha256": "f4dc32f87623d6dfa526e26d6f9295184f1397de21d6a5a46ffd3d36bf0c6f47",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/wordpress/livecanvas-onepager-build/docs/client-communication-brief.md",
+      "type": "file",
+      "path": "frameworks/wordpress/livecanvas-onepager-build/docs/client-communication-brief.md",
+      "sha256": "e2e21684a8ff40e7a9f4426412709bdfb0bbf2edd9c009492d195da6bc400178",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/wordpress/livecanvas-onepager-build/docs/picostrap-livecanvas-recipe.md",
+      "type": "file",
+      "path": "frameworks/wordpress/livecanvas-onepager-build/docs/picostrap-livecanvas-recipe.md",
+      "sha256": "11b3fbf70203dd88a95fa845a24ccb7090dca09ce88776dc8381a031cd0d1ab3",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/wordpress/livecanvas-onepager-build/guardrails.md",
+      "type": "file",
+      "path": "frameworks/wordpress/livecanvas-onepager-build/guardrails.md",
+      "sha256": "a92e1e9eabedeb9e328f24c02ad929bbbe496672d7a871a22bc3b8f40c34b231",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/wordpress/livecanvas-onepager-build/manifest.json",
+      "type": "file",
+      "path": "frameworks/wordpress/livecanvas-onepager-build/manifest.json",
+      "sha256": "14ddc7c47b0fa4862d1c3626c0f83dbaf3ff8ddc816bdc2033dbff52e8d6c2ac",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/wordpress/livecanvas-onepager-build/prompts/01_INTAKE_AND_RESEARCH.md",
+      "type": "file",
+      "path": "frameworks/wordpress/livecanvas-onepager-build/prompts/01_INTAKE_AND_RESEARCH.md",
+      "sha256": "b55bed68eb292f147b5f260807f959376a7aa05aa531f5f1aa858a2ce153c37b",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/wordpress/livecanvas-onepager-build/prompts/02_DESIGN_SPEC.md",
+      "type": "file",
+      "path": "frameworks/wordpress/livecanvas-onepager-build/prompts/02_DESIGN_SPEC.md",
+      "sha256": "2ff5e67a8bb113c7bfa3fccb90f2742c20683b742eab97468b961cf33a82b8cd",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/wordpress/livecanvas-onepager-build/prompts/03_THEME_TOKENS.md",
+      "type": "file",
+      "path": "frameworks/wordpress/livecanvas-onepager-build/prompts/03_THEME_TOKENS.md",
+      "sha256": "9bceca5fe0152725970c4ed7be4f304ad68d37db48a2332a238ef1422da117e9",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/wordpress/livecanvas-onepager-build/prompts/04_PAGE_BUILD.md",
+      "type": "file",
+      "path": "frameworks/wordpress/livecanvas-onepager-build/prompts/04_PAGE_BUILD.md",
+      "sha256": "435be245edaf0481fc5fba825f5ffe5366236eb3792b249c4c1e83a535cca781",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/wordpress/livecanvas-onepager-build/prompts/05_CLIENT_REVIEW.md",
+      "type": "file",
+      "path": "frameworks/wordpress/livecanvas-onepager-build/prompts/05_CLIENT_REVIEW.md",
+      "sha256": "68f6f8b0f17b05f7f65accab1af27ccc7cac4c2a78ea2f415b75deeffc1ddebe",
+      "mode": 420
+    },
+    {
+      "id": "file:frameworks/wordpress/livecanvas-onepager-build/README.md",
+      "type": "file",
+      "path": "frameworks/wordpress/livecanvas-onepager-build/README.md",
+      "sha256": "904b45492ec3a09829dc23562fe3174972d177b52e28270c04e27526ba480dee",
+      "mode": 420
+    },
+    {
       "id": "file:frameworks/wordpress/livecanvas-rebuild/.claude/agents/livecanvas-rebuild/audit-agent.md",
       "type": "file",
       "path": "frameworks/wordpress/livecanvas-rebuild/.claude/agents/livecanvas-rebuild/audit-agent.md",
@@ -8148,7 +8369,7 @@
       "id": "file:INSTRUCTIONS.md",
       "type": "file",
       "path": "INSTRUCTIONS.md",
-      "sha256": "f24d710dab995154c44c14f18012b109a7317a3d9d4e7605a2f5bbdb73d045dd",
+      "sha256": "946fd44b5e9dd11a4542a58981006dfdf3773131f1dc03d933c03691c7a9e42e",
       "mode": 420
     },
     {
@@ -9370,6 +9591,13 @@
       "mode": 420
     },
     {
+      "id": "file:instructions/canonical/frameworks/wordpress/livecanvas-onepager-build.yaml",
+      "type": "file",
+      "path": "instructions/canonical/frameworks/wordpress/livecanvas-onepager-build.yaml",
+      "sha256": "3fe2274d77b3728365448f66f7d00403f2e8c5d6b5ebe798c0eca7a90ca68808",
+      "mode": 420
+    },
+    {
       "id": "file:instructions/canonical/frameworks/wordpress/qa.yaml",
       "type": "file",
       "path": "instructions/canonical/frameworks/wordpress/qa.yaml",
@@ -9548,7 +9776,7 @@
       "id": "file:instructions/canonical/system.yaml",
       "type": "file",
       "path": "instructions/canonical/system.yaml",
-      "sha256": "2403daa3bcd8ed7c4e2a2e034f5e73ea7a7e8f10a84b2e329e66f92979b59a1b",
+      "sha256": "4872c667fed2bb7cdeafc8b1ab649256170c0ca661e03616349a03e03d6f3890",
       "mode": 420
     },
     {
@@ -9611,7 +9839,7 @@
       "id": "file:OPENCODE.md",
       "type": "file",
       "path": "OPENCODE.md",
-      "sha256": "36aa262556d4a42765657f8bc90675c045bea6ab31cc2bb209bf616c1ee08435",
+      "sha256": "1a470552be979981dcde27aa8546a841c235ff1a3a9ea099eb2661d0be731664",
       "mode": 420
     },
     {
@@ -20929,6 +21157,11 @@
       "name": "wordpress/documentation"
     },
     {
+      "id": "framework:wordpress/livecanvas-onepager-build",
+      "type": "framework-registration",
+      "name": "wordpress/livecanvas-onepager-build"
+    },
+    {
       "id": "framework:wordpress/livecanvas-rebuild",
       "type": "framework-registration",
       "name": "wordpress/livecanvas-rebuild"
@@ -22063,6 +22296,11 @@
       "declared_target": ".claude/commands/telemetry-status.md"
     },
     {
+      "id": "manifest-path:.claude/commands/ticktock.md",
+      "type": "manifest-registration",
+      "declared_target": ".claude/commands/ticktock.md"
+    },
+    {
       "id": "manifest-path:.claude/commands/triage-client-board.md",
       "type": "manifest-registration",
       "declared_target": ".claude/commands/triage-client-board.md"
@@ -22293,6 +22531,11 @@
       "declared_target": ".claude/skills/store-credential/SKILL.md"
     },
     {
+      "id": "manifest-path:.claude/skills/ticktock/SKILL.md",
+      "type": "manifest-registration",
+      "declared_target": ".claude/skills/ticktock/SKILL.md"
+    },
+    {
       "id": "manifest-path:frameworks/deliverables/presentation-review/.claude/agents/presentation-review",
       "type": "manifest-registration",
       "declared_target": "frameworks/deliverables/presentation-review/.claude/agents/presentation-review"
@@ -22503,6 +22746,66 @@
       "declared_target": "frameworks/project-management/feedback-to-tasks/guardrails.md"
     },
     {
+      "id": "manifest-path:frameworks/research/business-identity-verification/.claude/agents/business-identity-verification",
+      "type": "manifest-registration",
+      "declared_target": "frameworks/research/business-identity-verification/.claude/agents/business-identity-verification"
+    },
+    {
+      "id": "manifest-path:frameworks/research/business-identity-verification/.claude/commands/business-identity-verification",
+      "type": "manifest-registration",
+      "declared_target": "frameworks/research/business-identity-verification/.claude/commands/business-identity-verification"
+    },
+    {
+      "id": "manifest-path:frameworks/research/business-identity-verification/.claude/skills/business-identity-verification",
+      "type": "manifest-registration",
+      "declared_target": "frameworks/research/business-identity-verification/.claude/skills/business-identity-verification"
+    },
+    {
+      "id": "manifest-path:frameworks/research/business-identity-verification/guardrails.md",
+      "type": "manifest-registration",
+      "declared_target": "frameworks/research/business-identity-verification/guardrails.md"
+    },
+    {
+      "id": "manifest-path:frameworks/research/contractor-credential-review/.claude/agents/contractor-credential-review",
+      "type": "manifest-registration",
+      "declared_target": "frameworks/research/contractor-credential-review/.claude/agents/contractor-credential-review"
+    },
+    {
+      "id": "manifest-path:frameworks/research/contractor-credential-review/.claude/commands/contractor-credential-review",
+      "type": "manifest-registration",
+      "declared_target": "frameworks/research/contractor-credential-review/.claude/commands/contractor-credential-review"
+    },
+    {
+      "id": "manifest-path:frameworks/research/contractor-credential-review/.claude/skills/contractor-credential-review",
+      "type": "manifest-registration",
+      "declared_target": "frameworks/research/contractor-credential-review/.claude/skills/contractor-credential-review"
+    },
+    {
+      "id": "manifest-path:frameworks/research/contractor-credential-review/guardrails.md",
+      "type": "manifest-registration",
+      "declared_target": "frameworks/research/contractor-credential-review/guardrails.md"
+    },
+    {
+      "id": "manifest-path:frameworks/research/osint-discovery/.claude/agents/osint-discovery",
+      "type": "manifest-registration",
+      "declared_target": "frameworks/research/osint-discovery/.claude/agents/osint-discovery"
+    },
+    {
+      "id": "manifest-path:frameworks/research/osint-discovery/.claude/commands/osint-discovery",
+      "type": "manifest-registration",
+      "declared_target": "frameworks/research/osint-discovery/.claude/commands/osint-discovery"
+    },
+    {
+      "id": "manifest-path:frameworks/research/osint-discovery/.claude/skills/osint-discovery",
+      "type": "manifest-registration",
+      "declared_target": "frameworks/research/osint-discovery/.claude/skills/osint-discovery"
+    },
+    {
+      "id": "manifest-path:frameworks/research/osint-discovery/guardrails.md",
+      "type": "manifest-registration",
+      "declared_target": "frameworks/research/osint-discovery/guardrails.md"
+    },
+    {
       "id": "manifest-path:frameworks/wordpress/analytics-tracking/.claude/agents/analytics-tracking",
       "type": "manifest-registration",
       "declared_target": "frameworks/wordpress/analytics-tracking/.claude/agents/analytics-tracking"
@@ -22601,6 +22904,26 @@
       "id": "manifest-path:frameworks/wordpress/documentation/guardrails.md",
       "type": "manifest-registration",
       "declared_target": "frameworks/wordpress/documentation/guardrails.md"
+    },
+    {
+      "id": "manifest-path:frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build",
+      "type": "manifest-registration",
+      "declared_target": "frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build"
+    },
+    {
+      "id": "manifest-path:frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build",
+      "type": "manifest-registration",
+      "declared_target": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build"
+    },
+    {
+      "id": "manifest-path:frameworks/wordpress/livecanvas-onepager-build/.claude/skills/livecanvas-onepager-build",
+      "type": "manifest-registration",
+      "declared_target": "frameworks/wordpress/livecanvas-onepager-build/.claude/skills/livecanvas-onepager-build"
+    },
+    {
+      "id": "manifest-path:frameworks/wordpress/livecanvas-onepager-build/guardrails.md",
+      "type": "manifest-registration",
+      "declared_target": "frameworks/wordpress/livecanvas-onepager-build/guardrails.md"
     },
     {
       "id": "manifest-path:frameworks/wordpress/livecanvas-rebuild/.claude/agents/livecanvas-rebuild",
@@ -25766,6 +26089,15 @@
       "specifier": "../userpromptsubmit-ambient-router.cjs"
     },
     {
+      "id": "04a8c72041c10585de140bcfbb4a29ff46dc938a219f70d850c908067fdfda19",
+      "type": "manifest-target",
+      "from": "manifest-path:frameworks/wordpress/livecanvas-onepager-build/.claude/skills/livecanvas-onepager-build",
+      "to": "directory:frameworks/wordpress/livecanvas-onepager-build/.claude/skills/livecanvas-onepager-build",
+      "target": "frameworks/wordpress/livecanvas-onepager-build/.claude/skills/livecanvas-onepager-build",
+      "required": true,
+      "declared_target": "frameworks/wordpress/livecanvas-onepager-build/.claude/skills/livecanvas-onepager-build"
+    },
+    {
       "id": "04abe0769d1aba51045995de48398ea4999f45cb93fdfa0c5e3fa4e2ecafcd36",
       "type": "static-import",
       "from": "file:tools/kernel/hooks/dispatch-posttool.cjs",
@@ -26083,6 +26415,15 @@
       "declared_target": ".claude/commands/empower-grimoire.md"
     },
     {
+      "id": "080e0b26ec250dc61046f8e4e2ec910e65caf79815a7bf4e0958ff26222a151d",
+      "type": "manifest-target",
+      "from": "manifest-path:frameworks/research/contractor-credential-review/.claude/commands/contractor-credential-review",
+      "to": "directory:frameworks/research/contractor-credential-review/.claude/commands/contractor-credential-review",
+      "target": "frameworks/research/contractor-credential-review/.claude/commands/contractor-credential-review",
+      "required": true,
+      "declared_target": "frameworks/research/contractor-credential-review/.claude/commands/contractor-credential-review"
+    },
+    {
       "id": "08430b7d467e7de4c0855b198417030ee39070078b25a61b1351a02c87121134",
       "type": "static-import",
       "from": "file:tools/verify/lib/__tests__/close-signal-v2.test.cjs",
@@ -26380,6 +26721,15 @@
       "target": "tools/kernel/hooks/pretool-delegation-altitude.cjs",
       "required": true,
       "specifier": "./pretool-delegation-altitude.cjs"
+    },
+    {
+      "id": "0b5f3ff5f6705cc61d7c6000b3f8182f5f793f360723d01c1b7130dd00ae879e",
+      "type": "manifest-target",
+      "from": "manifest-path:frameworks/research/osint-discovery/.claude/commands/osint-discovery",
+      "to": "directory:frameworks/research/osint-discovery/.claude/commands/osint-discovery",
+      "target": "frameworks/research/osint-discovery/.claude/commands/osint-discovery",
+      "required": true,
+      "declared_target": "frameworks/research/osint-discovery/.claude/commands/osint-discovery"
     },
     {
       "id": "0b73534204378971ee485eeafa219066670b7feec9f93c5b617e85a797d96b6e",
@@ -26883,6 +27233,15 @@
       "required": true,
       "declared_target": "tools/ai-bridge/evidence-gather.js",
       "resolution": "tracked"
+    },
+    {
+      "id": "105ef7cf7c339a0a546153e2fe74541c078207ef5268f7107b4a05af9824b649",
+      "type": "manifest-target",
+      "from": "manifest-path:frameworks/research/contractor-credential-review/.claude/skills/contractor-credential-review",
+      "to": "directory:frameworks/research/contractor-credential-review/.claude/skills/contractor-credential-review",
+      "target": "frameworks/research/contractor-credential-review/.claude/skills/contractor-credential-review",
+      "required": true,
+      "declared_target": "frameworks/research/contractor-credential-review/.claude/skills/contractor-credential-review"
     },
     {
       "id": "1085c15f159a1e70f5d4a3151bbde5ad18d44c20a6d4e4d820066aa48ec23ecc",
@@ -30162,6 +30521,15 @@
       "specifier": "../../lib/resolve-credential.cjs"
     },
     {
+      "id": "3205196cfbe5e69c8fe63eddf7fd8be7d6916a625e9139d917fcba5b6e7ccb08",
+      "type": "manifest-target",
+      "from": "manifest-path:frameworks/research/contractor-credential-review/.claude/agents/contractor-credential-review",
+      "to": "directory:frameworks/research/contractor-credential-review/.claude/agents/contractor-credential-review",
+      "target": "frameworks/research/contractor-credential-review/.claude/agents/contractor-credential-review",
+      "required": true,
+      "declared_target": "frameworks/research/contractor-credential-review/.claude/agents/contractor-credential-review"
+    },
+    {
       "id": "3214a6671fe840e3a03f17273960df0cf94e2889befd20b3b8628e5c2c966e0d",
       "type": "static-import",
       "from": "file:tools/google-ads/shared-list-builder.js",
@@ -32546,6 +32914,15 @@
       "specifier": "../../schemas/run-evidence-receipt.schema.json"
     },
     {
+      "id": "48623e0184fcbaed1322be2b8f2ec1e9a5e4206ca044e8cfb3284f7095ffa4dc",
+      "type": "manifest-target",
+      "from": "manifest-path:frameworks/wordpress/livecanvas-onepager-build/guardrails.md",
+      "to": "file:frameworks/wordpress/livecanvas-onepager-build/guardrails.md",
+      "target": "frameworks/wordpress/livecanvas-onepager-build/guardrails.md",
+      "required": true,
+      "declared_target": "frameworks/wordpress/livecanvas-onepager-build/guardrails.md"
+    },
+    {
       "id": "48672dd716a93f12578664c0ce97ea303aefa350bea559654753cc14c93d4cba",
       "type": "command-definition-file",
       "from": "command-definition:attune",
@@ -32581,6 +32958,15 @@
       "target": "frameworks/research/business-identity-verification/schemas/output/report.schema.json",
       "required": true,
       "declared_target": "frameworks/research/business-identity-verification/schemas/output/report.schema.json"
+    },
+    {
+      "id": "48eaa6b6b949bb75884197dbd3efe8f783f7c587c71247b19c24533e983b72e4",
+      "type": "manifest-target",
+      "from": "manifest-path:frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build",
+      "to": "directory:frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build",
+      "target": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build",
+      "required": true,
+      "declared_target": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build"
     },
     {
       "id": "4917dcff0a5161b9c134c646bb5168ff005eb56bd3a27dbe36a3d300fe48224e",
@@ -34498,6 +34884,15 @@
       "declared_target": ".claude/commands/publish-framework.md"
     },
     {
+      "id": "5c3d54f937e40e57cc105c1b736785976fb25387ac1d21592ca12d4e35fbb2bd",
+      "type": "manifest-target",
+      "from": "manifest-path:frameworks/research/business-identity-verification/guardrails.md",
+      "to": "file:frameworks/research/business-identity-verification/guardrails.md",
+      "target": "frameworks/research/business-identity-verification/guardrails.md",
+      "required": true,
+      "declared_target": "frameworks/research/business-identity-verification/guardrails.md"
+    },
+    {
       "id": "5c5cf4b81b99545efe2a4cc9b715a34d16fa3d6fe763b0d0b92f2593eaa16594",
       "type": "static-import",
       "from": "file:tools/gmail-inbox-agent/preview.js",
@@ -35491,6 +35886,15 @@
       "specifier": "../event-schema.js"
     },
     {
+      "id": "670a0fc53a49199f12362f2e67b8058383d836fa5c6abfddc18076193c9cae01",
+      "type": "framework-manifest",
+      "from": "framework:wordpress/livecanvas-onepager-build",
+      "to": "file:frameworks/wordpress/livecanvas-onepager-build/manifest.json",
+      "target": "frameworks/wordpress/livecanvas-onepager-build/manifest.json",
+      "required": true,
+      "declared_target": "frameworks/wordpress/livecanvas-onepager-build/manifest.json"
+    },
+    {
       "id": "671872525210838d5070c486b1eaac5183b952cd0f6036efa6ee01b318b06b7c",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/blueprint.md",
@@ -36145,6 +36549,15 @@
       "target": "tools/kernel/hooks/posttool-write-ledger.cjs",
       "required": true,
       "specifier": "../posttool-write-ledger.cjs"
+    },
+    {
+      "id": "6cb4075b4ef390ed8fc67fbd377120e24fc93aa148f249db0f31619df577f7d7",
+      "type": "manifest-target",
+      "from": "manifest-path:.claude/skills/ticktock/SKILL.md",
+      "to": "file:.claude/skills/ticktock/SKILL.md",
+      "target": ".claude/skills/ticktock/SKILL.md",
+      "required": true,
+      "declared_target": ".claude/skills/ticktock/SKILL.md"
     },
     {
       "id": "6d0272d6f7e6f08fe3965bce188ec3804dfd4e41a7492e16f3c48ac0a8f9a498",
@@ -39016,6 +39429,15 @@
       "specifier": "../../../kernel/hooks/userprompt-plan-review-gate.cjs"
     },
     {
+      "id": "89fcf4fdddadf8a80ae1b4735e61353e852483dceaacd0db02f2240118aaa292",
+      "type": "manifest-target",
+      "from": "manifest-path:frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build",
+      "to": "directory:frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build",
+      "target": "frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build",
+      "required": true,
+      "declared_target": "frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build"
+    },
+    {
       "id": "8a063f4132cf4c06d77e79a9f45dcc1a8780b07da74eb965b57239fa6167f6f3",
       "type": "static-import",
       "from": "file:tools/signals/lib/__tests__/signal-normalization-proposal.test.js",
@@ -41244,6 +41666,15 @@
       "specifier": "../workspace/lib/args"
     },
     {
+      "id": "9eac6b25c470ad11d58c44411551ddc0947f896b87fc7b3aee33ae1512355b77",
+      "type": "manifest-target",
+      "from": "manifest-path:frameworks/research/business-identity-verification/.claude/skills/business-identity-verification",
+      "to": "directory:frameworks/research/business-identity-verification/.claude/skills/business-identity-verification",
+      "target": "frameworks/research/business-identity-verification/.claude/skills/business-identity-verification",
+      "required": true,
+      "declared_target": "frameworks/research/business-identity-verification/.claude/skills/business-identity-verification"
+    },
+    {
       "id": "9ee7991059ac29ee800e727c157f61d2503efcaceb5d94346a9b625c23826250",
       "type": "operation-canonical",
       "from": "operation:fw-wordpress-design-research",
@@ -41360,6 +41791,15 @@
       "target": "tools/ai-bridge/lib/provider-contract.js",
       "required": true,
       "specifier": "../lib/provider-contract"
+    },
+    {
+      "id": "a0078d3c2421184fcc6b671c470c77b0557a860a945b2904232a56f920592d75",
+      "type": "manifest-target",
+      "from": "manifest-path:.claude/commands/ticktock.md",
+      "to": "file:.claude/commands/ticktock.md",
+      "target": ".claude/commands/ticktock.md",
+      "required": true,
+      "declared_target": ".claude/commands/ticktock.md"
     },
     {
       "id": "a031f2521b011607c42441abba11f72699555eef80eed338b04278df376ea3f8",
@@ -43380,6 +43820,15 @@
       "specifier": "../hook-emulation"
     },
     {
+      "id": "b5829781946608a271072bbfb28e59b574c6d0be4a25ae444ee5273ca42eb7c1",
+      "type": "manifest-target",
+      "from": "manifest-path:frameworks/research/osint-discovery/.claude/agents/osint-discovery",
+      "to": "directory:frameworks/research/osint-discovery/.claude/agents/osint-discovery",
+      "target": "frameworks/research/osint-discovery/.claude/agents/osint-discovery",
+      "required": true,
+      "declared_target": "frameworks/research/osint-discovery/.claude/agents/osint-discovery"
+    },
+    {
       "id": "b5835eef75c27af041cb16bb4a979f7519dd59892d4250db59cb95c3f27b3c48",
       "type": "command-definition-file",
       "from": "command-definition:fw-paid-media-ad-creative",
@@ -43761,6 +44210,15 @@
       "target": "tools/kernel/cascade-span/debrief-close-span-projection.cjs",
       "required": true,
       "specifier": "./debrief-close-span-projection.cjs"
+    },
+    {
+      "id": "b9282ec36b80cbb9a8043e420eef1d54684347a20b6eed4db0bcf49f94e483db",
+      "type": "manifest-target",
+      "from": "manifest-path:frameworks/research/business-identity-verification/.claude/commands/business-identity-verification",
+      "to": "directory:frameworks/research/business-identity-verification/.claude/commands/business-identity-verification",
+      "target": "frameworks/research/business-identity-verification/.claude/commands/business-identity-verification",
+      "required": true,
+      "declared_target": "frameworks/research/business-identity-verification/.claude/commands/business-identity-verification"
     },
     {
       "id": "b9701a56a7dc0356eb89921755cbce5a9ff79ca6b8bb67769248416d89a121b0",
@@ -45380,6 +45838,15 @@
       "specifier": "./lib/args.js"
     },
     {
+      "id": "ca9206dfe2649b7cf5bc26c1c2aee275e9c51bd7f0e7eb53844478c649d1a846",
+      "type": "framework-guardrails",
+      "from": "framework:wordpress/livecanvas-onepager-build",
+      "to": "file:frameworks/wordpress/livecanvas-onepager-build/guardrails.md",
+      "target": "frameworks/wordpress/livecanvas-onepager-build/guardrails.md",
+      "required": true,
+      "declared_target": "frameworks/wordpress/livecanvas-onepager-build/guardrails.md"
+    },
+    {
       "id": "ca9eda6ecc959876dc0b488dbac40e46e517bf5ba6411d5474c00c158f70aaaa",
       "type": "manifest-target",
       "from": "manifest-path:frameworks/wordpress/livecanvas-rebuild/.claude/skills/livecanvas-rebuild",
@@ -46801,6 +47268,15 @@
       "declared_target": "frameworks/deliverables/scope-verification/guardrails.md"
     },
     {
+      "id": "d9815a1bd1d408836ac1e1638b6490584f47892f532af1429e44e746e48e1054",
+      "type": "manifest-target",
+      "from": "manifest-path:frameworks/research/business-identity-verification/.claude/agents/business-identity-verification",
+      "to": "directory:frameworks/research/business-identity-verification/.claude/agents/business-identity-verification",
+      "target": "frameworks/research/business-identity-verification/.claude/agents/business-identity-verification",
+      "required": true,
+      "declared_target": "frameworks/research/business-identity-verification/.claude/agents/business-identity-verification"
+    },
+    {
       "id": "d98d7dc61388c88259f980736240998031022e8f454f9c06224434e189d27114",
       "type": "manifest-target",
       "from": "manifest-path:.claude/skills/propose-skill-capture/SKILL.md",
@@ -48199,6 +48675,15 @@
       "specifier": "./dispatch-contract"
     },
     {
+      "id": "e66f2a0fd43a668d96eed09e50c517f2af6366e43b4b93b33dc0b5325ab69519",
+      "type": "manifest-target",
+      "from": "manifest-path:frameworks/research/osint-discovery/guardrails.md",
+      "to": "file:frameworks/research/osint-discovery/guardrails.md",
+      "target": "frameworks/research/osint-discovery/guardrails.md",
+      "required": true,
+      "declared_target": "frameworks/research/osint-discovery/guardrails.md"
+    },
+    {
       "id": "e6704ee81ec8922371fd5708a318de7b803090c80dff65c303e018066311b11e",
       "type": "static-import",
       "from": "file:tools/runtime/hook-emulation.js",
@@ -48818,6 +49303,15 @@
       "target": "tools/signals/lib/recursive-actor-work-order.js",
       "required": true,
       "specifier": "../recursive-actor-work-order"
+    },
+    {
+      "id": "ec6bd281c997523ef927a19a4b7c196300689e6647d7323c9d5aa85a9f9abc77",
+      "type": "manifest-target",
+      "from": "manifest-path:frameworks/research/osint-discovery/.claude/skills/osint-discovery",
+      "to": "directory:frameworks/research/osint-discovery/.claude/skills/osint-discovery",
+      "target": "frameworks/research/osint-discovery/.claude/skills/osint-discovery",
+      "required": true,
+      "declared_target": "frameworks/research/osint-discovery/.claude/skills/osint-discovery"
     },
     {
       "id": "ec71ec9a00102c2fc074025487919fa42d2ab236c89badcb7e2e631b3e41dbc3",
@@ -50731,6 +51225,15 @@
       "declared_target": ".claude/commands/attune-codex.md"
     },
     {
+      "id": "fd60b71ce8f2701d42d2d16c1311ddf4959b11077ab97ab1784c21865e81183f",
+      "type": "manifest-target",
+      "from": "manifest-path:frameworks/research/contractor-credential-review/guardrails.md",
+      "to": "file:frameworks/research/contractor-credential-review/guardrails.md",
+      "target": "frameworks/research/contractor-credential-review/guardrails.md",
+      "required": true,
+      "declared_target": "frameworks/research/contractor-credential-review/guardrails.md"
+    },
+    {
       "id": "fd67844bd34470886cb97524dcaf877c5c0a8697f84c45e37cbe540d4667a6ad",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/context-check.md",
@@ -51033,8 +51536,8 @@
     }
   ],
   "counts": {
-    "nodes": 3877,
-    "edges": 2833,
+    "nodes": 3932,
+    "edges": 2853,
     "unresolved": 0
   }
 }

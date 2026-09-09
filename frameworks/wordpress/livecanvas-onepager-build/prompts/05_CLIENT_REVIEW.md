@@ -8,9 +8,11 @@ explains the why, names what is placeholder, and asks for exactly what is still 
 PATCH_ALLOWED (create a Gmail *draft* in the operator's account). Sending is the operator's action.
 
 ## Inputs
-- The live demo URL (noindexed; password if gated)
+- The live demo URL. The demo MUST be noindexed and password-gated before the link goes to the
+  client; include the password in the email body only, never in any file under the project.
 - Open gates from Stages 2–4 (hero photo, owner photo, extra photos, unconfirmed facts)
-- The operator's writing style (see memory `operator-client-email-style`)
+- `docs/client-communication-brief.md` (the agency's client-email register; project-scoped, not
+  operator-personal memory)
 
 ## Steps
 1. Draft under `outputs/email-to-client__design-direction-review.md`, then create it as a Gmail
@@ -28,10 +30,15 @@ PATCH_ALLOWED (create a Gmail *draft* in the operator's account). Sending is the
      close-up, one wide bright shot for the top), plus the owner-photo yes/no.
    - One-line close: reply or call; once happy we finish copy, add the form, go live on your domain.
    - First-name sign-off; the signature carries the company.
-3. Register: casual, contractions, "vibe" is fine, invite input at the end of a bullet, avoid
-   over-precision (no exact URLs beyond the demo link, no ids, no numbers the client doesn't need).
-4. Hand the draft to the operator. After they edit and send, diff their version against the draft
-   and record what changed as a style observation.
+3. Register: follow `docs/client-communication-brief.md` (casual, contractions, short asides in
+   parentheses, invite input at the end of a bullet, no over-precision, first-name sign-off).
+4. Hand the draft to the operator. After they edit and send, read the sent version back, replace
+   the demo password (and any other credential) with the fixed placeholder `[DEMO_PASSWORD]`
+   **before** comparing, then diff the sanitized sent text against the draft and record only the
+   sanitized differences in the project's `outputs/` next to the draft (a dated "operator edits"
+   note). Confirm the note contains no credential before saving it. Style observations belong to
+   the project record; they are not written into the framework or into operator-personal memory
+   by this framework.
 
 ## Outputs
 - `outputs/email-to-client__design-direction-review.md` (pre-edit draft, for provenance)

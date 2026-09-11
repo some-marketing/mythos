@@ -419,6 +419,69 @@ helpers.
 <process>
 
 <phase id="tt.orient" n="1" effect="PURE">
+### Explicit research goals (the same path for `/tt` and `/ticktock`)
+
+`--research-spec <prepared-experiment.json>` selects a prospective researcher-side
+experiment. It never supplies an ecology GoalPacket, reward, policy feature or
+learning update. With no selection, the cycle remains unassigned/developmental.
+Do not infer a goal from discussion or a previous batch.
+
+ORIENT must call the existing executable consumer before other cycle work:
+
+```text
+node tools/ticktock/cycle-driver.cjs benchmark <charter> <benchmark-out> <cycle> <signalsDir> --research-spec <spec>
+```
+
+For selected research, every `<benchmark-out>` (including tick/observe/debrief
+outputs below) must be a fresh exclusive file at
+`_dev/sim-runs/research/_benchmark/<charter_hash>/<cycle>/<unique-id>.json`.
+Use a new ID on each inspection. `<signalsDir>` must be that same cycle's
+`_benchmark/<charter_hash>/<cycle>/signals` directory under the research root.
+The selector and both destinations are validated read-only before the benchmark,
+because its rebaseline detector can emit a signal. Traversal, symlinks, existing
+diagnostic files and destinations outside these reserved paths refuse. A dropped
+previously bound selector refuses before either output can be written.
+
+For an ordinary cycle, omit only the final `--research-spec <spec>` pair. Consume
+`research_context`: distinguish the full-trace **drift** benchmark from the
+**comparative** goal, readiness, prerequisites and gaps. Passing drift proves no
+competence, learning or benefit. Failed drift halts before selected-research
+binding or execution. Missing, changed or invalid explicit selection refuses;
+it never falls back to ordinary TICK. Known later goals remain draft/not_ready.
+
+The canonical selection receipt is discovered by charter hash and cycle before
+looking at the supplied batch. It pins the batch, spec path/bytes and source
+identities. Repeat the same explicit selector on every phase entry/resume;
+omitting it, changing its path or changing its contents refuses. Read-only
+inspection can resume; research execution cannot overwrite or resume an arm.
+
+After the existing phase entry/preflight/journal checks, use these consumers for
+an explicitly selected batch (ordinary TICK keeps its existing path):
+
+```text
+node tools/ticktock/cycle-driver.cjs research-tick <charter> <cycle> --research-spec <spec> --benchmark-out <tick-benchmark-out> --signals-dir <signalsDir> --authorized
+node tools/ticktock/cycle-driver.cjs research-observe <charter> <cycle> --research-spec <spec> --benchmark-out <observe-benchmark-out> --signals-dir <signalsDir>
+node tools/ticktock/cycle-driver.cjs research-debrief <charter> <cycle> --research-spec <spec> --benchmark-out <debrief-benchmark-out> --signals-dir <signalsDir>
+```
+
+Each consumer repeats the complete drift check and verifies the immutable
+selection. TICK requires ready RG-01 and separately obtained operator launch
+authorization. `--authorized` acknowledges that intent; it is not an authorization
+receipt or a replacement for existing gates. Never add it merely because a spec
+was prepared. OBSERVE validates complete raw hive evidence; RESEARCH/TOCK consume
+the offline debrief verdict and proposed prerequisites. A valid null result is
+not an invalid experiment. No result automatically promotes a goal, edits a
+charter, changes stopping conditions or rebaselines the fingerprint.
+
+For quick/skipped analysis, call the same `research-debrief` command with `--quick`.
+It still verifies the binding and reports `not_evaluated`, never benefit/success.
+Record the skipped analysis in the existing generation manifest as usual.
+
+These are fail-closed module/command checks when invoked. The skill requires
+those calls, but no global hook compels invocation; direct `run-live` remains
+outside this opt-in research route. Changes to this governing skill land through
+separate reviewed implementation, never by the `/tt` cycle itself.
+
 **ORIENT — state from artifacts, never from memory.**
 
 Resolve where the loop actually is by reading: the charter (`charter.readCharter`),

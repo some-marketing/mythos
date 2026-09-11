@@ -186,6 +186,11 @@ function chooseForageTile(worldState, kind, rng, trailFollowProb) {
 // default (undefined interval, or no tickIndex supplied) -- zero behavior
 // change for every existing caller. Returns `forced_exploration: true/false`
 // and `policy_entropy` explicitly so callers can log them, not infer them.
+// Shared action translation for research policies and the existing neural policy.
+// Keep the published gather quantity and territory RNG draw unchanged.
+function resolveGatherYieldFood() { return 1; }
+function pickClaimTerritoryTile(rng) { return `tile-${Math.floor((rng || Math.random)() * 100)}`; }
+
 function decide(network, hiveState, worldState, rng, liveConfig = {}, tickIndex) {
   const input = encodeState(hiveState, worldState);
   const { probs } = forward(network, input);
@@ -213,14 +218,14 @@ function decide(network, hiveState, worldState, rng, liveConfig = {}, tickIndex)
   const policyEntropy = computeEntropy(probs);
   if (chosenVerb === 'gather-food') {
     const tileId = chooseForageTile(worldState, 'food', foragerRng, trailFollowProb);
-    return { verb: 'gather', resourceKey: 'food', amount: 1, tileId, _action_index: chosenIndex, _probs: probs, policy_entropy: policyEntropy, forced_exploration: forced };
+    return { verb: 'gather', resourceKey: 'food', amount: resolveGatherYieldFood(), tileId, _action_index: chosenIndex, _probs: probs, policy_entropy: policyEntropy, forced_exploration: forced };
   }
   if (chosenVerb === 'gather-wood') {
     const tileId = chooseForageTile(worldState, 'wood', foragerRng, trailFollowProb);
     return { verb: 'gather', resourceKey: 'wood', amount: 1, tileId, _action_index: chosenIndex, _probs: probs, policy_entropy: policyEntropy, forced_exploration: forced };
   }
   if (chosenVerb === 'build') return { verb: 'build', entry: { kind: 'chamber', coords: null }, _action_index: chosenIndex, _probs: probs, policy_entropy: policyEntropy, forced_exploration: forced }; // coords null: the network decides IF to build, not WHERE -- harness resolves placement onto owned territory (operator 2026-08-03, mirror-gate geometry)
-  if (chosenVerb === 'claim-territory') return { verb: 'claim-territory', tileId: `tile-${Math.floor((rng || Math.random)() * 100)}`, _action_index: chosenIndex, _probs: probs, policy_entropy: policyEntropy, forced_exploration: forced };
+  if (chosenVerb === 'claim-territory') return { verb: 'claim-territory', tileId: pickClaimTerritoryTile(rng), _action_index: chosenIndex, _probs: probs, policy_entropy: policyEntropy, forced_exploration: forced };
   return { verb: 'idle', _action_index: chosenIndex, _probs: probs, policy_entropy: policyEntropy, forced_exploration: forced };
 }
 
@@ -332,5 +337,5 @@ module.exports = {
   INPUT_SIZE, HIDDEN_SIZE, OUTPUT_SIZE, VERB_ORDER, UPKEEP_COST,
   TRAIL_FOLLOW_PROB, TRAIL_SENSE_CAP, RESOURCE_NORM_K,
   createNetwork, forward, softmax, computeEntropy, encodeState, decide, trainStep, applyUpkeep,
-  chooseForageTile, mulberry32, normalizeResource
+  chooseForageTile, mulberry32, normalizeResource, resolveGatherYieldFood, pickClaimTerritoryTile
 };

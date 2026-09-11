@@ -1,0 +1,89 @@
+{
+  "schema": "ResearchObjectives/1.0",
+  "goals": [
+    {
+      "id": "RG-01",
+      "version": 1,
+      "title": "Competent benchmark headroom",
+      "prerequisites": [],
+      "execution_supported": true,
+      "cost_fields": [
+        "wall_ms",
+        "peak_rss_bytes",
+        "updates",
+        "decisions",
+        "ticks"
+      ],
+      "energy": "unavailable unless independently instrumented"
+    },
+    {
+      "id": "RG-02",
+      "version": 1,
+      "title": "Repeat and restart continuity",
+      "prerequisites": [
+        "RG-01"
+      ],
+      "execution_supported": false,
+      "cost_fields": [
+        "wall_ms",
+        "peak_rss_bytes",
+        "updates",
+        "decisions",
+        "ticks"
+      ],
+      "energy": "unavailable unless independently instrumented"
+    },
+    {
+      "id": "RG-03",
+      "version": 1,
+      "title": "Held-out learning",
+      "prerequisites": [
+        "RG-01",
+        "RG-02"
+      ],
+      "execution_supported": false,
+      "cost_fields": [
+        "wall_ms",
+        "peak_rss_bytes",
+        "updates",
+        "decisions",
+        "ticks"
+      ],
+      "energy": "unavailable unless independently instrumented"
+    },
+    {
+      "id": "RG-04",
+      "version": 1,
+      "title": "Useful cues under blind and shuffled controls",
+      "prerequisites": [
+        "RG-03"
+      ],
+      "execution_supported": false,
+      "cost_fields": [
+        "wall_ms",
+        "peak_rss_bytes",
+        "updates",
+        "decisions",
+        "ticks"
+      ],
+      "energy": "unavailable unless independently instrumented"
+    },
+    {
+      "id": "RG-05",
+      "version": 1,
+      "title": "Retention and cost",
+      "prerequisites": [
+        "RG-03"
+      ],
+      "execution_supported": false,
+      "cost_fields": [
+        "wall_ms",
+        "peak_rss_bytes",
+        "updates",
+        "decisions",
+        "ticks"
+      ],
+      "energy": "unavailable unless independently instrumented"
+    }
+  ]
+}

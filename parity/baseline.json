@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "67f87ce216a8cbc7841be42278763d59968e2dce399dbbf3d6da96ac9eeaf161",
+    "expected_tree_sha256": "bc7d58682860ef9b7b6fec2245264a8c5f669de46748dc31e871dca3470be8d1",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -1022,7 +1022,7 @@
       },
       {
         "path": ".claude/commands/ticktock.md",
-        "sha256": "90b6a4e5908b7234066d052dd65e2b952d0ee94882aefabb1ec761e43f6077ea",
+        "sha256": "37e6cb457d13e36ed47be405739d2f07237de737d52b241b9e38bca4830c5f37",
         "mode": 420
       },
       {
@@ -1033,6 +1033,11 @@
       {
         "path": ".claude/commands/trial-quest.md",
         "sha256": "3017f7160fed4e4bca6e2658bd2016073088b1d198813de4c5d466bb319ed210",
+        "mode": 420
+      },
+      {
+        "path": ".claude/commands/tt.md",
+        "sha256": "a72c1c9a5fb5764235e32f5b30387381e9c7fade9a4c1d307395c23e2b36e725",
         "mode": 420
       },
       {
@@ -1452,7 +1457,7 @@
       },
       {
         "path": ".claude/skills/ticktock/SKILL.md",
-        "sha256": "5cd28b19d19b8468677c0e83fe5493b68788c41138207afbfa7562ff22462d1a",
+        "sha256": "4c44b35d9c7cfc0b9da1b43c8f98e96659a2a941ddf344ab1e5ceaa5e674e631",
         "mode": 420
       },
       {
@@ -5067,7 +5072,7 @@
       },
       {
         "path": "instructions/canonical/command-aliases.yaml",
-        "sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
+        "sha256": "9bbc50aa1343a5502258e0e067eca0bb4cf4ea9f560abc5b998247a0e04b9901",
         "mode": 420
       },
       {
@@ -6102,7 +6107,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "d9cd516cce6c406d53205ee49847ad7cac79b9f8cdd2febc8c96930ee77761e7",
+        "sha256": "67ef6386259c03a46c7f66e1c06574acc3ad5ff7df87876ae34852c17a9f25c1",
         "mode": 420
       },
       {
@@ -6581,6 +6586,66 @@
         "mode": 420
       },
       {
+        "path": "tools/ant-hive-world/research/README.md",
+        "sha256": "c0fa1268793c79fce6523a7a8a4c3019e3748b9b23b60eb6e79d988cd8ac9dca",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/research/__tests__/public-policy-regression.test.cjs",
+        "sha256": "2f1f8e09be6e37746dea3b2a00e41326ed2ef56c5720549a942eac75b3e1628c",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/research/__tests__/research-contract.test.cjs",
+        "sha256": "d88e6bbca1ebe8cbad8c955939b9694c4e55352930d12697ff1d091856009aca",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/research/__tests__/research-workflow.test.cjs",
+        "sha256": "8aae49a58c6a9cc1e414e2696b3334a656658d895ea9000e5831cdc7f6aa518d",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/research/__tests__/rg01-adapters.test.cjs",
+        "sha256": "24b424be901f15b83af976bb4a9b3a9961b6dd96e4766ff1dff15618be323a0b",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/research/experiment-schema.json",
+        "sha256": "a807f1f91aace96a46b8c6c576a2da38a98ee4e5fd48168c9a1ae9218a5ee160",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/research/objectives.json",
+        "sha256": "e8f6a750948e74c03fa1727b538ae00078cf747ca92d9248afce943bc1d7f66d",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/research/research-io.cjs",
+        "sha256": "d5b0c7b77a3c9f6122fd9b3db4f30711a4725b29222be5be85dc65af8f512528",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/research/result-schema.json",
+        "sha256": "a3d04ecb13c5bb393229207bdf35e14ac99f3e952d63acbbe029afef633874f6",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/research/rg01-driver.cjs",
+        "sha256": "5c7f7cd067211ac8921ea305e99b853fe0f94f426ddfeddc36839da90889f1ef",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/research/rg01-policies.cjs",
+        "sha256": "8d703d473c47944ec47e580529f3c7b1c47df37a6fdb5fd81680735e5b140a94",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/research/rg01-score.cjs",
+        "sha256": "1b0f6500b433c128464374a9ad4673575ab96f1c68e6e2c99c8d9e71162aa2d7",
+        "mode": 420
+      },
+      {
         "path": "tools/ant-hive-world/run-live.js",
         "sha256": "5576659e41ac13574ef35e6a3e2c058cd011a5b752031636a5ae2ef6eb0ff445",
         "mode": 420
@@ -6597,7 +6662,7 @@
       },
       {
         "path": "tools/ant-hive-world/untrained-network.js",
-        "sha256": "aac69406a94a2d376c834203c8593346278333719ca27bfd4c805ed5796a3872",
+        "sha256": "ba12fea3115d8e2be4ea8d074ccd3828494d40bb015f97550e90bde25ea0ed6b",
         "mode": 420
       },
       {
@@ -8693,6 +8758,11 @@
       {
         "path": "tools/instructions/__tests__/aliases.test.js",
         "sha256": "25df9ce388a49714ab406aab3199a93da158e700e0f62bc00123657ca5a7b84d",
+        "mode": 420
+      },
+      {
+        "path": "tools/instructions/generate-alias-stubs.cjs",
+        "sha256": "3470705301282d68947b7f527b35ba30f20ae1716fee66871c6928bee4e99ee1",
         "mode": 420
       },
       {
@@ -12822,7 +12892,7 @@
       },
       {
         "path": "tools/ticktock/cycle-driver.cjs",
-        "sha256": "849aae45b6faf6e191e6fb8a295a88ec7c334927ec0cb8516b8b4089bc860569",
+        "sha256": "386b9835736081c0520243373efa7e214e86c8f162d89f633b0e6abc40485bda",
         "mode": 420
       },
       {
@@ -12878,6 +12948,26 @@
       {
         "path": "tools/ticktock/ratification-proposal.cjs",
         "sha256": "5f5dc306d473831ba822be540c6dcd3f8608ef787754bab27f30345e0d9b83d6",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/research-debrief.cjs",
+        "sha256": "ad95fa8df30a6935e13613ecf3f6e6c21772479c2f185bc9342e9d2809920a8f",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/research-prepare.cjs",
+        "sha256": "2fed21716f924b7370205c449d1fcbf01eff0701e8bd1bbbd4daae2b0ff7489d",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/research-readiness.cjs",
+        "sha256": "057fcdad855f68679cce7ca728a88d6ab4b31578633ceb6b78ac74b305d9ca55",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/research-run.cjs",
+        "sha256": "3d90cc0d6a96caa22b23594faf5ea4b1d44d8b792b5ed646bf5628addfba9dac",
         "mode": 420
       },
       {
@@ -12943,6 +13033,11 @@
       {
         "path": "tools/ticktock/test-rebaseline-frequency.cjs",
         "sha256": "bfdaabd079bb3a5b94758f3065fdd0c12e3ee0d0a4ee7a160d0c27cd75cc64cf",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/test-research-goal-integration.cjs",
+        "sha256": "dcaf1c6f165cb9d06039fa06d9ea9a2dcb95359cf0cab6da709df926ad85e96f",
         "mode": 420
       },
       {
@@ -14102,11 +14197,11 @@
   },
   "wiring": {
     "package_script_count": 205,
-    "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
+    "command_alias_registry_sha256": "9bbc50aa1343a5502258e0e067eca0bb4cf4ea9f560abc5b998247a0e04b9901",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "d9cd516cce6c406d53205ee49847ad7cac79b9f8cdd2febc8c96930ee77761e7",
-    "graph_nodes": 3934,
-    "graph_edges": 2855
+    "graph_sha256": "67ef6386259c03a46c7f66e1c06574acc3ad5ff7df87876ae34852c17a9f25c1",
+    "graph_nodes": 3955,
+    "graph_edges": 2896
   },
   "runtime_exclusions": [
     ".git/**",

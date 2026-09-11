@@ -122,6 +122,17 @@
         "orchestrate-loop"
       ],
       "notes": "Shortest operator shorthand for the Evidence Loop profile. The typed alias is provenance; Evidence Loop owns the profile contract and orchestrate-loop owns lifecycle state."
+    },
+    {
+      "id": "tt",
+      "kind": "terminal_alias",
+      "target": "ticktock",
+      "authority_source": "ticktock",
+      "expansion_edges": [
+        "tt",
+        "ticktock"
+      ],
+      "notes": "Short form of the ticktock simulation cycle command."
     }
   ]
 }

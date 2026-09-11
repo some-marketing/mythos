@@ -19,6 +19,7 @@ capability tiers, and the refusals are all there and none of them are optional.
 - `/ticktock N` — N generations (**unattended** for N>1).
 - `/ticktock deep` — one cycle at maximum rigor.
 - `/ticktock quick` — reduced fan-out; skipped phases are recorded, not omitted. May not merge.
+- `/ticktock --research-spec <prepared-experiment.json>` — explicitly select a prospective research batch; `/tt --research-spec <prepared-experiment.json>` resolves to this same command. Selection is preparation, not launch authorization.
 - `/ticktock tock` — TOCK only (`/meditate` in the loop's frame; no sim authority).
 - `/ticktock --until <deterministic milestone>` — run to a milestone (**unattended**).
 - `--dry-run` — modifier on any form: a declared local-only run. No phase may issue
@@ -71,7 +72,7 @@ A statistical `--until` is **unrepresentable**: `RunCharter/1.0`'s
    **The preflight is ADVISORY, not BLOCKING** — a real fail-closed script, but
    nothing in the harness compels the call, and the BLOCKING version would be a
    registered hook under `tools/kernel/hooks/`, inside the convene perimeter.
-3. Every cycle, in order: benchmark first, rotation dispatch, generation
+3. Every cycle, call `node tools/ticktock/cycle-driver.cjs benchmark <charter> <out> <cycle> <signalsDir> [--research-spec <path>]` first and consume its `research_context`. The complete frozen benchmark remains the drift check; the separately selected comparative benchmark reports goal readiness. Omit the selector only for an unassigned developmental cycle; a previously bound selector cannot be dropped on resume. For selected research, `<out>` must be a fresh `_dev/sim-runs/research/_benchmark/<charter_hash>/<cycle>/<unique-id>.json`, and `<signalsDir>` must be its sibling `signals` directory. Both destinations and the selector are admitted read-only before benchmarking. Follow the skill’s research phase consumers and existing entry gates. Then rotation dispatch, generation
    manifest, journal transitions — calling `tools/ticktock/run-benchmark.js`,
    `charter.cjs`, `journal.cjs`, and `canonical.cjs` through their exported API.
    Never reimplement them. `journal.cjs` received a repair (B1/B2/B4 of

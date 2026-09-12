@@ -731,7 +731,15 @@ function selectActorTargetSignal(projectRoot, actorId = '', fileName = '') {
     ? listActorTargetSignals(projectRoot, actorId)
     : listRunnableActorSignals(projectRoot);
   if (fileName) {
-    return signals.find((info) => info.name === fileName) || null;
+    let requestedName = fileName;
+    if (path.basename(fileName) !== fileName) {
+      if (fileName.split(path.sep).includes('..')) return null;
+      const signalDir = path.join(projectRoot, '_dev', 'reports', 'signals');
+      const requestedPath = path.resolve(projectRoot, fileName);
+      requestedName = path.basename(requestedPath);
+      if (requestedPath !== path.join(signalDir, requestedName)) return null;
+    }
+    return signals.find((info) => info.name === requestedName) || null;
   }
   return signals[0] || null;
 }

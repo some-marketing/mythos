@@ -3,9 +3,10 @@
   "source_relative_path": "instructions/canonical/command-aliases.yaml",
   "source_sha256": "9bbc50aa1343a5502258e0e067eca0bb4cf4ea9f560abc5b998247a0e04b9901",
   "projection_kind": "alias_metadata",
-  "capability_tier": "ADVISORY",
-  "semantic_review_state": "reviewed_safe",
+  "capability_tier": "ABSENT",
+  "semantic_review_state": "target_unavailable",
   "target_exact_path": ".agents/skills/ticktock/SKILL.md",
   "collision_state": "clear",
-  "application_status": "metadata_attached"
+  "application_status": "blocked_target_unavailable",
+  "detail": "resolved target is not an applicable Codex skill"
 }

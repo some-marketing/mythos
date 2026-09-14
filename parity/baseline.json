@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "aca69d5a827ace63893c442e6d1922e5f67e0490e21ccafd6fc3a781ac124c87",
+    "expected_tree_sha256": "89fbd782c8edd978e1bc351a1f0e4b99c3fdc036b70468abe5d8ccc424384a85",
     "expected_files": [
       {
         "path": ".agents/skills/go/SKILL.md",
@@ -698,11 +698,6 @@
       {
         "path": ".agents/skills/source-command-write-handoff/SKILL.md",
         "sha256": "107eafea381e654b7a6ed4559e63a8f09724b6b398c1e31efc9e5a83ee4a3a24",
-        "mode": 420
-      },
-      {
-        "path": ".agents/skills/ticktock/SKILL.md",
-        "sha256": "e74e0e7503b8df917561910162d42c8d145ae2656f00dd4d66b460178b93b6f4",
         "mode": 420
       },
       {
@@ -2222,7 +2217,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-parity-remediation__verification.md",
-        "sha256": "8eed34b2ea89e4e649c6c5b35855b1bec7764bc89f5aabde225328e38a661c2f",
+        "sha256": "7237f34101dfa3e34b403aec816482632e1283be4d77529fdb698983e9761ecf",
         "mode": 420
       },
       {
@@ -3146,13 +3141,8 @@
         "mode": 420
       },
       {
-        "path": "_dev/reports/analysis/codex-skill-projections/candidates/ticktock/SKILL.md",
-        "sha256": "e74e0e7503b8df917561910162d42c8d145ae2656f00dd4d66b460178b93b6f4",
-        "mode": 420
-      },
-      {
         "path": "_dev/reports/analysis/codex-skill-projections/projection-index.json",
-        "sha256": "26fed7ae702122b15c9dd396832bca6ebe73187946f7f885cc12dc4b730b5711",
+        "sha256": "091f9d8c6d41ba3cf8f72e9a0fa6bb58ffb762d5012cbbc70a261e23a2f166c8",
         "mode": 420
       },
       {
@@ -3202,7 +3192,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-tt.json",
-        "sha256": "3ac746bb49ddb1cc12af6c929d4a20183595a5129aa4077659f602fb4eae2d27",
+        "sha256": "1b09664f982b8ed2b390085360cea369c019b834d27332041a8354caac220494",
         "mode": 420
       },
       {
@@ -3872,7 +3862,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/direct-ticktock.json",
-        "sha256": "b8e34b872ca378330f43b152c4ffb07de3fa0f3c1f140c535a906112fac66920",
+        "sha256": "673eca9ade4acb86af429aa431022e68b3c1896c7a12e50421a53029f7fc1c6e",
         "mode": 420
       },
       {
@@ -7737,7 +7727,7 @@
       },
       {
         "path": "instructions/adapters/codex.yaml",
-        "sha256": "4e1bd036130be5d0925147e4022967a8289f51ed38991789033d21ca33237dd8",
+        "sha256": "eeca7f3e3c4daba5f4f3653a8061180263d80a77c051b57c8d68c363462dab37",
         "mode": 420
       },
       {
@@ -8802,7 +8792,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "e6951d7c15a6c45eb1f3fedf7241f3af864fc696cc155ca69a7b7f9546ef0208",
+        "sha256": "a75bb0a01f10b6647087203ff8442493f0a5f3846a09c6c1069a6a23e993a6ff",
         "mode": 420
       },
       {
@@ -15177,7 +15167,7 @@
       },
       {
         "path": "tools/skills/__tests__/sync-codex-skills.test.cjs",
-        "sha256": "6aed05e14fb21b8c00314c1fbbb01340536f6fa9bfa08d5841457c71a4a756dd",
+        "sha256": "21b0b2851de2bb96b2f462a74283b264b39ba974dce992e020b249588f75a2d6",
         "mode": 420
       },
       {
@@ -15187,7 +15177,7 @@
       },
       {
         "path": "tools/skills/sync-codex-skills.cjs",
-        "sha256": "fde4c7ac6b86a3bab07ef4dec1d5708fff9919d576e1ae0724b164d39c4e276f",
+        "sha256": "889490f971aa7c638e955c2c0a6d00385fbd96b952ffe57887f3b79da940ce5c",
         "mode": 420
       },
       {
@@ -16914,8 +16904,8 @@
     "package_script_count": 205,
     "command_alias_registry_sha256": "9bbc50aa1343a5502258e0e067eca0bb4cf4ea9f560abc5b998247a0e04b9901",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "e6951d7c15a6c45eb1f3fedf7241f3af864fc696cc155ca69a7b7f9546ef0208",
-    "graph_nodes": 4092,
+    "graph_sha256": "a75bb0a01f10b6647087203ff8442493f0a5f3846a09c6c1069a6a23e993a6ff",
+    "graph_nodes": 4091,
     "graph_edges": 2899
   },
   "runtime_exclusions": [

@@ -364,6 +364,27 @@ function buildCandidates(options = {}) {
     candidates.push({ id: `direct-${name}`, content: normalized.content || null, resources, receipt, targetRoot });
   }
 
+  const directCandidates = new Map(candidates
+    .filter((candidate) => candidate.receipt.projection_kind === 'direct_system_skill')
+    .map((candidate) => [candidate.id.replace(/^direct-/, ''), candidate]));
+  const directDependencies = config.families.direct_system_skills.dependencies || {};
+  for (const [name, dependencies] of Object.entries(directDependencies)) {
+    validateSlugId(name, 'direct skill dependency owner');
+    if (!Array.isArray(dependencies)) throw new Error(`Dependencies for direct skill ${name} must be an array`);
+    const candidate = directCandidates.get(name);
+    if (!candidate) throw new Error(`Dependency owner is not a configured direct skill: ${name}`);
+    const missing = dependencies
+      .map((dependency) => validateSlugId(dependency, `dependency for direct skill ${name}`))
+      .filter((dependency) => !isApplicable(directCandidates.get(dependency) || {}));
+    if (!missing.length) continue;
+    candidate.content = null;
+    candidate.resources = [];
+    candidate.receipt.capability_tier = 'ABSENT';
+    candidate.receipt.semantic_review_state = 'dependency_unavailable';
+    candidate.receipt.application_status = 'blocked_dependency';
+    candidate.receipt.detail = `required direct skill dependency unavailable: ${missing.join(', ')}`;
+  }
+
   const frameworkRoot = path.join(root, 'frameworks');
   for (const sourcePath of walk(frameworkRoot, (file) => file.endsWith(`${path.sep}SKILL.md`) && file.includes(`${path.sep}.claude${path.sep}skills${path.sep}`))) {
     if (sourcePath.split(path.sep).includes('_template')) continue;
@@ -391,13 +412,19 @@ function buildCandidates(options = {}) {
     const targetRel = terminal
       ? posix(path.join(config.target_root, commandTarget ? `source-command-${terminal}` : terminal, 'SKILL.md'))
       : posix(path.join(config.target_root, `unresolved-alias-${alias.id}`, 'SKILL.md'));
-    const tier = result.ok ? (handlers.has(terminal) ? 'BLOCKING' : 'ADVISORY') : 'UNKNOWN';
+    const targetCandidate = candidates.find((candidate) => candidate.receipt.target_exact_path === targetRel);
+    const targetAvailable = result.ok && isApplicable(targetCandidate || {});
+    const tier = !result.ok ? 'UNKNOWN' : targetAvailable ? (handlers.has(terminal) ? 'BLOCKING' : 'ADVISORY') : 'ABSENT';
     const registryBytes = fs.existsSync(path.join(root, config.alias_registry))
       ? fs.readFileSync(path.join(root, config.alias_registry))
       : Buffer.from(JSON.stringify(options.aliasRegistry || {}));
-    const receipt = receiptBase(config, relative(root, path.join(root, config.alias_registry)), registryBytes, 'alias_metadata', tier, result.ok ? config.families.aliases.semantic_review_state : 'unresolved', targetRel);
-    receipt.application_status = result.ok ? 'metadata_candidate' : 'blocked';
+    const reviewState = !result.ok
+      ? 'unresolved'
+      : targetAvailable ? config.families.aliases.semantic_review_state : 'target_unavailable';
+    const receipt = receiptBase(config, relative(root, path.join(root, config.alias_registry)), registryBytes, 'alias_metadata', tier, reviewState, targetRel);
+    receipt.application_status = !result.ok ? 'blocked' : targetAvailable ? 'metadata_candidate' : 'blocked_target_unavailable';
     if (!result.ok) receipt.detail = `${result.reason}: ${result.trail.join(' -> ')}`;
+    else if (!targetAvailable) receipt.detail = 'resolved target is not an applicable Codex skill';
     candidates.push({ id: `alias-${alias.id}`, content: null, resources: [], receipt, targetRoot, aliasTerminal: terminal });
   }
 
@@ -440,7 +467,7 @@ function writeCandidate(candidateDir, candidate) {
 function isApplicable(candidate) {
   return Boolean(candidate.content)
     && SAFE_REVIEW_STATES.has(candidate.receipt.semantic_review_state)
-    && candidate.receipt.capability_tier !== 'UNKNOWN'
+    && !['ABSENT', 'UNKNOWN'].includes(candidate.receipt.capability_tier)
     && candidate.receipt.collision_state === 'clear';
 }
 
@@ -509,7 +536,14 @@ function sync(options = {}) {
     for (const candidate of selected) if (applyCandidate(root, candidate, targetRoot)) applied += 1;
     const appliedTerminals = new Set(selected.filter((item) => ['applied_additive', 'already_aligned'].includes(item.receipt.application_status)).map((item) => item.receipt.target_exact_path));
     for (const candidate of selected.filter((item) => item.receipt.projection_kind === 'alias_metadata' && item.receipt.application_status === 'metadata_candidate')) {
-      candidate.receipt.application_status = appliedTerminals.has(candidate.receipt.target_exact_path) ? 'metadata_attached' : 'blocked_target_unavailable';
+      if (appliedTerminals.has(candidate.receipt.target_exact_path)) {
+        candidate.receipt.application_status = 'metadata_attached';
+      } else {
+        candidate.receipt.application_status = 'blocked_target_unavailable';
+        candidate.receipt.capability_tier = 'ABSENT';
+        candidate.receipt.semantic_review_state = 'target_unavailable';
+        candidate.receipt.detail = 'resolved target is not an applied or aligned Codex skill';
+      }
     }
   }
   for (const candidate of selected) writeCandidate(validatedCandidateDir, candidate);

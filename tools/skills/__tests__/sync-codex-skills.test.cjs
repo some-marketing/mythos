@@ -147,6 +147,26 @@ test('unsafe canonical and alias IDs cannot construct projection output paths', 
   assert.equal(fs.existsSync(path.join(root, 'sentinel.json')), false);
 });
 
+test('direct skills and aliases remain unavailable while a required dependency is absent', () => {
+  const root = fixture();
+  const adapterPath = path.join(root, 'instructions/adapters/codex.yaml');
+  const adapter = JSON.parse(fs.readFileSync(adapterPath, 'utf8'));
+  adapter.skill_projection.families.direct_system_skills.sources.push('.claude/skills/meditate/SKILL.md');
+  adapter.skill_projection.families.direct_system_skills.dependencies = { ticktock: ['meditate'] };
+  fs.writeFileSync(adapterPath, `${JSON.stringify(adapter, null, 2)}\n`);
+  skill(root, 'ticktock');
+  const aliases = { aliases: [{ id: 'tt', target: 'ticktock' }] };
+  const result = sync({ root, handlerIds: new Set(), aliasRegistry: aliases, apply: true });
+  const ticktock = byId(result, 'direct-ticktock');
+  const tt = byId(result, 'alias-tt');
+  assert.equal(ticktock.receipt.capability_tier, 'ABSENT');
+  assert.equal(ticktock.receipt.application_status, 'blocked_dependency');
+  assert.match(ticktock.receipt.detail, /meditate/);
+  assert.equal(tt.receipt.capability_tier, 'ABSENT');
+  assert.equal(tt.receipt.application_status, 'blocked_target_unavailable');
+  assert.equal(fs.existsSync(path.join(root, '.agents/skills/ticktock/SKILL.md')), false);
+});
+
 test('tt, oil, and chi resolve across the command boundary to direct project skills', () => {
   const root = fixture();
   skill(root, 'ticktock');

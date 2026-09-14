@@ -4,9 +4,9 @@ Refreshed under the approved parity amendment at `2026-09-14T18:51:57Z` in the d
 
 ## Mechanical results
 
-- Combined projector, lifecycle, and alias regressions: 28 passed, 0 failed.
+- Combined projector, lifecycle, and alias regressions: 29 passed, 0 failed.
 - `node tools/skills/sync-codex-skills.cjs --check`: aligned.
-- Pinned Codex `quick_validate.py`, using the repository PyYAML environment: 132 of 132 applied packages valid; 177 of 177 top-level staged candidate packages valid. All 182 staged `SKILL.md` files, including five bundled helper resources, also validate.
+- Pinned Codex `quick_validate.py`, using the repository PyYAML environment: 131 of 131 applied packages valid; 176 of 176 top-level staged candidate packages valid. All 181 staged `SKILL.md` files, including five bundled helper resources, also validate.
 - Private-path and obvious-secret-pattern scan over applied and staged candidate trees: no matches.
 - `npm run instructions:generate`: completed and wrote the generator-owned targets.
 - `npm run instructions:validate`: passed with no parity or drift errors.
@@ -15,8 +15,8 @@ Refreshed under the approved parity amendment at `2026-09-14T18:51:57Z` in the d
 
 ## Protected parity amendment
 
-- Wiring graph regenerated: 4,092 nodes, 2,899 edges, 0 unresolved.
-- Target-only baseline repair registered 3,367 expected files while preserving the complete source and membrane policy objects byte-for-byte.
+- Wiring graph regenerated: 4,091 nodes, 2,899 edges, 0 unresolved.
+- Target-only baseline repair registered 3,365 expected files while preserving the complete source and membrane policy objects byte-for-byte.
 - Portable `npm run verify:parity`: `ok: true`, 0 findings.
 - Authoritative private-denylist verification against the existing bound hash: `ok: true`, 0 findings. The external file and its location are not serialized in tracked artifacts.
 - Parity test suite: 28 passed, 0 failed.
@@ -26,9 +26,9 @@ The first package-validation attempt used a Python interpreter without PyYAML an
 ## Projection truth
 
 - 130 canonical command skills applied: 126 `ADVISORY`, 4 handler-backed `BLOCKING`. Eight typed aliases with their own canonical workflows retain distinct runtime pointers.
-- 2 direct project skills applied: `go` and `ticktock`.
-- 2 direct project skills blocked `ABSENT / missing_source`: `meditate` and `outward-inward-loop`.
-- 10 aliases attached as target metadata: 9 `ADVISORY`, 1 handler-backed `BLOCKING`; no alias body was generated.
+- 1 direct project skill applied: `go`.
+- 2 direct project skills blocked `ABSENT / missing_source`: `meditate` and `outward-inward-loop`; `ticktock` is additionally blocked `ABSENT / dependency_unavailable` because its mandatory TOCK phase requires `meditate`.
+- 9 aliases attached as target metadata: 8 `ADVISORY`, 1 handler-backed `BLOCKING`; `/tt` is blocked `ABSENT / target_unavailable`, and no alias body was generated.
 - 45 framework helpers staged `ADVISORY / pending_review`; none applied.
 - 189 evidence receipts emitted; no collisions and no unclassified `UNKNOWN` projection was applied.
 
@@ -38,10 +38,10 @@ Fresh `codex exec --ephemeral --sandbox read-only` confirmed that `go`, `source-
 
 ## Distinct review
 
-Claude and Gemini reviewed the implementation and the protected parity amendment. The first Cloud Codex PR review led to candidate-path hardening, typed workflow preservation, resource reconciliation, lifecycle staging isolation, and correction of the instruction alias loader/renderer. The second Cloud Codex review identified two further path-identity gaps: unvalidated candidate IDs and filename/internal canonical-ID conflation. Both are repaired with slug validation, filename-keyed command loading, mismatch rejection, contained-write checks, and regressions. Gemini approved the earlier repaired tree. A remaining Claude block was tested directly and adjudicated: legacy aliases render correctly, and resolved-root plus strict-descendant checks satisfy the declared local CLI threat model. Final review synthesis: `convene-runs/20260914T185255Z-codex-skill-parity-final-code-review/synthesis.md`.
+Claude and Gemini reviewed the implementation and the protected parity amendment. The first Cloud Codex PR review led to candidate-path hardening, typed workflow preservation, resource reconciliation, lifecycle staging isolation, and correction of the instruction alias loader/renderer. The second Cloud Codex review identified two further path-identity gaps: unvalidated candidate IDs and filename/internal canonical-ID conflation. Both are repaired with slug validation, filename-keyed command loading, mismatch rejection, contained-write checks, and regressions. The third Cloud Codex review found that `ticktock` remained exposed despite its mandatory `meditate` dependency being absent; dependency gating now keeps both `ticktock` and `/tt` unavailable. Gemini approved the earlier repaired tree. A remaining Claude block was tested directly and adjudicated: legacy aliases render correctly, and resolved-root plus strict-descendant checks satisfy the declared local CLI threat model. Final review synthesis: `convene-runs/20260914T185255Z-codex-skill-parity-final-code-review/synthesis.md`.
 
 ## Falsifiers and residuals
 
 Acceptance would be disproved by an applied `UNKNOWN` or pending candidate, copied alias behavior, a non-handler command marked `BLOCKING`, a private path in a shipped projection, a canonical/client diff, a failed runtime discovery claim, or an unresolved distinct-family blocker. None was observed.
 
-Residuals are the two missing accepted direct sources, 45 unreviewed framework helpers, non-append-only first-write evidence, and broader foreign-extra coverage in `--check`. These remain explicitly outside the accepted capability claim. The instruction alias-renderer mismatch is repaired and covered by focused tests. Repository parity is both portable-verified and privately ratified for this amended tree.
+Residuals are the two missing direct sources, the dependency-blocked `ticktock` flow, 45 unreviewed framework helpers, non-append-only first-write evidence, and broader foreign-extra coverage in `--check`. These remain explicitly outside the accepted capability claim. The instruction alias-renderer mismatch is repaired and covered by focused tests. Repository parity is both portable-verified and privately ratified for this amended tree.

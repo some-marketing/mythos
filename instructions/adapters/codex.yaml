@@ -45,7 +45,12 @@
           ".claude/skills/meditate/SKILL.md",
           ".claude/skills/outward-inward-loop/SKILL.md",
           ".claude/skills/ticktock/SKILL.md"
-        ]
+        ],
+        "dependencies": {
+          "ticktock": [
+            "meditate"
+          ]
+        }
       },
       "aliases": {
         "application": "target_metadata_only",

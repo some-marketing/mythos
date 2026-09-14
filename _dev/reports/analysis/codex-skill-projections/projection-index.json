@@ -10,11 +10,13 @@
   "counts": {
     "canonical_command:ADVISORY:reviewed_safe:already_aligned": 126,
     "canonical_command:BLOCKING:reviewed_safe:already_aligned": 4,
-    "direct_system_skill:ADVISORY:reviewed_safe:already_aligned": 2,
+    "direct_system_skill:ADVISORY:reviewed_safe:already_aligned": 1,
     "direct_system_skill:ABSENT:missing_source:blocked_missing_source": 2,
+    "direct_system_skill:ABSENT:dependency_unavailable:blocked_dependency": 1,
     "framework_helper:ADVISORY:pending_review:candidate": 45,
-    "alias_metadata:ADVISORY:reviewed_safe:metadata_attached": 9,
-    "alias_metadata:BLOCKING:reviewed_safe:metadata_attached": 1
+    "alias_metadata:ADVISORY:reviewed_safe:metadata_attached": 8,
+    "alias_metadata:BLOCKING:reviewed_safe:metadata_attached": 1,
+    "alias_metadata:ABSENT:target_unavailable:blocked_target_unavailable": 1
   },
   "receipts": [
     "receipts/alias-blueprint.json",

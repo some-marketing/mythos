@@ -2609,13 +2609,6 @@
       "mode": 420
     },
     {
-      "id": "file:.agents/skills/ticktock/SKILL.md",
-      "type": "file",
-      "path": ".agents/skills/ticktock/SKILL.md",
-      "sha256": "e74e0e7503b8df917561910162d42c8d145ae2656f00dd4d66b460178b93b6f4",
-      "mode": 420
-    },
-    {
       "id": "file:.claude/agents/aside.md",
       "type": "file",
       "path": ".claude/agents/aside.md",
@@ -9346,7 +9339,7 @@
       "id": "file:instructions/adapters/codex.yaml",
       "type": "file",
       "path": "instructions/adapters/codex.yaml",
-      "sha256": "4e1bd036130be5d0925147e4022967a8289f51ed38991789033d21ca33237dd8",
+      "sha256": "eeca7f3e3c4daba5f4f3653a8061180263d80a77c051b57c8d68c363462dab37",
       "mode": 420
     },
     {
@@ -19776,7 +19769,7 @@
       "id": "file:tools/skills/__tests__/sync-codex-skills.test.cjs",
       "type": "file",
       "path": "tools/skills/__tests__/sync-codex-skills.test.cjs",
-      "sha256": "6aed05e14fb21b8c00314c1fbbb01340536f6fa9bfa08d5841457c71a4a756dd",
+      "sha256": "21b0b2851de2bb96b2f462a74283b264b39ba974dce992e020b249588f75a2d6",
       "mode": 420
     },
     {
@@ -19797,7 +19790,7 @@
       "id": "file:tools/skills/sync-codex-skills.cjs",
       "type": "file",
       "path": "tools/skills/sync-codex-skills.cjs",
-      "sha256": "fde4c7ac6b86a3bab07ef4dec1d5708fff9919d576e1ae0724b164d39c4e276f",
+      "sha256": "889490f971aa7c638e955c2c0a6d00385fbd96b952ffe57887f3b79da940ce5c",
       "mode": 420
     },
     {
@@ -53066,7 +53059,7 @@
     }
   ],
   "counts": {
-    "nodes": 4092,
+    "nodes": 4091,
     "edges": 2899,
     "unresolved": 0
   }

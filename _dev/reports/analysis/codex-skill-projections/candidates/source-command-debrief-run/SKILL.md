@@ -9,4 +9,4 @@ Canonical authority: `instructions/canonical/commands/debrief-run.yaml`. Read th
 
 Capability tier: **BLOCKING**.
 
-Run `node tools/commands/mythos-command-runner.cjs '/debrief-run $ARGUMENTS'`. The exported HANDLERS registry is the evidence for deterministic execution.
+Run `node tools/commands/mythos-command-runner.cjs` with one positional command string formed from `/debrief-run` followed by the user's actual invocation arguments. With no arguments, pass exactly `/debrief-run`. Never pass placeholder text in place of the user's arguments. The exported HANDLERS registry is the evidence for deterministic execution.

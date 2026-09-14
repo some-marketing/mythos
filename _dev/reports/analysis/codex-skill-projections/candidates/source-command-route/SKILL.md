@@ -9,4 +9,4 @@ Canonical authority: `instructions/canonical/commands/route.yaml`. Read that fil
 
 Capability tier: **BLOCKING**.
 
-Run `node tools/commands/mythos-command-runner.cjs '/route $ARGUMENTS'`. The exported HANDLERS registry is the evidence for deterministic execution.
+Run `node tools/commands/mythos-command-runner.cjs` with one positional command string formed from `/route` followed by the user's actual invocation arguments. With no arguments, pass exactly `/route`. Never pass placeholder text in place of the user's arguments. The exported HANDLERS registry is the evidence for deterministic execution.

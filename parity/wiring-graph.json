@@ -1870,7 +1870,7 @@
       "id": "file:.agents/skills/source-command-concept-promote/SKILL.md",
       "type": "file",
       "path": ".agents/skills/source-command-concept-promote/SKILL.md",
-      "sha256": "3a335cce6d466eb076afdddc828b01e0f2c62b43b9ea3bcbb9707cb1bb04389c",
+      "sha256": "e0bd6b12eb822cc2e8a1729952c050f2ded152eb5ace27c7e6467a58c034bee4",
       "mode": 420
     },
     {
@@ -1940,7 +1940,7 @@
       "id": "file:.agents/skills/source-command-debrief-run/SKILL.md",
       "type": "file",
       "path": ".agents/skills/source-command-debrief-run/SKILL.md",
-      "sha256": "2cf99ff505db1c8726a8a2ab8a598c8da1f7fad3d549b9d3dbcdf7e8a64aebf8",
+      "sha256": "544ed39ec39b0f16a0f7b6a60dddc40879f70a113c9e998df355e8be0ae067a9",
       "mode": 420
     },
     {
@@ -2493,14 +2493,14 @@
       "id": "file:.agents/skills/source-command-review-task-plan/SKILL.md",
       "type": "file",
       "path": ".agents/skills/source-command-review-task-plan/SKILL.md",
-      "sha256": "bf2eab06741745be5a186fb7198af383a7526986e3f18a60e4a3bf9887a0c899",
+      "sha256": "61b69064dfe10854bf4b472c381c55fb791651fdd65f3f06588b82a9826202d6",
       "mode": 420
     },
     {
       "id": "file:.agents/skills/source-command-route/SKILL.md",
       "type": "file",
       "path": ".agents/skills/source-command-route/SKILL.md",
-      "sha256": "56fbb0001d310825b05cb248f990fa059d2943c9feea7e606058e179a3beb176",
+      "sha256": "52f98a6f73bbd2f68684ba8d242cb8662c375e078c15620fea3aea5b1e9a41dd",
       "mode": 420
     },
     {
@@ -19769,7 +19769,7 @@
       "id": "file:tools/skills/__tests__/sync-codex-skills.test.cjs",
       "type": "file",
       "path": "tools/skills/__tests__/sync-codex-skills.test.cjs",
-      "sha256": "21b0b2851de2bb96b2f462a74283b264b39ba974dce992e020b249588f75a2d6",
+      "sha256": "fbf0cc7db48ca8fe464b75f82a1a6175bf1005cd12899677d818de6991b4f4eb",
       "mode": 420
     },
     {
@@ -19790,7 +19790,7 @@
       "id": "file:tools/skills/sync-codex-skills.cjs",
       "type": "file",
       "path": "tools/skills/sync-codex-skills.cjs",
-      "sha256": "889490f971aa7c638e955c2c0a6d00385fbd96b952ffe57887f3b79da940ce5c",
+      "sha256": "10f4bc9ad6f577067e11729108c229a2baed84148547d890e927c54c59b80e9e",
       "mode": 420
     },
     {

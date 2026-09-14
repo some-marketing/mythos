@@ -94,6 +94,8 @@ test('HANDLERS evidence alone marks deterministic capability BLOCKING', () => {
   const result = buildCandidates({ root, handlerIds: new Set(['handled']) });
   assert.equal(byId(result, 'command-managed').receipt.capability_tier, 'ADVISORY');
   assert.equal(byId(result, 'command-handled').receipt.capability_tier, 'BLOCKING');
+  assert.doesNotMatch(byId(result, 'command-handled').content, /\$ARGUMENTS/);
+  assert.match(byId(result, 'command-handled').content, /actual invocation arguments/);
 });
 
 test('alias cycles and nonterminal aliases remain UNKNOWN and unapplied', () => {
@@ -191,6 +193,19 @@ test('framework namespace collisions are rejected', () => {
   assert.equal(colliding.length, 2);
   assert.equal(colliding.every((item) => item.receipt.collision_state === 'collision'), true);
   assert.equal(colliding.every((item) => item.receipt.capability_tier === 'UNKNOWN'), true);
+});
+
+test('nested framework skills project independently instead of becoming parent resources', () => {
+  const root = fixture();
+  write(root, 'frameworks/a/b/.claude/skills/parent/SKILL.md', '---\nname: parent\ndescription: parent\n---\nbody\n');
+  write(root, 'frameworks/a/b/.claude/skills/parent/reference.md', 'parent reference\n');
+  write(root, 'frameworks/a/b/.claude/skills/parent/child/SKILL.md', '---\nname: child\ndescription: child\n---\nbody\n');
+  write(root, 'frameworks/a/b/.claude/skills/parent/child/reference.md', 'child reference\n');
+  const result = buildCandidates({ root, handlerIds: new Set() });
+  const parent = byId(result, 'framework-guild-a-b-parent');
+  const child = byId(result, 'framework-guild-a-b-parent-child');
+  assert.deepEqual(parent.resources.map((resource) => resource.relativePath), ['reference.md']);
+  assert.deepEqual(child.resources.map((resource) => resource.relativePath), ['reference.md']);
 });
 
 test('malformed metadata and private absolute paths stage but never apply', () => {

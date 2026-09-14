@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "89fbd782c8edd978e1bc351a1f0e4b99c3fdc036b70468abe5d8ccc424384a85",
+    "expected_tree_sha256": "c294de6cf142ce666c7078b90f16a34cad0775388fa99c381a091bba9367b97a",
     "expected_files": [
       {
         "path": ".agents/skills/go/SKILL.md",
@@ -172,7 +172,7 @@
       },
       {
         "path": ".agents/skills/source-command-concept-promote/SKILL.md",
-        "sha256": "3a335cce6d466eb076afdddc828b01e0f2c62b43b9ea3bcbb9707cb1bb04389c",
+        "sha256": "e0bd6b12eb822cc2e8a1729952c050f2ded152eb5ace27c7e6467a58c034bee4",
         "mode": 420
       },
       {
@@ -222,7 +222,7 @@
       },
       {
         "path": ".agents/skills/source-command-debrief-run/SKILL.md",
-        "sha256": "2cf99ff505db1c8726a8a2ab8a598c8da1f7fad3d549b9d3dbcdf7e8a64aebf8",
+        "sha256": "544ed39ec39b0f16a0f7b6a60dddc40879f70a113c9e998df355e8be0ae067a9",
         "mode": 420
       },
       {
@@ -617,12 +617,12 @@
       },
       {
         "path": ".agents/skills/source-command-review-task-plan/SKILL.md",
-        "sha256": "bf2eab06741745be5a186fb7198af383a7526986e3f18a60e4a3bf9887a0c899",
+        "sha256": "61b69064dfe10854bf4b472c381c55fb791651fdd65f3f06588b82a9826202d6",
         "mode": 420
       },
       {
         "path": ".agents/skills/source-command-route/SKILL.md",
-        "sha256": "56fbb0001d310825b05cb248f990fa059d2943c9feea7e606058e179a3beb176",
+        "sha256": "52f98a6f73bbd2f68684ba8d242cb8662c375e078c15620fea3aea5b1e9a41dd",
         "mode": 420
       },
       {
@@ -2217,7 +2217,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-parity-remediation__verification.md",
-        "sha256": "7237f34101dfa3e34b403aec816482632e1283be4d77529fdb698983e9761ecf",
+        "sha256": "ed0350e53dbb8c4942368f94a53b17ad8e4e1acc0f546228ab4b817fdfa3bb84",
         "mode": 420
       },
       {
@@ -2333,31 +2333,6 @@
       {
         "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-design-research-design-research/SKILL.md",
         "sha256": "45b7fdf2bb858bda5df4003b03860acf2f55c1a53b82168f35a37e85c0194d88",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-design-research-design-research/cross-ai-handoff/SKILL.md",
-        "sha256": "0b40bb9b6381f239d0225db80e5be768342812d2d336a8cb31e2fc0c4e3d9e42",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-design-research-design-research/design-mockup/SKILL.md",
-        "sha256": "9158de603b62c1ad96ddebffdeedf840daea9cd26a5743731ffbcb24e67c4e6a",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-design-research-design-research/mockup-brief/SKILL.md",
-        "sha256": "ba02515a4892066e59ac6acb9687ff476f31fe9ea8d718d65bace612eef1f07a",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-design-research-design-research/site-audit/SKILL.md",
-        "sha256": "77efdfc45c556449d8fa8bcf8c0641d8eeaaf7913a98297bd7857ccd96198b02",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-design-research-design-research/visual-refine/SKILL.md",
-        "sha256": "e5fb176ac4e996553d9e30fe89828b0aaa830b6aefa667b56a97b8ba8cad8443",
         "mode": 420
       },
       {
@@ -2612,7 +2587,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-concept-promote/SKILL.md",
-        "sha256": "3a335cce6d466eb076afdddc828b01e0f2c62b43b9ea3bcbb9707cb1bb04389c",
+        "sha256": "e0bd6b12eb822cc2e8a1729952c050f2ded152eb5ace27c7e6467a58c034bee4",
         "mode": 420
       },
       {
@@ -2662,7 +2637,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-debrief-run/SKILL.md",
-        "sha256": "2cf99ff505db1c8726a8a2ab8a598c8da1f7fad3d549b9d3dbcdf7e8a64aebf8",
+        "sha256": "544ed39ec39b0f16a0f7b6a60dddc40879f70a113c9e998df355e8be0ae067a9",
         "mode": 420
       },
       {
@@ -3057,12 +3032,12 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-review-task-plan/SKILL.md",
-        "sha256": "bf2eab06741745be5a186fb7198af383a7526986e3f18a60e4a3bf9887a0c899",
+        "sha256": "61b69064dfe10854bf4b472c381c55fb791651fdd65f3f06588b82a9826202d6",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-route/SKILL.md",
-        "sha256": "56fbb0001d310825b05cb248f990fa059d2943c9feea7e606058e179a3beb176",
+        "sha256": "52f98a6f73bbd2f68684ba8d242cb8662c375e078c15620fea3aea5b1e9a41dd",
         "mode": 420
       },
       {
@@ -8792,7 +8767,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "a75bb0a01f10b6647087203ff8442493f0a5f3846a09c6c1069a6a23e993a6ff",
+        "sha256": "b6df58f82d27b5ad38161557fe49151d3ee4daed4faa4f57c9a23271d54b4e98",
         "mode": 420
       },
       {
@@ -15167,7 +15142,7 @@
       },
       {
         "path": "tools/skills/__tests__/sync-codex-skills.test.cjs",
-        "sha256": "21b0b2851de2bb96b2f462a74283b264b39ba974dce992e020b249588f75a2d6",
+        "sha256": "fbf0cc7db48ca8fe464b75f82a1a6175bf1005cd12899677d818de6991b4f4eb",
         "mode": 420
       },
       {
@@ -15177,7 +15152,7 @@
       },
       {
         "path": "tools/skills/sync-codex-skills.cjs",
-        "sha256": "889490f971aa7c638e955c2c0a6d00385fbd96b952ffe57887f3b79da940ce5c",
+        "sha256": "10f4bc9ad6f577067e11729108c229a2baed84148547d890e927c54c59b80e9e",
         "mode": 420
       },
       {
@@ -16904,7 +16879,7 @@
     "package_script_count": 205,
     "command_alias_registry_sha256": "9bbc50aa1343a5502258e0e067eca0bb4cf4ea9f560abc5b998247a0e04b9901",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "a75bb0a01f10b6647087203ff8442493f0a5f3846a09c6c1069a6a23e993a6ff",
+    "graph_sha256": "b6df58f82d27b5ad38161557fe49151d3ee4daed4faa4f57c9a23271d54b4e98",
     "graph_nodes": 4091,
     "graph_edges": 2899
   },

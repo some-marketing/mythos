@@ -258,7 +258,7 @@ function renderCanonicalSkill(commandId, spec, capabilityTier, override, aliases
   const execution = override && override.codex_execution
     ? override.codex_execution
     : capabilityTier === 'BLOCKING'
-      ? `Run \`node tools/commands/mythos-command-runner.cjs '/${commandId} $ARGUMENTS'\`. The exported HANDLERS registry is the evidence for deterministic execution.`
+      ? `Run \`node tools/commands/mythos-command-runner.cjs\` with one positional command string formed from \`/${commandId}\` followed by the user's actual invocation arguments. With no arguments, pass exactly \`/${commandId}\`. Never pass placeholder text in place of the user's arguments. The exported HANDLERS registry is the evidence for deterministic execution.`
       : `Read the canonical command at execution time and carry out its workflow with Codex capabilities. This projection is ${capabilityTier}; availability of this skill is not a blocking runtime mechanism.`;
   return `---\nname: source-command-${commandId}\ndescription: ${JSON.stringify(`${spec.description || `Canonical /${commandId} command.`}${aliasText}`)}\n---\n\n# /${commandId}\n\nCanonical authority: \`instructions/canonical/commands/${commandId}.yaml\`. Read that file at execution time; this projection never copies or overrides its behavioral body.\n\nCapability tier: **${capabilityTier}**.\n\n${execution}\n`;
 }
@@ -281,6 +281,23 @@ function renderFrameworkSkill(text, identity) {
     ok: true,
     content: `---\nname: ${identity.slug}\ndescription: ${JSON.stringify(parsed.metadata.description.replace(/[<>]/g, (value) => value === '<' ? '(' : ')'))}\n---\n\n${lineage}\n\n${parsed.body}`
   };
+}
+
+function bundledResources(sourcePath) {
+  const sourceDir = path.dirname(sourcePath);
+  return walk(sourceDir, (file) => {
+    if (file === sourcePath) return false;
+    let cursor = path.dirname(file);
+    while (cursor !== sourceDir && isWithin(sourceDir, cursor)) {
+      if (fs.existsSync(path.join(cursor, 'SKILL.md'))) return false;
+      cursor = path.dirname(cursor);
+    }
+    return true;
+  }).map((file) => ({
+    sourcePath: file,
+    relativePath: relative(sourceDir, file),
+    bytes: fs.readFileSync(file)
+  }));
 }
 
 function containsPrivateAbsolutePath(bytes) {
@@ -348,11 +365,7 @@ function buildCandidates(options = {}) {
     }
     const sourceBytes = fs.readFileSync(sourcePath);
     const normalized = normalizeDirectSkill(String(sourceBytes), name, terminalAliases.get(name) || []);
-    const resources = walk(path.dirname(sourcePath), (file) => file !== sourcePath).map((file) => ({
-      sourcePath: file,
-      relativePath: relative(path.dirname(sourcePath), file),
-      bytes: fs.readFileSync(file)
-    }));
+    const resources = bundledResources(sourcePath);
     const privateLeak = containsPrivateAbsolutePath(sourceBytes) || resources.some((item) => containsPrivateAbsolutePath(item.bytes));
     const receipt = receiptBase(config, sourceRel, sourceBytes, 'direct_system_skill', normalized.ok ? 'ADVISORY' : 'UNKNOWN', config.families.direct_system_skills.semantic_review_state, targetRel);
     if (!normalized.ok || privateLeak) {
@@ -393,7 +406,7 @@ function buildCandidates(options = {}) {
     const sourceBytes = fs.readFileSync(sourcePath);
     const rendered = renderFrameworkSkill(String(sourceBytes), identity);
     const targetRel = posix(path.join(config.target_root, identity.slug, 'SKILL.md'));
-    const resources = walk(path.dirname(sourcePath), (file) => file !== sourcePath).map((file) => ({ sourcePath: file, relativePath: relative(path.dirname(sourcePath), file), bytes: fs.readFileSync(file) }));
+    const resources = bundledResources(sourcePath);
     const privateLeak = containsPrivateAbsolutePath(sourceBytes) || resources.some((item) => containsPrivateAbsolutePath(item.bytes));
     const receipt = receiptBase(config, identity.rel, sourceBytes, 'framework_helper', rendered.ok ? 'ADVISORY' : 'UNKNOWN', config.families.framework_helpers.semantic_review_state, targetRel);
     if (!rendered.ok || privateLeak) {

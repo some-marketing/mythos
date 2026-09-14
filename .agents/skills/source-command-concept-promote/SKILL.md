@@ -9,4 +9,4 @@ Canonical authority: `instructions/canonical/commands/concept-promote.yaml`. Rea
 
 Capability tier: **BLOCKING**.
 
-Run `node tools/commands/mythos-command-runner.cjs '/concept-promote $ARGUMENTS'`. The exported HANDLERS registry is the evidence for deterministic execution.
+Run `node tools/commands/mythos-command-runner.cjs` with one positional command string formed from `/concept-promote` followed by the user's actual invocation arguments. With no arguments, pass exactly `/concept-promote`. Never pass placeholder text in place of the user's arguments. The exported HANDLERS registry is the evidence for deterministic execution.

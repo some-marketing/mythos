@@ -220,6 +220,27 @@ function safeOutputPath(root, ...segments) {
   return output;
 }
 
+function validateTargetRoot(root, targetRoot) {
+  const lexicalRoot = path.resolve(root);
+  const lexicalTarget = path.resolve(targetRoot);
+  if (!isWithin(lexicalRoot, lexicalTarget)) throw new Error(`Unsafe target root outside repository: ${targetRoot}`);
+  let cursor = lexicalTarget;
+  while (cursor !== lexicalRoot) {
+    try {
+      const metadata = fs.lstatSync(cursor);
+      if (metadata.isSymbolicLink()) throw new Error(`Refusing symbolic-link target root component: ${cursor}`);
+      if (cursor === lexicalTarget && !metadata.isDirectory()) throw new Error(`Target root is not a directory: ${cursor}`);
+    } catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+    }
+    cursor = path.dirname(cursor);
+  }
+  const realRoot = fs.realpathSync(lexicalRoot);
+  const realTarget = resolvedPath(lexicalTarget);
+  if (!isWithin(realRoot, realTarget)) throw new Error(`Unsafe resolved target root outside repository: ${targetRoot}`);
+  return realTarget;
+}
+
 function validateCandidateDir(root, targetRoot, candidateDir, configuredCandidateRoot) {
   const realRoot = resolvedPath(root);
   const realTarget = resolvedPath(targetRoot);
@@ -449,13 +470,18 @@ function buildCandidates(options = {}) {
     const content = renderCanonicalSkill(id, command.spec, tier, override, terminalAliases.get(id) || []);
     const forbidden = (override && override.forbidden_source_fragments) || [];
     const leakedHarnessText = forbidden.some((fragment) => content.includes(fragment));
+    const privateLeak = containsPrivateAbsolutePath(content) || containsCredentialMaterial(content);
     const receipt = receiptBase(config, sourceRel, sourceBytes, 'canonical_command', tier, reviewState, targetRel);
-    if (!CAPABILITY_TIERS.has(tier) || leakedHarnessText) {
+    if (!CAPABILITY_TIERS.has(tier) || leakedHarnessText || privateLeak) {
       receipt.capability_tier = 'UNKNOWN';
-      receipt.semantic_review_state = leakedHarnessText ? 'harness_specific_rejected' : 'malformed';
+      receipt.semantic_review_state = privateLeak ? 'private_path_rejected' : leakedHarnessText ? 'harness_specific_rejected' : 'malformed';
       receipt.application_status = 'blocked';
+      if (privateLeak) {
+        receipt.detail = 'private or credential content detected';
+        redactRejectedPackage(receipt);
+      }
     }
-    candidates.push({ id: `command-${id}`, content, resources: [], receipt, targetRoot });
+    candidates.push({ id: `command-${id}`, content: privateLeak ? null : content, resources: [], receipt, targetRoot });
   }
 
   for (const sourceRel of directSources) {
@@ -617,16 +643,26 @@ function packageAlignment(candidate, targetRoot) {
   const files = expectedPackageFiles(candidate, targetRoot);
   const packageRoot = path.dirname(files[0].filePath);
   const expectedPaths = new Set(files.map((item) => path.resolve(item.filePath)));
-  const missing = files.filter((item) => !fs.existsSync(item.filePath));
-  const conflicting = files.filter((item) => fs.existsSync(item.filePath) && !fs.readFileSync(item.filePath).equals(item.bytes));
-  const modeMismatches = files.filter((item) => fs.existsSync(item.filePath)
-    && item.mode != null
+  const withMetadata = files.map((item) => {
+    try {
+      return { item, metadata: fs.lstatSync(item.filePath) };
+    } catch (error) {
+      if (error.code === 'ENOENT') return { item, metadata: null };
+      throw error;
+    }
+  });
+  const missing = withMetadata.filter(({ metadata }) => !metadata).map(({ item }) => item);
+  const nonFiles = withMetadata.filter(({ metadata }) => metadata && !metadata.isFile()).map(({ item }) => item);
+  const regularFiles = withMetadata.filter(({ metadata }) => metadata && metadata.isFile()).map(({ item }) => item);
+  const conflicting = regularFiles.filter((item) => !fs.readFileSync(item.filePath).equals(item.bytes));
+  const modeMismatches = regularFiles.filter((item) => item.mode != null
     && (fs.statSync(item.filePath).mode & 0o777) !== item.mode);
   const unexpected = walk(packageRoot).filter((filePath) => !expectedPaths.has(path.resolve(filePath)));
   return {
-    aligned: missing.length === 0 && conflicting.length === 0 && modeMismatches.length === 0 && unexpected.length === 0,
+    aligned: missing.length === 0 && nonFiles.length === 0 && conflicting.length === 0 && modeMismatches.length === 0 && unexpected.length === 0,
     files,
     missing,
+    nonFiles,
     conflicting,
     modeMismatches,
     unexpected
@@ -712,11 +748,12 @@ function orphanedManagedTargets(managedTargets, candidates, targetRoot) {
 function applyCandidate(root, candidate, targetRoot) {
   if (!isApplicable(candidate)) return false;
   const alignment = packageAlignment(candidate, targetRoot);
-  if (alignment.conflicting.length || alignment.modeMismatches.length || alignment.unexpected.length) {
+  if (alignment.nonFiles.length || alignment.conflicting.length || alignment.modeMismatches.length || alignment.unexpected.length) {
     candidate.receipt.application_status = 'blocked_existing_preserved';
     const conflicts = [...new Set([
       ...alignment.conflicting.map((item) => item.filePath),
       ...alignment.modeMismatches.map((item) => item.filePath),
+      ...alignment.nonFiles.map((item) => item.filePath),
       ...alignment.unexpected
     ].map((filePath) => relative(root, filePath)))];
     candidate.receipt.detail = `conflicting existing package file(s): ${conflicts.join(', ')}`;
@@ -739,7 +776,7 @@ function sync(options = {}) {
   const root = options.root || PROJECT_ROOT;
   const built = buildCandidates(options);
   const candidateDir = options.candidateDir || path.join(root, built.config.candidate_root);
-  const targetRoot = options.targetDir || path.join(root, built.config.target_root);
+  const targetRoot = validateTargetRoot(root, options.targetDir || path.join(root, built.config.target_root));
   const selected = options.includeCandidate
     ? built.candidates.filter(options.includeCandidate)
     : built.candidates;

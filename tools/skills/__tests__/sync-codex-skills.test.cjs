@@ -165,6 +165,18 @@ test('canonical JSON parse errors are sanitized before entering receipts', () =>
   assert.doesNotMatch(JSON.stringify(candidate.receipt), /sk-zzzz/);
 });
 
+test('canonical rendered content is rejected without retaining private or credential bytes', () => {
+  const root = fixture();
+  const secret = `sk-${'q'.repeat(24)}`;
+  command(root, 'sample', { description: `credential ${secret}` });
+  const candidate = byId(sync({ root, handlerIds: new Set(), apply: true }), 'command-sample');
+  assert.equal(candidate.content, null);
+  assert.equal(candidate.receipt.semantic_review_state, 'private_path_rejected');
+  assert.equal(candidate.receipt.source_sha256, null);
+  assert.equal(fs.existsSync(path.join(root, '.agents/skills/source-command-sample/SKILL.md')), false);
+  assert.doesNotMatch(JSON.stringify(candidate.receipt), /sk-qqqq/);
+});
+
 test('unsafe canonical and alias IDs cannot construct projection output paths', () => {
   const root = fixture();
   const privateId = ['', 'Users', 'private-operator', 'escape'].join('/');
@@ -439,6 +451,27 @@ test('dangling destination symlinks cannot redirect applied writes', () => {
   fs.symlinkSync(external, path.join(skillDir, 'SKILL.md'));
   assert.throws(() => sync({ root, handlerIds: new Set(), apply: true }), /Refusing symbolic-link destination component/);
   assert.equal(fs.existsSync(external), false);
+});
+
+test('symlinked target roots cannot redirect applied writes outside the repository', () => {
+  const root = fixture();
+  command(root, 'sample');
+  const external = fs.mkdtempSync(path.join(os.tmpdir(), 'codex-projector-target-'));
+  fs.mkdirSync(path.join(root, '.agents'), { recursive: true });
+  fs.symlinkSync(external, path.join(root, '.agents/skills'));
+  assert.throws(() => sync({ root, handlerIds: new Set(), apply: true }), /Refusing symbolic-link target root component/);
+  assert.equal(fs.existsSync(path.join(external, 'source-command-sample/SKILL.md')), false);
+});
+
+test('non-file installed targets are preserved and reported as drift', () => {
+  const root = fixture();
+  command(root, 'sample');
+  const installed = path.join(root, '.agents/skills/source-command-sample/SKILL.md');
+  fs.mkdirSync(installed, { recursive: true });
+  assert.equal(sync({ root, handlerIds: new Set(), check: true }).drift, 1);
+  const reapplied = sync({ root, handlerIds: new Set(), apply: true });
+  assert.equal(byId(reapplied, 'command-sample').receipt.application_status, 'blocked_existing_preserved');
+  assert.equal(fs.lstatSync(installed).isDirectory(), true);
 });
 
 test('dangling projection index symlinks cannot redirect staging writes', () => {

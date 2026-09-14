@@ -286,6 +286,18 @@ test('malformed metadata and private absolute paths stage but never apply', () =
   assert.equal(fs.existsSync(path.join(root, '_dev/reports/analysis/codex-skill-projections/candidates/outward-inward-loop/SKILL.md')), false);
 });
 
+test('assignment-form home paths are rejected without retaining private bytes', () => {
+  const root = fixture();
+  const privatePath = ['', 'home', 'private-operator', 'workspace'].join('/');
+  skill(root, 'ticktock', `WORKDIR=${privatePath}\n`);
+  const result = sync({ root, handlerIds: new Set(), apply: true });
+  const candidate = byId(result, 'direct-ticktock');
+  assert.equal(candidate.receipt.semantic_review_state, 'private_path_rejected');
+  assert.equal(candidate.receipt.source_sha256, null);
+  assert.equal(fs.existsSync(path.join(root, '.agents/skills/ticktock/SKILL.md')), false);
+  assert.doesNotMatch(JSON.stringify(candidate.receipt), /private-operator/);
+});
+
 test('check reports stale installed targets whose candidates are now blocked', () => {
   const root = fixture();
   skill(root, 'ticktock');
@@ -318,6 +330,23 @@ test('candidate-only staging preserves managed-target history for later orphan c
   assert.ok(sync({ root, handlerIds: new Set(), check: true }).drift > 0);
   const ledger = JSON.parse(fs.readFileSync(path.join(root, '_dev/reports/analysis/codex-skill-projections/managed-targets.json'), 'utf8'));
   assert.deepEqual(ledger.targets, ['.agents/skills/source-command-sample/SKILL.md']);
+});
+
+test('candidate-only staging restores ledger entries from prior application receipts', () => {
+  const root = fixture();
+  const source = command(root, 'sample');
+  command(root, 'keeper');
+  const applied = sync({ root, handlerIds: new Set(), apply: true });
+  const ledgerPath = path.join(applied.candidateDir, 'managed-targets.json');
+  const ledger = JSON.parse(fs.readFileSync(ledgerPath, 'utf8'));
+  ledger.targets = ledger.targets.filter((target) => !target.includes('source-command-sample'));
+  fs.writeFileSync(ledgerPath, `${JSON.stringify(ledger, null, 2)}\n`);
+  sync({ root, handlerIds: new Set() });
+  const repaired = JSON.parse(fs.readFileSync(ledgerPath, 'utf8'));
+  assert.equal(repaired.targets.includes('.agents/skills/source-command-sample/SKILL.md'), true);
+  fs.unlinkSync(source);
+  sync({ root, handlerIds: new Set() });
+  assert.ok(sync({ root, handlerIds: new Set(), check: true }).drift > 0);
 });
 
 test('check reports missing or stale staged projection evidence', () => {
@@ -495,18 +524,17 @@ test('candidate staging refuses repository and target directory deletion', () =>
   assert.equal(fs.readFileSync(externalReceipt, 'utf8'), 'preserve\n');
 });
 
-test('candidate staging writes through the validated resolved directory', () => {
+test('candidate staging rejects symlinked directories before cleanup', () => {
   const root = fixture();
   command(root, 'sample');
   const configured = path.join(root, '_dev/reports/analysis/codex-skill-projections');
-  const resolvedLane = path.join(configured, 'resolved-lane');
-  const linkedLane = path.join(configured, 'linked-lane');
-  fs.mkdirSync(resolvedLane, { recursive: true });
-  fs.symlinkSync(resolvedLane, linkedLane);
-  const result = sync({ root, handlerIds: new Set(), candidateDir: linkedLane });
-  assert.equal(result.candidateDir, fs.realpathSync(resolvedLane));
-  assert.equal(fs.existsSync(path.join(resolvedLane, 'projection-index.json')), true);
-  assert.equal(fs.lstatSync(linkedLane).isSymbolicLink(), true);
+  const victim = path.join(root, '_dev/reports/analysis/victim');
+  const candidateSentinel = write(root, '_dev/reports/analysis/victim/candidates/keep.txt', 'keep candidate\n');
+  const receiptSentinel = write(root, '_dev/reports/analysis/victim/receipts/keep.txt', 'keep receipt\n');
+  fs.symlinkSync(victim, configured);
+  assert.throws(() => sync({ root, handlerIds: new Set() }), /Refusing symbolic-link candidate directory component/);
+  assert.equal(fs.readFileSync(candidateSentinel, 'utf8'), 'keep candidate\n');
+  assert.equal(fs.readFileSync(receiptSentinel, 'utf8'), 'keep receipt\n');
 });
 
 test('dangling destination symlinks cannot redirect applied writes', () => {

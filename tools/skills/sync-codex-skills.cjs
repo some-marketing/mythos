@@ -242,6 +242,22 @@ function validateTargetRoot(root, targetRoot) {
 }
 
 function validateCandidateDir(root, targetRoot, candidateDir, configuredCandidateRoot) {
+  const lexicalRoot = path.resolve(root);
+  const lexicalCandidate = path.resolve(candidateDir);
+  const lexicalConfigured = path.resolve(configuredCandidateRoot);
+  if (!isWithin(lexicalRoot, lexicalConfigured)) throw new Error(`Unsafe configured candidate directory outside repository: ${configuredCandidateRoot}`);
+  if (lexicalCandidate !== lexicalConfigured && !isWithin(lexicalConfigured, lexicalCandidate)) {
+    throw new Error(`Unsafe candidate directory outside configured projection root: ${candidateDir}`);
+  }
+  let cursor = lexicalCandidate;
+  while (cursor !== lexicalRoot) {
+    try {
+      if (fs.lstatSync(cursor).isSymbolicLink()) throw new Error(`Refusing symbolic-link candidate directory component: ${cursor}`);
+    } catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+    }
+    cursor = path.dirname(cursor);
+  }
   const realRoot = resolvedPath(root);
   const realTarget = resolvedPath(targetRoot);
   const realCandidate = resolvedPath(candidateDir);
@@ -388,7 +404,7 @@ function bundledResources(sourcePath) {
 }
 
 function containsPrivateAbsolutePath(bytes) {
-  return /(?:^|[\s('"`])\/(?:Users|home)\/[^/\s]+\//m.test(String(bytes));
+  return /\/(?:Users|home)\/[^/\s]+\//m.test(String(bytes));
 }
 
 function containsCredentialMaterial(bytes) {
@@ -711,7 +727,6 @@ function loadManagedTargets(candidateDir, generatorId) {
     }
     for (const target of ledger.targets) managed.add(validateManagedTarget(target));
   }
-  if (hasLedger) return managed;
   const receiptsDir = path.join(candidateDir, 'receipts');
   if (!fs.existsSync(receiptsDir)) return managed;
   const receiptMetadata = fs.lstatSync(receiptsDir);

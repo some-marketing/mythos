@@ -151,7 +151,8 @@ test('canonical command identity is keyed by filename and mismatches never repla
   assert.equal(byId(result, 'command-alpha').receipt.semantic_review_state, 'reviewed_safe');
   const mismatch = byId(result, 'command-beta');
   assert.equal(mismatch.receipt.application_status, 'blocked_malformed');
-  assert.match(mismatch.receipt.detail, /canonical id mismatch.*beta.*alpha/);
+  assert.equal(mismatch.receipt.detail, 'canonical id mismatch for filename "beta"');
+  assert.doesNotMatch(mismatch.receipt.detail, /alpha/);
   assert.equal(result.candidates.filter((candidate) => candidate.id === 'command-alpha').length, 1);
 });
 
@@ -166,10 +167,12 @@ test('canonical JSON parse errors are sanitized before entering receipts', () =>
 
 test('unsafe canonical and alias IDs cannot construct projection output paths', () => {
   const root = fixture();
-  write(root, 'instructions/canonical/commands/safe.yaml', `${JSON.stringify({ id: '../escape', description: 'unsafe', mode: 'REVIEW_ONLY' }, null, 2)}\n`);
+  const privateId = ['', 'Users', 'private-operator', 'escape'].join('/');
+  write(root, 'instructions/canonical/commands/safe.yaml', `${JSON.stringify({ id: privateId, description: 'unsafe', mode: 'REVIEW_ONLY' }, null, 2)}\n`);
   const malformed = byId(buildCandidates({ root, handlerIds: new Set() }), 'command-safe');
   assert.equal(malformed.receipt.application_status, 'blocked_malformed');
-  assert.match(malformed.receipt.detail, /invalid canonical id/);
+  assert.equal(malformed.receipt.detail, 'invalid canonical id for filename "safe"');
+  assert.doesNotMatch(JSON.stringify(malformed.receipt), /private-operator/);
 
   const aliases = { aliases: [{ id: 'x/../../../../sentinel', target: 'safe' }] };
   assert.throws(() => sync({ root, handlerIds: new Set(), aliasRegistry: aliases }), /Invalid alias id/);

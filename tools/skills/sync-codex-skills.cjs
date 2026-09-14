@@ -145,9 +145,9 @@ function loadCanonicalCommands(root, config) {
     }
     const declaredId = spec.id == null ? filenameId : String(spec.id).trim();
     const malformed = !SAFE_ID_PATTERN.test(declaredId)
-      ? `invalid canonical id: ${JSON.stringify(declaredId)}`
+      ? `invalid canonical id for filename ${JSON.stringify(filenameId)}`
       : declaredId !== filenameId
-        ? `canonical id mismatch: filename ${JSON.stringify(filenameId)} declares ${JSON.stringify(declaredId)}`
+        ? `canonical id mismatch for filename ${JSON.stringify(filenameId)}`
         : null;
     commands.set(filenameId, { spec, sourcePath, filenameId, declaredId, malformed });
   }

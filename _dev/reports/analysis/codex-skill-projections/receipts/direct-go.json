@@ -7,5 +7,7 @@
   "semantic_review_state": "reviewed_safe",
   "target_exact_path": ".agents/skills/go/SKILL.md",
   "collision_state": "clear",
-  "application_status": "already_aligned"
+  "application_status": "already_aligned",
+  "resource_manifest": [],
+  "package_sha256": "277977c6bfd97990f4f137fda6e1d6e49b3880d455c13e5416cfe7a252a2edec"
 }

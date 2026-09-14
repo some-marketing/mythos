@@ -7,5 +7,7 @@
   "semantic_review_state": "pending_review",
   "target_exact_path": ".agents/skills/guild-wordpress-qa-qa-locator-correction/SKILL.md",
   "collision_state": "clear",
-  "application_status": "candidate"
+  "application_status": "candidate",
+  "resource_manifest": [],
+  "package_sha256": "b027a69e954e41cdb78f1fac4391853f5b0cb35e0d3b9e2db28e2b8d50c25d44"
 }

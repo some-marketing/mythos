@@ -4,7 +4,7 @@ Refreshed under the approved parity amendment at `2026-09-14T18:51:57Z` in the d
 
 ## Mechanical results
 
-- Combined projector, lifecycle, and alias regressions: 30 passed, 0 failed.
+- Combined projector, lifecycle, and alias regressions: 31 passed, 0 failed.
 - `node tools/skills/sync-codex-skills.cjs --check`: aligned.
 - Pinned Codex `quick_validate.py`, using the repository PyYAML environment: 131 of 131 applied packages valid; 176 of 176 top-level staged candidate packages valid. Nested child skills are excluded from parent resources, so the staged tree contains exactly 176 independently projected `SKILL.md` files.
 - Private-path and obvious-secret-pattern scan over applied and staged candidate trees: no matches.
@@ -30,7 +30,7 @@ The first package-validation attempt used a Python interpreter without PyYAML an
 - 2 direct project skills blocked `ABSENT / missing_source`: `meditate` and `outward-inward-loop`; `ticktock` is additionally blocked `ABSENT / dependency_unavailable` because its mandatory TOCK phase requires `meditate`.
 - 9 aliases attached as target metadata: 8 `ADVISORY`, 1 handler-backed `BLOCKING`; `/tt` is blocked `ABSENT / target_unavailable`, and no alias body was generated.
 - 45 framework helpers staged `ADVISORY / pending_review`; none applied.
-- 189 evidence receipts emitted; no collisions and no unclassified `UNKNOWN` projection was applied.
+- 189 evidence receipts emitted; bundled-resource packages carry deterministic path/hash manifests and complete-package hashes. No collisions and no unclassified `UNKNOWN` projection was applied.
 
 ## Live Codex result
 
@@ -38,7 +38,7 @@ Fresh `codex exec --ephemeral --sandbox read-only` confirmed that `go`, `source-
 
 ## Distinct review
 
-Claude and Gemini reviewed the implementation and the protected parity amendment. The first Cloud Codex PR review led to candidate-path hardening, typed workflow preservation, resource reconciliation, lifecycle staging isolation, and correction of the instruction alias loader/renderer. The second Cloud Codex review identified two further path-identity gaps: unvalidated candidate IDs and filename/internal canonical-ID conflation. Both are repaired with slug validation, filename-keyed command loading, mismatch rejection, contained-write checks, and regressions. The third Cloud Codex review found that `ticktock` remained exposed despite its mandatory `meditate` dependency being absent; dependency gating now keeps both `ticktock` and `/tt` unavailable. The fourth Cloud Codex review found literal blocking-command argument placeholders and nested child skills bundled as parent resources; blocking projections now require the actual invocation arguments, while nested skills project only through their own receipts. Gemini approved the earlier repaired tree. A remaining Claude block was tested directly and adjudicated: legacy aliases render correctly, and resolved-root plus strict-descendant checks satisfy the declared local CLI threat model. Final review synthesis: `convene-runs/20260914T185255Z-codex-skill-parity-final-code-review/synthesis.md`.
+Claude and Gemini reviewed the implementation and the protected parity amendment. The first Cloud Codex PR review led to candidate-path hardening, typed workflow preservation, resource reconciliation, lifecycle staging isolation, and correction of the instruction alias loader/renderer. The second Cloud Codex review identified two further path-identity gaps: unvalidated candidate IDs and filename/internal canonical-ID conflation. Both are repaired with slug validation, filename-keyed command loading, mismatch rejection, contained-write checks, and regressions. The third Cloud Codex review found that `ticktock` remained exposed despite its mandatory `meditate` dependency being absent; dependency gating now keeps both `ticktock` and `/tt` unavailable. The fourth Cloud Codex review found literal blocking-command argument placeholders and nested child skills bundled as parent resources; blocking projections now require the actual invocation arguments, while nested skills project only through their own receipts. The fifth Cloud Codex review found private rejected bytes still entering staging, raw malformed lines entering receipts, and incomplete resource hashing; rejected packages now retain only sanitized receipt metadata, parse errors expose line numbers only, and package evidence covers every resource path and hash. Gemini approved the earlier repaired tree. A remaining Claude block was tested directly and adjudicated: legacy aliases render correctly, and resolved-root plus strict-descendant checks satisfy the declared local CLI threat model. Final review synthesis: `convene-runs/20260914T185255Z-codex-skill-parity-final-code-review/synthesis.md`.
 
 ## Falsifiers and residuals
 

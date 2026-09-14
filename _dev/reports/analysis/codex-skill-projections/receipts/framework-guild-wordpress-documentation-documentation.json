@@ -7,5 +7,12 @@
   "semantic_review_state": "pending_review",
   "target_exact_path": ".agents/skills/guild-wordpress-documentation-documentation/SKILL.md",
   "collision_state": "clear",
-  "application_status": "candidate"
+  "application_status": "candidate",
+  "resource_manifest": [
+    {
+      "path": "references/ANNOTATION_STYLE.md",
+      "sha256": "343b7dceb8913243834dfb7ae6cfbfccebdd1f8c6b407a61e221331001566fa1"
+    }
+  ],
+  "package_sha256": "d8afe59f6cce59b8860f977dbb814f6ea925fb3ba2194c2f5d1044a081d06b7e"
 }

@@ -7,5 +7,7 @@
   "semantic_review_state": "pending_review",
   "target_exact_path": ".agents/skills/guild-wordpress-design-research-design-research-site-audit/SKILL.md",
   "collision_state": "clear",
-  "application_status": "candidate"
+  "application_status": "candidate",
+  "resource_manifest": [],
+  "package_sha256": "e1f5078437a17e128e6360314914d8a1d364956ee1b0fc63b1b1ed2820ccfe30"
 }

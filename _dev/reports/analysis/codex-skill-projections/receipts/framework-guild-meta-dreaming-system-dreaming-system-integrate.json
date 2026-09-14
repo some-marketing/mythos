@@ -7,5 +7,7 @@
   "semantic_review_state": "pending_review",
   "target_exact_path": ".agents/skills/guild-meta-dreaming-system-dreaming-system-integrate/SKILL.md",
   "collision_state": "clear",
-  "application_status": "candidate"
+  "application_status": "candidate",
+  "resource_manifest": [],
+  "package_sha256": "aaf4d968a48e390c0b288f2a2c8b3153722e299329bddbe533a5c424edea0733"
 }

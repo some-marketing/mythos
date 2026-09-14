@@ -7,5 +7,7 @@
   "semantic_review_state": "pending_review",
   "target_exact_path": ".agents/skills/guild-deliverables-scope-verification-scope-verification/SKILL.md",
   "collision_state": "clear",
-  "application_status": "candidate"
+  "application_status": "candidate",
+  "resource_manifest": [],
+  "package_sha256": "bce3baaeeefe041bddbf8a0a973be3351dd9c059abe84cb9ecd97ded55a99105"
 }

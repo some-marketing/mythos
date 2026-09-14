@@ -1,6 +1,7 @@
 'use strict';
 
 const assert = require('node:assert/strict');
+const crypto = require('node:crypto');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
@@ -17,6 +18,10 @@ const {
 
 const PROJECT_ROOT = path.resolve(__dirname, '..', '..', '..');
 const ALLOWED_FRONTMATTER = new Set(['name', 'description', 'license', 'compatibility', 'metadata', 'allowed-tools']);
+
+function sha256ForTest(value) {
+  return crypto.createHash('sha256').update(value).digest('hex');
+}
 
 function write(root, rel, content) {
   const target = path.join(root, rel);
@@ -216,8 +221,21 @@ test('malformed metadata and private absolute paths stage but never apply', () =
   const result = sync({ root, handlerIds: new Set(), apply: true });
   assert.equal(byId(result, 'direct-ticktock').receipt.semantic_review_state, 'malformed');
   assert.equal(byId(result, 'direct-outward-inward-loop').receipt.semantic_review_state, 'private_path_rejected');
+  assert.equal(byId(result, 'direct-outward-inward-loop').receipt.source_sha256, null);
+  assert.equal(byId(result, 'direct-outward-inward-loop').receipt.package_sha256, null);
+  assert.deepEqual(byId(result, 'direct-outward-inward-loop').resources, []);
   assert.equal(fs.existsSync(path.join(root, '.agents/skills/ticktock/SKILL.md')), false);
   assert.equal(fs.existsSync(path.join(root, '.agents/skills/outward-inward-loop/SKILL.md')), false);
+  assert.equal(fs.existsSync(path.join(root, '_dev/reports/analysis/codex-skill-projections/candidates/outward-inward-loop/SKILL.md')), false);
+});
+
+test('malformed frontmatter receipts identify the line without copying its contents', () => {
+  const root = fixture();
+  const sensitiveLine = ['not-frontmatter', ['', 'Users', 'private', 'secret'].join('/')].join(' ');
+  write(root, '.claude/skills/ticktock/SKILL.md', `---\nname: ticktock\n${sensitiveLine}\ndescription: demo\n---\nbody\n`);
+  const candidate = byId(buildCandidates({ root, handlerIds: new Set() }), 'direct-ticktock');
+  assert.equal(candidate.receipt.detail, 'malformed frontmatter at line 2');
+  assert.doesNotMatch(JSON.stringify(candidate.receipt), /not-frontmatter|Users\/private\/secret/);
 });
 
 test('direct resources copy recursively and application remains additive-only', () => {
@@ -226,6 +244,10 @@ test('direct resources copy recursively and application remains additive-only', 
   write(root, '.claude/skills/ticktock/references/nested.md', 'evidence\n');
   const first = sync({ root, handlerIds: new Set(), apply: true });
   assert.equal(byId(first, 'direct-ticktock').receipt.application_status, 'applied_additive');
+  const evidence = byId(first, 'direct-ticktock').receipt;
+  assert.deepEqual(evidence.resource_manifest, [{ path: 'references/nested.md', sha256: sha256ForTest('evidence\n') }]);
+  assert.match(evidence.package_sha256, /^[a-f0-9]{64}$/);
+  const firstPackageHash = evidence.package_sha256;
   const resource = path.join(root, '.agents/skills/ticktock/references/nested.md');
   assert.equal(fs.readFileSync(resource, 'utf8'), 'evidence\n');
   fs.unlinkSync(resource);
@@ -242,6 +264,10 @@ test('direct resources copy recursively and application remains additive-only', 
   const second = sync({ root, handlerIds: new Set(), apply: true });
   assert.equal(byId(second, 'direct-ticktock').receipt.application_status, 'blocked_existing_preserved');
   assert.equal(fs.readFileSync(path.join(root, '.agents/skills/ticktock/SKILL.md'), 'utf8'), 'foreign\n');
+  fs.writeFileSync(path.join(root, '.claude/skills/ticktock/references/nested.md'), 'changed evidence\n');
+  const changed = byId(buildCandidates({ root, handlerIds: new Set() }), 'direct-ticktock').receipt;
+  assert.notEqual(changed.package_sha256, firstPackageHash);
+  assert.equal(changed.source_sha256, evidence.source_sha256);
 });
 
 test('candidate staging refuses repository and target directory deletion', () => {

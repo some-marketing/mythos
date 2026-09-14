@@ -7,5 +7,7 @@
   "semantic_review_state": "pending_review",
   "target_exact_path": ".agents/skills/guild-wordpress-livecanvas-rebuild-livecanvas-rebuild/SKILL.md",
   "collision_state": "clear",
-  "application_status": "candidate"
+  "application_status": "candidate",
+  "resource_manifest": [],
+  "package_sha256": "8cfd74c897640a842280963443b1358c09690cef2e518ba4f6fb1bc514e16292"
 }

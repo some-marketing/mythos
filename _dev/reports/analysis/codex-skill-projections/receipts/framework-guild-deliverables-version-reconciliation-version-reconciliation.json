@@ -7,5 +7,7 @@
   "semantic_review_state": "pending_review",
   "target_exact_path": ".agents/skills/guild-deliverables-version-reconciliation-version-reconciliation/SKILL.md",
   "collision_state": "clear",
-  "application_status": "candidate"
+  "application_status": "candidate",
+  "resource_manifest": [],
+  "package_sha256": "e0bfef0e66d10718dd60bcb3a73dccac295746ec62151d2e01f6462a983c7367"
 }

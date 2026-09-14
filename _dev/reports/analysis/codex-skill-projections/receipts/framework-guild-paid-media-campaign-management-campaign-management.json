@@ -7,5 +7,7 @@
   "semantic_review_state": "pending_review",
   "target_exact_path": ".agents/skills/guild-paid-media-campaign-management-campaign-management/SKILL.md",
   "collision_state": "clear",
-  "application_status": "candidate"
+  "application_status": "candidate",
+  "resource_manifest": [],
+  "package_sha256": "89956a28151bc743324e07ef60b7b5db71731e5f9e295831c06fd56acc39248d"
 }

@@ -87,7 +87,7 @@ function parseFrontmatter(text, sourcePath = '<memory>') {
     const match = lines[index].match(/^([A-Za-z0-9_-]+):(?:\s*(.*))?$/);
     if (!match) {
       if (!lines[index].trim()) continue;
-      return { ok: false, error: `malformed frontmatter line: ${lines[index]}`, sourcePath };
+      return { ok: false, error: `malformed frontmatter at line ${index + 1}`, sourcePath };
     }
     const key = match[1];
     let value = (match[2] || '').trim();
@@ -318,6 +318,23 @@ function receiptBase(config, sourcePath, sourceBytes, kind, capabilityTier, revi
   };
 }
 
+function attachPackageEvidence(receipt, sourceBytes, resources) {
+  const resourceManifest = resources
+    .map((resource) => ({ path: posix(resource.relativePath), sha256: sha256(resource.bytes) }))
+    .sort((a, b) => a.path.localeCompare(b.path));
+  receipt.resource_manifest = resourceManifest;
+  receipt.package_sha256 = sha256(Buffer.from(JSON.stringify({
+    source_sha256: sha256(sourceBytes),
+    resources: resourceManifest
+  })));
+}
+
+function redactRejectedPackage(receipt) {
+  receipt.source_sha256 = null;
+  receipt.resource_manifest = [];
+  receipt.package_sha256 = null;
+}
+
 function buildCandidates(options = {}) {
   const root = options.root || PROJECT_ROOT;
   const { adapter, config } = loadProjectionConfig(root);
@@ -368,13 +385,15 @@ function buildCandidates(options = {}) {
     const resources = bundledResources(sourcePath);
     const privateLeak = containsPrivateAbsolutePath(sourceBytes) || resources.some((item) => containsPrivateAbsolutePath(item.bytes));
     const receipt = receiptBase(config, sourceRel, sourceBytes, 'direct_system_skill', normalized.ok ? 'ADVISORY' : 'UNKNOWN', config.families.direct_system_skills.semantic_review_state, targetRel);
+    attachPackageEvidence(receipt, sourceBytes, resources);
     if (!normalized.ok || privateLeak) {
       receipt.capability_tier = 'UNKNOWN';
       receipt.semantic_review_state = privateLeak ? 'private_path_rejected' : 'malformed';
       receipt.application_status = 'blocked';
       receipt.detail = normalized.error || 'private absolute path detected';
     }
-    candidates.push({ id: `direct-${name}`, content: normalized.content || null, resources, receipt, targetRoot });
+    if (privateLeak) redactRejectedPackage(receipt);
+    candidates.push({ id: `direct-${name}`, content: privateLeak ? null : normalized.content || null, resources: privateLeak ? [] : resources, receipt, targetRoot });
   }
 
   const directCandidates = new Map(candidates
@@ -409,13 +428,15 @@ function buildCandidates(options = {}) {
     const resources = bundledResources(sourcePath);
     const privateLeak = containsPrivateAbsolutePath(sourceBytes) || resources.some((item) => containsPrivateAbsolutePath(item.bytes));
     const receipt = receiptBase(config, identity.rel, sourceBytes, 'framework_helper', rendered.ok ? 'ADVISORY' : 'UNKNOWN', config.families.framework_helpers.semantic_review_state, targetRel);
+    attachPackageEvidence(receipt, sourceBytes, resources);
     if (!rendered.ok || privateLeak) {
       receipt.capability_tier = 'UNKNOWN';
       receipt.semantic_review_state = privateLeak ? 'private_path_rejected' : 'malformed';
       receipt.application_status = 'blocked';
       receipt.detail = rendered.error || 'private absolute path detected';
     }
-    candidates.push({ id: `framework-${identity.slug}`, content: rendered.content || null, resources, receipt, targetRoot });
+    if (privateLeak) redactRejectedPackage(receipt);
+    candidates.push({ id: `framework-${identity.slug}`, content: privateLeak ? null : rendered.content || null, resources: privateLeak ? [] : resources, receipt, targetRoot });
   }
 
   for (const result of aliasResults) {

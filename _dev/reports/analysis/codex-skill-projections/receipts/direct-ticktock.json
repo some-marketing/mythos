@@ -8,5 +8,7 @@
   "target_exact_path": ".agents/skills/ticktock/SKILL.md",
   "collision_state": "clear",
   "application_status": "blocked_dependency",
+  "resource_manifest": [],
+  "package_sha256": "f5f6fe2970b86d246ed6ea4a3a3f050eb9ec905e21486eef7c1dfb351d5b3070",
   "detail": "required direct skill dependency unavailable: meditate"
 }

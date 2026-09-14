@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "c294de6cf142ce666c7078b90f16a34cad0775388fa99c381a091bba9367b97a",
+    "expected_tree_sha256": "1288fb0ad6be6269b7d55b8ec0c4932fbf0b99d04b5874f64cfe5d0350260af2",
     "expected_files": [
       {
         "path": ".agents/skills/go/SKILL.md",
@@ -2217,7 +2217,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-parity-remediation__verification.md",
-        "sha256": "ed0350e53dbb8c4942368f94a53b17ad8e4e1acc0f546228ab4b817fdfa3bb84",
+        "sha256": "2854d786584e2cbe12c8064270ee08abba8f6a545b7fa2dedec44ff26b115ec3",
         "mode": 420
       },
       {
@@ -3822,7 +3822,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/direct-go.json",
-        "sha256": "59193f61fd0ebda4794f8bae68a450f1a198cdb9d8d68a11f19c48c626af102a",
+        "sha256": "11fbbf160ba5eccca3bd496aa44e8b92480f1045281b902e6b8b50533f2dc222",
         "mode": 420
       },
       {
@@ -3837,232 +3837,232 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/direct-ticktock.json",
-        "sha256": "673eca9ade4acb86af429aa431022e68b3c1896c7a12e50421a53029f7fc1c6e",
+        "sha256": "35beeb155b5acc547d57bdd1d03029b8f20311d7ecd93c4458d921d3ed8f38ca",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-deliverables-presentation-review-presentation-review.json",
-        "sha256": "9391e12f79da4e414de578907e0d7aa5ce9370538e4e3b04cc20623c7dbad36c",
+        "sha256": "78f176fc554fde0baf79783a54435ff3cb6208caf863f510b0bbfe0bf07e7de7",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-deliverables-scope-verification-scope-verification.json",
-        "sha256": "bf90ca1429713cfcd92d83100d55b83c897a76594cefa6488811d70331efe18f",
+        "sha256": "ee5c9378a20ff3bc2b079c5db0d6c757064348a858d366e7f51bada2e3d2c388",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-deliverables-version-reconciliation-version-reconciliation.json",
-        "sha256": "bab4592ca7f82d3eb2d4b440d8421f4b6cdc6cc3a42d4d15c3c08cf11be212f0",
+        "sha256": "6ce205fa8df987d4f49449bed6a47e8f727af2e91513ac631d5a7a098e11a2c8",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-meta-dreaming-system-dreaming-system-integrate.json",
-        "sha256": "c1d7fc3dd2bce2f2bd7f6d8e0bcebcc6ef8e7d2c7ee73e5c432fcf15e154505b",
+        "sha256": "b1633494ef48aa622a1271fe58f1a14aafe27a5e4287a66f72bf10c6adbcdd48",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-paid-media-ad-creative-ad-creative.json",
-        "sha256": "af27e327a299740fea360a8ee09ca977f7d15a66f4c17fd24e15ffa65bcce3e5",
+        "sha256": "a30e016f800d2bdb409479639acf1b8130b0a0308c56f8ded7ea1f312b65c9bf",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-paid-media-campaign-management-campaign-management.json",
-        "sha256": "eeb2ec43bb259caf1ebcba1e9cc26c6a675cc89a9498683036e28f5f6b9a90ce",
+        "sha256": "b90ecce0a49fd3dbdea41db48cb9a6320450d22835b46289b7d201e3bd8ee3d4",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-paid-media-google-ads-search-campaign-build-googl-d570329c.json",
-        "sha256": "980a0e6ff5ffcce20b9faee67edc3c07198b861b53e50c32a611c49bac1f1173",
+        "sha256": "6a0cfdfbd429f5cb0591bd8350e40ae74ea31ac5852ce4b060da8e67eb3a19dc",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-paid-media-meta-creative-iteration-meta-creative-iteration.json",
-        "sha256": "0d7f1a0750e7bf7fb25be319d76dd61a324d45cb1472b8178dcc43d6194a27ea",
+        "sha256": "0ce96b56d444fb18d4919fd2e14898f0e11a687375e361da2a93cd0ca6ed53ea",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-project-management-dart-collaboration-dart-collaboration.json",
-        "sha256": "f1f495f8b849e3827e61981851124d8ffd305276c22f2db479779196e2fb4e1b",
+        "sha256": "520ffe2c412b08171ec261df76131d7acd5097673be8cd952efda61b21966511",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-project-management-feedback-to-tasks-feedback-to-tasks.json",
-        "sha256": "d7201c74d89c8f5ea48320b1e3b54bb76f751909f18392d8d48e8e1915486dc3",
+        "sha256": "9d9c6542f8f79a4f4a58d1194a60014f25d050b4a34d0b99f80fac0707963295",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-research-business-identity-verification-business-938fa203.json",
-        "sha256": "09b56825e1a4d4e493cde4fbd06f3a797393ddd733135d7b7abbad8ec2a931df",
+        "sha256": "e0d62046dee935533cb44884ce6c51c4710ea345fa2aad471b1bf669d9de2d1b",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-research-contractor-credential-review-contractor-2e585fa1.json",
-        "sha256": "fddbace979368237343876682d060a3d08880c826d30c9fa7c27b92b875b94b1",
+        "sha256": "d73011b854bfe38ffebd6ebcc7e314c4c89263f7e5e1348b607db22e4fb41194",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-research-osint-discovery-osint-discovery.json",
-        "sha256": "fee3a693af5e3672de3f70ed4207ed7dd1518b5e301f5bdec4afea46c1f5a19e",
+        "sha256": "45187e4e32ea52ab15bdffe43b1f7a6fa4605c6d5a1ed4628e7caba5808131c0",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-analytics-tracking-analytics-tracking.json",
-        "sha256": "926e3d0c3a603f6f62dceff31e160ed93d5fbb2549eef7158918b3845ae5ccde",
+        "sha256": "2d86e9e55e9ef1600a123eb554ceb6c88509b1f6aad26341a03f48e41e8fa93f",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-content-editing-content-editing.json",
-        "sha256": "07f144eb7238a9c63974b55530e9a8c17a5fe5fa5536369e99941c8bd1dc471e",
+        "sha256": "77a9ba7e125d76f2a52adebc858fd47c32eafbccaadc50b0cdb707ead87fefb6",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-design-mockup-validation-design-mockup-023c1aed.json",
-        "sha256": "40d802c3324241f87f370924ac09f9dc012271384b87606596788749cbfd2a5a",
+        "sha256": "19fff29f7d0ed74da9b6636340947163376b034c9987abd9fe93f308439ef3d6",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-design-research-design-research-cross-ai-handoff.json",
-        "sha256": "4d46c1ec3ae8336b2d40bca87bb5a62c42d80bfda245ff3ea3fa0a5cb7cf8341",
+        "sha256": "7f3134ca394fbffbb9bedfd882b627645e0d8871538b98f77f26e7c364c9e74a",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-design-research-design-research-design-mockup.json",
-        "sha256": "934cc9f0d081a36a7992ea580f5e9fa231db8f378764d90487925d4b3fd55f57",
+        "sha256": "a67a97bc974752de489505674fb6a063c02eb1c3538255fac03dcceb1e01154f",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-design-research-design-research-mockup-brief.json",
-        "sha256": "46e162ed767210794142a279e4e261c5f2edd264e8e8ff3600124718392bcfd7",
+        "sha256": "9ceb460b7f87fff246f59ac099a04f86abe92b25af3fb7b6718e2eec6710f461",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-design-research-design-research-site-audit.json",
-        "sha256": "00c13ceb965354abcd7b5f496aa680489bc76d47b85e5646a785ca32f279e7ce",
+        "sha256": "a2b84e6801e48cc4fb382c12812e8f6365979414c815fe5086bc4a2ef42d5418",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-design-research-design-research-visual-refine.json",
-        "sha256": "00fcfd51f5998a7a528235b95d688eb0d583da6cf14571c0e74dea2670b9f3f7",
+        "sha256": "6efc34a3765fa006aad6d35770ef20725dde6dbe66b5eb197a4e1191b301fada",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-design-research-design-research.json",
-        "sha256": "88ca5089b3eca427fc07ffe96fb54d9fa19229183604ea067573f72f1facf1f0",
+        "sha256": "be8e3da8d8f5fb5f189de0a04fa41692351e2e8482ae84e4e064e3815a32b212",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-documentation-documentation.json",
-        "sha256": "6dbfaeeb7d06cff47b466a57d4b0699063b27eab8c200d2313944caafc8e09ae",
+        "sha256": "d0ca30ddc9b8153c9a0dece5fd5cdf7682ee60e40bef4f7f4a542225d8a1e76e",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-livecanvas-onepager-build-livecanvas-on-036f97c9.json",
-        "sha256": "89ff2642b3f7b633be4ffb8dd14c41e6a03e362303fe3894b79d6d55eca11520",
+        "sha256": "1ae38440ff0a57bb0af7173af0cfe50831237ed045a8ded0c80808ece54ae337",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-livecanvas-rebuild-livecanvas-rebuild.json",
-        "sha256": "a22523f32f9035be400cfa6bf6ba970c7a2f31eb48258d5b920f14d01a45d455",
+        "sha256": "0e4c0deb94c521ee7239b0a3bf95fed93eaee7859f4b47c75f097ec35f0ba514",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-page-cro-page-cro.json",
-        "sha256": "c54248fc39e7a0938cdf2550964a1977ec516a52d36d5b43264eb20ee88a3867",
+        "sha256": "7618047a87d3d1eff2daccbf67e9f8debc6045b255841ede59525345305124b6",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-append-to-dev-bundle.json",
-        "sha256": "b031991fe56096cf17a0fae089b1f293d056a1f46f87ceb860fd013c8e209f64",
+        "sha256": "9517f9ffd3a60026afd28c6c8b01f6af0de0f025a569226c1bee35ee331eb1bc",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-changelog-capture.json",
-        "sha256": "6000d378344331ee1bb2d26ada261d7d600162a6ab795b2d9a8dbff4af42f6dd",
+        "sha256": "eb9142382b544219a09bd20bcca8c123265ef0ca469fc999ae65756fa5d5ca0d",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-compile-dev-bundle.json",
-        "sha256": "0d12fdb7185453437280a00d06312d945e846a10a86f2fbeda79e4160683d525",
+        "sha256": "eefe964a9b9a81cddb7c042481e4ad9f0bf96599ddb0ad5a2f42a2501a8d2525",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-cross-run-anomaly.json",
-        "sha256": "bb91df15d7eaf78cf0d05a38a4b65f522990a12200521d9f7ef81e92046ebc24",
+        "sha256": "5f2c7dd318e0c21042da60dd1296d64dc28e5fb4b2ab35f45044e5660052021e",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-deep-pipeline-analysis.json",
-        "sha256": "811a15e121b05199e61e998efb9dd4f42c56dfedbd54f21e10d07c3034c07145",
+        "sha256": "631aceb1115c1f16d2e92d0866b42309b8d14e047ba129e422d81ff3c16ccb0a",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-dev-packet.json",
-        "sha256": "e56e3ea3c5bc83b11d27f1659cce19c40df0eaf0cc66c68bf0b6938d42c9c2d2",
+        "sha256": "849a6c64f1e38485e97f60fca8e745590b49dbdd41cd2d50b41fa046db81ff63",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-expectation-updater.json",
-        "sha256": "9c416c3ad894a041e1d6df11301572b56f1e1e2ede20249ea3086ffab49b7f09",
+        "sha256": "190b8a947597bf11ba863d5d1236a3975a11f906ff437460d2af1b404681c595",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-implement-fixes.json",
-        "sha256": "e80c069ac6b7e5d372eb61026c61336db94ec7abb9137cfa5118fd11dd755d09",
+        "sha256": "cf304c6a79d1472f2919d009d3a3681cb416d1976d26f2bb157135182f8011a4",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-intake-scaffold.json",
-        "sha256": "ecfb6ab6884cf9973b8211300454352131b35960452efe983edf5e86eec55522",
+        "sha256": "cc415790476a296dc882df4c1a7b39cfde98de627c26704d29a346fb9ca22838",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-iterate-until-pass.json",
-        "sha256": "e85532eb89361274fa33d9a8e8f50f2e852e3ff7c6c829aea69c2a06c2656380",
+        "sha256": "d1772c08afd025bc944882426c12e7b5f285836ead73634d0bf36c77b41e90bc",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-locator-correction.json",
-        "sha256": "510f3e8cfcd116ba4b858861c2968133907af7c41fc9c8d065251cc22de0df0e",
+        "sha256": "4dc4da09ea96a2e43942a9fc82023250396e8be37485acbfa5768fbc51d57c22",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-mcp-walkthrough.json",
-        "sha256": "8ef9d3c5cadbf0255fabef0a2850398be59f86633c723e058abea6a2ace4e84e",
+        "sha256": "a5110ffb8939614431dcf47f0aacccb65b28bc0a6d4377e5c1d7bd7bbf9d72ea",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-navigation-cleanup.json",
-        "sha256": "c46deafca7c0ab9d072138220dc4921822d9b691b0dd5974c3d2f280ca51ffc5",
+        "sha256": "b9a8dd6fd69f9efcea062cdcab71d47d6b838c191d4d34eca9935eb3020abecb",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-parallel-run.json",
-        "sha256": "9e1722a04794ec779da79ffba285de58e9f415ef4d0e2fecb67b40a2fff29852",
+        "sha256": "3bd8d1626059701349faff19040372a51f796a9f4bf5d91b08fd1908e066e542",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-report-handoff.json",
-        "sha256": "e0117a227695dc3ee7834185091593241c4d33ea504d0e154f1adb5089843d37",
+        "sha256": "410f8ab7ea31696e89dd593dbb0f36de5e39c0af1a49fbe604d1723f3aee5132",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-rerun-verify.json",
-        "sha256": "737f9db9edafe3c370138dc3e0c69adfc6a8ce825b3a70634af31dc00f8d50bb",
+        "sha256": "d57312bc666b596de64776bc0c37bc6626ba786d733d504ec40eaffea7fde469",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-update-framework-artifacts.json",
-        "sha256": "66ee18222378b50c3c395aafac48c8d69c70479322a90a860735eef8b9274dff",
+        "sha256": "2a45d46ea678373e1d794aedfe89f1ef82062662e3770b9c102e5d714c2cb4e0",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-seo-audit-seo-audit.json",
-        "sha256": "fafc6920c9f1062113ba31b9f3a5c4650ecfa6cb7dc545b9f53110403ee896bf",
+        "sha256": "e63c57fdb8b74848f97d70c02fa7970b127c136f69b219a67dc25ab23457b1d1",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-seo-validation-seo-validation.json",
-        "sha256": "40692fbc0a489f47f83f602c1b8dfaba20091d56453fa34965e7acc4196c0584",
+        "sha256": "eb5d00ebf962494bedddc86cbc0961a8f3d4a57e8a0a2a19be0e2e597d66481a",
         "mode": 420
       },
       {
@@ -8767,7 +8767,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "b6df58f82d27b5ad38161557fe49151d3ee4daed4faa4f57c9a23271d54b4e98",
+        "sha256": "8d4bfc2d84d5041af30b9d355e277b5e1a130110bc10d30096ed4a19aaa32d39",
         "mode": 420
       },
       {
@@ -15142,7 +15142,7 @@
       },
       {
         "path": "tools/skills/__tests__/sync-codex-skills.test.cjs",
-        "sha256": "fbf0cc7db48ca8fe464b75f82a1a6175bf1005cd12899677d818de6991b4f4eb",
+        "sha256": "7b47beb7cbaaf7d0207cbc6fcc3b2947190fa39f8801e8e3c741a77d4ee318da",
         "mode": 420
       },
       {
@@ -15152,7 +15152,7 @@
       },
       {
         "path": "tools/skills/sync-codex-skills.cjs",
-        "sha256": "10f4bc9ad6f577067e11729108c229a2baed84148547d890e927c54c59b80e9e",
+        "sha256": "e630661deedbb4d0d4703e77de6033b1e58e8c0c63a7e537dd781168775641c7",
         "mode": 420
       },
       {
@@ -16879,7 +16879,7 @@
     "package_script_count": 205,
     "command_alias_registry_sha256": "9bbc50aa1343a5502258e0e067eca0bb4cf4ea9f560abc5b998247a0e04b9901",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "b6df58f82d27b5ad38161557fe49151d3ee4daed4faa4f57c9a23271d54b4e98",
+    "graph_sha256": "8d4bfc2d84d5041af30b9d355e277b5e1a130110bc10d30096ed4a19aaa32d39",
     "graph_nodes": 4091,
     "graph_edges": 2899
   },

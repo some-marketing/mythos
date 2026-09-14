@@ -281,7 +281,7 @@ test('check reports stale installed targets whose candidates are now blocked', (
   assert.equal(fs.existsSync(path.join(root, '.agents/skills/ticktock/SKILL.md')), true);
   write(root, '.claude/skills/ticktock/SKILL.md', 'malformed source\n');
   const checked = sync({ root, handlerIds: new Set(), check: true });
-  assert.equal(checked.drift, 1);
+  assert.ok(checked.drift > 0);
   assert.equal(byId(checked, 'direct-ticktock').receipt.semantic_review_state, 'malformed');
 });
 
@@ -292,7 +292,7 @@ test('check reports orphaned managed targets whose source candidates disappeared
   assert.equal(fs.existsSync(path.join(root, '.agents/skills/source-command-sample/SKILL.md')), true);
   fs.unlinkSync(source);
   const checked = sync({ root, handlerIds: new Set(), check: true });
-  assert.equal(checked.drift, 1);
+  assert.ok(checked.drift > 0);
   assert.equal(checked.candidates.some((candidate) => candidate.id === 'command-sample'), false);
 });
 
@@ -303,9 +303,33 @@ test('candidate-only staging preserves managed-target history for later orphan c
   fs.unlinkSync(path.join(root, '_dev/reports/analysis/codex-skill-projections/managed-targets.json'));
   sync({ root, handlerIds: new Set() });
   fs.unlinkSync(source);
-  assert.equal(sync({ root, handlerIds: new Set(), check: true }).drift, 1);
+  assert.ok(sync({ root, handlerIds: new Set(), check: true }).drift > 0);
   const ledger = JSON.parse(fs.readFileSync(path.join(root, '_dev/reports/analysis/codex-skill-projections/managed-targets.json'), 'utf8'));
   assert.deepEqual(ledger.targets, ['.agents/skills/source-command-sample/SKILL.md']);
+});
+
+test('check reports missing or stale staged projection evidence', () => {
+  const root = fixture();
+  command(root, 'sample');
+  const staged = sync({ root, handlerIds: new Set(), apply: true });
+  fs.unlinkSync(path.join(staged.candidateDir, 'projection-index.json'));
+  assert.ok(sync({ root, handlerIds: new Set(), check: true }).drift > 0);
+  sync({ root, handlerIds: new Set(), apply: true });
+  fs.writeFileSync(path.join(staged.candidateDir, 'receipts/command-sample.json'), '{}\n');
+  assert.ok(sync({ root, handlerIds: new Set(), check: true }).drift > 0);
+  sync({ root, handlerIds: new Set(), apply: true });
+  fs.writeFileSync(path.join(staged.candidateDir, 'candidates/source-command-sample/SKILL.md'), 'stale\n');
+  assert.ok(sync({ root, handlerIds: new Set(), check: true }).drift > 0);
+});
+
+test('candidate-only staging repairs malformed disposable receipts', () => {
+  const root = fixture();
+  command(root, 'sample');
+  const applied = sync({ root, handlerIds: new Set(), apply: true });
+  const receiptPath = path.join(applied.candidateDir, 'receipts/command-sample.json');
+  fs.writeFileSync(receiptPath, '{broken\n');
+  assert.doesNotThrow(() => sync({ root, handlerIds: new Set() }));
+  assert.equal(JSON.parse(fs.readFileSync(receiptPath, 'utf8')).projection_kind, 'canonical_command');
 });
 
 test('malformed frontmatter receipts identify the line without copying its contents', () => {
@@ -332,7 +356,7 @@ test('direct resources copy recursively and application remains additive-only', 
   assert.equal(fs.readFileSync(resource, 'utf8'), 'evidence\n');
   assert.equal(fs.statSync(resource).mode & 0o777, 0o755);
   fs.unlinkSync(resource);
-  assert.equal(sync({ root, handlerIds: new Set(), check: true }).drift, 1);
+  assert.ok(sync({ root, handlerIds: new Set(), check: true }).drift > 0);
   const repaired = sync({ root, handlerIds: new Set(), apply: true });
   assert.equal(byId(repaired, 'direct-ticktock').receipt.application_status, 'applied_additive');
   assert.equal(fs.readFileSync(resource, 'utf8'), 'evidence\n');
@@ -364,7 +388,7 @@ test('removed bundled resources remain preserved but are reported as package dri
   sync({ root, handlerIds: new Set(), apply: true });
   const installedResource = path.join(root, '.agents/skills/ticktock/references/old.md');
   fs.unlinkSync(sourceResource);
-  assert.equal(sync({ root, handlerIds: new Set(), check: true }).drift, 1);
+  assert.ok(sync({ root, handlerIds: new Set(), check: true }).drift > 0);
   const reapplied = sync({ root, handlerIds: new Set(), apply: true });
   assert.equal(byId(reapplied, 'direct-ticktock').receipt.application_status, 'blocked_existing_preserved');
   assert.equal(fs.readFileSync(installedResource, 'utf8'), 'old evidence\n');
@@ -468,7 +492,7 @@ test('non-file installed targets are preserved and reported as drift', () => {
   command(root, 'sample');
   const installed = path.join(root, '.agents/skills/source-command-sample/SKILL.md');
   fs.mkdirSync(installed, { recursive: true });
-  assert.equal(sync({ root, handlerIds: new Set(), check: true }).drift, 1);
+  assert.ok(sync({ root, handlerIds: new Set(), check: true }).drift > 0);
   const reapplied = sync({ root, handlerIds: new Set(), apply: true });
   assert.equal(byId(reapplied, 'command-sample').receipt.application_status, 'blocked_existing_preserved');
   assert.equal(fs.lstatSync(installed).isDirectory(), true);

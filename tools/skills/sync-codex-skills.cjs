@@ -605,9 +605,7 @@ function writeCandidate(candidateDir, candidate) {
   fs.mkdirSync(path.dirname(receiptPath), { recursive: true });
   fs.writeFileSync(receiptPath, `${JSON.stringify(candidate.receipt, null, 2)}\n`);
   if (!candidate.content) return;
-  const targetRel = candidate.receipt.collision_state === 'collision'
-    ? path.join(candidate.id, 'SKILL.md')
-    : candidate.receipt.target_exact_path.replace(/^\.agents\/skills\//, '');
+  const targetRel = stagedCandidateRelativePath(candidate);
   const skillPath = safeOutputPath(candidateDir, 'candidates', targetRel);
   fs.mkdirSync(path.dirname(skillPath), { recursive: true });
   fs.writeFileSync(skillPath, candidate.content);
@@ -617,6 +615,12 @@ function writeCandidate(candidateDir, candidate) {
     fs.writeFileSync(resourcePath, resource.bytes);
     fs.chmodSync(resourcePath, resource.mode);
   }
+}
+
+function stagedCandidateRelativePath(candidate) {
+  return candidate.receipt.collision_state === 'collision'
+    ? path.join(candidate.id, 'SKILL.md')
+    : candidate.receipt.target_exact_path.replace(/^\.agents\/skills\//, '');
 }
 
 function isApplicable(candidate) {
@@ -692,13 +696,15 @@ function validateManagedTarget(value) {
 function loadManagedTargets(candidateDir, generatorId) {
   const managed = new Set();
   const ledgerPath = safeOutputPath(candidateDir, 'managed-targets.json');
-  if (fs.existsSync(ledgerPath)) {
+  const hasLedger = fs.existsSync(ledgerPath);
+  if (hasLedger) {
     const ledger = readJson(ledgerPath);
     if (ledger.schema !== 'CodexSkillManagedTargets/1.0' || ledger.generator_id !== generatorId || !Array.isArray(ledger.targets)) {
       throw new Error(`Invalid managed target ledger: ${ledgerPath}`);
     }
     for (const target of ledger.targets) managed.add(validateManagedTarget(target));
   }
+  if (hasLedger) return managed;
   const receiptsDir = path.join(candidateDir, 'receipts');
   if (!fs.existsSync(receiptsDir)) return managed;
   const receiptMetadata = fs.lstatSync(receiptsDir);
@@ -708,13 +714,87 @@ function loadManagedTargets(candidateDir, generatorId) {
     if (!entry.name.endsWith('.json')) continue;
     if (entry.isSymbolicLink()) throw new Error(`Refusing symbolic-link projection receipt: ${entry.name}`);
     if (!entry.isFile()) continue;
-    const receipt = readJson(path.join(receiptsDir, entry.name));
+    let receipt;
+    try {
+      receipt = readJson(path.join(receiptsDir, entry.name));
+    } catch {
+      continue;
+    }
     if (receipt.generator_id !== generatorId || receipt.projection_kind === 'alias_metadata') continue;
     if (['already_aligned', 'applied_additive'].includes(receipt.application_status)) {
       managed.add(validateManagedTarget(receipt.target_exact_path));
     }
   }
   return managed;
+}
+
+function receiptEvidence(receipt) {
+  const evidence = { ...receipt };
+  delete evidence.application_status;
+  delete evidence.detail;
+  return evidence;
+}
+
+function stagedEvidenceAligned(candidateDir, candidates, generatorId, handlers) {
+  const receiptsDir = safeOutputPath(candidateDir, 'receipts');
+  const candidatesDir = safeOutputPath(candidateDir, 'candidates');
+  const indexPath = safeOutputPath(candidateDir, 'projection-index.json');
+  if (!fs.existsSync(receiptsDir) || !fs.existsSync(indexPath)) return false;
+
+  const expectedReceiptPaths = new Set(candidates.map((candidate) => safeOutputPath(receiptsDir, `${candidate.id}.json`)));
+  const actualReceiptPaths = new Set(walk(receiptsDir));
+  if (expectedReceiptPaths.size !== actualReceiptPaths.size
+    || [...expectedReceiptPaths].some((filePath) => !actualReceiptPaths.has(filePath))) return false;
+
+  const actualReceipts = [];
+  for (const candidate of candidates) {
+    const receiptPath = safeOutputPath(receiptsDir, `${candidate.id}.json`);
+    let actual;
+    try {
+      const metadata = fs.lstatSync(receiptPath);
+      if (!metadata.isFile()) return false;
+      actual = readJson(receiptPath);
+    } catch {
+      return false;
+    }
+    if (JSON.stringify(receiptEvidence(actual)) !== JSON.stringify(receiptEvidence(candidate.receipt))) return false;
+    actualReceipts.push(actual);
+  }
+
+  const expectedCandidateFiles = new Map();
+  for (const candidate of candidates.filter((item) => item.content)) {
+    const skillPath = safeOutputPath(candidatesDir, stagedCandidateRelativePath(candidate));
+    expectedCandidateFiles.set(skillPath, { bytes: Buffer.from(candidate.content), mode: null });
+    for (const resource of candidate.resources) {
+      expectedCandidateFiles.set(safeOutputPath(path.dirname(skillPath), resource.relativePath), { bytes: resource.bytes, mode: resource.mode });
+    }
+  }
+  const actualCandidatePaths = new Set(walk(candidatesDir));
+  if (expectedCandidateFiles.size !== actualCandidatePaths.size
+    || [...expectedCandidateFiles.keys()].some((filePath) => !actualCandidatePaths.has(filePath))) return false;
+  for (const [filePath, expected] of expectedCandidateFiles) {
+    const metadata = fs.lstatSync(filePath);
+    if (!metadata.isFile() || !fs.readFileSync(filePath).equals(expected.bytes)) return false;
+    if (expected.mode != null && (metadata.mode & 0o777) !== expected.mode) return false;
+  }
+
+  let index;
+  try {
+    index = readJson(indexPath);
+  } catch {
+    return false;
+  }
+  const expectedReceiptRefs = candidates.map((candidate) => `receipts/${candidate.id}.json`).sort();
+  const actualCounts = actualReceipts.reduce((counts, receipt) => {
+    const key = `${receipt.projection_kind}:${receipt.capability_tier}:${receipt.semantic_review_state}:${receipt.application_status}`;
+    counts[key] = (counts[key] || 0) + 1;
+    return counts;
+  }, {});
+  return index.schema === 'CodexSkillProjectionIndex/1.0'
+    && index.generator_id === generatorId
+    && JSON.stringify(index.handler_ids) === JSON.stringify(handlers)
+    && JSON.stringify(index.receipts) === JSON.stringify(expectedReceiptRefs)
+    && JSON.stringify(index.counts) === JSON.stringify(actualCounts);
 }
 
 function writeManagedTargets(candidateDir, generatorId, managed) {
@@ -794,6 +874,7 @@ function sync(options = {}) {
       if (blockedTargetInstalled(candidate, targetRoot)) drift += 1;
     }
     drift += orphanedManagedTargets(managedTargets, built.candidates, targetRoot).length;
+    if (!stagedEvidenceAligned(validatedCandidateDir, selected, built.config.generator_id, built.handlers)) drift += 1;
     return { ...built, allCandidates: built.candidates, candidates: selected, candidateDir: validatedCandidateDir, drift, applied };
   }
 

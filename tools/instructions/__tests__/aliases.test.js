@@ -34,11 +34,23 @@ test('no aliases -> no section (stays mythos-compatible)', () => {
 
 test('parseAliasRegistry returns all four domains as arrays (JSON form)', () => {
   const raw = JSON.stringify({
-    aliases: { 'plan-quest': { resolves_to: 'plan-task', status: 'primary' } },
+    aliases: [{
+      id: 'dl',
+      kind: 'operator_shorthand',
+      target: 'deliberate',
+      execution_target: 'orchestrate-loop',
+      authority_source: 'orchestrate-loop'
+    }],
     framework_aliases: { 'page-glamour': { resolves_to: 'wordpress/page-cro', status: 'primary' } }
   });
   assert.deepEqual(parseAliasRegistry(raw), {
-    aliases: [{ id: 'plan-quest', resolves_to: 'plan-task', status: 'primary' }],
+    aliases: [{
+      id: 'dl',
+      kind: 'operator_shorthand',
+      target: 'deliberate',
+      execution_target: 'orchestrate-loop',
+      authority_source: 'orchestrate-loop'
+    }],
     framework_aliases: [{ id: 'page-glamour', resolves_to: 'wordpress/page-cro', status: 'primary' }],
     skill_aliases: [],
     tool_aliases: []
@@ -65,18 +77,76 @@ test('parseAliasRegistry tolerates the commented YAML form across domains', () =
   assert.deepEqual(reg.skill_aliases, []);
 });
 
-test('loads the shipped 55-entry command registry with correct status split', () => {
+test('loads the shipped typed command registry without losing target or authority', () => {
   const aliases = loadCommandAliases(SURFACE_ROOT);
-  assert.equal(aliases.length, 55);
-  const byStatus = (s) => aliases.filter((a) => a.status === s).length;
-  assert.equal(byStatus('primary'), 35);
-  assert.equal(byStatus('cross-alias'), 15);
-  assert.equal(byStatus('compatibility'), 5);
+  assert.equal(aliases.length, 10);
+  assert.deepEqual(
+    aliases.map((alias) => alias.id),
+    ['owl', 'oa', 'council-of-owls', 'deliberate', 'dl', 'oc', 'help-me-route', 'blueprint', 'el', 'tt']
+  );
+  assert.ok(aliases.every((alias) => alias.id && alias.kind && alias.target && alias.authority_source));
+  const byKind = (kind) => aliases.filter((alias) => alias.kind === kind).length;
+  assert.equal(byKind('terminal_alias'), 5);
+  assert.equal(byKind('conditional_expansion'), 2);
+  assert.equal(byKind('operator_shorthand'), 3);
 
   const find = (id) => aliases.find((a) => a.id === id);
-  assert.deepEqual(find('guild-ledger'), { id: 'guild-ledger', resolves_to: 'system-status', status: 'primary' });
-  assert.deepEqual(find('aura'), { id: 'aura', resolves_to: 'system-status', status: 'cross-alias' });
-  assert.deepEqual(find('owl'), { id: 'owl', resolves_to: 'orchestrate-loop', status: 'compatibility' });
+  assert.deepEqual(
+    {
+      id: find('owl').id,
+      kind: find('owl').kind,
+      target: find('owl').target,
+      authority_source: find('owl').authority_source
+    },
+    { id: 'owl', kind: 'terminal_alias', target: 'orchestrate-loop', authority_source: 'orchestrate-loop' }
+  );
+  assert.deepEqual(
+    {
+      id: find('dl').id,
+      kind: find('dl').kind,
+      target: find('dl').target,
+      execution_target: find('dl').execution_target,
+      authority_source: find('dl').authority_source
+    },
+    {
+      id: 'dl',
+      kind: 'operator_shorthand',
+      target: 'deliberate',
+      execution_target: 'orchestrate-loop',
+      authority_source: 'orchestrate-loop'
+    }
+  );
+  assert.deepEqual(
+    {
+      id: find('tt').id,
+      kind: find('tt').kind,
+      target: find('tt').target,
+      authority_source: find('tt').authority_source
+    },
+    { id: 'tt', kind: 'terminal_alias', target: 'ticktock', authority_source: 'ticktock' }
+  );
+});
+
+test('typed aliases render their declared target, execution target, and authority', () => {
+  const section = commandAliasSection({ aliases: [
+    {
+      id: 'dl',
+      kind: 'operator_shorthand',
+      target: 'deliberate',
+      execution_target: 'orchestrate-loop',
+      authority_source: 'orchestrate-loop'
+    },
+    {
+      id: 'tt',
+      kind: 'terminal_alias',
+      target: 'ticktock',
+      authority_source: 'ticktock'
+    }
+  ] });
+
+  assert.match(section, /- `\/dl` -> `\/deliberate` \[operator_shorthand\]; execution: `\/orchestrate-loop`; authority: `\/orchestrate-loop`/);
+  assert.match(section, /- `\/tt` -> `\/ticktock` \[terminal_alias\]; authority: `\/ticktock`/);
+  assert.doesNotMatch(section, /\/undefined|`\/0`/);
 });
 
 test('command aliases render primaries first, then cross-alias, then compatibility', () => {

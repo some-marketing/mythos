@@ -137,6 +137,56 @@ function directNameFromSource(source) {
   return path.basename(path.dirname(source));
 }
 
+function resolvedPath(value) {
+  const suffix = [];
+  let cursor = path.resolve(value);
+  while (!fs.existsSync(cursor)) {
+    const parent = path.dirname(cursor);
+    if (parent === cursor) break;
+    suffix.unshift(path.basename(cursor));
+    cursor = parent;
+  }
+  const base = fs.existsSync(cursor) ? fs.realpathSync(cursor) : cursor;
+  return path.resolve(base, ...suffix);
+}
+
+function isWithin(parent, child) {
+  const relation = path.relative(parent, child);
+  return relation !== '' && relation !== '..' && !relation.startsWith(`..${path.sep}`) && !path.isAbsolute(relation);
+}
+
+function validateCandidateDir(root, targetRoot, candidateDir, configuredCandidateRoot) {
+  const realRoot = resolvedPath(root);
+  const realTarget = resolvedPath(targetRoot);
+  const realCandidate = resolvedPath(candidateDir);
+  const realConfigured = resolvedPath(configuredCandidateRoot);
+  if (!isWithin(realRoot, realCandidate)) throw new Error(`Unsafe candidate directory outside repository: ${candidateDir}`);
+  if (realCandidate !== realConfigured && !isWithin(realConfigured, realCandidate)) {
+    throw new Error(`Unsafe candidate directory outside configured projection root: ${candidateDir}`);
+  }
+  if (realCandidate === realTarget || isWithin(realTarget, realCandidate) || isWithin(realCandidate, realTarget)) {
+    throw new Error(`Unsafe candidate directory overlaps target skills: ${candidateDir}`);
+  }
+  return realCandidate;
+}
+
+function clearGeneratedProjectionArtifacts(candidateDir) {
+  const safeRoot = resolvedPath(candidateDir);
+  for (const child of ['candidates', 'receipts']) {
+    const generated = path.join(candidateDir, child);
+    if (!fs.existsSync(generated)) continue;
+    const resolvedGenerated = resolvedPath(generated);
+    if (!isWithin(safeRoot, resolvedGenerated)) throw new Error(`Unsafe generated artifact deletion outside candidate root: ${generated}`);
+    fs.rmSync(resolvedGenerated, { recursive: true });
+  }
+  const index = path.join(candidateDir, 'projection-index.json');
+  if (fs.existsSync(index)) {
+    const resolvedIndex = resolvedPath(index);
+    if (!isWithin(safeRoot, resolvedIndex)) throw new Error(`Unsafe generated artifact deletion outside candidate root: ${index}`);
+    fs.rmSync(resolvedIndex);
+  }
+}
+
 function resolveAliases(root, config, commands, directNames, registryOverride) {
   const registryPath = path.join(root, config.alias_registry);
   const registry = registryOverride || readJson(registryPath);
@@ -234,13 +284,9 @@ function buildCandidates(options = {}) {
   const directNames = new Set(directSources.map(directNameFromSource));
   const aliasResults = resolveAliases(root, config, commands, directNames, options.aliasRegistry);
   const terminalAliases = aliasesByTerminal(aliasResults);
-  const routedAliasCommands = new Set(aliasResults
-    .filter((result) => result.ok && result.terminal !== result.alias.id)
-    .map((result) => String(result.alias.id)));
   const candidates = [];
 
   for (const [id, command] of commands) {
-    if (routedAliasCommands.has(id)) continue;
     const sourceRel = relative(root, command.sourcePath);
     const targetRel = posix(path.join(config.target_root, `source-command-${id}`, 'SKILL.md'));
     if (command.malformed || !command.spec || command.spec.id !== id) {
@@ -370,20 +416,40 @@ function isApplicable(candidate) {
     && candidate.receipt.collision_state === 'clear';
 }
 
-function applyCandidate(root, candidate, targetRoot) {
-  if (!isApplicable(candidate)) return false;
+function expectedPackageFiles(candidate, targetRoot) {
   const suffix = candidate.receipt.target_exact_path.replace(/^\.agents\/skills\//, '');
   const skillPath = path.join(targetRoot, suffix);
-  if (fs.existsSync(skillPath)) {
-    candidate.receipt.application_status = fs.readFileSync(skillPath, 'utf8') === candidate.content ? 'already_aligned' : 'blocked_existing_preserved';
+  return [
+    { filePath: skillPath, bytes: Buffer.from(candidate.content) },
+    ...candidate.resources.map((resource) => ({
+      filePath: path.join(path.dirname(skillPath), resource.relativePath),
+      bytes: resource.bytes
+    }))
+  ];
+}
+
+function packageAlignment(candidate, targetRoot) {
+  const files = expectedPackageFiles(candidate, targetRoot);
+  const missing = files.filter((item) => !fs.existsSync(item.filePath));
+  const conflicting = files.filter((item) => fs.existsSync(item.filePath) && !fs.readFileSync(item.filePath).equals(item.bytes));
+  return { aligned: missing.length === 0 && conflicting.length === 0, files, missing, conflicting };
+}
+
+function applyCandidate(root, candidate, targetRoot) {
+  if (!isApplicable(candidate)) return false;
+  const alignment = packageAlignment(candidate, targetRoot);
+  if (alignment.conflicting.length) {
+    candidate.receipt.application_status = 'blocked_existing_preserved';
+    candidate.receipt.detail = `conflicting existing package file(s): ${alignment.conflicting.map((item) => relative(root, item.filePath)).join(', ')}`;
     return false;
   }
-  fs.mkdirSync(path.dirname(skillPath), { recursive: true });
-  fs.writeFileSync(skillPath, candidate.content);
-  for (const resource of candidate.resources) {
-    const resourcePath = path.join(path.dirname(skillPath), resource.relativePath);
-    fs.mkdirSync(path.dirname(resourcePath), { recursive: true });
-    fs.writeFileSync(resourcePath, resource.bytes);
+  if (alignment.aligned) {
+    candidate.receipt.application_status = 'already_aligned';
+    return false;
+  }
+  for (const item of alignment.missing) {
+    fs.mkdirSync(path.dirname(item.filePath), { recursive: true });
+    fs.writeFileSync(item.filePath, item.bytes);
   }
   candidate.receipt.application_status = 'applied_additive';
   return true;
@@ -402,36 +468,36 @@ function sync(options = {}) {
 
   if (options.check) {
     for (const candidate of selected.filter(isApplicable)) {
-      const suffix = candidate.receipt.target_exact_path.replace(/^\.agents\/skills\//, '');
-      const skillPath = path.join(targetRoot, suffix);
-      if (!fs.existsSync(skillPath) || fs.readFileSync(skillPath, 'utf8') !== candidate.content) drift += 1;
+      if (!packageAlignment(candidate, targetRoot).aligned) drift += 1;
     }
-    return { ...built, candidateDir, drift, applied };
+    return { ...built, allCandidates: built.candidates, candidates: selected, candidateDir, drift, applied };
   }
 
-  if (fs.existsSync(candidateDir)) fs.rmSync(candidateDir, { recursive: true });
-  fs.mkdirSync(candidateDir, { recursive: true });
+  const configuredCandidateRoot = path.join(root, built.config.candidate_root);
+  const validatedCandidateDir = validateCandidateDir(root, targetRoot, candidateDir, configuredCandidateRoot);
+  clearGeneratedProjectionArtifacts(validatedCandidateDir);
+  fs.mkdirSync(validatedCandidateDir, { recursive: true });
   if (options.apply) {
     for (const candidate of selected) if (applyCandidate(root, candidate, targetRoot)) applied += 1;
-    const appliedTerminals = new Set(built.candidates.filter((item) => ['applied_additive', 'already_aligned'].includes(item.receipt.application_status)).map((item) => item.receipt.target_exact_path));
-    for (const candidate of built.candidates.filter((item) => item.receipt.projection_kind === 'alias_metadata' && item.receipt.application_status === 'metadata_candidate')) {
+    const appliedTerminals = new Set(selected.filter((item) => ['applied_additive', 'already_aligned'].includes(item.receipt.application_status)).map((item) => item.receipt.target_exact_path));
+    for (const candidate of selected.filter((item) => item.receipt.projection_kind === 'alias_metadata' && item.receipt.application_status === 'metadata_candidate')) {
       candidate.receipt.application_status = appliedTerminals.has(candidate.receipt.target_exact_path) ? 'metadata_attached' : 'blocked_target_unavailable';
     }
   }
-  for (const candidate of built.candidates) writeCandidate(candidateDir, candidate);
+  for (const candidate of selected) writeCandidate(validatedCandidateDir, candidate);
   const index = {
     schema: 'CodexSkillProjectionIndex/1.0',
     generator_id: built.config.generator_id,
     handler_ids: built.handlers,
-    counts: built.candidates.reduce((acc, item) => {
+    counts: selected.reduce((acc, item) => {
       const key = `${item.receipt.projection_kind}:${item.receipt.capability_tier}:${item.receipt.semantic_review_state}:${item.receipt.application_status}`;
       acc[key] = (acc[key] || 0) + 1;
       return acc;
     }, {}),
-    receipts: built.candidates.map((item) => `receipts/${item.id}.json`).sort()
+    receipts: selected.map((item) => `receipts/${item.id}.json`).sort()
   };
-  fs.writeFileSync(path.join(candidateDir, 'projection-index.json'), `${JSON.stringify(index, null, 2)}\n`);
-  return { ...built, candidateDir, drift, applied, index };
+  fs.writeFileSync(path.join(validatedCandidateDir, 'projection-index.json'), `${JSON.stringify(index, null, 2)}\n`);
+  return { ...built, allCandidates: built.candidates, candidates: selected, candidateDir: validatedCandidateDir, drift, applied, index };
 }
 
 function main() {
@@ -454,9 +520,11 @@ module.exports = {
   SAFE_REVIEW_STATES,
   aliasesByTerminal,
   buildCandidates,
+  clearGeneratedProjectionArtifacts,
   containsPrivateAbsolutePath,
   frameworkIdentity,
   isApplicable,
+  packageAlignment,
   loadProjectionConfig,
   normalizeDirectSkill,
   parseArgs,
@@ -464,5 +532,6 @@ module.exports = {
   renderCanonicalSkill,
   renderFrameworkSkill,
   resolveAliases,
-  sync
+  sync,
+  validateCandidateDir
 };

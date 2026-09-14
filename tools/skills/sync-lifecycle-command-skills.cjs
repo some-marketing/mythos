@@ -3,7 +3,7 @@
 
 // Compatibility entry point. Projection authority lives in sync-codex-skills.cjs.
 const path = require('node:path');
-const { parseArgs, sync } = require('./sync-codex-skills.cjs');
+const { loadProjectionConfig, parseArgs, sync } = require('./sync-codex-skills.cjs');
 
 const PROJECT_ROOT = path.resolve(__dirname, '..', '..');
 const LIFECYCLE_COMMANDS = Object.freeze(['boot', 'new-session', 'next-session', 'cross-session', 'end-session', 'shutdown']);
@@ -14,7 +14,10 @@ function isLifecycle(candidate) {
 }
 
 function syncLifecycle(options = {}) {
-  return sync({ ...options, root: options.root || PROJECT_ROOT, includeCandidate: isLifecycle });
+  const root = options.root || PROJECT_ROOT;
+  const { config } = loadProjectionConfig(root);
+  const candidateDir = options.candidateDir || path.join(root, config.candidate_root, 'lifecycle');
+  return sync({ ...options, root, candidateDir, includeCandidate: isLifecycle });
 }
 
 function main() {

@@ -47,10 +47,25 @@ function orchestrationSummary(policy) {
   ].join('\n');
 }
 
-// Render one domain's aliases as bullet lines, grouped primary -> cross-alias ->
-// compatibility (and any remaining statuses treated as compatibility). `prefix`
-// is `/` for slash commands and '' for framework/skill/tool names.
+// Render one domain's aliases as bullet lines. Canonical typed records retain
+// their declared order and target/execution/authority distinctions. Legacy
+// records retain the older primary -> cross-alias -> compatibility grouping.
+// `prefix` is `/` for slash commands and '' for framework/skill/tool names.
 function renderAliasGroup(aliases, prefix) {
+  const typed = aliases.some((alias) => alias.kind || alias.target || alias.authority_source);
+  if (typed) {
+    return aliases.map((alias) => {
+      const target = alias.target || alias.resolves_to;
+      const kind = alias.kind || alias.status || 'compatibility';
+      const executionTarget = alias.execution_target;
+      const authority = alias.authority_source || executionTarget || target;
+      const execution = executionTarget && executionTarget !== target
+        ? `; execution: \`${prefix}${executionTarget}\``
+        : '';
+      return `- \`${prefix}${alias.id}\` -> \`${prefix}${target}\` [${kind}]${execution}; authority: \`${prefix}${authority}\``;
+    });
+  }
+
   // primary alias id -> its authority, so a cross-alias that resolves to a
   // primary alias still reports the underlying canonical id.
   const primaryAuthorityById = new Map();

@@ -48,7 +48,7 @@
     "solo_reasoning": "_dev/reports/analysis/bp-r__codex-skill-parity-remediation__solo-reasoning.md",
     "convene_synthesis": "_dev/reports/analysis/convene-runs/20260914T164532Z-codex-skill-parity-remediation/synthesis.md",
     "concept": "_dev/concepts/codex-skill-parity-remediation.md",
-    "grounding": "_dev/reports/analysis/philosophy-grounding__codex-skill-parity-remediation.md"
+    "grounding": "private local evidence retained outside the tracked repository surface"
   },
   "bounded_plan": {
     "steps": [
@@ -137,12 +137,11 @@
   "scope_identity": {
     "workstream_scope": "codex-skill-parity-remediation",
     "session_or_run_id": "01a0a0b0-595f-7e40-8b4c-78d6570ef785",
-    "working_surface": "/Users/admin/mythos for blueprint artifacts; ~/.mythos-worktrees/mythos-codex-skill-parity-remediation for all implementation, validation, commit, and PR work",
+    "working_surface": "the canonical Mythos checkout for blueprint artifacts; the isolated codex-skill-parity-remediation worktree for all implementation, validation, commit, and PR work",
     "owned_artifacts": [
       "_dev/reports/analysis/bp-r__codex-skill-parity-remediation__solo-reasoning.md",
       "_dev/reports/analysis/convene-runs/20260914T164532Z-codex-skill-parity-remediation/**",
       "_dev/concepts/codex-skill-parity-remediation.md",
-      "_dev/reports/analysis/philosophy-grounding__codex-skill-parity-remediation.md",
       "_dev/reports/analysis/task-plans/codex-skill-parity-remediation__plan.json",
       "_dev/reports/analysis/task-plans/codex-skill-parity-remediation__plan.md",
       "_dev/reports/analysis/codex-skill-projections/**",
@@ -165,7 +164,7 @@
     "dynamic_ownership_rule": "A generated .agents/skills path enters this workstream's owned set only after the projector emits a receipt naming that exact path, proves it absent immediately before write, and classifies the candidate reviewed-safe. An existing path requires a CustodyRecord containing the exact path, preflight git status, SHA-256 of current bytes, attribution source (generator stamp or UNKNOWN), and an operator-stamp reference. UNKNOWN attribution or a missing operator stamp blocks refresh and leaves the file as an enumerated residual."
   },
   "philosophy_grounding": {
-    "artifact": "_dev/reports/analysis/philosophy-grounding__codex-skill-parity-remediation.md",
+    "artifact": "private local evidence retained outside the tracked repository surface",
     "verdict": "needs-adjustment",
     "adjustments_applied": true
   },

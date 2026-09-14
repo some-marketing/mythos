@@ -9,7 +9,7 @@ Build and execute a custody-safe Codex projection system that closes every audit
 - Solo reasoning: `_dev/reports/analysis/bp-r__codex-skill-parity-remediation__solo-reasoning.md`
 - Consequence-grade synthesis: `_dev/reports/analysis/convene-runs/20260914T164532Z-codex-skill-parity-remediation/synthesis.md`
 - Concept: `_dev/concepts/codex-skill-parity-remediation.md`
-- Philosophy grounding: `_dev/reports/analysis/philosophy-grounding__codex-skill-parity-remediation.md`
+- Philosophy grounding: private local evidence retained outside the tracked repository surface.
 
 ## Matched framework
 

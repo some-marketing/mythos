@@ -36,11 +36,10 @@ function ensureKernelSafety(system, kernel) {
   }
 }
 
-// Minimal, dependency-free parser for the simple alias registry schema:
-// a top-level `aliases:` map of `alias-key: { resolves_to, status }`. Tolerates
-// the JSON-compatible form used elsewhere in the canonical layer as well as the
-// commented YAML form. The registry carries up to four alias domains beside
-// each other; each normalizes to an ordered array of { id, resolves_to, status }.
+// Minimal, dependency-free parser for the alias registry schema. The canonical
+// command domain is an ordered array of typed records ({ id, kind, target,
+// execution_target, authority_source }); legacy map-form domains remain
+// readable so older exported surfaces do not break.
 const ALIAS_DOMAIN_KEYS = ['aliases', 'framework_aliases', 'skill_aliases', 'tool_aliases'];
 
 function emptyAliasRegistry() {
@@ -61,12 +60,17 @@ function parseAliasRegistry(raw) {
   const out = emptyAliasRegistry();
   if (!maps || typeof maps !== 'object') return out;
   for (const key of ALIAS_DOMAIN_KEYS) {
-    const domainMap = maps[key];
-    if (!domainMap || typeof domainMap !== 'object') continue;
-    out[key] = Object.entries(domainMap).map(([id, entry]) => ({
+    const domain = maps[key];
+    if (!domain || typeof domain !== 'object') continue;
+    if (Array.isArray(domain)) {
+      out[key] = domain
+        .filter((entry) => entry && typeof entry === 'object' && entry.id)
+        .map((entry) => ({ ...entry }));
+      continue;
+    }
+    out[key] = Object.entries(domain).map(([id, entry]) => ({
       id,
-      resolves_to: entry && entry.resolves_to,
-      status: entry && entry.status
+      ...(entry && typeof entry === 'object' ? entry : {})
     }));
   }
   return out;

@@ -8,6 +8,7 @@ const test = require('node:test');
 
 const {
   buildCandidates,
+  clearGeneratedProjectionArtifacts,
   normalizeDirectSkill,
   parseFrontmatter,
   resolveAliases,
@@ -109,6 +110,19 @@ test('alias cycles and nonterminal aliases remain UNKNOWN and unapplied', () => 
   assert.match(byId(result, 'alias-lost').receipt.detail, /nonterminal_alias/);
 });
 
+test('typed aliases with canonical workflows retain their own runtime pointer', () => {
+  const root = fixture();
+  command(root, 'orchestrate-loop');
+  command(root, 'deliberate', { objective: 'Reason solo, convene, and synthesize before routing.' });
+  const aliases = { aliases: [{ id: 'deliberate', target: 'orchestrate-loop' }] };
+  const result = buildCandidates({ root, handlerIds: new Set(), aliasRegistry: aliases });
+  const typed = byId(result, 'command-deliberate');
+  const terminal = byId(result, 'command-orchestrate-loop');
+  assert.match(typed.content, /instructions\/canonical\/commands\/deliberate\.yaml/);
+  assert.match(terminal.content, /Aliases resolved at generation time: \/deliberate/);
+  assert.equal(byId(result, 'alias-deliberate').receipt.target_exact_path, '.agents/skills/source-command-orchestrate-loop/SKILL.md');
+});
+
 test('tt, oil, and chi resolve across the command boundary to direct project skills', () => {
   const root = fixture();
   skill(root, 'ticktock');
@@ -138,7 +152,8 @@ test('framework namespace collisions are rejected', () => {
 test('malformed metadata and private absolute paths stage but never apply', () => {
   const root = fixture();
   write(root, '.claude/skills/ticktock/SKILL.md', 'no frontmatter\n');
-  write(root, '.claude/skills/outward-inward-loop/SKILL.md', '---\nname: outward-inward-loop\ndescription: secret /Users/private/work/file\n---\nbody\n');
+  const privateFixturePath = ['', 'Users', 'private', 'work', 'file'].join('/');
+  write(root, '.claude/skills/outward-inward-loop/SKILL.md', `---\nname: outward-inward-loop\ndescription: secret ${privateFixturePath}\n---\nbody\n`);
   const result = sync({ root, handlerIds: new Set(), apply: true });
   assert.equal(byId(result, 'direct-ticktock').receipt.semantic_review_state, 'malformed');
   assert.equal(byId(result, 'direct-outward-inward-loop').receipt.semantic_review_state, 'private_path_rejected');
@@ -152,11 +167,64 @@ test('direct resources copy recursively and application remains additive-only', 
   write(root, '.claude/skills/ticktock/references/nested.md', 'evidence\n');
   const first = sync({ root, handlerIds: new Set(), apply: true });
   assert.equal(byId(first, 'direct-ticktock').receipt.application_status, 'applied_additive');
-  assert.equal(fs.readFileSync(path.join(root, '.agents/skills/ticktock/references/nested.md'), 'utf8'), 'evidence\n');
+  const resource = path.join(root, '.agents/skills/ticktock/references/nested.md');
+  assert.equal(fs.readFileSync(resource, 'utf8'), 'evidence\n');
+  fs.unlinkSync(resource);
+  assert.equal(sync({ root, handlerIds: new Set(), check: true }).drift, 1);
+  const repaired = sync({ root, handlerIds: new Set(), apply: true });
+  assert.equal(byId(repaired, 'direct-ticktock').receipt.application_status, 'applied_additive');
+  assert.equal(fs.readFileSync(resource, 'utf8'), 'evidence\n');
+  fs.writeFileSync(resource, 'foreign resource\n');
+  assert.equal(sync({ root, handlerIds: new Set(), check: true }).drift, 1);
+  const conflict = sync({ root, handlerIds: new Set(), apply: true });
+  assert.equal(byId(conflict, 'direct-ticktock').receipt.application_status, 'blocked_existing_preserved');
+  assert.equal(fs.readFileSync(resource, 'utf8'), 'foreign resource\n');
   fs.writeFileSync(path.join(root, '.agents/skills/ticktock/SKILL.md'), 'foreign\n');
   const second = sync({ root, handlerIds: new Set(), apply: true });
   assert.equal(byId(second, 'direct-ticktock').receipt.application_status, 'blocked_existing_preserved');
   assert.equal(fs.readFileSync(path.join(root, '.agents/skills/ticktock/SKILL.md'), 'utf8'), 'foreign\n');
+});
+
+test('candidate staging refuses repository and target directory deletion', () => {
+  const root = fixture();
+  command(root, 'sample');
+  const rootSentinel = write(root, 'keep.txt', 'keep\n');
+  assert.throws(() => sync({ root, handlerIds: new Set(), candidateDir: root }), /Unsafe candidate directory/);
+  assert.equal(fs.readFileSync(rootSentinel, 'utf8'), 'keep\n');
+  const target = path.join(root, '.agents/skills');
+  write(root, '.agents/skills/keep.txt', 'target keep\n');
+  assert.throws(() => sync({ root, handlerIds: new Set(), candidateDir: target }), /Unsafe candidate directory/);
+  assert.equal(fs.readFileSync(path.join(target, 'keep.txt'), 'utf8'), 'target keep\n');
+  const candidateRoot = path.join(root, '_dev/reports/analysis/codex-skill-projections');
+  const externalReceipt = write(root, '_dev/reports/analysis/codex-skill-projections/runtime-receipt.md', 'preserve\n');
+  sync({ root, handlerIds: new Set(), candidateDir: candidateRoot });
+  assert.equal(fs.readFileSync(externalReceipt, 'utf8'), 'preserve\n');
+});
+
+test('candidate staging writes through the validated resolved directory', () => {
+  const root = fixture();
+  command(root, 'sample');
+  const configured = path.join(root, '_dev/reports/analysis/codex-skill-projections');
+  const resolvedLane = path.join(configured, 'resolved-lane');
+  const linkedLane = path.join(configured, 'linked-lane');
+  fs.mkdirSync(resolvedLane, { recursive: true });
+  fs.symlinkSync(resolvedLane, linkedLane);
+  const result = sync({ root, handlerIds: new Set(), candidateDir: linkedLane });
+  assert.equal(result.candidateDir, fs.realpathSync(resolvedLane));
+  assert.equal(fs.existsSync(path.join(resolvedLane, 'projection-index.json')), true);
+  assert.equal(fs.lstatSync(linkedLane).isSymbolicLink(), true);
+});
+
+test('generated cleanup refuses a child symlink escaping the validated root', () => {
+  const root = fixture();
+  const candidateRoot = path.join(root, '_dev/reports/analysis/codex-skill-projections');
+  const outside = path.join(root, '_dev/outside-receipts');
+  fs.mkdirSync(candidateRoot, { recursive: true });
+  fs.mkdirSync(outside, { recursive: true });
+  const sentinel = write(root, '_dev/outside-receipts/keep.txt', 'keep\n');
+  fs.symlinkSync(outside, path.join(candidateRoot, 'receipts'));
+  assert.throws(() => clearGeneratedProjectionArtifacts(candidateRoot), /outside candidate root/);
+  assert.equal(fs.readFileSync(sentinel, 'utf8'), 'keep\n');
 });
 
 test('candidate receipts carry every required evidence field', () => {

@@ -229,16 +229,16 @@ Mythos could otherwise quietly stop deserving the trust it asks for.
 
 Command names are mechanical aliases. The typed alias is provenance; authority, state, errors, evidence, and closeout belong to the resolved generic command.
 
-- `/0` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/1` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/2` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/3` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/4` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/5` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/6` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/7` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/8` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/9` -> `/undefined` [compatibility]; authority: `/undefined`
+- `/owl` -> `/orchestrate-loop` [terminal_alias]; authority: `/orchestrate-loop`
+- `/oa` -> `/orchestrate-loop` [terminal_alias]; authority: `/orchestrate-loop`
+- `/council-of-owls` -> `/orchestrate-loop` [conditional_expansion]; authority: `/orchestrate-loop`
+- `/deliberate` -> `/orchestrate-loop` [conditional_expansion]; authority: `/orchestrate-loop`
+- `/dl` -> `/deliberate` [operator_shorthand]; execution: `/orchestrate-loop`; authority: `/orchestrate-loop`
+- `/oc` -> `/council-of-owls` [operator_shorthand]; execution: `/orchestrate-loop`; authority: `/orchestrate-loop`
+- `/help-me-route` -> `/route` [terminal_alias]; authority: `/route`
+- `/blueprint` -> `/blueprint` [terminal_alias]; authority: `/blueprint`
+- `/el` -> `/evidence-loop` [operator_shorthand]; authority: `/evidence-loop`
+- `/tt` -> `/ticktock` [terminal_alias]; authority: `/ticktock`
 
 ## Codex Notes
 - Use repository-local manifests as source of truth.

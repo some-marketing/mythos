@@ -211,7 +211,7 @@ function safeOutputPath(root, ...segments) {
     try {
       if (fs.lstatSync(cursor).isSymbolicLink()) throw new Error(`Refusing symbolic-link destination component: ${cursor}`);
     } catch (error) {
-      if (error.code !== 'ENOENT') throw error;
+      if (!['ENOENT', 'ENOTDIR'].includes(error.code)) throw error;
     }
   }
   const safeRoot = resolvedPath(lexicalRoot);
@@ -258,8 +258,14 @@ function validateCandidateDir(root, targetRoot, candidateDir, configuredCandidat
 
 function clearGeneratedProjectionArtifacts(candidateDir) {
   const safeRoot = resolvedPath(candidateDir);
-  for (const child of ['candidates', 'receipts']) {
-    const generated = path.join(candidateDir, child);
+  const planned = [
+    { generated: path.join(candidateDir, 'candidates'), recursive: true },
+    { generated: path.join(candidateDir, 'receipts'), recursive: true },
+    { generated: path.join(candidateDir, 'projection-index.json'), recursive: true }
+  ];
+  const validated = [];
+  for (const item of planned) {
+    const { generated } = item;
     let metadata;
     try {
       metadata = fs.lstatSync(generated);
@@ -270,17 +276,10 @@ function clearGeneratedProjectionArtifacts(candidateDir) {
     if (metadata.isSymbolicLink()) throw new Error(`Unsafe generated artifact symlink: ${generated}`);
     const resolvedGenerated = resolvedPath(generated);
     if (!isWithin(safeRoot, resolvedGenerated)) throw new Error(`Unsafe generated artifact deletion outside candidate root: ${generated}`);
-    fs.rmSync(resolvedGenerated, { recursive: true });
+    validated.push({ ...item, resolvedGenerated });
   }
-  const index = path.join(candidateDir, 'projection-index.json');
-  try {
-    const metadata = fs.lstatSync(index);
-    if (metadata.isSymbolicLink()) throw new Error(`Unsafe generated artifact symlink: ${index}`);
-    const resolvedIndex = resolvedPath(index);
-    if (!isWithin(safeRoot, resolvedIndex)) throw new Error(`Unsafe generated artifact deletion outside candidate root: ${index}`);
-    fs.rmSync(resolvedIndex);
-  } catch (error) {
-    if (error.code !== 'ENOENT') throw error;
+  for (const { resolvedGenerated, recursive } of validated) {
+    fs.rmSync(resolvedGenerated, { recursive });
   }
 }
 
@@ -395,7 +394,7 @@ function containsPrivateAbsolutePath(bytes) {
 function containsCredentialMaterial(bytes) {
   const text = String(bytes);
   return /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/.test(text)
-    || /(?:^|[^A-Za-z0-9])(?:sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16})(?:$|[^A-Za-z0-9_-])/m.test(text);
+    || /(?:^|[^A-Za-z0-9])(?:sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|glpat-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{35})(?:$|[^A-Za-z0-9_-])/m.test(text);
 }
 
 function isSensitiveResourcePath(relativePath) {
@@ -646,6 +645,14 @@ function expectedPackageFiles(candidate, targetRoot) {
 function packageAlignment(candidate, targetRoot) {
   const files = expectedPackageFiles(candidate, targetRoot);
   const packageRoot = path.dirname(files[0].filePath);
+  try {
+    const packageMetadata = fs.lstatSync(packageRoot);
+    if (!packageMetadata.isDirectory()) {
+      return { aligned: false, files, missing: [], nonFiles: [{ filePath: packageRoot }], conflicting: [], modeMismatches: [], unexpected: [] };
+    }
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
+  }
   const expectedPaths = new Set(files.map((item) => path.resolve(item.filePath)));
   const withMetadata = files.map((item) => {
     try {
@@ -825,9 +832,9 @@ function orphanedManagedTargets(managedTargets, candidates, targetRoot) {
   return [...orphaned].sort();
 }
 
-function applyCandidate(root, candidate, targetRoot) {
+function applyCandidate(root, candidate, targetRoot, preflightAlignment) {
   if (!isApplicable(candidate)) return false;
-  const alignment = packageAlignment(candidate, targetRoot);
+  const alignment = preflightAlignment || packageAlignment(candidate, targetRoot);
   if (alignment.nonFiles.length || alignment.conflicting.length || alignment.modeMismatches.length || alignment.unexpected.length) {
     candidate.receipt.application_status = 'blocked_existing_preserved';
     const conflicts = [...new Set([
@@ -865,6 +872,12 @@ function sync(options = {}) {
   const configuredCandidateRoot = path.join(root, built.config.candidate_root);
   const validatedCandidateDir = validateCandidateDir(root, targetRoot, candidateDir, configuredCandidateRoot);
   const managedTargets = loadManagedTargets(validatedCandidateDir, built.config.generator_id);
+  const applicationPreflight = new Map();
+  if (options.apply) {
+    for (const candidate of selected.filter(isApplicable)) {
+      applicationPreflight.set(candidate, packageAlignment(candidate, targetRoot));
+    }
+  }
 
   if (options.check) {
     for (const candidate of selected.filter(isApplicable)) {
@@ -881,7 +894,7 @@ function sync(options = {}) {
   clearGeneratedProjectionArtifacts(validatedCandidateDir);
   fs.mkdirSync(validatedCandidateDir, { recursive: true });
   if (options.apply) {
-    for (const candidate of selected) if (applyCandidate(root, candidate, targetRoot)) applied += 1;
+    for (const candidate of selected) if (applyCandidate(root, candidate, targetRoot, applicationPreflight.get(candidate))) applied += 1;
     for (const candidate of selected.filter((item) => item.receipt.projection_kind !== 'alias_metadata'
       && ['applied_additive', 'already_aligned'].includes(item.receipt.application_status))) {
       managedTargets.add(validateManagedTarget(candidate.receipt.target_exact_path));

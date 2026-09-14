@@ -434,6 +434,17 @@ test('sensitive and credential-bearing bundled resources are rejected', () => {
   skill(credentialRoot, 'ticktock');
   write(credentialRoot, '.claude/skills/ticktock/notes.txt', `token sk-${'a'.repeat(24)}\n`);
   assert.throws(() => sync({ root: credentialRoot, handlerIds: new Set() }), /Refusing credential-bearing bundled resource/);
+
+  for (const token of [
+    `xoxb-${'a'.repeat(24)}`,
+    `glpat-${'b'.repeat(24)}`,
+    `AIza${'c'.repeat(35)}`
+  ]) {
+    const tokenRoot = fixture();
+    skill(tokenRoot, 'ticktock');
+    write(tokenRoot, '.claude/skills/ticktock/notes.txt', `token ${token}\n`);
+    assert.throws(() => sync({ root: tokenRoot, handlerIds: new Set() }), /Refusing credential-bearing bundled resource/);
+  }
 });
 
 test('candidate staging refuses repository and target directory deletion', () => {
@@ -477,6 +488,19 @@ test('dangling destination symlinks cannot redirect applied writes', () => {
   assert.equal(fs.existsSync(external), false);
 });
 
+test('all selected destinations are preflighted before the first application write', () => {
+  const root = fixture();
+  command(root, 'a');
+  command(root, 'z');
+  const unsafeDir = path.join(root, '.agents/skills/source-command-z');
+  fs.mkdirSync(unsafeDir, { recursive: true });
+  const external = path.join(os.tmpdir(), `codex-projector-preflight-${path.basename(root)}.md`);
+  fs.symlinkSync(external, path.join(unsafeDir, 'SKILL.md'));
+  assert.throws(() => sync({ root, handlerIds: new Set(), apply: true }), /Refusing symbolic-link destination component/);
+  assert.equal(fs.existsSync(path.join(root, '.agents/skills/source-command-a/SKILL.md')), false);
+  assert.equal(fs.existsSync(path.join(root, '_dev/reports/analysis/codex-skill-projections/projection-index.json')), false);
+});
+
 test('symlinked target roots cannot redirect applied writes outside the repository', () => {
   const root = fixture();
   command(root, 'sample');
@@ -498,15 +522,29 @@ test('non-file installed targets are preserved and reported as drift', () => {
   assert.equal(fs.lstatSync(installed).isDirectory(), true);
 });
 
+test('non-directory package roots are preserved and reported as drift', () => {
+  const root = fixture();
+  command(root, 'sample');
+  const packageRoot = write(root, '.agents/skills/source-command-sample', 'foreign package root\n');
+  assert.ok(sync({ root, handlerIds: new Set(), check: true }).drift > 0);
+  const reapplied = sync({ root, handlerIds: new Set(), apply: true });
+  assert.equal(byId(reapplied, 'command-sample').receipt.application_status, 'blocked_existing_preserved');
+  assert.equal(fs.readFileSync(packageRoot, 'utf8'), 'foreign package root\n');
+});
+
 test('dangling projection index symlinks cannot redirect staging writes', () => {
   const root = fixture();
   command(root, 'sample');
   const candidateRoot = path.join(root, '_dev/reports/analysis/codex-skill-projections');
   fs.mkdirSync(candidateRoot, { recursive: true });
   const external = path.join(os.tmpdir(), `codex-projector-index-${path.basename(root)}.json`);
+  const candidateSentinel = write(root, '_dev/reports/analysis/codex-skill-projections/candidates/keep.txt', 'keep candidate\n');
+  const receiptSentinel = write(root, '_dev/reports/analysis/codex-skill-projections/receipts/keep.txt', 'keep receipt\n');
   fs.symlinkSync(external, path.join(candidateRoot, 'projection-index.json'));
   assert.throws(() => sync({ root, handlerIds: new Set() }), /Unsafe generated artifact symlink/);
   assert.equal(fs.existsSync(external), false);
+  assert.equal(fs.readFileSync(candidateSentinel, 'utf8'), 'keep candidate\n');
+  assert.equal(fs.readFileSync(receiptSentinel, 'utf8'), 'keep receipt\n');
 });
 
 test('generated cleanup refuses a child symlink escaping the validated root', () => {

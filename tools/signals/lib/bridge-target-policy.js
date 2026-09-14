@@ -225,11 +225,21 @@ const BRIDGE_TARGET_POLICIES = Object.freeze({
           'anthropic/claude-sonnet-4-5',
           'google/gemini-3-pro-preview',
           'openai/gpt-5.1',
-          'qwen/qwen3-coder',
+          'qwen/qwen3.8-max-0902',
           'deepseek/deepseek-r1'
         ]),
-        stale_models: Object.freeze([]),
+        stale_models: Object.freeze([
+          // qwen/qwen3-coder moved here 2026-09-14: superseded by
+          // qwen/qwen3.8-max-0902 (released 2026-09-03; verified via live
+          // WebSearch against OpenRouter's own model page, not a docs re-read).
+          // Only the Qwen slug was re-verified this pass — the other five
+          // current_models entries above were not independently re-checked
+          // and still carry the 2026-04-22 BRIDGE_MODEL_SOURCE stamp.
+          'qwen/qwen3-coder'
+        ]),
         docs_checked_at: BRIDGE_MODEL_SOURCE.checked_at,
+        qwen_docs_checked_at: '2026-09-14',
+        qwen_docs_checked_method: 'live WebSearch against https://openrouter.ai/qwen and https://openrouter.ai/qwen/qwen3.8-max-0902, not a docs re-read',
         launch_contract: 'node tools/signals/run-openrouter-bridge.js --file <signal> [--model <slug>]',
         notes: Object.freeze([
           'OpenRouter is OpenAI-compatible at https://openrouter.ai/api/v1.',
@@ -646,7 +656,13 @@ const MODEL_FAMILIES = Object.freeze({
   google: { label: 'Google DeepMind', origin: 'onshore-western', use_cases: ['deep_reasoning', 'fast_cheap_mechanical', 'frontier_consequence_grade'], members: ['gemini'] },
   openai: { label: 'OpenAI', origin: 'onshore-western', use_cases: ['agentic_coding', 'deep_reasoning', 'frontier_consequence_grade'], members: ['codex'] },
   zhipu: { label: 'Zhipu (GLM)', origin: 'prc-hosted-gated', use_cases: ['long_context_non_sensitive'], members: ['openrouter:z-ai/glm-5.2'] },
-  alibaba: { label: 'Alibaba (Qwen)', origin: 'prc-hosted-via-openrouter', use_cases: ['long_context_non_sensitive'], members: ['openrouter:qwen/qwen3-coder'] },
+  // qwen/qwen3.8-max-0902 (2026-09) is a verified frontier-class reviewer:
+  // Artificial Analysis Intelligence Index 58, Coding Index 71.8 — comparable
+  // to onshore frontier families. deep_reasoning/agentic_coding added
+  // 2026-09-14 on that evidence; still prc-hosted-via-openrouter, so still
+  // excluded whenever a caller passes sensitive:true and still scored below
+  // onshore families by selectDistinctFamily's jurisdiction-aware ranking.
+  alibaba: { label: 'Alibaba (Qwen)', origin: 'prc-hosted-via-openrouter', use_cases: ['long_context_non_sensitive', 'deep_reasoning', 'agentic_coding'], members: ['openrouter:qwen/qwen3.8-max-0902'] },
   deepseek: { label: 'DeepSeek', origin: 'prc-hosted-via-openrouter', use_cases: ['fast_cheap_mechanical_non_sensitive'], members: ['openrouter:deepseek/deepseek-r1', 'codewhale'] },
   local: { label: 'Local ensemble (Ollama)', origin: 'onshore-local', use_cases: ['fast_cheap_mechanical', 'sovereign_ondevice_private'], members: ['ollama'] }
 });

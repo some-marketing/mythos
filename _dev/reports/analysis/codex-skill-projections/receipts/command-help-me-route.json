@@ -3,7 +3,7 @@
   "source_relative_path": "instructions/canonical/commands/help-me-route.yaml",
   "source_sha256": "5f16b0b121f020118969d9d74880660fc2e588c3ff38bbb251f0b89502ff9934",
   "projection_kind": "canonical_command",
-  "capability_tier": "ADVISORY",
+  "capability_tier": "BLOCKING",
   "semantic_review_state": "reviewed_safe",
   "target_exact_path": ".agents/skills/source-command-help-me-route/SKILL.md",
   "collision_state": "clear",

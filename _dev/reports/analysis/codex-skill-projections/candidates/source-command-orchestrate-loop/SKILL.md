@@ -1,6 +1,6 @@
 ---
 name: source-command-orchestrate-loop
-description: "Run a general review-driven orchestration loop with explicit actor roles, evidence gates, Codex finding classification, and debrief closeout Aliases resolved at generation time: /council-of-owls, /deliberate, /dl, /oa, /oc, /owl."
+description: "Run a general review-driven orchestration loop with explicit actor roles, evidence gates, Codex finding classification, and debrief closeout"
 ---
 
 # /orchestrate-loop

@@ -1,6 +1,6 @@
 ---
 name: source-command-route
-description: "Advisory operator-intent router for common Mythos workflow wording Aliases resolved at generation time: /help-me-route."
+description: "Advisory operator-intent router for common Mythos workflow wording"
 ---
 
 # /route

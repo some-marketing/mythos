@@ -5,7 +5,7 @@
   "projection_kind": "alias_metadata",
   "capability_tier": "ADVISORY",
   "semantic_review_state": "reviewed_safe",
-  "target_exact_path": ".agents/skills/source-command-orchestrate-loop/SKILL.md",
+  "target_exact_path": ".agents/skills/source-command-owl/SKILL.md",
   "collision_state": "clear",
   "application_status": "metadata_attached"
 }

@@ -1,6 +1,6 @@
 ---
 name: source-command-evidence-loop
-description: "Run a high-rigor orchestrate-loop profile that sends candidate work through distinct-family adversarial review, third-family context checking, research disposition for every finding, Perplexity research for public claims, and evidence-based re-entry until clean or at the inherited review ceiling Aliases resolved at generation time: /el."
+description: "Run a high-rigor orchestrate-loop profile that sends candidate work through distinct-family adversarial review, third-family context checking, research disposition for every finding, Perplexity research for public claims, and evidence-based re-entry until clean or at the inherited review ceiling"
 ---
 
 # /evidence-loop

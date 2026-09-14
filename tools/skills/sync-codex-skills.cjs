@@ -195,8 +195,20 @@ function validateSourceFile(sourcePath, sourceRoot, label, projectRoot = PROJECT
 }
 
 function safeOutputPath(root, ...segments) {
-  const safeRoot = resolvedPath(root);
-  const output = resolvedPath(path.resolve(root, ...segments));
+  const lexicalRoot = path.resolve(root);
+  const lexicalOutput = path.resolve(root, ...segments);
+  if (!isWithin(lexicalRoot, lexicalOutput)) throw new Error(`Unsafe output path outside intended root: ${lexicalOutput}`);
+  let cursor = lexicalRoot;
+  for (const component of path.relative(lexicalRoot, lexicalOutput).split(path.sep)) {
+    cursor = path.join(cursor, component);
+    try {
+      if (fs.lstatSync(cursor).isSymbolicLink()) throw new Error(`Refusing symbolic-link destination component: ${cursor}`);
+    } catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+    }
+  }
+  const safeRoot = resolvedPath(lexicalRoot);
+  const output = resolvedPath(lexicalOutput);
   if (!isWithin(safeRoot, output)) throw new Error(`Unsafe output path outside intended root: ${output}`);
   return output;
 }
@@ -268,10 +280,10 @@ function resolveAliases(root, config, commands, directNames, registryOverride) {
   return results;
 }
 
-function aliasesByTerminal(aliasResults) {
+function aliasesByTerminal(aliasResults, canonicalCommands = new Map()) {
   const map = new Map();
   for (const result of aliasResults) {
-    if (!result.ok || result.alias.id === result.terminal) continue;
+    if (!result.ok || result.alias.id === result.terminal || canonicalCommands.has(result.alias.id)) continue;
     if (!map.has(result.terminal)) map.set(result.terminal, []);
     map.get(result.terminal).push(String(result.alias.id));
   }
@@ -396,7 +408,10 @@ function buildCandidates(options = {}) {
   const directSourceRoot = path.join(root, config.families.direct_system_skills.source_root || '.claude/skills');
   const directNames = new Set(directSources.map(directNameFromSource));
   const aliasResults = resolveAliases(root, config, commands, directNames, options.aliasRegistry);
-  const terminalAliases = aliasesByTerminal(aliasResults);
+  const terminalAliases = aliasesByTerminal(aliasResults, commands);
+  const typedAliasTerminals = new Map(aliasResults
+    .filter((result) => result.ok && commands.has(result.alias.id))
+    .map((result) => [result.alias.id, result.terminal]));
   const candidates = [];
 
   for (const [id, command] of commands) {
@@ -407,9 +422,10 @@ function buildCandidates(options = {}) {
       continue;
     }
     const override = config.command_overrides[id];
+    const executionTarget = typedAliasTerminals.get(id) || id;
     const tier = override && override.capability_tier
       ? override.capability_tier
-      : handlers.has(id) ? 'BLOCKING' : 'ADVISORY';
+      : handlers.has(executionTarget) ? 'BLOCKING' : 'ADVISORY';
     const reviewState = (override && override.semantic_review_state) || config.families.canonical_commands.semantic_review_state;
     const sourceBytes = fs.readFileSync(command.sourcePath);
     const content = renderCanonicalSkill(id, command.spec, tier, override, terminalAliases.get(id) || []);
@@ -498,13 +514,14 @@ function buildCandidates(options = {}) {
   for (const result of aliasResults) {
     const alias = result.alias;
     const terminal = result.ok ? result.terminal : null;
+    const typedCommandTarget = result.ok && commands.has(alias.id);
     const commandTarget = terminal && commands.has(terminal);
     const targetRel = terminal
-      ? posix(path.join(config.target_root, commandTarget ? `source-command-${terminal}` : terminal, 'SKILL.md'))
+      ? posix(path.join(config.target_root, typedCommandTarget ? `source-command-${alias.id}` : commandTarget ? `source-command-${terminal}` : terminal, 'SKILL.md'))
       : posix(path.join(config.target_root, `unresolved-alias-${alias.id}`, 'SKILL.md'));
     const targetCandidate = candidates.find((candidate) => candidate.receipt.target_exact_path === targetRel);
     const targetAvailable = result.ok && isApplicable(targetCandidate || {});
-    const tier = !result.ok ? 'UNKNOWN' : targetAvailable ? (handlers.has(terminal) ? 'BLOCKING' : 'ADVISORY') : 'ABSENT';
+    const tier = !result.ok ? 'UNKNOWN' : targetAvailable ? targetCandidate.receipt.capability_tier : 'ABSENT';
     const registryBytes = fs.existsSync(path.join(root, config.alias_registry))
       ? fs.readFileSync(path.join(root, config.alias_registry))
       : Buffer.from(JSON.stringify(options.aliasRegistry || {}));

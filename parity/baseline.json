@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "9664c7de0e087a8702bdbb23f82a6ae97044dd1ecd419293353957afb726ad99",
+    "expected_tree_sha256": "d4b2eb988122cb157836d567a680dddd9d84690d16de15fd02355584c4f2fc55",
     "expected_files": [
       {
         "path": ".agents/skills/go/SKILL.md",
@@ -267,7 +267,7 @@
       },
       {
         "path": ".agents/skills/source-command-evidence-loop/SKILL.md",
-        "sha256": "5ba57854c7d99d740dfd0fd8875b12907e80e78e51c862a725e382c8d45b4413",
+        "sha256": "07b9b122d7e584c4e7b1a56c1abe4cdd31f524c2aaf6a665794bd984cfa7586e",
         "mode": 420
       },
       {
@@ -412,7 +412,7 @@
       },
       {
         "path": ".agents/skills/source-command-help-me-route/SKILL.md",
-        "sha256": "a864d114bfcfdc5d752ac082cb1c68dfb8cef20cf5c092c00b2ab9c9d111c9e0",
+        "sha256": "6878d64846d94b9b5919c197eb92ae09876b7426c36807616fc4f4fa50cd6fa7",
         "mode": 420
       },
       {
@@ -512,7 +512,7 @@
       },
       {
         "path": ".agents/skills/source-command-orchestrate-loop/SKILL.md",
-        "sha256": "2660fc12874437137b9daeda367b5c15cbda080ee806aa952684686cf39d16d5",
+        "sha256": "9123fea9d7c1f4075e56018dfff63a58d280a0e1d8e0418c48e28e5dbd9d75df",
         "mode": 420
       },
       {
@@ -622,7 +622,7 @@
       },
       {
         "path": ".agents/skills/source-command-route/SKILL.md",
-        "sha256": "52f98a6f73bbd2f68684ba8d242cb8662c375e078c15620fea3aea5b1e9a41dd",
+        "sha256": "016a5377e0027be879297d3d2364c6280f5a678a4b8722973a9ed74f1de31fd6",
         "mode": 420
       },
       {
@@ -2217,7 +2217,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-parity-remediation__verification.md",
-        "sha256": "b1d346716704617e6fe4af8d88ef77b53282a20ab42942aba47a39c44992342f",
+        "sha256": "a1574aa32e2c414f5d3b6165c17c3cf8aaca50ee77becf697f77f828b9d29d00",
         "mode": 420
       },
       {
@@ -2682,7 +2682,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-evidence-loop/SKILL.md",
-        "sha256": "5ba57854c7d99d740dfd0fd8875b12907e80e78e51c862a725e382c8d45b4413",
+        "sha256": "07b9b122d7e584c4e7b1a56c1abe4cdd31f524c2aaf6a665794bd984cfa7586e",
         "mode": 420
       },
       {
@@ -2827,7 +2827,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-help-me-route/SKILL.md",
-        "sha256": "a864d114bfcfdc5d752ac082cb1c68dfb8cef20cf5c092c00b2ab9c9d111c9e0",
+        "sha256": "6878d64846d94b9b5919c197eb92ae09876b7426c36807616fc4f4fa50cd6fa7",
         "mode": 420
       },
       {
@@ -2927,7 +2927,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-orchestrate-loop/SKILL.md",
-        "sha256": "2660fc12874437137b9daeda367b5c15cbda080ee806aa952684686cf39d16d5",
+        "sha256": "9123fea9d7c1f4075e56018dfff63a58d280a0e1d8e0418c48e28e5dbd9d75df",
         "mode": 420
       },
       {
@@ -3037,7 +3037,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-route/SKILL.md",
-        "sha256": "52f98a6f73bbd2f68684ba8d242cb8662c375e078c15620fea3aea5b1e9a41dd",
+        "sha256": "016a5377e0027be879297d3d2364c6280f5a678a4b8722973a9ed74f1de31fd6",
         "mode": 420
       },
       {
@@ -3117,7 +3117,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/projection-index.json",
-        "sha256": "091f9d8c6d41ba3cf8f72e9a0fa6bb58ffb762d5012cbbc70a261e23a2f166c8",
+        "sha256": "2e05d22c315e18e787058084bf0e7f8e7d73c6095b7ed0b5976c60d59070aea8",
         "mode": 420
       },
       {
@@ -3127,42 +3127,42 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-council-of-owls.json",
-        "sha256": "afef6dbf2d746c218876cc57b5e3d5dd8e3a3d07363d63bc144ff4fe42f38ba6",
+        "sha256": "c6db838b6bc908e6090b128190c86c2c53151aab4fc407db4c200f3ad2971aeb",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-deliberate.json",
-        "sha256": "afef6dbf2d746c218876cc57b5e3d5dd8e3a3d07363d63bc144ff4fe42f38ba6",
+        "sha256": "f54702ae447942605406d3dacd8fc31ddb50efb47cb6d578274b4c0ddd02a37a",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-dl.json",
-        "sha256": "afef6dbf2d746c218876cc57b5e3d5dd8e3a3d07363d63bc144ff4fe42f38ba6",
+        "sha256": "1a804d964a62da6be2253eafc74cbbb3e9b60a272a940bc0b9a10996dfc6ed15",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-el.json",
-        "sha256": "33fb4cc365057eed61fe2811b79985218ae857e2f276f41496aee704a07d1813",
+        "sha256": "ad1328814fcd2f76c88b0f21e54750ab45ff1f8bc9ab216f63f1cf154cecf3f2",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-help-me-route.json",
-        "sha256": "7973ca321f185dce17fa66627e784bbd9672ba53fb9e068bfe817e70efc52416",
+        "sha256": "795ce93f47e536a5d653db4eaa199b9aa05f16f5be3872045ffca45b737bf246",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-oa.json",
-        "sha256": "afef6dbf2d746c218876cc57b5e3d5dd8e3a3d07363d63bc144ff4fe42f38ba6",
+        "sha256": "2e881eed4100da2d1409496764b7d68a2ee2d71ec9ac47d61114e4ddac8845c0",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-oc.json",
-        "sha256": "afef6dbf2d746c218876cc57b5e3d5dd8e3a3d07363d63bc144ff4fe42f38ba6",
+        "sha256": "05c1f539c6135b0f407c64b2ec94f8dc8b1a3cb55c26da78f6ae5f7ac3a32982",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-owl.json",
-        "sha256": "afef6dbf2d746c218876cc57b5e3d5dd8e3a3d07363d63bc144ff4fe42f38ba6",
+        "sha256": "8a12dd447069eb2e0d33440b6b14957b84bce6866274554db8a56c31d4d9c0d6",
         "mode": 420
       },
       {
@@ -3532,7 +3532,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-help-me-route.json",
-        "sha256": "2f410d7a218d7cbd802fa6c062c1a142afd31040e86373ba3f227b0f6f4b2b71",
+        "sha256": "c9b07181553a0de9f67106f4b4bcad030184a31e40fbf123fca02d9166f3c927",
         "mode": 420
       },
       {
@@ -8767,7 +8767,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "48071ff2a620a2e3a5c1a363af0d56485728af4be34b1e45f48c4dcd9f4b7e38",
+        "sha256": "6ad7509d98e518c5ece428dc8a5071cb8c76b1020d4b05b07c7afca43e6e97b1",
         "mode": 420
       },
       {
@@ -15142,7 +15142,7 @@
       },
       {
         "path": "tools/skills/__tests__/sync-codex-skills.test.cjs",
-        "sha256": "6360b77fd31c752c553d3393b79594dba63d90a67b06bfc377c1b406a914ec04",
+        "sha256": "14119ab55b41d48e4b003dad072424bc1d5db2785bf4865c0e90728871a5e13b",
         "mode": 420
       },
       {
@@ -15152,7 +15152,7 @@
       },
       {
         "path": "tools/skills/sync-codex-skills.cjs",
-        "sha256": "5bff8ca404aa400785f19731767762e01834bee7ea6a6d127833c034a5616a14",
+        "sha256": "6ca51dc1717b515bb189ce344d6c3770987b612d74de41ffa9a0de5834870708",
         "mode": 420
       },
       {
@@ -16879,7 +16879,7 @@
     "package_script_count": 205,
     "command_alias_registry_sha256": "9bbc50aa1343a5502258e0e067eca0bb4cf4ea9f560abc5b998247a0e04b9901",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "48071ff2a620a2e3a5c1a363af0d56485728af4be34b1e45f48c4dcd9f4b7e38",
+    "graph_sha256": "6ad7509d98e518c5ece428dc8a5071cb8c76b1020d4b05b07c7afca43e6e97b1",
     "graph_nodes": 4091,
     "graph_edges": 2899
   },

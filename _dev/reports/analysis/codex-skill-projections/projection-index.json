@@ -8,8 +8,8 @@
     "route"
   ],
   "counts": {
-    "canonical_command:ADVISORY:reviewed_safe:already_aligned": 126,
-    "canonical_command:BLOCKING:reviewed_safe:already_aligned": 4,
+    "canonical_command:ADVISORY:reviewed_safe:already_aligned": 125,
+    "canonical_command:BLOCKING:reviewed_safe:already_aligned": 5,
     "direct_system_skill:ADVISORY:reviewed_safe:already_aligned": 1,
     "direct_system_skill:ABSENT:missing_source:blocked_missing_source": 2,
     "direct_system_skill:ABSENT:dependency_unavailable:blocked_dependency": 1,

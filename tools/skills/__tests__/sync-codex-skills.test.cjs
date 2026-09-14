@@ -126,8 +126,21 @@ test('typed aliases with canonical workflows retain their own runtime pointer', 
   const typed = byId(result, 'command-deliberate');
   const terminal = byId(result, 'command-orchestrate-loop');
   assert.match(typed.content, /instructions\/canonical\/commands\/deliberate\.yaml/);
-  assert.match(terminal.content, /Aliases resolved at generation time: \/deliberate/);
-  assert.equal(byId(result, 'alias-deliberate').receipt.target_exact_path, '.agents/skills/source-command-orchestrate-loop/SKILL.md');
+  assert.doesNotMatch(terminal.content, /Aliases resolved at generation time: \/deliberate/);
+  assert.equal(byId(result, 'alias-deliberate').receipt.target_exact_path, '.agents/skills/source-command-deliberate/SKILL.md');
+});
+
+test('handler-backed typed aliases retain their wrapper and deterministic execution', () => {
+  const root = fixture();
+  command(root, 'route');
+  command(root, 'help-me-route');
+  const aliases = { aliases: [{ id: 'help-me-route', target: 'route' }] };
+  const result = buildCandidates({ root, handlerIds: new Set(['route']), aliasRegistry: aliases });
+  const wrapper = byId(result, 'command-help-me-route');
+  assert.equal(wrapper.receipt.capability_tier, 'BLOCKING');
+  assert.match(wrapper.content, /actual invocation arguments/);
+  assert.equal(byId(result, 'alias-help-me-route').receipt.target_exact_path, '.agents/skills/source-command-help-me-route/SKILL.md');
+  assert.equal(byId(result, 'alias-help-me-route').receipt.capability_tier, 'BLOCKING');
 });
 
 test('canonical command identity is keyed by filename and mismatches never replace another command', () => {
@@ -348,6 +361,17 @@ test('candidate staging writes through the validated resolved directory', () => 
   assert.equal(result.candidateDir, fs.realpathSync(resolvedLane));
   assert.equal(fs.existsSync(path.join(resolvedLane, 'projection-index.json')), true);
   assert.equal(fs.lstatSync(linkedLane).isSymbolicLink(), true);
+});
+
+test('dangling destination symlinks cannot redirect applied writes', () => {
+  const root = fixture();
+  command(root, 'sample');
+  const skillDir = path.join(root, '.agents/skills/source-command-sample');
+  fs.mkdirSync(skillDir, { recursive: true });
+  const external = path.join(os.tmpdir(), `codex-projector-dangling-${path.basename(root)}.md`);
+  fs.symlinkSync(external, path.join(skillDir, 'SKILL.md'));
+  assert.throws(() => sync({ root, handlerIds: new Set(), apply: true }), /Refusing symbolic-link destination component/);
+  assert.equal(fs.existsSync(external), false);
 });
 
 test('generated cleanup refuses a child symlink escaping the validated root', () => {

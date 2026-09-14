@@ -285,7 +285,7 @@ function renderFrameworkSkill(text, identity) {
 
 function bundledResources(sourcePath) {
   const sourceDir = path.dirname(sourcePath);
-  return walk(sourceDir, (file) => {
+  const files = walk(sourceDir, (file) => {
     if (file === sourcePath) return false;
     let cursor = path.dirname(file);
     while (cursor !== sourceDir && isWithin(sourceDir, cursor)) {
@@ -293,11 +293,18 @@ function bundledResources(sourcePath) {
       cursor = path.dirname(cursor);
     }
     return true;
-  }).map((file) => ({
-    sourcePath: file,
-    relativePath: relative(sourceDir, file),
-    bytes: fs.readFileSync(file)
-  }));
+  });
+  return files.map((file) => {
+    const metadata = fs.lstatSync(file);
+    if (metadata.isSymbolicLink()) throw new Error(`Refusing symbolic-link bundled resource: ${relative(sourceDir, file)}`);
+    if (!metadata.isFile()) throw new Error(`Refusing non-file bundled resource: ${relative(sourceDir, file)}`);
+    return {
+      sourcePath: file,
+      relativePath: relative(sourceDir, file),
+      bytes: fs.readFileSync(file),
+      mode: metadata.mode & 0o777
+    };
+  });
 }
 
 function containsPrivateAbsolutePath(bytes) {
@@ -320,7 +327,7 @@ function receiptBase(config, sourcePath, sourceBytes, kind, capabilityTier, revi
 
 function attachPackageEvidence(receipt, sourceBytes, resources) {
   const resourceManifest = resources
-    .map((resource) => ({ path: posix(resource.relativePath), sha256: sha256(resource.bytes) }))
+    .map((resource) => ({ path: posix(resource.relativePath), sha256: sha256(resource.bytes), mode: resource.mode.toString(8).padStart(4, '0') }))
     .sort((a, b) => a.path.localeCompare(b.path));
   receipt.resource_manifest = resourceManifest;
   receipt.package_sha256 = sha256(Buffer.from(JSON.stringify({
@@ -495,6 +502,7 @@ function writeCandidate(candidateDir, candidate) {
     const resourcePath = safeOutputPath(path.dirname(skillPath), resource.relativePath);
     fs.mkdirSync(path.dirname(resourcePath), { recursive: true });
     fs.writeFileSync(resourcePath, resource.bytes);
+    fs.chmodSync(resourcePath, resource.mode);
   }
 }
 
@@ -512,7 +520,8 @@ function expectedPackageFiles(candidate, targetRoot) {
     { filePath: skillPath, bytes: Buffer.from(candidate.content) },
     ...candidate.resources.map((resource) => ({
       filePath: safeOutputPath(path.dirname(skillPath), resource.relativePath),
-      bytes: resource.bytes
+      bytes: resource.bytes,
+      mode: resource.mode
     }))
   ];
 }
@@ -521,15 +530,19 @@ function packageAlignment(candidate, targetRoot) {
   const files = expectedPackageFiles(candidate, targetRoot);
   const missing = files.filter((item) => !fs.existsSync(item.filePath));
   const conflicting = files.filter((item) => fs.existsSync(item.filePath) && !fs.readFileSync(item.filePath).equals(item.bytes));
-  return { aligned: missing.length === 0 && conflicting.length === 0, files, missing, conflicting };
+  const modeMismatches = files.filter((item) => fs.existsSync(item.filePath)
+    && item.mode != null
+    && (fs.statSync(item.filePath).mode & 0o777) !== item.mode);
+  return { aligned: missing.length === 0 && conflicting.length === 0 && modeMismatches.length === 0, files, missing, conflicting, modeMismatches };
 }
 
 function applyCandidate(root, candidate, targetRoot) {
   if (!isApplicable(candidate)) return false;
   const alignment = packageAlignment(candidate, targetRoot);
-  if (alignment.conflicting.length) {
+  if (alignment.conflicting.length || alignment.modeMismatches.length) {
     candidate.receipt.application_status = 'blocked_existing_preserved';
-    candidate.receipt.detail = `conflicting existing package file(s): ${alignment.conflicting.map((item) => relative(root, item.filePath)).join(', ')}`;
+    const conflicts = [...new Set([...alignment.conflicting, ...alignment.modeMismatches].map((item) => relative(root, item.filePath)))];
+    candidate.receipt.detail = `conflicting existing package file(s): ${conflicts.join(', ')}`;
     return false;
   }
   if (alignment.aligned) {
@@ -539,6 +552,7 @@ function applyCandidate(root, candidate, targetRoot) {
   for (const item of alignment.missing) {
     fs.mkdirSync(path.dirname(item.filePath), { recursive: true });
     fs.writeFileSync(item.filePath, item.bytes);
+    if (item.mode != null) fs.chmodSync(item.filePath, item.mode);
   }
   candidate.receipt.application_status = 'applied_additive';
   return true;

@@ -241,20 +241,28 @@ test('malformed frontmatter receipts identify the line without copying its conte
 test('direct resources copy recursively and application remains additive-only', () => {
   const root = fixture();
   skill(root, 'ticktock');
-  write(root, '.claude/skills/ticktock/references/nested.md', 'evidence\n');
+  const sourceResource = write(root, '.claude/skills/ticktock/references/nested.md', 'evidence\n');
+  fs.chmodSync(sourceResource, 0o755);
   const first = sync({ root, handlerIds: new Set(), apply: true });
   assert.equal(byId(first, 'direct-ticktock').receipt.application_status, 'applied_additive');
   const evidence = byId(first, 'direct-ticktock').receipt;
-  assert.deepEqual(evidence.resource_manifest, [{ path: 'references/nested.md', sha256: sha256ForTest('evidence\n') }]);
+  assert.deepEqual(evidence.resource_manifest, [{ path: 'references/nested.md', sha256: sha256ForTest('evidence\n'), mode: '0755' }]);
   assert.match(evidence.package_sha256, /^[a-f0-9]{64}$/);
   const firstPackageHash = evidence.package_sha256;
   const resource = path.join(root, '.agents/skills/ticktock/references/nested.md');
   assert.equal(fs.readFileSync(resource, 'utf8'), 'evidence\n');
+  assert.equal(fs.statSync(resource).mode & 0o777, 0o755);
   fs.unlinkSync(resource);
   assert.equal(sync({ root, handlerIds: new Set(), check: true }).drift, 1);
   const repaired = sync({ root, handlerIds: new Set(), apply: true });
   assert.equal(byId(repaired, 'direct-ticktock').receipt.application_status, 'applied_additive');
   assert.equal(fs.readFileSync(resource, 'utf8'), 'evidence\n');
+  assert.equal(fs.statSync(resource).mode & 0o777, 0o755);
+  fs.chmodSync(resource, 0o644);
+  assert.equal(sync({ root, handlerIds: new Set(), check: true }).drift, 1);
+  const modeConflict = sync({ root, handlerIds: new Set(), apply: true });
+  assert.equal(byId(modeConflict, 'direct-ticktock').receipt.application_status, 'blocked_existing_preserved');
+  assert.equal(fs.statSync(resource).mode & 0o777, 0o644);
   fs.writeFileSync(resource, 'foreign resource\n');
   assert.equal(sync({ root, handlerIds: new Set(), check: true }).drift, 1);
   const conflict = sync({ root, handlerIds: new Set(), apply: true });
@@ -268,6 +276,16 @@ test('direct resources copy recursively and application remains additive-only', 
   const changed = byId(buildCandidates({ root, handlerIds: new Set() }), 'direct-ticktock').receipt;
   assert.notEqual(changed.package_sha256, firstPackageHash);
   assert.equal(changed.source_sha256, evidence.source_sha256);
+});
+
+test('bundled resource symlinks are rejected before their targets are read', () => {
+  const root = fixture();
+  skill(root, 'ticktock');
+  const outside = write(root, 'private/key.pem', 'external private bytes\n');
+  const link = path.join(root, '.claude/skills/ticktock/key.pem');
+  fs.symlinkSync(outside, link);
+  assert.throws(() => sync({ root, handlerIds: new Set() }), /Refusing symbolic-link bundled resource/);
+  assert.equal(fs.existsSync(path.join(root, '_dev/reports/analysis/codex-skill-projections/candidates/ticktock/key.pem')), false);
 });
 
 test('candidate staging refuses repository and target directory deletion', () => {

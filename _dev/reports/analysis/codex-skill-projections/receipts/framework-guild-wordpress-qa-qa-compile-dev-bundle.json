@@ -11,12 +11,14 @@
   "resource_manifest": [
     {
       "path": "references/observational-examples.md",
-      "sha256": "9d2b1883459331d7c8f2208ea634e130a73ea37c54bff9399c7ecef607f32614"
+      "sha256": "9d2b1883459331d7c8f2208ea634e130a73ea37c54bff9399c7ecef607f32614",
+      "mode": "0644"
     },
     {
       "path": "references/pre-gate-inventory-template.md",
-      "sha256": "ac40f6fefb32cbdcb3899a339c4675ec0712b84d29adb4c188459ccbdbf33703"
+      "sha256": "ac40f6fefb32cbdcb3899a339c4675ec0712b84d29adb4c188459ccbdbf33703",
+      "mode": "0644"
     }
   ],
-  "package_sha256": "97d38dac8209f28be5f7241c0756b892b6e27cf49532c1916e1bb5dea3f50ad0"
+  "package_sha256": "57c6b754b7c6b7f62dac453a7bd9bb20eadab29f22730eca8250d0433f432775"
 }

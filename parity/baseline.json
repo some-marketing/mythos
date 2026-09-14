@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "c08832acf59106ea1ffa2dd5b925324b9e1d42b62dfbe6b84daea071bd8fc4c9",
+    "expected_tree_sha256": "679ea7aa1833aa6efba1e0748142db63c04be55c3acab2a7ebc7ebe9760b6418",
     "expected_files": [
       {
         "path": ".agents/skills/go/SKILL.md",
@@ -2217,7 +2217,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-parity-remediation__verification.md",
-        "sha256": "d3d33f83e0421e311f86112221d1758a5c01451169fc7ad86d8245671506ed12",
+        "sha256": "9f3b937ad7b0052b3eee502c8acb8562e20f927d6d6ceb74e8c843fcfb67f291",
         "mode": 420
       },
       {
@@ -3113,6 +3113,11 @@
       {
         "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-write-handoff/SKILL.md",
         "sha256": "107eafea381e654b7a6ed4559e63a8f09724b6b398c1e31efc9e5a83ee4a3a24",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/managed-targets.json",
+        "sha256": "1469fe3275eb816c628bb67a0cabcf2f3ea39df7d50a57038ec46ab7beefd0f3",
         "mode": 420
       },
       {
@@ -8767,7 +8772,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "e1920563fed12871cc199082b67ff4601c7ba685020e26a8211bbaf3c93d9330",
+        "sha256": "a3c58a1980be79bfbb640647e3b5d688c64972d1b6d6a0b77814fd06d20915c9",
         "mode": 420
       },
       {
@@ -15142,7 +15147,7 @@
       },
       {
         "path": "tools/skills/__tests__/sync-codex-skills.test.cjs",
-        "sha256": "90c609e1b502cd0a2491a2c66b6e08daff0a496c19bf13890eac229551e2b606",
+        "sha256": "31ea9990fb08f0a8a301fa2d7c2536c7733ce5a3c7313ac617763780b5e1d4de",
         "mode": 420
       },
       {
@@ -15152,7 +15157,7 @@
       },
       {
         "path": "tools/skills/sync-codex-skills.cjs",
-        "sha256": "4721495f9ebe62090710131283d21c76e15edc467059e1b7d1f0947ae25f9e01",
+        "sha256": "706319d2e0064f23f1cfe52fab90f9ea1de0d7b05ce4eed0c1a9962eb6446f7b",
         "mode": 420
       },
       {
@@ -16879,7 +16884,7 @@
     "package_script_count": 205,
     "command_alias_registry_sha256": "9bbc50aa1343a5502258e0e067eca0bb4cf4ea9f560abc5b998247a0e04b9901",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "e1920563fed12871cc199082b67ff4601c7ba685020e26a8211bbaf3c93d9330",
+    "graph_sha256": "a3c58a1980be79bfbb640647e3b5d688c64972d1b6d6a0b77814fd06d20915c9",
     "graph_nodes": 4091,
     "graph_edges": 2899
   },

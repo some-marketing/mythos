@@ -281,6 +281,18 @@ test('check reports orphaned managed targets whose source candidates disappeared
   assert.equal(checked.candidates.some((candidate) => candidate.id === 'command-sample'), false);
 });
 
+test('candidate-only staging preserves managed-target history for later orphan checks', () => {
+  const root = fixture();
+  const source = command(root, 'sample');
+  sync({ root, handlerIds: new Set(), apply: true });
+  fs.unlinkSync(path.join(root, '_dev/reports/analysis/codex-skill-projections/managed-targets.json'));
+  sync({ root, handlerIds: new Set() });
+  fs.unlinkSync(source);
+  assert.equal(sync({ root, handlerIds: new Set(), check: true }).drift, 1);
+  const ledger = JSON.parse(fs.readFileSync(path.join(root, '_dev/reports/analysis/codex-skill-projections/managed-targets.json'), 'utf8'));
+  assert.deepEqual(ledger.targets, ['.agents/skills/source-command-sample/SKILL.md']);
+});
+
 test('malformed frontmatter receipts identify the line without copying its contents', () => {
   const root = fixture();
   const sensitiveLine = ['not-frontmatter', ['', 'Users', 'private', 'secret'].join('/')].join(' ');
@@ -328,6 +340,19 @@ test('direct resources copy recursively and application remains additive-only', 
   const changed = byId(buildCandidates({ root, handlerIds: new Set() }), 'direct-ticktock').receipt;
   assert.notEqual(changed.package_sha256, firstPackageHash);
   assert.equal(changed.source_sha256, evidence.source_sha256);
+});
+
+test('removed bundled resources remain preserved but are reported as package drift', () => {
+  const root = fixture();
+  skill(root, 'ticktock');
+  const sourceResource = write(root, '.claude/skills/ticktock/references/old.md', 'old evidence\n');
+  sync({ root, handlerIds: new Set(), apply: true });
+  const installedResource = path.join(root, '.agents/skills/ticktock/references/old.md');
+  fs.unlinkSync(sourceResource);
+  assert.equal(sync({ root, handlerIds: new Set(), check: true }).drift, 1);
+  const reapplied = sync({ root, handlerIds: new Set(), apply: true });
+  assert.equal(byId(reapplied, 'direct-ticktock').receipt.application_status, 'blocked_existing_preserved');
+  assert.equal(fs.readFileSync(installedResource, 'utf8'), 'old evidence\n');
 });
 
 test('bundled resource symlinks are rejected before their targets are read', () => {

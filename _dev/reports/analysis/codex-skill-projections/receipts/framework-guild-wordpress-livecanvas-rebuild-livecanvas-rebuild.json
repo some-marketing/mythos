@@ -1,0 +1,11 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "frameworks/wordpress/livecanvas-rebuild/.claude/skills/livecanvas-rebuild/SKILL.md",
+  "source_sha256": "02cffab824eaca9e9b99ea0be266fe564468175e421244ffcf3e35104e85846a",
+  "projection_kind": "framework_helper",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "pending_review",
+  "target_exact_path": ".agents/skills/guild-wordpress-livecanvas-rebuild-livecanvas-rebuild/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "candidate"
+}

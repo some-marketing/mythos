@@ -1,0 +1,11 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "frameworks/project-management/dart-collaboration/.claude/skills/dart-collaboration/SKILL.md",
+  "source_sha256": "2078c61c4f002db0e5a3ded68fa5a6c5f1e83696179e31902e7602a95d5bea07",
+  "projection_kind": "framework_helper",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "pending_review",
+  "target_exact_path": ".agents/skills/guild-project-management-dart-collaboration-dart-collaboration/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "candidate"
+}

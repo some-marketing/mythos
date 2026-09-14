@@ -1,0 +1,11 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "frameworks/wordpress/design-research/.claude/skills/design-research/SKILL.md",
+  "source_sha256": "d41f1c0a9ddf604926309dfed567ca872d3638a732914d1b7a7956a936359bc3",
+  "projection_kind": "framework_helper",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "pending_review",
+  "target_exact_path": ".agents/skills/guild-wordpress-design-research-design-research/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "candidate"
+}

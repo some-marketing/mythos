@@ -1,0 +1,11 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "frameworks/deliverables/version-reconciliation/.claude/skills/version-reconciliation/SKILL.md",
+  "source_sha256": "c7b7310d4789cfb0e27dcdbeed874fdabba371c074b48820ed523824c1cd1241",
+  "projection_kind": "framework_helper",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "pending_review",
+  "target_exact_path": ".agents/skills/guild-deliverables-version-reconciliation-version-reconciliation/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "candidate"
+}

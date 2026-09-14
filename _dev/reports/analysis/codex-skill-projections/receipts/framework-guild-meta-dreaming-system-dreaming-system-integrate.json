@@ -1,0 +1,11 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "frameworks/meta/dreaming-system/.claude/skills/dreaming-system/integrate/SKILL.md",
+  "source_sha256": "f9567604fae280d8cbef1115b498f2e79a8e0441c1525fe9ed06cdf886d1b92f",
+  "projection_kind": "framework_helper",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "pending_review",
+  "target_exact_path": ".agents/skills/guild-meta-dreaming-system-dreaming-system-integrate/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "candidate"
+}

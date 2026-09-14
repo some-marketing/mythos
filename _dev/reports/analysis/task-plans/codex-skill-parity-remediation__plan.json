@@ -1,0 +1,191 @@
+{
+  "task_id": "codex-skill-parity-remediation",
+  "title": "Codex skill parity remediation",
+  "task_summary": "Create an evidence-bearing, custody-safe Codex skill projection system and close the audited discoverability gaps without duplicating canonical authority.",
+  "scope_type": "system",
+  "scope_justification": "The task changes repository-local Codex skill discovery, adapter policy, projection tooling, validation, and derived harness instructions.",
+  "storage_root": "_dev/reports/analysis/task-plans",
+  "origin_client_code": null,
+  "origin_project_id": null,
+  "description": "Remediate the full Codex skill parity audit by defining explicit projection policy, generating reviewed-safe missing projections, repairing invalid or stale projections only under bounded custody, and verifying real Codex discovery and capability truth.",
+  "client_code": null,
+  "project_id": null,
+  "source": "operator",
+  "requested_by": "operator via $bp-r with explicit instruction to plan and run",
+  "timestamp": "2026-09-14T16:40:09Z",
+  "similarity_assessment": {
+    "top_framework": "meta/execution-normalization",
+    "match_score": 51,
+    "match_rationale": "The framework covers cross-harness standardization and runtime normalization, but the concrete Codex projection and custody mechanics are bespoke gaps.",
+    "gaps": [
+      "No existing prompt chain owns Codex skill candidate generation or Codex frontmatter normalization",
+      "No existing framework defines direct versus routed exposure for framework-local helpers",
+      "No existing framework establishes path-level custody for the current untracked .agents tree"
+    ],
+    "applicable_modes": ["REVIEW_ONLY", "PATCH_ALLOWED", "COORDINATOR"],
+    "trust_tier": "applicable-with-gaps"
+  },
+  "existing_work_check": {
+    "has_overlap": true,
+    "disposition": "False-positive and subset matches only. Framework registry, lifecycle mechanics, ticktock, and outward/inward plans do not own the umbrella Codex projection surface; this plan adopts only the current lifecycle slice and does not overwrite their Claude sources."
+  },
+  "lived_context": {
+    "related_artifacts": [
+      "_dev/reports/analysis/task-plans/framework-registry-sync-9-missing__plan.json",
+      "_dev/reports/analysis/task-plans/session-lifecycle-mechanical-repairs__plan.json",
+      "_dev/reports/analysis/task-plans/ticktock-skill__plan.json",
+      "_dev/reports/analysis/task-plans/outward-inward-parity__plan.json"
+    ],
+    "lessons": [
+      "Check completeness bidirectionally against disk",
+      "Pair generation and validation modes",
+      "Worker-green is insufficient; reverify in the real harness",
+      "Untracked status does not prove custody",
+      "Generated projections remain derivative of canonical or accepted source authority"
+    ]
+  },
+  "blueprint_artifacts": {
+    "solo_reasoning": "_dev/reports/analysis/bp-r__codex-skill-parity-remediation__solo-reasoning.md",
+    "convene_synthesis": "_dev/reports/analysis/convene-runs/20260914T164532Z-codex-skill-parity-remediation/synthesis.md",
+    "concept": "_dev/concepts/codex-skill-parity-remediation.md",
+    "grounding": "_dev/reports/analysis/philosophy-grounding__codex-skill-parity-remediation.md"
+  },
+  "bounded_plan": {
+    "steps": [
+      {
+        "step_id": "S0",
+        "stage": "contract",
+        "stage_title": "Prove and declare the projection contract",
+        "description": "Run this and all later implementation steps in the isolated worktree `~/.mythos-worktrees/mythos-codex-skill-parity-remediation` on branch `codex/skill-parity-remediation`, after copying only the adopted lifecycle and blueprint artifacts into that worktree. Adopt the existing lifecycle slice as probation evidence; add explicit, machine-consumed projection families and capability tiers to the Codex adapter; implement one general projector with separate canonical-command, direct-system-skill, alias-resolution, and framework-helper strategies; derive deterministic handler coverage from the exported HANDLERS registry; preserve the lifecycle script as a compatibility wrapper; stamp candidates and receipts with generator id, source path, source hash, projection kind, capability tier, and semantic review state. UNKNOWN, harness-specific, malformed, colliding, or private-path-bearing candidates must be staged and rejected from application. Include negative fixtures for ground-in-philosophy's Pi-specific semantics, adapter-managed commands without HANDLERS (must be ADVISORY rather than BLOCKING), alias cycles/nonterminal targets, and aliases such as tt/oil/chi that cross the command-to-project-skill boundary.",
+        "framework_step": "meta/execution-normalization: runtime contract extraction and cross-harness standardization",
+        "mode": "PATCH_ALLOWED",
+        "is_gap": true,
+        "files_touched": [
+          "instructions/adapters/codex.yaml",
+          "tools/skills/sync-codex-skills.cjs (NEW)",
+          "tools/skills/sync-lifecycle-command-skills.cjs",
+          "tools/skills/README.md",
+          "tools/skills/__tests__/sync-codex-skills.test.cjs (NEW)",
+          "tools/skills/__tests__/sync-lifecycle-command-skills.test.cjs"
+        ]
+      },
+      {
+        "step_id": "S1",
+        "stage": "project",
+        "stage_title": "Project reviewed-safe capabilities in bounded families",
+        "depends_on": ["S0"],
+        "description": "From the isolated worktree, run the projector in candidate mode, review classifications, then apply only proven-absent and reviewed-safe outputs into that same worktree's `.agents/skills`. Prioritize daily operator vocabulary and governance: go, ticktock/tt, owl/oa/dl/oc resolution, ground-in-philosophy, repair-plan, and sm-os-status. Project the remaining safe canonical command pointers and the four missing direct skills from current accepted Claude sources. Resolve aliases dynamically through command-aliases and prove resolution; do not duplicate alias behavior. Project framework-local helpers only under a collision-free guild-<service>-<framework>-<skill> namespace with lineage and guardrail references. Repair the 33 invalid and 69 drift-candidate existing packages only in path-bounded child batches that preserve bodies/resources and have explicit custody evidence; otherwise record them as blocked residuals rather than overwrite them.",
+        "framework_step": "meta/execution-normalization: staged normalization and reviewed application",
+        "mode": "COORDINATOR",
+        "is_gap": true,
+        "files_touched": [
+          ".agents/skills/<reviewed-safe absent projections>/SKILL.md (NEW)",
+          ".agents/skills/<custody-approved existing projections>/SKILL.md (EDIT only after exact-path preflight)",
+          "_dev/reports/analysis/codex-skill-projections/** (NEW receipts and staged candidates)"
+        ]
+      },
+      {
+        "step_id": "S2",
+        "stage": "verify",
+        "stage_title": "Verify real harness behavior and close through review",
+        "depends_on": ["S1"],
+        "description": "From the same isolated worktree, run projector check mode, pinned Codex package-schema validation, canonical and alias resolution coverage, lifecycle tests, negative fixtures, path-leak checks, and instructions generation/validation after generated-output custody is secured. Produce separate counts for present, syntactically valid, resolvable, semantically reviewed, deterministic-handler-backed, and UNKNOWN. Obtain fresh Codex runtime receipts using `codex exec --ephemeral --sandbox read-only -C ~/.mythos-worktrees/mythos-codex-skill-parity-remediation --output-last-message <receipt> <probe>` for at least one direct skill, canonical command skill, alias, and framework helper; if the CLI cannot expose or invoke a class, report that class as discovery UNKNOWN. Inspect the scoped diff, run a distinct-family acceptance review bound to the diff and receipts, repair blocking findings through an amendment, then produce a debrief. Perform the commit/PR leg only in this worktree on branch `codex/skill-parity-remediation`; if worktree privacy or identity gates prevent scoped staging/review, stop at an explicit operator gate rather than changing the shared checkout.",
+        "framework_step": "meta/execution-normalization: validation and evidence-driven closeout",
+        "mode": "COORDINATOR",
+        "is_gap": true,
+        "files_touched": [
+          "AGENTS.md and other generator-owned outputs only through npm run instructions:generate",
+          "_dev/reports/analysis/codex-skill-parity-remediation*",
+          "_dev/reports/analysis/run-debrief__codex-skill-parity-remediation*.md"
+        ]
+      }
+    ],
+    "required_gates": [
+      "No writes to instructions/canonical/**",
+      "No existing .agents skill overwrite without exact-path custody and content-preserving strategy",
+      "UNKNOWN or harness-specific candidates cannot be applied without a reviewed Codex override",
+      "Aliases resolve dynamically and never become independent behavioral authority",
+      "Presence, package validity, semantic review, runtime resolution, and deterministic enforcement are reported separately",
+      "Consequence-grade plan review and distinct-family implementation review are required",
+      "Scoped commit and PR must exclude unrelated dirty work and run only from the declared secondary worktree"
+    ],
+    "expected_outcomes": [
+      "A machine-consumed Codex projection contract and one source-family-aware projector exist",
+      "All audited missing capabilities are either projected with receipts or explicitly classified UNKNOWN/unsupported with a named blocker",
+      "The four missing direct skills and reviewed-safe missing canonical commands are available to Codex without copied canonical authority",
+      "Alias parity is mechanically proven without behavior duplication",
+      "Framework-local helper exposure is explicit and lineage-preserving",
+      "Existing invalid or stale skills are repaired only where custody is proven; all residuals are enumerated",
+      "Real-harness receipts and independent review support every parity claim",
+      "A feature-branch PR contains only this workstream's files"
+    ],
+    "risk_notes": "High cross-harness and multi-actor risk. The main falsifiers are a generated skill that contains false-for-Codex semantics, a capability marked deterministic without a registered handler, an alias body that diverges from its target, a framework helper detached from lineage/guardrails, a write to a foreign existing skill, or a discovery claim supported only by file presence. Any of these blocks acceptance.",
+    "hardening_opportunity": "If successful, register the projector's coverage check as the Codex parity gate and retire lifecycle-only duplication after its probation evidence is reviewed."
+  },
+  "routing_expectations": {
+    "risk_tier": "high",
+    "review_lane": "codex-bridge",
+    "review_lane_rationale": "This is cross-harness system work spanning policy, generators, many projected packages, and actual Codex discovery. Local tests are necessary but insufficient; distinct-family review and consequence-grade convene evidence are required.",
+    "escalation_triggers": [
+      "Any required instructions/canonical/** edit",
+      "Any inability to distinguish an existing file's custody",
+      "Any candidate classified UNKNOWN or containing another harness's capability claim",
+      "Any need to overwrite unrelated dirty work or change branches in the shared checkout",
+      "Any real-harness discovery failure despite passing package validation"
+    ]
+  },
+  "scope_identity": {
+    "workstream_scope": "codex-skill-parity-remediation",
+    "session_or_run_id": "01a0a0b0-595f-7e40-8b4c-78d6570ef785",
+    "working_surface": "/Users/admin/mythos for blueprint artifacts; ~/.mythos-worktrees/mythos-codex-skill-parity-remediation for all implementation, validation, commit, and PR work",
+    "owned_artifacts": [
+      "_dev/reports/analysis/bp-r__codex-skill-parity-remediation__solo-reasoning.md",
+      "_dev/reports/analysis/convene-runs/20260914T164532Z-codex-skill-parity-remediation/**",
+      "_dev/concepts/codex-skill-parity-remediation.md",
+      "_dev/reports/analysis/philosophy-grounding__codex-skill-parity-remediation.md",
+      "_dev/reports/analysis/task-plans/codex-skill-parity-remediation__plan.json",
+      "_dev/reports/analysis/task-plans/codex-skill-parity-remediation__plan.md",
+      "_dev/reports/analysis/codex-skill-projections/**",
+      "_dev/reports/analysis/codex-skill-parity-remediation*",
+      "_dev/reports/analysis/run-debrief__codex-skill-parity-remediation*.md",
+      "instructions/adapters/codex.yaml",
+      "tools/skills/README.md",
+      "tools/skills/sync-lifecycle-command-skills.cjs",
+      "tools/skills/__tests__/sync-lifecycle-command-skills.test.cjs",
+      "tools/skills/sync-codex-skills.cjs",
+      "tools/skills/__tests__/sync-codex-skills.test.cjs"
+    ],
+    "forbidden_artifacts": [
+      "instructions/canonical/**",
+      ".claude/skills/outward-inward-loop/**",
+      "all client files",
+      "all unrelated dirty or untracked paths",
+      "existing .agents/skills paths without exact-path custody"
+    ],
+    "dynamic_ownership_rule": "A generated .agents/skills path enters this workstream's owned set only after the projector emits a receipt naming that exact path, proves it absent immediately before write, and classifies the candidate reviewed-safe. An existing path requires a CustodyRecord containing the exact path, preflight git status, SHA-256 of current bytes, attribution source (generator stamp or UNKNOWN), and an operator-stamp reference. UNKNOWN attribution or a missing operator stamp blocks refresh and leaves the file as an enumerated residual."
+  },
+  "philosophy_grounding": {
+    "artifact": "_dev/reports/analysis/philosophy-grounding__codex-skill-parity-remediation.md",
+    "verdict": "needs-adjustment",
+    "adjustments_applied": true
+  },
+  "prior_reviews": [
+    {
+      "actor": "kernel triad: claude, codex, gemini",
+      "artifact": "_dev/reports/analysis/convene-runs/20260914T164532Z-codex-skill-parity-remediation/synthesis.md",
+      "verdict": "needs-adjustment",
+      "disposition": "All blocking architecture adjustments incorporated before this plan was written."
+    }
+  ],
+  "produced_by_actor_id": "codex",
+  "produced_by_actor_type": "intelligence",
+  "produced_by_harness_id": "codex-app",
+  "produced_at": "2026-09-14T16:40:09Z",
+  "validated_by_actor_id": null,
+  "validated_by_actor_type": null,
+  "validated_by_harness_id": null,
+  "validated_at": null,
+  "validation_artifact": null,
+  "validation_method": null,
+  "validation_confidence": null
+}

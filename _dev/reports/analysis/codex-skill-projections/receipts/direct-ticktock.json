@@ -1,0 +1,11 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": ".claude/skills/ticktock/SKILL.md",
+  "source_sha256": "4c44b35d9c7cfc0b9da1b43c8f98e96659a2a941ddf344ab1e5ceaa5e674e631",
+  "projection_kind": "direct_system_skill",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "reviewed_safe",
+  "target_exact_path": ".agents/skills/ticktock/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "already_aligned"
+}

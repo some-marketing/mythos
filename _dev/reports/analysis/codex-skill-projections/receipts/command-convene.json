@@ -1,0 +1,11 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "instructions/canonical/commands/convene.yaml",
+  "source_sha256": "572bdef45b48a8c2ffa137454fe1a266f5faff8608f165fbdb312530e71e4208",
+  "projection_kind": "canonical_command",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "reviewed_safe",
+  "target_exact_path": ".agents/skills/source-command-convene/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "already_aligned"
+}

@@ -1,0 +1,11 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "frameworks/deliverables/scope-verification/.claude/skills/scope-verification/SKILL.md",
+  "source_sha256": "4c6a392b05da40f97807324f4176f4a877cd8249f6d31e4b7293c37b7bc4fd3f",
+  "projection_kind": "framework_helper",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "pending_review",
+  "target_exact_path": ".agents/skills/guild-deliverables-scope-verification-scope-verification/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "candidate"
+}

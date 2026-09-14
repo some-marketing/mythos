@@ -1,0 +1,12 @@
+---
+name: source-command-arc-status
+description: "Show the current actor-arc snapshot and lifecycle state for the resolving actor"
+---
+
+# /arc-status
+
+Canonical authority: `instructions/canonical/commands/arc-status.yaml`. Read that file at execution time; this projection never copies or overrides its behavioral body.
+
+Capability tier: **ADVISORY**.
+
+Read the canonical command at execution time and carry out its workflow with Codex capabilities. This projection is ADVISORY; availability of this skill is not a blocking runtime mechanism.

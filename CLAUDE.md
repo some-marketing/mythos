@@ -236,3 +236,4 @@ Command names are mechanical aliases. The typed alias is provenance; authority, 
 - `/6` -> `/undefined` [compatibility]; authority: `/undefined`
 - `/7` -> `/undefined` [compatibility]; authority: `/undefined`
 - `/8` -> `/undefined` [compatibility]; authority: `/undefined`
+- `/9` -> `/undefined` [compatibility]; authority: `/undefined`

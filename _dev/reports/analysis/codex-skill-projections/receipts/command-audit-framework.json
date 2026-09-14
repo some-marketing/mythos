@@ -1,0 +1,11 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "instructions/canonical/commands/audit-framework.yaml",
+  "source_sha256": "cd0f0a3bd6714c91b0fdfcf2e0c3ea1d693b5fcaca526ba6a71392dc2d807780",
+  "projection_kind": "canonical_command",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "reviewed_safe",
+  "target_exact_path": ".agents/skills/source-command-audit-framework/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "already_aligned"
+}

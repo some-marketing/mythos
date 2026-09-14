@@ -137,19 +137,24 @@ function loadCanonicalCommands(root, config) {
     validateSourceFile(sourcePath, sourceRoot, 'canonical command', root);
     const filenameId = validateSlugId(path.basename(sourcePath, '.yaml'), 'canonical command filename');
     let spec;
+    let command;
     try {
       spec = readJson(sourcePath);
     } catch (error) {
-      commands.set(filenameId, { malformed: sanitizedJsonError(error), sourcePath, filenameId });
-      continue;
+      command = { malformed: sanitizedJsonError(error), sourcePath, filenameId };
     }
-    const declaredId = spec.id == null ? filenameId : String(spec.id).trim();
-    const malformed = !SAFE_ID_PATTERN.test(declaredId)
-      ? `invalid canonical id for filename ${JSON.stringify(filenameId)}`
-      : declaredId !== filenameId
-        ? `canonical id mismatch for filename ${JSON.stringify(filenameId)}`
-        : null;
-    commands.set(filenameId, { spec, sourcePath, filenameId, declaredId, malformed });
+    if (!command) {
+      const declaredId = spec.id == null ? filenameId : String(spec.id).trim();
+      const malformed = !SAFE_ID_PATTERN.test(declaredId)
+        ? `invalid canonical id for filename ${JSON.stringify(filenameId)}`
+        : declaredId !== filenameId
+          ? `canonical id mismatch for filename ${JSON.stringify(filenameId)}`
+          : null;
+      command = { spec, sourcePath, filenameId, declaredId, malformed };
+    }
+    const existing = commands.get(filenameId);
+    if (!existing) commands.set(filenameId, command);
+    else commands.set(filenameId, { filenameId, duplicates: existing.duplicates ? [...existing.duplicates, command] : [existing, command] });
   }
   return commands;
 }
@@ -472,8 +477,25 @@ function buildCandidates(options = {}) {
   const candidates = [];
 
   for (const [id, command] of commands) {
-    const sourceRel = relative(root, command.sourcePath);
     const targetRel = posix(path.join(config.target_root, `source-command-${id}`, 'SKILL.md'));
+    if (command.duplicates) {
+      for (const duplicate of command.duplicates) {
+        const sourceRel = relative(root, duplicate.sourcePath);
+        candidates.push({
+          id: `command-${id}`,
+          content: null,
+          resources: [],
+          receipt: {
+            ...receiptBase(config, sourceRel, fs.readFileSync(duplicate.sourcePath), 'canonical_command', 'UNKNOWN', 'duplicate_rejected', targetRel),
+            application_status: 'blocked',
+            detail: `duplicate canonical command filename ${JSON.stringify(id)}`
+          },
+          targetRoot
+        });
+      }
+      continue;
+    }
+    const sourceRel = relative(root, command.sourcePath);
     if (command.malformed || !command.spec || command.spec.id !== id) {
       candidates.push({ id: `command-${id}`, content: null, resources: [], receipt: { ...receiptBase(config, sourceRel, fs.readFileSync(command.sourcePath), 'canonical_command', 'UNKNOWN', 'malformed', targetRel), application_status: 'blocked_malformed', detail: command.malformed || 'canonical id mismatch' } });
       continue;
@@ -751,6 +773,7 @@ function blockedTargetInstalled(candidate, targetRoot) {
     return true;
   } catch (error) {
     if (error.code === 'ENOENT') return false;
+    if (error.code === 'ENOTDIR') return true;
     throw error;
   }
 }
@@ -926,11 +949,13 @@ function orphanedManagedTargets(managedTargets, candidates, targetRoot) {
     if (currentTargets.has(target)) continue;
     const suffix = String(target || '').replace(/^\.agents\/skills\//, '');
     const targetPath = safeOutputPath(targetRoot, suffix);
+    const packageRoot = path.dirname(targetPath);
     try {
-      fs.lstatSync(targetPath);
+      fs.lstatSync(packageRoot);
       orphaned.add(target);
     } catch (error) {
-      if (error.code !== 'ENOENT') throw error;
+      if (error.code === 'ENOTDIR') orphaned.add(target);
+      else if (error.code !== 'ENOENT') throw error;
     }
   }
   return [...orphaned].sort();

@@ -156,6 +156,20 @@ test('canonical command identity is keyed by filename and mismatches never repla
   assert.equal(result.candidates.filter((candidate) => candidate.id === 'command-alpha').length, 1);
 });
 
+test('duplicate canonical command basenames are preserved as blocked collision evidence', () => {
+  const root = fixture();
+  command(root, 'sample');
+  write(root, 'instructions/canonical/commands/nested/sample.yaml', '{"id":"sample","description":"nested","mode":"REVIEW_ONLY"}\n');
+  const result = sync({ root, handlerIds: new Set(), apply: true });
+  const duplicates = result.candidates.filter((candidate) => candidate.receipt.projection_kind === 'canonical_command'
+    && candidate.receipt.target_exact_path === '.agents/skills/source-command-sample/SKILL.md');
+  assert.equal(duplicates.length, 2);
+  assert.equal(new Set(duplicates.map((candidate) => candidate.id)).size, 2);
+  assert.equal(duplicates.every((candidate) => candidate.receipt.collision_state === 'collision'), true);
+  assert.equal(duplicates.every((candidate) => candidate.receipt.semantic_review_state === 'collision_rejected'), true);
+  assert.equal(fs.existsSync(path.join(root, '.agents/skills/source-command-sample/SKILL.md')), false);
+});
+
 test('canonical JSON parse errors are sanitized before entering receipts', () => {
   const root = fixture();
   const secret = `sk-${'z'.repeat(24)}`;
@@ -334,6 +348,17 @@ test('check reports orphaned managed targets whose source candidates disappeared
   const checked = sync({ root, handlerIds: new Set(), check: true });
   assert.ok(checked.drift > 0);
   assert.equal(checked.candidates.some((candidate) => candidate.id === 'command-sample'), false);
+});
+
+test('orphan checks detect leftover package resources after the managed skill disappears', () => {
+  const root = fixture();
+  const source = command(root, 'sample');
+  sync({ root, handlerIds: new Set(), apply: true });
+  const installed = path.join(root, '.agents/skills/source-command-sample');
+  fs.unlinkSync(path.join(installed, 'SKILL.md'));
+  fs.writeFileSync(path.join(installed, 'leftover.txt'), 'stale\n');
+  fs.unlinkSync(source);
+  assert.ok(sync({ root, handlerIds: new Set(), check: true }).drift > 0);
 });
 
 test('candidate-only staging preserves managed-target history for later orphan checks', () => {
@@ -618,6 +643,13 @@ test('non-directory package roots are preserved and reported as drift', () => {
   assert.ok(sync({ root, handlerIds: new Set(), check: true }).drift > 0);
   const reapplied = sync({ root, handlerIds: new Set(), apply: true });
   assert.equal(byId(reapplied, 'command-sample').receipt.application_status, 'blocked_existing_preserved');
+  assert.equal(fs.readFileSync(packageRoot, 'utf8'), 'foreign package root\n');
+});
+
+test('blocked candidates classify non-directory package roots as drift', () => {
+  const root = fixture();
+  const packageRoot = write(root, '.agents/skills/ticktock', 'foreign package root\n');
+  assert.ok(sync({ root, handlerIds: new Set(), check: true }).drift > 0);
   assert.equal(fs.readFileSync(packageRoot, 'utf8'), 'foreign package root\n');
 });
 

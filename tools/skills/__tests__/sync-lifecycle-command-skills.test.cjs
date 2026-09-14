@@ -65,3 +65,15 @@ test('compatibility check reuses the committed general projection evidence', () 
   assert.equal(checked.drift, 0);
   assert.ok(checked.candidates.length >= LIFECYCLE_COMMANDS.length);
 });
+
+test('lifecycle application merges custody into the canonical ledger', () => {
+  const root = fixture();
+  const targetDir = path.join(root, '.agents', 'skills');
+  syncLifecycle({ root, targetDir, handlerIds: new Set(), apply: true });
+  const ledgerPath = path.join(root, '_dev/reports/analysis/codex-skill-projections/managed-targets.json');
+  const ledger = JSON.parse(fs.readFileSync(ledgerPath, 'utf8'));
+  assert.equal(ledger.targets.includes('.agents/skills/source-command-boot/SKILL.md'), true);
+  fs.unlinkSync(path.join(root, 'instructions/canonical/commands/boot.yaml'));
+  sync({ root, targetDir, handlerIds: new Set() });
+  assert.ok(syncLifecycle({ root, targetDir, handlerIds: new Set(), check: true }).drift > 0);
+});

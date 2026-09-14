@@ -524,6 +524,19 @@ test('candidate staging refuses repository and target directory deletion', () =>
   assert.equal(fs.readFileSync(externalReceipt, 'utf8'), 'preserve\n');
 });
 
+test('candidate staging preflights invalid IDs before clearing prior evidence', () => {
+  const root = fixture();
+  command(root, 'sample');
+  const first = sync({ root, handlerIds: new Set() });
+  const candidateSentinel = path.join(first.candidateDir, 'candidates/source-command-sample/SKILL.md');
+  const receiptSentinel = path.join(first.candidateDir, 'receipts/command-sample.json');
+  write(root, 'frameworks/a/b/.claude/skills/bad_/SKILL.md', '---\nname: bad\ndescription: invalid slug\n---\nbody\n');
+  assert.throws(() => sync({ root, handlerIds: new Set() }), /Invalid candidate id/);
+  assert.equal(fs.existsSync(candidateSentinel), true);
+  assert.equal(fs.existsSync(receiptSentinel), true);
+  assert.equal(fs.existsSync(path.join(first.candidateDir, 'projection-index.json')), true);
+});
+
 test('candidate staging rejects symlinked directories before cleanup', () => {
   const root = fixture();
   command(root, 'sample');

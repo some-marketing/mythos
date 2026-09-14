@@ -19769,14 +19769,14 @@
       "id": "file:tools/skills/__tests__/sync-codex-skills.test.cjs",
       "type": "file",
       "path": "tools/skills/__tests__/sync-codex-skills.test.cjs",
-      "sha256": "e071a53094da596398010857f9da46be30d2183a9c9249505f64e0a270a66de3",
+      "sha256": "0c868cab833650fb0d5faaf1548aaf19529e43b241e81ad79766f356e468d0e3",
       "mode": 420
     },
     {
       "id": "file:tools/skills/__tests__/sync-lifecycle-command-skills.test.cjs",
       "type": "file",
       "path": "tools/skills/__tests__/sync-lifecycle-command-skills.test.cjs",
-      "sha256": "af5b19ebc0ce9a83443699caa79c4071fe5c26e06333a4565d56ca20f12b2b99",
+      "sha256": "d1e3cdff0268c5371340183d9b4773643432b8891b4f003e46383770f0277b17",
       "mode": 420
     },
     {
@@ -19790,14 +19790,14 @@
       "id": "file:tools/skills/sync-codex-skills.cjs",
       "type": "file",
       "path": "tools/skills/sync-codex-skills.cjs",
-      "sha256": "1f2b2f1384787f6a7b2c0ffe3d3cd5b96a6aec04efd5b01b2427d7d75f5d1385",
+      "sha256": "2ba34843931fbe0cef05b9affbc33c663601ac9aea4b56989243dae5dc1a0c8e",
       "mode": 420
     },
     {
       "id": "file:tools/skills/sync-lifecycle-command-skills.cjs",
       "type": "file",
       "path": "tools/skills/sync-lifecycle-command-skills.cjs",
-      "sha256": "1ca10bde7e7b760ccb882fe44e8b6bca4da3af728db67cdddf6a4c15e4084d8b",
+      "sha256": "1af327f5b4c8c5e404cf5fb34afa2b988d66e993506d48e3a77d2c17a016d8c8",
       "mode": 420
     },
     {

@@ -3,7 +3,7 @@
 
 // Compatibility entry point. Projection authority lives in sync-codex-skills.cjs.
 const path = require('node:path');
-const { loadProjectionConfig, parseArgs, sync } = require('./sync-codex-skills.cjs');
+const { loadProjectionConfig, mergeManagedTargetCustody, parseArgs, sync } = require('./sync-codex-skills.cjs');
 
 const PROJECT_ROOT = path.resolve(__dirname, '..', '..');
 const LIFECYCLE_COMMANDS = Object.freeze(['boot', 'new-session', 'next-session', 'cross-session', 'end-session', 'shutdown']);
@@ -20,7 +20,14 @@ function syncLifecycle(options = {}) {
     return sync({ ...options, root, candidateDir: path.join(root, config.candidate_root) });
   }
   const candidateDir = options.candidateDir || path.join(root, config.candidate_root, 'lifecycle');
-  return sync({ ...options, root, candidateDir, includeCandidate: isLifecycle });
+  const result = sync({ ...options, root, candidateDir, includeCandidate: isLifecycle });
+  if (options.apply && !options.candidateDir) {
+    const appliedTargets = result.candidates
+      .filter((candidate) => ['applied_additive', 'already_aligned'].includes(candidate.receipt.application_status))
+      .map((candidate) => candidate.receipt.target_exact_path);
+    mergeManagedTargetCustody(path.join(root, config.candidate_root), config.generator_id, appliedTargets);
+  }
+  return result;
 }
 
 function main() {

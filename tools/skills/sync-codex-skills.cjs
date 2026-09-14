@@ -638,6 +638,29 @@ function stagedCandidateRelativePath(candidate) {
     : candidate.receipt.target_exact_path.replace(/^\.agents\/skills\//, '');
 }
 
+function preflightCandidateStaging(candidateDir, candidates) {
+  const outputs = new Set();
+  const register = (filePath) => {
+    if (outputs.has(filePath)) throw new Error(`Duplicate staged projection output: ${filePath}`);
+    outputs.add(filePath);
+  };
+  for (const candidate of candidates) {
+    validateSlugId(candidate.id, 'candidate id');
+    register(safeOutputPath(candidateDir, 'receipts', `${candidate.id}.json`));
+    if (!candidate.content) continue;
+    const skillPath = safeOutputPath(candidateDir, 'candidates', stagedCandidateRelativePath(candidate));
+    register(skillPath);
+    for (const resource of candidate.resources) register(safeOutputPath(path.dirname(skillPath), resource.relativePath));
+  }
+  const indexPath = path.join(candidateDir, 'projection-index.json');
+  try {
+    if (fs.lstatSync(indexPath).isSymbolicLink()) throw new Error(`Unsafe generated artifact symlink: ${indexPath}`);
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
+  }
+  register(safeOutputPath(candidateDir, 'projection-index.json'));
+}
+
 function isApplicable(candidate) {
   return Boolean(candidate.content)
     && SAFE_REVIEW_STATES.has(candidate.receipt.semantic_review_state)
@@ -846,6 +869,26 @@ function writeManagedTargets(candidateDir, generatorId, managed) {
   }, null, 2)}\n`);
 }
 
+function mergeManagedTargetCustody(candidateDir, generatorId, targets) {
+  const managed = loadManagedTargets(candidateDir, generatorId);
+  for (const target of targets) managed.add(validateManagedTarget(target));
+  const indexPath = safeOutputPath(candidateDir, 'projection-index.json');
+  let index = null;
+  if (fs.existsSync(indexPath)) {
+    index = readJson(indexPath);
+    if (index.schema !== 'CodexSkillProjectionIndex/1.0' || index.generator_id !== generatorId) {
+      throw new Error(`Invalid projection index for custody merge: ${indexPath}`);
+    }
+  }
+  fs.mkdirSync(candidateDir, { recursive: true });
+  writeManagedTargets(candidateDir, generatorId, managed);
+  if (index) {
+    index.managed_targets_sha256 = sha256(Buffer.from(JSON.stringify([...managed].sort())));
+    fs.writeFileSync(indexPath, `${JSON.stringify(index, null, 2)}\n`);
+  }
+  return managed;
+}
+
 function orphanedManagedTargets(managedTargets, candidates, targetRoot) {
   const currentTargets = new Set(candidates
     .filter((candidate) => candidate.receipt.projection_kind !== 'alias_metadata')
@@ -905,6 +948,7 @@ function sync(options = {}) {
   const configuredCandidateRoot = path.join(root, built.config.candidate_root);
   const validatedCandidateDir = validateCandidateDir(root, targetRoot, candidateDir, configuredCandidateRoot);
   const managedTargets = loadManagedTargets(validatedCandidateDir, built.config.generator_id);
+  preflightCandidateStaging(validatedCandidateDir, selected);
   const applicationPreflight = new Map();
   if (options.apply) {
     for (const candidate of selected.filter(isApplicable)) {
@@ -989,6 +1033,7 @@ module.exports = {
   isApplicable,
   packageAlignment,
   loadProjectionConfig,
+  mergeManagedTargetCustody,
   normalizeDirectSkill,
   parseArgs,
   parseFrontmatter,

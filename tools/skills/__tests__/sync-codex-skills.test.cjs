@@ -462,6 +462,25 @@ test('check compares deterministic rejection details in receipts', () => {
   assert.ok(sync({ root, handlerIds: new Set(), check: true }).drift > 0);
 });
 
+test('check rejects fabricated receipt application statuses even when index counts agree', () => {
+  const root = fixture();
+  command(root, 'sample');
+  const staged = sync({ root, handlerIds: new Set(), apply: true });
+  const receiptPath = path.join(staged.candidateDir, 'receipts/command-sample.json');
+  const receipt = JSON.parse(fs.readFileSync(receiptPath, 'utf8'));
+  const oldStatus = receipt.application_status;
+  receipt.application_status = 'fabricated';
+  fs.writeFileSync(receiptPath, `${JSON.stringify(receipt, null, 2)}\n`);
+  const indexPath = path.join(staged.candidateDir, 'projection-index.json');
+  const index = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
+  const oldKey = `canonical_command:reviewed_safe:${oldStatus}`;
+  const newKey = 'canonical_command:reviewed_safe:fabricated';
+  delete index.counts[oldKey];
+  index.counts[newKey] = 1;
+  fs.writeFileSync(indexPath, `${JSON.stringify(index, null, 2)}\n`);
+  assert.ok(sync({ root, handlerIds: new Set(), check: true }).drift > 0);
+});
+
 test('candidate-only staging repairs malformed disposable receipts', () => {
   const root = fixture();
   command(root, 'sample');
@@ -585,6 +604,15 @@ test('sensitive and credential-bearing bundled resources are rejected', () => {
     write(tokenRoot, '.claude/skills/ticktock/notes.txt', `token ${token}\n`);
     assert.throws(() => sync({ root: tokenRoot, handlerIds: new Set() }), /Refusing credential-bearing bundled resource/);
   }
+
+  const namedCredentialRoot = fixture();
+  skill(namedCredentialRoot, 'ticktock');
+  const namedToken = `sk-${'d'.repeat(24)}`;
+  write(namedCredentialRoot, `.claude/skills/ticktock/references/${namedToken}.txt`, 'innocuous\n');
+  assert.throws(
+    () => sync({ root: namedCredentialRoot, handlerIds: new Set() }),
+    (error) => /credential-bearing bundled resource path/.test(error.message) && !error.message.includes(namedToken)
+  );
 });
 
 test('candidate staging refuses repository and target directory deletion', () => {

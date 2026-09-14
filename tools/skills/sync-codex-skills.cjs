@@ -397,6 +397,9 @@ function bundledResources(sourcePath) {
     if (metadata.isSymbolicLink()) throw new Error(`Refusing symbolic-link bundled resource: ${relativePath}`);
     if (!metadata.isFile()) throw new Error(`Refusing non-file bundled resource: ${relativePath}`);
     if (isSensitiveResourcePath(relativePath)) throw new Error(`Refusing sensitive bundled resource: ${relativePath}`);
+    if (containsCredentialMaterial(relativePath) || containsPrivateAbsolutePath(relativePath)) {
+      throw new Error('Refusing private or credential-bearing bundled resource path');
+    }
     const bytes = fs.readFileSync(file);
     if (containsCredentialMaterial(bytes)) throw new Error(`Refusing credential-bearing bundled resource: ${relativePath}`);
     return {
@@ -835,10 +838,32 @@ function loadManagedTargets(candidateDir, generatorId) {
   return managed;
 }
 
+function normalizedApplicationStatus(receipt) {
+  const status = receipt.application_status;
+  if (receipt.projection_kind === 'alias_metadata'
+    && !['ABSENT', 'UNKNOWN'].includes(receipt.capability_tier)
+    && SAFE_REVIEW_STATES.has(receipt.semantic_review_state)
+    && receipt.collision_state === 'clear') {
+    return ['metadata_candidate', 'metadata_attached'].includes(status)
+      ? 'available_alias_metadata'
+      : `invalid:${status}`;
+  }
+  const applicable = receipt.projection_kind !== 'alias_metadata'
+    && !['ABSENT', 'UNKNOWN'].includes(receipt.capability_tier)
+    && SAFE_REVIEW_STATES.has(receipt.semantic_review_state)
+    && receipt.collision_state === 'clear';
+  if (applicable) {
+    return ['candidate', 'already_aligned', 'applied_additive', 'blocked_existing_preserved'].includes(status)
+      ? 'applicable_environment_state'
+      : `invalid:${status}`;
+  }
+  return status;
+}
+
 function receiptEvidence(receipt) {
   const evidence = { ...receipt };
   if (receipt.application_status === 'blocked_existing_preserved') delete evidence.detail;
-  delete evidence.application_status;
+  evidence.application_status = normalizedApplicationStatus(receipt);
   return evidence;
 }
 

@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "0dd7eb08cf6ae3eb0c15bbfbbae439d104652f214c8be6835178cbf8792652b6",
+    "expected_tree_sha256": "918953350f301362d894654aef5ffe674f022b0e2104b970919a290782f575fd",
     "expected_files": [
       {
         "path": ".agents/skills/go/SKILL.md",
@@ -2157,7 +2157,7 @@
       },
       {
         "path": ".github/workflows/parity.yml",
-        "sha256": "cc447d96c62e9163da5129b80c2a368c1c4d1174ea2ce2143e39ae2809a541e1",
+        "sha256": "7f0e3d87bb3f34f26e563c0b6412eca2102d08fefbf15ea2845cb753c61d1716",
         "mode": 420
       },
       {
@@ -2217,7 +2217,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-parity-remediation__verification.md",
-        "sha256": "83e1f078c8cc84f1f2a876b757b38c59ae759895f3c49dcf9fc372159d91d272",
+        "sha256": "5eacc5b7fb06f684738e0d2175611ba71cb21c98ada6e4917e3981e8b17770cc",
         "mode": 420
       },
       {
@@ -8742,7 +8742,7 @@
       },
       {
         "path": "package.json",
-        "sha256": "0174a03e6beef86c68242f440c13a64f2a4fc92221f2f442a05faeb692bcc3ee",
+        "sha256": "fb759a058551adb2357cd09442b016fd7a147904b13b0935b4e64165982e4140",
         "mode": 420
       },
       {
@@ -8772,7 +8772,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "0b844707b956f3a8a581035a84f9fe7310c764a16de0dd4a7af47d7e95f9faa1",
+        "sha256": "1ead50f5aa43792f7b87e2ae22bec3f1ea772fcf434d3ca3c6532ce8a6d381f7",
         "mode": 420
       },
       {
@@ -15142,12 +15142,12 @@
       },
       {
         "path": "tools/skills/README.md",
-        "sha256": "bb9f9404cffda894dbe3aef65f88fa3307e3b56f9e7145ac8f526d80fbe23de0",
+        "sha256": "8aaa3c2f995fcafc21d7670c6f5c839da1900ad6f364841a3e4f8ff042c06486",
         "mode": 420
       },
       {
         "path": "tools/skills/__tests__/sync-codex-skills.test.cjs",
-        "sha256": "ecd40e5cad4104ac4a0e2f8b1366209f6f7813dd1153bc93e1fe2ecc8f1941cd",
+        "sha256": "b20844a3137de898f14f7f6c5bf300e149910ab239da69ef7b0e35141fc14b35",
         "mode": 420
       },
       {
@@ -15157,7 +15157,7 @@
       },
       {
         "path": "tools/skills/sync-codex-skills.cjs",
-        "sha256": "4e9b92621a1d40cc2f419d33ed3ec67447f568a74edaf7b52fd1428dda29fcd8",
+        "sha256": "4a589dfe70acdd3386df453212e1154b31952a4b596696b562063a69a6fe1142",
         "mode": 420
       },
       {
@@ -16881,12 +16881,12 @@
     ]
   },
   "wiring": {
-    "package_script_count": 205,
+    "package_script_count": 206,
     "command_alias_registry_sha256": "9bbc50aa1343a5502258e0e067eca0bb4cf4ea9f560abc5b998247a0e04b9901",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "0b844707b956f3a8a581035a84f9fe7310c764a16de0dd4a7af47d7e95f9faa1",
-    "graph_nodes": 4091,
-    "graph_edges": 2900
+    "graph_sha256": "1ead50f5aa43792f7b87e2ae22bec3f1ea772fcf434d3ca3c6532ce8a6d381f7",
+    "graph_nodes": 4092,
+    "graph_edges": 2905
   },
   "runtime_exclusions": [
     ".git/**",

@@ -25,7 +25,11 @@ worktree without writing.
 node tools/skills/sync-codex-skills.cjs
 node tools/skills/sync-codex-skills.cjs --apply
 node tools/skills/sync-codex-skills.cjs --check
+npm run verify:codex-skills
 ```
+
+The combined verification command runs both projector checks and their focused
+projector, lifecycle, and alias regressions; the PR parity workflow enforces it.
 
 The four projection strategies remain distinct:
 

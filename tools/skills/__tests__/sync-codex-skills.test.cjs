@@ -177,6 +177,18 @@ test('duplicate canonical command basenames are preserved as blocked collision e
   assert.equal(fs.existsSync(path.join(root, '.agents/skills/source-command-sample/SKILL.md')), false);
 });
 
+test('unique nested canonical commands are blocked because runtime authority is top-level', () => {
+  const root = fixture();
+  write(root, 'instructions/canonical/commands/nested/sample.yaml', '{"id":"sample","description":"nested","mode":"REVIEW_ONLY"}\n');
+  const result = sync({ root, handlerIds: new Set(), apply: true });
+  const candidate = byId(result, 'command-sample');
+  assert.equal(candidate.content, null);
+  assert.equal(candidate.receipt.capability_tier, 'UNKNOWN');
+  assert.equal(candidate.receipt.semantic_review_state, 'malformed');
+  assert.match(candidate.receipt.detail, /nested canonical command path rejected/);
+  assert.equal(fs.existsSync(path.join(root, '.agents/skills/source-command-sample/SKILL.md')), false);
+});
+
 test('canonical JSON parse errors are sanitized before entering receipts', () => {
   const root = fixture();
   const secret = `sk-${'z'.repeat(24)}`;
@@ -361,6 +373,19 @@ test('terminal home-directory paths are rejected without a trailing separator', 
   assert.equal(candidate.receipt.source_sha256, null);
   assert.equal(fs.existsSync(path.join(root, '.agents/skills/ticktock/SKILL.md')), false);
   assert.doesNotMatch(JSON.stringify(candidate.receipt), /alice|bob|Carol|Dan/);
+});
+
+test('Linux root-home paths are rejected before staging', () => {
+  const rootHome = ['', 'root'].join('/');
+  for (const privatePath of [rootHome, `${rootHome}/private`]) {
+    const root = fixture();
+    skill(root, 'ticktock', `HOME=${privatePath}\n`);
+    const result = sync({ root, handlerIds: new Set(), apply: true });
+    const candidate = byId(result, 'direct-ticktock');
+    assert.equal(candidate.receipt.semantic_review_state, 'private_path_rejected');
+    assert.equal(candidate.receipt.source_sha256, null);
+    assert.equal(fs.existsSync(path.join(root, '.agents/skills/ticktock/SKILL.md')), false);
+  }
 });
 
 test('direct dependencies resolve transitively to a fixed point', () => {
@@ -732,9 +757,24 @@ test('non-directory package roots are preserved and reported as drift', () => {
 
 test('blocked candidates classify non-directory package roots as drift', () => {
   const root = fixture();
-  const packageRoot = write(root, '.agents/skills/ticktock', 'foreign package root\n');
+  skill(root, 'ticktock');
+  sync({ root, handlerIds: new Set(), apply: true });
+  const packageRoot = path.join(root, '.agents/skills/ticktock');
+  fs.unlinkSync(path.join(packageRoot, 'SKILL.md'));
+  fs.rmdirSync(packageRoot);
+  fs.writeFileSync(packageRoot, 'foreign package root\n');
+  fs.writeFileSync(path.join(root, '.claude/skills/ticktock/SKILL.md'), 'malformed source\n');
+  sync({ root, handlerIds: new Set() });
   assert.ok(sync({ root, handlerIds: new Set(), check: true }).drift > 0);
   assert.equal(fs.readFileSync(packageRoot, 'utf8'), 'foreign package root\n');
+});
+
+test('blocked candidates ignore user-owned packages without projector custody', () => {
+  const root = fixture();
+  write(root, 'frameworks/a/b/.claude/skills/pending/SKILL.md', '---\nname: pending\ndescription: pending\n---\nbody\n');
+  sync({ root, handlerIds: new Set() });
+  write(root, '.agents/skills/guild-a-b-pending/SKILL.md', 'user-owned\n');
+  assert.equal(sync({ root, handlerIds: new Set(), check: true }).drift, 0);
 });
 
 test('blocked candidates detect residual package resources after their skill disappears', () => {

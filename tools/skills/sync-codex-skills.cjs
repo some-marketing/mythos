@@ -137,6 +137,7 @@ function loadCanonicalCommands(root, config) {
   for (const sourcePath of walk(sourceRoot, (file) => file.endsWith('.yaml'))) {
     validateSourceFile(sourcePath, sourceRoot, 'canonical command', root);
     const filenameId = validateSlugId(path.basename(sourcePath, '.yaml'), 'canonical command filename');
+    const nested = path.dirname(relative(sourceRoot, sourcePath)) !== '.';
     let spec;
     let command;
     try {
@@ -153,6 +154,7 @@ function loadCanonicalCommands(root, config) {
           : null;
       command = { spec, sourcePath, filenameId, declaredId, malformed };
     }
+    if (nested) command.malformed = `nested canonical command path rejected for filename ${JSON.stringify(filenameId)}`;
     const existing = commands.get(filenameId);
     if (!existing) commands.set(filenameId, command);
     else commands.set(filenameId, { filenameId, duplicates: existing.duplicates ? [...existing.duplicates, command] : [existing, command] });
@@ -416,7 +418,8 @@ function containsPrivateAbsolutePath(bytes) {
   const text = String(bytes);
   return /\/(?:Users|home)\/[^\\/\s"'`;,]+(?=$|[\\/\s"'`;,])/m.test(text)
     || /(?:^|[^A-Za-z0-9])[A-Za-z]:[\\/](?:Users|home)[\\/][^\\/\s"'`;,]+(?=$|[\\/\s"'`;,])/m.test(text)
-    || /[\\/]{2}[^\\/\s]+[\\/](?:Users|home)[\\/][^\\/\s"'`;,]+(?=$|[\\/\s"'`;,])/m.test(text);
+    || /[\\/]{2}[^\\/\s]+[\\/](?:Users|home)[\\/][^\\/\s"'`;,]+(?=$|[\\/\s"'`;,])/m.test(text)
+    || /\/root(?=$|[\\/\s"'`;,])/m.test(text);
 }
 
 function containsCredentialMaterial(bytes) {
@@ -1050,15 +1053,15 @@ function sync(options = {}) {
 
   if (options.check) {
     const checked = options.checkCandidate ? selected.filter(options.checkCandidate) : selected;
+    const checkedManagedTargets = options.checkManagedTarget
+      ? new Set([...managedTargets].filter(options.checkManagedTarget))
+      : managedTargets;
     for (const candidate of checked.filter(isApplicable)) {
       if (!packageAlignment(candidate, targetRoot).aligned) drift += 1;
     }
     for (const candidate of checked) {
-      if (blockedTargetInstalled(candidate, targetRoot)) drift += 1;
+      if (checkedManagedTargets.has(candidate.receipt.target_exact_path) && blockedTargetInstalled(candidate, targetRoot)) drift += 1;
     }
-    const checkedManagedTargets = options.checkManagedTarget
-      ? new Set([...managedTargets].filter(options.checkManagedTarget))
-      : managedTargets;
     drift += orphanedManagedTargets(checkedManagedTargets, checked, targetRoot).length;
     if (!stagedEvidenceAligned(validatedCandidateDir, selected, built.config.generator_id, built.handlers, managedTargets)) drift += 1;
     return { ...built, allCandidates: built.candidates, candidates: selected, candidateDir: validatedCandidateDir, drift, applied };

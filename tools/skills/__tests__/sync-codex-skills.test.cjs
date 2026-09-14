@@ -43,7 +43,7 @@ function fixture() {
     allowed_frontmatter_keys: [...ALLOWED_FRONTMATTER],
     families: {
       canonical_commands: { source_root: 'instructions/canonical/commands', target_prefix: 'source-command-', semantic_review_state: 'reviewed_safe', default_capability_tier: 'ADVISORY' },
-      direct_system_skills: { semantic_review_state: 'reviewed_safe', sources: ['.claude/skills/ticktock/SKILL.md', '.claude/skills/outward-inward-loop/SKILL.md'] },
+      direct_system_skills: { source_root: '.claude/skills', semantic_review_state: 'reviewed_safe', sources: ['.claude/skills/ticktock/SKILL.md', '.claude/skills/outward-inward-loop/SKILL.md'] },
       aliases: { application: 'target_metadata_only', semantic_review_state: 'reviewed_safe' },
       framework_helpers: { source_pattern: 'frameworks/*/*/.claude/skills/**/SKILL.md', target_prefix: 'guild-', semantic_review_state: 'pending_review' }
     },
@@ -286,6 +286,16 @@ test('bundled resource symlinks are rejected before their targets are read', () 
   fs.symlinkSync(outside, link);
   assert.throws(() => sync({ root, handlerIds: new Set() }), /Refusing symbolic-link bundled resource/);
   assert.equal(fs.existsSync(path.join(root, '_dev/reports/analysis/codex-skill-projections/candidates/ticktock/key.pem')), false);
+});
+
+test('primary skill symlinks are rejected before their targets are read', () => {
+  const root = fixture();
+  const outside = write(root, 'private/external-skill.md', '---\nname: ticktock\ndescription: external\n---\nexternal private bytes\n');
+  const sourceDir = path.join(root, '.claude/skills/ticktock');
+  fs.mkdirSync(sourceDir, { recursive: true });
+  fs.symlinkSync(outside, path.join(sourceDir, 'SKILL.md'));
+  assert.throws(() => sync({ root, handlerIds: new Set() }), /Refusing symbolic-link direct skill source/);
+  assert.equal(fs.existsSync(path.join(root, '_dev/reports/analysis/codex-skill-projections/candidates/ticktock/SKILL.md')), false);
 });
 
 test('candidate staging refuses repository and target directory deletion', () => {

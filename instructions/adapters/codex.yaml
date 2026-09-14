@@ -39,6 +39,7 @@
         "default_capability_tier": "ADVISORY"
       },
       "direct_system_skills": {
+        "source_root": ".claude/skills",
         "semantic_review_state": "reviewed_safe",
         "sources": [
           ".claude/skills/go/SKILL.md",

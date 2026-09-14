@@ -127,6 +127,7 @@ function loadCanonicalCommands(root, config) {
   const sourceRoot = path.join(root, config.families.canonical_commands.source_root);
   const commands = new Map();
   for (const sourcePath of walk(sourceRoot, (file) => file.endsWith('.yaml'))) {
+    validateSourceFile(sourcePath, sourceRoot, 'canonical command');
     const filenameId = validateSlugId(path.basename(sourcePath, '.yaml'), 'canonical command filename');
     let spec;
     try {
@@ -166,6 +167,16 @@ function resolvedPath(value) {
 function isWithin(parent, child) {
   const relation = path.relative(parent, child);
   return relation !== '' && relation !== '..' && !relation.startsWith(`..${path.sep}`) && !path.isAbsolute(relation);
+}
+
+function validateSourceFile(sourcePath, sourceRoot, label) {
+  const metadata = fs.lstatSync(sourcePath);
+  if (metadata.isSymbolicLink()) throw new Error(`Refusing symbolic-link ${label} source: ${relative(sourceRoot, sourcePath)}`);
+  if (!metadata.isFile()) throw new Error(`Refusing non-file ${label} source: ${relative(sourceRoot, sourcePath)}`);
+  const realRoot = resolvedPath(sourceRoot);
+  const realSource = fs.realpathSync(sourcePath);
+  if (!isWithin(realRoot, realSource)) throw new Error(`Refusing ${label} source outside declared root: ${sourcePath}`);
+  return realSource;
 }
 
 function safeOutputPath(root, ...segments) {
@@ -349,6 +360,7 @@ function buildCandidates(options = {}) {
   const handlers = options.handlerIds || loadHandlerIds(root, config);
   const commands = loadCanonicalCommands(root, config);
   const directSources = config.families.direct_system_skills.sources;
+  const directSourceRoot = path.join(root, config.families.direct_system_skills.source_root || '.claude/skills');
   const directNames = new Set(directSources.map(directNameFromSource));
   const aliasResults = resolveAliases(root, config, commands, directNames, options.aliasRegistry);
   const terminalAliases = aliasesByTerminal(aliasResults);
@@ -387,6 +399,7 @@ function buildCandidates(options = {}) {
       candidates.push({ id: `direct-${name}`, content: null, resources: [], receipt: { ...receiptBase(config, sourceRel, null, 'direct_system_skill', 'ABSENT', 'missing_source', targetRel), application_status: 'blocked_missing_source' }, targetRoot });
       continue;
     }
+    validateSourceFile(sourcePath, directSourceRoot, 'direct skill');
     const sourceBytes = fs.readFileSync(sourcePath);
     const normalized = normalizeDirectSkill(String(sourceBytes), name, terminalAliases.get(name) || []);
     const resources = bundledResources(sourcePath);
@@ -429,6 +442,7 @@ function buildCandidates(options = {}) {
     if (sourcePath.split(path.sep).includes('_template')) continue;
     const identity = frameworkIdentity(root, sourcePath);
     if (!identity) continue;
+    validateSourceFile(sourcePath, frameworkRoot, 'framework skill');
     const sourceBytes = fs.readFileSync(sourcePath);
     const rendered = renderFrameworkSkill(String(sourceBytes), identity);
     const targetRel = posix(path.join(config.target_root, identity.slug, 'SKILL.md'));

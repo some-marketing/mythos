@@ -8,6 +8,7 @@ const path = require('node:path');
 const PROJECT_ROOT = path.resolve(__dirname, '..', '..');
 const CAPABILITY_TIERS = new Set(['BLOCKING', 'ADVISORY', 'ABSENT', 'UNKNOWN']);
 const SAFE_REVIEW_STATES = new Set(['reviewed_safe']);
+const SAFE_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 function sha256(bytes) {
   return crypto.createHash('sha256').update(bytes).digest('hex');
@@ -19,6 +20,12 @@ function posix(value) {
 
 function relative(root, value) {
   return posix(path.relative(root, value));
+}
+
+function validateSlugId(value, label) {
+  const id = String(value || '').trim();
+  if (!SAFE_ID_PATTERN.test(id)) throw new Error(`Invalid ${label}: ${JSON.stringify(id)}`);
+  return id;
 }
 
 function readJson(filePath) {
@@ -120,15 +127,21 @@ function loadCanonicalCommands(root, config) {
   const sourceRoot = path.join(root, config.families.canonical_commands.source_root);
   const commands = new Map();
   for (const sourcePath of walk(sourceRoot, (file) => file.endsWith('.yaml'))) {
+    const filenameId = validateSlugId(path.basename(sourcePath, '.yaml'), 'canonical command filename');
     let spec;
     try {
       spec = readJson(sourcePath);
     } catch (error) {
-      commands.set(path.basename(sourcePath, '.yaml'), { malformed: error.message, sourcePath });
+      commands.set(filenameId, { malformed: error.message, sourcePath, filenameId });
       continue;
     }
-    const id = String(spec.id || path.basename(sourcePath, '.yaml')).trim();
-    commands.set(id, { spec, sourcePath });
+    const declaredId = spec.id == null ? filenameId : String(spec.id).trim();
+    const malformed = !SAFE_ID_PATTERN.test(declaredId)
+      ? `invalid canonical id: ${JSON.stringify(declaredId)}`
+      : declaredId !== filenameId
+        ? `canonical id mismatch: filename ${JSON.stringify(filenameId)} declares ${JSON.stringify(declaredId)}`
+        : null;
+    commands.set(filenameId, { spec, sourcePath, filenameId, declaredId, malformed });
   }
   return commands;
 }
@@ -153,6 +166,13 @@ function resolvedPath(value) {
 function isWithin(parent, child) {
   const relation = path.relative(parent, child);
   return relation !== '' && relation !== '..' && !relation.startsWith(`..${path.sep}`) && !path.isAbsolute(relation);
+}
+
+function safeOutputPath(root, ...segments) {
+  const safeRoot = resolvedPath(root);
+  const output = resolvedPath(path.resolve(root, ...segments));
+  if (!isWithin(safeRoot, output)) throw new Error(`Unsafe output path outside intended root: ${output}`);
+  return output;
 }
 
 function validateCandidateDir(root, targetRoot, candidateDir, configuredCandidateRoot) {
@@ -191,7 +211,15 @@ function resolveAliases(root, config, commands, directNames, registryOverride) {
   const registryPath = path.join(root, config.alias_registry);
   const registry = registryOverride || readJson(registryPath);
   const rows = Array.isArray(registry.aliases) ? registry.aliases : [];
-  const aliases = new Map(rows.filter((row) => row && row.id).map((row) => [String(row.id), row]));
+  const aliases = new Map();
+  for (const row of rows) {
+    if (!row || !row.id) continue;
+    const id = validateSlugId(row.id, 'alias id');
+    const target = String(row.execution_target || row.target || '').trim();
+    if (target) validateSlugId(target, `target for alias ${id}`);
+    if (aliases.has(id)) throw new Error(`Duplicate alias id: ${id}`);
+    aliases.set(id, { ...row, id });
+  }
   const results = [];
 
   function resolve(id, trail = []) {
@@ -207,9 +235,8 @@ function resolveAliases(root, config, commands, directNames, registryOverride) {
     return resolve(next, [...trail, id]);
   }
 
-  for (const row of rows) {
-    if (!row || !row.id) continue;
-    const resolved = resolve(String(row.id));
+  for (const row of aliases.values()) {
+    const resolved = resolve(row.id);
     results.push({ alias: row, ...resolved });
   }
   return results;
@@ -394,16 +421,17 @@ function buildCandidates(options = {}) {
 }
 
 function writeCandidate(candidateDir, candidate) {
-  const receiptPath = path.join(candidateDir, 'receipts', `${candidate.id}.json`);
+  validateSlugId(candidate.id, 'candidate id');
+  const receiptPath = safeOutputPath(candidateDir, 'receipts', `${candidate.id}.json`);
   fs.mkdirSync(path.dirname(receiptPath), { recursive: true });
   fs.writeFileSync(receiptPath, `${JSON.stringify(candidate.receipt, null, 2)}\n`);
   if (!candidate.content) return;
   const targetRel = candidate.receipt.target_exact_path.replace(/^\.agents\/skills\//, '');
-  const skillPath = path.join(candidateDir, 'candidates', targetRel);
+  const skillPath = safeOutputPath(candidateDir, 'candidates', targetRel);
   fs.mkdirSync(path.dirname(skillPath), { recursive: true });
   fs.writeFileSync(skillPath, candidate.content);
   for (const resource of candidate.resources) {
-    const resourcePath = path.join(path.dirname(skillPath), resource.relativePath);
+    const resourcePath = safeOutputPath(path.dirname(skillPath), resource.relativePath);
     fs.mkdirSync(path.dirname(resourcePath), { recursive: true });
     fs.writeFileSync(resourcePath, resource.bytes);
   }
@@ -418,11 +446,11 @@ function isApplicable(candidate) {
 
 function expectedPackageFiles(candidate, targetRoot) {
   const suffix = candidate.receipt.target_exact_path.replace(/^\.agents\/skills\//, '');
-  const skillPath = path.join(targetRoot, suffix);
+  const skillPath = safeOutputPath(targetRoot, suffix);
   return [
     { filePath: skillPath, bytes: Buffer.from(candidate.content) },
     ...candidate.resources.map((resource) => ({
-      filePath: path.join(path.dirname(skillPath), resource.relativePath),
+      filePath: safeOutputPath(path.dirname(skillPath), resource.relativePath),
       bytes: resource.bytes
     }))
   ];

@@ -123,6 +123,30 @@ test('typed aliases with canonical workflows retain their own runtime pointer', 
   assert.equal(byId(result, 'alias-deliberate').receipt.target_exact_path, '.agents/skills/source-command-orchestrate-loop/SKILL.md');
 });
 
+test('canonical command identity is keyed by filename and mismatches never replace another command', () => {
+  const root = fixture();
+  command(root, 'alpha');
+  write(root, 'instructions/canonical/commands/beta.yaml', `${JSON.stringify({ id: 'alpha', description: 'mismatch', mode: 'REVIEW_ONLY' }, null, 2)}\n`);
+  const result = buildCandidates({ root, handlerIds: new Set() });
+  assert.equal(byId(result, 'command-alpha').receipt.semantic_review_state, 'reviewed_safe');
+  const mismatch = byId(result, 'command-beta');
+  assert.equal(mismatch.receipt.application_status, 'blocked_malformed');
+  assert.match(mismatch.receipt.detail, /canonical id mismatch.*beta.*alpha/);
+  assert.equal(result.candidates.filter((candidate) => candidate.id === 'command-alpha').length, 1);
+});
+
+test('unsafe canonical and alias IDs cannot construct projection output paths', () => {
+  const root = fixture();
+  write(root, 'instructions/canonical/commands/safe.yaml', `${JSON.stringify({ id: '../escape', description: 'unsafe', mode: 'REVIEW_ONLY' }, null, 2)}\n`);
+  const malformed = byId(buildCandidates({ root, handlerIds: new Set() }), 'command-safe');
+  assert.equal(malformed.receipt.application_status, 'blocked_malformed');
+  assert.match(malformed.receipt.detail, /invalid canonical id/);
+
+  const aliases = { aliases: [{ id: 'x/../../../../sentinel', target: 'safe' }] };
+  assert.throws(() => sync({ root, handlerIds: new Set(), aliasRegistry: aliases }), /Invalid alias id/);
+  assert.equal(fs.existsSync(path.join(root, 'sentinel.json')), false);
+});
+
 test('tt, oil, and chi resolve across the command boundary to direct project skills', () => {
   const root = fixture();
   skill(root, 'ticktock');

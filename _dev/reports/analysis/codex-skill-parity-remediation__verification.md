@@ -4,7 +4,7 @@ Refreshed under the approved parity amendment at `2026-09-14T18:51:57Z` in the d
 
 ## Mechanical results
 
-- Combined projector, lifecycle, and alias regressions: 26 passed, 0 failed.
+- Combined projector, lifecycle, and alias regressions: 28 passed, 0 failed.
 - `node tools/skills/sync-codex-skills.cjs --check`: aligned.
 - Pinned Codex `quick_validate.py`, using the repository PyYAML environment: 132 of 132 applied packages valid; 177 of 177 top-level staged candidate packages valid. All 182 staged `SKILL.md` files, including five bundled helper resources, also validate.
 - Private-path and obvious-secret-pattern scan over applied and staged candidate trees: no matches.
@@ -16,7 +16,7 @@ Refreshed under the approved parity amendment at `2026-09-14T18:51:57Z` in the d
 ## Protected parity amendment
 
 - Wiring graph regenerated: 4,092 nodes, 2,899 edges, 0 unresolved.
-- Target-only baseline repair registered 3,366 expected files while preserving the complete source and membrane policy objects byte-for-byte.
+- Target-only baseline repair registered 3,367 expected files while preserving the complete source and membrane policy objects byte-for-byte.
 - Portable `npm run verify:parity`: `ok: true`, 0 findings.
 - Authoritative private-denylist verification against the existing bound hash: `ok: true`, 0 findings. The external file and its location are not serialized in tracked artifacts.
 - Parity test suite: 28 passed, 0 failed.
@@ -38,7 +38,7 @@ Fresh `codex exec --ephemeral --sandbox read-only` confirmed that `go`, `source-
 
 ## Distinct review
 
-Claude and Gemini reviewed the implementation and the protected parity amendment. Fresh PR review findings led to candidate-path hardening, typed workflow preservation, resource reconciliation, lifecycle staging isolation, and correction of the instruction alias loader/renderer. Gemini approved the repaired tree. A remaining Claude block was tested directly and adjudicated: legacy aliases render correctly, and resolved-root plus strict-descendant checks satisfy the declared local CLI threat model. Final review synthesis: `convene-runs/20260914T185255Z-codex-skill-parity-final-code-review/synthesis.md`.
+Claude and Gemini reviewed the implementation and the protected parity amendment. The first Cloud Codex PR review led to candidate-path hardening, typed workflow preservation, resource reconciliation, lifecycle staging isolation, and correction of the instruction alias loader/renderer. The second Cloud Codex review identified two further path-identity gaps: unvalidated candidate IDs and filename/internal canonical-ID conflation. Both are repaired with slug validation, filename-keyed command loading, mismatch rejection, contained-write checks, and regressions. Gemini approved the earlier repaired tree. A remaining Claude block was tested directly and adjudicated: legacy aliases render correctly, and resolved-root plus strict-descendant checks satisfy the declared local CLI threat model. Final review synthesis: `convene-runs/20260914T185255Z-codex-skill-parity-final-code-review/synthesis.md`.
 
 ## Falsifiers and residuals
 

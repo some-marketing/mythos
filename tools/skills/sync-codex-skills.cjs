@@ -615,6 +615,33 @@ function blockedTargetInstalled(candidate, targetRoot) {
   }
 }
 
+function orphanedManagedTargets(candidateDir, candidates, targetRoot) {
+  const receiptsDir = path.join(candidateDir, 'receipts');
+  if (!fs.existsSync(receiptsDir)) return [];
+  const currentTargets = new Set(candidates
+    .filter((candidate) => candidate.receipt.projection_kind !== 'alias_metadata')
+    .map((candidate) => candidate.receipt.target_exact_path));
+  const orphaned = new Set();
+  for (const entry of fs.readdirSync(receiptsDir, { withFileTypes: true })) {
+    if (!entry.name.endsWith('.json')) continue;
+    if (entry.isSymbolicLink()) throw new Error(`Refusing symbolic-link projection receipt: ${entry.name}`);
+    if (!entry.isFile()) continue;
+    const receipt = readJson(path.join(receiptsDir, entry.name));
+    if (receipt.projection_kind === 'alias_metadata') continue;
+    if (!['already_aligned', 'applied_additive'].includes(receipt.application_status)) continue;
+    if (currentTargets.has(receipt.target_exact_path)) continue;
+    const suffix = String(receipt.target_exact_path || '').replace(/^\.agents\/skills\//, '');
+    const targetPath = safeOutputPath(targetRoot, suffix);
+    try {
+      fs.lstatSync(targetPath);
+      orphaned.add(receipt.target_exact_path);
+    } catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+    }
+  }
+  return [...orphaned].sort();
+}
+
 function applyCandidate(root, candidate, targetRoot) {
   if (!isApplicable(candidate)) return false;
   const alignment = packageAlignment(candidate, targetRoot);
@@ -647,6 +674,8 @@ function sync(options = {}) {
     : built.candidates;
   let drift = 0;
   let applied = 0;
+  const configuredCandidateRoot = path.join(root, built.config.candidate_root);
+  const validatedCandidateDir = validateCandidateDir(root, targetRoot, candidateDir, configuredCandidateRoot);
 
   if (options.check) {
     for (const candidate of selected.filter(isApplicable)) {
@@ -655,11 +684,10 @@ function sync(options = {}) {
     for (const candidate of selected) {
       if (blockedTargetInstalled(candidate, targetRoot)) drift += 1;
     }
-    return { ...built, allCandidates: built.candidates, candidates: selected, candidateDir, drift, applied };
+    drift += orphanedManagedTargets(validatedCandidateDir, built.candidates, targetRoot).length;
+    return { ...built, allCandidates: built.candidates, candidates: selected, candidateDir: validatedCandidateDir, drift, applied };
   }
 
-  const configuredCandidateRoot = path.join(root, built.config.candidate_root);
-  const validatedCandidateDir = validateCandidateDir(root, targetRoot, candidateDir, configuredCandidateRoot);
   clearGeneratedProjectionArtifacts(validatedCandidateDir);
   fs.mkdirSync(validatedCandidateDir, { recursive: true });
   if (options.apply) {

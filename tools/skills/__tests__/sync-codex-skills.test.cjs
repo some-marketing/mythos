@@ -253,6 +253,17 @@ test('check reports stale installed targets whose candidates are now blocked', (
   assert.equal(byId(checked, 'direct-ticktock').receipt.semantic_review_state, 'malformed');
 });
 
+test('check reports orphaned managed targets whose source candidates disappeared', () => {
+  const root = fixture();
+  const source = command(root, 'sample');
+  sync({ root, handlerIds: new Set(), apply: true });
+  assert.equal(fs.existsSync(path.join(root, '.agents/skills/source-command-sample/SKILL.md')), true);
+  fs.unlinkSync(source);
+  const checked = sync({ root, handlerIds: new Set(), check: true });
+  assert.equal(checked.drift, 1);
+  assert.equal(checked.candidates.some((candidate) => candidate.id === 'command-sample'), false);
+});
+
 test('malformed frontmatter receipts identify the line without copying its contents', () => {
   const root = fixture();
   const sensitiveLine = ['not-frontmatter', ['', 'Users', 'private', 'secret'].join('/')].join(' ');

@@ -83,11 +83,12 @@ function loadProjectionConfig(root) {
 }
 
 function parseFrontmatter(text, sourcePath = '<memory>') {
-  if (!text.startsWith('---\n')) return { ok: false, error: 'missing frontmatter opener', sourcePath };
-  const end = text.indexOf('\n---\n', 4);
+  const normalizedText = String(text).replace(/\r\n?/g, '\n');
+  if (!normalizedText.startsWith('---\n')) return { ok: false, error: 'missing frontmatter opener', sourcePath };
+  const end = normalizedText.indexOf('\n---\n', 4);
   if (end < 0) return { ok: false, error: 'missing frontmatter closer', sourcePath };
-  const raw = text.slice(4, end);
-  const body = text.slice(end + 5);
+  const raw = normalizedText.slice(4, end);
+  const body = normalizedText.slice(end + 5);
   const metadata = {};
   const lines = raw.split('\n');
   for (let index = 0; index < lines.length; index += 1) {
@@ -590,6 +591,9 @@ function buildCandidates(options = {}) {
     if (sourcePath.split(path.sep).includes('_template')) continue;
     const identity = frameworkIdentity(root, sourcePath);
     if (!identity) continue;
+    if (containsPrivateAbsolutePath(identity.rel) || containsCredentialMaterial(identity.rel)) {
+      throw new Error('Refusing private or credential-bearing framework skill path');
+    }
     validateSourceFile(sourcePath, frameworkRoot, 'framework skill', root);
     const sourceBytes = fs.readFileSync(sourcePath);
     const rendered = renderFrameworkSkill(String(sourceBytes), identity);

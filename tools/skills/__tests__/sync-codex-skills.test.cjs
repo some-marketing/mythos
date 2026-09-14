@@ -82,6 +82,13 @@ test('repo pins only Codex-supported projection frontmatter keys', () => {
   assert.deepEqual(new Set(Object.keys(parsed.metadata)), new Set(['name', 'description']));
 });
 
+test('frontmatter parsing accepts and normalizes CRLF line endings', () => {
+  const parsed = parseFrontmatter('---\r\nname: demo\r\ndescription: demo\r\n---\r\nbody\r\n');
+  assert.equal(parsed.ok, true);
+  assert.equal(parsed.metadata.name, 'demo');
+  assert.equal(parsed.body, 'body\n');
+});
+
 test('ground-in-philosophy uses the explicit Codex override and rejects Pi fallback text', () => {
   const root = fixture();
   command(root, 'ground-in-philosophy', { objective: 'Pi cannot natively spawn sub-agents', process: ['manual grounding (pi harness — no sub-agent)'] });
@@ -257,6 +264,17 @@ test('framework namespace collisions are rejected', () => {
     assert.equal(fs.existsSync(path.join(staged.candidateDir, 'receipts', `${candidate.id}.json`)), true);
     assert.equal(fs.existsSync(path.join(staged.candidateDir, 'candidates', candidate.id, 'SKILL.md')), true);
   }
+});
+
+test('credential-bearing framework source paths are rejected without retaining their bytes', () => {
+  const root = fixture();
+  const token = `sk-${'e'.repeat(24)}`;
+  write(root, `frameworks/a/b/.claude/skills/${token}/SKILL.md`, '---\nname: safe\ndescription: safe\n---\nbody\n');
+  assert.throws(
+    () => sync({ root, handlerIds: new Set() }),
+    (error) => /credential-bearing framework skill path/.test(error.message) && !error.message.includes(token)
+  );
+  assert.equal(fs.existsSync(path.join(root, '_dev/reports/analysis/codex-skill-projections')), false);
 });
 
 test('blocked framework candidates still participate in target collision rejection', () => {

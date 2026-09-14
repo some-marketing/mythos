@@ -579,7 +579,7 @@ function buildCandidates(options = {}) {
   }
 
   const byTarget = new Map();
-  for (const candidate of candidates.filter((item) => item.content)) {
+  for (const candidate of candidates.filter((item) => item.receipt.projection_kind !== 'alias_metadata')) {
     const target = candidate.receipt.target_exact_path;
     if (!byTarget.has(target)) byTarget.set(target, []);
     byTarget.get(target).push(candidate);
@@ -737,16 +737,30 @@ function loadManagedTargets(candidateDir, generatorId) {
 
 function receiptEvidence(receipt) {
   const evidence = { ...receipt };
+  if (receipt.application_status === 'blocked_existing_preserved') delete evidence.detail;
   delete evidence.application_status;
-  delete evidence.detail;
   return evidence;
 }
 
-function stagedEvidenceAligned(candidateDir, candidates, generatorId, handlers) {
+function stagedEvidenceAligned(candidateDir, candidates, generatorId, handlers, managedTargets) {
   const receiptsDir = safeOutputPath(candidateDir, 'receipts');
   const candidatesDir = safeOutputPath(candidateDir, 'candidates');
   const indexPath = safeOutputPath(candidateDir, 'projection-index.json');
-  if (!fs.existsSync(receiptsDir) || !fs.existsSync(indexPath)) return false;
+  const ledgerPath = safeOutputPath(candidateDir, 'managed-targets.json');
+  if (!fs.existsSync(receiptsDir) || !fs.existsSync(indexPath) || !fs.existsSync(ledgerPath)) return false;
+
+  let ledger;
+  try {
+    const metadata = fs.lstatSync(ledgerPath);
+    if (!metadata.isFile()) return false;
+    ledger = readJson(ledgerPath);
+  } catch {
+    return false;
+  }
+  const managedList = [...managedTargets].sort();
+  if (ledger.schema !== 'CodexSkillManagedTargets/1.0'
+    || ledger.generator_id !== generatorId
+    || JSON.stringify(ledger.targets) !== JSON.stringify(managedList)) return false;
 
   const expectedReceiptPaths = new Set(candidates.map((candidate) => safeOutputPath(receiptsDir, `${candidate.id}.json`)));
   const actualReceiptPaths = new Set(walk(receiptsDir));
@@ -765,6 +779,9 @@ function stagedEvidenceAligned(candidateDir, candidates, generatorId, handlers) 
       return false;
     }
     if (JSON.stringify(receiptEvidence(actual)) !== JSON.stringify(receiptEvidence(candidate.receipt))) return false;
+    if (['already_aligned', 'applied_additive'].includes(actual.application_status)
+      && actual.projection_kind !== 'alias_metadata'
+      && !managedTargets.has(actual.target_exact_path)) return false;
     actualReceipts.push(actual);
   }
 
@@ -801,6 +818,7 @@ function stagedEvidenceAligned(candidateDir, candidates, generatorId, handlers) 
     && index.generator_id === generatorId
     && JSON.stringify(index.handler_ids) === JSON.stringify(handlers)
     && JSON.stringify(index.receipts) === JSON.stringify(expectedReceiptRefs)
+    && index.managed_targets_sha256 === sha256(Buffer.from(JSON.stringify(managedList)))
     && JSON.stringify(index.counts) === JSON.stringify(actualCounts);
 }
 
@@ -887,7 +905,7 @@ function sync(options = {}) {
       if (blockedTargetInstalled(candidate, targetRoot)) drift += 1;
     }
     drift += orphanedManagedTargets(managedTargets, built.candidates, targetRoot).length;
-    if (!stagedEvidenceAligned(validatedCandidateDir, selected, built.config.generator_id, built.handlers)) drift += 1;
+    if (!stagedEvidenceAligned(validatedCandidateDir, selected, built.config.generator_id, built.handlers, managedTargets)) drift += 1;
     return { ...built, allCandidates: built.candidates, candidates: selected, candidateDir: validatedCandidateDir, drift, applied };
   }
 
@@ -917,6 +935,7 @@ function sync(options = {}) {
     schema: 'CodexSkillProjectionIndex/1.0',
     generator_id: built.config.generator_id,
     handler_ids: built.handlers,
+    managed_targets_sha256: sha256(Buffer.from(JSON.stringify([...managedTargets].sort()))),
     counts: selected.reduce((acc, item) => {
       const key = `${item.receipt.projection_kind}:${item.receipt.capability_tier}:${item.receipt.semantic_review_state}:${item.receipt.application_status}`;
       acc[key] = (acc[key] || 0) + 1;

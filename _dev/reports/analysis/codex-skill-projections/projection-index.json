@@ -7,6 +7,7 @@
     "review-task-plan",
     "route"
   ],
+  "managed_targets_sha256": "e5fdd960e42271b821bf8f7d58ce2ccb094c1249db126a602cdae1635df2b3ef",
   "counts": {
     "canonical_command:ADVISORY:reviewed_safe:already_aligned": 125,
     "canonical_command:BLOCKING:reviewed_safe:already_aligned": 5,

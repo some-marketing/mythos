@@ -245,6 +245,18 @@ test('framework namespace collisions are rejected', () => {
   }
 });
 
+test('blocked framework candidates still participate in target collision rejection', () => {
+  const root = fixture();
+  write(root, 'frameworks/a/b/.claude/skills/x-y/SKILL.md', '---\nname: x-y\ndescription: valid\n---\nbody\n');
+  write(root, 'frameworks/a/b/.claude/skills/x/y/SKILL.md', 'malformed\n');
+  const result = sync({ root, handlerIds: new Set(), apply: true });
+  const colliding = result.candidates.filter((item) => item.receipt.projection_kind === 'framework_helper');
+  assert.equal(colliding.length, 2);
+  assert.equal(colliding.every((item) => item.receipt.collision_state === 'collision'), true);
+  assert.equal(new Set(colliding.map((item) => item.id)).size, 2);
+  assert.equal(fs.existsSync(path.join(root, '.agents/skills/guild-a-b-x-y/SKILL.md')), false);
+});
+
 test('nested framework skills project independently instead of becoming parent resources', () => {
   const root = fixture();
   write(root, 'frameworks/a/b/.claude/skills/parent/SKILL.md', '---\nname: parent\ndescription: parent\n---\nbody\n');
@@ -319,6 +331,26 @@ test('check reports missing or stale staged projection evidence', () => {
   assert.ok(sync({ root, handlerIds: new Set(), check: true }).drift > 0);
   sync({ root, handlerIds: new Set(), apply: true });
   fs.writeFileSync(path.join(staged.candidateDir, 'candidates/source-command-sample/SKILL.md'), 'stale\n');
+  assert.ok(sync({ root, handlerIds: new Set(), check: true }).drift > 0);
+  sync({ root, handlerIds: new Set(), apply: true });
+  fs.unlinkSync(path.join(staged.candidateDir, 'managed-targets.json'));
+  assert.ok(sync({ root, handlerIds: new Set(), check: true }).drift > 0);
+  sync({ root, handlerIds: new Set(), apply: true });
+  const ledgerPath = path.join(staged.candidateDir, 'managed-targets.json');
+  const ledger = JSON.parse(fs.readFileSync(ledgerPath, 'utf8'));
+  ledger.targets = [];
+  fs.writeFileSync(ledgerPath, `${JSON.stringify(ledger, null, 2)}\n`);
+  assert.ok(sync({ root, handlerIds: new Set(), check: true }).drift > 0);
+});
+
+test('check compares deterministic rejection details in receipts', () => {
+  const root = fixture();
+  write(root, 'instructions/canonical/commands/sample.yaml', `${JSON.stringify({ id: 'other', description: 'mismatch', mode: 'REVIEW_ONLY' }, null, 2)}\n`);
+  const staged = sync({ root, handlerIds: new Set() });
+  const receiptPath = path.join(staged.candidateDir, 'receipts/command-sample.json');
+  const receipt = JSON.parse(fs.readFileSync(receiptPath, 'utf8'));
+  receipt.detail = 'incorrect evidence';
+  fs.writeFileSync(receiptPath, `${JSON.stringify(receipt, null, 2)}\n`);
   assert.ok(sync({ root, handlerIds: new Set(), check: true }).drift > 0);
 });
 

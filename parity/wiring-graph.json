@@ -19769,7 +19769,7 @@
       "id": "file:tools/skills/__tests__/sync-codex-skills.test.cjs",
       "type": "file",
       "path": "tools/skills/__tests__/sync-codex-skills.test.cjs",
-      "sha256": "24d72c6ed0d9fab376a03f8442158e44d2f5aaf13bb0cff9d456c3d4ab89848d",
+      "sha256": "7b26b9c32bdaf3b54503f2cefe0e8477e9ea1eabd1103766ca2b9a1ae4d3b82d",
       "mode": 420
     },
     {
@@ -19790,7 +19790,7 @@
       "id": "file:tools/skills/sync-codex-skills.cjs",
       "type": "file",
       "path": "tools/skills/sync-codex-skills.cjs",
-      "sha256": "8e707544c437d2d2d0c682d3b2cb79674047ed21f2c05544e6683407968e3f32",
+      "sha256": "5efd5df43722e0d3f9babf0a275f5a328586a3a19be03791deabe2eb1e5ba7e1",
       "mode": 420
     },
     {

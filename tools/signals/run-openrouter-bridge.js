@@ -43,6 +43,15 @@ const {
   closeSignalInfo
 } = require('./lib/actor-auto');
 const { scanLiveHandoffSignals } = require('./lib/pipeline-loop');
+const { getBridgeTargetPolicy, getBridgeTransportPolicy } = require('./lib/bridge-target-policy');
+
+// Reads openrouter/api's stale_models straight from the single source of
+// truth (bridge-target-policy.js) rather than duplicating the list here.
+function STALE_OPENROUTER_MODELS() {
+  const targetPolicy = getBridgeTargetPolicy('openrouter');
+  const transportPolicy = targetPolicy && getBridgeTransportPolicy('openrouter', targetPolicy.default_transport);
+  return (transportPolicy && Array.isArray(transportPolicy.stale_models)) ? transportPolicy.stale_models : [];
+}
 const {
   createHandoffSignal,
   validateHandoffSignal,
@@ -380,7 +389,17 @@ function resolveOpenRouterApiKey() {
 // (fail-closed), instead of silently degrading to a non-PRC allow.
 // ---------------------------------------------------------------------------
 const PRC_JURISDICTION_MODEL_DESCRIPTORS = Object.freeze({
-  'z-ai/glm-5.2': 'glm-5.2-hosted.json'
+  'z-ai/glm-5.2': 'glm-5.2-hosted.json',
+  // Registered 2026-09-14 alongside bridge-target-policy.js's Qwen slug
+  // update (PR #33 Codex review, P1): without this entry the model fell
+  // through to the 'non-prc-default' branch below and the pre-egress
+  // DATA-BAN gate skipped sensitivity classification entirely for it, even
+  // though it is PRC-hosted-via-OpenRouter. No descriptor file exists yet
+  // (same as glm-5.2-hosted.json above), so this fails closed and BLOCKS
+  // every dispatch to this model until an operator authors the real
+  // descriptor content -- the safe default, not a completed jurisdiction
+  // profile.
+  'qwen/qwen3.8-max-0902': 'qwen3.8-max-hosted.json'
 });
 
 /**
@@ -486,6 +505,33 @@ async function runOpenRouterForSignal(projectRoot, signalInfo, opts = {}) {
   const apiKey = resolveOpenRouterApiKey();
   const timestamp = opts.timestamp || formatStamp();
   const model = opts.model || DEFAULT_MODEL;
+
+  // Reject a known-stale model slug before any other work. Added 2026-09-14
+  // (PR #33 Codex review, P2): bridge-target-policy.js's openrouter
+  // stale_models array was previously empty, so this enforcement gap existed
+  // but was unreachable; the PR that first populates stale_models with a
+  // real entry (qwen/qwen3-coder) is the one that must also wire the check,
+  // or that declared-stale slug would still silently reach egress.
+  //
+  // Deliberately narrower than validateBridgeTargetModel()'s full allowlist
+  // enforcement (used for the CLI targets): OpenRouter's current_models is a
+  // curated subset for selectDistinctFamily/documentation, not an exhaustive
+  // allowlist -- the default model is 'openrouter/auto' and callers may
+  // legitimately pass any OpenRouter-hosted slug that isn't in that list.
+  // Only an EXPLICITLY stale-flagged slug is rejected.
+  const staleModels = STALE_OPENROUTER_MODELS();
+  if (staleModels.includes(model)) {
+    return {
+      mode: 'blocked',
+      reason: 'stale_bridge_model',
+      success: false,
+      actor: ACTOR_ID,
+      model,
+      signalName: signalInfo.name,
+      freshnessReason: `Bridge model "${model}" is stale for openrouter/api and must not be dispatched. See tools/signals/lib/bridge-target-policy.js stale_models.`
+    };
+  }
+
   const basePrompt = loadPromptBody(projectRoot, signalInfo);
   const artifacts = buildArtifacts(projectRoot, signalInfo, timestamp);
   const scope = signalInfo.signal.scope || signalInfo.signal.signal_scope || 'general';

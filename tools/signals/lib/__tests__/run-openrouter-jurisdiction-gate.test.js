@@ -333,4 +333,43 @@ describe('run-openrouter-bridge — jurisdiction data-ban enforcement (S4)', () 
     assert.ok(Array.isArray(res.descriptor.labels));
     assert.ok(!res.descriptor.labels.includes('prc-origin-risk'));
   });
+
+  it('resolveDispatchTarget registers the Qwen3.8 Max slug as known-PRC and fails closed (no descriptor file authored yet)', () => {
+    // Regression test for PR #33 Codex review (P1): before this slug was
+    // added to PRC_JURISDICTION_MODEL_DESCRIPTORS, this exact call returned
+    // source:'non-prc-default' and the pre-egress data-ban gate skipped
+    // sensitivity classification entirely for this PRC-hosted-via-OpenRouter
+    // model. It must now resolve as a known-PRC slug with no descriptor
+    // file present, which fails closed (blocks), same as z-ai/glm-5.2 above.
+    const res = resolveDispatchTarget('/nonexistent-root', 'qwen/qwen3.8-max-0902');
+    assert.equal(res.source, 'missing-descriptor');
+    assert.equal(res.descriptor.load_error, 'missing-descriptor');
+  });
+
+  it('a declared-stale model slug is blocked before egress, before the jurisdiction gate even runs', async () => {
+    // Regression test for PR #33 Codex review (P2): bridge-target-policy.js's
+    // openrouter stale_models array now declares qwen/qwen3-coder stale, but
+    // nothing previously consulted that list at dispatch time -- the slug
+    // would have reached egress unchanged. This proves it is rejected, and
+    // that the adapter is never invoked (no egress, same guarantee as the
+    // jurisdiction gate above, for a different reason).
+    const root = makeTempRoot();
+    try {
+      const signalInfo = setupSignal(root, BENIGN_PROMPT, 'stale-model-block');
+      const adapter = recordingAdapter();
+
+      const result = await runOpenRouterForSignal(root, signalInfo, {
+        model: 'qwen/qwen3-coder',
+        adapter,
+        timestamp: 'STAMP-STALE'
+      });
+
+      assert.equal(result.mode, 'blocked');
+      assert.equal(result.reason, 'stale_bridge_model');
+      assert.equal(result.success, false);
+      assert.equal(adapter.calls.length, 0, 'a stale model must never reach egress');
+    } finally {
+      cleanupTempRoot(root);
+    }
+  });
 });

@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "4d95b682aa0f410f220553ceec5e5dfccc274a6866b60d0aec92f90112ac33b3",
+    "expected_tree_sha256": "4f03268b54ddddd5ad90e1aa88e117ea7271a49005f1df75925a056004b31042",
     "expected_files": [
       {
         "path": ".agents/skills/go/SKILL.md",
@@ -2217,7 +2217,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-parity-remediation__verification.md",
-        "sha256": "e3dc3440905dcc3a93af93c79d1e25a22e60dacf55e7818004fa063fd1a9e09e",
+        "sha256": "a58daed81f3d4af6b59e9430efe7766b93dfd676b92b0543724ca9b00f058df2",
         "mode": 420
       },
       {
@@ -8772,7 +8772,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "535e0500ec24f3c8cc295c299fddbac98897d6078df6948a2999167cdb0ccc3a",
+        "sha256": "0069fc536bd5a240feec8280afb4ed2537d36ee5755af1425b1c75e24d00d2b6",
         "mode": 420
       },
       {
@@ -15152,7 +15152,7 @@
       },
       {
         "path": "tools/skills/__tests__/sync-lifecycle-command-skills.test.cjs",
-        "sha256": "a7226e764b46331171e76818c2a7729e8d9f9cd236ee5c1b9b53f23ea8af38c3",
+        "sha256": "af5b19ebc0ce9a83443699caa79c4071fe5c26e06333a4565d56ca20f12b2b99",
         "mode": 420
       },
       {
@@ -15162,7 +15162,7 @@
       },
       {
         "path": "tools/skills/sync-lifecycle-command-skills.cjs",
-        "sha256": "2130b53985df0e12522a75faa52aec09d1e89fe3f9e9283a5b60f0c8ee2b8e6b",
+        "sha256": "1ca10bde7e7b760ccb882fe44e8b6bca4da3af728db67cdddf6a4c15e4084d8b",
         "mode": 420
       },
       {
@@ -16884,9 +16884,9 @@
     "package_script_count": 205,
     "command_alias_registry_sha256": "9bbc50aa1343a5502258e0e067eca0bb4cf4ea9f560abc5b998247a0e04b9901",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "535e0500ec24f3c8cc295c299fddbac98897d6078df6948a2999167cdb0ccc3a",
+    "graph_sha256": "0069fc536bd5a240feec8280afb4ed2537d36ee5755af1425b1c75e24d00d2b6",
     "graph_nodes": 4091,
-    "graph_edges": 2899
+    "graph_edges": 2900
   },
   "runtime_exclusions": [
     ".git/**",

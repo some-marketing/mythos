@@ -19776,7 +19776,7 @@
       "id": "file:tools/skills/__tests__/sync-lifecycle-command-skills.test.cjs",
       "type": "file",
       "path": "tools/skills/__tests__/sync-lifecycle-command-skills.test.cjs",
-      "sha256": "a7226e764b46331171e76818c2a7729e8d9f9cd236ee5c1b9b53f23ea8af38c3",
+      "sha256": "af5b19ebc0ce9a83443699caa79c4071fe5c26e06333a4565d56ca20f12b2b99",
       "mode": 420
     },
     {
@@ -19797,7 +19797,7 @@
       "id": "file:tools/skills/sync-lifecycle-command-skills.cjs",
       "type": "file",
       "path": "tools/skills/sync-lifecycle-command-skills.cjs",
-      "sha256": "2130b53985df0e12522a75faa52aec09d1e89fe3f9e9283a5b60f0c8ee2b8e6b",
+      "sha256": "1ca10bde7e7b760ccb882fe44e8b6bca4da3af728db67cdddf6a4c15e4084d8b",
       "mode": 420
     },
     {
@@ -46714,6 +46714,15 @@
       "specifier": "../manifest-schema-sweep.cjs"
     },
     {
+      "id": "c437a17ee659829b25f15fc1079e63e8680894bc6fb7dba049ae4239a395b600",
+      "type": "static-import",
+      "from": "file:tools/skills/__tests__/sync-lifecycle-command-skills.test.cjs",
+      "to": "file:tools/skills/sync-codex-skills.cjs",
+      "target": "tools/skills/sync-codex-skills.cjs",
+      "required": true,
+      "specifier": "../sync-codex-skills.cjs"
+    },
+    {
       "id": "c45116742022c973c91729db37b3e933160eb65be37188761ccc016fe62b9cfc",
       "type": "manifest-target",
       "from": "manifest-path:frameworks/deliverables/scope-verification/.claude/skills/scope-verification",
@@ -53060,7 +53069,7 @@
   ],
   "counts": {
     "nodes": 4091,
-    "edges": 2899,
+    "edges": 2900,
     "unresolved": 0
   }
 }

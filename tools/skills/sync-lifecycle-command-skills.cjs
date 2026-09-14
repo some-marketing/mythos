@@ -16,6 +16,9 @@ function isLifecycle(candidate) {
 function syncLifecycle(options = {}) {
   const root = options.root || PROJECT_ROOT;
   const { config } = loadProjectionConfig(root);
+  if (options.check && !options.candidateDir) {
+    return sync({ ...options, root, candidateDir: path.join(root, config.candidate_root) });
+  }
   const candidateDir = options.candidateDir || path.join(root, config.candidate_root, 'lifecycle');
   return sync({ ...options, root, candidateDir, includeCandidate: isLifecycle });
 }

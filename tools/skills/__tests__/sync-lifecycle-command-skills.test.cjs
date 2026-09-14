@@ -7,6 +7,7 @@ const path = require('node:path');
 const test = require('node:test');
 
 const { LIFECYCLE_COMMANDS, syncLifecycle } = require('../sync-lifecycle-command-skills.cjs');
+const { sync } = require('../sync-codex-skills.cjs');
 
 const PROJECT_ROOT = path.resolve(__dirname, '..', '..', '..');
 
@@ -51,6 +52,16 @@ test('compatibility wrapper is additive-only and reports existing drift', () => 
   const result = syncLifecycle({ root, targetDir, handlerIds: new Set(), apply: true });
   assert.equal(fs.readFileSync(boot, 'utf8'), 'foreign\n');
   assert.equal(result.candidates.find((item) => item.id === 'command-boot').receipt.application_status, 'blocked_existing_preserved');
+  sync({ root, targetDir, handlerIds: new Set(), apply: true });
   const checked = syncLifecycle({ root, targetDir, handlerIds: new Set(), check: true });
   assert.equal(checked.drift, 1);
+});
+
+test('compatibility check reuses the committed general projection evidence', () => {
+  const root = fixture();
+  const targetDir = path.join(root, '.agents', 'skills');
+  sync({ root, targetDir, handlerIds: new Set(), apply: true });
+  const checked = syncLifecycle({ root, targetDir, handlerIds: new Set(), check: true });
+  assert.equal(checked.drift, 0);
+  assert.ok(checked.candidates.length >= LIFECYCLE_COMMANDS.length);
 });

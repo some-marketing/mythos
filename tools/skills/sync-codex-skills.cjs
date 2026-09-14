@@ -410,9 +410,9 @@ function bundledResources(sourcePath) {
 
 function containsPrivateAbsolutePath(bytes) {
   const text = String(bytes);
-  return /\/(?:Users|home)\/[^/\s]+\//m.test(text)
-    || /(?:^|[^A-Za-z0-9])[A-Za-z]:[\\/](?:Users|home)[\\/][^\\/\s]+[\\/]/m.test(text)
-    || /[\\/]{2}[^\\/\s]+[\\/](?:Users|home)[\\/][^\\/\s]+[\\/]/m.test(text);
+  return /\/(?:Users|home)\/[^\\/\s"'`;,]+(?=$|[\\/\s"'`;,])/m.test(text)
+    || /(?:^|[^A-Za-z0-9])[A-Za-z]:[\\/](?:Users|home)[\\/][^\\/\s"'`;,]+(?=$|[\\/\s"'`;,])/m.test(text)
+    || /[\\/]{2}[^\\/\s]+[\\/](?:Users|home)[\\/][^\\/\s"'`;,]+(?=$|[\\/\s"'`;,])/m.test(text);
 }
 
 function containsCredentialMaterial(bytes) {
@@ -554,22 +554,33 @@ function buildCandidates(options = {}) {
     .filter((candidate) => candidate.receipt.projection_kind === 'direct_system_skill')
     .map((candidate) => [candidate.id.replace(/^direct-/, ''), candidate]));
   const directDependencies = config.families.direct_system_skills.dependencies || {};
+  const validatedDependencies = [];
   for (const [name, dependencies] of Object.entries(directDependencies)) {
     validateSlugId(name, 'direct skill dependency owner');
     if (!Array.isArray(dependencies)) throw new Error(`Dependencies for direct skill ${name} must be an array`);
     const candidate = directCandidates.get(name);
     if (!candidate) throw new Error(`Dependency owner is not a configured direct skill: ${name}`);
-    const missing = dependencies
-      .map((dependency) => validateSlugId(dependency, `dependency for direct skill ${name}`))
-      .filter((dependency) => !isApplicable(directCandidates.get(dependency) || {}));
-    if (!missing.length) continue;
-    candidate.content = null;
-    candidate.resources = [];
-    candidate.receipt.capability_tier = 'ABSENT';
-    candidate.receipt.semantic_review_state = 'dependency_unavailable';
-    candidate.receipt.application_status = 'blocked_dependency';
-    candidate.receipt.detail = `required direct skill dependency unavailable: ${missing.join(', ')}`;
+    validatedDependencies.push({
+      candidate,
+      dependencies: dependencies.map((dependency) => validateSlugId(dependency, `dependency for direct skill ${name}`))
+    });
   }
+  let dependencyChanged;
+  do {
+    dependencyChanged = false;
+    for (const { candidate, dependencies } of validatedDependencies) {
+      if (!isApplicable(candidate)) continue;
+      const missing = dependencies.filter((dependency) => !isApplicable(directCandidates.get(dependency) || {}));
+      if (!missing.length) continue;
+      candidate.content = null;
+      candidate.resources = [];
+      candidate.receipt.capability_tier = 'ABSENT';
+      candidate.receipt.semantic_review_state = 'dependency_unavailable';
+      candidate.receipt.application_status = 'blocked_dependency';
+      candidate.receipt.detail = `required direct skill dependency unavailable: ${missing.join(', ')}`;
+      dependencyChanged = true;
+    }
+  } while (dependencyChanged);
 
   const frameworkRoot = path.join(root, 'frameworks');
   for (const sourcePath of walk(frameworkRoot, (file) => file.endsWith(`${path.sep}SKILL.md`) && file.includes(`${path.sep}.claude${path.sep}skills${path.sep}`))) {
@@ -764,18 +775,23 @@ function packageAlignment(candidate, targetRoot) {
   };
 }
 
-function blockedTargetInstalled(candidate, targetRoot) {
-  if (candidate.receipt.projection_kind === 'alias_metadata' || isApplicable(candidate)) return false;
-  const suffix = candidate.receipt.target_exact_path.replace(/^\.agents\/skills\//, '');
-  const targetPath = safeOutputPath(targetRoot, suffix);
+function packageRootHasArtifacts(packageRoot) {
   try {
-    fs.lstatSync(targetPath);
-    return true;
+    const metadata = fs.lstatSync(packageRoot);
+    return !metadata.isDirectory() || fs.readdirSync(packageRoot).length > 0;
   } catch (error) {
     if (error.code === 'ENOENT') return false;
     if (error.code === 'ENOTDIR') return true;
     throw error;
   }
+}
+
+function blockedTargetInstalled(candidate, targetRoot) {
+  if (candidate.receipt.projection_kind === 'alias_metadata' || isApplicable(candidate)) return false;
+  const suffix = candidate.receipt.target_exact_path.replace(/^\.agents\/skills\//, '');
+  const targetPath = safeOutputPath(targetRoot, suffix);
+  const packageRoot = path.dirname(targetPath);
+  return packageRootHasArtifacts(packageRoot);
 }
 
 function validateManagedTarget(value) {
@@ -950,13 +966,7 @@ function orphanedManagedTargets(managedTargets, candidates, targetRoot) {
     const suffix = String(target || '').replace(/^\.agents\/skills\//, '');
     const targetPath = safeOutputPath(targetRoot, suffix);
     const packageRoot = path.dirname(targetPath);
-    try {
-      fs.lstatSync(packageRoot);
-      orphaned.add(target);
-    } catch (error) {
-      if (error.code === 'ENOTDIR') orphaned.add(target);
-      else if (error.code !== 'ENOENT') throw error;
-    }
+    if (packageRootHasArtifacts(packageRoot)) orphaned.add(target);
   }
   return [...orphaned].sort();
 }

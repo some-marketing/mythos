@@ -328,6 +328,44 @@ test('Windows home paths are rejected without retaining private bytes', () => {
   assert.doesNotMatch(JSON.stringify(candidate.receipt), /Alice|Bob|Carol|Dan/);
 });
 
+test('terminal home-directory paths are rejected without a trailing separator', () => {
+  const root = fixture();
+  const macHome = ['', 'Users', 'bob'].join('/');
+  skill(root, 'ticktock', [
+    'HOME=/home/alice',
+    `MAC_HOME="${macHome}"`,
+    String.raw`WIN_HOME=C:\Users\Carol`,
+    String.raw`UNC_HOME=\\server\home\Dan`
+  ].join('\n'));
+  const result = sync({ root, handlerIds: new Set(), apply: true });
+  const candidate = byId(result, 'direct-ticktock');
+  assert.equal(candidate.receipt.semantic_review_state, 'private_path_rejected');
+  assert.equal(candidate.receipt.source_sha256, null);
+  assert.equal(fs.existsSync(path.join(root, '.agents/skills/ticktock/SKILL.md')), false);
+  assert.doesNotMatch(JSON.stringify(candidate.receipt), /alice|bob|Carol|Dan/);
+});
+
+test('direct dependencies resolve transitively to a fixed point', () => {
+  const root = fixture();
+  const adapterPath = path.join(root, 'instructions/adapters/codex.yaml');
+  const adapter = JSON.parse(fs.readFileSync(adapterPath, 'utf8'));
+  adapter.skill_projection.families.direct_system_skills.sources = [
+    '.claude/skills/a/SKILL.md',
+    '.claude/skills/b/SKILL.md',
+    '.claude/skills/c/SKILL.md'
+  ];
+  adapter.skill_projection.families.direct_system_skills.dependencies = { a: ['b'], b: ['c'] };
+  fs.writeFileSync(adapterPath, `${JSON.stringify(adapter, null, 2)}\n`);
+  skill(root, 'a');
+  skill(root, 'b');
+  const result = sync({ root, handlerIds: new Set(), apply: true });
+  assert.equal(byId(result, 'direct-a').receipt.semantic_review_state, 'dependency_unavailable');
+  assert.equal(byId(result, 'direct-b').receipt.semantic_review_state, 'dependency_unavailable');
+  assert.equal(byId(result, 'direct-c').receipt.semantic_review_state, 'missing_source');
+  assert.equal(fs.existsSync(path.join(root, '.agents/skills/a/SKILL.md')), false);
+  assert.equal(fs.existsSync(path.join(root, '.agents/skills/b/SKILL.md')), false);
+});
+
 test('check reports stale installed targets whose candidates are now blocked', () => {
   const root = fixture();
   skill(root, 'ticktock');
@@ -651,6 +689,22 @@ test('blocked candidates classify non-directory package roots as drift', () => {
   const packageRoot = write(root, '.agents/skills/ticktock', 'foreign package root\n');
   assert.ok(sync({ root, handlerIds: new Set(), check: true }).drift > 0);
   assert.equal(fs.readFileSync(packageRoot, 'utf8'), 'foreign package root\n');
+});
+
+test('blocked candidates detect residual package resources after their skill disappears', () => {
+  const root = fixture();
+  skill(root, 'ticktock');
+  write(root, '.claude/skills/ticktock/references/a.md', 'expected resource\n');
+  sync({ root, handlerIds: new Set(), apply: true });
+  fs.writeFileSync(path.join(root, '.claude/skills/ticktock/SKILL.md'), 'malformed source\n');
+  fs.unlinkSync(path.join(root, '.agents/skills/ticktock/SKILL.md'));
+  sync({ root, handlerIds: new Set() });
+  assert.ok(sync({ root, handlerIds: new Set(), check: true }).drift > 0);
+  const resource = path.join(root, '.agents/skills/ticktock/references/a.md');
+  assert.equal(fs.readFileSync(resource, 'utf8'), 'expected resource\n');
+  fs.unlinkSync(resource);
+  fs.rmdirSync(path.dirname(resource));
+  assert.equal(sync({ root, handlerIds: new Set(), check: true }).drift, 0);
 });
 
 test('nested non-directory resource parents are preserved and reported as drift', () => {

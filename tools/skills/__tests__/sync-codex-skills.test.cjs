@@ -298,6 +298,28 @@ test('primary skill symlinks are rejected before their targets are read', () => 
   assert.equal(fs.existsSync(path.join(root, '_dev/reports/analysis/codex-skill-projections/candidates/ticktock/SKILL.md')), false);
 });
 
+test('symlinked source roots cannot redefine repository containment', () => {
+  const root = fixture();
+  const externalRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'external-skills-'));
+  write(externalRoot, 'ticktock/SKILL.md', '---\nname: ticktock\ndescription: external\n---\nexternal private bytes\n');
+  const claudeRoot = path.join(root, '.claude');
+  fs.mkdirSync(claudeRoot, { recursive: true });
+  fs.symlinkSync(externalRoot, path.join(claudeRoot, 'skills'));
+  assert.throws(() => sync({ root, handlerIds: new Set() }), /Refusing symbolic-link direct skill source root/);
+});
+
+test('sensitive and credential-bearing bundled resources are rejected', () => {
+  const envRoot = fixture();
+  skill(envRoot, 'ticktock');
+  write(envRoot, '.claude/skills/ticktock/.env', 'API_KEY=supersecret\n');
+  assert.throws(() => sync({ root: envRoot, handlerIds: new Set() }), /Refusing sensitive bundled resource: \.env/);
+
+  const credentialRoot = fixture();
+  skill(credentialRoot, 'ticktock');
+  write(credentialRoot, '.claude/skills/ticktock/notes.txt', `token sk-${'a'.repeat(24)}\n`);
+  assert.throws(() => sync({ root: credentialRoot, handlerIds: new Set() }), /Refusing credential-bearing bundled resource/);
+});
+
 test('candidate staging refuses repository and target directory deletion', () => {
   const root = fixture();
   command(root, 'sample');

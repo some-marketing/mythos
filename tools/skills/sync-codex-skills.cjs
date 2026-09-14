@@ -127,7 +127,7 @@ function loadCanonicalCommands(root, config) {
   const sourceRoot = path.join(root, config.families.canonical_commands.source_root);
   const commands = new Map();
   for (const sourcePath of walk(sourceRoot, (file) => file.endsWith('.yaml'))) {
-    validateSourceFile(sourcePath, sourceRoot, 'canonical command');
+    validateSourceFile(sourcePath, sourceRoot, 'canonical command', root);
     const filenameId = validateSlugId(path.basename(sourcePath, '.yaml'), 'canonical command filename');
     let spec;
     try {
@@ -169,11 +169,26 @@ function isWithin(parent, child) {
   return relation !== '' && relation !== '..' && !relation.startsWith(`..${path.sep}`) && !path.isAbsolute(relation);
 }
 
-function validateSourceFile(sourcePath, sourceRoot, label) {
+function validateSourceFile(sourcePath, sourceRoot, label, projectRoot = PROJECT_ROOT) {
+  const lexicalProjectRoot = path.resolve(projectRoot);
+  const lexicalSourceRoot = path.resolve(sourceRoot);
+  if (lexicalSourceRoot !== lexicalProjectRoot && !isWithin(lexicalProjectRoot, lexicalSourceRoot)) {
+    throw new Error(`Refusing ${label} source root outside repository: ${sourceRoot}`);
+  }
+  let cursor = lexicalSourceRoot;
+  while (cursor !== lexicalProjectRoot) {
+    const rootMetadata = fs.lstatSync(cursor);
+    if (rootMetadata.isSymbolicLink()) throw new Error(`Refusing symbolic-link ${label} source root: ${cursor}`);
+    cursor = path.dirname(cursor);
+  }
+  const realProjectRoot = fs.realpathSync(lexicalProjectRoot);
+  const realRoot = fs.realpathSync(lexicalSourceRoot);
+  if (realRoot !== realProjectRoot && !isWithin(realProjectRoot, realRoot)) {
+    throw new Error(`Refusing resolved ${label} source root outside repository: ${sourceRoot}`);
+  }
   const metadata = fs.lstatSync(sourcePath);
   if (metadata.isSymbolicLink()) throw new Error(`Refusing symbolic-link ${label} source: ${relative(sourceRoot, sourcePath)}`);
   if (!metadata.isFile()) throw new Error(`Refusing non-file ${label} source: ${relative(sourceRoot, sourcePath)}`);
-  const realRoot = resolvedPath(sourceRoot);
   const realSource = fs.realpathSync(sourcePath);
   if (!isWithin(realRoot, realSource)) throw new Error(`Refusing ${label} source outside declared root: ${sourcePath}`);
   return realSource;
@@ -306,13 +321,17 @@ function bundledResources(sourcePath) {
     return true;
   });
   return files.map((file) => {
+    const relativePath = relative(sourceDir, file);
     const metadata = fs.lstatSync(file);
-    if (metadata.isSymbolicLink()) throw new Error(`Refusing symbolic-link bundled resource: ${relative(sourceDir, file)}`);
-    if (!metadata.isFile()) throw new Error(`Refusing non-file bundled resource: ${relative(sourceDir, file)}`);
+    if (metadata.isSymbolicLink()) throw new Error(`Refusing symbolic-link bundled resource: ${relativePath}`);
+    if (!metadata.isFile()) throw new Error(`Refusing non-file bundled resource: ${relativePath}`);
+    if (isSensitiveResourcePath(relativePath)) throw new Error(`Refusing sensitive bundled resource: ${relativePath}`);
+    const bytes = fs.readFileSync(file);
+    if (containsCredentialMaterial(bytes)) throw new Error(`Refusing credential-bearing bundled resource: ${relativePath}`);
     return {
       sourcePath: file,
-      relativePath: relative(sourceDir, file),
-      bytes: fs.readFileSync(file),
+      relativePath,
+      bytes,
       mode: metadata.mode & 0o777
     };
   });
@@ -320,6 +339,20 @@ function bundledResources(sourcePath) {
 
 function containsPrivateAbsolutePath(bytes) {
   return /(?:^|[\s('"`])\/(?:Users|home)\/[^/\s]+\//m.test(String(bytes));
+}
+
+function containsCredentialMaterial(bytes) {
+  const text = String(bytes);
+  return /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/.test(text)
+    || /(?:^|[^A-Za-z0-9])(?:sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16})(?:$|[^A-Za-z0-9_-])/m.test(text);
+}
+
+function isSensitiveResourcePath(relativePath) {
+  const name = path.basename(relativePath).toLowerCase();
+  return name === '.env'
+    || name.startsWith('.env.')
+    || ['.netrc', '.npmrc', 'credentials.json', 'secrets.json', 'id_rsa', 'id_ed25519'].includes(name)
+    || ['.key', '.p12', '.pfx', '.pem'].some((extension) => name.endsWith(extension));
 }
 
 function receiptBase(config, sourcePath, sourceBytes, kind, capabilityTier, reviewState, targetPath) {
@@ -399,11 +432,12 @@ function buildCandidates(options = {}) {
       candidates.push({ id: `direct-${name}`, content: null, resources: [], receipt: { ...receiptBase(config, sourceRel, null, 'direct_system_skill', 'ABSENT', 'missing_source', targetRel), application_status: 'blocked_missing_source' }, targetRoot });
       continue;
     }
-    validateSourceFile(sourcePath, directSourceRoot, 'direct skill');
+    validateSourceFile(sourcePath, directSourceRoot, 'direct skill', root);
     const sourceBytes = fs.readFileSync(sourcePath);
     const normalized = normalizeDirectSkill(String(sourceBytes), name, terminalAliases.get(name) || []);
     const resources = bundledResources(sourcePath);
-    const privateLeak = containsPrivateAbsolutePath(sourceBytes) || resources.some((item) => containsPrivateAbsolutePath(item.bytes));
+    const privateLeak = containsPrivateAbsolutePath(sourceBytes) || containsCredentialMaterial(sourceBytes)
+      || resources.some((item) => containsPrivateAbsolutePath(item.bytes) || containsCredentialMaterial(item.bytes));
     const receipt = receiptBase(config, sourceRel, sourceBytes, 'direct_system_skill', normalized.ok ? 'ADVISORY' : 'UNKNOWN', config.families.direct_system_skills.semantic_review_state, targetRel);
     attachPackageEvidence(receipt, sourceBytes, resources);
     if (!normalized.ok || privateLeak) {
@@ -442,12 +476,13 @@ function buildCandidates(options = {}) {
     if (sourcePath.split(path.sep).includes('_template')) continue;
     const identity = frameworkIdentity(root, sourcePath);
     if (!identity) continue;
-    validateSourceFile(sourcePath, frameworkRoot, 'framework skill');
+    validateSourceFile(sourcePath, frameworkRoot, 'framework skill', root);
     const sourceBytes = fs.readFileSync(sourcePath);
     const rendered = renderFrameworkSkill(String(sourceBytes), identity);
     const targetRel = posix(path.join(config.target_root, identity.slug, 'SKILL.md'));
     const resources = bundledResources(sourcePath);
-    const privateLeak = containsPrivateAbsolutePath(sourceBytes) || resources.some((item) => containsPrivateAbsolutePath(item.bytes));
+    const privateLeak = containsPrivateAbsolutePath(sourceBytes) || containsCredentialMaterial(sourceBytes)
+      || resources.some((item) => containsPrivateAbsolutePath(item.bytes) || containsCredentialMaterial(item.bytes));
     const receipt = receiptBase(config, identity.rel, sourceBytes, 'framework_helper', rendered.ok ? 'ADVISORY' : 'UNKNOWN', config.families.framework_helpers.semantic_review_state, targetRel);
     attachPackageEvidence(receipt, sourceBytes, resources);
     if (!rendered.ok || privateLeak) {

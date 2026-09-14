@@ -1,6 +1,9 @@
 ---
 name: go
 description: "\"Just go\" — execute a plan that has already been fully blueprinted by /plan-task and cleared distinct review. The addressed mind becomes the orchestrator, fans out one subagent per plan scope, tiers each dispatch down the dispatch-routing-rule altitude ladder — recursing into sub-scopes until the leaf work is deterministic — and as results fold back up, extracts any mechanical solution into a reusable tool before reporting the scope done. Ships ungated as a project skill wrapping /run-plan; adds no new gate."
+metadata:
+  execution_mode: "COORDINATOR"
+  trust_tier: "report_write_scoped"
 ---
 
 <skill>

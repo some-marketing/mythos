@@ -1695,7 +1695,7 @@
       "id": "file:.agents/skills/go/SKILL.md",
       "type": "file",
       "path": ".agents/skills/go/SKILL.md",
-      "sha256": "f5074ab1439da4cdf5ee6f01e8fbf1b57684fd05906220197b645ace9c47a02e",
+      "sha256": "432a385e7ea9a0b6a13e8b2f30d16ba3f7bb6605fd517e362e754bd915881990",
       "mode": 420
     },
     {
@@ -19769,7 +19769,7 @@
       "id": "file:tools/skills/__tests__/sync-codex-skills.test.cjs",
       "type": "file",
       "path": "tools/skills/__tests__/sync-codex-skills.test.cjs",
-      "sha256": "c73630d6cfac1eed8a4a87e4101b65fd11f5868ff2aeff2bbc5b00c35c9da081",
+      "sha256": "fd8fee6900c4bc340fb536e0a2e4fe20a9018e9567b5c376e83114e1f7bab159",
       "mode": 420
     },
     {
@@ -19790,7 +19790,7 @@
       "id": "file:tools/skills/sync-codex-skills.cjs",
       "type": "file",
       "path": "tools/skills/sync-codex-skills.cjs",
-      "sha256": "8b98e22e4b5d67c149ea10e63334c9ede30a10188dcf2d26d139d481bac19155",
+      "sha256": "82d3daadf5a2ce5676c42c053491ceef9d345d9b338e1f0679c5f8a80b465dd6",
       "mode": 420
     },
     {

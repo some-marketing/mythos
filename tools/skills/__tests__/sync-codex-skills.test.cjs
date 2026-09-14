@@ -80,6 +80,10 @@ test('repo pins only Codex-supported projection frontmatter keys', () => {
   assert.equal(normalized.ok, true);
   const parsed = parseFrontmatter(normalized.content);
   assert.deepEqual(new Set(Object.keys(parsed.metadata)), new Set(['name', 'description']));
+
+  const bounded = normalizeDirectSkill('---\nname: old\ndescription: demo\nexecution_mode: COORDINATOR\ntrust_tier: report_write_scoped\n---\nbody\n', 'new');
+  assert.equal(bounded.ok, true);
+  assert.match(bounded.content, /metadata:\n  execution_mode: "COORDINATOR"\n  trust_tier: "report_write_scoped"/);
 });
 
 test('frontmatter parsing accepts and normalizes CRLF line endings', () => {
@@ -656,6 +660,22 @@ test('sensitive and credential-bearing bundled resources are rejected', () => {
     () => sync({ root: namedCredentialRoot, handlerIds: new Set() }),
     (error) => /credential-bearing bundled resource path/.test(error.message) && !error.message.includes(namedToken)
   );
+});
+
+test('credential assignments and temporary AWS keys are rejected without retaining their bytes', () => {
+  for (const body of [
+    `AWS_SECRET_ACCESS_KEY=${'z'.repeat(32)}\n`,
+    `temporary ASIA${'A'.repeat(16)}\n`
+  ]) {
+    const root = fixture();
+    skill(root, 'ticktock', body);
+    const result = sync({ root, handlerIds: new Set(), apply: true });
+    const candidate = byId(result, 'direct-ticktock');
+    assert.equal(candidate.receipt.semantic_review_state, 'private_path_rejected');
+    assert.equal(candidate.receipt.source_sha256, null);
+    assert.equal(fs.existsSync(path.join(root, '.agents/skills/ticktock/SKILL.md')), false);
+    assert.doesNotMatch(JSON.stringify(candidate.receipt), /zzzzzzzz|ASIAAAAA/);
+  }
 });
 
 test('candidate staging refuses repository and target directory deletion', () => {

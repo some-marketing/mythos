@@ -117,10 +117,17 @@ function normalizeDirectSkill(text, targetName, aliases = []) {
   const parsed = parseFrontmatter(text);
   if (!parsed.ok) return parsed;
   const aliasSuffix = aliases.length ? ` Aliases: ${aliases.map((id) => `/${id}`).join(', ')}.` : '';
+  const executionMetadata = projectionExecutionMetadata(parsed.metadata);
   return {
     ok: true,
-    content: `---\nname: ${targetName}\ndescription: ${JSON.stringify(`${parsed.metadata.description}${aliasSuffix}`)}\n---\n${parsed.body}`
+    content: `---\nname: ${targetName}\ndescription: ${JSON.stringify(`${parsed.metadata.description}${aliasSuffix}`)}\n${executionMetadata}---\n${parsed.body}`
   };
+}
+
+function projectionExecutionMetadata(metadata) {
+  const fields = ['execution_mode', 'trust_tier'].filter((key) => metadata[key]);
+  if (!fields.length) return '';
+  return `metadata:\n${fields.map((key) => `  ${key}: ${JSON.stringify(metadata[key])}`).join('\n')}\n`;
 }
 
 function loadHandlerIds(root, config) {
@@ -377,9 +384,10 @@ function renderFrameworkSkill(text, identity) {
   const parsed = parseFrontmatter(text, identity.rel);
   if (!parsed.ok) return parsed;
   const lineage = `Framework lineage: \`frameworks/${identity.service}/${identity.framework}\`. Read its \`manifest.json\` and \`guardrails.md\` before execution. Source helper: \`${identity.rel}\`.`;
+  const executionMetadata = projectionExecutionMetadata(parsed.metadata);
   return {
     ok: true,
-    content: `---\nname: ${identity.slug}\ndescription: ${JSON.stringify(parsed.metadata.description.replace(/[<>]/g, (value) => value === '<' ? '(' : ')'))}\n---\n\n${lineage}\n\n${parsed.body}`
+    content: `---\nname: ${identity.slug}\ndescription: ${JSON.stringify(parsed.metadata.description.replace(/[<>]/g, (value) => value === '<' ? '(' : ')'))}\n${executionMetadata}---\n\n${lineage}\n\n${parsed.body}`
   };
 }
 
@@ -425,7 +433,8 @@ function containsPrivateAbsolutePath(bytes) {
 function containsCredentialMaterial(bytes) {
   const text = String(bytes);
   return /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/.test(text)
-    || /(?:^|[^A-Za-z0-9])(?:sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|glpat-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{35})(?:$|[^A-Za-z0-9_-])/m.test(text);
+    || /(?:^|[^A-Za-z0-9])(?:sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|(?:AKIA|ASIA)[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|glpat-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{35})(?:$|[^A-Za-z0-9_-])/m.test(text)
+    || /(?:^|[^A-Z0-9_])(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY)\s*=\s*(?!["']?(?:<|\$\{|your[-_]|example|redacted|placeholder))[^\s"'`]+/im.test(text);
 }
 
 function isSensitiveResourcePath(relativePath) {

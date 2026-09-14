@@ -602,6 +602,19 @@ function packageAlignment(candidate, targetRoot) {
   return { aligned: missing.length === 0 && conflicting.length === 0 && modeMismatches.length === 0, files, missing, conflicting, modeMismatches };
 }
 
+function blockedTargetInstalled(candidate, targetRoot) {
+  if (candidate.receipt.projection_kind === 'alias_metadata' || isApplicable(candidate)) return false;
+  const suffix = candidate.receipt.target_exact_path.replace(/^\.agents\/skills\//, '');
+  const targetPath = safeOutputPath(targetRoot, suffix);
+  try {
+    fs.lstatSync(targetPath);
+    return true;
+  } catch (error) {
+    if (error.code === 'ENOENT') return false;
+    throw error;
+  }
+}
+
 function applyCandidate(root, candidate, targetRoot) {
   if (!isApplicable(candidate)) return false;
   const alignment = packageAlignment(candidate, targetRoot);
@@ -638,6 +651,9 @@ function sync(options = {}) {
   if (options.check) {
     for (const candidate of selected.filter(isApplicable)) {
       if (!packageAlignment(candidate, targetRoot).aligned) drift += 1;
+    }
+    for (const candidate of selected) {
+      if (blockedTargetInstalled(candidate, targetRoot)) drift += 1;
     }
     return { ...built, allCandidates: built.candidates, candidates: selected, candidateDir, drift, applied };
   }

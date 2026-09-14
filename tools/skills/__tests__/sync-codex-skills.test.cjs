@@ -242,6 +242,17 @@ test('malformed metadata and private absolute paths stage but never apply', () =
   assert.equal(fs.existsSync(path.join(root, '_dev/reports/analysis/codex-skill-projections/candidates/outward-inward-loop/SKILL.md')), false);
 });
 
+test('check reports stale installed targets whose candidates are now blocked', () => {
+  const root = fixture();
+  skill(root, 'ticktock');
+  assert.equal(sync({ root, handlerIds: new Set(), apply: true }).drift, 0);
+  assert.equal(fs.existsSync(path.join(root, '.agents/skills/ticktock/SKILL.md')), true);
+  write(root, '.claude/skills/ticktock/SKILL.md', 'malformed source\n');
+  const checked = sync({ root, handlerIds: new Set(), check: true });
+  assert.equal(checked.drift, 1);
+  assert.equal(byId(checked, 'direct-ticktock').receipt.semantic_review_state, 'malformed');
+});
+
 test('malformed frontmatter receipts identify the line without copying its contents', () => {
   const root = fixture();
   const sensitiveLine = ['not-frontmatter', ['', 'Users', 'private', 'secret'].join('/')].join(' ');

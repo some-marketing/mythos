@@ -155,6 +155,15 @@ test('canonical command identity is keyed by filename and mismatches never repla
   assert.equal(result.candidates.filter((candidate) => candidate.id === 'command-alpha').length, 1);
 });
 
+test('canonical JSON parse errors are sanitized before entering receipts', () => {
+  const root = fixture();
+  const secret = `sk-${'z'.repeat(24)}`;
+  write(root, 'instructions/canonical/commands/broken.yaml', `{"id":"broken","secret":"${secret}"`);
+  const candidate = byId(buildCandidates({ root, handlerIds: new Set() }), 'command-broken');
+  assert.match(candidate.receipt.detail, /^invalid JSON(?: at (?:line|position))/);
+  assert.doesNotMatch(JSON.stringify(candidate.receipt), /sk-zzzz/);
+});
+
 test('unsafe canonical and alias IDs cannot construct projection output paths', () => {
   const root = fixture();
   write(root, 'instructions/canonical/commands/safe.yaml', `${JSON.stringify({ id: '../escape', description: 'unsafe', mode: 'REVIEW_ONLY' }, null, 2)}\n`);
@@ -211,6 +220,14 @@ test('framework namespace collisions are rejected', () => {
   assert.equal(colliding.length, 2);
   assert.equal(colliding.every((item) => item.receipt.collision_state === 'collision'), true);
   assert.equal(colliding.every((item) => item.receipt.capability_tier === 'UNKNOWN'), true);
+  assert.equal(new Set(colliding.map((item) => item.id)).size, 2);
+  const staged = sync({ root, handlerIds: new Set() });
+  const stagedCollisions = staged.candidates.filter((item) => item.receipt.collision_state === 'collision');
+  assert.equal(new Set(staged.index.receipts).size, staged.index.receipts.length);
+  for (const candidate of stagedCollisions) {
+    assert.equal(fs.existsSync(path.join(staged.candidateDir, 'receipts', `${candidate.id}.json`)), true);
+    assert.equal(fs.existsSync(path.join(staged.candidateDir, 'candidates', candidate.id, 'SKILL.md')), true);
+  }
 });
 
 test('nested framework skills project independently instead of becoming parent resources', () => {
@@ -396,6 +413,17 @@ test('dangling destination symlinks cannot redirect applied writes', () => {
   assert.equal(fs.existsSync(external), false);
 });
 
+test('dangling projection index symlinks cannot redirect staging writes', () => {
+  const root = fixture();
+  command(root, 'sample');
+  const candidateRoot = path.join(root, '_dev/reports/analysis/codex-skill-projections');
+  fs.mkdirSync(candidateRoot, { recursive: true });
+  const external = path.join(os.tmpdir(), `codex-projector-index-${path.basename(root)}.json`);
+  fs.symlinkSync(external, path.join(candidateRoot, 'projection-index.json'));
+  assert.throws(() => sync({ root, handlerIds: new Set() }), /Unsafe generated artifact symlink/);
+  assert.equal(fs.existsSync(external), false);
+});
+
 test('generated cleanup refuses a child symlink escaping the validated root', () => {
   const root = fixture();
   const candidateRoot = path.join(root, '_dev/reports/analysis/codex-skill-projections');
@@ -404,7 +432,7 @@ test('generated cleanup refuses a child symlink escaping the validated root', ()
   fs.mkdirSync(outside, { recursive: true });
   const sentinel = write(root, '_dev/outside-receipts/keep.txt', 'keep\n');
   fs.symlinkSync(outside, path.join(candidateRoot, 'receipts'));
-  assert.throws(() => clearGeneratedProjectionArtifacts(candidateRoot), /outside candidate root/);
+  assert.throws(() => clearGeneratedProjectionArtifacts(candidateRoot), /Unsafe generated artifact symlink/);
   assert.equal(fs.readFileSync(sentinel, 'utf8'), 'keep\n');
 });
 

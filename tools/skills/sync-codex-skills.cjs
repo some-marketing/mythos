@@ -32,6 +32,13 @@ function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }
 
+function sanitizedJsonError(error) {
+  const lineColumn = String(error && error.message).match(/line (\d+) column (\d+)/i);
+  if (lineColumn) return `invalid JSON at line ${lineColumn[1]} column ${lineColumn[2]}`;
+  const position = String(error && error.message).match(/position (\d+)/i);
+  return position ? `invalid JSON at position ${position[1]}` : 'invalid JSON';
+}
+
 function walk(root, predicate = () => true) {
   if (!fs.existsSync(root)) return [];
   const found = [];
@@ -133,7 +140,7 @@ function loadCanonicalCommands(root, config) {
     try {
       spec = readJson(sourcePath);
     } catch (error) {
-      commands.set(filenameId, { malformed: error.message, sourcePath, filenameId });
+      commands.set(filenameId, { malformed: sanitizedJsonError(error), sourcePath, filenameId });
       continue;
     }
     const declaredId = spec.id == null ? filenameId : String(spec.id).trim();
@@ -232,16 +239,27 @@ function clearGeneratedProjectionArtifacts(candidateDir) {
   const safeRoot = resolvedPath(candidateDir);
   for (const child of ['candidates', 'receipts']) {
     const generated = path.join(candidateDir, child);
-    if (!fs.existsSync(generated)) continue;
+    let metadata;
+    try {
+      metadata = fs.lstatSync(generated);
+    } catch (error) {
+      if (error.code === 'ENOENT') continue;
+      throw error;
+    }
+    if (metadata.isSymbolicLink()) throw new Error(`Unsafe generated artifact symlink: ${generated}`);
     const resolvedGenerated = resolvedPath(generated);
     if (!isWithin(safeRoot, resolvedGenerated)) throw new Error(`Unsafe generated artifact deletion outside candidate root: ${generated}`);
     fs.rmSync(resolvedGenerated, { recursive: true });
   }
   const index = path.join(candidateDir, 'projection-index.json');
-  if (fs.existsSync(index)) {
+  try {
+    const metadata = fs.lstatSync(index);
+    if (metadata.isSymbolicLink()) throw new Error(`Unsafe generated artifact symlink: ${index}`);
     const resolvedIndex = resolvedPath(index);
     if (!isWithin(safeRoot, resolvedIndex)) throw new Error(`Unsafe generated artifact deletion outside candidate root: ${index}`);
     fs.rmSync(resolvedIndex);
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
   }
 }
 
@@ -548,6 +566,7 @@ function buildCandidates(options = {}) {
       candidate.receipt.capability_tier = 'UNKNOWN';
       candidate.receipt.semantic_review_state = 'collision_rejected';
       candidate.receipt.application_status = 'blocked';
+      candidate.id = `${candidate.id}-${sha256(candidate.receipt.source_relative_path).slice(0, 8)}`;
     }
   }
 
@@ -560,7 +579,9 @@ function writeCandidate(candidateDir, candidate) {
   fs.mkdirSync(path.dirname(receiptPath), { recursive: true });
   fs.writeFileSync(receiptPath, `${JSON.stringify(candidate.receipt, null, 2)}\n`);
   if (!candidate.content) return;
-  const targetRel = candidate.receipt.target_exact_path.replace(/^\.agents\/skills\//, '');
+  const targetRel = candidate.receipt.collision_state === 'collision'
+    ? path.join(candidate.id, 'SKILL.md')
+    : candidate.receipt.target_exact_path.replace(/^\.agents\/skills\//, '');
   const skillPath = safeOutputPath(candidateDir, 'candidates', targetRel);
   fs.mkdirSync(path.dirname(skillPath), { recursive: true });
   fs.writeFileSync(skillPath, candidate.content);
@@ -716,7 +737,8 @@ function sync(options = {}) {
     }, {}),
     receipts: selected.map((item) => `receipts/${item.id}.json`).sort()
   };
-  fs.writeFileSync(path.join(validatedCandidateDir, 'projection-index.json'), `${JSON.stringify(index, null, 2)}\n`);
+  const indexPath = safeOutputPath(validatedCandidateDir, 'projection-index.json');
+  fs.writeFileSync(indexPath, `${JSON.stringify(index, null, 2)}\n`);
   return { ...built, allCandidates: built.candidates, candidates: selected, candidateDir: validatedCandidateDir, drift, applied, index };
 }
 

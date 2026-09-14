@@ -404,7 +404,10 @@ function bundledResources(sourcePath) {
 }
 
 function containsPrivateAbsolutePath(bytes) {
-  return /\/(?:Users|home)\/[^/\s]+\//m.test(String(bytes));
+  const text = String(bytes);
+  return /\/(?:Users|home)\/[^/\s]+\//m.test(text)
+    || /(?:^|[^A-Za-z0-9])[A-Za-z]:[\\/](?:Users|home)[\\/][^\\/\s]+[\\/]/m.test(text)
+    || /[\\/]{2}[^\\/\s]+[\\/](?:Users|home)[\\/][^\\/\s]+[\\/]/m.test(text);
 }
 
 function containsCredentialMaterial(bytes) {
@@ -681,6 +684,19 @@ function expectedPackageFiles(candidate, targetRoot) {
   ];
 }
 
+function nestedNonDirectory(filePath, packageRoot) {
+  let cursor = path.dirname(filePath);
+  while (cursor !== packageRoot && isWithin(packageRoot, cursor)) {
+    try {
+      if (!fs.lstatSync(cursor).isDirectory()) return cursor;
+    } catch (error) {
+      if (!['ENOENT', 'ENOTDIR'].includes(error.code)) throw error;
+    }
+    cursor = path.dirname(cursor);
+  }
+  return null;
+}
+
 function packageAlignment(candidate, targetRoot) {
   const files = expectedPackageFiles(candidate, targetRoot);
   const packageRoot = path.dirname(files[0].filePath);
@@ -698,11 +714,18 @@ function packageAlignment(candidate, targetRoot) {
       return { item, metadata: fs.lstatSync(item.filePath) };
     } catch (error) {
       if (error.code === 'ENOENT') return { item, metadata: null };
+      if (error.code === 'ENOTDIR') {
+        const nonFilePath = nestedNonDirectory(item.filePath, packageRoot);
+        if (nonFilePath) return { item, metadata: null, nonFilePath };
+      }
       throw error;
     }
   });
-  const missing = withMetadata.filter(({ metadata }) => !metadata).map(({ item }) => item);
-  const nonFiles = withMetadata.filter(({ metadata }) => metadata && !metadata.isFile()).map(({ item }) => item);
+  const missing = withMetadata.filter(({ metadata, nonFilePath }) => !metadata && !nonFilePath).map(({ item }) => item);
+  const nonFiles = [...new Set([
+    ...withMetadata.filter(({ metadata }) => metadata && !metadata.isFile()).map(({ item }) => item.filePath),
+    ...withMetadata.filter(({ nonFilePath }) => nonFilePath).map(({ nonFilePath }) => nonFilePath)
+  ])].map((filePath) => ({ filePath }));
   const regularFiles = withMetadata.filter(({ metadata }) => metadata && metadata.isFile()).map(({ item }) => item);
   const conflicting = regularFiles.filter((item) => !fs.readFileSync(item.filePath).equals(item.bytes));
   const modeMismatches = regularFiles.filter((item) => item.mode != null
@@ -869,7 +892,7 @@ function writeManagedTargets(candidateDir, generatorId, managed) {
   }, null, 2)}\n`);
 }
 
-function mergeManagedTargetCustody(candidateDir, generatorId, targets) {
+function preflightManagedTargetCustody(candidateDir, generatorId, targets = []) {
   const managed = loadManagedTargets(candidateDir, generatorId);
   for (const target of targets) managed.add(validateManagedTarget(target));
   const indexPath = safeOutputPath(candidateDir, 'projection-index.json');
@@ -880,6 +903,11 @@ function mergeManagedTargetCustody(candidateDir, generatorId, targets) {
       throw new Error(`Invalid projection index for custody merge: ${indexPath}`);
     }
   }
+  return { managed, index, indexPath };
+}
+
+function mergeManagedTargetCustody(candidateDir, generatorId, targets) {
+  const { managed, index, indexPath } = preflightManagedTargetCustody(candidateDir, generatorId, targets);
   fs.mkdirSync(candidateDir, { recursive: true });
   writeManagedTargets(candidateDir, generatorId, managed);
   if (index) {
@@ -957,13 +985,17 @@ function sync(options = {}) {
   }
 
   if (options.check) {
-    for (const candidate of selected.filter(isApplicable)) {
+    const checked = options.checkCandidate ? selected.filter(options.checkCandidate) : selected;
+    for (const candidate of checked.filter(isApplicable)) {
       if (!packageAlignment(candidate, targetRoot).aligned) drift += 1;
     }
-    for (const candidate of selected) {
+    for (const candidate of checked) {
       if (blockedTargetInstalled(candidate, targetRoot)) drift += 1;
     }
-    drift += orphanedManagedTargets(managedTargets, built.candidates, targetRoot).length;
+    const checkedManagedTargets = options.checkManagedTarget
+      ? new Set([...managedTargets].filter(options.checkManagedTarget))
+      : managedTargets;
+    drift += orphanedManagedTargets(checkedManagedTargets, checked, targetRoot).length;
     if (!stagedEvidenceAligned(validatedCandidateDir, selected, built.config.generator_id, built.handlers, managedTargets)) drift += 1;
     return { ...built, allCandidates: built.candidates, candidates: selected, candidateDir: validatedCandidateDir, drift, applied };
   }
@@ -1037,6 +1069,7 @@ module.exports = {
   normalizeDirectSkill,
   parseArgs,
   parseFrontmatter,
+  preflightManagedTargetCustody,
   renderCanonicalSkill,
   renderFrameworkSkill,
   resolveAliases,

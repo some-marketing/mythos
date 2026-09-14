@@ -3,7 +3,7 @@
 
 // Compatibility entry point. Projection authority lives in sync-codex-skills.cjs.
 const path = require('node:path');
-const { loadProjectionConfig, mergeManagedTargetCustody, parseArgs, sync } = require('./sync-codex-skills.cjs');
+const { loadProjectionConfig, mergeManagedTargetCustody, parseArgs, preflightManagedTargetCustody, sync } = require('./sync-codex-skills.cjs');
 
 const PROJECT_ROOT = path.resolve(__dirname, '..', '..');
 const LIFECYCLE_COMMANDS = Object.freeze(['boot', 'new-session', 'next-session', 'cross-session', 'end-session', 'shutdown']);
@@ -13,13 +13,26 @@ function isLifecycle(candidate) {
     && LIFECYCLE_COMMANDS.some((id) => candidate.id === `command-${id}`);
 }
 
+function isLifecycleManagedTarget(target) {
+  return LIFECYCLE_COMMANDS.some((id) => target === `.agents/skills/source-command-${id}/SKILL.md`);
+}
+
 function syncLifecycle(options = {}) {
   const root = options.root || PROJECT_ROOT;
   const { config } = loadProjectionConfig(root);
   if (options.check && !options.candidateDir) {
-    return sync({ ...options, root, candidateDir: path.join(root, config.candidate_root) });
+    return sync({
+      ...options,
+      root,
+      candidateDir: path.join(root, config.candidate_root),
+      checkCandidate: isLifecycle,
+      checkManagedTarget: isLifecycleManagedTarget
+    });
   }
   const candidateDir = options.candidateDir || path.join(root, config.candidate_root, 'lifecycle');
+  if (options.apply && !options.candidateDir) {
+    preflightManagedTargetCustody(path.join(root, config.candidate_root), config.generator_id);
+  }
   const result = sync({ ...options, root, candidateDir, includeCandidate: isLifecycle });
   if (options.apply && !options.candidateDir) {
     const appliedTargets = result.candidates
@@ -45,4 +58,4 @@ function main() {
 
 if (require.main === module) main();
 
-module.exports = { LIFECYCLE_COMMANDS, isLifecycle, syncLifecycle };
+module.exports = { LIFECYCLE_COMMANDS, isLifecycle, isLifecycleManagedTarget, syncLifecycle };

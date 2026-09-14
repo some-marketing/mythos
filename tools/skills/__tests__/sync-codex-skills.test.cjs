@@ -298,6 +298,22 @@ test('assignment-form home paths are rejected without retaining private bytes', 
   assert.doesNotMatch(JSON.stringify(candidate.receipt), /private-operator/);
 });
 
+test('Windows home paths are rejected without retaining private bytes', () => {
+  const root = fixture();
+  skill(root, 'ticktock', [
+    String.raw`WORKDIR=C:\Users\Alice\private`,
+    String.raw`ALT=D:/home/Bob/private`,
+    String.raw`UNC=\\server\Users\Carol\private`,
+    'MIXED=//server/home/Dan/private'
+  ].join('\n'));
+  const result = sync({ root, handlerIds: new Set(), apply: true });
+  const candidate = byId(result, 'direct-ticktock');
+  assert.equal(candidate.receipt.semantic_review_state, 'private_path_rejected');
+  assert.equal(candidate.receipt.source_sha256, null);
+  assert.equal(fs.existsSync(path.join(root, '.agents/skills/ticktock/SKILL.md')), false);
+  assert.doesNotMatch(JSON.stringify(candidate.receipt), /Alice|Bob|Carol|Dan/);
+});
+
 test('check reports stale installed targets whose candidates are now blocked', () => {
   const root = fixture();
   skill(root, 'ticktock');
@@ -603,6 +619,17 @@ test('non-directory package roots are preserved and reported as drift', () => {
   const reapplied = sync({ root, handlerIds: new Set(), apply: true });
   assert.equal(byId(reapplied, 'command-sample').receipt.application_status, 'blocked_existing_preserved');
   assert.equal(fs.readFileSync(packageRoot, 'utf8'), 'foreign package root\n');
+});
+
+test('nested non-directory resource parents are preserved and reported as drift', () => {
+  const root = fixture();
+  skill(root, 'ticktock');
+  write(root, '.claude/skills/ticktock/references/a.md', 'expected resource\n');
+  const blockingParent = write(root, '.agents/skills/ticktock/references', 'foreign parent file\n');
+  assert.ok(sync({ root, handlerIds: new Set(), check: true }).drift > 0);
+  const reapplied = sync({ root, handlerIds: new Set(), apply: true });
+  assert.equal(byId(reapplied, 'direct-ticktock').receipt.application_status, 'blocked_existing_preserved');
+  assert.equal(fs.readFileSync(blockingParent, 'utf8'), 'foreign parent file\n');
 });
 
 test('dangling projection index symlinks cannot redirect staging writes', () => {

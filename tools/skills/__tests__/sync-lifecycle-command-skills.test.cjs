@@ -11,6 +11,13 @@ const { sync } = require('../sync-codex-skills.cjs');
 
 const PROJECT_ROOT = path.resolve(__dirname, '..', '..', '..');
 
+function write(root, relativePath, content) {
+  const target = path.join(root, relativePath);
+  fs.mkdirSync(path.dirname(target), { recursive: true });
+  fs.writeFileSync(target, content);
+  return target;
+}
+
 function fixture() {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-lifecycle-root-'));
   const adapter = fs.readFileSync(path.join(PROJECT_ROOT, 'instructions', 'adapters', 'codex.yaml'));
@@ -76,4 +83,22 @@ test('lifecycle application merges custody into the canonical ledger', () => {
   fs.unlinkSync(path.join(root, 'instructions/canonical/commands/boot.yaml'));
   sync({ root, targetDir, handlerIds: new Set() });
   assert.ok(syncLifecycle({ root, targetDir, handlerIds: new Set(), check: true }).drift > 0);
+});
+
+test('lifecycle application preflights canonical custody before target writes', () => {
+  const root = fixture();
+  const targetDir = path.join(root, '.agents', 'skills');
+  write(root, '_dev/reports/analysis/codex-skill-projections/managed-targets.json', 'malformed\n');
+  assert.throws(() => syncLifecycle({ root, targetDir, handlerIds: new Set(), apply: true }));
+  assert.equal(fs.existsSync(path.join(targetDir, 'source-command-boot', 'SKILL.md')), false);
+});
+
+test('lifecycle checks ignore unrelated installed package drift', () => {
+  const root = fixture();
+  const targetDir = path.join(root, '.agents', 'skills');
+  fs.writeFileSync(path.join(root, 'instructions', 'canonical', 'commands', 'route.yaml'), '{"id":"route","description":"route","mode":"REVIEW_ONLY"}\n');
+  sync({ root, targetDir, handlerIds: new Set(), apply: true });
+  fs.writeFileSync(path.join(targetDir, 'source-command-route', 'SKILL.md'), 'foreign\n');
+  assert.ok(sync({ root, targetDir, handlerIds: new Set(), check: true }).drift > 0);
+  assert.equal(syncLifecycle({ root, targetDir, handlerIds: new Set(), check: true }).drift, 0);
 });

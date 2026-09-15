@@ -1,0 +1,28 @@
+{
+  "schema_version": "TaskOutcome/1.0",
+  "task_id": "cg-complete",
+  "produced_by_actor_id": "fixture-producer",
+  "produced_by_actor_type": "intelligence",
+  "produced_by_harness_id": "fixture-producer-harness",
+  "validated_by_actor_id": "fixture-reviewer",
+  "validated_by_actor_type": "intelligence",
+  "validated_by_harness_id": "fixture-reviewer-harness",
+  "validation_artifact": "_dev/reports/analysis/run-debrief__cg-complete.md",
+  "validation_method": "distinct-family-acceptance-review",
+  "validation_confidence": "high",
+  "completion_evidence": {
+    "all_steps_done": true,
+    "verification_passed": true,
+    "no_open_blockers": true,
+    "operator_acceptance_received": true
+  },
+  "outcome_delta": {
+    "completed": true,
+    "verification_passed": true,
+    "operator_accepted": true,
+    "divergences": [],
+    "gates_triggered": [],
+    "corrections": [],
+    "should_harden": false
+  }
+}

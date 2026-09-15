@@ -17841,6 +17841,69 @@
       "mode": 420
     },
     {
+      "id": "file:tools/planning/__fixtures__/completion-grammar/cases.cjs",
+      "type": "file",
+      "path": "tools/planning/__fixtures__/completion-grammar/cases.cjs",
+      "sha256": "54bc09b921e53c576d1344fd601c879ae10305d52e752a4d0ecd2c3cbc43ec8b",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/planning/__fixtures__/completion-grammar/outcome-complete.json",
+      "type": "file",
+      "path": "tools/planning/__fixtures__/completion-grammar/outcome-complete.json",
+      "sha256": "a6f2fa311255a25ff86f3431b59f0401dc824b5bc4ce39c244145d30b8e54683",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/planning/__fixtures__/completion-grammar/plan-bridge-blocked.json",
+      "type": "file",
+      "path": "tools/planning/__fixtures__/completion-grammar/plan-bridge-blocked.json",
+      "sha256": "440d38d43ced80e6cf87393a81ed1ff8641521ff01dceaef4a949997990f5946",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/planning/__fixtures__/completion-grammar/plan-bridge-no-evidence.json",
+      "type": "file",
+      "path": "tools/planning/__fixtures__/completion-grammar/plan-bridge-no-evidence.json",
+      "sha256": "db2caedf863567a5507d785588993a535056e4fdace2ac838aed260341091a43",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/planning/__fixtures__/completion-grammar/plan-complete.json",
+      "type": "file",
+      "path": "tools/planning/__fixtures__/completion-grammar/plan-complete.json",
+      "sha256": "aeaeb0b3879fcf405a2a2c70f4ba59196d3b761a41dc3d9b8f11936acb5f8e9e",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/planning/__fixtures__/completion-grammar/plan-debrief-only.json",
+      "type": "file",
+      "path": "tools/planning/__fixtures__/completion-grammar/plan-debrief-only.json",
+      "sha256": "eb63c87a666c5aebbe80e8a983e3e6a3410fdb78286d00d05f2c2713265a8f12",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/planning/__fixtures__/completion-grammar/plan-declared-complete.json",
+      "type": "file",
+      "path": "tools/planning/__fixtures__/completion-grammar/plan-declared-complete.json",
+      "sha256": "f8380e72de28d23b24b321787c934f15cec9ee2c6bf81a543aa68085870eced3",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/planning/__fixtures__/completion-grammar/plan-steps-done.json",
+      "type": "file",
+      "path": "tools/planning/__fixtures__/completion-grammar/plan-steps-done.json",
+      "sha256": "6e498f0429cbeb4a58f30cf69ee1c478bec491a8b436ebb4092c3aef02049014",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/planning/__fixtures__/completion-grammar/README.md",
+      "type": "file",
+      "path": "tools/planning/__fixtures__/completion-grammar/README.md",
+      "sha256": "b6ae930ae3378d04a1507563fcb3e2bfc75d1e01bd7d5f729724d55b6308f68e",
+      "mode": 420
+    },
+    {
       "id": "file:tools/planning/__fixtures__/gemini-draft-plan.md",
       "type": "file",
       "path": "tools/planning/__fixtures__/gemini-draft-plan.md",
@@ -17873,6 +17936,13 @@
       "type": "file",
       "path": "tools/planning/__tests__/harness-plan-output-contract.test.js",
       "sha256": "6ac29cd999198d4a884a2a74bfa10917a45a49d387bb273fd2880d92903f9d67",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/planning/__tests__/plan-visibility-completion-grammar.test.cjs",
+      "type": "file",
+      "path": "tools/planning/__tests__/plan-visibility-completion-grammar.test.cjs",
+      "sha256": "30e366f8878f69e57a5850fafb71a72bd73c3626a1bf134c20903ce39e9827e8",
       "mode": 420
     },
     {
@@ -18138,7 +18208,7 @@
       "id": "file:tools/planning/lib/completion-classifier.js",
       "type": "file",
       "path": "tools/planning/lib/completion-classifier.js",
-      "sha256": "3499e74c9d085607a6d544e743f0899bd8112ccbdbf36344a6a9b61c4f7b29a3",
+      "sha256": "8a5c2601a3811bafa8c29d76f8eaaef3c18aff08ef46aead343c152d3494f644",
       "mode": 420
     },
     {
@@ -18243,7 +18313,7 @@
       "id": "file:tools/planning/lib/plan-visibility.js",
       "type": "file",
       "path": "tools/planning/lib/plan-visibility.js",
-      "sha256": "d5fc73caa9d2800a2d677743e2f84db44f735f25af500c225a1cf4b74e7def0a",
+      "sha256": "b70642d8e6f10e229ea6b04fbd28f2e6da22bc6a6731e6ce9cf8ad199f4d24c8",
       "mode": 420
     },
     {
@@ -30914,6 +30984,15 @@
       "declared_target": ".claude/commands/loot.md"
     },
     {
+      "id": "28e48d4b5a7a273308a60209afc05a39625a62d65985b1c42caa921bb2f994f4",
+      "type": "static-import",
+      "from": "file:tools/planning/__tests__/plan-visibility-completion-grammar.test.cjs",
+      "to": "file:tools/planning/lib/completion-classifier.js",
+      "target": "tools/planning/lib/completion-classifier.js",
+      "required": true,
+      "specifier": "../lib/completion-classifier"
+    },
+    {
       "id": "291e644f8a7fdc183d0f1ce8af605ef6618ff7e38d338f0548e7a2379aac07aa",
       "type": "command-alias-authority",
       "from": "command-definition:cast-grimoire",
@@ -32332,6 +32411,15 @@
       "target": "tools/dart-integration/lib/dart-api.js",
       "required": true,
       "specifier": "./lib/dart-api"
+    },
+    {
+      "id": "36e34c5de3bc7f5fc156b2ee20911ec1d7f6715d42e47321592112d43b6a9a67",
+      "type": "static-import",
+      "from": "file:tools/planning/__tests__/plan-visibility-completion-grammar.test.cjs",
+      "to": "file:tools/planning/lib/plan-visibility.js",
+      "target": "tools/planning/lib/plan-visibility.js",
+      "required": true,
+      "specifier": "../lib/plan-visibility"
     },
     {
       "id": "371c008eb96871e6ef8f6b06606213f6cfc2624d6caf6e816f5c0b849f050b59",
@@ -35390,6 +35478,15 @@
       "target": ".claude/commands/oc.md",
       "required": true,
       "declared_target": ".claude/commands/oc.md"
+    },
+    {
+      "id": "5553baf31ede6fc2fdad84b5572a7dd9568d913647879c2dae292d2273e09778",
+      "type": "static-import",
+      "from": "file:tools/planning/lib/plan-visibility.js",
+      "to": "file:tools/planning/lib/completion-classifier.js",
+      "target": "tools/planning/lib/completion-classifier.js",
+      "required": true,
+      "specifier": "./completion-classifier"
     },
     {
       "id": "5559cf7edb3ff868f904593e6d154e7e4a1086e1c7615de23c05e087b783feca",
@@ -41269,6 +41366,15 @@
       "target": "tools/planning/lib/resolve-task-plan.js",
       "required": true,
       "specifier": "../../planning/lib/resolve-task-plan"
+    },
+    {
+      "id": "8f1e2ea8e980224cd32e09be7cb9ae0c31da7b43cbb7a3aff29c6e57c1a2ebd3",
+      "type": "static-import",
+      "from": "file:tools/planning/__tests__/plan-visibility-completion-grammar.test.cjs",
+      "to": "file:tools/planning/__fixtures__/completion-grammar/cases.cjs",
+      "target": "tools/planning/__fixtures__/completion-grammar/cases.cjs",
+      "required": true,
+      "specifier": "../__fixtures__/completion-grammar/cases.cjs"
     },
     {
       "id": "8f2ff92650e6024bc2e212ce5efd3360cab5c91c65dfd27e0e7d0d54977e1cd9",
@@ -52321,6 +52427,15 @@
       "authority": "conclave"
     },
     {
+      "id": "f8e0cbf32584e492682b718f0a9f93338306c143d4b03a7fd88ab350d69fa796",
+      "type": "static-import",
+      "from": "file:tools/planning/__tests__/plan-visibility-completion-grammar.test.cjs",
+      "to": "file:tools/planning/lib/resolve-task-plan.js",
+      "target": "tools/planning/lib/resolve-task-plan.js",
+      "required": true,
+      "specifier": "../lib/resolve-task-plan"
+    },
+    {
       "id": "f901b763690f2f40ae7cf66bee182cfce56300e7a345efc4dfa1cf894c880ff2",
       "type": "command-alias-authority",
       "from": "command-definition:cultivate",
@@ -53151,8 +53266,8 @@
     }
   ],
   "counts": {
-    "nodes": 4092,
-    "edges": 2908,
+    "nodes": 4102,
+    "edges": 2913,
     "unresolved": 0
   }
 }

@@ -1064,6 +1064,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     `AUTH_TOKEN: authsecretvalue${'h'.repeat(16)}\n`,
     `SECRET=baresecretvalue${'s'.repeat(16)}\n`,
     `Authorization: Bearer ordinarysecretvalue${'b'.repeat(16)}\n`,
+    'Authorization: Bearer secret\n',
     'Authorization: Basic dTpw\n',
     `-----BEGIN ENCRYPTED PRIVATE KEY-----\nencryptedprivatebytes${'e'.repeat(16)}\n-----END ENCRYPTED PRIVATE KEY-----\n`,
     `temporary ASIA${'A'.repeat(16)}\n`

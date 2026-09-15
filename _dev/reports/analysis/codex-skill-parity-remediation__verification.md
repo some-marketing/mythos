@@ -77,6 +77,8 @@ The forty-seventh Cloud Codex review found short Basic credentials below the for
 
 The forty-eighth Cloud Codex review found indentationless YAML alias sequences being treated as new domains, the configured framework source pattern being silently ignored, and canonical projections pointing at a hardcoded source root. The shared parser now recognizes sequence records before resetting domain state, unsupported framework discovery patterns fail explicitly instead of misreporting alignment, and canonical plus typed-wrapper authority paths derive from the validated configured source root. Focused regressions cover all three.
 
+The forty-ninth Cloud Codex review found that valid short Bearer credentials remained below the detector's former sixteen-character floor. Authorization-header scanning now rejects any non-placeholder Bearer token accepted by the bounded token alphabet, including `Authorization: Bearer secret`, while preserving shell-variable placeholders. The focused regression suite covers the short-token case.
+
 ## Falsifiers and residuals
 
 Acceptance would be disproved by an applied `UNKNOWN` or pending candidate, copied alias behavior, a non-handler command marked `BLOCKING`, a private path in a shipped projection, a canonical/client diff, a failed runtime discovery claim, or an unresolved distinct-family blocker. None was observed.

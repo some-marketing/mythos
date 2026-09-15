@@ -273,6 +273,9 @@ function parseFrontmatter(text, sourcePath = '<memory>') {
       if (!quoted && key === 'allowed-tools' && isYamlNonStringToken(value)) {
         return { ok: false, error: 'frontmatter allowed-tools scalar must be a string', sourcePath };
       }
+      if (!quoted && ['license', 'execution_mode', 'trust_tier'].includes(key) && isYamlNonStringToken(value)) {
+        return { ok: false, error: `frontmatter ${key} scalar must be a string`, sourcePath };
+      }
       if (!quoted && ['name', 'description'].includes(key) && isYamlNonStringToken(value)) value = null;
       else {
         value = decodeQuotedYamlScalar(value, Boolean(blockScalar));

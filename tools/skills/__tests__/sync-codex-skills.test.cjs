@@ -112,6 +112,12 @@ test('repo pins only Codex-supported projection frontmatter keys', () => {
     assert.equal(malformed.ok, false);
     assert.match(malformed.error, /allowed-tools scalar must be a string/);
   }
+
+  for (const field of ['license: false', 'license: 123', 'trust_tier: null']) {
+    const malformed = normalizeDirectSkill(`---\nname: old\ndescription: demo\n${field}\n---\nbody\n`, 'new');
+    assert.equal(malformed.ok, false);
+    assert.match(malformed.error, /scalar must be a string/);
+  }
 });
 
 test('frontmatter parsing accepts and normalizes CRLF line endings', () => {
@@ -203,6 +209,11 @@ test('direct and framework skills preserve execution modes declared in inline me
   const block = normalizeDirectSkill('---\nname: demo\ndescription: demo\nmetadata:\n  execution_mode: FINDINGS_ONLY\n  trust_tier: report_only\n---\nbody\n', 'demo');
   assert.equal(block.ok, true);
   assert.match(block.content, /metadata:\n  execution_mode: "FINDINGS_ONLY"\n  trust_tier: "report_only"/);
+
+  const invalidFrameworkRoot = fixture();
+  write(invalidFrameworkRoot, 'frameworks/a/b/.claude/skills/helper/SKILL.md', '---\nname: helper\ndescription: helper\nlicense: false\n---\nbody\n');
+  const invalidFramework = byId(sync({ root: invalidFrameworkRoot, handlerIds: new Set(), apply: true }), 'framework-guild-a-b-helper');
+  assert.equal(invalidFramework.receipt.semantic_review_state, 'malformed');
 });
 
 test('direct and framework descriptions reject YAML non-string tokens and empty text', () => {

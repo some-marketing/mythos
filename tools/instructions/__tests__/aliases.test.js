@@ -211,7 +211,7 @@ test('typed aliases render their declared target, execution target, and authorit
 test('mixed typed and legacy aliases retain resolved legacy authority', () => {
   const section = commandAliasSection({ aliases: [
     { id: 'dl', kind: 'operator_shorthand', target: 'deliberate', execution_target: 'orchestrate-loop', authority_source: 'orchestrate-loop' },
-    { id: 'cast', resolves_to: 'run-framework', status: 'primary' },
+    { id: 'cast', kind: 'terminal_alias', target: 'run-framework', authority_source: 'run-framework' },
     { id: 'spell', resolves_to: 'cast', status: 'cross-alias' }
   ] });
   assert.match(section, /- `\/spell` -> `\/cast` \[cross-alias\]; authority: `\/run-framework`/);

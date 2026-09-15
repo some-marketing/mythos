@@ -53,16 +53,17 @@ function orchestrationSummary(policy) {
 // `prefix` is `/` for slash commands and '' for framework/skill/tool names.
 function renderAliasGroup(aliases, prefix) {
   const isTyped = (alias) => Boolean(alias.kind || alias.target || alias.execution_target || alias.authority_source);
-  const legacyById = new Map();
+  const aliasById = new Map();
   for (const alias of aliases) {
-    if (!isTyped(alias)) legacyById.set(alias.id, alias);
+    aliasById.set(alias.id, alias);
   }
   const authorityOf = (alias) => {
-    let target = alias.resolves_to;
+    let target = alias.authority_source || alias.execution_target || alias.target || alias.resolves_to;
     const seen = new Set([alias.id]);
-    while (legacyById.has(target) && !seen.has(target)) {
+    while (aliasById.has(target) && !seen.has(target)) {
       seen.add(target);
-      target = legacyById.get(target).resolves_to;
+      const next = aliasById.get(target);
+      target = next.authority_source || next.execution_target || next.target || next.resolves_to;
     }
     return target;
   };
@@ -80,7 +81,7 @@ function renderAliasGroup(aliases, prefix) {
       const target = alias.target || alias.resolves_to;
       const kind = alias.kind || alias.status || 'compatibility';
       const executionTarget = alias.execution_target;
-      const authority = alias.authority_source || executionTarget || target;
+      const authority = authorityOf(alias);
       const execution = executionTarget && executionTarget !== target
         ? `; execution: \`${prefix}${executionTarget}\``
         : '';

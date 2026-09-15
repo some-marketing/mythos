@@ -135,6 +135,8 @@ The seventy-sixth Cloud Codex review found property-reference exemptions accepti
 
 The seventy-seventh Cloud Codex review found canonical command scanning limited to rendered wrappers and nonliteral URL passwords rejected despite matching accepted property-reference forms. Canonical candidates now scan their complete source bytes before installation, while URL userinfo exempts only exact property references. Focused regressions cover hidden canonical fields and JavaScript environment references.
 
+The seventy-eighth Cloud Codex review found legacy-to-typed alias chains stopping before their terminal authority and retained license or trust-tier YAML non-strings being coerced into strings. Instruction rendering now traverses every alias record type with cycle protection, and every retained scalar field enforces string typing. Focused regressions cover mixed chains plus direct and framework metadata rejection.
+
 ## Falsifiers and residuals
 
 Acceptance would be disproved by an applied `UNKNOWN` or pending candidate, copied alias behavior, a non-handler command marked `BLOCKING`, a private path in a shipped projection, a canonical/client diff, a failed runtime discovery claim, or an unresolved distinct-family blocker. None was observed.

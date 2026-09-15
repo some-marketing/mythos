@@ -1,0 +1,15 @@
+{
+  "schema_version": "TaskPlan/1.0",
+  "task_id": "cg-debrief-only",
+  "title": "Completion grammar fixture: a debrief report and nothing else",
+  "scope_type": "system",
+  "produced_by_actor_id": "fixture-producer",
+  "produced_by_actor_type": "intelligence",
+  "produced_by_harness_id": "fixture-producer-harness",
+  "routing_expectations": { "risk_tier": "low", "review_lane": "operator-gate" },
+  "bounded_plan": {
+    "steps": [
+      { "step_id": "S1", "status": "planned", "description": "Not started.", "mode": "PATCH_ALLOWED" }
+    ]
+  }
+}

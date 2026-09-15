@@ -497,7 +497,7 @@ function aliasesByTerminal(aliasResults, canonicalCommands = new Map()) {
   return map;
 }
 
-function renderCanonicalSkill(commandId, spec, capabilityTier, override, aliases = [], projectionName = `source-command-${commandId}`, authorityCommandId = commandId) {
+function renderCanonicalSkill(commandId, spec, capabilityTier, override, aliases = [], projectionName = `source-command-${commandId}`, authorityCommandId = commandId, authoritySourceRoot = 'instructions/canonical/commands') {
   const aliasText = aliases.length ? ` Aliases resolved at generation time: ${aliases.map((id) => `/${id}`).join(', ')}.` : '';
   const description = `${spec.description || `Canonical /${commandId} command.`}${aliasText}`
     .replace(/[<>]/g, (value) => value === '<' ? '(' : ')');
@@ -506,9 +506,10 @@ function renderCanonicalSkill(commandId, spec, capabilityTier, override, aliases
     : capabilityTier === 'BLOCKING'
       ? `Run \`node tools/commands/mythos-command-runner.cjs\` with one positional command string formed from \`/${commandId}\` followed by the user's actual invocation arguments. With no arguments, pass exactly \`/${commandId}\`. Never pass placeholder text in place of the user's arguments. The exported HANDLERS registry is the evidence for deterministic execution.`
       : `Read the canonical command at execution time and carry out its workflow with Codex capabilities. This projection is ${capabilityTier}; availability of this skill is not a blocking runtime mechanism.`;
+  const sourceRoot = posix(path.normalize(authoritySourceRoot)).replace(/\/$/, '');
   const authority = authorityCommandId === commandId
-    ? `Canonical authority: \`instructions/canonical/commands/${commandId}.yaml\`. Read that file at execution time; this projection never copies or overrides its behavioral body.`
-    : `Typed-wrapper provenance: \`instructions/canonical/commands/${commandId}.yaml\`. Canonical behavioral authority: \`instructions/canonical/commands/${authorityCommandId}.yaml\`. Read the authority file at execution time; the wrapper preserves invocation provenance but never overrides authoritative behavior.`;
+    ? `Canonical authority: \`${sourceRoot}/${commandId}.yaml\`. Read that file at execution time; this projection never copies or overrides its behavioral body.`
+    : `Typed-wrapper provenance: \`${sourceRoot}/${commandId}.yaml\`. Canonical behavioral authority: \`${sourceRoot}/${authorityCommandId}.yaml\`. Read the authority file at execution time; the wrapper preserves invocation provenance but never overrides authoritative behavior.`;
   return `---\nname: ${projectionName}\ndescription: ${JSON.stringify(description)}\n---\n\n# /${commandId}\n\n${authority}\n\nCapability tier: **${capabilityTier}**.\n\n${execution}\n`;
 }
 
@@ -692,7 +693,7 @@ function buildCandidates(options = {}) {
       : handlers.has(executionTarget) ? 'BLOCKING' : 'ADVISORY';
     const reviewState = (override && override.semantic_review_state) || config.families.canonical_commands.semantic_review_state;
     const sourceBytes = fs.readFileSync(command.sourcePath);
-    const content = renderCanonicalSkill(id, command.spec, tier, override, terminalAliases.get(id) || [], projectionName, typedAliasAuthorities.get(id) || id);
+    const content = renderCanonicalSkill(id, command.spec, tier, override, terminalAliases.get(id) || [], projectionName, typedAliasAuthorities.get(id) || id, config.families.canonical_commands.source_root);
     const rendered = parseFrontmatter(content);
     const invalidDescription = !rendered.ok || rendered.metadata.description.length > 1024;
     const forbidden = (override && override.forbidden_source_fragments) || [];
@@ -772,6 +773,10 @@ function buildCandidates(options = {}) {
     }
   } while (dependencyChanged);
 
+  const frameworkSourcePattern = String(config.families.framework_helpers.source_pattern || '');
+  if (frameworkSourcePattern !== 'frameworks/*/*/.claude/skills/**/SKILL.md') {
+    throw new Error('Unsupported framework helper source pattern');
+  }
   const frameworkRoot = path.join(root, 'frameworks');
   validateSourceRoot(frameworkRoot, 'framework skill', root);
   for (const sourcePath of walk(frameworkRoot, (file) => file.endsWith(`${path.sep}SKILL.md`) && file.includes(`${path.sep}.claude${path.sep}skills${path.sep}`))) {

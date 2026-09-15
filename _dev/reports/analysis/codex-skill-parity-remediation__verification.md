@@ -4,7 +4,7 @@ Refreshed under the approved parity amendment at `2026-09-14T18:51:57Z` in the d
 
 ## Mechanical results
 
-- Combined projector, lifecycle, and alias regressions: 106 passed, 0 failed.
+- Combined projector, lifecycle, and alias regressions: 109 passed, 0 failed.
 - `node tools/skills/sync-codex-skills.cjs --check`: aligned.
 - `node tools/skills/sync-lifecycle-command-skills.cjs --check`: six lifecycle skills aligned against the committed general projection evidence.
 - Pinned Codex `quick_validate.py`, using the repository PyYAML environment: 131 of 131 applied packages valid; 176 of 176 top-level staged candidate packages valid. Nested child skills are excluded from parent resources, so the staged tree contains exactly 176 independently projected `SKILL.md` files.
@@ -74,6 +74,8 @@ The forty-fifth Cloud Codex review found package suffix and custody validation s
 The forty-sixth Cloud Codex review found canonical commands accepting absent or invalid execution modes, the projector rejecting ordinary YAML-sequence alias registries, and framework helper names ignoring their configured target prefix. Canonical modes now require one declared execution mode, alias loading reuses the instruction engine's dependency-free typed YAML parser after source confinement, and framework identities derive from a validated configured prefix. Focused regressions cover all three.
 
 The forty-seventh Cloud Codex review found short Basic credentials below the former token-length floor, alias availability captured before collision rejection, valid wider YAML sequence indentation being ignored, and non-scalar canonical descriptions being coerced into discovery text. Basic headers now use a four-character credential floor with placeholder exemptions, alias metadata is reconciled after collision classification, the shared YAML parser tracks entry indentation relative to its domain, and canonical descriptions require scalar strings. Focused regressions cover all four.
+
+The forty-eighth Cloud Codex review found indentationless YAML alias sequences being treated as new domains, the configured framework source pattern being silently ignored, and canonical projections pointing at a hardcoded source root. The shared parser now recognizes sequence records before resetting domain state, unsupported framework discovery patterns fail explicitly instead of misreporting alignment, and canonical plus typed-wrapper authority paths derive from the validated configured source root. Focused regressions cover all three.
 
 ## Falsifiers and residuals
 

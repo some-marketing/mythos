@@ -407,6 +407,18 @@ test('canonical projections honor the configured target prefix', () => {
   assert.equal(fs.existsSync(path.join(root, '.agents/skills/source-command-sample/SKILL.md')), false);
 });
 
+test('canonical projections point at the configured source root', () => {
+  const root = fixture();
+  const adapterPath = path.join(root, 'instructions/adapters/codex.yaml');
+  const adapter = JSON.parse(fs.readFileSync(adapterPath, 'utf8'));
+  adapter.skill_projection.families.canonical_commands.source_root = 'instructions/canonical/alternate-commands';
+  fs.writeFileSync(adapterPath, `${JSON.stringify(adapter, null, 2)}\n`);
+  write(root, 'instructions/canonical/alternate-commands/sample.yaml', '{"id":"sample","description":"sample","mode":"REVIEW_ONLY"}\n');
+  const candidate = byId(buildCandidates({ root, handlerIds: new Set() }), 'command-sample');
+  assert.match(candidate.content, /Canonical authority: `instructions\/canonical\/alternate-commands\/sample\.yaml`/);
+  assert.doesNotMatch(candidate.content, /instructions\/canonical\/commands\/sample\.yaml/);
+});
+
 test('projection application and custody honor the configured target root', () => {
   const root = fixture();
   const adapterPath = path.join(root, 'instructions/adapters/codex.yaml');
@@ -591,6 +603,15 @@ test('framework projections honor the configured target prefix', () => {
   assert.equal(framework.id, 'framework-fw-a-b-demo');
   assert.equal(framework.receipt.target_exact_path, '.agents/skills/fw-a-b-demo/SKILL.md');
   assert.match(framework.content, /^---\nname: fw-a-b-demo\n/);
+});
+
+test('framework projections reject unsupported configured source patterns', () => {
+  const root = fixture();
+  const adapterPath = path.join(root, 'instructions/adapters/codex.yaml');
+  const adapter = JSON.parse(fs.readFileSync(adapterPath, 'utf8'));
+  adapter.skill_projection.families.framework_helpers.source_pattern = 'frameworks/*/*/skills/**/SKILL.md';
+  fs.writeFileSync(adapterPath, `${JSON.stringify(adapter, null, 2)}\n`);
+  assert.throws(() => buildCandidates({ root, handlerIds: new Set() }), /Unsupported framework helper source pattern/);
 });
 
 test('credential-bearing framework source paths are rejected without retaining their bytes', () => {

@@ -94,16 +94,16 @@ function parseSimpleAliasYaml(raw) {
     if (!match) continue;
     const key = match[1].trim();
     const value = parseSimpleYamlScalar(match[2].trim());
-    if (indent === 0) {
-      currentDomain = ALIAS_DOMAIN_KEYS.includes(key) ? key : null;
-      currentEntry = null;
-      currentEntryIndent = null;
-      if (currentDomain) maps[currentDomain] = maps[currentDomain] || {};
-    } else if (currentDomain && sequenceMatch) {
+    if (currentDomain && sequenceMatch) {
       if (!Array.isArray(maps[currentDomain])) maps[currentDomain] = [];
       currentEntry = { [sequenceMatch[1].trim()]: parseSimpleYamlScalar(sequenceMatch[2].trim()) };
       currentEntryIndent = indent;
       maps[currentDomain].push(currentEntry);
+    } else if (indent === 0) {
+      currentDomain = ALIAS_DOMAIN_KEYS.includes(key) ? key : null;
+      currentEntry = null;
+      currentEntryIndent = null;
+      if (currentDomain) maps[currentDomain] = maps[currentDomain] || {};
     } else if (currentDomain && currentEntry && currentEntryIndent != null && indent > currentEntryIndent) {
       currentEntry[key] = value;
     } else if (currentDomain) {

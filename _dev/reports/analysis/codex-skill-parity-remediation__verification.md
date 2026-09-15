@@ -101,6 +101,8 @@ The fifty-ninth Cloud Codex review found typed YAML sequence records using stand
 
 The sixtieth Cloud Codex review found typed wrapper projections omitting their invocation-specific workflow lens and camelCase credential assignments bypassing secret detection. Typed wrappers now direct Codex to read and apply the wrapper workflow as an invocation lens before consulting the resolved authority for governing behavior, and bounded camelCase credential-key families enter the redacted rejection path. Focused regressions cover both findings.
 
+The sixty-first Cloud Codex review found PascalCase credential assignments bypassing the camelCase detector and safe property-based environment references being classified as literal secrets. Credential-key suffix recognition now accepts both lower- and upper-initial provider prefixes, while bounded `process.env`, `import.meta.env`, `env`, `config`, and `secrets` property references remain nonliteral. Focused regressions cover both rejection and safe-reference paths.
+
 ## Falsifiers and residuals
 
 Acceptance would be disproved by an applied `UNKNOWN` or pending candidate, copied alias behavior, a non-handler command marked `BLOCKING`, a private path in a shipped projection, a canonical/client diff, a failed runtime discovery claim, or an unresolved distinct-family blocker. None was observed.

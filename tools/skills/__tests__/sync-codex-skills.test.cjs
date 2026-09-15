@@ -1200,6 +1200,8 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     `dbPassword: "dbcamelvalue${'d'.repeat(16)}"\n`,
     `sessionToken = "sessioncamelvalue${'t'.repeat(16)}"\n`,
     `stripeApiKey = "stripecamelvalue${'k'.repeat(16)}"\n`,
+    `DbPassword: "dbpascalvalue${'p'.repeat(16)}"\n`,
+    `StripeApiKey = "stripepascalvalue${'i'.repeat(16)}"\n`,
     `Authorization: Bearer ordinarysecretvalue${'b'.repeat(16)}\n`,
     'Authorization: Bearer secret\n',
     'Authorization: Basic dTpw\n',
@@ -1225,7 +1227,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
 
 test('shell-variable credential references are not treated as literal secrets', () => {
   const root = fixture();
-  skill(root, 'ticktock', 'export OPENAI_API_KEY="$OPENAI_API_KEY"\nexport AUTH_TOKEN=${AUTH_TOKEN}\nAuthorization: Bearer $ACCESS_TOKEN\nAuthorization: Basic ${BASIC_AUTH}\nCookie: csrftoken=placeholder; sessionid="$SESSION_ID"\n');
+  skill(root, 'ticktock', 'export OPENAI_API_KEY="$OPENAI_API_KEY"\nexport AUTH_TOKEN=${AUTH_TOKEN}\nAuthorization: Bearer $ACCESS_TOKEN\nAuthorization: Basic ${BASIC_AUTH}\nCookie: csrftoken=placeholder; sessionid="$SESSION_ID"\npassword: process.env.DB_PASSWORD,\nsessionToken = import.meta.env.SESSION_TOKEN;\ndbPassword: config.dbPassword\n');
   const result = sync({ root, handlerIds: new Set(), apply: true });
   const candidate = byId(result, 'direct-ticktock');
   assert.equal(candidate.receipt.semantic_review_state, 'reviewed_safe');

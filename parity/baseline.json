@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "49d33a3fc5875df0fff6d3c0b91516c3c9d5b3017853a32f191f175264267014",
+    "expected_tree_sha256": "ed2be720be2c0e8e09a5256539dcd5d256b56690319306dc27fd1dd84f08ade9",
     "expected_files": [
       {
         "path": ".agents/skills/go/SKILL.md",
@@ -2102,7 +2102,7 @@
       },
       {
         "path": ".claude/skills/outward-inward-loop/SKILL.md",
-        "sha256": "bc7b7f302af4491bb9f2036a4bff8ca6ae0a29fff250e20f529c98530919f16e",
+        "sha256": "8f5faab8b55c09c676d8d7eac21aa9b7e12afa03cf17d980b789a77d97093224",
         "mode": 420
       },
       {
@@ -8362,7 +8362,7 @@
       },
       {
         "path": "instructions/canonical/commands/outward-inward.yaml",
-        "sha256": "aeb14a8d709b89e05f7d51d3e09ad53b91da4ef4b86f517a8de3dd6bd2c7362e",
+        "sha256": "e2318666358b549df73bca76b17dbe8eeb5c828c18c9e9c48d8673e555fab1fd",
         "mode": 420
       },
       {
@@ -8917,7 +8917,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "f0a49159d6758f5b8dc38fa86e0576ec4b4342612c9146c9449be28b3071c6dc",
+        "sha256": "dc7f900ee3534bafb37c5c17559115431669b34c69835046aed0db5c4fbf5096",
         "mode": 420
       },
       {
@@ -13921,6 +13921,51 @@
         "mode": 420
       },
       {
+        "path": "tools/planning/__fixtures__/completion-grammar/README.md",
+        "sha256": "b6ae930ae3378d04a1507563fcb3e2bfc75d1e01bd7d5f729724d55b6308f68e",
+        "mode": 420
+      },
+      {
+        "path": "tools/planning/__fixtures__/completion-grammar/cases.cjs",
+        "sha256": "54bc09b921e53c576d1344fd601c879ae10305d52e752a4d0ecd2c3cbc43ec8b",
+        "mode": 420
+      },
+      {
+        "path": "tools/planning/__fixtures__/completion-grammar/outcome-complete.json",
+        "sha256": "a6f2fa311255a25ff86f3431b59f0401dc824b5bc4ce39c244145d30b8e54683",
+        "mode": 420
+      },
+      {
+        "path": "tools/planning/__fixtures__/completion-grammar/plan-bridge-blocked.json",
+        "sha256": "440d38d43ced80e6cf87393a81ed1ff8641521ff01dceaef4a949997990f5946",
+        "mode": 420
+      },
+      {
+        "path": "tools/planning/__fixtures__/completion-grammar/plan-bridge-no-evidence.json",
+        "sha256": "db2caedf863567a5507d785588993a535056e4fdace2ac838aed260341091a43",
+        "mode": 420
+      },
+      {
+        "path": "tools/planning/__fixtures__/completion-grammar/plan-complete.json",
+        "sha256": "aeaeb0b3879fcf405a2a2c70f4ba59196d3b761a41dc3d9b8f11936acb5f8e9e",
+        "mode": 420
+      },
+      {
+        "path": "tools/planning/__fixtures__/completion-grammar/plan-debrief-only.json",
+        "sha256": "eb63c87a666c5aebbe80e8a983e3e6a3410fdb78286d00d05f2c2713265a8f12",
+        "mode": 420
+      },
+      {
+        "path": "tools/planning/__fixtures__/completion-grammar/plan-declared-complete.json",
+        "sha256": "f8380e72de28d23b24b321787c934f15cec9ee2c6bf81a543aa68085870eced3",
+        "mode": 420
+      },
+      {
+        "path": "tools/planning/__fixtures__/completion-grammar/plan-steps-done.json",
+        "sha256": "6e498f0429cbeb4a58f30cf69ee1c478bec491a8b436ebb4092c3aef02049014",
+        "mode": 420
+      },
+      {
         "path": "tools/planning/__fixtures__/gemini-draft-plan.md",
         "sha256": "c74997cd1bd9a24d110359cc72a3e095983b0277a3c754651ba54f8dfe67acc8",
         "mode": 420
@@ -13943,6 +13988,11 @@
       {
         "path": "tools/planning/__tests__/harness-plan-output-contract.test.js",
         "sha256": "6ac29cd999198d4a884a2a74bfa10917a45a49d387bb273fd2880d92903f9d67",
+        "mode": 420
+      },
+      {
+        "path": "tools/planning/__tests__/plan-visibility-completion-grammar.test.cjs",
+        "sha256": "30e366f8878f69e57a5850fafb71a72bd73c3626a1bf134c20903ce39e9827e8",
         "mode": 420
       },
       {
@@ -14132,7 +14182,7 @@
       },
       {
         "path": "tools/planning/lib/completion-classifier.js",
-        "sha256": "3499e74c9d085607a6d544e743f0899bd8112ccbdbf36344a6a9b61c4f7b29a3",
+        "sha256": "8a5c2601a3811bafa8c29d76f8eaaef3c18aff08ef46aead343c152d3494f644",
         "mode": 420
       },
       {
@@ -14207,7 +14257,7 @@
       },
       {
         "path": "tools/planning/lib/plan-visibility.js",
-        "sha256": "d5fc73caa9d2800a2d677743e2f84db44f735f25af500c225a1cf4b74e7def0a",
+        "sha256": "b70642d8e6f10e229ea6b04fbd28f2e6da22bc6a6731e6ce9cf8ad199f4d24c8",
         "mode": 420
       },
       {
@@ -17039,9 +17089,9 @@
     "package_script_count": 206,
     "command_alias_registry_sha256": "bf0f8b941e0dc0d7b7d3938b765ac379a62b1c3bac50984358cd133afd1012d2",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "f0a49159d6758f5b8dc38fa86e0576ec4b4342612c9146c9449be28b3071c6dc",
-    "graph_nodes": 4113,
-    "graph_edges": 2926
+    "graph_sha256": "dc7f900ee3534bafb37c5c17559115431669b34c69835046aed0db5c4fbf5096",
+    "graph_nodes": 4123,
+    "graph_edges": 2931
   },
   "runtime_exclusions": [
     ".git/**",

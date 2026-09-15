@@ -1,0 +1,30 @@
+{
+  "schema_version": "TaskPlan/1.0",
+  "task_id": "cg-bridge-blocked",
+  "title": "Completion grammar fixture: codex-bridge lane with no bridge artifacts, plus execution evidence",
+  "scope_type": "system",
+  "produced_by_actor_id": "fixture-producer",
+  "produced_by_actor_type": "intelligence",
+  "produced_by_harness_id": "fixture-producer-harness",
+  "approval": {
+    "status": "pending",
+    "approved_by": null
+  },
+  "routing_expectations": {
+    "risk_tier": "medium",
+    "review_lane": "codex-bridge"
+  },
+  "bounded_plan": {
+    "steps": [
+      {
+        "step_id": "S1",
+        "status": "in_progress",
+        "description": "Underway.",
+        "mode": "PATCH_ALLOWED"
+      }
+    ]
+  },
+  "outcome_delta": {
+    "completed": false
+  }
+}

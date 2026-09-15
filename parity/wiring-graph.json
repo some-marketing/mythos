@@ -11681,13 +11681,6 @@
       "mode": 420
     },
     {
-      "id": "file:tools/ant-hive-world/embodiment-bridge/__pycache__/bridge_step.cpython-314.pyc",
-      "type": "file",
-      "path": "tools/ant-hive-world/embodiment-bridge/__pycache__/bridge_step.cpython-314.pyc",
-      "sha256": "ee0aa42f5cd14dfbd66fa2bd2628ac1bd112009476d82ad07396f866cff68a97",
-      "mode": 420
-    },
-    {
       "id": "file:tools/ant-hive-world/embodiment-bridge/bridge_scene.xml",
       "type": "file",
       "path": "tools/ant-hive-world/embodiment-bridge/bridge_scene.xml",
@@ -54732,7 +54725,7 @@
     }
   ],
   "counts": {
-    "nodes": 4188,
+    "nodes": 4187,
     "edges": 3009,
     "unresolved": 0
   }

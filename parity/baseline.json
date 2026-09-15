@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "991f454d1e4f2d99ec9369c2bc74c1ca92c675836bd6f7e15ac2e5f8430a85b9",
+    "expected_tree_sha256": "8157030e9307bed8d14c91b11fe9d5a4bc60dd2d69be2520f6f8424bd3ac5087",
     "expected_files": [
       {
         "path": ".agents/skills/go/SKILL.md",
@@ -8777,7 +8777,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "036254c082c69cdf3a75063d5d4f71a085e145074d2449a949f0b4c2d427f0f8",
+        "sha256": "b4e2d51ac9f6669d9607f1e16442202cbb1ad324c9307ef4f445041f4e20c762",
         "mode": 420
       },
       {
@@ -17359,8 +17359,8 @@
     "package_script_count": 206,
     "command_alias_registry_sha256": "9bbc50aa1343a5502258e0e067eca0bb4cf4ea9f560abc5b998247a0e04b9901",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "036254c082c69cdf3a75063d5d4f71a085e145074d2449a949f0b4c2d427f0f8",
-    "graph_nodes": 4188,
+    "graph_sha256": "b4e2d51ac9f6669d9607f1e16442202cbb1ad324c9307ef4f445041f4e20c762",
+    "graph_nodes": 4187,
     "graph_edges": 3009
   },
   "runtime_exclusions": [

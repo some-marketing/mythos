@@ -1475,6 +1475,13 @@
       "mode": 420
     },
     {
+      "id": "file:_dev/config/dispatch-targets/qwen3.8-max-hosted.json",
+      "type": "file",
+      "path": "_dev/config/dispatch-targets/qwen3.8-max-hosted.json",
+      "sha256": "bdde984ba60b10708acb6e85ae5768f4fb9eb8b5e591193ae538f6e09543e1d7",
+      "mode": 420
+    },
+    {
       "id": "file:_dev/sim-runs/authority-probe.js",
       "type": "file",
       "path": "_dev/sim-runs/authority-probe.js",
@@ -19209,7 +19216,7 @@
       "id": "file:tools/signals/lib/__tests__/bridge-target-policy.test.js",
       "type": "file",
       "path": "tools/signals/lib/__tests__/bridge-target-policy.test.js",
-      "sha256": "cef6bc3ece66c8ba59ec213bedaec249d082bf8a93645f73f2e963d0e5dda9e9",
+      "sha256": "8edb332e30d04e8364991ae209f960c23107c6a45d680fca660a0e85a1758115",
       "mode": 420
     },
     {
@@ -19244,7 +19251,7 @@
       "id": "file:tools/signals/lib/__tests__/distinct-families.test.js",
       "type": "file",
       "path": "tools/signals/lib/__tests__/distinct-families.test.js",
-      "sha256": "913ef54eb7bec0e3b491df37b4027a02c236b79b18fd558ea6132da238d7f261",
+      "sha256": "4127de7a3c02ff2cdc225b6eaaa7acbf243a163022410a155216b6c0212dde43",
       "mode": 420
     },
     {
@@ -19335,7 +19342,7 @@
       "id": "file:tools/signals/lib/__tests__/run-openrouter-jurisdiction-gate.test.js",
       "type": "file",
       "path": "tools/signals/lib/__tests__/run-openrouter-jurisdiction-gate.test.js",
-      "sha256": "1c9a8ec2b1941ecd600a013d57ac19f37f13e3debf838fb5f7fa4306a92c7213",
+      "sha256": "e8fd6420d05bb7182ee12f8cde40017f02fe7f7455c31cc5381d9c380349afed",
       "mode": 420
     },
     {
@@ -19405,7 +19412,7 @@
       "id": "file:tools/signals/lib/bridge-target-policy.js",
       "type": "file",
       "path": "tools/signals/lib/bridge-target-policy.js",
-      "sha256": "db2368c67dec242265e6ded80ffc2bf3a8b2f55d4d587ce0b1b1ebcb03a97f09",
+      "sha256": "9eabe6035218dbb4a6613d6048fafe7c6be3578897c288d6418f5e74d188347f",
       "mode": 420
     },
     {
@@ -19685,7 +19692,7 @@
       "id": "file:tools/signals/run-openrouter-bridge.js",
       "type": "file",
       "path": "tools/signals/run-openrouter-bridge.js",
-      "sha256": "c698ac599668bba1b248167ca16bdf7487db17444cad2d7bbcd92623fa6bcc84",
+      "sha256": "2be4069db12871e5b556be99589ff98192b3b09a39f166d64070d9c3dacd24dd",
       "mode": 420
     },
     {
@@ -43909,6 +43916,15 @@
       "declared_target": ".claude/commands/capture-status.md"
     },
     {
+      "id": "a6dc0b9696615b7ad1ba81f966d79e7ea7baf697092cb39740e4b475200fc93a",
+      "type": "static-import",
+      "from": "file:tools/signals/run-openrouter-bridge.js",
+      "to": "file:tools/signals/lib/bridge-target-policy.js",
+      "target": "tools/signals/lib/bridge-target-policy.js",
+      "required": true,
+      "specifier": "./lib/bridge-target-policy"
+    },
+    {
       "id": "a6fce5f569be4786fe55ba3482242772665a250b946efc897530349c96371b28",
       "type": "package-script-target",
       "from": "package-script:lint:spans:enforce",
@@ -53266,8 +53282,8 @@
     }
   ],
   "counts": {
-    "nodes": 4102,
-    "edges": 2913,
+    "nodes": 4103,
+    "edges": 2914,
     "unresolved": 0
   }
 }

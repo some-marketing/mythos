@@ -10822,21 +10822,21 @@
       "id": "file:instructions/generated/claude/.claude.guardrails.md",
       "type": "file",
       "path": "instructions/generated/claude/.claude.guardrails.md",
-      "sha256": "9b3a06934b46a33e1ae4357c127b28ccfe81a061005ef0e60c7fdfe7919c54b1",
+      "sha256": "996c11eef57fba5a279cb7bf3cecbf107e35f709f6079b907beb39d6fad781e3",
       "mode": 420
     },
     {
       "id": "file:instructions/generated/claude/CLAUDE.md",
       "type": "file",
       "path": "instructions/generated/claude/CLAUDE.md",
-      "sha256": "b3cdfc2d9c35b790708bac03ade18801ffaeba79d6318a727fc401ff623a1158",
+      "sha256": "be26ffd8ddf2cb6f8154c97668584f5e551bc3bf32aebb4eb3748e3e3f48b4e6",
       "mode": 420
     },
     {
       "id": "file:instructions/generated/manifest.json",
       "type": "file",
       "path": "instructions/generated/manifest.json",
-      "sha256": "d9b27fdb59309acd67d6b561554350752706fa73eff59ea6a6b72fb12be77c32",
+      "sha256": "9d6710100d39a648f457db238ad34eefcd112f01ede7047c5a6be314a273873e",
       "mode": 420
     },
     {
@@ -14637,7 +14637,7 @@
       "id": "file:tools/instructions/__tests__/aliases.test.js",
       "type": "file",
       "path": "tools/instructions/__tests__/aliases.test.js",
-      "sha256": "15b239b97642dc9d0cef2dd2c3814e4f6c4be4d99c62f506f30d23ec67ace195",
+      "sha256": "f48ff5e1488b73d4e9c0408a7b1c65e6de3f75e803115ae74400e523e9f5a778",
       "mode": 420
     },
     {

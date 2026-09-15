@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "6111368bedb9622f23416a7f46d3b17209210a718e86d7f30b3e2a5f85d2e3e2",
+    "expected_tree_sha256": "991f454d1e4f2d99ec9369c2bc74c1ca92c675836bd6f7e15ac2e5f8430a85b9",
     "expected_files": [
       {
         "path": ".agents/skills/go/SKILL.md",
@@ -9378,11 +9378,6 @@
       {
         "path": "tools/ant-hive-world/embodiment-bridge/Dockerfile",
         "sha256": "7678b7340d3d9c567fcaf7788e368c10c9c40e59610a27032f13989db4b06adf",
-        "mode": 420
-      },
-      {
-        "path": "tools/ant-hive-world/embodiment-bridge/__pycache__/bridge_step.cpython-314.pyc",
-        "sha256": "ee0aa42f5cd14dfbd66fa2bd2628ac1bd112009476d82ad07396f866cff68a97",
         "mode": 420
       },
       {

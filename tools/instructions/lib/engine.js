@@ -121,6 +121,9 @@ function parseSimpleAliasYaml(raw) {
       currentEntryIndent = null;
       if (currentDomain) maps[currentDomain] = maps[currentDomain] || {};
     } else if (currentDomain && currentEntry && currentEntryIndent != null && indent > currentEntryIndent) {
+      if (Object.prototype.hasOwnProperty.call(currentEntry, key)) {
+        throw new Error(`Duplicate alias field: ${key}`);
+      }
       currentEntry[key] = value;
     } else if (currentDomain) {
       if (Array.isArray(maps[currentDomain])) continue;
@@ -138,7 +141,13 @@ function parseSimpleYamlInlineMapping(value) {
   const entry = {};
   for (const field of match[1].split(',')) {
     const fieldMatch = field.trim().match(/^([^:]+):\s*(.*)$/);
-    if (fieldMatch) entry[fieldMatch[1].trim()] = parseSimpleYamlScalar(fieldMatch[2].trim());
+    if (fieldMatch) {
+      const key = fieldMatch[1].trim();
+      if (Object.prototype.hasOwnProperty.call(entry, key)) {
+        throw new Error(`Duplicate alias field: ${key}`);
+      }
+      entry[key] = parseSimpleYamlScalar(fieldMatch[2].trim());
+    }
   }
   return entry;
 }

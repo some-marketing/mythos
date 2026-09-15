@@ -136,6 +136,17 @@ test('parseAliasRegistry preserves inline mappings in legacy map records', () =>
   assert.deepEqual(parseAliasRegistry(raw).aliases, [{ id: 'shortcut', target: 'route' }]);
 });
 
+test('parseAliasRegistry rejects duplicate YAML alias fields', () => {
+  assert.throws(
+    () => parseAliasRegistry('aliases:\n  - id: shortcut\n    target: review-progress\n    target: run-framework\n'),
+    /Duplicate alias field: target/
+  );
+  assert.throws(
+    () => parseAliasRegistry('aliases:\n  - { id: shortcut, target: review-progress, target: run-framework }\n'),
+    /Duplicate alias field: target/
+  );
+});
+
 test('loads the shipped typed command registry without losing target or authority', () => {
   const aliases = loadCommandAliases(SURFACE_ROOT);
   assert.equal(aliases.length, 10);

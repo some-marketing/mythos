@@ -4,7 +4,7 @@ Refreshed under the approved parity amendment at `2026-09-14T18:51:57Z` in the d
 
 ## Mechanical results
 
-- Combined projector, lifecycle, and alias regressions: 126 passed, 0 failed.
+- Combined projector, lifecycle, and alias regressions: 128 passed, 0 failed.
 - `node tools/skills/sync-codex-skills.cjs --check`: aligned.
 - `node tools/skills/sync-lifecycle-command-skills.cjs --check`: six lifecycle skills aligned against the committed general projection evidence.
 - Pinned Codex `quick_validate.py`, using the repository PyYAML environment: 131 of 131 applied packages valid; 176 of 176 top-level staged candidate packages valid. Nested child skills are excluded from parent resources, so the staged tree contains exactly 176 independently projected `SKILL.md` files.
@@ -138,6 +138,8 @@ The seventy-seventh Cloud Codex review found canonical command scanning limited 
 The seventy-eighth Cloud Codex review found legacy-to-typed alias chains stopping before their terminal authority and retained license or trust-tier YAML non-strings being coerced into strings. Instruction rendering now traverses every alias record type with cycle protection, and every retained scalar field enforces string typing. Focused regressions cover mixed chains plus direct and framework metadata rejection.
 
 The seventy-ninth Cloud Codex review found canonical self-target aliases such as the shipped `/blueprint` entry being mistaken for runtime cycles. Runtime resolution now treats a self-target as terminal only when the matching canonical command exists, while continuing to reject genuine multi-alias cycles. A focused regression covers both cases.
+
+The eightieth Cloud Codex review found duplicate YAML alias fields silently replacing earlier routing authority and credential terms embedded within longer assignment keys escaping projection scanning. The alias parser now rejects repeated record fields in block and flow mappings, and the credential detector rejects separator-delimited sensitive terms anywhere in assignment keys while retaining whole-value reference exemptions. Focused regressions cover direct and framework projections plus safe references.
 
 ## Falsifiers and residuals
 

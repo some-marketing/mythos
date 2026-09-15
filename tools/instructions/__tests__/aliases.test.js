@@ -245,6 +245,11 @@ test('runtime command resolution follows legacy aliases transitively and rejects
   fs.writeFileSync(registryPath, 'aliases:\n  - id: shortcut\n    resolves_to: route\n');
   assert.equal(resolveCommandAlias(root, 'shortcut').executionCommand, 'route');
 
+  fs.mkdirSync(path.join(root, 'instructions', 'canonical', 'commands'), { recursive: true });
+  fs.writeFileSync(path.join(root, 'instructions', 'canonical', 'commands', 'blueprint.yaml'), '{}\n');
+  fs.writeFileSync(registryPath, 'aliases:\n  - id: blueprint\n    execution_target: blueprint\n');
+  assert.equal(resolveCommandAlias(root, 'blueprint').executionCommand, 'blueprint');
+
   fs.writeFileSync(registryPath, 'aliases:\n  - id: one\n    resolves_to: two\n  - id: two\n    resolves_to: one\n');
   assert.throws(() => resolveCommandAlias(root, 'one'), /Command alias cycle detected: one -> two -> one/);
 

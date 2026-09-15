@@ -64,12 +64,16 @@ function resolveCommandAlias(projectRoot, commandId) {
   const trail = [typedCommand];
   let executionCommand = immediateTarget;
   while (aliases.has(executionCommand)) {
+    const nextAlias = aliases.get(executionCommand);
+    const nextCommand = String(nextAlias.execution_target || nextAlias.target || nextAlias.resolves_to || executionCommand).trim().toLowerCase();
+    const canonicalSelfTarget = nextCommand === executionCommand
+      && fs.existsSync(path.join(projectRoot, 'instructions', 'canonical', 'commands', `${executionCommand}.yaml`));
+    if (canonicalSelfTarget) break;
     if (trail.includes(executionCommand)) {
       throw new Error(`Command alias cycle detected: ${[...trail, executionCommand].join(' -> ')}`);
     }
     trail.push(executionCommand);
-    const nextAlias = aliases.get(executionCommand);
-    executionCommand = String(nextAlias.execution_target || nextAlias.target || nextAlias.resolves_to || executionCommand).trim().toLowerCase();
+    executionCommand = nextCommand;
   }
   return {
     isAlias: true,
@@ -77,7 +81,7 @@ function resolveCommandAlias(projectRoot, commandId) {
     resolvedCommand: String(alias.target || alias.resolves_to || immediateTarget).trim().toLowerCase(),
     executionCommand,
     authoritySource: String(alias.authority_source || executionCommand).trim().toLowerCase(),
-    expansionEdges: Array.isArray(alias.expansion_edges) ? alias.expansion_edges : [...trail, executionCommand],
+    expansionEdges: Array.isArray(alias.expansion_edges) ? alias.expansion_edges : trail.includes(executionCommand) ? trail : [...trail, executionCommand],
     alias
   };
 }

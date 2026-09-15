@@ -137,6 +137,8 @@ The seventy-seventh Cloud Codex review found canonical command scanning limited 
 
 The seventy-eighth Cloud Codex review found legacy-to-typed alias chains stopping before their terminal authority and retained license or trust-tier YAML non-strings being coerced into strings. Instruction rendering now traverses every alias record type with cycle protection, and every retained scalar field enforces string typing. Focused regressions cover mixed chains plus direct and framework metadata rejection.
 
+The seventy-ninth Cloud Codex review found canonical self-target aliases such as the shipped `/blueprint` entry being mistaken for runtime cycles. Runtime resolution now treats a self-target as terminal only when the matching canonical command exists, while continuing to reject genuine multi-alias cycles. A focused regression covers both cases.
+
 ## Falsifiers and residuals
 
 Acceptance would be disproved by an applied `UNKNOWN` or pending candidate, copied alias behavior, a non-handler command marked `BLOCKING`, a private path in a shipped projection, a canonical/client diff, a failed runtime discovery claim, or an unresolved distinct-family blocker. None was observed.

@@ -13000,7 +13000,7 @@
       "id": "file:tools/commands/lib/command-aliases.cjs",
       "type": "file",
       "path": "tools/commands/lib/command-aliases.cjs",
-      "sha256": "a817e529201ad2132ea234ed02b85a7b4713cef5434e1dea6f78f688c0826e51",
+      "sha256": "6079ccbce0b5a3ab3c7a22ce96eb769d4579cadca59995bcd1a9a8bdaf1e3241",
       "mode": 420
     },
     {
@@ -14554,7 +14554,7 @@
       "id": "file:tools/instructions/__tests__/aliases.test.js",
       "type": "file",
       "path": "tools/instructions/__tests__/aliases.test.js",
-      "sha256": "1de27e42afc8d37cde416c5e2c66ceed4530d092093b0146d824cf4912a906b6",
+      "sha256": "e2f925c43f7cb997fb7b3ad2661a5de13f05f76f611488b5b7f7e58c72fc4960",
       "mode": 420
     },
     {

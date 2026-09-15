@@ -37,7 +37,7 @@
     "Post-import replay readiness is not represented as comparative effectiveness",
     "Comparative trial designs preserve control validity, remaining differences, and non-success outcomes",
     "Comparative execution is reported ABSENT and execution_blocked rather than implied from an advisory validator",
-    "Every runnable imported prompt has a prompt-provenance and injection-review attestation bound to the exact source-envelope identity and digest, with separate recorded rewriter and attester actor ids",
+    "Every runnable imported prompt has a prompt-provenance and injection-review attestation bound to the exact source-envelope identity and digest; when rewrite_performed=true, it also has separate recorded rewriter and attester actor ids",
     "Comparative evaluation uses an actor id and model-provider family distinct from the producer",
     "The user receives either in-session findings or a declared write-capable artifact bundle with truthful halt and replay status"
   ],

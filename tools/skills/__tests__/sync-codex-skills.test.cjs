@@ -225,6 +225,18 @@ test('canonical rendered content is rejected without retaining private or creden
   assert.doesNotMatch(JSON.stringify(candidate.receipt), /sk-qqqq/);
 });
 
+test('credential-bearing canonical paths are rejected before identifiers or receipts are staged', () => {
+  const root = fixture();
+  const token = `sk-${'k'.repeat(24)}`;
+  command(root, token);
+  assert.throws(
+    () => sync({ root, handlerIds: new Set() }),
+    (error) => /Refusing private or credential-bearing canonical command path/.test(error.message) && !error.message.includes(token)
+  );
+  assert.equal(fs.existsSync(path.join(root, '_dev/reports/analysis/codex-skill-projections/candidates')), false);
+  assert.equal(fs.existsSync(path.join(root, '_dev/reports/analysis/codex-skill-projections/receipts')), false);
+});
+
 test('unsafe canonical and alias IDs cannot construct projection output paths', () => {
   const root = fixture();
   const privateId = ['', 'Users', 'private-operator', 'escape'].join('/');
@@ -697,6 +709,8 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     `CLIENT_SECRET=clientsecretvalue${'c'.repeat(16)}\n`,
     `PASSWORD: passwordsecretvalue${'p'.repeat(16)}\n`,
     `ACCESS_TOKEN="accesssecretvalue${'a'.repeat(16)}"\n`,
+    `PRIVATE_KEY="privatesecretvalue${'v'.repeat(16)}"\n`,
+    `AUTH_TOKEN: authsecretvalue${'h'.repeat(16)}\n`,
     `temporary ASIA${'A'.repeat(16)}\n`
   ]) {
     const root = fixture();
@@ -706,7 +720,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     assert.equal(candidate.receipt.semantic_review_state, 'private_path_rejected');
     assert.equal(candidate.receipt.source_sha256, null);
     assert.equal(fs.existsSync(path.join(root, '.agents/skills/ticktock/SKILL.md')), false);
-    assert.doesNotMatch(JSON.stringify(candidate.receipt), /zzzzzzzz|ordinarysecretvalue|yamlsecretvalue|jsonsecretvalue|genericsecretvalue|clientsecretvalue|passwordsecretvalue|accesssecretvalue|ASIAAAAA/);
+    assert.doesNotMatch(JSON.stringify(candidate.receipt), /zzzzzzzz|ordinarysecretvalue|yamlsecretvalue|jsonsecretvalue|genericsecretvalue|clientsecretvalue|passwordsecretvalue|accesssecretvalue|privatesecretvalue|authsecretvalue|ASIAAAAA/);
   }
 });
 

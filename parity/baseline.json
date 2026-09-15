@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "2ceaa2fcf0e7d65341fa33cd2e3e0f1f7e2c19f37c9a6025aa64a572ec97aac3",
+    "expected_tree_sha256": "e3e809f523b805e7e21b16f3019feacb097e8cecdad6c5f833125099ebb29df9",
     "expected_files": [
       {
         "path": ".agents/skills/go/SKILL.md",
@@ -2217,7 +2217,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-parity-remediation__verification.md",
-        "sha256": "f75bf8ae48c16c6e2272bcb4c20168954435bc596bce94650e5a813fa89c6b20",
+        "sha256": "c9fc35d1f08f1d5bfedc65544be056cd2debe0ca19d1ebe7d7662b916673bd78",
         "mode": 420
       },
       {
@@ -8772,7 +8772,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "9a4f595aba6faccc11667a904b6722f612377c453e12c701efd5ae85e78e57a1",
+        "sha256": "baa826d3f3de29f00f5295ea8852110221cf00d50d1a2885a5db38a1247a5393",
         "mode": 420
       },
       {
@@ -15147,7 +15147,7 @@
       },
       {
         "path": "tools/skills/__tests__/sync-codex-skills.test.cjs",
-        "sha256": "aec9c7bac10d7914e9c267a238d977b3094a54df7b8179edecb1823f1fdb1492",
+        "sha256": "352cc6ab028a60dbf954800c62c187b1704397b89fd2ef4c5aeba471614c308d",
         "mode": 420
       },
       {
@@ -15157,7 +15157,7 @@
       },
       {
         "path": "tools/skills/sync-codex-skills.cjs",
-        "sha256": "2ee030c14dae914700998fb3da4943e8e85a03088b20f108d6ffa8d6e336b294",
+        "sha256": "629f1944647932f4f586e5de6368f334c7fa8f4d5b5d146a9b42e719047a640f",
         "mode": 420
       },
       {
@@ -16884,7 +16884,7 @@
     "package_script_count": 206,
     "command_alias_registry_sha256": "9bbc50aa1343a5502258e0e067eca0bb4cf4ea9f560abc5b998247a0e04b9901",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "9a4f595aba6faccc11667a904b6722f612377c453e12c701efd5ae85e78e57a1",
+    "graph_sha256": "baa826d3f3de29f00f5295ea8852110221cf00d50d1a2885a5db38a1247a5393",
     "graph_nodes": 4092,
     "graph_edges": 2905
   },

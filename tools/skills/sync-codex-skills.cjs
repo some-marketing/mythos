@@ -70,7 +70,7 @@ function parseArgs(argv) {
 }
 
 function loadProjectionConfig(root) {
-  const adapterPath = path.join(root, 'instructions', 'adapters', 'codex.yaml');
+  const adapterPath = validateConfiguredSource(root, 'instructions/adapters/codex.yaml', 'Codex adapter');
   const adapter = readJson(adapterPath);
   const config = adapter.skill_projection;
   if (!config || config.schema !== 'CodexSkillProjectionConfig/1.0') {
@@ -562,7 +562,13 @@ function buildCandidates(options = {}) {
   const commands = loadCanonicalCommands(root, config);
   const directSources = config.families.direct_system_skills.sources;
   const directSourceRoot = path.join(root, config.families.direct_system_skills.source_root || '.claude/skills');
-  const directNames = new Set(directSources.map(directNameFromSource));
+  const directDescriptors = directSources.map((sourceRel) => {
+    if (containsPrivateAbsolutePath(sourceRel) || containsCredentialMaterial(sourceRel)) {
+      throw new Error('Refusing private or credential-bearing direct skill path');
+    }
+    return { sourceRel, name: validateSlugId(directNameFromSource(sourceRel), 'direct skill name') };
+  });
+  const directNames = new Set(directDescriptors.map(({ name }) => name));
   const aliasResults = resolveAliases(root, config, commands, directNames, options.aliasRegistry);
   const terminalAliases = aliasesByTerminal(aliasResults, commands);
   const typedAliasTerminals = new Map(aliasResults
@@ -622,9 +628,8 @@ function buildCandidates(options = {}) {
     candidates.push({ id: `command-${id}`, content: privateLeak ? null : content, resources: [], receipt, targetRoot });
   }
 
-  for (const sourceRel of directSources) {
+  for (const { sourceRel, name } of directDescriptors) {
     const sourcePath = path.join(root, sourceRel);
-    const name = directNameFromSource(sourceRel);
     const targetRel = posix(path.join(config.target_root, name, 'SKILL.md'));
     if (!fs.existsSync(sourcePath)) {
       candidates.push({ id: `direct-${name}`, content: null, resources: [], receipt: { ...receiptBase(config, sourceRel, null, 'direct_system_skill', 'ABSENT', 'missing_source', targetRel), application_status: 'blocked_missing_source' }, targetRoot });
@@ -632,7 +637,9 @@ function buildCandidates(options = {}) {
     }
     validateSourceFile(sourcePath, directSourceRoot, 'direct skill', root);
     const sourceBytes = fs.readFileSync(sourcePath);
-    const normalized = normalizeDirectSkill(String(sourceBytes), name, terminalAliases.get(name) || []);
+    const normalized = name.length > 64
+      ? { ok: false, error: 'direct skill projection name exceeds 64 characters' }
+      : normalizeDirectSkill(String(sourceBytes), name, terminalAliases.get(name) || []);
     const resources = bundledResources(sourcePath);
     const privateLeak = containsPrivateAbsolutePath(sourceBytes) || containsCredentialMaterial(sourceBytes)
       || resources.some((item) => containsPrivateAbsolutePath(item.bytes) || containsCredentialMaterial(item.bytes));

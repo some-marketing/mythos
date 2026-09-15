@@ -159,6 +159,16 @@ test('alias registry loading rejects traversal and external symlinks before read
   assert.throws(() => buildCandidates({ root: symlinkRoot, handlerIds: new Set() }), /Refusing symbolic-link alias registry source/);
 });
 
+test('Codex adapter loading rejects external symlinks before reading', () => {
+  const root = fixture();
+  const externalRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'external-adapter-'));
+  const externalAdapter = write(externalRoot, 'codex.yaml', '{"skill_projection":null}\n');
+  const adapterPath = path.join(root, 'instructions/adapters/codex.yaml');
+  fs.unlinkSync(adapterPath);
+  fs.symlinkSync(externalAdapter, adapterPath);
+  assert.throws(() => buildCandidates({ root, handlerIds: new Set() }), /Refusing symbolic-link Codex adapter source/);
+});
+
 test('ground-in-philosophy uses the explicit Codex override and rejects Pi fallback text', () => {
   const root = fixture();
   command(root, 'ground-in-philosophy', { objective: 'Pi cannot natively spawn sub-agents', process: ['manual grounding (pi harness — no sub-agent)'] });
@@ -302,6 +312,37 @@ test('canonical projections exceeding the Codex skill-name limit are blocked', (
   assert.equal(candidate.receipt.application_status, 'blocked_malformed');
   assert.match(candidate.receipt.detail, /exceeds 64 characters/);
   assert.equal(fs.existsSync(path.join(root, `.agents/skills/source-command-${id}/SKILL.md`)), false);
+});
+
+test('credential-bearing direct paths are rejected before identifiers or receipts are staged', () => {
+  const root = fixture();
+  const token = `sk-${'d'.repeat(24)}`;
+  const adapterPath = path.join(root, 'instructions/adapters/codex.yaml');
+  const adapter = JSON.parse(fs.readFileSync(adapterPath, 'utf8'));
+  adapter.skill_projection.families.direct_system_skills.sources.push(`.claude/skills/${token}/SKILL.md`);
+  fs.writeFileSync(adapterPath, `${JSON.stringify(adapter, null, 2)}\n`);
+  skill(root, token);
+  assert.throws(
+    () => sync({ root, handlerIds: new Set() }),
+    (error) => /credential-bearing direct skill path/.test(error.message) && !error.message.includes(token)
+  );
+  assert.equal(fs.existsSync(path.join(root, '_dev/reports/analysis/codex-skill-projections')), false);
+});
+
+test('direct projections exceeding the Codex skill-name limit are blocked', () => {
+  const root = fixture();
+  const name = 'x'.repeat(65);
+  const adapterPath = path.join(root, 'instructions/adapters/codex.yaml');
+  const adapter = JSON.parse(fs.readFileSync(adapterPath, 'utf8'));
+  adapter.skill_projection.families.direct_system_skills.sources.push(`.claude/skills/${name}/SKILL.md`);
+  fs.writeFileSync(adapterPath, `${JSON.stringify(adapter, null, 2)}\n`);
+  skill(root, name);
+  const result = sync({ root, handlerIds: new Set(), apply: true });
+  const candidate = byId(result, `direct-${name}`);
+  assert.equal(candidate.receipt.semantic_review_state, 'malformed');
+  assert.equal(candidate.receipt.application_status, 'blocked');
+  assert.match(candidate.receipt.detail, /exceeds 64 characters/);
+  assert.equal(fs.existsSync(path.join(root, `.agents/skills/${name}/SKILL.md`)), false);
 });
 
 test('unsafe canonical and alias IDs cannot construct projection output paths', () => {

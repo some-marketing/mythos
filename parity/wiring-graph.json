@@ -13000,7 +13000,7 @@
       "id": "file:tools/commands/lib/command-aliases.cjs",
       "type": "file",
       "path": "tools/commands/lib/command-aliases.cjs",
-      "sha256": "5ff93770ee91371cee3a4753dba23270e5f80faa026c3bcef269cb8f365190a2",
+      "sha256": "a817e529201ad2132ea234ed02b85a7b4713cef5434e1dea6f78f688c0826e51",
       "mode": 420
     },
     {
@@ -14554,7 +14554,7 @@
       "id": "file:tools/instructions/__tests__/aliases.test.js",
       "type": "file",
       "path": "tools/instructions/__tests__/aliases.test.js",
-      "sha256": "95837e84b99287313f477cbed575a27187a7a8edc88fe0350841e07464fd9422",
+      "sha256": "f8bd8ea37499aa69595cdf008b0833f71fbd60a3e9cddedd1b305db68892a10a",
       "mode": 420
     },
     {
@@ -19769,7 +19769,7 @@
       "id": "file:tools/skills/__tests__/sync-codex-skills.test.cjs",
       "type": "file",
       "path": "tools/skills/__tests__/sync-codex-skills.test.cjs",
-      "sha256": "db0d92614432beae3f5669c3d479f19f57f588d224c8f19990af090e49ebc43a",
+      "sha256": "fafc7378e348c51cc9a3cf5765455c77bc5e4e98a2ba67c659913bce3513fda1",
       "mode": 420
     },
     {
@@ -19790,7 +19790,7 @@
       "id": "file:tools/skills/sync-codex-skills.cjs",
       "type": "file",
       "path": "tools/skills/sync-codex-skills.cjs",
-      "sha256": "7435cc51e9d789d9595261d896df65e3f988e08002a158d088c19873f7db85d9",
+      "sha256": "10e9058ca08407f5c5e4ba2f613b956fa0ef7f00fb6721009c9df972d4e4c2f7",
       "mode": 420
     },
     {

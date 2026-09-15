@@ -20,7 +20,8 @@ function loadAliasRegistry(projectRoot) {
 
   let registry;
   try {
-    registry = parseAliasRegistry(fs.readFileSync(registryPath, 'utf8'));
+    const raw = fs.readFileSync(registryPath, 'utf8');
+    registry = /^(?:\{|\[)/.test(raw.trimStart()) ? JSON.parse(raw) : parseAliasRegistry(raw);
   } catch (err) {
     throw new Error(`Failed to parse command alias registry ${registryPath}: ${err.message}`);
   }

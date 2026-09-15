@@ -261,6 +261,9 @@ function parseFrontmatter(text, sourcePath = '<memory>') {
         if (value === INVALID_YAML_SCALAR) return { ok: false, error: 'invalid quoted frontmatter scalar', sourcePath };
       }
     }
+    if (Object.prototype.hasOwnProperty.call(metadata, key)) {
+      return { ok: false, error: `frontmatter contains duplicate ${key} declarations`, sourcePath };
+    }
     metadata[key] = value;
   }
   if (metadata.metadata && typeof metadata.metadata === 'object' && !Array.isArray(metadata.metadata)) {

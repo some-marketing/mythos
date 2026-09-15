@@ -127,6 +127,8 @@ The seventy-second Cloud Codex review found `bearer` and `accessKey` assignments
 
 The seventy-third Cloud Codex review found execution modes declared inside valid inline `metadata` mappings being silently omitted from direct and framework projections. The frontmatter parser now accepts string-only flow mappings, lifts supported execution fields into the normalized projection, and rejects conflicting declarations. Focused regressions cover both direct and framework preservation.
 
+The seventy-fourth Cloud Codex review found duplicate execution-mode keys weakening earlier constraints and malformed JSON-shaped alias registries falling through as empty YAML. Frontmatter parsing now rejects duplicate declarations, while runtime alias loading requires JSON-looking input to parse as JSON and retains the shared parser only for YAML-shaped input. Focused regressions cover both fail-closed paths.
+
 ## Falsifiers and residuals
 
 Acceptance would be disproved by an applied `UNKNOWN` or pending candidate, copied alias behavior, a non-handler command marked `BLOCKING`, a private path in a shipped projection, a canonical/client diff, a failed runtime discovery claim, or an unresolved distinct-family blocker. None was observed.

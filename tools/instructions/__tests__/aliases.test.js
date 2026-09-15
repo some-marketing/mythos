@@ -247,6 +247,9 @@ test('runtime command resolution follows legacy aliases transitively and rejects
 
   fs.writeFileSync(registryPath, 'aliases:\n  - id: one\n    resolves_to: two\n  - id: two\n    resolves_to: one\n');
   assert.throws(() => resolveCommandAlias(root, 'one'), /Command alias cycle detected: one -> two -> one/);
+
+  fs.writeFileSync(registryPath, '{"aliases":[{"id":"broken","resolves_to":"route"}]');
+  assert.throws(() => resolveCommandAlias(root, 'broken'), /Failed to parse command alias registry/);
   fs.rmSync(root, { recursive: true, force: true });
 });
 

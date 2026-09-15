@@ -193,6 +193,9 @@ test('direct and framework skills preserve execution modes declared in inline me
   const conflicting = normalizeDirectSkill('---\nname: demo\ndescription: demo\nexecution_mode: REVIEW_ONLY\nmetadata: {execution_mode: PATCH_ALLOWED}\n---\nbody\n', 'demo');
   assert.equal(conflicting.ok, false);
   assert.match(conflicting.error, /conflicting execution_mode declarations/);
+  const duplicate = normalizeDirectSkill('---\nname: demo\ndescription: demo\nexecution_mode: FINDINGS_ONLY\nexecution_mode: PATCH_ALLOWED\n---\nbody\n', 'demo');
+  assert.equal(duplicate.ok, false);
+  assert.match(duplicate.error, /duplicate execution_mode declarations/);
 });
 
 test('direct and framework descriptions reject YAML non-string tokens and empty text', () => {

@@ -749,6 +749,7 @@ function containsCredentialMaterial(bytes) {
   const text = String(bytes);
   return /-----BEGIN (?:[A-Z0-9]+ )*PRIVATE KEY-----/.test(text)
     || /(?:^|[^A-Za-z0-9])(?:sk-[A-Za-z0-9_-]{20,}|pplx-[A-Za-z0-9]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|(?:sk|rk|pk)_(?:live|test)_[A-Za-z0-9]{16,}|(?:AKIA|ASIA)[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|glpat-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{35})(?:$|[^A-Za-z0-9_-])/m.test(text)
+    || /\b(?:secret|token|apikey|api[_-]key|access[_-]?key|auth|passwd|password)[_-][A-Za-z0-9_-]*[A-Fa-f0-9]{12,}\b/i.test(text)
     || /(?:^|[^A-Za-z0-9_-])eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}(?:$|[^A-Za-z0-9_-])/m.test(text)
     || /op:\/\/(?!(?:\{[A-Z_][A-Z0-9_]*\}|<[^>\s]+>)\/)[^\s"'`)]+/.test(text)
     || containsLiteralAuthorizationCredential(text)

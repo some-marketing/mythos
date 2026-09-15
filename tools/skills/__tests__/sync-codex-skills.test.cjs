@@ -1301,6 +1301,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     'dbPASSWORD = "supersecretvalue"\n',
     'database_password_value: correcthorsebatterystaple\n',
     'stripe_api_key_value: supersecretvalue\n',
+    'token_prod_9f8a7b6c5d4e3f2a1b0c\n',
     `Authorization: Bearer ordinarysecretvalue${'b'.repeat(16)}\n`,
     'Authorization: Bearer secret\n',
     'Authorization: Basic dTpw\n',
@@ -1328,15 +1329,20 @@ test('credential assignments and temporary AWS keys are rejected without retaini
   }
 });
 
-test('framework skills reject credential terms embedded within assignment keys', () => {
-  const root = fixture();
-  write(root, 'frameworks/a/b/.claude/skills/helper/SKILL.md', '---\nname: helper\ndescription: helper\n---\ndatabase_password_value: correcthorsebatterystaple\n');
-  const result = sync({ root, handlerIds: new Set(), apply: true });
-  const candidate = result.candidates.find((item) => item.receipt.projection_kind === 'framework_helper');
-  assert.equal(candidate.receipt.semantic_review_state, 'private_path_rejected');
-  assert.equal(candidate.receipt.source_sha256, null);
-  assert.equal(fs.existsSync(path.join(root, '.agents/skills/guild-a-b-helper/SKILL.md')), false);
-  assert.doesNotMatch(JSON.stringify(candidate.receipt), /correcthorsebatterystaple/);
+test('framework skills reject embedded credential fields and bare secret-shaped tokens', () => {
+  for (const body of [
+    'database_password_value: correcthorsebatterystaple\n',
+    'token_prod_9f8a7b6c5d4e3f2a1b0c\n'
+  ]) {
+    const root = fixture();
+    write(root, 'frameworks/a/b/.claude/skills/helper/SKILL.md', `---\nname: helper\ndescription: helper\n---\n${body}`);
+    const result = sync({ root, handlerIds: new Set(), apply: true });
+    const candidate = result.candidates.find((item) => item.receipt.projection_kind === 'framework_helper');
+    assert.equal(candidate.receipt.semantic_review_state, 'private_path_rejected');
+    assert.equal(candidate.receipt.source_sha256, null);
+    assert.equal(fs.existsSync(path.join(root, '.agents/skills/guild-a-b-helper/SKILL.md')), false);
+    assert.doesNotMatch(JSON.stringify(candidate.receipt), /correcthorsebatterystaple|9f8a7b6c5d4e3f2a1b0c/);
+  }
 });
 
 test('credential references are not treated as literal secrets', () => {

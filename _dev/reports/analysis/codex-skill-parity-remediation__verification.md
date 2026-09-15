@@ -141,6 +141,8 @@ The seventy-ninth Cloud Codex review found canonical self-target aliases such as
 
 The eightieth Cloud Codex review found duplicate YAML alias fields silently replacing earlier routing authority and credential terms embedded within longer assignment keys escaping projection scanning. The alias parser now rejects repeated record fields in block and flow mappings, and the credential detector rejects separator-delimited sensitive terms anywhere in assignment keys while retaining whole-value reference exemptions. Focused regressions cover direct and framework projections plus safe references.
 
+The eighty-first Cloud Codex review found bare secret-shaped tokens with long hexadecimal or alphanumeric tails escaping assignment-oriented scanning. The projector now applies the repository publisher's standalone secret-token signature before staging, and direct plus framework regressions verify rejection without retaining the sensitive bytes.
+
 ## Falsifiers and residuals
 
 Acceptance would be disproved by an applied `UNKNOWN` or pending candidate, copied alias behavior, a non-handler command marked `BLOCKING`, a private path in a shipped projection, a canonical/client diff, a failed runtime discovery claim, or an unresolved distinct-family blocker. None was observed.

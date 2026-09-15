@@ -10,7 +10,7 @@ description: >
   Ships ungated as a project skill wrapping /run-plan; adds no new gate.
 version: 1.0.0
 execution_mode: COORDINATOR
-trust_tier: report_write_scoped
+trust_tier: meta_modifying
 tags: [orchestration, execution, alias, dispatch-routing, tool-hardening]
 ---
 

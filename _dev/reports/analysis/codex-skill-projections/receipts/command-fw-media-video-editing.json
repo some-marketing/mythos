@@ -1,0 +1,11 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "instructions/canonical/commands/fw-media-video-editing.yaml",
+  "source_sha256": "450a325da40b7c19e21ccda3ba0156929de3a3a9303ff7b8734912302ba7dfa5",
+  "projection_kind": "canonical_command",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "reviewed_safe",
+  "target_exact_path": ".agents/skills/source-command-fw-media-video-editing/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "already_aligned"
+}

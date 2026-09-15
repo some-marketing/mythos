@@ -1,0 +1,11 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "instructions/canonical/commands/continue-self-help.yaml",
+  "source_sha256": "0c69cee815f4e58f9c85f7185faa14e7efb9fdcaa9a49ad13012d0d075b0dc9e",
+  "projection_kind": "canonical_command",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "reviewed_safe",
+  "target_exact_path": ".agents/skills/source-command-continue-self-help/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "already_aligned"
+}

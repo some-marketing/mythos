@@ -1,0 +1,11 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "instructions/canonical/commands/reconcile-lessons.yaml",
+  "source_sha256": "3ddb030740f543666bafec0320d1e4ee74f9251feb52e6cdb8e7f8e338324a2d",
+  "projection_kind": "canonical_command",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "reviewed_safe",
+  "target_exact_path": ".agents/skills/source-command-reconcile-lessons/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "already_aligned"
+}

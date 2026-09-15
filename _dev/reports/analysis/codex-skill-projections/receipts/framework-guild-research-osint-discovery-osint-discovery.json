@@ -1,0 +1,13 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "frameworks/research/osint-discovery/.claude/skills/osint-discovery/SKILL.md",
+  "source_sha256": "8aca4fa240e388e7ea263e02ad63304c08709491f463e2b86898b59a90b02041",
+  "projection_kind": "framework_helper",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "pending_review",
+  "target_exact_path": ".agents/skills/guild-research-osint-discovery-osint-discovery/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "candidate",
+  "resource_manifest": [],
+  "package_sha256": "bda75e0c59af99770d3c075bb97ab91c931b782eb12bef2aaa6267b957ad1a11"
+}

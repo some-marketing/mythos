@@ -1,0 +1,54 @@
+{
+  "schema": "TaskPlanReview/1.0",
+  "command": "/review-task-plan codex-skill-parity-remediation",
+  "target": "codex-skill-parity-remediation",
+  "generated_at": "2026-09-14T16:57:40.325Z",
+  "status": "structural_precheck_complete",
+  "task_id": "codex-skill-parity-remediation",
+  "title": "Codex skill parity remediation",
+  "description": "Remediate the full Codex skill parity audit by defining explicit projection policy, generating reviewed-safe missing projections, repairing invalid or stale projections only under bounded custody, and verifying real Codex discovery and capability truth.",
+  "scope_type": "system",
+  "client_code": null,
+  "storage_root": "_dev/reports/analysis/task-plans",
+  "review_lane": "codex-bridge",
+  "risk_tier": "high",
+  "paths": {
+    "json": "_dev/reports/analysis/task-plans/codex-skill-parity-remediation__plan.json",
+    "markdown": "_dev/reports/analysis/task-plans/codex-skill-parity-remediation__plan.md"
+  },
+  "narrative_completion_expected": {
+    "schema": "TaskPlanNarrativeCompletion/1.0",
+    "run_id": "standalone-1789405060325",
+    "plan_content_hash": "a59d22321393ab3359b6d71412635fe8333823d93c4fed29b625ab50fb6fa7fe",
+    "plan_json_sha256": "60c27bbb74a40b243ca987ea14a5e1717693abffb614563626d964750f573a68",
+    "plan_markdown_sha256": "9c5dbb7070e26b07f8bb13dc6a8a55d5fd7fe59a939607219813b815f93d7746",
+    "status": "pending"
+  },
+  "blockers": [],
+  "warnings": [],
+  "owned_artifacts_audit": {
+    "existing": [
+      "_dev/reports/analysis/bp-r__codex-skill-parity-remediation__solo-reasoning.md",
+      "_dev/concepts/codex-skill-parity-remediation.md",
+      "_dev/reports/analysis/philosophy-grounding__codex-skill-parity-remediation.md",
+      "_dev/reports/analysis/task-plans/codex-skill-parity-remediation__plan.json",
+      "_dev/reports/analysis/task-plans/codex-skill-parity-remediation__plan.md",
+      "instructions/adapters/codex.yaml",
+      "tools/skills/README.md",
+      "tools/skills/sync-lifecycle-command-skills.cjs",
+      "tools/skills/__tests__/sync-lifecycle-command-skills.test.cjs"
+    ],
+    "missing": [],
+    "planned_new": [
+      "tools/skills/sync-codex-skills.cjs",
+      "tools/skills/__tests__/sync-codex-skills.test.cjs"
+    ],
+    "glob_patterns_not_validated": [
+      "_dev/reports/analysis/convene-runs/20260914T164532Z-codex-skill-parity-remediation/**",
+      "_dev/reports/analysis/codex-skill-projections/**",
+      "_dev/reports/analysis/codex-skill-parity-remediation*",
+      "_dev/reports/analysis/run-debrief__codex-skill-parity-remediation*.md"
+    ]
+  },
+  "amendments": []
+}

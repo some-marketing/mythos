@@ -686,11 +686,13 @@ function familyForTarget(targetId) {
  *   opts.sensitive  — when true, exclude PRC-hosted families (jurisdiction)
  *   opts.riskTier    — 'low'|'medium'|'high' (consequence → frontier family)
  *   opts.preferLocal — prefer onshore/local when available
+ *   opts.preferredFamily — explicitly request an eligible family lane
  */
 function selectDistinctFamily(originFamily, opts = {}) {
   const sensitive = Boolean(opts.sensitive);
   const riskTier = normalizeText(opts.riskTier || opts.risk_tier || 'high').toLowerCase();
   const preferLocal = Boolean(opts.preferLocal);
+  const preferredFamily = normalizeText(opts.preferredFamily || opts.preferFamily).toLowerCase();
 
   const eligible = [];
   for (const [famId, fam] of Object.entries(MODEL_FAMILIES)) {
@@ -728,7 +730,11 @@ function selectDistinctFamily(originFamily, opts = {}) {
     return { ...e, score };
   }).sort((a, b) => b.score - a.score);
 
-  const pick = scored[0];
+  // An explicit family request is a routing preference, not a jurisdiction
+  // override: `eligible` has already removed the origin family and all PRC
+  // families for sensitive payloads. This lets callers intentionally request
+  // the Qwen lane without weakening the sensitive-data exclusion.
+  const pick = (preferredFamily && eligible.find((e) => e.family === preferredFamily)) || scored[0];
   return {
     target: pick.target,
     model: pick.model,

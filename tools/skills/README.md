@@ -13,6 +13,46 @@ python3 tools/skills/sync-skills.py --clean
 
 Requires `pyyaml` (`pip install pyyaml`).
 
+## Codex skill projections
+
+`sync-codex-skills.cjs` is the source-family-aware Codex projector. Its machine
+contract lives in `instructions/adapters/codex.yaml`. The default run stages
+candidates and evidence receipts only; `--apply` adds reviewed-safe projections
+whose exact targets are absent, and `--check` compares those projections with the
+worktree without writing.
+
+```bash
+node tools/skills/sync-codex-skills.cjs
+node tools/skills/sync-codex-skills.cjs --apply
+node tools/skills/sync-codex-skills.cjs --check
+npm run verify:codex-skills
+```
+
+The combined verification command runs both projector checks and their focused
+projector, lifecycle, and alias regressions; the PR parity workflow enforces it.
+
+The four projection strategies remain distinct:
+
+- Canonical commands become thin runtime pointers to
+  `instructions/canonical/commands/*.yaml`; their behavioral bodies are not copied.
+- Direct system skills keep their bodies and recursively copy bundled resources,
+  while frontmatter is normalized to the Codex key allowlist pinned in adapter and
+  tests.
+- Command aliases resolve dynamically and appear as metadata on their terminal
+  target rather than as duplicate behavior files.
+- Framework helpers stage under collision-free
+  `guild-<service>-<framework>-<skill>` names with lineage and guardrail pointers.
+
+Capability tier comes from the exported `HANDLERS` registry plus explicit Codex
+adapter overrides. Adapter membership alone is advisory. Every candidate receives
+a receipt under `_dev/reports/analysis/codex-skill-projections/`; `UNKNOWN`,
+malformed, colliding, harness-specific, private-path-bearing, and review-pending
+candidates cannot apply.
+
+`sync-lifecycle-command-skills.cjs` remains as a compatibility entry point for the
+six lifecycle commands, but delegates projection to the general engine. Both entry
+points are additive-only and preserve every existing target, aligned or not.
+
 ## What it does
 
 1. Walks every `.claude/skills/<name>/SKILL.md` (plus, if your repo has them,

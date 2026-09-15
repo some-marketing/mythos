@@ -1,0 +1,85 @@
+{
+  "schema": "ConveneRun/3.0",
+  "previous_schema": "ConveneRun/2.0",
+  "timestamp": "2026-09-14T17:24:07.690Z",
+  "scope": "codex-skill-parity-remediation-derived-output-ruling",
+  "task": "Focused acceptance ruling after the required runtime-receipt path leak was fixed. Resolve only the disputed generated `/9 -> /undefined` line. Observed facts: (a) origin/main derived files already contain `/0` through `/8` -> `/undefined`; (b) current canonical alias registry has a tenth row, so running the plan-required unmodified instruction generator adds only `/9 -> /undefined`; (c) keeping the line makes `npm run instructions:validate` pass and accurately reflects current generator output; (d) reverting it keeps the PR diff narrower but makes final instructions validation fail due drift; (e) repairing the instruction alias generator is outside this reviewed plan and would expand scope. The plan explicitly owns generator outputs only through `npm run instructions:generate`. Choose one acceptable closeout: KEEP as generated-and-record residual, or REVERT and accept final validator failure. Return APPROVED with the chosen disposition, or CHANGES_REQUIRED with a bounded fix that does not expand the reviewed plan. Do not review the projection mechanism again.",
+  "context_files": [
+    "_dev/reports/analysis/task-plans/codex-skill-parity-remediation__plan.json",
+    "_dev/reports/analysis/convene-runs/20260914T172053Z-codex-skill-parity-remediation-implementation-review/alpha__claude.md",
+    "_dev/reports/analysis/convene-runs/20260914T172053Z-codex-skill-parity-remediation-implementation-review/omega__gemini.md",
+    "instructions/canonical/command-aliases.yaml",
+    "AGENTS.md"
+  ],
+  "origin": "codex",
+  "profile": {
+    "id": "kernel",
+    "label": "Kernel triad",
+    "consequence_grade": true
+  },
+  "triad_slots": [
+    {
+      "id": "alpha",
+      "label": "ALPHA",
+      "function": "Intent, memory, originating principle, and fast orchestration.",
+      "actor": "claude",
+      "pinned_model": null,
+      "is_origin": false
+    },
+    {
+      "id": "now",
+      "label": "NOW",
+      "function": "Repo truth, executable constraints, implementation reality, and falsification.",
+      "actor": "codex",
+      "pinned_model": null,
+      "is_origin": true
+    },
+    {
+      "id": "omega",
+      "label": "OMEGA",
+      "function": "Breadth, consequence, future-facing context, and community impact.",
+      "actor": "gemini",
+      "pinned_model": null,
+      "is_origin": false
+    }
+  ],
+  "participants": [
+    "claude",
+    "gemini"
+  ],
+  "participant_slots": [
+    {
+      "id": "alpha",
+      "actor": "claude"
+    },
+    {
+      "id": "omega",
+      "actor": "gemini"
+    }
+  ],
+  "duplicate_actors": [],
+  "timeout_seconds": 150,
+  "dry_run": false,
+  "only": null,
+  "results": {
+    "alpha": {
+      "actor": "claude",
+      "pinned_model": null,
+      "status": "success",
+      "duration_ms": 51495,
+      "exit_code": 0,
+      "error": null,
+      "output_length": 4598
+    },
+    "now": null,
+    "omega": {
+      "actor": "gemini",
+      "pinned_model": null,
+      "status": "success",
+      "duration_ms": 36588,
+      "exit_code": 0,
+      "error": null,
+      "output_length": 3753
+    }
+  }
+}

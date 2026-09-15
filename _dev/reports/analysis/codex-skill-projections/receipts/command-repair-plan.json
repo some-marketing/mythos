@@ -1,0 +1,11 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "instructions/canonical/commands/repair-plan.yaml",
+  "source_sha256": "bae892f7aa9d66d52c0c1ecc52572a8eecf66984d89ca713ec01be463d355b7b",
+  "projection_kind": "canonical_command",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "reviewed_safe",
+  "target_exact_path": ".agents/skills/source-command-repair-plan/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "already_aligned"
+}

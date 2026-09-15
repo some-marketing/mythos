@@ -1,0 +1,11 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "instructions/canonical/commands/cadence.yaml",
+  "source_sha256": "448eb3d6a4d842725b1dc73498409a4f7dd0eb955a3101d9030a9e032c80816c",
+  "projection_kind": "canonical_command",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "reviewed_safe",
+  "target_exact_path": ".agents/skills/source-command-cadence/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "already_aligned"
+}

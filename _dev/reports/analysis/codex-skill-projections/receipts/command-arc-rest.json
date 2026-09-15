@@ -1,0 +1,11 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "instructions/canonical/commands/arc-rest.yaml",
+  "source_sha256": "cf24cdd596a51039d7841ec91a81fcde6434597253b1c0837d18be6347a772e0",
+  "projection_kind": "canonical_command",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "reviewed_safe",
+  "target_exact_path": ".agents/skills/source-command-arc-rest/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "already_aligned"
+}

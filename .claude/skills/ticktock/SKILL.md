@@ -12,7 +12,7 @@ description: >
   introduces no new blocking hook of its own.
 version: 0.1.0
 execution_mode: COORDINATOR
-trust_tier: report_write_scoped
+trust_tier: meta_modifying
 tags: [cadence, co-evolution, simulation, orchestration, meditation, benchmark, resumable]
 ---
 

@@ -104,6 +104,34 @@ test('frontmatter parsing accepts and normalizes CRLF line endings', () => {
   assert.equal(parsed.body, 'body\n');
 });
 
+test('frontmatter parsing removes YAML comments without corrupting quoted hashes', () => {
+  const normalized = normalizeDirectSkill('---\nname: demo\ndescription: "demo # retained"\nexecution_mode: REVIEW_ONLY # no writes\ntrust_tier: report_only # bounded\n---\nbody\n', 'demo');
+  assert.equal(normalized.ok, true);
+  assert.match(normalized.content, /description: "demo # retained"/);
+  assert.match(normalized.content, /execution_mode: "REVIEW_ONLY"/);
+  assert.match(normalized.content, /trust_tier: "report_only"/);
+  assert.doesNotMatch(normalized.content, /no writes|bounded/);
+});
+
+test('handler registry loading rejects traversal and external symlinks before require', () => {
+  const traversalRoot = fixture();
+  const traversalAdapterPath = path.join(traversalRoot, 'instructions/adapters/codex.yaml');
+  const traversalAdapter = JSON.parse(fs.readFileSync(traversalAdapterPath, 'utf8'));
+  const outsideName = `${path.basename(traversalRoot)}-handler.cjs`;
+  traversalAdapter.skill_projection.handler_registry = `../${outsideName}`;
+  fs.writeFileSync(traversalAdapterPath, `${JSON.stringify(traversalAdapter, null, 2)}\n`);
+  fs.writeFileSync(path.join(traversalRoot, '..', outsideName), 'module.exports = { HANDLERS: {} };\n');
+  assert.throws(() => buildCandidates({ root: traversalRoot }), /Refusing handler registry outside repository/);
+
+  const symlinkRoot = fixture();
+  const externalRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'external-handler-'));
+  const externalHandler = write(externalRoot, 'handler.cjs', 'module.exports = { HANDLERS: {} };\n');
+  const handlerPath = path.join(symlinkRoot, 'tools/commands/mythos-command-runner.cjs');
+  fs.mkdirSync(path.dirname(handlerPath), { recursive: true });
+  fs.symlinkSync(externalHandler, handlerPath);
+  assert.throws(() => buildCandidates({ root: symlinkRoot }), /Refusing symbolic-link handler registry source/);
+});
+
 test('ground-in-philosophy uses the explicit Codex override and rejects Pi fallback text', () => {
   const root = fixture();
   command(root, 'ground-in-philosophy', { objective: 'Pi cannot natively spawn sub-agents', process: ['manual grounding (pi harness — no sub-agent)'] });
@@ -745,6 +773,16 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     assert.equal(fs.existsSync(path.join(root, '.agents/skills/ticktock/SKILL.md')), false);
     assert.doesNotMatch(JSON.stringify(candidate.receipt), /zzzzzzzz|ordinarysecretvalue|yamlsecretvalue|jsonsecretvalue|genericsecretvalue|clientsecretvalue|passwordsecretvalue|accesssecretvalue|privatesecretvalue|authsecretvalue|encryptedprivatebytes|ASIAAAAA/);
   }
+});
+
+test('shell-variable credential references are not treated as literal secrets', () => {
+  const root = fixture();
+  skill(root, 'ticktock', 'export OPENAI_API_KEY="$OPENAI_API_KEY"\nexport AUTH_TOKEN=${AUTH_TOKEN}\n');
+  const result = sync({ root, handlerIds: new Set(), apply: true });
+  const candidate = byId(result, 'direct-ticktock');
+  assert.equal(candidate.receipt.semantic_review_state, 'reviewed_safe');
+  assert.equal(candidate.receipt.application_status, 'applied_additive');
+  assert.equal(fs.existsSync(path.join(root, '.agents/skills/ticktock/SKILL.md')), true);
 });
 
 test('candidate staging refuses repository and target directory deletion', () => {

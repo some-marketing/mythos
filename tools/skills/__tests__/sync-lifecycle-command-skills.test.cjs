@@ -73,6 +73,18 @@ test('compatibility check reuses the committed general projection evidence', () 
   assert.ok(checked.candidates.length >= LIFECYCLE_COMMANDS.length);
 });
 
+test('lifecycle checks retain collision-suffixed evidence through stable receipt targets', () => {
+  const root = fixture();
+  const targetDir = path.join(root, '.agents', 'skills');
+  write(root, 'instructions/canonical/commands/duplicate/boot.yaml', '{"id":"boot","description":"duplicate boot","mode":"REVIEW_ONLY"}\n');
+  sync({ root, targetDir, handlerIds: new Set(), apply: true });
+  const checked = syncLifecycle({ root, targetDir, handlerIds: new Set(), check: true });
+  const bootCandidates = checked.candidates.filter((candidate) => candidate.receipt.target_exact_path === '.agents/skills/source-command-boot/SKILL.md');
+  assert.equal(bootCandidates.length, 2);
+  assert.equal(bootCandidates.every((candidate) => candidate.receipt.collision_state === 'collision'), true);
+  assert.ok(checked.drift > 0);
+});
+
 test('lifecycle application merges custody into the canonical ledger', () => {
   const root = fixture();
   const targetDir = path.join(root, '.agents', 'skills');

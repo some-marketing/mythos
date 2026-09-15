@@ -82,6 +82,22 @@ function loadProjectionConfig(root) {
   return { adapter, adapterPath, config };
 }
 
+function stripYamlInlineComment(value) {
+  const text = String(value);
+  let quote = null;
+  for (let index = 0; index < text.length; index += 1) {
+    const character = text[index];
+    if (quote) {
+      if (quote === '"' && character === '\\') index += 1;
+      else if (character === quote) quote = null;
+      continue;
+    }
+    if (character === '"' || character === "'") quote = character;
+    else if (character === '#' && (index === 0 || /\s/.test(text[index - 1]))) return text.slice(0, index).trimEnd();
+  }
+  return text;
+}
+
 function parseFrontmatter(text, sourcePath = '<memory>') {
   const normalizedText = String(text).replace(/\r\n?/g, '\n');
   if (!normalizedText.startsWith('---\n')) return { ok: false, error: 'missing frontmatter opener', sourcePath };
@@ -98,7 +114,7 @@ function parseFrontmatter(text, sourcePath = '<memory>') {
       return { ok: false, error: `malformed frontmatter at line ${index + 1}`, sourcePath };
     }
     const key = match[1];
-    let value = (match[2] || '').trim();
+    let value = stripYamlInlineComment((match[2] || '').trim()).trim();
     if (value === '>' || value === '|') {
       const chunks = [];
       while (index + 1 < lines.length && /^\s+/.test(lines[index + 1])) chunks.push(lines[++index].trim());
@@ -109,7 +125,7 @@ function parseFrontmatter(text, sourcePath = '<memory>') {
         const itemMatch = lines[index + 1].match(/^\s+-\s+(.+)$/);
         if (!itemMatch) break;
         index += 1;
-        let item = itemMatch[1].trim();
+        let item = stripYamlInlineComment(itemMatch[1].trim()).trim();
         if ((item.startsWith('"') && item.endsWith('"')) || (item.startsWith("'") && item.endsWith("'"))) {
           item = item.slice(1, -1);
         }
@@ -160,7 +176,9 @@ function projectionExecutionMetadata(metadata) {
 }
 
 function loadHandlerIds(root, config) {
-  const handlerPath = path.join(root, config.handler_registry);
+  const handlerPath = path.resolve(root, String(config.handler_registry || ''));
+  if (!isWithin(path.resolve(root), handlerPath)) throw new Error('Refusing handler registry outside repository');
+  validateSourceFile(handlerPath, root, 'handler registry', root);
   delete require.cache[require.resolve(handlerPath)];
   const runtime = require(handlerPath);
   if (!runtime.HANDLERS || typeof runtime.HANDLERS !== 'object') throw new Error(`HANDLERS export missing: ${handlerPath}`);
@@ -484,7 +502,7 @@ function containsCredentialMaterial(bytes) {
   const text = String(bytes);
   return /-----BEGIN (?:[A-Z0-9]+ )*PRIVATE KEY-----/.test(text)
     || /(?:^|[^A-Za-z0-9])(?:sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|(?:AKIA|ASIA)[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|glpat-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{35})(?:$|[^A-Za-z0-9_-])/m.test(text)
-    || /(?:^|[^A-Z0-9_])["']?(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY|API[_-]?KEY|CLIENT[_-]?SECRET|PASSWORD|PASSWD|ACCESS[_-]?TOKEN|REFRESH[_-]?TOKEN|AUTH[_-]?TOKEN|SECRET[_-]?KEY|PRIVATE[_-]?KEY)["']?\s*[:=]\s*["']?(?!(?:<|\$\{|your[-_]|example|redacted|placeholder))[^\s"'`]+/im.test(text);
+    || /(?:^|[^A-Z0-9_])["']?(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY|API[_-]?KEY|CLIENT[_-]?SECRET|PASSWORD|PASSWD|ACCESS[_-]?TOKEN|REFRESH[_-]?TOKEN|AUTH[_-]?TOKEN|SECRET[_-]?KEY|PRIVATE[_-]?KEY)["']?\s*[:=]\s*["']?(?!(?:<|\$(?:\{|[A-Za-z_])|your[-_]|example|redacted|placeholder))[^\s"'`]+/im.test(text);
 }
 
 function isSensitiveResourcePath(relativePath) {

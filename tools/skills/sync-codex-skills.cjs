@@ -694,7 +694,8 @@ function containsLiteralAuthorizationCredential(text) {
 function containsCredentialMaterial(bytes) {
   const text = String(bytes);
   return /-----BEGIN (?:[A-Z0-9]+ )*PRIVATE KEY-----/.test(text)
-    || /(?:^|[^A-Za-z0-9])(?:sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|(?:AKIA|ASIA)[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|glpat-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{35})(?:$|[^A-Za-z0-9_-])/m.test(text)
+    || /(?:^|[^A-Za-z0-9])(?:sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|(?:sk|rk|pk)_(?:live|test)_[A-Za-z0-9]{16,}|(?:AKIA|ASIA)[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|glpat-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{35})(?:$|[^A-Za-z0-9_-])/m.test(text)
+    || /op:\/\/[^\s"'`)]+/.test(text)
     || containsLiteralAuthorizationCredential(text)
     || containsLiteralCookieCredential(text)
     || /[A-Za-z][A-Za-z0-9+.-]*:\/\/[^\s/@:]+:(?!(?:<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=@))[^@\s/]+@/im.test(text)

@@ -4,7 +4,7 @@ Refreshed under the approved parity amendment at `2026-09-14T18:51:57Z` in the d
 
 ## Mechanical results
 
-- Combined projector, lifecycle, and alias regressions: 123 passed, 0 failed.
+- Combined projector, lifecycle, and alias regressions: 124 passed, 0 failed.
 - `node tools/skills/sync-codex-skills.cjs --check`: aligned.
 - `node tools/skills/sync-lifecycle-command-skills.cjs --check`: six lifecycle skills aligned against the committed general projection evidence.
 - Pinned Codex `quick_validate.py`, using the repository PyYAML environment: 131 of 131 applied packages valid; 176 of 176 top-level staged candidate packages valid. Nested child skills are excluded from parent resources, so the staged tree contains exactly 176 independently projected `SKILL.md` files.
@@ -118,6 +118,8 @@ The sixty-seventh Cloud Codex review found literal `credential` and `credentials
 The sixty-eighth Cloud Codex review found backtick-delimited credential assignments and leading-dot YAML floats bypassing validation. Assignment scanning now consumes backtick delimiters while retaining exact template-variable exemptions, and `.5`/`-.5` forms are classified as YAML non-strings. Focused regressions cover literal rejection, safe references, and both direct and framework metadata paths.
 
 The sixty-ninth Cloud Codex review found acronym-cased credential keys and Cookie property references misclassified in opposite directions. The bounded mixed-case assignment matcher now handles acronym casing such as `APIKey` and `PASSWORD`, while the shared credential-reference predicate accepts quoted or unquoted `process.env`, `import.meta.env`, `env`, `config`, and `secrets` properties. Focused regressions cover both rejection and safe-reference paths.
+
+The seventieth Cloud Codex review found bare Stripe restricted keys and private 1Password locators escaping the projector's narrower scanner, plus legacy alias authorities resolving only one hop. The projector now shares the publisher's bounded Stripe and `op://` signatures, while instruction rendering follows legacy `resolves_to` chains to their terminal with cycle protection. Focused regressions cover both security formats and multi-hop authority rendering.
 
 ## Falsifiers and residuals
 

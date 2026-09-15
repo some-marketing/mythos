@@ -1241,6 +1241,8 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     `token: "lowertokenvalue${'l'.repeat(16)}"\n`,
     'token: `supersecretvalue`\n',
     `export PAT=github_pat_${'g'.repeat(24)}\n`,
+    `export KEY=rk_live_${'r'.repeat(20)}\n`,
+    'op://PrivateVault/Stripe/production-token\n',
     'credentials: "supersecretvalue"\n',
     'stripeAPIKey = "supersecretvalue"\n',
     'openAIAPIKey: `supersecretvalue`\n',

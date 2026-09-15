@@ -216,6 +216,15 @@ test('mixed typed and legacy aliases retain resolved legacy authority', () => {
   assert.match(section, /- `\/spell` -> `\/cast` \[cross-alias\]; authority: `\/run-framework`/);
 });
 
+test('legacy alias authorities resolve transitively to their terminal', () => {
+  const section = commandAliasSection([
+    { id: 'cast', resolves_to: 'run-framework', status: 'primary' },
+    { id: 'spell', resolves_to: 'cast', status: 'cross-alias' },
+    { id: 'chant', resolves_to: 'spell', status: 'compatibility' }
+  ]);
+  assert.match(section, /- `\/chant` -> `\/spell` \[compatibility\]; authority: `\/run-framework`/);
+});
+
 test('command aliases render primaries first, then cross-alias, then compatibility', () => {
   const aliases = [
     { id: 'legacy', resolves_to: 'route', status: 'compatibility' },

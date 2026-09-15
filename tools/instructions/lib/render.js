@@ -53,13 +53,18 @@ function orchestrationSummary(policy) {
 // `prefix` is `/` for slash commands and '' for framework/skill/tool names.
 function renderAliasGroup(aliases, prefix) {
   const isTyped = (alias) => Boolean(alias.kind || alias.target || alias.execution_target || alias.authority_source);
-  const primaryAuthorityById = new Map();
+  const legacyById = new Map();
   for (const alias of aliases) {
-    if (!isTyped(alias) && alias.status === 'primary') primaryAuthorityById.set(alias.id, alias.resolves_to);
+    if (!isTyped(alias)) legacyById.set(alias.id, alias);
   }
   const authorityOf = (alias) => {
-    const target = alias.resolves_to;
-    return primaryAuthorityById.has(target) ? primaryAuthorityById.get(target) : target;
+    let target = alias.resolves_to;
+    const seen = new Set([alias.id]);
+    while (legacyById.has(target) && !seen.has(target)) {
+      seen.add(target);
+      target = legacyById.get(target).resolves_to;
+    }
+    return target;
   };
   const renderLegacy = (alias) => {
     const authority = authorityOf(alias);

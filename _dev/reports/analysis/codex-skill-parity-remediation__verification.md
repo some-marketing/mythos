@@ -16,7 +16,7 @@ Refreshed under the approved parity amendment at `2026-09-14T18:51:57Z` in the d
 
 ## Protected parity amendment
 
-- Wiring graph regenerated: 4,092 nodes, 2,907 edges, 0 unresolved.
+- Wiring graph regenerated: 4,092 nodes, 2,908 edges, 0 unresolved.
 - Target-only baseline repair registered 3,361 expected files while preserving the complete source and membrane policy objects byte-for-byte.
 - Portable `npm run verify:parity`: `ok: true`, 0 findings.
 - Authoritative private-denylist verification against the existing bound hash: `ok: true`, 0 findings. The external file and its location are not serialized in tracked artifacts.
@@ -122,6 +122,8 @@ The sixty-ninth Cloud Codex review found acronym-cased credential keys and Cooki
 The seventieth Cloud Codex review found bare Stripe restricted keys and private 1Password locators escaping the projector's narrower scanner, plus legacy alias authorities resolving only one hop. The projector now shares the publisher's bounded Stripe and `op://` signatures, while instruction rendering follows legacy `resolves_to` chains to their terminal with cycle protection. Focused regressions cover both security formats and multi-hop authority rendering.
 
 The seventy-first Cloud Codex review found bare Perplexity keys and JWTs escaping projection, plus runtime command resolution remaining single-hop after generated alias authority became transitive. The projector now shares the publisher's bounded Perplexity and JWT signatures, and the runtime resolver follows alias chains to their terminal while rejecting cycles. Focused regressions cover both credential formats, multi-hop execution, and cycle failure.
+
+The seventy-second Cloud Codex review found `bearer` and `accessKey` assignments escaping projection, plus the runtime alias loader rejecting supported YAML sequence syntax. Both assignment names now enter the redacted credential-rejection path, and runtime alias loading uses the same shared parser as instruction generation and projection. Focused regressions cover both credential fields, ordinary YAML runtime resolution, and YAML-defined cycle failure.
 
 ## Falsifiers and residuals
 

@@ -1246,6 +1246,8 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     `Authorization: Bearer eyJ${'a'.repeat(12)}.${'b'.repeat(12)}.${'c'.repeat(12)}\n`,
     'op://PrivateVault/Stripe/production-token\n',
     'credentials: "supersecretvalue"\n',
+    'bearer = "supersecretvalue"\n',
+    'accessKey: "supersecretvalue"\n',
     'stripeAPIKey = "supersecretvalue"\n',
     'openAIAPIKey: `supersecretvalue`\n',
     'dbPASSWORD = "supersecretvalue"\n',

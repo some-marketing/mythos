@@ -13000,7 +13000,7 @@
       "id": "file:tools/commands/lib/command-aliases.cjs",
       "type": "file",
       "path": "tools/commands/lib/command-aliases.cjs",
-      "sha256": "c854bda10d851109b235d3d42fa4ceb4b40d43bd1074cccc5471d13cdb195abc",
+      "sha256": "5ff93770ee91371cee3a4753dba23270e5f80faa026c3bcef269cb8f365190a2",
       "mode": 420
     },
     {
@@ -14554,7 +14554,7 @@
       "id": "file:tools/instructions/__tests__/aliases.test.js",
       "type": "file",
       "path": "tools/instructions/__tests__/aliases.test.js",
-      "sha256": "fd2e95116950d6f6997066ed789f1b86aec3c7ab6517464167a64c503a103e9a",
+      "sha256": "95837e84b99287313f477cbed575a27187a7a8edc88fe0350841e07464fd9422",
       "mode": 420
     },
     {
@@ -19769,7 +19769,7 @@
       "id": "file:tools/skills/__tests__/sync-codex-skills.test.cjs",
       "type": "file",
       "path": "tools/skills/__tests__/sync-codex-skills.test.cjs",
-      "sha256": "f48e980dc13360d9c16e6bb2112baee12e2e09dbdd2baca6834dffaeca0ebdf3",
+      "sha256": "cc0c06c14c3ffb9a97e9377479422b432c27130c8ae891ac145b550a1918c12c",
       "mode": 420
     },
     {
@@ -19790,7 +19790,7 @@
       "id": "file:tools/skills/sync-codex-skills.cjs",
       "type": "file",
       "path": "tools/skills/sync-codex-skills.cjs",
-      "sha256": "cacec23cb4d112b396f2c72bd0236d3fb5db0fb525c63590dee8d2ff4ca6a746",
+      "sha256": "0bf3bfe6eb64dd00e4ac9b493470bd56fc5b15957b879847080de81088e6b0da",
       "mode": 420
     },
     {
@@ -46145,6 +46145,15 @@
       "specifier": "../../verify/lib/signal.cjs"
     },
     {
+      "id": "bd2a40cc2c2747a778ed048f0e6fe0fdd48f0bd3052642627d72a7eb38df4c9d",
+      "type": "static-import",
+      "from": "file:tools/commands/lib/command-aliases.cjs",
+      "to": "file:tools/instructions/lib/engine.js",
+      "target": "tools/instructions/lib/engine.js",
+      "required": true,
+      "specifier": "../../instructions/lib/engine.js"
+    },
+    {
       "id": "bd31895445adb489bae2689c0e409d76dda719d375656048b9388f475505a83e",
       "type": "static-import",
       "from": "file:tools/kernel/loop-protocol/__tests__/ledger.test.cjs",
@@ -53143,7 +53152,7 @@
   ],
   "counts": {
     "nodes": 4092,
-    "edges": 2907,
+    "edges": 2908,
     "unresolved": 0
   }
 }

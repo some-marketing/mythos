@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { parseAliasRegistry } = require('../../instructions/lib/engine.js');
 
 function aliasRegistryPath(projectRoot) {
   return path.join(projectRoot, 'instructions', 'canonical', 'command-aliases.yaml');
@@ -19,7 +20,7 @@ function loadAliasRegistry(projectRoot) {
 
   let registry;
   try {
-    registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
+    registry = parseAliasRegistry(fs.readFileSync(registryPath, 'utf8'));
   } catch (err) {
     throw new Error(`Failed to parse command alias registry ${registryPath}: ${err.message}`);
   }

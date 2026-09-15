@@ -242,10 +242,10 @@ test('runtime command resolution follows legacy aliases transitively and rejects
   assert.equal(resolved.authoritySource, 'route');
   assert.deepEqual(resolved.expansionEdges, ['chant', 'spell', 'cast', 'route']);
 
-  fs.writeFileSync(registryPath, JSON.stringify({ aliases: [
-    { id: 'one', resolves_to: 'two' },
-    { id: 'two', resolves_to: 'one' }
-  ] }));
+  fs.writeFileSync(registryPath, 'aliases:\n  - id: shortcut\n    resolves_to: route\n');
+  assert.equal(resolveCommandAlias(root, 'shortcut').executionCommand, 'route');
+
+  fs.writeFileSync(registryPath, 'aliases:\n  - id: one\n    resolves_to: two\n  - id: two\n    resolves_to: one\n');
   assert.throws(() => resolveCommandAlias(root, 'one'), /Command alias cycle detected: one -> two -> one/);
   fs.rmSync(root, { recursive: true, force: true });
 });

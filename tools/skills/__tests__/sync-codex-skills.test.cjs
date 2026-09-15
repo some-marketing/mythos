@@ -148,7 +148,7 @@ test('direct skills reject non-scalar and unknown execution modes', () => {
 });
 
 test('direct and framework descriptions reject YAML non-string tokens', () => {
-  for (const description of ['[one, two]', '{text: hello}', 'null']) {
+  for (const description of ['[one, two]', '{text: hello}', 'null', '0x10', '0o10']) {
     const root = fixture();
     write(root, '.claude/skills/ticktock/SKILL.md', `---\nname: ticktock\ndescription: ${description}\n---\nbody\n`);
     write(root, 'frameworks/a/b/.claude/skills/demo/SKILL.md', `---\nname: demo\ndescription: ${description}\n---\nbody\n`);
@@ -1170,6 +1170,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     'Authorization: Bearer secret\n',
     'Authorization: Basic dTpw\n',
     'Authorization: Token supersecret\n',
+    'Authorization: Token exampleRealSecret123\n',
     'Cookie: sessionid=eyJhbGciOiJIUzI1NiJ9\n',
     'https://alice:s3cret@example.com\n',
     `-----BEGIN ENCRYPTED PRIVATE KEY-----\nencryptedprivatebytes${'e'.repeat(16)}\n-----END ENCRYPTED PRIVATE KEY-----\n`,

@@ -109,6 +109,14 @@ test('parseAliasRegistry preserves indentationless YAML sequences', () => {
   }]);
 });
 
+test('parseAliasRegistry preserves flow-style YAML sequence records', () => {
+  const raw = [
+    'aliases:',
+    '  - { id: shortcut, target: route }'
+  ].join('\n');
+  assert.deepEqual(parseAliasRegistry(raw).aliases, [{ id: 'shortcut', target: 'route' }]);
+});
+
 test('loads the shipped typed command registry without losing target or authority', () => {
   const aliases = loadCommandAliases(SURFACE_ROOT);
   assert.equal(aliases.length, 10);

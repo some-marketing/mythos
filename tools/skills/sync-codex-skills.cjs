@@ -747,10 +747,10 @@ function containsCredentialMaterial(bytes) {
   return /-----BEGIN (?:[A-Z0-9]+ )*PRIVATE KEY-----/.test(text)
     || /(?:^|[^A-Za-z0-9])(?:sk-[A-Za-z0-9_-]{20,}|pplx-[A-Za-z0-9]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|(?:sk|rk|pk)_(?:live|test)_[A-Za-z0-9]{16,}|(?:AKIA|ASIA)[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|glpat-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{35})(?:$|[^A-Za-z0-9_-])/m.test(text)
     || /(?:^|[^A-Za-z0-9_-])eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}(?:$|[^A-Za-z0-9_-])/m.test(text)
-    || /op:\/\/[^\s"'`)]+/.test(text)
+    || /op:\/\/(?!(?:\{[A-Z_][A-Z0-9_]*\}|<[^>\s]+>)\/)[^\s"'`)]+/.test(text)
     || containsLiteralAuthorizationCredential(text)
     || containsLiteralCookieCredential(text)
-    || /[A-Za-z][A-Za-z0-9+.-]*:\/\/[^\s/@:]+:(?!(?:<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=@))[^@\s/]+@/im.test(text)
+    || /[A-Za-z][A-Za-z0-9+.-]*:\/\/[^\s/@:]+:(?!(?:(?:\$\{)?(?:process\.env|import\.meta\.env|env|config|secrets)\.[A-Za-z_$][A-Za-z0-9_$]*(?:\})?|<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=@))[^@\s/]+@/im.test(text)
     || /(?:^|[^A-Za-z0-9_])["']?(?:(?:[A-Za-z][A-Za-z0-9]*)?(?:ApiKey|ClientSecret|Password|Passwd|AccessKey|AccessToken|RefreshToken|AuthToken|SessionToken|SecretKey|PrivateKey|Secret|Credentials?)|apiKey|clientSecret|password|passwd|accessKey|accessToken|refreshToken|authToken|sessionToken|auth|bearer|token|secretKey|privateKey|secret|credentials?)["']?\s*[:=]\s*["'`]?(?!(?:(?:process\.env|import\.meta\.env|env|config|secrets)\.[A-Za-z_$][A-Za-z0-9_$]*|<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)[ \t]*(?=$|[,;}"'`]))[^\s"'`]+/im.test(text)
     || /(?:^|[^A-Z0-9_])["']?(?:[A-Z][A-Z0-9_-]*[_-])?(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY|API[_-]?KEY|CLIENT[_-]?SECRET|PASSWORD|PASSWD|ACCESS[_-]?KEY|ACCESS[_-]?TOKEN|REFRESH[_-]?TOKEN|AUTH[_-]?TOKEN|AUTH|BEARER|TOKEN|SECRET|CREDENTIALS?|SECRET[_-]?KEY|PRIVATE[_-]?KEY)["']?\s*[:=]\s*["'`]?(?!(?:(?:process\.env|import\.meta\.env|env|config|secrets)\.[A-Za-z_$][A-Za-z0-9_$]*|<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)[ \t]*(?=$|[,;}"'`]))[^\s"'`]+/im.test(text);
 }
@@ -871,7 +871,8 @@ function buildCandidates(options = {}) {
     const invalidDescription = !rendered.ok || rendered.metadata.description.length > 1024;
     const forbidden = (override && override.forbidden_source_fragments) || [];
     const leakedHarnessText = forbidden.some((fragment) => content.includes(fragment));
-    const privateLeak = containsPrivateAbsolutePath(content) || containsCredentialMaterial(content);
+    const privateLeak = containsPrivateAbsolutePath(sourceBytes) || containsCredentialMaterial(sourceBytes)
+      || containsPrivateAbsolutePath(content) || containsCredentialMaterial(content);
     const receipt = receiptBase(config, sourceRel, sourceBytes, 'canonical_command', tier, reviewState, targetRel);
     if (!CAPABILITY_TIERS.has(tier) || leakedHarnessText || privateLeak || invalidDescription) {
       receipt.capability_tier = 'UNKNOWN';

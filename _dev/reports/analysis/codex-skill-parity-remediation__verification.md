@@ -133,6 +133,8 @@ The seventy-fifth Cloud Codex review found bare `auth` assignments escaping cred
 
 The seventy-sixth Cloud Codex review found property-reference exemptions accepting trailing literal fallback secrets and block-style metadata mappings being rejected despite matching generated projection form. Credential references are now exempt only when they consume the complete assignment value, and scalar block metadata mappings preserve supported execution fields while rejecting non-string or duplicate entries. Focused regressions cover both paths.
 
+The seventy-seventh Cloud Codex review found canonical command scanning limited to rendered wrappers and nonliteral URL passwords rejected despite matching accepted property-reference forms. Canonical candidates now scan their complete source bytes before installation, while URL userinfo exempts only exact property references. Focused regressions cover hidden canonical fields and JavaScript environment references.
+
 ## Falsifiers and residuals
 
 Acceptance would be disproved by an applied `UNKNOWN` or pending candidate, copied alias behavior, a non-handler command marked `BLOCKING`, a private path in a shipped projection, a canonical/client diff, a failed runtime discovery claim, or an unresolved distinct-family blocker. None was observed.

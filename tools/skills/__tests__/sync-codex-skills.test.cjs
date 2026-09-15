@@ -517,15 +517,20 @@ test('canonical descriptions must be non-empty scalar strings', () => {
 });
 
 test('canonical rendered content is rejected without retaining private or credential bytes', () => {
-  const root = fixture();
   const secret = `sk-${'q'.repeat(24)}`;
-  command(root, 'sample', { description: `credential ${secret}` });
-  const candidate = byId(sync({ root, handlerIds: new Set(), apply: true }), 'command-sample');
-  assert.equal(candidate.content, null);
-  assert.equal(candidate.receipt.semantic_review_state, 'private_path_rejected');
-  assert.equal(candidate.receipt.source_sha256, null);
-  assert.equal(fs.existsSync(path.join(root, '.agents/skills/source-command-sample/SKILL.md')), false);
-  assert.doesNotMatch(JSON.stringify(candidate.receipt), /sk-qqqq/);
+  for (const extra of [
+    { description: `credential ${secret}` },
+    { process: `use credential ${secret}` }
+  ]) {
+    const root = fixture();
+    command(root, 'sample', extra);
+    const candidate = byId(sync({ root, handlerIds: new Set(), apply: true }), 'command-sample');
+    assert.equal(candidate.content, null);
+    assert.equal(candidate.receipt.semantic_review_state, 'private_path_rejected');
+    assert.equal(candidate.receipt.source_sha256, null);
+    assert.equal(fs.existsSync(path.join(root, '.agents/skills/source-command-sample/SKILL.md')), false);
+    assert.doesNotMatch(JSON.stringify(candidate.receipt), /sk-qqqq/);
+  }
 });
 
 test('credential-bearing canonical paths are rejected before identifiers or receipts are staged', () => {
@@ -1312,7 +1317,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
 
 test('credential references are not treated as literal secrets', () => {
   const root = fixture();
-  skill(root, 'ticktock', 'export OPENAI_API_KEY="$OPENAI_API_KEY"\nexport AUTH_TOKEN=${AUTH_TOKEN}\ntoken: `${AUTH_TOKEN}`\nAuthorization: Bearer $ACCESS_TOKEN\nAuthorization: Basic ${BASIC_AUTH}\nAuthorization: `Bearer ${AUTH_TOKEN}`\nAuthorization: process.env.AUTH_TOKEN,\ncurl -H "Authorization: Bearer $ACCESS_TOKEN" https://example.test\nCookie: csrftoken=placeholder; sessionid="$SESSION_ID"\nCookie: `sessionid=${process.env.SESSION_ID}`\nCookie: sessionid=config.sessionId\ncurl -H "Cookie: sessionid=$SESSION_ID" https://example.test\ncurl -H \'Cookie: sessionid=$SESSION_ID\' https://example.test\npassword: process.env.DB_PASSWORD,\nsessionToken = import.meta.env.SESSION_TOKEN;\ndbPassword: config.dbPassword\ncredentials: secrets.credentials\n');
+  skill(root, 'ticktock', 'export OPENAI_API_KEY="$OPENAI_API_KEY"\nexport AUTH_TOKEN=${AUTH_TOKEN}\ntoken: `${AUTH_TOKEN}`\nAuthorization: Bearer $ACCESS_TOKEN\nAuthorization: Basic ${BASIC_AUTH}\nAuthorization: `Bearer ${AUTH_TOKEN}`\nAuthorization: process.env.AUTH_TOKEN,\ncurl -H "Authorization: Bearer $ACCESS_TOKEN" https://example.test\nCookie: csrftoken=placeholder; sessionid="$SESSION_ID"\nCookie: `sessionid=${process.env.SESSION_ID}`\nCookie: sessionid=config.sessionId\ncurl -H "Cookie: sessionid=$SESSION_ID" https://example.test\ncurl -H \'Cookie: sessionid=$SESSION_ID\' https://example.test\npassword: process.env.DB_PASSWORD,\nsessionToken = import.meta.env.SESSION_TOKEN;\ndbPassword: config.dbPassword\ncredentials: secrets.credentials\npostgres://alice:${process.env.DB_PASSWORD}@db.example.test/app\nop://{VAULT}/Service/credential\n');
   const result = sync({ root, handlerIds: new Set(), apply: true });
   const candidate = byId(result, 'direct-ticktock');
   assert.equal(candidate.receipt.semantic_review_state, 'reviewed_safe');

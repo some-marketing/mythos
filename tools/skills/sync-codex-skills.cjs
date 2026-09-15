@@ -11,6 +11,7 @@ const CAPABILITY_TIERS = new Set(['BLOCKING', 'ADVISORY', 'ABSENT', 'UNKNOWN']);
 const SAFE_REVIEW_STATES = new Set(['reviewed_safe']);
 const EXECUTION_MODES = new Set(['FINDINGS_ONLY', 'RUN_ONLY', 'REVIEW_ONLY', 'PATCH_ALLOWED', 'COORDINATOR', 'REPO_HYGIENE']);
 const SAFE_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const CODEX_FRONTMATTER_KEYS = new Set(['name', 'description', 'license', 'metadata', 'allowed-tools']);
 
 function sha256(bytes) {
   return crypto.createHash('sha256').update(bytes).digest('hex');
@@ -160,10 +161,11 @@ function parseFrontmatter(text, sourcePath = '<memory>') {
     }
     const key = match[1];
     let value = stripYamlInlineComment((match[2] || '').trim()).trim();
-    if (value === '>' || value === '|') {
+    const blockScalar = value.match(/^([>|])(?:[+-]?[1-9]?|[1-9]?[+-]?)$/);
+    if (blockScalar) {
       const chunks = [];
       while (index + 1 < lines.length && /^\s+/.test(lines[index + 1])) chunks.push(lines[++index].trim());
-      value = chunks.join(value === '>' ? ' ' : '\n');
+      value = chunks.join(blockScalar[1] === '>' ? ' ' : '\n');
     } else if (!value && index + 1 < lines.length && /^\s+-\s+/.test(lines[index + 1])) {
       const items = [];
       while (index + 1 < lines.length) {
@@ -193,7 +195,7 @@ function parseFrontmatter(text, sourcePath = '<memory>') {
   return { ok: true, metadata, body, sourcePath };
 }
 
-function normalizeDirectSkill(text, targetName, aliases = []) {
+function normalizeDirectSkill(text, targetName, aliases = [], allowedFrontmatterKeys = CODEX_FRONTMATTER_KEYS) {
   const parsed = parseFrontmatter(text);
   if (!parsed.ok) return parsed;
   if (parsed.metadata.execution_mode != null
@@ -204,20 +206,21 @@ function normalizeDirectSkill(text, targetName, aliases = []) {
   const description = `${parsed.metadata.description}${aliasSuffix}`
     .replace(/[<>]/g, (value) => value === '<' ? '(' : ')');
   if (description.length > 1024) return { ok: false, error: 'frontmatter description exceeds 1024 characters' };
-  const executionMetadata = projectionExecutionMetadata(parsed.metadata);
-  const supportedFields = projectionSupportedFrontmatter(parsed.metadata);
+  const executionMetadata = projectionExecutionMetadata(parsed.metadata, allowedFrontmatterKeys);
+  const supportedFields = projectionSupportedFrontmatter(parsed.metadata, allowedFrontmatterKeys);
   return {
     ok: true,
     content: `---\nname: ${targetName}\ndescription: ${JSON.stringify(description)}\n${supportedFields}${executionMetadata}---\n${parsed.body}`
   };
 }
 
-function projectionSupportedFrontmatter(metadata) {
-  const fields = ['license', 'allowed-tools'].filter((key) => metadata[key]);
+function projectionSupportedFrontmatter(metadata, allowedFrontmatterKeys = CODEX_FRONTMATTER_KEYS) {
+  const fields = ['license', 'allowed-tools'].filter((key) => allowedFrontmatterKeys.has(key) && metadata[key]);
   return fields.map((key) => `${key}: ${JSON.stringify(metadata[key])}\n`).join('');
 }
 
-function projectionExecutionMetadata(metadata) {
+function projectionExecutionMetadata(metadata, allowedFrontmatterKeys = CODEX_FRONTMATTER_KEYS) {
+  if (!allowedFrontmatterKeys.has('metadata')) return '';
   const fields = ['execution_mode', 'trust_tier'].filter((key) => metadata[key]);
   if (!fields.length) return '';
   return `metadata:\n${fields.map((key) => `  ${key}: ${JSON.stringify(metadata[key])}`).join('\n')}\n`;
@@ -527,7 +530,7 @@ function frameworkIdentity(root, sourcePath, targetPrefix = 'guild-') {
   return { service, framework, skillPath, slug, rel };
 }
 
-function renderFrameworkSkill(text, identity) {
+function renderFrameworkSkill(text, identity, allowedFrontmatterKeys = CODEX_FRONTMATTER_KEYS) {
   const parsed = parseFrontmatter(text, identity.rel);
   if (!parsed.ok) return parsed;
   if (parsed.metadata.execution_mode != null
@@ -535,8 +538,8 @@ function renderFrameworkSkill(text, identity) {
     return { ok: false, error: 'frontmatter execution_mode must be one declared execution mode', sourcePath: identity.rel };
   }
   const lineage = `Framework lineage: \`frameworks/${identity.service}/${identity.framework}\`. Read its \`manifest.json\` and \`guardrails.md\` before execution. Source helper: \`${identity.rel}\`.`;
-  const executionMetadata = projectionExecutionMetadata(parsed.metadata);
-  const supportedFields = projectionSupportedFrontmatter(parsed.metadata);
+  const executionMetadata = projectionExecutionMetadata(parsed.metadata, allowedFrontmatterKeys);
+  const supportedFields = projectionSupportedFrontmatter(parsed.metadata, allowedFrontmatterKeys);
   const description = parsed.metadata.description.replace(/[<>]/g, (value) => value === '<' ? '(' : ')');
   if (description.length > 1024) return { ok: false, error: 'frontmatter description exceeds 1024 characters', sourcePath: identity.rel };
   return {
@@ -590,6 +593,7 @@ function containsCredentialMaterial(bytes) {
     || /(?:^|[^A-Za-z0-9])(?:sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|(?:AKIA|ASIA)[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|glpat-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{35})(?:$|[^A-Za-z0-9_-])/m.test(text)
     || /(?:^|[^A-Z0-9_])["']?AUTHORIZATION["']?\s*[:=]\s*["']?BEARER\s+(?!(?:<|\$(?:\{|[A-Za-z_])|your[-_]|example|redacted|placeholder))[A-Za-z0-9._~+/=-]+/im.test(text)
     || /(?:^|[^A-Z0-9_])["']?AUTHORIZATION["']?\s*[:=]\s*["']?BASIC\s+(?!(?:<|\$(?:\{|[A-Za-z_])|your[-_]|example|redacted|placeholder))[A-Za-z0-9+/=]{4,}/im.test(text)
+    || /[A-Za-z][A-Za-z0-9+.-]*:\/\/[^\s/@:]+:(?!(?:<|\$(?:\{|[A-Za-z_])|your[-_]|example|redacted|placeholder))[^@\s/]+@/im.test(text)
     || /(?:^|[^A-Z0-9_])["']?(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY|API[_-]?KEY|CLIENT[_-]?SECRET|PASSWORD|PASSWD|ACCESS[_-]?TOKEN|REFRESH[_-]?TOKEN|AUTH[_-]?TOKEN|SECRET|SECRET[_-]?KEY|PRIVATE[_-]?KEY)["']?\s*[:=]\s*["']?(?!(?:<|\$(?:\{|[A-Za-z_])|your[-_]|example|redacted|placeholder))[^\s"'`]+/im.test(text);
 }
 
@@ -635,6 +639,13 @@ function redactRejectedPackage(receipt) {
 function buildCandidates(options = {}) {
   const root = options.root || PROJECT_ROOT;
   const { adapter, config } = loadProjectionConfig(root);
+  if (!Array.isArray(config.allowed_frontmatter_keys)
+    || config.allowed_frontmatter_keys.some((key) => typeof key !== 'string' || !CODEX_FRONTMATTER_KEYS.has(key))
+    || !config.allowed_frontmatter_keys.includes('name')
+    || !config.allowed_frontmatter_keys.includes('description')) {
+    throw new Error('Configured frontmatter allowlist must contain only supported keys and retain name and description');
+  }
+  const allowedFrontmatterKeys = new Set(config.allowed_frontmatter_keys);
   const defaultCanonicalTier = config.families.canonical_commands.default_capability_tier;
   if (typeof defaultCanonicalTier !== 'string' || !CAPABILITY_TIERS.has(defaultCanonicalTier)) {
     throw new Error('Canonical command default capability tier must be one declared capability tier');
@@ -729,7 +740,7 @@ function buildCandidates(options = {}) {
     const sourceBytes = fs.readFileSync(sourcePath);
     const normalized = name.length > 64
       ? { ok: false, error: 'direct skill projection name exceeds 64 characters' }
-      : normalizeDirectSkill(String(sourceBytes), name, terminalAliases.get(name) || []);
+      : normalizeDirectSkill(String(sourceBytes), name, terminalAliases.get(name) || [], allowedFrontmatterKeys);
     const resources = bundledResources(sourcePath);
     const privateLeak = containsPrivateAbsolutePath(sourceBytes) || containsCredentialMaterial(sourceBytes)
       || resources.some((item) => containsPrivateAbsolutePath(item.bytes) || containsCredentialMaterial(item.bytes));
@@ -792,7 +803,7 @@ function buildCandidates(options = {}) {
     }
     validateSourceFile(sourcePath, frameworkRoot, 'framework skill', root);
     const sourceBytes = fs.readFileSync(sourcePath);
-    const rendered = renderFrameworkSkill(String(sourceBytes), identity);
+    const rendered = renderFrameworkSkill(String(sourceBytes), identity, allowedFrontmatterKeys);
     const targetRel = posix(path.join(config.target_root, identity.slug, 'SKILL.md'));
     const resources = bundledResources(sourcePath);
     const privateLeak = containsPrivateAbsolutePath(sourceBytes) || containsCredentialMaterial(sourceBytes)

@@ -120,6 +120,15 @@ test('frontmatter parsing decodes quoted YAML scalar escapes', () => {
   assert.equal(singleQuoted.metadata.description, "It's safe");
 });
 
+test('frontmatter parsing accepts YAML block scalar chomping and indentation indicators', () => {
+  for (const marker of ['>-', '|+', '>2-', '|-2']) {
+    const parsed = parseFrontmatter(`---\nname: demo\ndescription: ${marker}\n  first line\n  second line\n---\nbody\n`);
+    assert.equal(parsed.ok, true, marker);
+    assert.match(parsed.metadata.description, /first line/);
+    assert.match(parsed.metadata.description, /second line/);
+  }
+});
+
 test('direct descriptions replace angle brackets rejected by Codex validation', () => {
   const normalized = normalizeDirectSkill('---\nname: demo\ndescription: Run <task> safely\n---\nbody\n', 'demo');
   assert.equal(normalized.ok, true);
@@ -639,6 +648,21 @@ test('framework projections honor the configured target prefix', () => {
   assert.match(framework.content, /^---\nname: fw-a-b-demo\n/);
 });
 
+test('direct and framework projections honor the configured frontmatter allowlist', () => {
+  const root = fixture();
+  const adapterPath = path.join(root, 'instructions/adapters/codex.yaml');
+  const adapter = JSON.parse(fs.readFileSync(adapterPath, 'utf8'));
+  adapter.skill_projection.allowed_frontmatter_keys = ['name', 'description'];
+  fs.writeFileSync(adapterPath, `${JSON.stringify(adapter, null, 2)}\n`);
+  skill(root, 'ticktock', 'body\n');
+  write(root, '.claude/skills/ticktock/SKILL.md', '---\nname: ticktock\ndescription: direct\nlicense: MIT\nallowed-tools: Read\nexecution_mode: REVIEW_ONLY\n---\nbody\n');
+  write(root, 'frameworks/a/b/.claude/skills/demo/SKILL.md', '---\nname: demo\ndescription: framework\nlicense: MIT\nallowed-tools: Read\nexecution_mode: REVIEW_ONLY\n---\nbody\n');
+  const result = buildCandidates({ root, handlerIds: new Set() });
+  for (const candidate of [byId(result, 'direct-ticktock'), byId(result, 'framework-guild-a-b-demo')]) {
+    assert.doesNotMatch(candidate.content, /license:|allowed-tools:|metadata:/);
+  }
+});
+
 test('framework projections reject unsupported configured source patterns', () => {
   const root = fixture();
   const adapterPath = path.join(root, 'instructions/adapters/codex.yaml');
@@ -1100,6 +1124,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     `Authorization: Bearer ordinarysecretvalue${'b'.repeat(16)}\n`,
     'Authorization: Bearer secret\n',
     'Authorization: Basic dTpw\n',
+    'https://alice:s3cret@example.com\n',
     `-----BEGIN ENCRYPTED PRIVATE KEY-----\nencryptedprivatebytes${'e'.repeat(16)}\n-----END ENCRYPTED PRIVATE KEY-----\n`,
     `temporary ASIA${'A'.repeat(16)}\n`
   ]) {

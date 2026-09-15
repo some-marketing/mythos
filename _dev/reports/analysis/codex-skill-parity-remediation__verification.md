@@ -4,7 +4,7 @@ Refreshed under the approved parity amendment at `2026-09-14T18:51:57Z` in the d
 
 ## Mechanical results
 
-- Combined projector, lifecycle, and alias regressions: 111 passed, 0 failed.
+- Combined projector, lifecycle, and alias regressions: 113 passed, 0 failed.
 - `node tools/skills/sync-codex-skills.cjs --check`: aligned.
 - `node tools/skills/sync-lifecycle-command-skills.cjs --check`: six lifecycle skills aligned against the committed general projection evidence.
 - Pinned Codex `quick_validate.py`, using the repository PyYAML environment: 131 of 131 applied packages valid; 176 of 176 top-level staged candidate packages valid. Nested child skills are excluded from parent resources, so the staged tree contains exactly 176 independently projected `SKILL.md` files.
@@ -80,6 +80,8 @@ The forty-eighth Cloud Codex review found indentationless YAML alias sequences b
 The forty-ninth Cloud Codex review found that valid short Bearer credentials remained below the detector's former sixteen-character floor. Authorization-header scanning now rejects any non-placeholder Bearer token accepted by the bounded token alphabet, including `Authorization: Bearer secret`, while preserving shell-variable placeholders. The focused regression suite covers the short-token case.
 
 The fiftieth Cloud Codex review found that typed aliases could reference an existing but inapplicable canonical authority and that non-handler canonical commands ignored the adapter's configured default capability tier. Typed wrappers now become unavailable unless their evaluated authority candidate is applicable, and canonical defaults are read from a validated declared capability tier while handler evidence still promotes deterministic commands to `BLOCKING`. Focused regressions cover malformed authorities plus `UNKNOWN` and invalid configured defaults.
+
+The fifty-first Cloud Codex review found URI-userinfo credentials escaping detection, direct and framework projections ignoring tightened configured frontmatter keys, and valid YAML block scalars with chomping or indentation indicators being rejected. URI authority credentials now enter the redacted rejection path, the validated adapter allowlist governs optional retained fields and metadata, and block scalar parsing accepts both indicator orders. Focused regressions cover all three findings.
 
 ## Falsifiers and residuals
 

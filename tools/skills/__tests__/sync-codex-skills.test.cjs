@@ -397,6 +397,20 @@ test('unsafe canonical and alias IDs cannot construct projection output paths', 
   assert.equal(fs.existsSync(path.join(root, 'sentinel.json')), false);
 });
 
+test('credential-bearing alias routing fields are rejected before projection evidence', () => {
+  for (const field of ['id', 'target']) {
+    const root = fixture();
+    skill(root, 'ticktock');
+    const token = `sk-${'r'.repeat(24)}`;
+    const alias = field === 'id' ? { id: token, target: 'ticktock' } : { id: 'safe', target: token };
+    assert.throws(
+      () => sync({ root, handlerIds: new Set(), aliasRegistry: { aliases: [alias] } }),
+      (error) => /credential-bearing alias routing field/.test(error.message) && !error.message.includes(token)
+    );
+    assert.equal(fs.existsSync(path.join(root, '_dev/reports/analysis/codex-skill-projections')), false);
+  }
+});
+
 test('direct skills and aliases remain unavailable while a required dependency is absent', () => {
   const root = fixture();
   const adapterPath = path.join(root, 'instructions/adapters/codex.yaml');
@@ -482,6 +496,17 @@ test('sequence-valued framework names and descriptions produce malformed receipt
   assert.equal(candidate.receipt.semantic_review_state, 'malformed');
   assert.equal(candidate.receipt.application_status, 'blocked');
   assert.equal(fs.existsSync(path.join(root, '.agents/skills/guild-a-b-helper/SKILL.md')), false);
+});
+
+test('framework helpers reject non-scalar and unknown execution modes', () => {
+  for (const mode of ['execution_mode:\n  - REVIEW_ONLY\n  - PATCH_ALLOWED', 'execution_mode: SUPERUSER']) {
+    const root = fixture();
+    write(root, 'frameworks/a/b/.claude/skills/helper/SKILL.md', `---\nname: helper\ndescription: helper\n${mode}\n---\nbody\n`);
+    const candidate = byId(sync({ root, handlerIds: new Set(), apply: true }), 'framework-guild-a-b-helper');
+    assert.equal(candidate.receipt.semantic_review_state, 'malformed');
+    assert.match(candidate.receipt.detail, /execution_mode must be one declared execution mode/);
+    assert.equal(fs.existsSync(path.join(root, '.agents/skills/guild-a-b-helper/SKILL.md')), false);
+  }
 });
 
 test('nested framework skills project independently instead of becoming parent resources', () => {

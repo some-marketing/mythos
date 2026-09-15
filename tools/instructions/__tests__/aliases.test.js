@@ -80,15 +80,15 @@ test('parseAliasRegistry tolerates the commented YAML form across domains', () =
 test('parseAliasRegistry preserves typed aliases in YAML sequence form', () => {
   const raw = [
     'aliases:',
-    '  - id: dl',
-    '    kind: operator_shorthand',
+    '  - id: dl # shorthand',
+    '    kind: "operator # shorthand"',
     '    target: deliberate',
     '    execution_target: orchestrate-loop',
     '    authority_source: orchestrate-loop'
   ].join('\n');
   assert.deepEqual(parseAliasRegistry(raw).aliases, [{
     id: 'dl',
-    kind: 'operator_shorthand',
+    kind: 'operator # shorthand',
     target: 'deliberate',
     execution_target: 'orchestrate-loop',
     authority_source: 'orchestrate-loop'

@@ -92,14 +92,14 @@ function parseSimpleAliasYaml(raw) {
     const match = trimmedLine.match(/^([^:]+):\s*(.*)$/);
     if (!match) continue;
     const key = match[1].trim();
-    const value = stripQuotes(match[2].trim());
+    const value = parseSimpleYamlScalar(match[2].trim());
     if (indent === 0) {
       currentDomain = ALIAS_DOMAIN_KEYS.includes(key) ? key : null;
       currentEntry = null;
       if (currentDomain) maps[currentDomain] = maps[currentDomain] || {};
     } else if (currentDomain && indent <= 2 && sequenceMatch) {
       if (!Array.isArray(maps[currentDomain])) maps[currentDomain] = [];
-      currentEntry = { [sequenceMatch[1].trim()]: stripQuotes(sequenceMatch[2].trim()) };
+      currentEntry = { [sequenceMatch[1].trim()]: parseSimpleYamlScalar(sequenceMatch[2].trim()) };
       maps[currentDomain].push(currentEntry);
     } else if (currentDomain && indent <= 2) {
       if (Array.isArray(maps[currentDomain])) continue;
@@ -110,6 +110,23 @@ function parseSimpleAliasYaml(raw) {
     }
   }
   return maps;
+}
+
+function parseSimpleYamlScalar(value) {
+  let quote = null;
+  for (let index = 0; index < value.length; index += 1) {
+    const character = value[index];
+    if (quote) {
+      if (quote === '"' && character === '\\') index += 1;
+      else if (character === quote) quote = null;
+      continue;
+    }
+    if (character === '"' || character === "'") quote = character;
+    else if (character === '#' && (index === 0 || /\s/.test(value[index - 1]))) {
+      return stripQuotes(value.slice(0, index).trimEnd());
+    }
+  }
+  return stripQuotes(value);
 }
 
 function stripQuotes(value) {

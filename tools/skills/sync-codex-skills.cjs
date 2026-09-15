@@ -411,8 +411,12 @@ function resolveAliases(root, config, commands, directNames, registryOverride) {
   const aliases = new Map();
   for (const row of rows) {
     if (!row || !row.id) continue;
-    const id = validateSlugId(row.id, 'alias id');
+    const rawId = String(row.id).trim();
     const target = String(row.execution_target || row.target || '').trim();
+    if ([rawId, target].some((value) => containsPrivateAbsolutePath(value) || containsCredentialMaterial(value))) {
+      throw new Error('Refusing private or credential-bearing alias routing field');
+    }
+    const id = validateSlugId(rawId, 'alias id');
     if (target) validateSlugId(target, `target for alias ${id}`);
     if (aliases.has(id)) throw new Error(`Duplicate alias id: ${id}`);
     aliases.set(id, { ...row, id });
@@ -475,6 +479,10 @@ function frameworkIdentity(root, sourcePath) {
 function renderFrameworkSkill(text, identity) {
   const parsed = parseFrontmatter(text, identity.rel);
   if (!parsed.ok) return parsed;
+  if (parsed.metadata.execution_mode != null
+    && (typeof parsed.metadata.execution_mode !== 'string' || !EXECUTION_MODES.has(parsed.metadata.execution_mode))) {
+    return { ok: false, error: 'frontmatter execution_mode must be one declared execution mode', sourcePath: identity.rel };
+  }
   const lineage = `Framework lineage: \`frameworks/${identity.service}/${identity.framework}\`. Read its \`manifest.json\` and \`guardrails.md\` before execution. Source helper: \`${identity.rel}\`.`;
   const executionMetadata = projectionExecutionMetadata(parsed.metadata);
   const supportedFields = projectionSupportedFrontmatter(parsed.metadata);

@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "bfbdb2044fa163a36d74d593864cdbc710dca2c4a67875bed975bf5b087419be",
+    "expected_tree_sha256": "75514cddd044af0cff7d850c51515bbad5ffdd14d8b672f4d57428f2f7db3832",
     "expected_files": [
       {
         "path": ".agents/skills/go/SKILL.md",
@@ -2217,7 +2217,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-parity-remediation__verification.md",
-        "sha256": "c0d5d5265b5cbb63ad165f631ec5cad4ecb1700f5c2ef56208590416a25c20d2",
+        "sha256": "71d02f019144358bb37f80d92205d63f224a27896154f61b77eba6312447ffe5",
         "mode": 420
       },
       {
@@ -8772,7 +8772,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "0bcb34f275c26c5950cb81f4ad1ac94ba4af8185bbb43a560539d60e767adfc5",
+        "sha256": "4a86256800b3d5d61f0626af274c0892ec31b7d4f983125394e87dd3db5f6f2f",
         "mode": 420
       },
       {
@@ -11422,7 +11422,7 @@
       },
       {
         "path": "tools/instructions/__tests__/aliases.test.js",
-        "sha256": "3648a9b025814bc4b7ce21eb6563fbe1c152c030e98c246eccfb21f90e27a133",
+        "sha256": "e06a40671e7aa5614c384bf4169d54e98d7c2c3af8d4d635f5c79f9a0e7bf430",
         "mode": 420
       },
       {
@@ -11437,7 +11437,7 @@
       },
       {
         "path": "tools/instructions/lib/engine.js",
-        "sha256": "7fbfdf60f6817751e3c4af998b95af71da1dd0694d6375eaf80c7b100de543d3",
+        "sha256": "c1d84736bd7c881a1a527247dd49b6b173b5bbfb92bf4335b087d53bf07b146d",
         "mode": 420
       },
       {
@@ -15147,7 +15147,7 @@
       },
       {
         "path": "tools/skills/__tests__/sync-codex-skills.test.cjs",
-        "sha256": "8f552007bf57079ed78c336f89b308e89b59f58b8cc8542115d15925caea91c1",
+        "sha256": "682499e7eef5597aa203b04370e3763f3f324907faea32b39ef15f673632c23b",
         "mode": 420
       },
       {
@@ -15157,7 +15157,7 @@
       },
       {
         "path": "tools/skills/sync-codex-skills.cjs",
-        "sha256": "c5b32f0d28ba3aa11be0d81b67e3fb166b0f2bf6d1faebc75b6d727d1f8688a4",
+        "sha256": "c2c6ba9bacb037419f7f6205417e04eb82522a6547f69d2d1bb22d8a4d2659fd",
         "mode": 420
       },
       {
@@ -16884,7 +16884,7 @@
     "package_script_count": 206,
     "command_alias_registry_sha256": "9bbc50aa1343a5502258e0e067eca0bb4cf4ea9f560abc5b998247a0e04b9901",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "0bcb34f275c26c5950cb81f4ad1ac94ba4af8185bbb43a560539d60e767adfc5",
+    "graph_sha256": "4a86256800b3d5d61f0626af274c0892ec31b7d4f983125394e87dd3db5f6f2f",
     "graph_nodes": 4092,
     "graph_edges": 2905
   },

@@ -112,7 +112,7 @@ test('parseAliasRegistry preserves indentationless YAML sequences', () => {
 test('parseAliasRegistry preserves flow-style YAML sequence records', () => {
   const raw = [
     'aliases:',
-    '  - { id: shortcut, target: route }'
+    '  - { id: shortcut, target: route } # shorthand'
   ].join('\n');
   assert.deepEqual(parseAliasRegistry(raw).aliases, [{ id: 'shortcut', target: 'route' }]);
 });

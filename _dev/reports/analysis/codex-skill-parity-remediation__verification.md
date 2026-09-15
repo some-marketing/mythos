@@ -91,6 +91,8 @@ The fifty-fourth Cloud Codex review found literal Cookie credentials, legacy `re
 
 The fifty-fifth Cloud Codex review found prefix-only credential placeholder exemptions, flow-style YAML alias records being dropped, and non-decimal YAML numbers bypassing discovery scalar validation. Placeholder exemptions now require a complete approved placeholder value, the shared alias parser accepts flow sequence records, and hexadecimal, octal, and binary numeric forms are classified as non-string. Focused regressions cover all three findings.
 
+The fifty-sixth Cloud Codex review found quoted Cookie credentials, comments after flow-style alias records, leading-zero YAML numbers, and empty canonical descriptions. Cookie scanning now consumes an optional value quote before applying exact placeholder exemptions, flow records accept trailing comments, leading-zero numeric tokens fail scalar-string validation, and canonical descriptions must contain non-whitespace text. Focused regressions cover all four findings.
+
 ## Falsifiers and residuals
 
 Acceptance would be disproved by an applied `UNKNOWN` or pending candidate, copied alias behavior, a non-handler command marked `BLOCKING`, a private path in a shipped projection, a canonical/client diff, a failed runtime discovery claim, or an unresolved distinct-family blocker. None was observed.

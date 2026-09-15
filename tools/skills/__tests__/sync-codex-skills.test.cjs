@@ -148,7 +148,7 @@ test('direct skills reject non-scalar and unknown execution modes', () => {
 });
 
 test('direct and framework descriptions reject YAML non-string tokens', () => {
-  for (const description of ['[one, two]', '{text: hello}', 'null', '0x10', '0o10']) {
+  for (const description of ['[one, two]', '{text: hello}', 'null', '0x10', '0o10', '0123']) {
     const root = fixture();
     write(root, '.claude/skills/ticktock/SKILL.md', `---\nname: ticktock\ndescription: ${description}\n---\nbody\n`);
     write(root, 'frameworks/a/b/.claude/skills/demo/SKILL.md', `---\nname: demo\ndescription: ${description}\n---\nbody\n`);
@@ -412,7 +412,7 @@ test('canonical commands honor and validate the configured default capability ti
   );
 });
 
-test('canonical descriptions must be scalar strings', () => {
+test('canonical descriptions must be non-empty scalar strings', () => {
   for (const description of [{ text: 'object' }, ['sequence']]) {
     const root = fixture();
     command(root, 'sample', { description });
@@ -420,6 +420,16 @@ test('canonical descriptions must be scalar strings', () => {
     assert.equal(candidate.content, null);
     assert.equal(candidate.receipt.semantic_review_state, 'malformed');
     assert.match(candidate.receipt.detail, /canonical command description must be a scalar string/);
+    assert.equal(fs.existsSync(path.join(root, '.agents/skills/source-command-sample/SKILL.md')), false);
+  }
+
+  for (const description of ['', '   ']) {
+    const root = fixture();
+    command(root, 'sample', { description });
+    const candidate = byId(sync({ root, handlerIds: new Set(), apply: true }), 'command-sample');
+    assert.equal(candidate.content, null);
+    assert.equal(candidate.receipt.semantic_review_state, 'malformed');
+    assert.match(candidate.receipt.detail, /canonical command description must be a non-empty string/);
     assert.equal(fs.existsSync(path.join(root, '.agents/skills/source-command-sample/SKILL.md')), false);
   }
 });
@@ -1172,6 +1182,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     'Authorization: Token supersecret\n',
     'Authorization: Token exampleRealSecret123\n',
     'Cookie: sessionid=eyJhbGciOiJIUzI1NiJ9\n',
+    'Cookie: sessionid="supersecret"\n',
     'https://alice:s3cret@example.com\n',
     `-----BEGIN ENCRYPTED PRIVATE KEY-----\nencryptedprivatebytes${'e'.repeat(16)}\n-----END ENCRYPTED PRIVATE KEY-----\n`,
     `temporary ASIA${'A'.repeat(16)}\n`
@@ -1189,7 +1200,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
 
 test('shell-variable credential references are not treated as literal secrets', () => {
   const root = fixture();
-  skill(root, 'ticktock', 'export OPENAI_API_KEY="$OPENAI_API_KEY"\nexport AUTH_TOKEN=${AUTH_TOKEN}\nAuthorization: Bearer $ACCESS_TOKEN\nAuthorization: Basic ${BASIC_AUTH}\n');
+  skill(root, 'ticktock', 'export OPENAI_API_KEY="$OPENAI_API_KEY"\nexport AUTH_TOKEN=${AUTH_TOKEN}\nAuthorization: Bearer $ACCESS_TOKEN\nAuthorization: Basic ${BASIC_AUTH}\nCookie: sessionid="$SESSION_ID"\n');
   const result = sync({ root, handlerIds: new Set(), apply: true });
   const candidate = byId(result, 'direct-ticktock');
   assert.equal(candidate.receipt.semantic_review_state, 'reviewed_safe');

@@ -176,6 +176,25 @@ test('direct skills reject non-scalar and unknown execution modes', () => {
   }
 });
 
+test('direct and framework skills preserve execution modes declared in inline metadata', () => {
+  const normalized = normalizeDirectSkill('---\nname: demo\ndescription: demo\nmetadata: {execution_mode: FINDINGS_ONLY}\n---\nbody\n', 'demo');
+  assert.equal(normalized.ok, true);
+  assert.match(normalized.content, /metadata:\n  execution_mode: "FINDINGS_ONLY"/);
+
+  const root = fixture();
+  write(root, 'frameworks/a/b/.claude/skills/helper/SKILL.md', '---\nname: helper\ndescription: helper\nmetadata: {execution_mode: REVIEW_ONLY}\n---\nbody\n');
+  const candidate = byId(sync({ root, handlerIds: new Set(), apply: true }), 'framework-guild-a-b-helper');
+  assert.equal(candidate.receipt.semantic_review_state, 'pending_review');
+  assert.match(candidate.content, /metadata:\n  execution_mode: "REVIEW_ONLY"/);
+
+  const invalid = normalizeDirectSkill('---\nname: demo\ndescription: demo\nmetadata: {execution_mode: [REVIEW_ONLY]}\n---\nbody\n', 'demo');
+  assert.equal(invalid.ok, false);
+  assert.match(invalid.error, /metadata flow mapping must contain only scalar strings/);
+  const conflicting = normalizeDirectSkill('---\nname: demo\ndescription: demo\nexecution_mode: REVIEW_ONLY\nmetadata: {execution_mode: PATCH_ALLOWED}\n---\nbody\n', 'demo');
+  assert.equal(conflicting.ok, false);
+  assert.match(conflicting.error, /conflicting execution_mode declarations/);
+});
+
 test('direct and framework descriptions reject YAML non-string tokens and empty text', () => {
   for (const description of ['[one, two]', '{text: hello}', 'null', '0x10', '0o10', '0123', '.5', '-.5', '2026-09-15', '"   "']) {
     const root = fixture();

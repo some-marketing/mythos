@@ -185,6 +185,22 @@ function parseYamlFlowStringList(value) {
   return quote ? null : items;
 }
 
+function parseYamlFlowStringMap(value) {
+  const token = String(value).trim();
+  if (!token.startsWith('{') || !token.endsWith('}')) return null;
+  const inner = token.slice(1, -1).trim();
+  if (!inner) return {};
+  const result = {};
+  for (const field of inner.split(',')) {
+    const match = field.trim().match(/^([A-Za-z0-9_-]+):\s*(.+)$/);
+    if (!match || isYamlNonStringToken(match[2])) return null;
+    const decoded = decodeQuotedYamlScalar(match[2].trim());
+    if (decoded === INVALID_YAML_SCALAR || typeof decoded !== 'string') return null;
+    result[match[1]] = decoded;
+  }
+  return result;
+}
+
 function parseFrontmatter(text, sourcePath = '<memory>') {
   const normalizedText = String(text).replace(/\r\n?/g, '\n');
   if (!normalizedText.startsWith('---\n')) return { ok: false, error: 'missing frontmatter opener', sourcePath };
@@ -229,6 +245,11 @@ function parseFrontmatter(text, sourcePath = '<memory>') {
       if (!items) return { ok: false, error: 'frontmatter allowed-tools flow sequence must contain only strings', sourcePath };
       value = items;
     }
+    if (key === 'metadata' && typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
+      const fields = parseYamlFlowStringMap(value);
+      if (!fields) return { ok: false, error: 'frontmatter metadata flow mapping must contain only scalar strings', sourcePath };
+      value = fields;
+    }
     if (typeof value === 'string') {
       const quoted = (value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"));
       if (!quoted && key === 'allowed-tools' && isYamlNonStringToken(value)) {
@@ -241,6 +262,15 @@ function parseFrontmatter(text, sourcePath = '<memory>') {
       }
     }
     metadata[key] = value;
+  }
+  if (metadata.metadata && typeof metadata.metadata === 'object' && !Array.isArray(metadata.metadata)) {
+    for (const key of ['execution_mode', 'trust_tier']) {
+      if (metadata.metadata[key] == null) continue;
+      if (metadata[key] != null && metadata[key] !== metadata.metadata[key]) {
+        return { ok: false, error: `frontmatter contains conflicting ${key} declarations`, sourcePath };
+      }
+      metadata[key] = metadata.metadata[key];
+    }
   }
   if (typeof metadata.name !== 'string' || !metadata.name || typeof metadata.description !== 'string' || !metadata.description.trim()) {
     return { ok: false, error: 'frontmatter requires scalar name and description', sourcePath };

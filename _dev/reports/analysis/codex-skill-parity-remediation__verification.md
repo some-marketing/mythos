@@ -4,7 +4,7 @@ Refreshed under the approved parity amendment at `2026-09-14T18:51:57Z` in the d
 
 ## Mechanical results
 
-- Combined projector, lifecycle, and alias regressions: 125 passed, 0 failed.
+- Combined projector, lifecycle, and alias regressions: 126 passed, 0 failed.
 - `node tools/skills/sync-codex-skills.cjs --check`: aligned.
 - `node tools/skills/sync-lifecycle-command-skills.cjs --check`: six lifecycle skills aligned against the committed general projection evidence.
 - Pinned Codex `quick_validate.py`, using the repository PyYAML environment: 131 of 131 applied packages valid; 176 of 176 top-level staged candidate packages valid. Nested child skills are excluded from parent resources, so the staged tree contains exactly 176 independently projected `SKILL.md` files.
@@ -124,6 +124,8 @@ The seventieth Cloud Codex review found bare Stripe restricted keys and private 
 The seventy-first Cloud Codex review found bare Perplexity keys and JWTs escaping projection, plus runtime command resolution remaining single-hop after generated alias authority became transitive. The projector now shares the publisher's bounded Perplexity and JWT signatures, and the runtime resolver follows alias chains to their terminal while rejecting cycles. Focused regressions cover both credential formats, multi-hop execution, and cycle failure.
 
 The seventy-second Cloud Codex review found `bearer` and `accessKey` assignments escaping projection, plus the runtime alias loader rejecting supported YAML sequence syntax. Both assignment names now enter the redacted credential-rejection path, and runtime alias loading uses the same shared parser as instruction generation and projection. Focused regressions cover both credential fields, ordinary YAML runtime resolution, and YAML-defined cycle failure.
+
+The seventy-third Cloud Codex review found execution modes declared inside valid inline `metadata` mappings being silently omitted from direct and framework projections. The frontmatter parser now accepts string-only flow mappings, lifts supported execution fields into the normalized projection, and rejects conflicting declarations. Focused regressions cover both direct and framework preservation.
 
 ## Falsifiers and residuals
 

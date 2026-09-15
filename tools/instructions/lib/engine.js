@@ -89,9 +89,17 @@ function parseSimpleAliasYaml(raw) {
     const trimmedLine = line.trim();
     if (!trimmedLine || trimmedLine.startsWith('#')) continue;
     const indent = line.length - line.trimStart().length;
+    const bareSequenceMatch = trimmedLine.match(/^-\s*(?:#.*)?$/);
     const flowSequenceMatch = trimmedLine.match(/^-\s*\{(.*)\}\s*(?:#.*)?$/);
     const sequenceMatch = trimmedLine.match(/^-\s+([^:]+):\s*(.*)$/);
     const match = trimmedLine.match(/^([^:]+):\s*(.*)$/);
+    if (currentDomain && bareSequenceMatch) {
+      if (!Array.isArray(maps[currentDomain])) maps[currentDomain] = [];
+      currentEntry = {};
+      currentEntryIndent = indent;
+      maps[currentDomain].push(currentEntry);
+      continue;
+    }
     if (!match && !flowSequenceMatch) continue;
     if (currentDomain && flowSequenceMatch) {
       if (!Array.isArray(maps[currentDomain])) maps[currentDomain] = [];

@@ -52,9 +52,26 @@ function orchestrationSummary(policy) {
 // records retain the older primary -> cross-alias -> compatibility grouping.
 // `prefix` is `/` for slash commands and '' for framework/skill/tool names.
 function renderAliasGroup(aliases, prefix) {
-  const typed = aliases.some((alias) => alias.kind || alias.target || alias.authority_source);
-  if (typed) {
+  const isTyped = (alias) => Boolean(alias.kind || alias.target || alias.execution_target || alias.authority_source);
+  const primaryAuthorityById = new Map();
+  for (const alias of aliases) {
+    if (!isTyped(alias) && alias.status === 'primary') primaryAuthorityById.set(alias.id, alias.resolves_to);
+  }
+  const authorityOf = (alias) => {
+    const target = alias.resolves_to;
+    return primaryAuthorityById.has(target) ? primaryAuthorityById.get(target) : target;
+  };
+  const renderLegacy = (alias) => {
+    const authority = authorityOf(alias);
+    if (alias.status === 'primary') {
+      return `- \`${prefix}${alias.id}\` (\`${prefix}${authority}\`) [primary]; authority: \`${prefix}${authority}\``;
+    }
+    return `- \`${prefix}${alias.id}\` -> \`${prefix}${alias.resolves_to}\` [${alias.status || 'compatibility'}]; authority: \`${prefix}${authority}\``;
+  };
+
+  if (aliases.some(isTyped)) {
     return aliases.map((alias) => {
+      if (!isTyped(alias)) return renderLegacy(alias);
       const target = alias.target || alias.resolves_to;
       const kind = alias.kind || alias.status || 'compatibility';
       const executionTarget = alias.execution_target;
@@ -68,28 +85,19 @@ function renderAliasGroup(aliases, prefix) {
 
   // primary alias id -> its authority, so a cross-alias that resolves to a
   // primary alias still reports the underlying canonical id.
-  const primaryAuthorityById = new Map();
-  for (const alias of aliases) {
-    if (alias.status === 'primary') primaryAuthorityById.set(alias.id, alias.resolves_to);
-  }
-  const authorityOf = (alias) => {
-    const target = alias.resolves_to;
-    return primaryAuthorityById.has(target) ? primaryAuthorityById.get(target) : target;
-  };
-
   const primaries = aliases.filter((a) => a.status === 'primary');
   const crossAliases = aliases.filter((a) => a.status === 'cross-alias');
   const compatibility = aliases.filter((a) => a.status !== 'primary' && a.status !== 'cross-alias');
 
   const lines = [];
   for (const alias of primaries) {
-    lines.push(`- \`${prefix}${alias.id}\` (\`${prefix}${authorityOf(alias)}\`) [primary]; authority: \`${prefix}${authorityOf(alias)}\``);
+    lines.push(renderLegacy(alias));
   }
   for (const alias of crossAliases) {
-    lines.push(`- \`${prefix}${alias.id}\` -> \`${prefix}${alias.resolves_to}\` [cross-alias]; authority: \`${prefix}${authorityOf(alias)}\``);
+    lines.push(renderLegacy(alias));
   }
   for (const alias of compatibility) {
-    lines.push(`- \`${prefix}${alias.id}\` -> \`${prefix}${alias.resolves_to}\` [${alias.status || 'compatibility'}]; authority: \`${prefix}${authorityOf(alias)}\``);
+    lines.push(renderLegacy(alias));
   }
   return lines;
 }

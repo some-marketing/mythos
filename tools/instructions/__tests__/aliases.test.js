@@ -109,6 +109,16 @@ test('parseAliasRegistry preserves indentationless YAML sequences', () => {
   }]);
 });
 
+test('parseAliasRegistry preserves sequence records with standalone dash markers', () => {
+  const raw = [
+    'aliases:',
+    '  -',
+    '    id: shortcut',
+    '    target: route'
+  ].join('\n');
+  assert.deepEqual(parseAliasRegistry(raw).aliases, [{ id: 'shortcut', target: 'route' }]);
+});
+
 test('parseAliasRegistry preserves flow-style YAML sequence records', () => {
   const raw = [
     'aliases:',
@@ -195,6 +205,15 @@ test('typed aliases render their declared target, execution target, and authorit
   assert.match(section, /- `\/dl` -> `\/deliberate` \[operator_shorthand\]; execution: `\/orchestrate-loop`; authority: `\/orchestrate-loop`/);
   assert.match(section, /- `\/tt` -> `\/ticktock` \[terminal_alias\]; authority: `\/ticktock`/);
   assert.doesNotMatch(section, /\/undefined|`\/0`/);
+});
+
+test('mixed typed and legacy aliases retain resolved legacy authority', () => {
+  const section = commandAliasSection({ aliases: [
+    { id: 'dl', kind: 'operator_shorthand', target: 'deliberate', execution_target: 'orchestrate-loop', authority_source: 'orchestrate-loop' },
+    { id: 'cast', resolves_to: 'run-framework', status: 'primary' },
+    { id: 'spell', resolves_to: 'cast', status: 'cross-alias' }
+  ] });
+  assert.match(section, /- `\/spell` -> `\/cast` \[cross-alias\]; authority: `\/run-framework`/);
 });
 
 test('command aliases render primaries first, then cross-alias, then compatibility', () => {

@@ -17,6 +17,7 @@ const {
   planOutputs
 } = require('../lib/engine');
 const { commandAliasSection, coreDoctrineSection } = require('../lib/render');
+const { resolveCommandAlias } = require('../../commands/lib/command-aliases.cjs');
 
 // mythos-surface root (…/tools/instructions/__tests__ -> up three).
 const SURFACE_ROOT = path.resolve(__dirname, '..', '..', '..');
@@ -223,6 +224,30 @@ test('legacy alias authorities resolve transitively to their terminal', () => {
     { id: 'chant', resolves_to: 'spell', status: 'compatibility' }
   ]);
   assert.match(section, /- `\/chant` -> `\/spell` \[compatibility\]; authority: `\/run-framework`/);
+});
+
+test('runtime command resolution follows legacy aliases transitively and rejects cycles', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'command-alias-runtime-'));
+  const registryPath = path.join(root, 'instructions', 'canonical', 'command-aliases.yaml');
+  fs.mkdirSync(path.dirname(registryPath), { recursive: true });
+  fs.writeFileSync(registryPath, JSON.stringify({ aliases: [
+    { id: 'cast', resolves_to: 'route' },
+    { id: 'spell', resolves_to: 'cast' },
+    { id: 'chant', resolves_to: 'spell' }
+  ] }));
+
+  const resolved = resolveCommandAlias(root, 'chant');
+  assert.equal(resolved.resolvedCommand, 'spell');
+  assert.equal(resolved.executionCommand, 'route');
+  assert.equal(resolved.authoritySource, 'route');
+  assert.deepEqual(resolved.expansionEdges, ['chant', 'spell', 'cast', 'route']);
+
+  fs.writeFileSync(registryPath, JSON.stringify({ aliases: [
+    { id: 'one', resolves_to: 'two' },
+    { id: 'two', resolves_to: 'one' }
+  ] }));
+  assert.throws(() => resolveCommandAlias(root, 'one'), /Command alias cycle detected: one -> two -> one/);
+  fs.rmSync(root, { recursive: true, force: true });
 });
 
 test('command aliases render primaries first, then cross-alias, then compatibility', () => {

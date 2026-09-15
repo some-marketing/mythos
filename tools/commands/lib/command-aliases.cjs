@@ -58,14 +58,24 @@ function resolveCommandAlias(projectRoot, commandId) {
     };
   }
 
-  const executionCommand = String(alias.execution_target || alias.target || typedCommand).trim().toLowerCase();
+  const immediateTarget = String(alias.execution_target || alias.target || alias.resolves_to || typedCommand).trim().toLowerCase();
+  const trail = [typedCommand];
+  let executionCommand = immediateTarget;
+  while (aliases.has(executionCommand)) {
+    if (trail.includes(executionCommand)) {
+      throw new Error(`Command alias cycle detected: ${[...trail, executionCommand].join(' -> ')}`);
+    }
+    trail.push(executionCommand);
+    const nextAlias = aliases.get(executionCommand);
+    executionCommand = String(nextAlias.execution_target || nextAlias.target || nextAlias.resolves_to || executionCommand).trim().toLowerCase();
+  }
   return {
     isAlias: true,
     typedCommand,
-    resolvedCommand: String(alias.target || executionCommand).trim().toLowerCase(),
+    resolvedCommand: String(alias.target || alias.resolves_to || immediateTarget).trim().toLowerCase(),
     executionCommand,
     authoritySource: String(alias.authority_source || executionCommand).trim().toLowerCase(),
-    expansionEdges: Array.isArray(alias.expansion_edges) ? alias.expansion_edges : [typedCommand, executionCommand],
+    expansionEdges: Array.isArray(alias.expansion_edges) ? alias.expansion_edges : [...trail, executionCommand],
     alias
   };
 }

@@ -4,7 +4,7 @@ Refreshed under the approved parity amendment at `2026-09-14T18:51:57Z` in the d
 
 ## Mechanical results
 
-- Combined projector, lifecycle, and alias regressions: 124 passed, 0 failed.
+- Combined projector, lifecycle, and alias regressions: 125 passed, 0 failed.
 - `node tools/skills/sync-codex-skills.cjs --check`: aligned.
 - `node tools/skills/sync-lifecycle-command-skills.cjs --check`: six lifecycle skills aligned against the committed general projection evidence.
 - Pinned Codex `quick_validate.py`, using the repository PyYAML environment: 131 of 131 applied packages valid; 176 of 176 top-level staged candidate packages valid. Nested child skills are excluded from parent resources, so the staged tree contains exactly 176 independently projected `SKILL.md` files.
@@ -16,7 +16,7 @@ Refreshed under the approved parity amendment at `2026-09-14T18:51:57Z` in the d
 
 ## Protected parity amendment
 
-- Wiring graph regenerated: 4,092 nodes, 2,906 edges, 0 unresolved.
+- Wiring graph regenerated: 4,092 nodes, 2,907 edges, 0 unresolved.
 - Target-only baseline repair registered 3,361 expected files while preserving the complete source and membrane policy objects byte-for-byte.
 - Portable `npm run verify:parity`: `ok: true`, 0 findings.
 - Authoritative private-denylist verification against the existing bound hash: `ok: true`, 0 findings. The external file and its location are not serialized in tracked artifacts.
@@ -120,6 +120,8 @@ The sixty-eighth Cloud Codex review found backtick-delimited credential assignme
 The sixty-ninth Cloud Codex review found acronym-cased credential keys and Cookie property references misclassified in opposite directions. The bounded mixed-case assignment matcher now handles acronym casing such as `APIKey` and `PASSWORD`, while the shared credential-reference predicate accepts quoted or unquoted `process.env`, `import.meta.env`, `env`, `config`, and `secrets` properties. Focused regressions cover both rejection and safe-reference paths.
 
 The seventieth Cloud Codex review found bare Stripe restricted keys and private 1Password locators escaping the projector's narrower scanner, plus legacy alias authorities resolving only one hop. The projector now shares the publisher's bounded Stripe and `op://` signatures, while instruction rendering follows legacy `resolves_to` chains to their terminal with cycle protection. Focused regressions cover both security formats and multi-hop authority rendering.
+
+The seventy-first Cloud Codex review found bare Perplexity keys and JWTs escaping projection, plus runtime command resolution remaining single-hop after generated alias authority became transitive. The projector now shares the publisher's bounded Perplexity and JWT signatures, and the runtime resolver follows alias chains to their terminal while rejecting cycles. Focused regressions cover both credential formats, multi-hop execution, and cycle failure.
 
 ## Falsifiers and residuals
 

@@ -13000,7 +13000,7 @@
       "id": "file:tools/commands/lib/command-aliases.cjs",
       "type": "file",
       "path": "tools/commands/lib/command-aliases.cjs",
-      "sha256": "c0617cc04c33a896b522741131ee6180de217526e44c7267f4bf25f8926e5f5f",
+      "sha256": "c854bda10d851109b235d3d42fa4ceb4b40d43bd1074cccc5471d13cdb195abc",
       "mode": 420
     },
     {
@@ -14554,7 +14554,7 @@
       "id": "file:tools/instructions/__tests__/aliases.test.js",
       "type": "file",
       "path": "tools/instructions/__tests__/aliases.test.js",
-      "sha256": "878820de05bd4190db9b9c01969a2d4ccb3cb5c232a1aed28f7439224f65c85b",
+      "sha256": "fd2e95116950d6f6997066ed789f1b86aec3c7ab6517464167a64c503a103e9a",
       "mode": 420
     },
     {
@@ -19769,7 +19769,7 @@
       "id": "file:tools/skills/__tests__/sync-codex-skills.test.cjs",
       "type": "file",
       "path": "tools/skills/__tests__/sync-codex-skills.test.cjs",
-      "sha256": "c1bb733d17b5bd08a1c6db0da8d20d083a04a50f05f39cd6659d9bfcc43205ff",
+      "sha256": "f48e980dc13360d9c16e6bb2112baee12e2e09dbdd2baca6834dffaeca0ebdf3",
       "mode": 420
     },
     {
@@ -19790,7 +19790,7 @@
       "id": "file:tools/skills/sync-codex-skills.cjs",
       "type": "file",
       "path": "tools/skills/sync-codex-skills.cjs",
-      "sha256": "567e2db75445308796a3aa5e1915d62703a9d95b2d8571d7531cd8ff525f2b5e",
+      "sha256": "cacec23cb4d112b396f2c72bd0236d3fb5db0fb525c63590dee8d2ff4ca6a746",
       "mode": 420
     },
     {
@@ -29194,6 +29194,15 @@
       "target": "tools/kernel/tier-ledger/append-ledger-entry.cjs",
       "required": true,
       "specifier": "./append-ledger-entry.cjs"
+    },
+    {
+      "id": "183ae99ee84ea558105697564d8b4d6207a800f8ed85dc63bdb1462049214ef5",
+      "type": "static-import",
+      "from": "file:tools/instructions/__tests__/aliases.test.js",
+      "to": "file:tools/commands/lib/command-aliases.cjs",
+      "target": "tools/commands/lib/command-aliases.cjs",
+      "required": true,
+      "specifier": "../../commands/lib/command-aliases.cjs"
     },
     {
       "id": "1844229e3a8fb887cade77d91bbdd317549b4642bf841881dbeb85ba2fb49fe1",
@@ -53134,7 +53143,7 @@
   ],
   "counts": {
     "nodes": 4092,
-    "edges": 2906,
+    "edges": 2907,
     "unresolved": 0
   }
 }

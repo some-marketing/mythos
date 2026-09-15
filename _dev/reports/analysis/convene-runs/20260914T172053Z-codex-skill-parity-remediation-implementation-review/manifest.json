@@ -1,0 +1,88 @@
+{
+  "schema": "ConveneRun/3.0",
+  "previous_schema": "ConveneRun/2.0",
+  "timestamp": "2026-09-14T17:22:23.578Z",
+  "scope": "codex-skill-parity-remediation-implementation-review",
+  "task": "Distinct-family acceptance review of the implemented Codex skill parity remediation. Producer is Codex. Review actual repository implementation against the bound plan and doctrine. Mechanical evidence observed by coordinator: projector/lifecycle tests 11/11 pass; projector --check passes; pinned quick_validate passes 124/124 applied and 174/174 staged candidates; private-path scan passes; live fresh Codex runtime finds go, source-command-ground-in-philosophy, and /tt with correct authority and reports pending framework helper absent/UNKNOWN; instructions validation passes after generation; no instructions/canonical or clients changes. Known residuals are two direct skills blocked ABSENT because accepted branch lacks Claude source, 45 framework helpers pending_review and not runtime-discoverable, and pre-existing main-checkout invalid/stale packages lack custody. Also judge whether retaining the generator-produced one-line `/9 -> /undefined` derived-output drift is acceptable in this PR or must be reverted and recorded as an out-of-scope validation residual. Return explicit APPROVED or CHANGES_REQUIRED first, then severity-ranked findings with exact evidence and required fixes.",
+  "context_files": [
+    "_dev/reports/analysis/task-plans/codex-skill-parity-remediation__plan.json",
+    "instructions/adapters/codex.yaml",
+    "tools/skills/sync-codex-skills.cjs",
+    "tools/skills/__tests__/sync-codex-skills.test.cjs",
+    "tools/skills/sync-lifecycle-command-skills.cjs",
+    "tools/skills/__tests__/sync-lifecycle-command-skills.test.cjs",
+    "_dev/reports/analysis/codex-skill-projections/projection-index.json",
+    "_dev/reports/analysis/codex-skill-projections/runtime-receipt-codex-discovery.md"
+  ],
+  "origin": "codex",
+  "profile": {
+    "id": "kernel",
+    "label": "Kernel triad",
+    "consequence_grade": true
+  },
+  "triad_slots": [
+    {
+      "id": "alpha",
+      "label": "ALPHA",
+      "function": "Intent, memory, originating principle, and fast orchestration.",
+      "actor": "claude",
+      "pinned_model": null,
+      "is_origin": false
+    },
+    {
+      "id": "now",
+      "label": "NOW",
+      "function": "Repo truth, executable constraints, implementation reality, and falsification.",
+      "actor": "codex",
+      "pinned_model": null,
+      "is_origin": true
+    },
+    {
+      "id": "omega",
+      "label": "OMEGA",
+      "function": "Breadth, consequence, future-facing context, and community impact.",
+      "actor": "gemini",
+      "pinned_model": null,
+      "is_origin": false
+    }
+  ],
+  "participants": [
+    "claude",
+    "gemini"
+  ],
+  "participant_slots": [
+    {
+      "id": "alpha",
+      "actor": "claude"
+    },
+    {
+      "id": "omega",
+      "actor": "gemini"
+    }
+  ],
+  "duplicate_actors": [],
+  "timeout_seconds": 180,
+  "dry_run": false,
+  "only": null,
+  "results": {
+    "alpha": {
+      "actor": "claude",
+      "pinned_model": null,
+      "status": "success",
+      "duration_ms": 90550,
+      "exit_code": 0,
+      "error": null,
+      "output_length": 4720
+    },
+    "now": null,
+    "omega": {
+      "actor": "gemini",
+      "pinned_model": null,
+      "status": "success",
+      "duration_ms": 42959,
+      "exit_code": 0,
+      "error": null,
+      "output_length": 3169
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "schema": "ConveneRun/3.0",
+  "previous_schema": "ConveneRun/2.0",
+  "timestamp": "2026-09-14T18:57:41.261Z",
+  "scope": "codex-skill-parity-block-adjudication",
+  "task": "Adjudicate the remaining Claude BLOCK against the current code. Claude claims: (A) a legacy alias with resolves_to but no target is mishandled because typed detection is false; executed falsifier renders /legacy -> /route correctly with no undefined. (B) resolved candidate-directory cleanup remains unsafe because of broken symlink chains or a theoretical concurrent symlink swap; current tests cover validated resolved-root writes and refusal of an escaping child symlink, and all 26 combined tests pass. Determine whether either is a reproducible blocker under this local CLI's threat model and approved plan, or whether the findings are unsupported/overstated. Inspect actual files. Return APPROVE, AMEND_REQUIRED, or BLOCK and provide a concrete reproduction for any blocker. Do not modify files.",
+  "context_files": [
+    "tools/instructions/lib/engine.js",
+    "tools/instructions/lib/render.js",
+    "tools/instructions/__tests__/aliases.test.js",
+    "tools/skills/sync-codex-skills.cjs",
+    "tools/skills/__tests__/sync-codex-skills.test.cjs"
+  ],
+  "origin": "now",
+  "profile": {
+    "id": "openrouter-triad",
+    "label": "OpenRouter triad",
+    "consequence_grade": false
+  },
+  "triad_slots": [
+    {
+      "id": "alpha",
+      "label": "ALPHA",
+      "function": "Fast reasoning, intent, orchestration.",
+      "actor": "openrouter-anthropic/claude-sonnet-4",
+      "pinned_model": null,
+      "is_origin": false
+    },
+    {
+      "id": "now",
+      "label": "NOW",
+      "function": "Repo truth, code verification, falsification.",
+      "actor": "openrouter-openai/gpt-4o",
+      "pinned_model": null,
+      "is_origin": true
+    },
+    {
+      "id": "omega",
+      "label": "OMEGA",
+      "function": "Breadth, consequence, reframing, big picture.",
+      "actor": "openrouter-google/gemini-2.5-pro",
+      "pinned_model": null,
+      "is_origin": false
+    }
+  ],
+  "participants": [
+    "openrouter-google/gemini-2.5-pro"
+  ],
+  "participant_slots": [
+    {
+      "id": "omega",
+      "actor": "openrouter-google/gemini-2.5-pro"
+    }
+  ],
+  "duplicate_actors": [],
+  "timeout_seconds": 180,
+  "dry_run": false,
+  "only": "omega",
+  "results": {
+    "alpha": null,
+    "now": null,
+    "omega": {
+      "actor": "openrouter-google/gemini-2.5-pro",
+      "pinned_model": null,
+      "status": "success",
+      "duration_ms": 38365,
+      "exit_code": 0,
+      "error": null,
+      "output_length": 3341
+    }
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "schema": "PlanAmendment/1.0",
+  "plan_id": "codex-skill-parity-remediation",
+  "plan_path": "_dev/reports/analysis/task-plans/codex-skill-parity-remediation__plan.json",
+  "amendment_id": "mythos-full-parity-port__codex-skill-parity-remediation__20260914T173619Z",
+  "timestamp": "2026-09-14T17:36:19Z",
+  "amended_by_actor_id": "codex",
+  "amended_by_harness_id": "codex-app",
+  "trigger": "The operator authorized the protected parity-port amendment after PR #32 passed implementation review but portable CI rejected unregistered target-tree changes.",
+  "divergences": [
+    {
+      "id": "D1",
+      "type": "gate_changed",
+      "step_id": "S2",
+      "original": "S2 required scoped validation, independent review, and pull-request delivery but did not name the repository's exact-tree parity registration gate.",
+      "observed": "Both PR #32 verification jobs fail at npm run verify:parity because the new Codex projection files, derived instructions, tooling, and evidence artifacts are absent from the protected target baseline.",
+      "evidence_refs": [
+        "parity/README.md",
+        "parity/baseline.json",
+        "tools/parity/verify-parity.cjs",
+        "PR #32 CI runs 34875248962 and 34875271093"
+      ],
+      "recommended_action": "Add a protected parity registration gate after all deliverable and review artifacts are final: rebuild the wiring graph, perform the repository-supported target-only baseline repair, and require npm run verify:parity to pass before delivery is complete."
+    },
+    {
+      "id": "D2",
+      "type": "output_changed",
+      "step_id": "S2",
+      "original": "The owned output set excluded parity/baseline.json and parity/wiring-graph.json.",
+      "observed": "Exact-tree registration necessarily changes the target expected-file inventory, target tree digest, wiring graph, graph digest, and wiring counts.",
+      "evidence_refs": [
+        "parity/baseline.json",
+        "parity/wiring-graph.json",
+        "tools/parity/surgical-baseline-repair.cjs",
+        "tools/parity/build-wiring-graph.cjs"
+      ],
+      "recommended_action": "Add parity/baseline.json and parity/wiring-graph.json to the bounded write set. Preserve baseline.source verbatim and prohibit source commit, export-map digest, public denylist digest, or private-denylist hash changes."
+    },
+    {
+      "id": "D3",
+      "type": "assumption_changed",
+      "step_id": "S2",
+      "original": "Passing instruction validation and path-leak checks was assumed sufficient to make the committed evidence artifacts portable.",
+      "observed": "Portable parity additionally detected an operator-specific token in a grounding report and literal private home-path syntax in the plan JSON and a negative test fixture.",
+      "evidence_refs": [
+        "private local grounding evidence retained outside the tracked repository surface",
+        "_dev/reports/analysis/task-plans/codex-skill-parity-remediation__plan.json",
+        "tools/skills/__tests__/sync-codex-skills.test.cjs",
+        "tools/parity/verify-parity.cjs"
+      ],
+      "recommended_action": "Move the philosophy-grounding report off the public tracked surface into a local private archive. Replace the two literal home-path occurrences with portable wording or a fixture-derived string while preserving plan meaning and negative-test behavior. Then rerun focused tests and contamination scans before parity registration."
+    },
+    {
+      "id": "D4",
+      "type": "step_split",
+      "step_id": "S2",
+      "original": "S2 combined final validation, review, and pull-request delivery.",
+      "observed": "Parity registration must occur only after amendment review and after every committed artifact is final; otherwise later files immediately stale the exact-tree baseline.",
+      "evidence_refs": [
+        "parity/README.md",
+        "instructions/canonical/commands/amend-plan.yaml",
+        "tools/parity/surgical-baseline-repair.cjs"
+      ],
+      "recommended_action": "Split closeout into: review amendment; sanitize reported contamination; finalize amendment evidence; regenerate wiring graph; repair target baseline once; run complete verification; inspect diff; commit and push; confirm PR checks."
+    },
+    {
+      "id": "D5",
+      "type": "gate_changed",
+      "step_id": "S2",
+      "original": "The pre-PR implementation review was the final code-review gate before parity registration.",
+      "observed": "The fresh PR review reported four projector defects and one alias-renderer defect. The renderer currently parses the canonical array registry as numeric object keys and emits nonexistent numeric aliases with undefined targets; its shipped focused test fails against the canonical registry.",
+      "evidence_refs": [
+        "PR #32 review comments 4007847477, 4007847484, 4007847488, 4007847498, and 4007847507",
+        "tools/skills/sync-codex-skills.cjs",
+        "tools/instructions/lib/engine.js",
+        "tools/instructions/lib/render.js",
+        "tools/instructions/__tests__/aliases.test.js"
+      ],
+      "recommended_action": "Resolve all five findings before parity registration. Add focused regression tests. For the renderer, minimally normalize the canonical array schema without changing canonical data, preserve typed target and authority fields, regenerate derived instructions, and require the alias test to pass."
+    }
+  ],
+  "risk_reassessment": {
+    "original_risk_tier": "high",
+    "amended_risk_tier": "high",
+    "original_review_lane": "codex-bridge",
+    "amended_review_lane": "codex-bridge plus protected parity-port review",
+    "rationale": "The implementation risk does not increase beyond high, but changing the repository/export boundary requires explicit membrane review and independent confirmation that source provenance remains unchanged."
+  },
+  "execution_constraints": [
+    "Preserve parity/baseline.json source metadata verbatim, including private_denylist_sha256.",
+    "Do not use build-baseline.cjs without all authoritative private-source inputs.",
+    "Use the target-only repair only after independent review confirms it is the repository-supported path for legitimate target additions.",
+    "Do not weaken, skip, or remove parity findings or tests.",
+    "Keep portable verification distinct from authoritative private-denylist ratification; if the bound private file remains unavailable, report ratification as pending.",
+    "Do not add post-repair tracked artifacts; if the tree changes, rerun graph generation and target repair.",
+    "Resolve all fresh PR review findings before exact-tree registration and bind the final review to the repaired diff.",
+    "Require npm run verify:parity, parity tests, focused projector tests, instruction validation, and git diff --check to pass.",
+    "Keep instructions/canonical and client paths outside the write set."
+  ],
+  "added_owned_artifacts": [
+    "parity/baseline.json",
+    "parity/wiring-graph.json",
+    "_dev/reports/analysis/task-plans/codex-skill-parity-remediation__amendment__20260914T173619Z.json",
+    "_dev/reports/analysis/task-plans/codex-skill-parity-remediation__amendment__20260914T173619Z.md",
+    "tools/instructions/lib/engine.js",
+    "tools/instructions/lib/render.js",
+    "tools/instructions/__tests__/aliases.test.js"
+  ],
+  "acceptance_additions": [
+    "The portable parity verifier returns ok=true with no findings.",
+    "Authoritative private-denylist verification passes against the existing bound hash without serializing the external file or its location.",
+    "The private-denylist binding and all source provenance fields are byte-for-byte unchanged.",
+    "The wiring graph reports zero unresolved nodes.",
+    "All five fresh PR review findings have regression coverage and are resolved or explicitly rebutted with evidence.",
+    "Independent review confirms the target-only registration does not widen export-map authority or suppress contamination checks.",
+    "PR #32 required checks pass after the amended commit is pushed."
+  ],
+  "review": {
+    "run": "_dev/reports/analysis/convene-runs/20260914T174455Z-codex-skill-parity-amendment-review",
+    "actors": [
+      "openrouter-anthropic/claude-sonnet-4",
+      "openrouter-google/gemini-2.5-pro"
+    ],
+    "verdict": "APPROVE",
+    "disposition": "Both distinct-provider reviewers explicitly authorized contamination cleanup, the five PR repairs, alias normalization, graph regeneration, target-only baseline repair with source preservation, and authoritative private-denylist verification."
+  },
+  "plan_still_executable": true,
+  "next_command": "/run-plan codex-skill-parity-remediation",
+  "supersedes_prior_amendment": null
+}

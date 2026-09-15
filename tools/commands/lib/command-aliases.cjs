@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { parseAliasRegistry } = require('../../instructions/lib/engine.js');
 
 function aliasRegistryPath(projectRoot) {
   return path.join(projectRoot, 'instructions', 'canonical', 'command-aliases.yaml');
@@ -19,7 +20,8 @@ function loadAliasRegistry(projectRoot) {
 
   let registry;
   try {
-    registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
+    const raw = fs.readFileSync(registryPath, 'utf8');
+    registry = /^(?:\{|\[)/.test(raw.trimStart()) ? JSON.parse(raw) : parseAliasRegistry(raw);
   } catch (err) {
     throw new Error(`Failed to parse command alias registry ${registryPath}: ${err.message}`);
   }
@@ -58,14 +60,28 @@ function resolveCommandAlias(projectRoot, commandId) {
     };
   }
 
-  const executionCommand = String(alias.execution_target || alias.target || typedCommand).trim().toLowerCase();
+  const immediateTarget = String(alias.execution_target || alias.target || alias.resolves_to || typedCommand).trim().toLowerCase();
+  const trail = [typedCommand];
+  let executionCommand = immediateTarget;
+  while (aliases.has(executionCommand)) {
+    const nextAlias = aliases.get(executionCommand);
+    const nextCommand = String(nextAlias.execution_target || nextAlias.target || nextAlias.resolves_to || executionCommand).trim().toLowerCase();
+    const canonicalSelfTarget = nextCommand === executionCommand
+      && fs.existsSync(path.join(projectRoot, 'instructions', 'canonical', 'commands', `${executionCommand}.yaml`));
+    if (canonicalSelfTarget) break;
+    if (trail.includes(executionCommand)) {
+      throw new Error(`Command alias cycle detected: ${[...trail, executionCommand].join(' -> ')}`);
+    }
+    trail.push(executionCommand);
+    executionCommand = nextCommand;
+  }
   return {
     isAlias: true,
     typedCommand,
-    resolvedCommand: String(alias.target || executionCommand).trim().toLowerCase(),
+    resolvedCommand: String(alias.target || alias.resolves_to || immediateTarget).trim().toLowerCase(),
     executionCommand,
     authoritySource: String(alias.authority_source || executionCommand).trim().toLowerCase(),
-    expansionEdges: Array.isArray(alias.expansion_edges) ? alias.expansion_edges : [typedCommand, executionCommand],
+    expansionEdges: Array.isArray(alias.expansion_edges) ? alias.expansion_edges : trail.includes(executionCommand) ? trail : [...trail, executionCommand],
     alias
   };
 }

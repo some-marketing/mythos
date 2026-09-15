@@ -1,0 +1,11 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "instructions/canonical/commands/triage-client-board.yaml",
+  "source_sha256": "959cf76341181881bc6f517af486c23e31293facdc55e648f94ed1192d0e25bd",
+  "projection_kind": "canonical_command",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "reviewed_safe",
+  "target_exact_path": ".agents/skills/source-command-triage-client-board/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "already_aligned"
+}

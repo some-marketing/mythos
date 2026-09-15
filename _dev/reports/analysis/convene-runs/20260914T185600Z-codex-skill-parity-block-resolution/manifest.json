@@ -1,0 +1,72 @@
+{
+  "schema": "ConveneRun/3.0",
+  "previous_schema": "ConveneRun/2.0",
+  "timestamp": "2026-09-14T18:56:30.095Z",
+  "scope": "codex-skill-parity-block-resolution",
+  "task": "Re-review your prior BLOCK on PR #32 against the current files. Verify two points precisely: (1) parseAliasRegistry now directly maps array-form canonical records and commandAliasSection has a typed rendering regression; the executed combined suite reports 24/24 passing and generated root docs contain no numeric or undefined aliases; (2) sync now uses validateCandidateDir's resolved return for cleanup/writes, and each deletion child is independently verified as a strict descendant, with safe-symlink and escaping-child-symlink regressions; the projector-focused suite reports 15/15 passing. Inspect the actual current code and tests. Return APPROVE, AMEND_REQUIRED, or BLOCK, citing any reproducible blocker. Do not modify files.",
+  "context_files": [
+    "tools/instructions/lib/engine.js",
+    "tools/instructions/lib/render.js",
+    "tools/instructions/__tests__/aliases.test.js",
+    "tools/skills/sync-codex-skills.cjs",
+    "tools/skills/__tests__/sync-codex-skills.test.cjs"
+  ],
+  "origin": "now",
+  "profile": {
+    "id": "openrouter-triad",
+    "label": "OpenRouter triad",
+    "consequence_grade": false
+  },
+  "triad_slots": [
+    {
+      "id": "alpha",
+      "label": "ALPHA",
+      "function": "Fast reasoning, intent, orchestration.",
+      "actor": "openrouter-anthropic/claude-sonnet-4",
+      "pinned_model": null,
+      "is_origin": false
+    },
+    {
+      "id": "now",
+      "label": "NOW",
+      "function": "Repo truth, code verification, falsification.",
+      "actor": "openrouter-openai/gpt-4o",
+      "pinned_model": null,
+      "is_origin": true
+    },
+    {
+      "id": "omega",
+      "label": "OMEGA",
+      "function": "Breadth, consequence, reframing, big picture.",
+      "actor": "openrouter-google/gemini-2.5-pro",
+      "pinned_model": null,
+      "is_origin": false
+    }
+  ],
+  "participants": [
+    "openrouter-anthropic/claude-sonnet-4"
+  ],
+  "participant_slots": [
+    {
+      "id": "alpha",
+      "actor": "openrouter-anthropic/claude-sonnet-4"
+    }
+  ],
+  "duplicate_actors": [],
+  "timeout_seconds": 180,
+  "dry_run": false,
+  "only": "alpha",
+  "results": {
+    "alpha": {
+      "actor": "openrouter-anthropic/claude-sonnet-4",
+      "pinned_model": null,
+      "status": "success",
+      "duration_ms": 29713,
+      "exit_code": 0,
+      "error": null,
+      "output_length": 3827
+    },
+    "now": null,
+    "omega": null
+  }
+}

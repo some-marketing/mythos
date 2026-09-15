@@ -95,6 +95,11 @@ test('repo pins only Codex-supported projection frontmatter keys', () => {
   assert.equal(listBounded.ok, true);
   assert.match(listBounded.content, /allowed-tools: \["Read","Bash\(ls \*\)"\]/);
   assert.deepEqual(parseFrontmatter(listBounded.content).metadata['allowed-tools'], ['Read', 'Bash(ls *)']);
+
+  const flowBounded = normalizeDirectSkill('---\nname: old\ndescription: demo\nallowed-tools: [Read, Write]\n---\nbody\n', 'new');
+  assert.equal(flowBounded.ok, true);
+  assert.match(flowBounded.content, /allowed-tools: \["Read","Write"\]/);
+  assert.deepEqual(parseFrontmatter(flowBounded.content).metadata['allowed-tools'], ['Read', 'Write']);
 });
 
 test('frontmatter parsing accepts and normalizes CRLF line endings', () => {
@@ -292,12 +297,23 @@ test('typed aliases reject missing canonical authority sources', () => {
   );
 });
 
-test('typed aliases remain unavailable when their canonical authority is malformed', () => {
+test('typed aliases reject authorities that diverge from their resolved terminal', () => {
   const root = fixture();
   command(root, 'wrapper');
   command(root, 'route');
+  command(root, 'debrief-run');
+  const aliases = { aliases: [{ id: 'wrapper', execution_target: 'route', authority_source: 'debrief-run' }] };
+  assert.throws(
+    () => buildCandidates({ root, handlerIds: new Set(), aliasRegistry: aliases }),
+    /Alias authority source must match resolved terminal for wrapper/
+  );
+});
+
+test('typed aliases remain unavailable when their canonical authority is malformed', () => {
+  const root = fixture();
+  command(root, 'wrapper');
   command(root, 'broken-authority', { mode: 'SUPERUSER' });
-  const aliases = { aliases: [{ id: 'wrapper', target: 'route', authority_source: 'broken-authority' }] };
+  const aliases = { aliases: [{ id: 'wrapper', target: 'broken-authority', authority_source: 'broken-authority' }] };
   const result = sync({ root, handlerIds: new Set(), aliasRegistry: aliases, apply: true });
   const wrapper = byId(result, 'command-wrapper');
   assert.equal(wrapper.content, null);
@@ -1176,6 +1192,9 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     `PRIVATE_KEY="privatesecretvalue${'v'.repeat(16)}"\n`,
     `AUTH_TOKEN: authsecretvalue${'h'.repeat(16)}\n`,
     `SECRET=baresecretvalue${'s'.repeat(16)}\n`,
+    `STRIPE_API_KEY=stripevalue${'r'.repeat(16)}\n`,
+    `DB_PASSWORD=dbvalue${'d'.repeat(16)}\n`,
+    `FOO_ACCESS_TOKEN=foovalue${'f'.repeat(16)}\n`,
     `Authorization: Bearer ordinarysecretvalue${'b'.repeat(16)}\n`,
     'Authorization: Bearer secret\n',
     'Authorization: Basic dTpw\n',

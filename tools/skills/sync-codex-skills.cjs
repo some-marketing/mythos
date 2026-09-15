@@ -152,6 +152,32 @@ function isYamlNonStringToken(value) {
     || /^\d{4}-\d{2}-\d{2}(?:[Tt]|\s)\d{2}:\d{2}/.test(token);
 }
 
+function parseYamlFlowStringList(value) {
+  const token = String(value).trim();
+  if (!token.startsWith('[') || !token.endsWith(']')) return null;
+  const inner = token.slice(1, -1).trim();
+  if (!inner) return [];
+  const items = [];
+  let start = 0;
+  let quote = null;
+  for (let index = 0; index <= inner.length; index += 1) {
+    const character = inner[index];
+    if (quote) {
+      if (quote === '"' && character === '\\') index += 1;
+      else if (character === quote) quote = null;
+      continue;
+    }
+    if (character === '"' || character === "'") quote = character;
+    else if (character === ',' || index === inner.length) {
+      const rawItem = inner.slice(start, index).trim();
+      if (!rawItem || isYamlNonStringToken(rawItem)) return null;
+      items.push(decodeQuotedYamlScalar(rawItem));
+      start = index + 1;
+    }
+  }
+  return quote ? null : items;
+}
+
 function parseFrontmatter(text, sourcePath = '<memory>') {
   const normalizedText = String(text).replace(/\r\n?/g, '\n');
   if (!normalizedText.startsWith('---\n')) return { ok: false, error: 'missing frontmatter opener', sourcePath };
@@ -188,12 +214,9 @@ function parseFrontmatter(text, sourcePath = '<memory>') {
       value = items;
     }
     if (key === 'allowed-tools' && typeof value === 'string' && value.startsWith('[') && value.endsWith(']')) {
-      try {
-        const items = JSON.parse(value);
-        if (Array.isArray(items) && items.every((item) => typeof item === 'string')) value = items;
-      } catch {
-        // Leave non-JSON YAML flow syntax as a scalar; the projector will preserve it verbatim.
-      }
+      const items = parseYamlFlowStringList(value);
+      if (!items) return { ok: false, error: 'frontmatter allowed-tools flow sequence must contain only strings', sourcePath };
+      value = items;
     }
     if (typeof value === 'string') {
       const quoted = (value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"));
@@ -499,6 +522,9 @@ function resolveAliases(root, config, commands, directNames, registryOverride) {
 
   for (const row of aliases.values()) {
     const resolved = resolve(row.id);
+    if (resolved.ok && commands.has(row.id) && row.authority_source && row.authority_source !== resolved.terminal) {
+      throw new Error(`Alias authority source must match resolved terminal for ${row.id}`);
+    }
     results.push({ alias: row, ...resolved });
   }
   return results;
@@ -632,7 +658,7 @@ function containsCredentialMaterial(bytes) {
     || /(?:^|[^A-Z0-9_])["']?AUTHORIZATION["']?\s*[:=]\s*["']?[A-Z][A-Z0-9._~-]*\s+(?!(?:<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=$|[\s;"'`]))[^\s"'`]+/im.test(text)
     || containsLiteralCookieCredential(text)
     || /[A-Za-z][A-Za-z0-9+.-]*:\/\/[^\s/@:]+:(?!(?:<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=@))[^@\s/]+@/im.test(text)
-    || /(?:^|[^A-Z0-9_])["']?(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY|API[_-]?KEY|CLIENT[_-]?SECRET|PASSWORD|PASSWD|ACCESS[_-]?TOKEN|REFRESH[_-]?TOKEN|AUTH[_-]?TOKEN|SECRET|SECRET[_-]?KEY|PRIVATE[_-]?KEY)["']?\s*[:=]\s*["']?(?!(?:<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=$|[\s"'`]))[^\s"'`]+/im.test(text);
+    || /(?:^|[^A-Z0-9_])["']?(?:[A-Z][A-Z0-9_-]*[_-])?(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY|API[_-]?KEY|CLIENT[_-]?SECRET|PASSWORD|PASSWD|ACCESS[_-]?TOKEN|REFRESH[_-]?TOKEN|AUTH[_-]?TOKEN|SECRET|SECRET[_-]?KEY|PRIVATE[_-]?KEY)["']?\s*[:=]\s*["']?(?!(?:<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=$|[\s"'`]))[^\s"'`]+/im.test(text);
 }
 
 function isSensitiveResourcePath(relativePath) {

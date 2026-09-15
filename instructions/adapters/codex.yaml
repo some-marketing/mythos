@@ -14,5 +14,84 @@
     "agents": "subagent_roles"
   },
   "unsupported_features_policy": "warn",
-  "post_processors": []
+  "post_processors": [],
+  "skill_projection": {
+    "schema": "CodexSkillProjectionConfig/1.0",
+    "generator_id": "mythos-codex-skill-projector/1.0.0",
+    "generator": "tools/skills/sync-codex-skills.cjs",
+    "handler_registry": "tools/commands/mythos-command-runner.cjs",
+    "alias_registry": "instructions/canonical/command-aliases.yaml",
+    "candidate_root": "_dev/reports/analysis/codex-skill-projections",
+    "target_root": ".agents/skills",
+    "allowed_frontmatter_keys": [
+      "name",
+      "description",
+      "license",
+      "metadata",
+      "allowed-tools"
+    ],
+    "families": {
+      "canonical_commands": {
+        "source_root": "instructions/canonical/commands",
+        "target_prefix": "source-command-",
+        "semantic_review_state": "reviewed_safe",
+        "default_capability_tier": "ADVISORY"
+      },
+      "direct_system_skills": {
+        "source_root": ".claude/skills",
+        "semantic_review_state": "reviewed_safe",
+        "sources": [
+          ".claude/skills/go/SKILL.md",
+          ".claude/skills/meditate/SKILL.md",
+          ".claude/skills/outward-inward-loop/SKILL.md",
+          ".claude/skills/ticktock/SKILL.md"
+        ],
+        "dependencies": {
+          "ticktock": [
+            "meditate"
+          ]
+        }
+      },
+      "aliases": {
+        "application": "target_metadata_only",
+        "semantic_review_state": "reviewed_safe"
+      },
+      "framework_helpers": {
+        "source_pattern": "frameworks/*/*/.claude/skills/**/SKILL.md",
+        "target_prefix": "guild-",
+        "semantic_review_state": "pending_review"
+      }
+    },
+    "command_overrides": {
+      "ground-in-philosophy": {
+        "capability_tier": "ADVISORY",
+        "semantic_review_state": "reviewed_safe",
+        "codex_execution": "Dispatch the registered philosophy-grounding role for the 16-check assessment and disconfirmation pass. If that role is unavailable, report capability UNKNOWN and stop; never substitute another harness's fallback as Codex behavior.",
+        "forbidden_source_fragments": [
+          "Pi cannot natively spawn sub-agents",
+          "manual grounding (pi harness"
+        ]
+      }
+    }
+  },
+  "managed_commands": [
+    "/amend-plan",
+    "/boot",
+    "/cross-session",
+    "/debrief-run",
+    "/dispatch-bridge",
+    "/end-session",
+    "/new-session",
+    "/next-session",
+    "/normalize-signals",
+    "/orchestrate",
+    "/orchestrate-loop",
+    "/repair-plan",
+    "/review-task-plan",
+    "/run-plan",
+    "/shutdown",
+    "/substrate-fidelity-review",
+    "/synthesize-debrief",
+    "/systemize-behavior"
+  ]
 }

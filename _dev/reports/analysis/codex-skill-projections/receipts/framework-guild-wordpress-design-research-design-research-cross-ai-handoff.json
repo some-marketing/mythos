@@ -1,0 +1,13 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "frameworks/wordpress/design-research/.claude/skills/design-research/cross-ai-handoff/SKILL.md",
+  "source_sha256": "0b40bb9b6381f239d0225db80e5be768342812d2d336a8cb31e2fc0c4e3d9e42",
+  "projection_kind": "framework_helper",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "pending_review",
+  "target_exact_path": ".agents/skills/guild-wordpress-design-research-design-research-cross-ai-handoff/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "candidate",
+  "resource_manifest": [],
+  "package_sha256": "6dcaacaeb137fa4adfd23b0781fb0a27be11426523bd63f62054f0096918a50a"
+}

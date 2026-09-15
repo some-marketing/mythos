@@ -88,6 +88,8 @@ required_skills:
       name: state-reconciliation-preamble
     - path: .claude/skills/store-credential/SKILL.md
       name: store-credential
+    - path: .claude/skills/ticktock/SKILL.md
+      name: ticktock
   frameworks:
     - path: frameworks/deliverables/presentation-review/.claude/skills/presentation-review/
       name: presentation-review
@@ -109,6 +111,12 @@ required_skills:
       name: dart-collaboration
     - path: frameworks/project-management/feedback-to-tasks/.claude/skills/feedback-to-tasks/
       name: feedback-to-tasks
+    - path: frameworks/research/business-identity-verification/.claude/skills/business-identity-verification/
+      name: business-identity-verification
+    - path: frameworks/research/contractor-credential-review/.claude/skills/contractor-credential-review/
+      name: contractor-credential-review
+    - path: frameworks/research/osint-discovery/.claude/skills/osint-discovery/
+      name: osint-discovery
     - path: frameworks/wordpress/analytics-tracking/.claude/skills/analytics-tracking/
       name: analytics-tracking
     - path: frameworks/wordpress/content-editing/.claude/skills/content-editing/
@@ -119,6 +127,8 @@ required_skills:
       name: design-research (6 skills)
     - path: frameworks/wordpress/documentation/.claude/skills/documentation/
       name: documentation
+    - path: frameworks/wordpress/livecanvas-onepager-build/.claude/skills/livecanvas-onepager-build/
+      name: livecanvas-onepager-build
     - path: frameworks/wordpress/livecanvas-rebuild/.claude/skills/livecanvas-rebuild/
       name: livecanvas-rebuild
     - path: frameworks/wordpress/page-cro/.claude/skills/page-cro/
@@ -311,6 +321,7 @@ required_commands:
     - path: .claude/commands/system-status.md
     - path: .claude/commands/systemize-behavior.md
     - path: .claude/commands/telemetry-status.md
+    - path: .claude/commands/ticktock.md
     - path: .claude/commands/triage-client-board.md
     - path: .claude/commands/trial-quest.md
     - path: .claude/commands/validate-all-frameworks.md
@@ -337,6 +348,12 @@ required_commands:
       note: 2 commands
     - path: frameworks/project-management/feedback-to-tasks/.claude/commands/feedback-to-tasks/
       note: 5 commands
+    - path: frameworks/research/business-identity-verification/.claude/commands/business-identity-verification/
+      note: 1 command
+    - path: frameworks/research/contractor-credential-review/.claude/commands/contractor-credential-review/
+      note: 1 command
+    - path: frameworks/research/osint-discovery/.claude/commands/osint-discovery/
+      note: 1 command
     - path: frameworks/wordpress/analytics-tracking/.claude/commands/analytics-tracking/
       note: 6 commands
     - path: frameworks/wordpress/content-editing/.claude/commands/content-editing/
@@ -347,6 +364,8 @@ required_commands:
       note: 15 commands
     - path: frameworks/wordpress/documentation/.claude/commands/documentation/
       note: 6 commands
+    - path: frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/
+      note: 7 commands
     - path: frameworks/wordpress/livecanvas-rebuild/.claude/commands/livecanvas-rebuild/
       note: 7 commands
     - path: frameworks/wordpress/page-cro/.claude/commands/page-cro/
@@ -411,6 +430,12 @@ required_subagents:
       note: 1 agent
     - path: frameworks/project-management/feedback-to-tasks/.claude/agents/feedback-to-tasks/
       note: 4 agents
+    - path: frameworks/research/business-identity-verification/.claude/agents/business-identity-verification/
+      note: 3 agents
+    - path: frameworks/research/contractor-credential-review/.claude/agents/contractor-credential-review/
+      note: 3 agents
+    - path: frameworks/research/osint-discovery/.claude/agents/osint-discovery/
+      note: 4 agents
     - path: frameworks/wordpress/analytics-tracking/.claude/agents/analytics-tracking/
       note: 4 agents
     - path: frameworks/wordpress/content-editing/.claude/agents/content-editing/
@@ -421,6 +446,8 @@ required_subagents:
       note: 9 agents
     - path: frameworks/wordpress/documentation/.claude/agents/documentation/
       note: 2 agents
+    - path: frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/
+      note: 5 agents
     - path: frameworks/wordpress/livecanvas-rebuild/.claude/agents/livecanvas-rebuild/
       note: 5 agents
     - path: frameworks/wordpress/page-cro/.claude/agents/page-cro/
@@ -454,11 +481,15 @@ required_guardrails:
   - path: frameworks/paid-media/meta-creative-iteration/guardrails.md
   - path: frameworks/project-management/dart-collaboration/guardrails.md
   - path: frameworks/project-management/feedback-to-tasks/guardrails.md
+  - path: frameworks/research/business-identity-verification/guardrails.md
+  - path: frameworks/research/contractor-credential-review/guardrails.md
+  - path: frameworks/research/osint-discovery/guardrails.md
   - path: frameworks/wordpress/analytics-tracking/guardrails.md
   - path: frameworks/wordpress/content-editing/guardrails.md
   - path: frameworks/wordpress/design-mockup-validation/guardrails.md
   - path: frameworks/wordpress/design-research/guardrails.md
   - path: frameworks/wordpress/documentation/guardrails.md
+  - path: frameworks/wordpress/livecanvas-onepager-build/guardrails.md
   - path: frameworks/wordpress/livecanvas-rebuild/guardrails.md
   - path: frameworks/wordpress/page-cro/guardrails.md
   - path: frameworks/wordpress/qa/guardrails.md

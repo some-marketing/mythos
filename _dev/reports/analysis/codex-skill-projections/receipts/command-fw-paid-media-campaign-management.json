@@ -1,0 +1,11 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "instructions/canonical/commands/fw-paid-media-campaign-management.yaml",
+  "source_sha256": "11c7cd513d3eb41e28955b1e5ce85eedb428bc288c13875a5c2881ca049e2004",
+  "projection_kind": "canonical_command",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "reviewed_safe",
+  "target_exact_path": ".agents/skills/source-command-fw-paid-media-campaign-management/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "already_aligned"
+}

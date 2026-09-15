@@ -1,0 +1,11 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": ".claude/skills/meditate/SKILL.md",
+  "source_sha256": null,
+  "projection_kind": "direct_system_skill",
+  "capability_tier": "ABSENT",
+  "semantic_review_state": "missing_source",
+  "target_exact_path": ".agents/skills/meditate/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "blocked_missing_source"
+}

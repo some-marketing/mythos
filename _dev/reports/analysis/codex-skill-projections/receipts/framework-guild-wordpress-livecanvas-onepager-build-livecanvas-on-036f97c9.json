@@ -1,0 +1,13 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "frameworks/wordpress/livecanvas-onepager-build/.claude/skills/livecanvas-onepager-build/SKILL.md",
+  "source_sha256": "4c8821b1206b3940527e3667f1f4a8988f473d17872def8d811997e6d23ee14c",
+  "projection_kind": "framework_helper",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "pending_review",
+  "target_exact_path": ".agents/skills/guild-wordpress-livecanvas-onepager-build-livecanvas-on-036f97c9/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "candidate",
+  "resource_manifest": [],
+  "package_sha256": "ec4b377aaa66ccb1210833ab25309dc1dfd00d890d574582f6809dcdf58c3508"
+}

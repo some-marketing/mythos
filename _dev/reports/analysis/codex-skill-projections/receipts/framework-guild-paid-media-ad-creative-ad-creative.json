@@ -1,0 +1,13 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "frameworks/paid-media/ad-creative/.claude/skills/ad-creative/SKILL.md",
+  "source_sha256": "723ec7b09e6dc466a4dc9447aefdd5a7144e9a29aa91a3b9cb9d429ff1aecf20",
+  "projection_kind": "framework_helper",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "pending_review",
+  "target_exact_path": ".agents/skills/guild-paid-media-ad-creative-ad-creative/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "candidate",
+  "resource_manifest": [],
+  "package_sha256": "5ce34b5675fbbec671d19962279e4f89a398bcb876700f9fe0dd1001b5077435"
+}

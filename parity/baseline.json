@@ -43,8 +43,663 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "4cd62bd73a85d6126cba99be9ecafaf3efd06a8c2869ae64902e576046520945",
+    "expected_tree_sha256": "c3b78255667ad3fb5b3a354840fd5e95b38da80737f4da549072d07a1727a321",
     "expected_files": [
+      {
+        "path": ".agents/skills/go/SKILL.md",
+        "sha256": "1a441653a5c5ff6408d0e6b5e175f4b1f1f336b77b08e18a3a28f69eb6cf0f55",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-ad-copy-dev/SKILL.md",
+        "sha256": "9f0071a981b3fbf5b24daf347b7b9847a7adc818cbcf9b5443b053b40414be71",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-advance-pipeline/SKILL.md",
+        "sha256": "5c2a536c76bad2d0a577cf26b9f7fb5cbfa3fdddce4b0c1f377a819e008b02de",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-aider-self-help/SKILL.md",
+        "sha256": "97ce0bc784e356deedf971931fa33687d8da4a0a449c706cd997828a1efa5ecf",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-amend-plan/SKILL.md",
+        "sha256": "e273e9bdf26a83bf6cbaac30d83a8da8d964bd5ac299b4cf8321a7da1a107245",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-arc-blocked/SKILL.md",
+        "sha256": "5304a866f402f33d55667d6e5a0a47beaa31efe66e736700db1d1302e712133d",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-arc-complete/SKILL.md",
+        "sha256": "ab398b5e2fab14d6c0668ff30da50a839577db586c2e14f141f9cf0b0b135334",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-arc-rest/SKILL.md",
+        "sha256": "22a6f578290a69f9ca2363c10258bb89f815e52c70ed3679d3a21e671278ae32",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-arc-status/SKILL.md",
+        "sha256": "81e39da1ab964a4fd9e11e8c4b930494beb851328ebec3cede74b3a7d18d301a",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-aside/SKILL.md",
+        "sha256": "e4ac46a4c738ddee31622be38f7e5a1c80f3dfb0327e97725071fa92ab906363",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-assemble-prompt-system/SKILL.md",
+        "sha256": "44006c3c2e24186984aaebf3837626c9c4a6a08fd683525de41aae8df29c8a7f",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-audit-framework/SKILL.md",
+        "sha256": "cf49734bbfbdc508119dc48a2b09f3e78b08652bb4acacc9d7e49e66d2f55b51",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-author-prompt-system/SKILL.md",
+        "sha256": "c77e7ab02aaac40c0a0167d26d7fa211c73a5ecce58487e5cb14f00ec9cf4e81",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-blueprint/SKILL.md",
+        "sha256": "7fe1ba5f6696aa551e8a15cca6f8cb421c768331d2ccdb87befff940967a6d93",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-boot/SKILL.md",
+        "sha256": "848d519e3cceb67121b3bb814b2a7e6d10b495ace8567b57399febe2cace08db",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-bridge-speakers/SKILL.md",
+        "sha256": "d5057e1b37e31e551c0da047426747c6dc279ae1fee7db7eb238407c14a6f71c",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-cadence/SKILL.md",
+        "sha256": "a8875d125510d3eea4558e77e622c7104559719c68b63007a2a7a4e5633d7398",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-candidate-status/SKILL.md",
+        "sha256": "d2173be37d465ef254e9542d578b0f53c28886f51e54f80f2823bb4b8033e3b9",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-capture-status/SKILL.md",
+        "sha256": "1a4dc08f3b7291a0e0a921a5754856e503fc38891a1f3214de0f2b025f30d5a6",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-capture-task/SKILL.md",
+        "sha256": "fbe0f3029974d50cf20ac9120fc093185c90740345c9c70bd6735eb0bbe14d6d",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-claim-intake/SKILL.md",
+        "sha256": "3eef2d0224e9df1119afc44a4d743b6ae4c86c4099526e0d043034dc9643579d",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-clean-house/SKILL.md",
+        "sha256": "21d0247fb635b8ae78d5b2a127383306e3ba6fedc28fc013fd7255fe12d2b188",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-codex-self-help/SKILL.md",
+        "sha256": "3f58f3833c7414845126c9403803d24fb28b0405dddccb34393dc870f3e91f47",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-concept-dispatch/SKILL.md",
+        "sha256": "1f432ab1effe8bb27cd90162561716f1d8b83ac1fe9dbdbee02c29725e4ade93",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-concept-init/SKILL.md",
+        "sha256": "4c4abfd645b4de67f978ad11f33fe676abb579ddf83b8d254047246a210c8ceb",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-concept-promote/SKILL.md",
+        "sha256": "e0bd6b12eb822cc2e8a1729952c050f2ded152eb5ace27c7e6467a58c034bee4",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-context-check/SKILL.md",
+        "sha256": "2486211c1d64a04798b04779560f643fac3b8b2569c3f4747bebae777314ab1d",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-continue-self-help/SKILL.md",
+        "sha256": "93e570b0f915e88c0725f3b0f36f38c0e8f73ba71a16fdacb6f86a0fe47e0a7e",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-convene-gate-status/SKILL.md",
+        "sha256": "477d128b20643f68c2f26c451c8d015b580dde0d46cc42486d5c5a09e142af0c",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-convene/SKILL.md",
+        "sha256": "f2854c065e216788a6f64abce4b97243473ab493a4fcfb3eaf1aef98bddafa07",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-council-of-owls/SKILL.md",
+        "sha256": "f14ff2a0cca5dd38bc74e0ea041f494ef0aec9b28fca2a940e8957a52c1d2347",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-create-plan/SKILL.md",
+        "sha256": "cecc79a1cb488a40fb533e765c936b2fd3d54b32923a22a63b42ba37d079d348",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-cross-session/SKILL.md",
+        "sha256": "3deea9c0c20f41aae56acdc3071974aad9199f8fab71134512f0b12d6af51905",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-crush-self-help/SKILL.md",
+        "sha256": "f05e47dec447db7c68e4f598f7d6e147810cf1f26836dd8a113aa137365a31f6",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-cursor-self-help/SKILL.md",
+        "sha256": "e85ada298e99714d69910a72dcaaaeeab2ec465f064a7346f2667bf06fd3d6d0",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-debrief-run/SKILL.md",
+        "sha256": "544ed39ec39b0f16a0f7b6a60dddc40879f70a113c9e998df355e8be0ae067a9",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-deliberate/SKILL.md",
+        "sha256": "7ad3a02e19a36bd98ef19d0c9810d9ab705e4737577afced8e6f89a7648f67d8",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-discord-access/SKILL.md",
+        "sha256": "5a68c5899874861b7dcba5c57340c6a4bc34b668c5aa09ea249d0a37f93a0831",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-discord-configure/SKILL.md",
+        "sha256": "603aadae3acb09ded6e4fe9126a62f4930aa23b9d19d7086d96ad69a1c4b29ee",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-dispatch-bridge/SKILL.md",
+        "sha256": "26bfe7e194107367fa8cdcec1a24dc3d53a7cd02617897dff25578fa43f1a8b5",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-dispatch-trifecta/SKILL.md",
+        "sha256": "5b2f85194bafb4d4c635ac79f0aa0ccd737aa3532ec0ee596d749d37b2f42780",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-dl/SKILL.md",
+        "sha256": "75d0cfa5789cac1140e195018b73d01970c8fe84e56e820d3a319aff550cfd59",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-el/SKILL.md",
+        "sha256": "06ed1bea066af1cd4032e720f16ad038512a7c17c02467a0eede5bd4d3c62bdf",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-end-session/SKILL.md",
+        "sha256": "909ad5ac729c7ed423683cb313852b6e0aeae2961111f2cce965bbd18ac5ba8a",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-evidence-loop/SKILL.md",
+        "sha256": "07b9b122d7e584c4e7b1a56c1abe4cdd31f524c2aaf6a665794bd984cfa7586e",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-execute-plan/SKILL.md",
+        "sha256": "efe87df41c06c79b575889801e9d1c52df36285b026bccdb7e6ff9c2fd4b585c",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-extract-skill/SKILL.md",
+        "sha256": "584d5031ae7e307cf87d9e76e0399fb6559a27a36c120a9853fe24d4d98498c7",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-follow-signal/SKILL.md",
+        "sha256": "3044feefbbf9f57c63b5714503781ec3305f86cdac147c40ee88dddafafee959",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-framework-phase/SKILL.md",
+        "sha256": "17c6c6b057bd6ae24bbe22d46efd46321525713a762d033efe853de9ca3b5223",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-framework-run/SKILL.md",
+        "sha256": "e6b57bf40edea806065ced5539d9437a872753cd76b2460f1b93d08f846104d4",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-framework-status/SKILL.md",
+        "sha256": "e13936b1a78deb2cbe74114961f786005eb90c8f467b0fb9415546141a482cf8",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-fw-deliverables-presentation-review/SKILL.md",
+        "sha256": "2dec0b7c990698f5f2268f6c57dc63f45d026f90c1ad1240c81513eccdee982d",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-fw-deliverables-scope-verification/SKILL.md",
+        "sha256": "8705c859827ab284092caffe42b2099156441df209a030f29da1f52eaaf72252",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-fw-deliverables-version-reconciliation/SKILL.md",
+        "sha256": "715c0c6394ab227dab1a5f3e0044e871a58d49e4d8e259b00f6914b8746f6e2a",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-fw-media-video-editing/SKILL.md",
+        "sha256": "49b9c9e85a8b17e1081e1d99d232048429291cfd44d98f9492594b637c75f0c9",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-fw-meta-execution-normalization/SKILL.md",
+        "sha256": "f27d8a70775d6a8e02e116c313ea118ff5e186c25e46947614a6ef14aeec5b99",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-fw-paid-media-ad-creative/SKILL.md",
+        "sha256": "8f078686d28d670e15423b9b196ac1abaea399220c39665fcca7e112b8b8bdc3",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-fw-paid-media-campaign-management/SKILL.md",
+        "sha256": "5e877521ce4c145790efbef230a7a8cd682894fc7e88f8f5f19a242006e7a026",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-fw-project-management-dart-collaboration/SKILL.md",
+        "sha256": "b406984a9d361d6a8e659e67bdc2b967bc376adbda036c06c53843fecf95c71c",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-fw-project-management-feedback-to-tasks/SKILL.md",
+        "sha256": "8f7d1325e1043350839115c1cb6e7981bda4958df710b2f00c8118d4e705a575",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-fw-wordpress-analytics-tracking/SKILL.md",
+        "sha256": "69ab1a7a927e7ed618ff18c70563b08adf438791a55d13331dbb932727465046",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-fw-wordpress-content-editing/SKILL.md",
+        "sha256": "3e9d850adbff38da4de86d728ec5192dba5dbfe0bb1fdb5176292d3d2695bfba",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-fw-wordpress-design-mockup-validation/SKILL.md",
+        "sha256": "da1712d04d71bd6288b0ce6e8c91fda38beb49272217bf3ebaad589f8a80dadc",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-fw-wordpress-design-research/SKILL.md",
+        "sha256": "19a51687852731e9902d9587e5f03161d7ed2c3c9439a81e8a1c6bcc5730e2b0",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-fw-wordpress-documentation/SKILL.md",
+        "sha256": "83ac9ce293a97deb842e3c5af8da1b29bca781092cf69a5575f12760466b8d6e",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-fw-wordpress-page-cro/SKILL.md",
+        "sha256": "fad3b767f91d5eb87c38479be7d68abc4b38525bca883e5908a9a7978d9d787e",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-fw-wordpress-qa/SKILL.md",
+        "sha256": "3514b6f11fc2de6a9278ccfe7d00c61c69dc1e262fc43e9cf2952afc0ae132be",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-fw-wordpress-seo-audit/SKILL.md",
+        "sha256": "77eee1407b58c50c7bdb3a75f36619e071ee424773600aafff4f8e1c69dd49df",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-fw-wordpress-seo-validation/SKILL.md",
+        "sha256": "4da972099eef7410fbbcafe67419ac419007402b7edf35dd8c8dc01a7edbfa56",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-gemini-self-help/SKILL.md",
+        "sha256": "653b53cd06a87de5eb8c45bee26137065fdec110635e22ee000794b1c0d9b366",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-generate-harness/SKILL.md",
+        "sha256": "2d73c5fa13c8b35b117b3fdd40215fc0025f69d0536b834f46f8b022dc21a71e",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-goose-self-help/SKILL.md",
+        "sha256": "0109df6ae4ce48068ed20b3607d7537adf200bdb4254f47f9916d35571ee23ca",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-ground-in-philosophy/SKILL.md",
+        "sha256": "0fb83ca918793045545ac4ba28cf4f77bcd2adc6021526a4fb3a088ed61e958a",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-help-me-route/SKILL.md",
+        "sha256": "8481bafae850c3efe52e2d7040024e9145c47b3020001b5b9cd62f064017d78c",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-hermes-self-help/SKILL.md",
+        "sha256": "6476d825c1aaba5a7cc060db8251c7837dbb52eecc13ad0090e6f806b908b7e2",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-improve-framework/SKILL.md",
+        "sha256": "e1e0164c34be0c494735fa83dbe4994f85c391603812b978629c4048a4401da6",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-ingest-walkthrough/SKILL.md",
+        "sha256": "20d9b06bcb932ec3ca241a163366dc95ef19dd4113596cb2d5c80315f0109b69",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-kilocode-self-help/SKILL.md",
+        "sha256": "24f40bc838b791a796010deb81e209e53f59a412ac3195189a4d8ad87ef4e84f",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-lint-attributions/SKILL.md",
+        "sha256": "28b0389ddffd6cd6d037291cacddb24401691a391a143ef68eecd7fac00c0fd7",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-list-frameworks/SKILL.md",
+        "sha256": "86720ef768dc6c286be5550bc527b2883ad2533aa7a5124a249a7e24d9a20cda",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-motivation-scan/SKILL.md",
+        "sha256": "323a7872fe0c905439b78e260b989c80a3de0830dcf5b8ccb74fe5e5b938bc4c",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-mythos-status/SKILL.md",
+        "sha256": "e1c068f39e0e7bc3c99988c39244e5cc791e55b8c79bcb811f768fab2f719980",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-new-client/SKILL.md",
+        "sha256": "72fff5ff4f94afd286e44c5507e74c4c869e8d659e5b1fd52757201ef585073e",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-new-framework/SKILL.md",
+        "sha256": "0481c07a164628edb57627805395ccd1b6910377cddc3a9b6ed1748db68b8f6e",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-new-project/SKILL.md",
+        "sha256": "2a03d7768d9ab79fc122514c890a246b74c06f938a832e761e5de886fa3bc2cd",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-new-session/SKILL.md",
+        "sha256": "270e5077fc4452915e5f0caaa20af362fd61f73439cb4edb30027086d814d2a6",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-next-session/SKILL.md",
+        "sha256": "ba121ea60ab2ac109630f8d899ec2d7647fd9341d97001a82f1dd0df248dca76",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-next-step/SKILL.md",
+        "sha256": "16fca577a3425b1fe7e1482502d02cc02a5dbc0e3a3f19bd661a44755e186984",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-normalize-capture/SKILL.md",
+        "sha256": "39596a27d7025b1c15ada845654ec4be7610063ac239527669371927f133b182",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-normalize-signals/SKILL.md",
+        "sha256": "7f85775006e8a4c9ab003308f95f8b291b8f351dd452622a59f25917730c6e31",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-oa/SKILL.md",
+        "sha256": "ac9ee5f60a99f2abfd2b81d49e13f7ccc39c56108aab6962ee805f1d8180ddf9",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-oc/SKILL.md",
+        "sha256": "516b647460428eb5a4e4c26815efc0b1c4db6463875238d2d6bd22fe6fd9bdd9",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-opencode-self-help/SKILL.md",
+        "sha256": "583a97c196bc9efb4e71a4b23dc93893938aa013cfa7f77637bd613a26e0e4cb",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-orchestrate-loop/SKILL.md",
+        "sha256": "9123fea9d7c1f4075e56018dfff63a58d280a0e1d8e0418c48e28e5dbd9d75df",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-orchestrate/SKILL.md",
+        "sha256": "a413a0e204b64cbbdc08085c02f7de2520c40e3c897d6745b0bbfd67219ae3e2",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-owl/SKILL.md",
+        "sha256": "128b7ef0ea8e85af24d608278dca5357546e61cabf6d5edd5e1b34ea95c34663",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-pi-self-help/SKILL.md",
+        "sha256": "4918ac3f81447328f730ea0b789314ad1be181691bf2d346460f6444ca3de720",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-plan-active-workstreams/SKILL.md",
+        "sha256": "bb28a5749d20d6437799ab8aed21ccd6e7520ae7cff7a99d62dfcf942149c186",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-plan-pipeline/SKILL.md",
+        "sha256": "31a9257dad5526c9f0a7ad6e695532075cf54cd559bc861da96ba39ace617356",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-plan-task/SKILL.md",
+        "sha256": "f91f8d0037b77f0959a7c395c49a34e76082eed8a10d0b269557e79435945f97",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-plans/SKILL.md",
+        "sha256": "d59df5318370b766fe01b1d4e18d85c3bf30141b43a3e756a78602a1694f82fd",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-project-status/SKILL.md",
+        "sha256": "3533e4b599b198bf1296b2d591327c803ecb5c04cab1bce273b9b1306e7e9834",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-promote-framework/SKILL.md",
+        "sha256": "4ad82ddd44e938289098e010e3af136705b886ced127905328105aeeb465136c",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-prompt-refine/SKILL.md",
+        "sha256": "a081eb45183c9fc4985e7f1eff591f43f862fefcd499420f19f64db35eaeb335",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-reconcile-lessons/SKILL.md",
+        "sha256": "a9984577ec16ccf469df3175c0375e0046d024e9473bbb80da4afb32b67f6604",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-reconcile-task-outcomes/SKILL.md",
+        "sha256": "d6f92257c1fca10efa787d9ef2aace9a75f0df20965ecaa369ee6c6858421934",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-reference-compare/SKILL.md",
+        "sha256": "91d17e9be1101968dc849553b6dbc9155899577ab0c1fdacfdfbd2bdc210b9ca",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-remember/SKILL.md",
+        "sha256": "e84fd4f11e29282240f1d0430fdccc0a07e0a1e459ed3f5ba48f037b86df5bc3",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-repair-plan/SKILL.md",
+        "sha256": "707aae08be43f4b9b650633ce7d9c215470e7958e6e1362867bd5dd7fdb244c4",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-replay-framework/SKILL.md",
+        "sha256": "d5be1d096f459b0ddc247dd32d6e51c9df0257ff70eef3d08e0f79594270c3f4",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-review-active-workstreams/SKILL.md",
+        "sha256": "d88a85a28364e32ae14bc27ba97ae5e73f16686b612ef86a9237d504666a668a",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-review-dispatch/SKILL.md",
+        "sha256": "f612d000e5d9772884f631ff9385863b8106125fb63f30a4602d31419bbc8e27",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-review-progress/SKILL.md",
+        "sha256": "7b2ca90a59ab9536cfe63d976ee179b552f94afc95396242ba54151073a78ad7",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-review-source-material/SKILL.md",
+        "sha256": "2ad7bb4f65bde57bc020f43cdf6a440db048f803891a9d414fbabd82e144fd14",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-review-task-plan/SKILL.md",
+        "sha256": "61b69064dfe10854bf4b472c381c55fb791651fdd65f3f06588b82a9826202d6",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-route/SKILL.md",
+        "sha256": "016a5377e0027be879297d3d2364c6280f5a678a4b8722973a9ed74f1de31fd6",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-run-framework/SKILL.md",
+        "sha256": "dbbceac3713d3d55a3c0f5aa1e2209fddb8d85c3cbfdf59ea3de241435def081",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-run-plan/SKILL.md",
+        "sha256": "7c94dfaa45432e6b458dc806e18a16d118ed4bc47022ef01d874858076934a6e",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-scaffold-framework/SKILL.md",
+        "sha256": "88207ba42102376fc86455ac33d7c75e38de8531ed71eff8fd9fd0cd5ead6ab0",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-self-help/SKILL.md",
+        "sha256": "82dc1c48cb0a8fd6386b12091c358952f1b8c7d4ec939561e0ef79bbc2f4df02",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-ship-workstream/SKILL.md",
+        "sha256": "ddd80c059f2e69a8bc335af66f4c447a630c3419d0496af95f0265d04fb3ced5",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-shutdown/SKILL.md",
+        "sha256": "b33512ec700249b382a1da8e8ec79545528b334a26e42cfa490762df0e0ec359",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-sync-manifest/SKILL.md",
+        "sha256": "e601110397c89d209153f395fa6a19e25cffc3c7547d5beb395cf89540dffa3c",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-synthesize-concept/SKILL.md",
+        "sha256": "740df8738ae341dc7ea66bae4eb76a8021f1504a13390bcb4af52f20de22e810",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-synthesize-debrief/SKILL.md",
+        "sha256": "671c180de68343a967d5b99bf3be653410e30e00d714eea02f8255a40b45fae9",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-systemize-behavior/SKILL.md",
+        "sha256": "3868b5d8bd81dbb91b1be71ce031563b999cf46268362fe33af937b195632541",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-telemetry-status/SKILL.md",
+        "sha256": "65b1463f7ed9ea40ad6ba72ee70315357e3f72fdb3cc87ddef454b3ca315a53e",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-triage-client-board/SKILL.md",
+        "sha256": "66f211901b853ddb6e06f925c054067769efe14810b8b1e43537e029599c79a3",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-validate-all-frameworks/SKILL.md",
+        "sha256": "5010406b169b1398cd1bba1d94910db4d215b3fbe1e78261be5ba3a674893b4e",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-whats-next/SKILL.md",
+        "sha256": "dc3ff49582910bb6bb3158d5b90e0ad5f8daf6b165f3f635007e0e70e639417d",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-write-handoff/SKILL.md",
+        "sha256": "107eafea381e654b7a6ed4559e63a8f09724b6b398c1e31efc9e5a83ee4a3a24",
+        "mode": 420
+      },
       {
         "path": ".claude/CLAUDE.md",
         "sha256": "2796760540fd283fe497ef30be01b697ae1d91fcf5dc2aecafd1c562811839a5",
@@ -1022,7 +1677,7 @@
       },
       {
         "path": ".claude/commands/ticktock.md",
-        "sha256": "90b6a4e5908b7234066d052dd65e2b952d0ee94882aefabb1ec761e43f6077ea",
+        "sha256": "37e6cb457d13e36ed47be405739d2f07237de737d52b241b9e38bca4830c5f37",
         "mode": 420
       },
       {
@@ -1033,6 +1688,11 @@
       {
         "path": ".claude/commands/trial-quest.md",
         "sha256": "3017f7160fed4e4bca6e2658bd2016073088b1d198813de4c5d466bb319ed210",
+        "mode": 420
+      },
+      {
+        "path": ".claude/commands/tt.md",
+        "sha256": "a72c1c9a5fb5764235e32f5b30387381e9c7fade9a4c1d307395c23e2b36e725",
         "mode": 420
       },
       {
@@ -1052,7 +1712,7 @@
       },
       {
         "path": ".claude/guardrails.md",
-        "sha256": "9b3a06934b46a33e1ae4357c127b28ccfe81a061005ef0e60c7fdfe7919c54b1",
+        "sha256": "996c11eef57fba5a279cb7bf3cecbf107e35f709f6079b907beb39d6fad781e3",
         "mode": 420
       },
       {
@@ -1062,7 +1722,7 @@
       },
       {
         "path": ".claude/project-claude.yml",
-        "sha256": "6786368b527bca263075bbc1f153928133460de2f49fb62e51402d60bfd99ba9",
+        "sha256": "5e4d3c09b8d68745ec88ebe0f58920e404947a690570136f6b4ba332348f639b",
         "mode": 420
       },
       {
@@ -1187,7 +1847,7 @@
       },
       {
         "path": ".claude/skills/go/SKILL.md",
-        "sha256": "c9cdb2579148f6ffdb8bd399223ae1f469031b03b41e93e38197a6ce7ca1a8aa",
+        "sha256": "7eaac68ae8b8968e0e19d05797de6208ab7606f64d3d08b8abdbc6159823d000",
         "mode": 420
       },
       {
@@ -1452,7 +2112,7 @@
       },
       {
         "path": ".claude/skills/ticktock/SKILL.md",
-        "sha256": "5cd28b19d19b8468677c0e83fe5493b68788c41138207afbfa7562ff22462d1a",
+        "sha256": "f726f614a1110b9d873e2c9eb83818bc46d69095d2dc209c5ef7d2448569cf80",
         "mode": 420
       },
       {
@@ -1497,7 +2157,7 @@
       },
       {
         "path": ".github/workflows/parity.yml",
-        "sha256": "cc447d96c62e9163da5129b80c2a368c1c4d1174ea2ce2143e39ae2809a541e1",
+        "sha256": "7f0e3d87bb3f34f26e563c0b6412eca2102d08fefbf15ea2845cb753c61d1716",
         "mode": 420
       },
       {
@@ -1507,17 +2167,17 @@
       },
       {
         "path": "AGENTS.md",
-        "sha256": "8ef082f3cf0a84bd2d689e0c3842833ed95aa200a44b430d3037aaae34ee0696",
+        "sha256": "d55ae3fa03e903092b1986caf6e0cfe0c6e8890708b215048c602f4afd629d39",
         "mode": 420
       },
       {
         "path": "CLAUDE.md",
-        "sha256": "853a429fb94becc2b56eb50dc5c21806f3209d4557dd8f083c567fc149c70b81",
+        "sha256": "5f0d58aa93e2ab7488cb41544c2f0c61c968c8413b01c462f4cfb05980d919b3",
         "mode": 420
       },
       {
         "path": "INSTRUCTIONS.md",
-        "sha256": "f24d710dab995154c44c14f18012b109a7317a3d9d4e7605a2f5bbdb73d045dd",
+        "sha256": "d2c33ba0a3da55e6c03559c9058328941045fe243863321ba7749d514648d86d",
         "mode": 420
       },
       {
@@ -1527,7 +2187,7 @@
       },
       {
         "path": "OPENCODE.md",
-        "sha256": "36aa262556d4a42765657f8bc90675c045bea6ab31cc2bb209bf616c1ee08435",
+        "sha256": "8e19a625b60570a0eecad6429ce8d956f248da4a9da0e64cae9234bf02e4fb13",
         "mode": 420
       },
       {
@@ -1541,8 +2201,2018 @@
         "mode": 420
       },
       {
+        "path": "_dev/concepts/codex-skill-parity-remediation.md",
+        "sha256": "5bf76d9e1f79076193432335036e2bf1b29c39ba313e9bdc727dbbb77559720a",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/bp-r__codex-skill-parity-remediation__solo-reasoning.md",
+        "sha256": "e6db90f0d4f528ff1364972c0ed0329c1e751999a29a0bd40ad5ba4215c1147d",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-parity-audit.md",
+        "sha256": "4edafce46e6b8a31d365602dd40b452ad66cf553c0076e77fc9f94556069cbba",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-parity-remediation__verification.md",
+        "sha256": "8aaf463ff29c5c986d726af1bb98819216216cb080955cd36d8082eeaf2137f1",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/go/SKILL.md",
+        "sha256": "1a441653a5c5ff6408d0e6b5e175f4b1f1f336b77b08e18a3a28f69eb6cf0f55",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-deliverables-presentation-review-presentation-review/SKILL.md",
+        "sha256": "14358a58036881fd64c5ed1d24cc3e7ed208d4e00325203058a555dbea1ff265",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-deliverables-scope-verification-scope-verification/SKILL.md",
+        "sha256": "891a85f80f257a527643b8990faa8b4bb4d13568c67e42de88a30f8ca722a66f",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-deliverables-version-reconciliation-version-reconciliation/SKILL.md",
+        "sha256": "a500a78b7eb67ff3cc64c908265f10e76f385775a6fe7b576319d36e95799a18",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-meta-dreaming-system-dreaming-system-integrate/SKILL.md",
+        "sha256": "7ae24e8837d262069726beac36c71eab2c1245ba5ea3801ac6f3658d1a1c9818",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-paid-media-ad-creative-ad-creative/SKILL.md",
+        "sha256": "63994143acdedc2a1795ccd09d16539402ba0f97f95921d9f58b0d31c67bd1fb",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-paid-media-campaign-management-campaign-management/SKILL.md",
+        "sha256": "2c3c54ea02ecbdd39216ac73f31de53cd7a81e460b0044a8c005a3985074d3d0",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-paid-media-google-ads-search-campaign-build-googl-d570329c/SKILL.md",
+        "sha256": "2c9e5f223f54a3cda961d1f288b53598c260bade801617ecceba600bd35d9020",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-paid-media-meta-creative-iteration-meta-creative-iteration/SKILL.md",
+        "sha256": "7f8c34d12c50ecd5b8a911944fd5f7ebee2517261a43490414d9e394833cdc77",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-project-management-dart-collaboration-dart-collaboration/SKILL.md",
+        "sha256": "a491f40942082649d6fe53e165c1c6c2859be6334a3038d5c1233dd0a06d1574",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-project-management-feedback-to-tasks-feedback-to-tasks/SKILL.md",
+        "sha256": "0aa783a18b8f3f1029105e879018ca50a38f5bf12dc2688fe1164e6754829889",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-research-business-identity-verification-business-938fa203/SKILL.md",
+        "sha256": "ad22a671453e90cfa1ed722afc63632fe3a641abe8d4121230dba4c8ba10c614",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-research-contractor-credential-review-contractor-2e585fa1/SKILL.md",
+        "sha256": "6cdbccdd476d4d4a1d0dcf7b220638c540d74922a55f3acd60596f639868552b",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-research-osint-discovery-osint-discovery/SKILL.md",
+        "sha256": "f79585737f28f55c3cd8d132e0b54f1cd72cd320b9c83e79303369cd6fe9b01a",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-analytics-tracking-analytics-tracking/SKILL.md",
+        "sha256": "6e3d9db7801bcd86225ee8ea3cc3e6a705a131448bfd6a1be671f552f8ad5c16",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-content-editing-content-editing/SKILL.md",
+        "sha256": "8efd4ad6782396403e0fd75b4fde91860e5852099f8a50d1aa0c103201f10dbc",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-design-mockup-validation-design-mockup-023c1aed/SKILL.md",
+        "sha256": "c79c1eb13401b1b5df0d958584780a284e531fcb2fe8010ce38fd6e43e5ce5e0",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-design-research-design-research-cross-ai-handoff/SKILL.md",
+        "sha256": "68107bd288fbdfc2bb10ba50539bb84995f2f25037b3509cdcebbf7ad655b00e",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-design-research-design-research-design-mockup/SKILL.md",
+        "sha256": "30d7777d1ce945e6bd177364c2eed8253795082e6415a77e700bc1bf7c9af0a1",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-design-research-design-research-mockup-brief/SKILL.md",
+        "sha256": "fa704ee30f29c3dc56ac76a7a2b4e6b52d57a68de455bdc57c7c02bfe73c6c47",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-design-research-design-research-site-audit/SKILL.md",
+        "sha256": "87561643e0aa854dcaec4d95fd14e1ca7ffcab87e840a6d25713bb2c7b621555",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-design-research-design-research-visual-refine/SKILL.md",
+        "sha256": "2296c3627c22b4a852d82d9aa1f21132862ee171bfce94134b66775a2fce6dcf",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-design-research-design-research/SKILL.md",
+        "sha256": "45b7fdf2bb858bda5df4003b03860acf2f55c1a53b82168f35a37e85c0194d88",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-documentation-documentation/SKILL.md",
+        "sha256": "3c2d9b1b01ce138b099d51df8b44d8ebf4a1e463bfb9b38f4616b1df84ccaac8",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-documentation-documentation/references/ANNOTATION_STYLE.md",
+        "sha256": "343b7dceb8913243834dfb7ae6cfbfccebdd1f8c6b407a61e221331001566fa1",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-livecanvas-onepager-build-livecanvas-on-036f97c9/SKILL.md",
+        "sha256": "793609b302034187050ba653840dbe19776c9fbb3b5aa7094e8cb4739d3d28b1",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-livecanvas-rebuild-livecanvas-rebuild/SKILL.md",
+        "sha256": "5a818b79d955d64d086116a595c4319520a6448c9cafd5282aeb09be692a091e",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-page-cro-page-cro/SKILL.md",
+        "sha256": "9bf060e916a0d4937b74e790b5c65e4bf237053c52939d4be73bbe67c26c1acf",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-qa-qa-append-to-dev-bundle/SKILL.md",
+        "sha256": "637586636ffa7b94911e6bfbe7c1053f9d04b0c550bd10ebba317e9996509bb7",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-qa-qa-changelog-capture/SKILL.md",
+        "sha256": "4143783f3d723112d727fc28f9cb545907cbe0ba892026a452f6f6348080be1b",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-qa-qa-compile-dev-bundle/SKILL.md",
+        "sha256": "633bf218994c0a0b1e30b74a46cbb889acac71e31ea6ecaf83ccbbd743c01a29",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-qa-qa-compile-dev-bundle/references/observational-examples.md",
+        "sha256": "9d2b1883459331d7c8f2208ea634e130a73ea37c54bff9399c7ecef607f32614",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-qa-qa-compile-dev-bundle/references/pre-gate-inventory-template.md",
+        "sha256": "ac40f6fefb32cbdcb3899a339c4675ec0712b84d29adb4c188459ccbdbf33703",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-qa-qa-cross-run-anomaly/SKILL.md",
+        "sha256": "8f5ba0e14830ba16efec2a1b1757f12f7947c9b577308c5f40c50791050816fd",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-qa-qa-deep-pipeline-analysis/SKILL.md",
+        "sha256": "c0285770a14949937b0005cc376f1e3e02bd649dbe12d0c2521efd1b33f44f38",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-qa-qa-dev-packet/SKILL.md",
+        "sha256": "2510eef041e3cc6a12f05386e136dc63ff749b5fe061e1a29d9f660545f6bfab",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-qa-qa-expectation-updater/SKILL.md",
+        "sha256": "d48ef4dd9311e2b1bc943928c61673a5cd7a4d43880235e9eb4ab194c76f6ef2",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-qa-qa-implement-fixes/SKILL.md",
+        "sha256": "71e732253a88c37e15cad35d291b4521cd976be60c4c4da48bda9adb35890a22",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-qa-qa-intake-scaffold/SKILL.md",
+        "sha256": "ef699d79820e403843b942e9ad19dc6dbffff3c47cce78e31b9ad70f0ab8280c",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-qa-qa-iterate-until-pass/SKILL.md",
+        "sha256": "8a6327937a409e43f6def9683a0143823c878bdca4545b2628daec253c2b1a23",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-qa-qa-locator-correction/SKILL.md",
+        "sha256": "72f4d94129152c0b3c063558b10154e9297ce19f3ce7b8959338ef56cf809070",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-qa-qa-mcp-walkthrough/SKILL.md",
+        "sha256": "a35941fec1b82e20222e41841d1c2fc726bd725deab57b8c0a00729db83c48f8",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-qa-qa-navigation-cleanup/SKILL.md",
+        "sha256": "47450ccbee9f735ac6b62d480db747372378558a4bae53f0c00c931b2090650f",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-qa-qa-parallel-run/SKILL.md",
+        "sha256": "6277cc98c33dcada38540fcf85c455b6fe301a1020f84c6c1bd3431c59c4b40f",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-qa-qa-report-handoff/SKILL.md",
+        "sha256": "aa15fd52b2f1a32130958d5c40b9c0c473ad987140ac19a8654bd66beb0a1102",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-qa-qa-rerun-verify/SKILL.md",
+        "sha256": "4be8cfd81940e6f60ceb6b5541c635031c6043df0b16fdd243012d0f631d3323",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-qa-qa-update-framework-artifacts/SKILL.md",
+        "sha256": "895dccebeeddb57c2aa497cace94e42fcac5a0c0384b9360c7cb3bf480b54a8d",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-seo-audit-seo-audit/SKILL.md",
+        "sha256": "e8f825af762c5611f16e4785af175053568629344bb51a2dfbb07020c9cee971",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/guild-wordpress-seo-validation-seo-validation/SKILL.md",
+        "sha256": "19f576482b7ae2121fc53636b668176fb594cd25a0969b771f205844b8d5a5c5",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-ad-copy-dev/SKILL.md",
+        "sha256": "9f0071a981b3fbf5b24daf347b7b9847a7adc818cbcf9b5443b053b40414be71",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-advance-pipeline/SKILL.md",
+        "sha256": "5c2a536c76bad2d0a577cf26b9f7fb5cbfa3fdddce4b0c1f377a819e008b02de",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-aider-self-help/SKILL.md",
+        "sha256": "97ce0bc784e356deedf971931fa33687d8da4a0a449c706cd997828a1efa5ecf",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-amend-plan/SKILL.md",
+        "sha256": "e273e9bdf26a83bf6cbaac30d83a8da8d964bd5ac299b4cf8321a7da1a107245",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-arc-blocked/SKILL.md",
+        "sha256": "5304a866f402f33d55667d6e5a0a47beaa31efe66e736700db1d1302e712133d",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-arc-complete/SKILL.md",
+        "sha256": "ab398b5e2fab14d6c0668ff30da50a839577db586c2e14f141f9cf0b0b135334",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-arc-rest/SKILL.md",
+        "sha256": "22a6f578290a69f9ca2363c10258bb89f815e52c70ed3679d3a21e671278ae32",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-arc-status/SKILL.md",
+        "sha256": "81e39da1ab964a4fd9e11e8c4b930494beb851328ebec3cede74b3a7d18d301a",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-aside/SKILL.md",
+        "sha256": "e4ac46a4c738ddee31622be38f7e5a1c80f3dfb0327e97725071fa92ab906363",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-assemble-prompt-system/SKILL.md",
+        "sha256": "44006c3c2e24186984aaebf3837626c9c4a6a08fd683525de41aae8df29c8a7f",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-audit-framework/SKILL.md",
+        "sha256": "cf49734bbfbdc508119dc48a2b09f3e78b08652bb4acacc9d7e49e66d2f55b51",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-author-prompt-system/SKILL.md",
+        "sha256": "c77e7ab02aaac40c0a0167d26d7fa211c73a5ecce58487e5cb14f00ec9cf4e81",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-blueprint/SKILL.md",
+        "sha256": "7fe1ba5f6696aa551e8a15cca6f8cb421c768331d2ccdb87befff940967a6d93",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-boot/SKILL.md",
+        "sha256": "848d519e3cceb67121b3bb814b2a7e6d10b495ace8567b57399febe2cace08db",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-bridge-speakers/SKILL.md",
+        "sha256": "d5057e1b37e31e551c0da047426747c6dc279ae1fee7db7eb238407c14a6f71c",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-cadence/SKILL.md",
+        "sha256": "a8875d125510d3eea4558e77e622c7104559719c68b63007a2a7a4e5633d7398",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-candidate-status/SKILL.md",
+        "sha256": "d2173be37d465ef254e9542d578b0f53c28886f51e54f80f2823bb4b8033e3b9",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-capture-status/SKILL.md",
+        "sha256": "1a4dc08f3b7291a0e0a921a5754856e503fc38891a1f3214de0f2b025f30d5a6",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-capture-task/SKILL.md",
+        "sha256": "fbe0f3029974d50cf20ac9120fc093185c90740345c9c70bd6735eb0bbe14d6d",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-claim-intake/SKILL.md",
+        "sha256": "3eef2d0224e9df1119afc44a4d743b6ae4c86c4099526e0d043034dc9643579d",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-clean-house/SKILL.md",
+        "sha256": "21d0247fb635b8ae78d5b2a127383306e3ba6fedc28fc013fd7255fe12d2b188",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-codex-self-help/SKILL.md",
+        "sha256": "3f58f3833c7414845126c9403803d24fb28b0405dddccb34393dc870f3e91f47",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-concept-dispatch/SKILL.md",
+        "sha256": "1f432ab1effe8bb27cd90162561716f1d8b83ac1fe9dbdbee02c29725e4ade93",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-concept-init/SKILL.md",
+        "sha256": "4c4abfd645b4de67f978ad11f33fe676abb579ddf83b8d254047246a210c8ceb",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-concept-promote/SKILL.md",
+        "sha256": "e0bd6b12eb822cc2e8a1729952c050f2ded152eb5ace27c7e6467a58c034bee4",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-context-check/SKILL.md",
+        "sha256": "2486211c1d64a04798b04779560f643fac3b8b2569c3f4747bebae777314ab1d",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-continue-self-help/SKILL.md",
+        "sha256": "93e570b0f915e88c0725f3b0f36f38c0e8f73ba71a16fdacb6f86a0fe47e0a7e",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-convene-gate-status/SKILL.md",
+        "sha256": "477d128b20643f68c2f26c451c8d015b580dde0d46cc42486d5c5a09e142af0c",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-convene/SKILL.md",
+        "sha256": "f2854c065e216788a6f64abce4b97243473ab493a4fcfb3eaf1aef98bddafa07",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-council-of-owls/SKILL.md",
+        "sha256": "f14ff2a0cca5dd38bc74e0ea041f494ef0aec9b28fca2a940e8957a52c1d2347",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-create-plan/SKILL.md",
+        "sha256": "cecc79a1cb488a40fb533e765c936b2fd3d54b32923a22a63b42ba37d079d348",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-cross-session/SKILL.md",
+        "sha256": "3deea9c0c20f41aae56acdc3071974aad9199f8fab71134512f0b12d6af51905",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-crush-self-help/SKILL.md",
+        "sha256": "f05e47dec447db7c68e4f598f7d6e147810cf1f26836dd8a113aa137365a31f6",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-cursor-self-help/SKILL.md",
+        "sha256": "e85ada298e99714d69910a72dcaaaeeab2ec465f064a7346f2667bf06fd3d6d0",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-debrief-run/SKILL.md",
+        "sha256": "544ed39ec39b0f16a0f7b6a60dddc40879f70a113c9e998df355e8be0ae067a9",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-deliberate/SKILL.md",
+        "sha256": "7ad3a02e19a36bd98ef19d0c9810d9ab705e4737577afced8e6f89a7648f67d8",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-discord-access/SKILL.md",
+        "sha256": "5a68c5899874861b7dcba5c57340c6a4bc34b668c5aa09ea249d0a37f93a0831",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-discord-configure/SKILL.md",
+        "sha256": "603aadae3acb09ded6e4fe9126a62f4930aa23b9d19d7086d96ad69a1c4b29ee",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-dispatch-bridge/SKILL.md",
+        "sha256": "26bfe7e194107367fa8cdcec1a24dc3d53a7cd02617897dff25578fa43f1a8b5",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-dispatch-trifecta/SKILL.md",
+        "sha256": "5b2f85194bafb4d4c635ac79f0aa0ccd737aa3532ec0ee596d749d37b2f42780",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-dl/SKILL.md",
+        "sha256": "75d0cfa5789cac1140e195018b73d01970c8fe84e56e820d3a319aff550cfd59",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-el/SKILL.md",
+        "sha256": "06ed1bea066af1cd4032e720f16ad038512a7c17c02467a0eede5bd4d3c62bdf",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-end-session/SKILL.md",
+        "sha256": "909ad5ac729c7ed423683cb313852b6e0aeae2961111f2cce965bbd18ac5ba8a",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-evidence-loop/SKILL.md",
+        "sha256": "07b9b122d7e584c4e7b1a56c1abe4cdd31f524c2aaf6a665794bd984cfa7586e",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-execute-plan/SKILL.md",
+        "sha256": "efe87df41c06c79b575889801e9d1c52df36285b026bccdb7e6ff9c2fd4b585c",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-extract-skill/SKILL.md",
+        "sha256": "584d5031ae7e307cf87d9e76e0399fb6559a27a36c120a9853fe24d4d98498c7",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-follow-signal/SKILL.md",
+        "sha256": "3044feefbbf9f57c63b5714503781ec3305f86cdac147c40ee88dddafafee959",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-framework-phase/SKILL.md",
+        "sha256": "17c6c6b057bd6ae24bbe22d46efd46321525713a762d033efe853de9ca3b5223",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-framework-run/SKILL.md",
+        "sha256": "e6b57bf40edea806065ced5539d9437a872753cd76b2460f1b93d08f846104d4",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-framework-status/SKILL.md",
+        "sha256": "e13936b1a78deb2cbe74114961f786005eb90c8f467b0fb9415546141a482cf8",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-fw-deliverables-presentation-review/SKILL.md",
+        "sha256": "2dec0b7c990698f5f2268f6c57dc63f45d026f90c1ad1240c81513eccdee982d",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-fw-deliverables-scope-verification/SKILL.md",
+        "sha256": "8705c859827ab284092caffe42b2099156441df209a030f29da1f52eaaf72252",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-fw-deliverables-version-reconciliation/SKILL.md",
+        "sha256": "715c0c6394ab227dab1a5f3e0044e871a58d49e4d8e259b00f6914b8746f6e2a",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-fw-media-video-editing/SKILL.md",
+        "sha256": "49b9c9e85a8b17e1081e1d99d232048429291cfd44d98f9492594b637c75f0c9",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-fw-meta-execution-normalization/SKILL.md",
+        "sha256": "f27d8a70775d6a8e02e116c313ea118ff5e186c25e46947614a6ef14aeec5b99",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-fw-paid-media-ad-creative/SKILL.md",
+        "sha256": "8f078686d28d670e15423b9b196ac1abaea399220c39665fcca7e112b8b8bdc3",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-fw-paid-media-campaign-management/SKILL.md",
+        "sha256": "5e877521ce4c145790efbef230a7a8cd682894fc7e88f8f5f19a242006e7a026",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-fw-project-management-dart-collaboration/SKILL.md",
+        "sha256": "b406984a9d361d6a8e659e67bdc2b967bc376adbda036c06c53843fecf95c71c",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-fw-project-management-feedback-to-tasks/SKILL.md",
+        "sha256": "8f7d1325e1043350839115c1cb6e7981bda4958df710b2f00c8118d4e705a575",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-fw-wordpress-analytics-tracking/SKILL.md",
+        "sha256": "69ab1a7a927e7ed618ff18c70563b08adf438791a55d13331dbb932727465046",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-fw-wordpress-content-editing/SKILL.md",
+        "sha256": "3e9d850adbff38da4de86d728ec5192dba5dbfe0bb1fdb5176292d3d2695bfba",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-fw-wordpress-design-mockup-validation/SKILL.md",
+        "sha256": "da1712d04d71bd6288b0ce6e8c91fda38beb49272217bf3ebaad589f8a80dadc",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-fw-wordpress-design-research/SKILL.md",
+        "sha256": "19a51687852731e9902d9587e5f03161d7ed2c3c9439a81e8a1c6bcc5730e2b0",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-fw-wordpress-documentation/SKILL.md",
+        "sha256": "83ac9ce293a97deb842e3c5af8da1b29bca781092cf69a5575f12760466b8d6e",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-fw-wordpress-page-cro/SKILL.md",
+        "sha256": "fad3b767f91d5eb87c38479be7d68abc4b38525bca883e5908a9a7978d9d787e",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-fw-wordpress-qa/SKILL.md",
+        "sha256": "3514b6f11fc2de6a9278ccfe7d00c61c69dc1e262fc43e9cf2952afc0ae132be",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-fw-wordpress-seo-audit/SKILL.md",
+        "sha256": "77eee1407b58c50c7bdb3a75f36619e071ee424773600aafff4f8e1c69dd49df",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-fw-wordpress-seo-validation/SKILL.md",
+        "sha256": "4da972099eef7410fbbcafe67419ac419007402b7edf35dd8c8dc01a7edbfa56",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-gemini-self-help/SKILL.md",
+        "sha256": "653b53cd06a87de5eb8c45bee26137065fdec110635e22ee000794b1c0d9b366",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-generate-harness/SKILL.md",
+        "sha256": "2d73c5fa13c8b35b117b3fdd40215fc0025f69d0536b834f46f8b022dc21a71e",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-goose-self-help/SKILL.md",
+        "sha256": "0109df6ae4ce48068ed20b3607d7537adf200bdb4254f47f9916d35571ee23ca",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-ground-in-philosophy/SKILL.md",
+        "sha256": "0fb83ca918793045545ac4ba28cf4f77bcd2adc6021526a4fb3a088ed61e958a",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-help-me-route/SKILL.md",
+        "sha256": "8481bafae850c3efe52e2d7040024e9145c47b3020001b5b9cd62f064017d78c",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-hermes-self-help/SKILL.md",
+        "sha256": "6476d825c1aaba5a7cc060db8251c7837dbb52eecc13ad0090e6f806b908b7e2",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-improve-framework/SKILL.md",
+        "sha256": "e1e0164c34be0c494735fa83dbe4994f85c391603812b978629c4048a4401da6",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-ingest-walkthrough/SKILL.md",
+        "sha256": "20d9b06bcb932ec3ca241a163366dc95ef19dd4113596cb2d5c80315f0109b69",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-kilocode-self-help/SKILL.md",
+        "sha256": "24f40bc838b791a796010deb81e209e53f59a412ac3195189a4d8ad87ef4e84f",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-lint-attributions/SKILL.md",
+        "sha256": "28b0389ddffd6cd6d037291cacddb24401691a391a143ef68eecd7fac00c0fd7",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-list-frameworks/SKILL.md",
+        "sha256": "86720ef768dc6c286be5550bc527b2883ad2533aa7a5124a249a7e24d9a20cda",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-motivation-scan/SKILL.md",
+        "sha256": "323a7872fe0c905439b78e260b989c80a3de0830dcf5b8ccb74fe5e5b938bc4c",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-mythos-status/SKILL.md",
+        "sha256": "e1c068f39e0e7bc3c99988c39244e5cc791e55b8c79bcb811f768fab2f719980",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-new-client/SKILL.md",
+        "sha256": "72fff5ff4f94afd286e44c5507e74c4c869e8d659e5b1fd52757201ef585073e",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-new-framework/SKILL.md",
+        "sha256": "0481c07a164628edb57627805395ccd1b6910377cddc3a9b6ed1748db68b8f6e",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-new-project/SKILL.md",
+        "sha256": "2a03d7768d9ab79fc122514c890a246b74c06f938a832e761e5de886fa3bc2cd",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-new-session/SKILL.md",
+        "sha256": "270e5077fc4452915e5f0caaa20af362fd61f73439cb4edb30027086d814d2a6",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-next-session/SKILL.md",
+        "sha256": "ba121ea60ab2ac109630f8d899ec2d7647fd9341d97001a82f1dd0df248dca76",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-next-step/SKILL.md",
+        "sha256": "16fca577a3425b1fe7e1482502d02cc02a5dbc0e3a3f19bd661a44755e186984",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-normalize-capture/SKILL.md",
+        "sha256": "39596a27d7025b1c15ada845654ec4be7610063ac239527669371927f133b182",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-normalize-signals/SKILL.md",
+        "sha256": "7f85775006e8a4c9ab003308f95f8b291b8f351dd452622a59f25917730c6e31",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-oa/SKILL.md",
+        "sha256": "ac9ee5f60a99f2abfd2b81d49e13f7ccc39c56108aab6962ee805f1d8180ddf9",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-oc/SKILL.md",
+        "sha256": "516b647460428eb5a4e4c26815efc0b1c4db6463875238d2d6bd22fe6fd9bdd9",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-opencode-self-help/SKILL.md",
+        "sha256": "583a97c196bc9efb4e71a4b23dc93893938aa013cfa7f77637bd613a26e0e4cb",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-orchestrate-loop/SKILL.md",
+        "sha256": "9123fea9d7c1f4075e56018dfff63a58d280a0e1d8e0418c48e28e5dbd9d75df",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-orchestrate/SKILL.md",
+        "sha256": "a413a0e204b64cbbdc08085c02f7de2520c40e3c897d6745b0bbfd67219ae3e2",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-owl/SKILL.md",
+        "sha256": "128b7ef0ea8e85af24d608278dca5357546e61cabf6d5edd5e1b34ea95c34663",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-pi-self-help/SKILL.md",
+        "sha256": "4918ac3f81447328f730ea0b789314ad1be181691bf2d346460f6444ca3de720",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-plan-active-workstreams/SKILL.md",
+        "sha256": "bb28a5749d20d6437799ab8aed21ccd6e7520ae7cff7a99d62dfcf942149c186",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-plan-pipeline/SKILL.md",
+        "sha256": "31a9257dad5526c9f0a7ad6e695532075cf54cd559bc861da96ba39ace617356",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-plan-task/SKILL.md",
+        "sha256": "f91f8d0037b77f0959a7c395c49a34e76082eed8a10d0b269557e79435945f97",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-plans/SKILL.md",
+        "sha256": "d59df5318370b766fe01b1d4e18d85c3bf30141b43a3e756a78602a1694f82fd",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-project-status/SKILL.md",
+        "sha256": "3533e4b599b198bf1296b2d591327c803ecb5c04cab1bce273b9b1306e7e9834",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-promote-framework/SKILL.md",
+        "sha256": "4ad82ddd44e938289098e010e3af136705b886ced127905328105aeeb465136c",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-prompt-refine/SKILL.md",
+        "sha256": "a081eb45183c9fc4985e7f1eff591f43f862fefcd499420f19f64db35eaeb335",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-reconcile-lessons/SKILL.md",
+        "sha256": "a9984577ec16ccf469df3175c0375e0046d024e9473bbb80da4afb32b67f6604",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-reconcile-task-outcomes/SKILL.md",
+        "sha256": "d6f92257c1fca10efa787d9ef2aace9a75f0df20965ecaa369ee6c6858421934",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-reference-compare/SKILL.md",
+        "sha256": "91d17e9be1101968dc849553b6dbc9155899577ab0c1fdacfdfbd2bdc210b9ca",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-remember/SKILL.md",
+        "sha256": "e84fd4f11e29282240f1d0430fdccc0a07e0a1e459ed3f5ba48f037b86df5bc3",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-repair-plan/SKILL.md",
+        "sha256": "707aae08be43f4b9b650633ce7d9c215470e7958e6e1362867bd5dd7fdb244c4",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-replay-framework/SKILL.md",
+        "sha256": "d5be1d096f459b0ddc247dd32d6e51c9df0257ff70eef3d08e0f79594270c3f4",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-review-active-workstreams/SKILL.md",
+        "sha256": "d88a85a28364e32ae14bc27ba97ae5e73f16686b612ef86a9237d504666a668a",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-review-dispatch/SKILL.md",
+        "sha256": "f612d000e5d9772884f631ff9385863b8106125fb63f30a4602d31419bbc8e27",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-review-progress/SKILL.md",
+        "sha256": "7b2ca90a59ab9536cfe63d976ee179b552f94afc95396242ba54151073a78ad7",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-review-source-material/SKILL.md",
+        "sha256": "2ad7bb4f65bde57bc020f43cdf6a440db048f803891a9d414fbabd82e144fd14",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-review-task-plan/SKILL.md",
+        "sha256": "61b69064dfe10854bf4b472c381c55fb791651fdd65f3f06588b82a9826202d6",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-route/SKILL.md",
+        "sha256": "016a5377e0027be879297d3d2364c6280f5a678a4b8722973a9ed74f1de31fd6",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-run-framework/SKILL.md",
+        "sha256": "dbbceac3713d3d55a3c0f5aa1e2209fddb8d85c3cbfdf59ea3de241435def081",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-run-plan/SKILL.md",
+        "sha256": "7c94dfaa45432e6b458dc806e18a16d118ed4bc47022ef01d874858076934a6e",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-scaffold-framework/SKILL.md",
+        "sha256": "88207ba42102376fc86455ac33d7c75e38de8531ed71eff8fd9fd0cd5ead6ab0",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-self-help/SKILL.md",
+        "sha256": "82dc1c48cb0a8fd6386b12091c358952f1b8c7d4ec939561e0ef79bbc2f4df02",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-ship-workstream/SKILL.md",
+        "sha256": "ddd80c059f2e69a8bc335af66f4c447a630c3419d0496af95f0265d04fb3ced5",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-shutdown/SKILL.md",
+        "sha256": "b33512ec700249b382a1da8e8ec79545528b334a26e42cfa490762df0e0ec359",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-sync-manifest/SKILL.md",
+        "sha256": "e601110397c89d209153f395fa6a19e25cffc3c7547d5beb395cf89540dffa3c",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-synthesize-concept/SKILL.md",
+        "sha256": "740df8738ae341dc7ea66bae4eb76a8021f1504a13390bcb4af52f20de22e810",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-synthesize-debrief/SKILL.md",
+        "sha256": "671c180de68343a967d5b99bf3be653410e30e00d714eea02f8255a40b45fae9",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-systemize-behavior/SKILL.md",
+        "sha256": "3868b5d8bd81dbb91b1be71ce031563b999cf46268362fe33af937b195632541",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-telemetry-status/SKILL.md",
+        "sha256": "65b1463f7ed9ea40ad6ba72ee70315357e3f72fdb3cc87ddef454b3ca315a53e",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-triage-client-board/SKILL.md",
+        "sha256": "66f211901b853ddb6e06f925c054067769efe14810b8b1e43537e029599c79a3",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-validate-all-frameworks/SKILL.md",
+        "sha256": "5010406b169b1398cd1bba1d94910db4d215b3fbe1e78261be5ba3a674893b4e",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-whats-next/SKILL.md",
+        "sha256": "dc3ff49582910bb6bb3158d5b90e0ad5f8daf6b165f3f635007e0e70e639417d",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-write-handoff/SKILL.md",
+        "sha256": "107eafea381e654b7a6ed4559e63a8f09724b6b398c1e31efc9e5a83ee4a3a24",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/managed-targets.json",
+        "sha256": "1469fe3275eb816c628bb67a0cabcf2f3ea39df7d50a57038ec46ab7beefd0f3",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/projection-index.json",
+        "sha256": "40fb2cc8588532e5f82af4b7095b237e460e839698e99167f78b84cb8dda1a82",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-blueprint.json",
+        "sha256": "92355c301e41853ee3a01c68c6fee538f735cce15fd22a13d03d79e515330d4a",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-council-of-owls.json",
+        "sha256": "c6db838b6bc908e6090b128190c86c2c53151aab4fc407db4c200f3ad2971aeb",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-deliberate.json",
+        "sha256": "f54702ae447942605406d3dacd8fc31ddb50efb47cb6d578274b4c0ddd02a37a",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-dl.json",
+        "sha256": "1a804d964a62da6be2253eafc74cbbb3e9b60a272a940bc0b9a10996dfc6ed15",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-el.json",
+        "sha256": "ad1328814fcd2f76c88b0f21e54750ab45ff1f8bc9ab216f63f1cf154cecf3f2",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-help-me-route.json",
+        "sha256": "795ce93f47e536a5d653db4eaa199b9aa05f16f5be3872045ffca45b737bf246",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-oa.json",
+        "sha256": "2e881eed4100da2d1409496764b7d68a2ee2d71ec9ac47d61114e4ddac8845c0",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-oc.json",
+        "sha256": "05c1f539c6135b0f407c64b2ec94f8dc8b1a3cb55c26da78f6ae5f7ac3a32982",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-owl.json",
+        "sha256": "8a12dd447069eb2e0d33440b6b14957b84bce6866274554db8a56c31d4d9c0d6",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-tt.json",
+        "sha256": "1b09664f982b8ed2b390085360cea369c019b834d27332041a8354caac220494",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-ad-copy-dev.json",
+        "sha256": "84331ff67985bc8accacf5a39c010991e31fea6b337fc8c948c79285eac4f133",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-advance-pipeline.json",
+        "sha256": "ac47ca92f17fc46282ee6cf9222f167b60ebaf3910c686de0fae5b0a7e25ccc8",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-aider-self-help.json",
+        "sha256": "8fe6cd8c713943c09154719d89cfd2ccc4d6f77c6cdb6fb1b819377bcb6778b1",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-amend-plan.json",
+        "sha256": "32b932e9c8d3ee0d58d6d67b165da6f23034b9123e576a04fba27189d76550e0",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-arc-blocked.json",
+        "sha256": "f4c5314b2cf5110740bf606174af175392216123c71c09db1d0155dc22c72655",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-arc-complete.json",
+        "sha256": "648ff43f6f06dec4cd32c2d991fb7c04ce4028e3c175101b4d1f334d549a8a4d",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-arc-rest.json",
+        "sha256": "0f384198c382948987598d7ef51ccb351603ecbbb285f08ac0d6731cef13a7cb",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-arc-status.json",
+        "sha256": "d1589a0c92bb21c8481ff0632165cbb7d834a44b36fb4058e9d1031313ea3455",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-aside.json",
+        "sha256": "36bbb15a7e646bc2334e94d37b2d516b5ba204d79b2bb547e9cd26f1733edbd2",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-assemble-prompt-system.json",
+        "sha256": "4ed8527b22310cf7d4c915ea97ba7f349b95558a98036df571c565c33625c52a",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-audit-framework.json",
+        "sha256": "8bbe35a08422a5d1fccce0d71c0334d9dba18fb0fd86630d29d1a28ff6e3d470",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-author-prompt-system.json",
+        "sha256": "40ba82bd5e62da9a1f5d080df18de2b5f219e7320677bdd80a27e24782602e34",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-blueprint.json",
+        "sha256": "891f0f2553d1ccdb04424d2022922e8353b7856d04c124cd877dc0b759e7c453",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-boot.json",
+        "sha256": "fe5e9a594af6980e14dc029127b5b19ba34b937ec1e59af53e8409fd2bd890be",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-bridge-speakers.json",
+        "sha256": "b209f86b85106692d068db511643f9424fc8bd0105595e54287143f6aea5b2c3",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-cadence.json",
+        "sha256": "88328383a1cf1202c2fbe0a9591a45209ef110f9f587ec74c8ec7e88d949f842",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-candidate-status.json",
+        "sha256": "95c7f853360488d682e456f309807423b6766879fc0a26d9cdc0b5b00aa9e65d",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-capture-status.json",
+        "sha256": "28376b8c38dffd24c5da23b509ad3a91238931c96533d16f64eec88572d941f8",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-capture-task.json",
+        "sha256": "a50a996e6b90e23840684999e1cd10a98c1300b027feee7510dc323388054188",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-claim-intake.json",
+        "sha256": "aa606b317a78fe673fc8ab0073e30c99bb9f1e82628db9606d56c68e57c9ea4e",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-clean-house.json",
+        "sha256": "a4dba63921a4ab4dc0de9566904ef173c7cc1ae6aebd89f8b1516635e77923f0",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-codex-self-help.json",
+        "sha256": "ad43db67be4074f164189726f4a3b17b796b71de14611e674a96d69feb762cd3",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-concept-dispatch.json",
+        "sha256": "4710d1eb5745417783c322b740ca7947acd9909ebd24035d72fd425c9e92bc85",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-concept-init.json",
+        "sha256": "548731e30f0c180922fe352b601b7806dc6eabc85ff1f5810844ca83ab9fc8b7",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-concept-promote.json",
+        "sha256": "59a45fe264517d63da7a625b35e7e9dffe30f1c3a5effaa2b720e3e52222dbea",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-context-check.json",
+        "sha256": "f4ede8f2502c32a1c65574f3d6863684c47b54719d5980c1dea7bf6aaff7bf4d",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-continue-self-help.json",
+        "sha256": "b9e0aff8ebe7b0ac29e73ac765d233919a9e62486f13d70acf6db31f5a8b93e0",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-convene-gate-status.json",
+        "sha256": "2d7f4005c5e2402f82d6fae04b00551e6a9d59dc3eeb9e076cc1b3baaa6e31aa",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-convene.json",
+        "sha256": "0d6f2596c9a8d136d9f0929c99ccd569b288ce19ffb16c708ca9b099d2c43844",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-council-of-owls.json",
+        "sha256": "9800aec738bd7bf4e47053f09f13389f3310575a7f67a6c321dc2ab11a707448",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-create-plan.json",
+        "sha256": "8c038a0f2c4a398884d339dc36a0d9b71a695c054cd8ede0553bdb112569d1cb",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-cross-session.json",
+        "sha256": "d9060a14ba85b227d4add5f5e6d8d641bec00667b5aa1e4b1e73d083ab0fcfd5",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-crush-self-help.json",
+        "sha256": "d75328324bceeee178f6ab20cdb81a150df8836f2157b5e9bb0b3aae157692a8",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-cursor-self-help.json",
+        "sha256": "165bc9599e7e17bb7c28288c8ac96641bc8c10fe4e0fe7898fb9c2603a29455f",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-debrief-run.json",
+        "sha256": "258264386918285b3bc0054e7de945ba63b6e5e0117ff3f5f1c5e3fa42a9ba40",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-deliberate.json",
+        "sha256": "830dd926a15922e12e8738fb48705af3331c44b42c5c3e88766e6c57411425a9",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-discord-access.json",
+        "sha256": "3dfa1cae6aab7f5325cf0827b33af5ba17d24854e2081e37a8be8fc54e6ec9e9",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-discord-configure.json",
+        "sha256": "c23bcf1f45382211aae8f45cd7fec8385fb66bea168cbae749b85c69286473fd",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-dispatch-bridge.json",
+        "sha256": "9e303eb238ce55627a53a62c5a4287bc8f6ae6a3ace040bf25c48d3e9875240d",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-dispatch-trifecta.json",
+        "sha256": "04f3150f60b0c153d0bb7e892139554fa39b4e9bc058d7493ba534b5dea14dc8",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-dl.json",
+        "sha256": "549eb4765929070fcb0f827423553a3a9d08c5366ed8f92b5d0318c0987685d5",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-el.json",
+        "sha256": "5c68cd101a7c41ee5e04fc37dd410f1f0bda2d5ae6411d91b55fcf25ab03e9eb",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-end-session.json",
+        "sha256": "2c25174c566e4153ca6b12070080dbb795bd1b1071d2ba3a7d5c8a9ce7fc9201",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-evidence-loop.json",
+        "sha256": "ec8b9de667921d842cbdd2ce4d07185c59b1741b22b4b9964e389ec65c2471c9",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-execute-plan.json",
+        "sha256": "eabd47912328d0786d1701b50c28d03728dce43bf839a503fcc853c6f29247cc",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-extract-skill.json",
+        "sha256": "19024eb10464f4e4680bf0fe9a1f22f1aa31a91f0485fe56d612fefe817c407e",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-follow-signal.json",
+        "sha256": "3aaa107e83846064f0841c430cbe7053b8ae7a6b7d90c6a887cbc90d3489f1aa",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-framework-phase.json",
+        "sha256": "5e66ac27b154ccb6ef53e6fa1796b17845e0aef74c174558dd824ebf917c4c6f",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-framework-run.json",
+        "sha256": "291328635a528ec109f27da1a3863b7198e83e8cc0433470993ca887bafc64fa",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-framework-status.json",
+        "sha256": "f7c5a8db61a3216b234a4391a3ace1aa0549905dd8d82aebc8a0509a3eceaad4",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-fw-deliverables-presentation-review.json",
+        "sha256": "2bd3590cce068b2d2f52313b2f9b32e74ab73480dcf02657d43d82fc114027ea",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-fw-deliverables-scope-verification.json",
+        "sha256": "6203d3d864c87ee6b4a5383cba26fd48f8976e0d279bcad28cc3921b0b27122e",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-fw-deliverables-version-reconciliation.json",
+        "sha256": "3962504f154f3b9ba29fa984c7e8f838d431b593340edb4ebfc6e97987fa3bda",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-fw-media-video-editing.json",
+        "sha256": "3738952b0dbf6e71294df9de1d5add8806f120432f23961f866a1879557296eb",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-fw-meta-execution-normalization.json",
+        "sha256": "c79ceb2e926c1f4c54b8dd5f88dfa5af842d534177c1fcc907195853c15e5813",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-fw-paid-media-ad-creative.json",
+        "sha256": "e93b8f54efdca4cd21006aaa44719ffe6133e17d1fca619a49f95f31b02ef598",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-fw-paid-media-campaign-management.json",
+        "sha256": "7cb761f2d9b070f24c867970dbc059f6be0541dec9def4c14be67aee76ad0037",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-fw-project-management-dart-collaboration.json",
+        "sha256": "ef4f4503b5778fe1e5d29d9a7c19ba4c70e012ab873781b6285a7ad1ce64d5ac",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-fw-project-management-feedback-to-tasks.json",
+        "sha256": "ea6ee1cfa767eb517c644a7106c527f500185367d1203bf21ca35c3c53d0b2b2",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-fw-wordpress-analytics-tracking.json",
+        "sha256": "e130dfeb453135630f0c09dc127e1c9ce2964be89d54c5e9595a315ef6d07246",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-fw-wordpress-content-editing.json",
+        "sha256": "f9438132bd5aaeafa7bd55f846ddf21ae023756ff05830e5d60ac54e85a5f784",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-fw-wordpress-design-mockup-validation.json",
+        "sha256": "8faa72328cec1530cdf0c15bdd741679542c5b1a2c31e1d413b30ee8654dd6e3",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-fw-wordpress-design-research.json",
+        "sha256": "7c3faa9d9887c7a9d905b11e5b9ba896687ab6e0c09b59559deef7d63e658def",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-fw-wordpress-documentation.json",
+        "sha256": "212400f7a171c8bcf479e0b07fda61f0661a54d09e9dc247020714eb79319fba",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-fw-wordpress-page-cro.json",
+        "sha256": "3cccd32c76e138146a3a6eb10024f925263aa4dad5e45b57af74dca99337e25f",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-fw-wordpress-qa.json",
+        "sha256": "6a91efa6073c64fe92e3acab8db05ddb5e669dbe9a6257aa51a390740eb40932",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-fw-wordpress-seo-audit.json",
+        "sha256": "885819e6a0b179505827cde73c285665ee4c3377afa4130ab8ac7686693ea42a",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-fw-wordpress-seo-validation.json",
+        "sha256": "da45d81a5e9529f160cbfd7c70cbcfc2d2957b0ef1ef05c615730009f976a933",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-gemini-self-help.json",
+        "sha256": "dfa23568730673eb5b3fb8cb4cd13a93fdcc9ffb81170ad8df6d0384a5f36320",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-generate-harness.json",
+        "sha256": "5a97545eb498ff9b7c4404fb922f0085dc0a146271e48ac450d64ce98b332553",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-goose-self-help.json",
+        "sha256": "4fe71fb57e1b0a68a9ec6ac9abe32fe797bf2df10b676a4fde79bcd1fdbb2f53",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-ground-in-philosophy.json",
+        "sha256": "4252175e2d92607bb9ec93b5b89e85f5ed80c2f47f8d09a0fdf86e096adb7d57",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-help-me-route.json",
+        "sha256": "c9b07181553a0de9f67106f4b4bcad030184a31e40fbf123fca02d9166f3c927",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-hermes-self-help.json",
+        "sha256": "6f17a489e7a4ff056f96fc98506173899f5e38056a122cdacea516439e5ac1d5",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-improve-framework.json",
+        "sha256": "938b3430b5e51a88eeafb9bfb3e8068ca58f19a3a1c2fd288d88d3ab52b709ad",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-ingest-walkthrough.json",
+        "sha256": "a873e70051c58a6391a81a1fe1d1417a863ec276d7814e61f0cafa8eb7cda0c7",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-kilocode-self-help.json",
+        "sha256": "41845efb3c13bf3c20043fefaeab9d21961b6cbd96acd70c7224e769afcfb568",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-lint-attributions.json",
+        "sha256": "64e119c7b7ae50c19b4c6e6da501b2e31b98b45ff326b79338a1198173f1198e",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-list-frameworks.json",
+        "sha256": "ad2f618d3a91186a1d1ed5beb47152071e973105420ec26622bcc4103a66508c",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-motivation-scan.json",
+        "sha256": "d12d20747add193f557c32ee6a0003697fc87d1d0811facc2b78fab10d810e77",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-mythos-status.json",
+        "sha256": "43382db7142005039a5f4ae5e60c2d5c65a38cda5a6383743dffeb0872859fa8",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-new-client.json",
+        "sha256": "6e25bc88d3c36d52dde4b4e17c226ff9e66b64bffba4bfe4a6bf997793848164",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-new-framework.json",
+        "sha256": "667378d6a41ca7c9b26e7ac5ef384b0c7275808b2d250c5a2a15046ac4ddf48d",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-new-project.json",
+        "sha256": "7c96f6ad1389e8aaa3b5fead151385febf87f24c08e7a6ec15750153824fc72d",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-new-session.json",
+        "sha256": "583390747ab4872ed9de5882952769a7a15cdf69c1bc3b30f1e3e4b5c30f6290",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-next-session.json",
+        "sha256": "0ac61d2e91beb0199fa6a735b40ae7689b155294119d9153d6eaa58606dd69a8",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-next-step.json",
+        "sha256": "0a0d9ac9209739c379ae0228bb2be3248a424d23d7f01de7971e4d3294e9557d",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-normalize-capture.json",
+        "sha256": "83ea580cd4fd81ba880dbf0a20fb43e900bae426cb0edecbfe7a1e01ebf04daf",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-normalize-signals.json",
+        "sha256": "fd4835a3f1fbd76108fc5b06e188be978024ba20cd25965652ba63b024272ba5",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-oa.json",
+        "sha256": "9d0757545b005233eec2836bf730a3a8032efef42697185500a7619f7f84ad7f",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-oc.json",
+        "sha256": "662ae54b1cfbd6db9b021aad7d752f65ca5f49d7f75fc1ed9ea46b54aeb8bf51",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-opencode-self-help.json",
+        "sha256": "1ad5c1a2819e83eab5b6499aea1cf8f2e6ac652d71a10332d18f17013ae97a45",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-orchestrate-loop.json",
+        "sha256": "984c9d127ea2928495d7f8e216d03cef262a74c100a01a8a515f0e880b9bd6c0",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-orchestrate.json",
+        "sha256": "5bb8beb38f85cf792ef23683a670d33942f0849a237d9653dd3b6cfce17722bb",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-owl.json",
+        "sha256": "b6aae03c007b420d117ae0c76d45060cfbf23e234a6e0b0af62f0f2678e828dc",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-pi-self-help.json",
+        "sha256": "85b569a36bc002b4c3a425ccafc941a87edbdd87f2699ca58caf046c1baaee53",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-plan-active-workstreams.json",
+        "sha256": "a8a4d220cbaad47b46fa2fc50d18a4e43e8a9c4acaec0946dc926bfe2ff17c7b",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-plan-pipeline.json",
+        "sha256": "a6d49ffd3a573c879fc01c3a9c286cddeee08928041229de5ba4f1c0c29c7dea",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-plan-task.json",
+        "sha256": "4d398872938dc76198f7360b3b8cde16652c909e87666d49b9c5fee087d94321",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-plans.json",
+        "sha256": "efa01ef72cd5e37776d011ed0aa59efff17c0a16af483e9a2aad5f4cb7c9f70b",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-project-status.json",
+        "sha256": "82fea417f2c51cb3673c59b9566d67c999efc3ec67b3be7c53debbf19fcade31",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-promote-framework.json",
+        "sha256": "d44f280e4b2fb5e3521aa00f39618c0dcc7bfccb56e62704efbac5cdd82c424f",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-prompt-refine.json",
+        "sha256": "4d605a596374ee225b8909f18212de96c9fca273636ec5dbbc9e4af8dc8e1503",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-reconcile-lessons.json",
+        "sha256": "8cc56a23b54f4b0ac52d311760f2b38b9f9c6e5504716f59c8f5ff6d02579bc9",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-reconcile-task-outcomes.json",
+        "sha256": "07ec921cc1ea175b182f1cf69a2504af9b89ef66e69aa62358573a69e7265b99",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-reference-compare.json",
+        "sha256": "1061646a920095f5eac4f932c132df5ee36aedcc45506386973b9edb011cfdee",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-remember.json",
+        "sha256": "0b50044633807fd09d4a019580b62ef128708ea8645cf44b7e77aa0215fb6649",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-repair-plan.json",
+        "sha256": "55ae843869b6e5d1db32dc5759be383d0d1b98b0881fac02f3a785d6c6fa28a3",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-replay-framework.json",
+        "sha256": "ea8d9b0a2c454af6858af633c1b4168d48ae4c887c0bdf5752db385f9fa65e5c",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-review-active-workstreams.json",
+        "sha256": "47766cd91219da435285d339b96193b91555030579d14e3a36e12bf66ae95e4e",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-review-dispatch.json",
+        "sha256": "3bb21029bcc1ab5f9779e7f08e33f1e9bcf4afe77c91e2fb30778f1b44849213",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-review-progress.json",
+        "sha256": "41e60a95135a27cda5e61973e6a8a5cdf1478f4baf061ee9502f602ab8d26b41",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-review-source-material.json",
+        "sha256": "14f0544f634f84d0daff875a6d2e551328bb431f154eb5180df293430278504e",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-review-task-plan.json",
+        "sha256": "ef131ec273fc573a14a819c837331def230bd6e12d3352f3932be484f1aa81e8",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-route.json",
+        "sha256": "afb63136d63474ff7edeac1d113265a6f755da0e15cb590763bf2d1a6605fd01",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-run-framework.json",
+        "sha256": "a59ee8c26fdbfa763785130864c1359c8567cd79a8aa209e195d21ea9c476895",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-run-plan.json",
+        "sha256": "d2c326f6efc810cb373f1d2f2200d837a87ab3514b5feaaa9bd57dd9c8faa565",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-scaffold-framework.json",
+        "sha256": "08272bd684cd6012d5292fbe608d92227580015c0cd00600db588ef9328f681f",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-self-help.json",
+        "sha256": "82e47174a1676c5e82907101bc4a65f476435bd96a4492e12cd75c03deb94a0f",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-ship-workstream.json",
+        "sha256": "59f3c4e16143088924bdea81c2653e2a8c402d900701f42bd36473c07191ea1d",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-shutdown.json",
+        "sha256": "4f9c0b9e5860a43d87f5eafa5111ae8a2e82852d181f0b141acd007c7057be8e",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-sync-manifest.json",
+        "sha256": "385de51a2e77b087ffa251475eee19b3566893208e69d87763e942451bde4c03",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-synthesize-concept.json",
+        "sha256": "b0d87aef77c7e9c5bd24cd02bc5bebb5885b98b9948d8d84f194b6182710283f",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-synthesize-debrief.json",
+        "sha256": "7605f178729ce7b639fae9f2eb3e6b56a5fe4edccc37acb30d300a05f0108043",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-systemize-behavior.json",
+        "sha256": "cff2848b28e79e468267551b10590e7af106867cd23050c31fc4701162545e4f",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-telemetry-status.json",
+        "sha256": "7bcf637a1c994e04e83930e84ac1e33c05b3bd0bb234b0880df861078fdfda4c",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-triage-client-board.json",
+        "sha256": "b73d3d680bc715d1bb63f3f201a3f0ce8bc95ac1748a9989f46441c072e97db2",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-validate-all-frameworks.json",
+        "sha256": "4d6a79bbfd6b34527dbd3f80cd80e55b34714ea7ee56a1bd0ab60e5b914db84a",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-whats-next.json",
+        "sha256": "8bddc2fdae62a4fa10e7736fea262bb0d3a5ddce7e445e5fe1b0634daf89a7c1",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-write-handoff.json",
+        "sha256": "92bff41c6147fa868e423e5e0b4f403513d0154339b4659c730e494f392c0763",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/direct-go.json",
+        "sha256": "e9d5b277dcf7f3f237a1506ed87c2652bc11f508fef270efa26005c53223464a",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/direct-meditate.json",
+        "sha256": "0b4d991d2f422e815cf7c23ca031b048c1bf6e0cc092e08a49fc8088ec5ebec3",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/direct-outward-inward-loop.json",
+        "sha256": "81da7f215181a3fbf752eea8b1201906b5ba76df601f9614cfeffe593c403f6d",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/direct-ticktock.json",
+        "sha256": "c6152b580d60def5c81b11f39028c042056fe1b29bd1eccee451a154dd0bec8d",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-deliverables-presentation-review-presentation-review.json",
+        "sha256": "78f176fc554fde0baf79783a54435ff3cb6208caf863f510b0bbfe0bf07e7de7",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-deliverables-scope-verification-scope-verification.json",
+        "sha256": "ee5c9378a20ff3bc2b079c5db0d6c757064348a858d366e7f51bada2e3d2c388",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-deliverables-version-reconciliation-version-reconciliation.json",
+        "sha256": "6ce205fa8df987d4f49449bed6a47e8f727af2e91513ac631d5a7a098e11a2c8",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-meta-dreaming-system-dreaming-system-integrate.json",
+        "sha256": "b1633494ef48aa622a1271fe58f1a14aafe27a5e4287a66f72bf10c6adbcdd48",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-paid-media-ad-creative-ad-creative.json",
+        "sha256": "a30e016f800d2bdb409479639acf1b8130b0a0308c56f8ded7ea1f312b65c9bf",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-paid-media-campaign-management-campaign-management.json",
+        "sha256": "b90ecce0a49fd3dbdea41db48cb9a6320450d22835b46289b7d201e3bd8ee3d4",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-paid-media-google-ads-search-campaign-build-googl-d570329c.json",
+        "sha256": "6a0cfdfbd429f5cb0591bd8350e40ae74ea31ac5852ce4b060da8e67eb3a19dc",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-paid-media-meta-creative-iteration-meta-creative-iteration.json",
+        "sha256": "0ce96b56d444fb18d4919fd2e14898f0e11a687375e361da2a93cd0ca6ed53ea",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-project-management-dart-collaboration-dart-collaboration.json",
+        "sha256": "520ffe2c412b08171ec261df76131d7acd5097673be8cd952efda61b21966511",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-project-management-feedback-to-tasks-feedback-to-tasks.json",
+        "sha256": "9d9c6542f8f79a4f4a58d1194a60014f25d050b4a34d0b99f80fac0707963295",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-research-business-identity-verification-business-938fa203.json",
+        "sha256": "e0d62046dee935533cb44884ce6c51c4710ea345fa2aad471b1bf669d9de2d1b",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-research-contractor-credential-review-contractor-2e585fa1.json",
+        "sha256": "d73011b854bfe38ffebd6ebcc7e314c4c89263f7e5e1348b607db22e4fb41194",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-research-osint-discovery-osint-discovery.json",
+        "sha256": "45187e4e32ea52ab15bdffe43b1f7a6fa4605c6d5a1ed4628e7caba5808131c0",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-analytics-tracking-analytics-tracking.json",
+        "sha256": "2d86e9e55e9ef1600a123eb554ceb6c88509b1f6aad26341a03f48e41e8fa93f",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-content-editing-content-editing.json",
+        "sha256": "77a9ba7e125d76f2a52adebc858fd47c32eafbccaadc50b0cdb707ead87fefb6",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-design-mockup-validation-design-mockup-023c1aed.json",
+        "sha256": "19fff29f7d0ed74da9b6636340947163376b034c9987abd9fe93f308439ef3d6",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-design-research-design-research-cross-ai-handoff.json",
+        "sha256": "7f3134ca394fbffbb9bedfd882b627645e0d8871538b98f77f26e7c364c9e74a",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-design-research-design-research-design-mockup.json",
+        "sha256": "a67a97bc974752de489505674fb6a063c02eb1c3538255fac03dcceb1e01154f",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-design-research-design-research-mockup-brief.json",
+        "sha256": "9ceb460b7f87fff246f59ac099a04f86abe92b25af3fb7b6718e2eec6710f461",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-design-research-design-research-site-audit.json",
+        "sha256": "a2b84e6801e48cc4fb382c12812e8f6365979414c815fe5086bc4a2ef42d5418",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-design-research-design-research-visual-refine.json",
+        "sha256": "6efc34a3765fa006aad6d35770ef20725dde6dbe66b5eb197a4e1191b301fada",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-design-research-design-research.json",
+        "sha256": "be8e3da8d8f5fb5f189de0a04fa41692351e2e8482ae84e4e064e3815a32b212",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-documentation-documentation.json",
+        "sha256": "d500dde26a52425bcf79fc74da23357e9f1c6f41974e2dabaa073864bf223911",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-livecanvas-onepager-build-livecanvas-on-036f97c9.json",
+        "sha256": "1ae38440ff0a57bb0af7173af0cfe50831237ed045a8ded0c80808ece54ae337",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-livecanvas-rebuild-livecanvas-rebuild.json",
+        "sha256": "0e4c0deb94c521ee7239b0a3bf95fed93eaee7859f4b47c75f097ec35f0ba514",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-page-cro-page-cro.json",
+        "sha256": "7618047a87d3d1eff2daccbf67e9f8debc6045b255841ede59525345305124b6",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-append-to-dev-bundle.json",
+        "sha256": "9517f9ffd3a60026afd28c6c8b01f6af0de0f025a569226c1bee35ee331eb1bc",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-changelog-capture.json",
+        "sha256": "eb9142382b544219a09bd20bcca8c123265ef0ca469fc999ae65756fa5d5ca0d",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-compile-dev-bundle.json",
+        "sha256": "33258c12dfac998bee9c03227cdd25ef06ffd9dc6aec8f9202248426fbde8207",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-cross-run-anomaly.json",
+        "sha256": "5f2c7dd318e0c21042da60dd1296d64dc28e5fb4b2ab35f45044e5660052021e",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-deep-pipeline-analysis.json",
+        "sha256": "631aceb1115c1f16d2e92d0866b42309b8d14e047ba129e422d81ff3c16ccb0a",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-dev-packet.json",
+        "sha256": "849a6c64f1e38485e97f60fca8e745590b49dbdd41cd2d50b41fa046db81ff63",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-expectation-updater.json",
+        "sha256": "190b8a947597bf11ba863d5d1236a3975a11f906ff437460d2af1b404681c595",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-implement-fixes.json",
+        "sha256": "cf304c6a79d1472f2919d009d3a3681cb416d1976d26f2bb157135182f8011a4",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-intake-scaffold.json",
+        "sha256": "cc415790476a296dc882df4c1a7b39cfde98de627c26704d29a346fb9ca22838",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-iterate-until-pass.json",
+        "sha256": "d1772c08afd025bc944882426c12e7b5f285836ead73634d0bf36c77b41e90bc",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-locator-correction.json",
+        "sha256": "4dc4da09ea96a2e43942a9fc82023250396e8be37485acbfa5768fbc51d57c22",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-mcp-walkthrough.json",
+        "sha256": "a5110ffb8939614431dcf47f0aacccb65b28bc0a6d4377e5c1d7bd7bbf9d72ea",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-navigation-cleanup.json",
+        "sha256": "b9a8dd6fd69f9efcea062cdcab71d47d6b838c191d4d34eca9935eb3020abecb",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-parallel-run.json",
+        "sha256": "3bd8d1626059701349faff19040372a51f796a9f4bf5d91b08fd1908e066e542",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-report-handoff.json",
+        "sha256": "410f8ab7ea31696e89dd593dbb0f36de5e39c0af1a49fbe604d1723f3aee5132",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-rerun-verify.json",
+        "sha256": "d57312bc666b596de64776bc0c37bc6626ba786d733d504ec40eaffea7fde469",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-qa-qa-update-framework-artifacts.json",
+        "sha256": "2a45d46ea678373e1d794aedfe89f1ef82062662e3770b9c102e5d714c2cb4e0",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-seo-audit-seo-audit.json",
+        "sha256": "e63c57fdb8b74848f97d70c02fa7970b127c136f69b219a67dc25ab23457b1d1",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/framework-guild-wordpress-seo-validation-seo-validation.json",
+        "sha256": "eb5d00ebf962494bedddc86cbc0961a8f3d4a57e8a0a2a19be0e2e597d66481a",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/runtime-receipt-codex-discovery.md",
+        "sha256": "60f713a6125c133b002a8b5ff4d6ca9f827effb5256c667dd433b996a851135b",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/completion-audit__codex-skill-parity-remediation.md",
+        "sha256": "f57c90ad72a2e1194cddb0983a808fd4a932b37d6c607d8ac73e4841a629aefb",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/completion-audit__codex-skill-parity-remediation__final.md",
+        "sha256": "e1bd8e3d7ddbfafb0e2b84ee4027396bac1c38046389c6c40b551da496ab53af",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/convene-runs/20260914T164532Z-codex-skill-parity-remediation/manifest.json",
+        "sha256": "b708cca19491e31f90121dd815a1729df73f85a430cfc0c52394d0787e113a8f",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/convene-runs/20260914T164532Z-codex-skill-parity-remediation/synthesis.md",
+        "sha256": "7ae5a15a261d4bdeea09627f3b57aee33576f63d29d09530ebfec544f40b7a5f",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/convene-runs/20260914T165917Z-codex-skill-parity-remediation-plan-final/manifest.json",
+        "sha256": "32bba53331460f3c4f4ea61dc3a47e2a767e478aead98e592557afe849aea2f5",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/convene-runs/20260914T165917Z-codex-skill-parity-remediation-plan-final/synthesis.md",
+        "sha256": "ddac425ae98f1644c58b7fe8a859714b0ff23480b51d929ae980c311fafbcd2d",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/convene-runs/20260914T172053Z-codex-skill-parity-remediation-implementation-review/manifest.json",
+        "sha256": "6f8ca9c568c85ddd99178b87c0c5954da6664557825572aa858c50c9056bdd31",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/convene-runs/20260914T172053Z-codex-skill-parity-remediation-implementation-review/synthesis.md",
+        "sha256": "850b8ffc0eeb0c2f79356eb6146a7a26ffc9dd3e67ecf8976e6c3d3f371f1e04",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/convene-runs/20260914T172316Z-codex-skill-parity-remediation-derived-output-ruling/manifest.json",
+        "sha256": "21330c79a7214d7e1b96dd6dc0177b6cfcd9926399ba796ce7e9248dcbcbb613",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/convene-runs/20260914T172316Z-codex-skill-parity-remediation-derived-output-ruling/synthesis.md",
+        "sha256": "df2a39c90d5e506bda754af9ce90bee288f01685bbe2b7e9ea54f6baee6b8190",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/convene-runs/20260914T174455Z-codex-skill-parity-amendment-review/manifest.json",
+        "sha256": "019651fd409e117fa6d23df9d753e12180d442c290ef042d4b5b6a1ba2e58a34",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/convene-runs/20260914T174455Z-codex-skill-parity-amendment-review/synthesis.md",
+        "sha256": "e091f1727f5b746e3fbc4b2f4f3089809ff4501297f6f16f8690f7e65f84d508",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/convene-runs/20260914T185255Z-codex-skill-parity-final-code-review/manifest.json",
+        "sha256": "f02f471bfdac0405030eddeafec25e648037b50695209cf6ed52deccd905e5a5",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/convene-runs/20260914T185255Z-codex-skill-parity-final-code-review/synthesis.md",
+        "sha256": "d046d4559d00dfc3872f6b4fea0c3dca5ac7ea83094c52f93392c4bb40a93e8c",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/convene-runs/20260914T185600Z-codex-skill-parity-block-resolution/manifest.json",
+        "sha256": "7b2d2dcded2761d334c3c34419118227cc4d43d51a7bb34914501c44a5216903",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/convene-runs/20260914T185600Z-codex-skill-parity-block-resolution/synthesis.md",
+        "sha256": "be5acc88aae749d07264fc88ca27035b15a1170248b7f9841917070b5b0a2d32",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/convene-runs/20260914T185702Z-codex-skill-parity-block-adjudication/manifest.json",
+        "sha256": "9d028d777c32b572df70eb5978b1306ae3a4349b9501e4ac04cc1b1d48f25151",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/convene-runs/20260914T185702Z-codex-skill-parity-block-adjudication/synthesis.md",
+        "sha256": "fc1ad7e1b1031046a460f636361bd45c6a144c33034ff0b453e7fef6bc6dd148",
+        "mode": 420
+      },
+      {
         "path": "_dev/reports/analysis/meditation__2026-08-18.md",
         "sha256": "5e7037bd656067eb9d2cbbf3e5670846d09942dc34636ce26e9d9c97dd6d5faa",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/run-debrief__codex-skill-parity-remediation.md",
+        "sha256": "780a0148f86da85599c737935a53247e9fed6934e358164334a5162a23097f9d",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/task-plan-reviews/codex-skill-parity-remediation__review.json",
+        "sha256": "7624eb25a7295c5229ba5f3c65b28678b0b5fa4c0396c8163cec9a242180bdb3",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/task-plan-reviews/codex-skill-parity-remediation__review.md",
+        "sha256": "cd94e6cea308e3538e1b1962f5d1bc6605e1e1677c04d29a396943fceaf5e829",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/task-plan-reviews/codex-skill-parity-remediation__review.structural-precheck.json",
+        "sha256": "fe9b3a43f8ff42dfe3d91c8e44c8fbf7903f9a1bdb6fc1238472b36a42bc3027",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/task-plan-reviews/codex-skill-parity-remediation__review.structural-precheck.md",
+        "sha256": "4e9df90ce1d7723edd31cfa8358bfebcc9fa537d716566b49df13454541d8ba1",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/task-plans/codex-skill-parity-remediation__amendment__20260914T173619Z.json",
+        "sha256": "a4769b199d8f70a45595e71826c9129e73097d09b9adf5460df5e5b38ead6b40",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/task-plans/codex-skill-parity-remediation__amendment__20260914T173619Z.md",
+        "sha256": "01c40c6970c4993b34fcb2862f883d22d4582bfbf8e3717d208db682626fbf3e",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/task-plans/codex-skill-parity-remediation__plan.json",
+        "sha256": "6850fa3d9c9d56b13bb5a28bd46c43de9c1cf8f88b02123fbb745e3b6bfef012",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/task-plans/codex-skill-parity-remediation__plan.md",
+        "sha256": "feb7f7d9d67316cd2a70b8528f5e1e77a07427aa0ed2941e8cb03ca9b5277d26",
         "mode": 420
       },
       {
@@ -3876,6 +6546,126 @@
         "mode": 420
       },
       {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/client-review-agent.md",
+        "sha256": "313e1410efaeff8ca407586f4ec964ead3e3340b4165f14dcdcceb82b6eb7c59",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/design-spec-agent.md",
+        "sha256": "9ca19b3d1246c9270785a321f1ddc0a348c10265c525a5f79a0bd5d5a3c6655f",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/intake-and-research-agent.md",
+        "sha256": "34799fe9eee230bb9c276338a788582cefbc450a2865b9475ee77c3782675cd3",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/page-build-agent.md",
+        "sha256": "7ab0c9f2b4bc522f291ea54428364b2211d0d8f26580d4e7a1a97f36e5adff53",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build/theme-tokens-agent.md",
+        "sha256": "92e14e31023a2213db789fa9728595ab54b285de3d01b47cfa5ecc7df60d43dc",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/client-review.md",
+        "sha256": "4f1ec031a7f51eb4af5526388f8e941f650e15775227455573e05c1a6aef0b8f",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/design-spec.md",
+        "sha256": "1d2696579c7950c2bce75bdee212869dfbccadd7f5f7c7f9ab1546edb8c4112a",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/intake-and-research.md",
+        "sha256": "b7a0307e8fdffbcb65144644ed73c52ae5fc5d07ba3237921a0e9102737e5fa3",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/page-build.md",
+        "sha256": "7ae48ace9cb282be92ecdaa0fbaedd64a2b2e3c487e45048bd68203345f51094",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/run.md",
+        "sha256": "6a7eea333be7d17d77549b5cf0bd041876d28f8771b0dc9e56e7d87c126a362b",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/status.md",
+        "sha256": "f3f7ec5ce333bb04beba8d072355955a0b83f3bfd24329a2150a68606357542f",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build/theme-tokens.md",
+        "sha256": "1646d850480bacd6971757073c9a835830a5fb489b8a81395cb0d4d94441dfb6",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/.claude/skills/livecanvas-onepager-build/SKILL.md",
+        "sha256": "4c8821b1206b3940527e3667f1f4a8988f473d17872def8d811997e6d23ee14c",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/README.md",
+        "sha256": "bcf9e3164c70301db8a83493b7ba2c27ccf04aa7e3b0c7903e9afa72b49254c7",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/docs/client-communication-brief.md",
+        "sha256": "e2e21684a8ff40e7a9f4426412709bdfb0bbf2edd9c009492d195da6bc400178",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/docs/picostrap-livecanvas-recipe.md",
+        "sha256": "11b3fbf70203dd88a95fa845a24ccb7090dca09ce88776dc8381a031cd0d1ab3",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/guardrails.md",
+        "sha256": "d3659baee8d6e1a1563516fe524bfcc8d5d726da99569a5e00f0fefb06601516",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/manifest.json",
+        "sha256": "8a0f9c8442ec476f8d3d74df59cd133169c58ebee4d7569acba100bafca91809",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/prompts/01_INTAKE_AND_RESEARCH.md",
+        "sha256": "258278b182f56120ed9ad94f4fe0e26adb0b0b533c23c0afafb7d0fc35a698ac",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/prompts/02_DESIGN_SPEC.md",
+        "sha256": "766ef88527b66000c6ad9f89af7aec2f97fae828215f5f63a8d5a35d5db121e5",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/prompts/03_THEME_TOKENS.md",
+        "sha256": "0a484133f9d616c3e27da013fbd61416673e03a28ed32ce1a121a4d1f53f56ed",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/prompts/04_PAGE_BUILD.md",
+        "sha256": "435be245edaf0481fc5fba825f5ffe5366236eb3792b249c4c1e83a535cca781",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/prompts/05_CLIENT_REVIEW.md",
+        "sha256": "758fb0c6fe8bb16c3c50afa9d9f42da557a711c17eb99a5273d68a7b58acb5df",
+        "mode": 420
+      },
+      {
+        "path": "frameworks/wordpress/livecanvas-onepager-build/schemas/draft-receipt.schema.json",
+        "sha256": "47c8ef69886770c08851880c41807fa25e2fba0de6f4a7f4a1967fe47fde1fa3",
+        "mode": 420
+      },
+      {
         "path": "frameworks/wordpress/livecanvas-rebuild/.claude/agents/livecanvas-rebuild/audit-agent.md",
         "sha256": "a28e07bd3408b29a1a86e5dc96a94a0b5e879ee7aaf15c96d01cf02f7a436779",
         "mode": 420
@@ -4917,7 +7707,7 @@
       },
       {
         "path": "instructions/adapters/codex.yaml",
-        "sha256": "1612b6b0a408b9bd1e0ac2f7d09233def14336906324b28a7ca6d51391174e1e",
+        "sha256": "39d9ce83eaf838c6b240a7e6f56713cb69d62dc1ddad0014d4447c75d3d3dd2f",
         "mode": 420
       },
       {
@@ -4947,7 +7737,7 @@
       },
       {
         "path": "instructions/canonical/command-aliases.yaml",
-        "sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
+        "sha256": "9bbc50aa1343a5502258e0e067eca0bb4cf4ea9f560abc5b998247a0e04b9901",
         "mode": 420
       },
       {
@@ -5776,6 +8566,11 @@
         "mode": 420
       },
       {
+        "path": "instructions/canonical/frameworks/wordpress/livecanvas-onepager-build.yaml",
+        "sha256": "6c4be6cfe5a367e92462d3380ef32b4069d0081653e2831fb2ad53cb0ab80f96",
+        "mode": 420
+      },
+      {
         "path": "instructions/canonical/frameworks/wordpress/qa.yaml",
         "sha256": "fe7206cf1c78886f74ebc611c3a6386a17886bf6a742e2e39715f8ebf4eeb823",
         "mode": 420
@@ -5902,7 +8697,7 @@
       },
       {
         "path": "instructions/canonical/system.yaml",
-        "sha256": "2403daa3bcd8ed7c4e2a2e034f5e73ea7a7e8f10a84b2e329e66f92979b59a1b",
+        "sha256": "4872c667fed2bb7cdeafc8b1ab649256170c0ca661e03616349a03e03d6f3890",
         "mode": 420
       },
       {
@@ -5947,7 +8742,7 @@
       },
       {
         "path": "package.json",
-        "sha256": "0174a03e6beef86c68242f440c13a64f2a4fc92221f2f442a05faeb692bcc3ee",
+        "sha256": "fb759a058551adb2357cd09442b016fd7a147904b13b0935b4e64165982e4140",
         "mode": 420
       },
       {
@@ -5977,7 +8772,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "14e221ed396b78de5008cc18b842fa56f787fc0e65e7ad532e4b32dc8855e295",
+        "sha256": "b224ebcbad7061c081bb7d5ea8c20a5b19a86faad05f2ce7d3d90670806cdb60",
         "mode": 420
       },
       {
@@ -6456,6 +9251,66 @@
         "mode": 420
       },
       {
+        "path": "tools/ant-hive-world/research/README.md",
+        "sha256": "c0fa1268793c79fce6523a7a8a4c3019e3748b9b23b60eb6e79d988cd8ac9dca",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/research/__tests__/public-policy-regression.test.cjs",
+        "sha256": "2f1f8e09be6e37746dea3b2a00e41326ed2ef56c5720549a942eac75b3e1628c",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/research/__tests__/research-contract.test.cjs",
+        "sha256": "d88e6bbca1ebe8cbad8c955939b9694c4e55352930d12697ff1d091856009aca",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/research/__tests__/research-workflow.test.cjs",
+        "sha256": "8aae49a58c6a9cc1e414e2696b3334a656658d895ea9000e5831cdc7f6aa518d",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/research/__tests__/rg01-adapters.test.cjs",
+        "sha256": "24b424be901f15b83af976bb4a9b3a9961b6dd96e4766ff1dff15618be323a0b",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/research/experiment-schema.json",
+        "sha256": "a807f1f91aace96a46b8c6c576a2da38a98ee4e5fd48168c9a1ae9218a5ee160",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/research/objectives.json",
+        "sha256": "e8f6a750948e74c03fa1727b538ae00078cf747ca92d9248afce943bc1d7f66d",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/research/research-io.cjs",
+        "sha256": "d5b0c7b77a3c9f6122fd9b3db4f30711a4725b29222be5be85dc65af8f512528",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/research/result-schema.json",
+        "sha256": "a3d04ecb13c5bb393229207bdf35e14ac99f3e952d63acbbe029afef633874f6",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/research/rg01-driver.cjs",
+        "sha256": "5c7f7cd067211ac8921ea305e99b853fe0f94f426ddfeddc36839da90889f1ef",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/research/rg01-policies.cjs",
+        "sha256": "8d703d473c47944ec47e580529f3c7b1c47df37a6fdb5fd81680735e5b140a94",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/research/rg01-score.cjs",
+        "sha256": "1b0f6500b433c128464374a9ad4673575ab96f1c68e6e2c99c8d9e71162aa2d7",
+        "mode": 420
+      },
+      {
         "path": "tools/ant-hive-world/run-live.js",
         "sha256": "5576659e41ac13574ef35e6a3e2c058cd011a5b752031636a5ae2ef6eb0ff445",
         "mode": 420
@@ -6472,7 +9327,7 @@
       },
       {
         "path": "tools/ant-hive-world/untrained-network.js",
-        "sha256": "aac69406a94a2d376c834203c8593346278333719ca27bfd4c805ed5796a3872",
+        "sha256": "ba12fea3115d8e2be4ea8d074ccd3828494d40bb015f97550e90bde25ea0ed6b",
         "mode": 420
       },
       {
@@ -7457,7 +10312,7 @@
       },
       {
         "path": "tools/commands/lib/command-aliases.cjs",
-        "sha256": "c0617cc04c33a896b522741131ee6180de217526e44c7267f4bf25f8926e5f5f",
+        "sha256": "6079ccbce0b5a3ab3c7a22ce96eb769d4579cadca59995bcd1a9a8bdaf1e3241",
         "mode": 420
       },
       {
@@ -8567,7 +11422,12 @@
       },
       {
         "path": "tools/instructions/__tests__/aliases.test.js",
-        "sha256": "25df9ce388a49714ab406aab3199a93da158e700e0f62bc00123657ca5a7b84d",
+        "sha256": "cebf2953e8f06a559b84d719796d93e6251499a035b42dada2bec38182b0dadb",
+        "mode": 420
+      },
+      {
+        "path": "tools/instructions/generate-alias-stubs.cjs",
+        "sha256": "3470705301282d68947b7f527b35ba30f20ae1716fee66871c6928bee4e99ee1",
         "mode": 420
       },
       {
@@ -8577,7 +11437,7 @@
       },
       {
         "path": "tools/instructions/lib/engine.js",
-        "sha256": "16d1669c85d85703172feba7502e53135c83e765bd2dbaf57cbc5df7dc2ccc33",
+        "sha256": "11517c3426cb9354c38e29527497c3fc81f7a61ece8d902ee64863151491a3de",
         "mode": 420
       },
       {
@@ -8587,7 +11447,7 @@
       },
       {
         "path": "tools/instructions/lib/render.js",
-        "sha256": "910d481b4f13e4d79580825144fdceb403bb5f83807d10693c8018aec994cf25",
+        "sha256": "98ffff20b3ed3484ca77704e1998b2a4cb7138a563fda16d767e097ac59a90f4",
         "mode": 420
       },
       {
@@ -12287,7 +15147,27 @@
       },
       {
         "path": "tools/skills/README.md",
-        "sha256": "deceb4de5a6515d8fe4d10502427c26a503d0905f5ce057a9c8066f4c710e194",
+        "sha256": "8aaa3c2f995fcafc21d7670c6f5c839da1900ad6f364841a3e4f8ff042c06486",
+        "mode": 420
+      },
+      {
+        "path": "tools/skills/__tests__/sync-codex-skills.test.cjs",
+        "sha256": "6ee2c8098fdbc9ba0344d31979b32070d9c3b914e6e57e51f3f78223c35c3d74",
+        "mode": 420
+      },
+      {
+        "path": "tools/skills/__tests__/sync-lifecycle-command-skills.test.cjs",
+        "sha256": "39fe9c617cb4686594278214fa9a4b872a30032e654587644d8dd990d122c7da",
+        "mode": 420
+      },
+      {
+        "path": "tools/skills/sync-codex-skills.cjs",
+        "sha256": "ab6e7091c35adbc2f976c7d5681fd935ff09cb01d79b7d2243d0be23c1547c9e",
+        "mode": 420
+      },
+      {
+        "path": "tools/skills/sync-lifecycle-command-skills.cjs",
+        "sha256": "5f6bbbd62eb17900e6939e0f4cb742864dd24d9e96ee33c684a14dd14c9cd2e2",
         "mode": 420
       },
       {
@@ -12702,7 +15582,7 @@
       },
       {
         "path": "tools/ticktock/cycle-driver.cjs",
-        "sha256": "849aae45b6faf6e191e6fb8a295a88ec7c334927ec0cb8516b8b4089bc860569",
+        "sha256": "386b9835736081c0520243373efa7e214e86c8f162d89f633b0e6abc40485bda",
         "mode": 420
       },
       {
@@ -12758,6 +15638,26 @@
       {
         "path": "tools/ticktock/ratification-proposal.cjs",
         "sha256": "5f5dc306d473831ba822be540c6dcd3f8608ef787754bab27f30345e0d9b83d6",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/research-debrief.cjs",
+        "sha256": "ad95fa8df30a6935e13613ecf3f6e6c21772479c2f185bc9342e9d2809920a8f",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/research-prepare.cjs",
+        "sha256": "2fed21716f924b7370205c449d1fcbf01eff0701e8bd1bbbd4daae2b0ff7489d",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/research-readiness.cjs",
+        "sha256": "057fcdad855f68679cce7ca728a88d6ab4b31578633ceb6b78ac74b305d9ca55",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/research-run.cjs",
+        "sha256": "3d90cc0d6a96caa22b23594faf5ea4b1d44d8b792b5ed646bf5628addfba9dac",
         "mode": 420
       },
       {
@@ -12823,6 +15723,11 @@
       {
         "path": "tools/ticktock/test-rebaseline-frequency.cjs",
         "sha256": "bfdaabd079bb3a5b94758f3065fdd0c12e3ee0d0a4ee7a160d0c27cd75cc64cf",
+        "mode": 420
+      },
+      {
+        "path": "tools/ticktock/test-research-goal-integration.cjs",
+        "sha256": "dcaf1c6f165cb9d06039fa06d9ea9a2dcb95359cf0cab6da709df926ad85e96f",
         "mode": 420
       },
       {
@@ -13981,12 +16886,12 @@
     ]
   },
   "wiring": {
-    "package_script_count": 205,
-    "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
+    "package_script_count": 206,
+    "command_alias_registry_sha256": "9bbc50aa1343a5502258e0e067eca0bb4cf4ea9f560abc5b998247a0e04b9901",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "14e221ed396b78de5008cc18b842fa56f787fc0e65e7ad532e4b32dc8855e295",
-    "graph_nodes": 3878,
-    "graph_edges": 2834
+    "graph_sha256": "b224ebcbad7061c081bb7d5ea8c20a5b19a86faad05f2ce7d3d90670806cdb60",
+    "graph_nodes": 4093,
+    "graph_edges": 2909
   },
   "runtime_exclusions": [
     ".git/**",

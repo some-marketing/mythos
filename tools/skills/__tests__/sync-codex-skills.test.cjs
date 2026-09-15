@@ -173,6 +173,22 @@ test('alias registry loading rejects traversal and external symlinks before read
   assert.throws(() => buildCandidates({ root: symlinkRoot, handlerIds: new Set() }), /Refusing symbolic-link alias registry source/);
 });
 
+test('projector parses typed aliases from ordinary YAML sequence syntax', () => {
+  const root = fixture();
+  command(root, 'deliberate');
+  command(root, 'orchestrate-loop');
+  write(root, 'instructions/canonical/command-aliases.yaml', [
+    'aliases:',
+    '  - id: deliberate',
+    '    target: orchestrate-loop',
+    '    authority_source: orchestrate-loop',
+    ''
+  ].join('\n'));
+  const result = buildCandidates({ root, handlerIds: new Set() });
+  assert.match(byId(result, 'command-deliberate').content, /Canonical behavioral authority: `instructions\/canonical\/commands\/orchestrate-loop\.yaml`/);
+  assert.equal(byId(result, 'alias-deliberate').aliasTerminal, 'orchestrate-loop');
+});
+
 test('Codex adapter loading rejects external symlinks before reading', () => {
   const root = fixture();
   const externalRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'external-adapter-'));
@@ -314,6 +330,18 @@ test('non-object canonical documents stage as malformed instead of aborting', ()
     assert.equal(candidate.receipt.application_status, 'blocked_malformed');
     assert.match(candidate.receipt.detail, /canonical command document must be an object/);
     assert.equal(fs.existsSync(path.join(root, '.agents/skills/source-command-broken/SKILL.md')), false);
+  }
+});
+
+test('canonical commands require one declared execution mode', () => {
+  for (const extra of [{ mode: 'SUPERUSER' }, { mode: ['REVIEW_ONLY'] }, { mode: undefined }]) {
+    const root = fixture();
+    command(root, 'sample', extra);
+    const candidate = byId(sync({ root, handlerIds: new Set(), apply: true }), 'command-sample');
+    assert.equal(candidate.content, null);
+    assert.equal(candidate.receipt.semantic_review_state, 'malformed');
+    assert.match(candidate.receipt.detail, /canonical command mode must be one declared execution mode/);
+    assert.equal(fs.existsSync(path.join(root, '.agents/skills/source-command-sample/SKILL.md')), false);
   }
 });
 
@@ -519,6 +547,20 @@ test('framework namespace collisions are rejected', () => {
     assert.equal(fs.existsSync(path.join(staged.candidateDir, 'receipts', `${candidate.id}.json`)), true);
     assert.equal(fs.existsSync(path.join(staged.candidateDir, 'candidates', candidate.id, 'SKILL.md')), true);
   }
+});
+
+test('framework projections honor the configured target prefix', () => {
+  const root = fixture();
+  const adapterPath = path.join(root, 'instructions/adapters/codex.yaml');
+  const adapter = JSON.parse(fs.readFileSync(adapterPath, 'utf8'));
+  adapter.skill_projection.families.framework_helpers.target_prefix = 'fw-';
+  fs.writeFileSync(adapterPath, `${JSON.stringify(adapter, null, 2)}\n`);
+  write(root, 'frameworks/a/b/.claude/skills/demo/SKILL.md', '---\nname: demo\ndescription: demo\n---\nbody\n');
+  const framework = buildCandidates({ root, handlerIds: new Set() }).candidates
+    .find((candidate) => candidate.receipt.projection_kind === 'framework_helper');
+  assert.equal(framework.id, 'framework-fw-a-b-demo');
+  assert.equal(framework.receipt.target_exact_path, '.agents/skills/fw-a-b-demo/SKILL.md');
+  assert.match(framework.content, /^---\nname: fw-a-b-demo\n/);
 });
 
 test('credential-bearing framework source paths are rejected without retaining their bytes', () => {

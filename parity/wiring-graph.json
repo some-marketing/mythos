@@ -19769,7 +19769,7 @@
       "id": "file:tools/skills/__tests__/sync-codex-skills.test.cjs",
       "type": "file",
       "path": "tools/skills/__tests__/sync-codex-skills.test.cjs",
-      "sha256": "68520584608840c61c8331783d7537140eda497606417c9b875bbd7a089688d4",
+      "sha256": "1bf355f853cc92cdfa6967d2524d7b78c300546dabc95dcfc50baff7004bac7b",
       "mode": 420
     },
     {
@@ -19790,7 +19790,7 @@
       "id": "file:tools/skills/sync-codex-skills.cjs",
       "type": "file",
       "path": "tools/skills/sync-codex-skills.cjs",
-      "sha256": "79828488fb2908ceb8584721c9c6519fc7e7cea98a61f211d0a9d5fc05c504ad",
+      "sha256": "6c0aed8912b41c290ea410505b6288d3429792f3d35e776491cc464089690223",
       "mode": 420
     },
     {
@@ -36619,6 +36619,15 @@
       "specifier": "./ceilings.cjs"
     },
     {
+      "id": "607b8796efc24cc656c135f4006bf749ab2a8ffd35fd66d724d6bbcce5df89c2",
+      "type": "static-import",
+      "from": "file:tools/skills/sync-codex-skills.cjs",
+      "to": "file:tools/instructions/lib/engine.js",
+      "target": "tools/instructions/lib/engine.js",
+      "required": true,
+      "specifier": "../instructions/lib/engine.js"
+    },
+    {
       "id": "607d1f7122688650593e2edf97e49755852501259f390d3e0f86e0970b26cbb2",
       "type": "static-import",
       "from": "file:tools/lib/__tests__/durable-artifact.test.cjs",
@@ -53125,7 +53134,7 @@
   ],
   "counts": {
     "nodes": 4092,
-    "edges": 2905,
+    "edges": 2906,
     "unresolved": 0
   }
 }

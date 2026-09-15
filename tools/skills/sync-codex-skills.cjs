@@ -4,6 +4,7 @@
 const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
+const { parseAliasRegistry } = require('../instructions/lib/engine.js');
 
 const PROJECT_ROOT = path.resolve(__dirname, '..', '..');
 const CAPABILITY_TIERS = new Set(['BLOCKING', 'ADVISORY', 'ABSENT', 'UNKNOWN']);
@@ -258,7 +259,9 @@ function loadCanonicalCommands(root, config) {
           ? `invalid canonical id for filename ${JSON.stringify(filenameId)}`
           : declaredId !== filenameId
             ? `canonical id mismatch for filename ${JSON.stringify(filenameId)}`
-            : null;
+            : typeof spec.mode !== 'string' || !EXECUTION_MODES.has(spec.mode)
+              ? 'canonical command mode must be one declared execution mode'
+              : null;
         command = { spec, sourcePath, filenameId, declaredId, malformed };
       }
     }
@@ -439,7 +442,7 @@ function clearGeneratedProjectionArtifacts(candidateDir) {
 
 function resolveAliases(root, config, commands, directNames, registryOverride) {
   const registryPath = validateConfiguredSource(root, config.alias_registry, 'alias registry');
-  const registry = registryOverride || readJson(registryPath);
+  const registry = registryOverride || parseAliasRegistry(fs.readFileSync(registryPath, 'utf8'));
   const rows = Array.isArray(registry.aliases) ? registry.aliases : [];
   const aliases = new Map();
   for (const row of rows) {
@@ -507,12 +510,16 @@ function renderCanonicalSkill(commandId, spec, capabilityTier, override, aliases
   return `---\nname: ${projectionName}\ndescription: ${JSON.stringify(description)}\n---\n\n# /${commandId}\n\n${authority}\n\nCapability tier: **${capabilityTier}**.\n\n${execution}\n`;
 }
 
-function frameworkIdentity(root, sourcePath) {
+function frameworkIdentity(root, sourcePath, targetPrefix = 'guild-') {
   const rel = relative(root, sourcePath);
   const match = rel.match(/^frameworks\/([^/]+)\/([^/]+)\/\.claude\/skills\/(.+)\/SKILL\.md$/);
   if (!match) return null;
   const [, service, framework, skillPath] = match;
-  const fullSlug = ['guild', service, framework, ...skillPath.split('/')].join('-').replace(/[^a-z0-9-]+/gi, '-').toLowerCase();
+  const prefix = String(targetPrefix || '');
+  if (containsPrivateAbsolutePath(prefix) || containsCredentialMaterial(prefix) || !SAFE_ID_PATTERN.test(`${prefix}x`)) {
+    throw new Error('Invalid framework helper target prefix');
+  }
+  const fullSlug = `${prefix}${[service, framework, ...skillPath.split('/')].join('-')}`.replace(/[^a-z0-9-]+/gi, '-').toLowerCase();
   const slug = fullSlug.length <= 64 ? fullSlug : `${fullSlug.slice(0, 55).replace(/-+$/, '')}-${sha256(fullSlug).slice(0, 8)}`;
   return { service, framework, skillPath, slug, rel };
 }
@@ -766,7 +773,7 @@ function buildCandidates(options = {}) {
   validateSourceRoot(frameworkRoot, 'framework skill', root);
   for (const sourcePath of walk(frameworkRoot, (file) => file.endsWith(`${path.sep}SKILL.md`) && file.includes(`${path.sep}.claude${path.sep}skills${path.sep}`))) {
     if (sourcePath.split(path.sep).includes('_template')) continue;
-    const identity = frameworkIdentity(root, sourcePath);
+    const identity = frameworkIdentity(root, sourcePath, config.families.framework_helpers.target_prefix);
     if (!identity) continue;
     if (containsPrivateAbsolutePath(identity.rel) || containsCredentialMaterial(identity.rel)) {
       throw new Error('Refusing private or credential-bearing framework skill path');

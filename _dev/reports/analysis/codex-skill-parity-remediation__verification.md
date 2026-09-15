@@ -4,7 +4,7 @@ Refreshed under the approved parity amendment at `2026-09-14T18:51:57Z` in the d
 
 ## Mechanical results
 
-- Combined projector, lifecycle, and alias regressions: 101 passed, 0 failed.
+- Combined projector, lifecycle, and alias regressions: 104 passed, 0 failed.
 - `node tools/skills/sync-codex-skills.cjs --check`: aligned.
 - `node tools/skills/sync-lifecycle-command-skills.cjs --check`: six lifecycle skills aligned against the committed general projection evidence.
 - Pinned Codex `quick_validate.py`, using the repository PyYAML environment: 131 of 131 applied packages valid; 176 of 176 top-level staged candidate packages valid. Nested child skills are excluded from parent resources, so the staged tree contains exactly 176 independently projected `SKILL.md` files.
@@ -16,7 +16,7 @@ Refreshed under the approved parity amendment at `2026-09-14T18:51:57Z` in the d
 
 ## Protected parity amendment
 
-- Wiring graph regenerated: 4,092 nodes, 2,905 edges, 0 unresolved.
+- Wiring graph regenerated: 4,092 nodes, 2,906 edges, 0 unresolved.
 - Target-only baseline repair registered 3,361 expected files while preserving the complete source and membrane policy objects byte-for-byte.
 - Portable `npm run verify:parity`: `ok: true`, 0 findings.
 - Authoritative private-denylist verification against the existing bound hash: `ok: true`, 0 findings. The external file and its location are not serialized in tracked artifacts.
@@ -70,6 +70,8 @@ The forty-third Cloud Codex review found credential-shaped alias routing fields,
 The forty-fourth Cloud Codex review found typed wrappers citing provenance as behavioral authority, literal Basic authorization credentials escaping rejection, and the configured canonical target prefix being ignored. Typed wrappers now preserve their alias file as provenance while loading the resolved authority source, Basic and Bearer headers share the redacted credential path with placeholder exemptions, and canonical names and targets derive from the validated configured prefix; focused regressions cover all three.
 
 The forty-fifth Cloud Codex review found package suffix and custody validation still tied to the default target root, non-object canonical documents aborting discovery, and typed wrappers accepting nonexistent canonical authority sources. Package staging, application, drift checks, and custody now derive suffixes from the validated configured target root; non-object documents produce blocked malformed evidence; and typed wrappers require their declared behavioral authority to resolve to an existing canonical command. Focused regressions cover all three.
+
+The forty-sixth Cloud Codex review found canonical commands accepting absent or invalid execution modes, the projector rejecting ordinary YAML-sequence alias registries, and framework helper names ignoring their configured target prefix. Canonical modes now require one declared execution mode, alias loading reuses the instruction engine's dependency-free typed YAML parser after source confinement, and framework identities derive from a validated configured prefix. Focused regressions cover all three.
 
 ## Falsifiers and residuals
 

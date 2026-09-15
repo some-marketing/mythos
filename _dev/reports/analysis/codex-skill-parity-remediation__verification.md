@@ -129,6 +129,8 @@ The seventy-third Cloud Codex review found execution modes declared inside valid
 
 The seventy-fourth Cloud Codex review found duplicate execution-mode keys weakening earlier constraints and malformed JSON-shaped alias registries falling through as empty YAML. Frontmatter parsing now rejects duplicate declarations, while runtime alias loading requires JSON-looking input to parse as JSON and retains the shared parser only for YAML-shaped input. Focused regressions cover both fail-closed paths.
 
+The seventy-fifth Cloud Codex review found bare `auth` assignments escaping credential rejection and duplicate execution keys inside inline metadata mappings retaining only the later value. Bare auth fields now enter the same placeholder-aware rejection path, and flow-mapping parsing fails closed on duplicate keys. Focused regressions cover both variants.
+
 ## Falsifiers and residuals
 
 Acceptance would be disproved by an applied `UNKNOWN` or pending candidate, copied alias behavior, a non-handler command marked `BLOCKING`, a private path in a shipped projection, a canonical/client diff, a failed runtime discovery claim, or an unresolved distinct-family blocker. None was observed.

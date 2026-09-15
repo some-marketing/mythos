@@ -56,6 +56,28 @@ test('selectDistinctFamily prefers local for low-risk / mechanical work', () => 
   assert.equal(pick.family, 'local', `expected local family for mechanical work, got ${pick.family}`);
 });
 
+test('selectDistinctFamily honors an explicit eligible Qwen family preference', () => {
+  const pick = selectDistinctFamily('anthropic', {
+    riskTier: 'high',
+    sensitive: false,
+    preferredFamily: 'alibaba',
+  });
+  assert.ok(pick);
+  assert.equal(pick.family, 'alibaba');
+  assert.equal(pick.model, 'qwen/qwen3.8-max-0902');
+});
+
+test('selectDistinctFamily keeps sensitive payloads off a preferred PRC family', () => {
+  const pick = selectDistinctFamily('anthropic', {
+    riskTier: 'high',
+    sensitive: true,
+    preferredFamily: 'alibaba',
+  });
+  assert.ok(pick);
+  assert.notEqual(pick.family, 'alibaba');
+  assert.ok(!MODEL_FAMILIES[pick.family].origin.includes('prc'));
+});
+
 test('selectDistinctFamily returns null when all distinct families are excluded', () => {
   // Only one family + sensitive filters the rest — construct a degenerate case:
   // origin covers everything by passing a family not in the map; still returns others.

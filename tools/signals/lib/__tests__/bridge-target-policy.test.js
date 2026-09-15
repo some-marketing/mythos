@@ -80,6 +80,16 @@ describe('bridge target policy', () => {
     assert.equal(ollama.model, 'qwen2.5-coder:14b');
   });
 
+  it('uses the model-specific freshness date for the current Qwen slug', () => {
+    const invocation = resolveBridgeInvocation('openrouter', {
+      transport: 'api',
+      model: 'qwen/qwen3.8-max-0902'
+    });
+
+    assert.equal(invocation.model, 'qwen/qwen3.8-max-0902');
+    assert.equal(invocation.docs.checked_at, '2026-09-14');
+  });
+
   it('reports unknown targets and unsupported transports before dispatch', () => {
     assert.equal(getBridgeTargetPolicy('missing'), null);
     assert.equal(getBridgeTransportPolicy('gemini', 'local-model'), null);

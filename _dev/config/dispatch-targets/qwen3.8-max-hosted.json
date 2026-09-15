@@ -1,0 +1,15 @@
+{
+  "id": "qwen3.8-max-hosted",
+  "provider": "openrouter",
+  "model_slug": "qwen/qwen3.8-max-0902",
+  "labels": [
+    "hosted-open-weight",
+    "not-local",
+    "text-only",
+    "prc-origin-risk",
+    "anthropic-compatible"
+  ],
+  "jurisdiction": "PRC",
+  "migration_path": "self-host on onshore metal then repoint slug",
+  "credential": "<operator-gated, stubbed>"
+}

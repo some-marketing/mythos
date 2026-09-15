@@ -673,6 +673,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     `AWS_SECRET_ACCESS_KEY=${'z'.repeat(32)}\n`,
     `OPENAI_API_KEY="ordinarysecretvalue${'q'.repeat(16)}"\n`,
     `OPENAI_API_KEY: yamlsecretvalue${'y'.repeat(16)}\n`,
+    `"OPENAI_API_KEY": "jsonsecretvalue${'j'.repeat(16)}"\n`,
     `temporary ASIA${'A'.repeat(16)}\n`
   ]) {
     const root = fixture();
@@ -682,7 +683,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     assert.equal(candidate.receipt.semantic_review_state, 'private_path_rejected');
     assert.equal(candidate.receipt.source_sha256, null);
     assert.equal(fs.existsSync(path.join(root, '.agents/skills/ticktock/SKILL.md')), false);
-    assert.doesNotMatch(JSON.stringify(candidate.receipt), /zzzzzzzz|ordinarysecretvalue|yamlsecretvalue|ASIAAAAA/);
+    assert.doesNotMatch(JSON.stringify(candidate.receipt), /zzzzzzzz|ordinarysecretvalue|yamlsecretvalue|jsonsecretvalue|ASIAAAAA/);
   }
 });
 

@@ -144,6 +144,14 @@ function decodeQuotedYamlScalar(value) {
   return value;
 }
 
+function isYamlNonStringToken(value) {
+  const token = String(value).trim();
+  return (/^\[.*\]$/.test(token) || /^\{.*\}$/.test(token))
+    || /^(?:~|null|true|false)$/i.test(token)
+    || /^[-+]?(?:(?:0|[1-9][0-9_]*)(?:\.[0-9_]*)?(?:e[-+]?[0-9]+)?|\.inf|\.nan)$/i.test(token)
+    || /^\d{4}-\d{2}-\d{2}(?:[Tt]|\s)\d{2}:\d{2}/.test(token);
+}
+
 function parseFrontmatter(text, sourcePath = '<memory>') {
   const normalizedText = String(text).replace(/\r\n?/g, '\n');
   if (!normalizedText.startsWith('---\n')) return { ok: false, error: 'missing frontmatter opener', sourcePath };
@@ -187,7 +195,11 @@ function parseFrontmatter(text, sourcePath = '<memory>') {
         // Leave non-JSON YAML flow syntax as a scalar; the projector will preserve it verbatim.
       }
     }
-    if (typeof value === 'string') value = decodeQuotedYamlScalar(value);
+    if (typeof value === 'string') {
+      const quoted = (value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"));
+      if (!quoted && ['name', 'description'].includes(key) && isYamlNonStringToken(value)) value = null;
+      else value = decodeQuotedYamlScalar(value);
+    }
     metadata[key] = value;
   }
   if (typeof metadata.name !== 'string' || !metadata.name || typeof metadata.description !== 'string' || !metadata.description) {
@@ -454,7 +466,7 @@ function resolveAliases(root, config, commands, directNames, registryOverride) {
   for (const row of rows) {
     if (!row || !row.id) continue;
     const rawId = String(row.id).trim();
-    const target = String(row.execution_target || row.target || '').trim();
+    const target = String(row.execution_target || row.target || row.resolves_to || '').trim();
     const authoritySource = String(row.authority_source || '').trim();
     if ([rawId, target, authoritySource].some((value) => containsPrivateAbsolutePath(value) || containsCredentialMaterial(value))) {
       throw new Error('Refusing private or credential-bearing alias routing field');
@@ -477,7 +489,7 @@ function resolveAliases(root, config, commands, directNames, registryOverride) {
       if (commands.has(id) || directNames.has(id)) return { ok: true, terminal: id, trail: [...trail, id] };
       return { ok: false, reason: 'nonterminal_alias', trail: [...trail, id] };
     }
-    const next = String(row.execution_target || row.target || '').trim();
+    const next = String(row.execution_target || row.target || row.resolves_to || '').trim();
     if (!next) return { ok: false, reason: 'nonterminal_alias', trail: [...trail, id] };
     if (next === id && (commands.has(id) || directNames.has(id))) return { ok: true, terminal: id, trail: [...trail, id] };
     return resolve(next, [...trail, id]);
@@ -593,6 +605,7 @@ function containsCredentialMaterial(bytes) {
   return /-----BEGIN (?:[A-Z0-9]+ )*PRIVATE KEY-----/.test(text)
     || /(?:^|[^A-Za-z0-9])(?:sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|(?:AKIA|ASIA)[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|glpat-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{35})(?:$|[^A-Za-z0-9_-])/m.test(text)
     || /(?:^|[^A-Z0-9_])["']?AUTHORIZATION["']?\s*[:=]\s*["']?[A-Z][A-Z0-9._~-]*\s+(?!(?:<|\$(?:\{|[A-Za-z_])|your[-_]|example|redacted|placeholder))[^\s"'`]+/im.test(text)
+    || /(?:^|[^A-Z0-9_])["']?COOKIE["']?\s*[:=]\s*["']?[^=;\s]+\s*=\s*(?!(?:<|\$(?:\{|[A-Za-z_])|your[-_]|example|redacted|placeholder))[^;\s"'`]+/im.test(text)
     || /[A-Za-z][A-Za-z0-9+.-]*:\/\/[^\s/@:]+:(?!(?:<|\$(?:\{|[A-Za-z_])|your[-_]|example|redacted|placeholder))[^@\s/]+@/im.test(text)
     || /(?:^|[^A-Z0-9_])["']?(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY|API[_-]?KEY|CLIENT[_-]?SECRET|PASSWORD|PASSWD|ACCESS[_-]?TOKEN|REFRESH[_-]?TOKEN|AUTH[_-]?TOKEN|SECRET|SECRET[_-]?KEY|PRIVATE[_-]?KEY)["']?\s*[:=]\s*["']?(?!(?:<|\$(?:\{|[A-Za-z_])|your[-_]|example|redacted|placeholder))[^\s"'`]+/im.test(text);
 }

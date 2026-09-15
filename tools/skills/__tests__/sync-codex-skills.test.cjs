@@ -147,6 +147,17 @@ test('direct skills reject non-scalar and unknown execution modes', () => {
   }
 });
 
+test('direct and framework descriptions reject YAML non-string tokens', () => {
+  for (const description of ['[one, two]', '{text: hello}', 'null']) {
+    const root = fixture();
+    write(root, '.claude/skills/ticktock/SKILL.md', `---\nname: ticktock\ndescription: ${description}\n---\nbody\n`);
+    write(root, 'frameworks/a/b/.claude/skills/demo/SKILL.md', `---\nname: demo\ndescription: ${description}\n---\nbody\n`);
+    const result = buildCandidates({ root, handlerIds: new Set() });
+    assert.equal(byId(result, 'direct-ticktock').receipt.semantic_review_state, 'malformed');
+    assert.equal(byId(result, 'framework-guild-a-b-demo').receipt.semantic_review_state, 'malformed');
+  }
+});
+
 test('handler registry loading rejects traversal and external symlinks before require', () => {
   const traversalRoot = fixture();
   const traversalAdapterPath = path.join(traversalRoot, 'instructions/adapters/codex.yaml');
@@ -244,6 +255,16 @@ test('alias cycles and nonterminal aliases remain UNKNOWN and unapplied', () => 
   assert.equal(byId(result, 'alias-a').receipt.capability_tier, 'UNKNOWN');
   assert.match(byId(result, 'alias-a').receipt.detail, /alias_cycle/);
   assert.match(byId(result, 'alias-lost').receipt.detail, /nonterminal_alias/);
+});
+
+test('legacy resolves_to aliases retain their terminal routing', () => {
+  const root = fixture();
+  command(root, 'route');
+  const aliases = { aliases: [{ id: 'shortcut', resolves_to: 'route' }] };
+  const result = buildCandidates({ root, handlerIds: new Set(), aliasRegistry: aliases });
+  const alias = byId(result, 'alias-shortcut');
+  assert.equal(alias.receipt.capability_tier, 'ADVISORY');
+  assert.equal(alias.receipt.target_exact_path, '.agents/skills/source-command-route/SKILL.md');
 });
 
 test('typed aliases with canonical workflows retain their own runtime pointer', () => {
@@ -1149,6 +1170,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     'Authorization: Bearer secret\n',
     'Authorization: Basic dTpw\n',
     'Authorization: Token supersecret\n',
+    'Cookie: sessionid=eyJhbGciOiJIUzI1NiJ9\n',
     'https://alice:s3cret@example.com\n',
     `-----BEGIN ENCRYPTED PRIVATE KEY-----\nencryptedprivatebytes${'e'.repeat(16)}\n-----END ENCRYPTED PRIVATE KEY-----\n`,
     `temporary ASIA${'A'.repeat(16)}\n`

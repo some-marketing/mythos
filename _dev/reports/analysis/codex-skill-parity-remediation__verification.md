@@ -4,7 +4,7 @@ Refreshed under the approved parity amendment at `2026-09-14T18:51:57Z` in the d
 
 ## Mechanical results
 
-- Combined projector, lifecycle, and alias regressions: 114 passed, 0 failed.
+- Combined projector, lifecycle, and alias regressions: 116 passed, 0 failed.
 - `node tools/skills/sync-codex-skills.cjs --check`: aligned.
 - `node tools/skills/sync-lifecycle-command-skills.cjs --check`: six lifecycle skills aligned against the committed general projection evidence.
 - Pinned Codex `quick_validate.py`, using the repository PyYAML environment: 131 of 131 applied packages valid; 176 of 176 top-level staged candidate packages valid. Nested child skills are excluded from parent resources, so the staged tree contains exactly 176 independently projected `SKILL.md` files.
@@ -86,6 +86,8 @@ The fifty-first Cloud Codex review found URI-userinfo credentials escaping detec
 The fifty-second Cloud Codex review found direct dependency gating could become stale when collision classification later invalidated a required package. The same fixed-point dependency gate now runs after collision resolution and before alias availability is finalized, so both dependent skills and their aliases become unavailable. A focused collision-plus-dependency regression covers the ordering.
 
 The fifty-third Cloud Codex review found literal credentials under non-Bearer/Basic Authorization schemes and valid multi-paragraph YAML block scalars being rejected at blank lines. Authorization scanning now treats any non-placeholder scheme-plus-credential header as protected material, and block scalar parsing consumes blank lines belonging to the scalar before later indented content. Existing redaction and block-indicator regressions cover both findings.
+
+The fifty-fourth Cloud Codex review found literal Cookie credentials, legacy `resolves_to` aliases being treated as nonterminal, and flow/null YAML descriptions being silently coerced to strings. Cookie headers now enter the redacted credential path with placeholder exemptions, alias resolution uses `resolves_to` as its legacy fallback, and YAML non-string tokens for names or descriptions fail scalar validation. Focused regressions cover all three findings.
 
 ## Falsifiers and residuals
 

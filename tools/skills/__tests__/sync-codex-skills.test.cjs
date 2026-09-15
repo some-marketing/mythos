@@ -113,6 +113,14 @@ test('frontmatter parsing removes YAML comments without corrupting quoted hashes
   assert.doesNotMatch(normalized.content, /no writes|bounded/);
 });
 
+test('direct skills reject non-scalar and unknown execution modes', () => {
+  for (const mode of ['execution_mode:\n  - REVIEW_ONLY\n  - PATCH_ALLOWED', 'execution_mode: SUPERUSER']) {
+    const normalized = normalizeDirectSkill(`---\nname: demo\ndescription: demo\n${mode}\n---\nbody\n`, 'demo');
+    assert.equal(normalized.ok, false);
+    assert.match(normalized.error, /execution_mode must be one declared execution mode/);
+  }
+});
+
 test('handler registry loading rejects traversal and external symlinks before require', () => {
   const traversalRoot = fixture();
   const traversalAdapterPath = path.join(traversalRoot, 'instructions/adapters/codex.yaml');
@@ -503,6 +511,27 @@ test('direct dependencies resolve transitively to a fixed point', () => {
   assert.equal(byId(result, 'direct-c').receipt.semantic_review_state, 'missing_source');
   assert.equal(fs.existsSync(path.join(root, '.agents/skills/a/SKILL.md')), false);
   assert.equal(fs.existsSync(path.join(root, '.agents/skills/b/SKILL.md')), false);
+});
+
+test('application conflicts block dependent direct skills before any writes', () => {
+  const root = fixture();
+  const adapterPath = path.join(root, 'instructions/adapters/codex.yaml');
+  const adapter = JSON.parse(fs.readFileSync(adapterPath, 'utf8'));
+  adapter.skill_projection.families.direct_system_skills.sources = [
+    '.claude/skills/child/SKILL.md',
+    '.claude/skills/parent/SKILL.md'
+  ];
+  adapter.skill_projection.families.direct_system_skills.dependencies = { child: ['parent'] };
+  fs.writeFileSync(adapterPath, `${JSON.stringify(adapter, null, 2)}\n`);
+  skill(root, 'child');
+  skill(root, 'parent');
+  write(root, '.agents/skills/parent/SKILL.md', 'foreign parent\n');
+  const result = sync({ root, handlerIds: new Set(), apply: true });
+  assert.equal(byId(result, 'direct-parent').receipt.application_status, 'blocked_existing_preserved');
+  assert.equal(byId(result, 'direct-child').receipt.application_status, 'blocked_dependency');
+  assert.equal(byId(result, 'direct-child').receipt.semantic_review_state, 'dependency_unavailable');
+  assert.equal(fs.existsSync(path.join(root, '.agents/skills/child/SKILL.md')), false);
+  assert.equal(fs.readFileSync(path.join(root, '.agents/skills/parent/SKILL.md'), 'utf8'), 'foreign parent\n');
 });
 
 test('check reports stale installed targets whose candidates are now blocked', () => {

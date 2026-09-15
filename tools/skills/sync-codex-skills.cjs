@@ -8,6 +8,7 @@ const path = require('node:path');
 const PROJECT_ROOT = path.resolve(__dirname, '..', '..');
 const CAPABILITY_TIERS = new Set(['BLOCKING', 'ADVISORY', 'ABSENT', 'UNKNOWN']);
 const SAFE_REVIEW_STATES = new Set(['reviewed_safe']);
+const EXECUTION_MODES = new Set(['FINDINGS_ONLY', 'RUN_ONLY', 'REVIEW_ONLY', 'PATCH_ALLOWED', 'COORDINATOR', 'REPO_HYGIENE']);
 const SAFE_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 function sha256(bytes) {
@@ -155,6 +156,10 @@ function parseFrontmatter(text, sourcePath = '<memory>') {
 function normalizeDirectSkill(text, targetName, aliases = []) {
   const parsed = parseFrontmatter(text);
   if (!parsed.ok) return parsed;
+  if (parsed.metadata.execution_mode != null
+    && (typeof parsed.metadata.execution_mode !== 'string' || !EXECUTION_MODES.has(parsed.metadata.execution_mode))) {
+    return { ok: false, error: 'frontmatter execution_mode must be one declared execution mode' };
+  }
   const aliasSuffix = aliases.length ? ` Aliases: ${aliases.map((id) => `/${id}`).join(', ')}.` : '';
   const executionMetadata = projectionExecutionMetadata(parsed.metadata);
   const supportedFields = projectionSupportedFrontmatter(parsed.metadata);
@@ -798,6 +803,39 @@ function isApplicable(candidate) {
     && candidate.receipt.collision_state === 'clear';
 }
 
+function alignmentBlocksApplication(alignment) {
+  return alignment.nonFiles.length || alignment.conflicting.length || alignment.modeMismatches.length || alignment.unexpected.length;
+}
+
+function blockApplicationDependencies(config, candidates, applicationPreflight) {
+  const directCandidates = new Map(candidates
+    .filter((candidate) => candidate.receipt.projection_kind === 'direct_system_skill')
+    .map((candidate) => [candidate.id.replace(/^direct-/, ''), candidate]));
+  const dependencies = config.families.direct_system_skills.dependencies || {};
+  let changed;
+  do {
+    changed = false;
+    for (const [name, required] of Object.entries(dependencies)) {
+      const candidate = directCandidates.get(name);
+      if (!candidate || !isApplicable(candidate)) continue;
+      const unavailable = required.filter((dependency) => {
+        const dependencyCandidate = directCandidates.get(dependency);
+        if (!dependencyCandidate || !isApplicable(dependencyCandidate)) return true;
+        const alignment = applicationPreflight.get(dependencyCandidate);
+        return alignment ? Boolean(alignmentBlocksApplication(alignment)) : true;
+      });
+      if (!unavailable.length) continue;
+      candidate.content = null;
+      candidate.resources = [];
+      candidate.receipt.capability_tier = 'ABSENT';
+      candidate.receipt.semantic_review_state = 'dependency_unavailable';
+      candidate.receipt.application_status = 'blocked_dependency';
+      candidate.receipt.detail = `required direct skill dependency unavailable during application: ${unavailable.join(', ')}`;
+      changed = true;
+    }
+  } while (changed);
+}
+
 function expectedPackageFiles(candidate, targetRoot) {
   const suffix = candidate.receipt.target_exact_path.replace(/^\.agents\/skills\//, '');
   const skillPath = safeOutputPath(targetRoot, suffix);
@@ -1136,6 +1174,7 @@ function sync(options = {}) {
     for (const candidate of selected.filter(isApplicable)) {
       applicationPreflight.set(candidate, packageAlignment(candidate, targetRoot));
     }
+    blockApplicationDependencies(built.config, selected, applicationPreflight);
   }
 
   if (options.check) {

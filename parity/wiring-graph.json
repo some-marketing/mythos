@@ -16576,7 +16576,7 @@
       "id": "file:tools/planning/__fixtures__/completion-grammar/cases.cjs",
       "type": "file",
       "path": "tools/planning/__fixtures__/completion-grammar/cases.cjs",
-      "sha256": "cb47ae0c14d8ae2482364ab512fe4ba3505795ce79dd74ec6b3816d77f43d394",
+      "sha256": "54bc09b921e53c576d1344fd601c879ae10305d52e752a4d0ecd2c3cbc43ec8b",
       "mode": 420
     },
     {
@@ -16674,7 +16674,7 @@
       "id": "file:tools/planning/__tests__/plan-visibility-completion-grammar.test.cjs",
       "type": "file",
       "path": "tools/planning/__tests__/plan-visibility-completion-grammar.test.cjs",
-      "sha256": "63314dbb3088341fa67727a1812a73bd98126ab281a1221d5cb3c6b3da0b1427",
+      "sha256": "30e366f8878f69e57a5850fafb71a72bd73c3626a1bf134c20903ce39e9827e8",
       "mode": 420
     },
     {
@@ -17045,7 +17045,7 @@
       "id": "file:tools/planning/lib/plan-visibility.js",
       "type": "file",
       "path": "tools/planning/lib/plan-visibility.js",
-      "sha256": "748a112f22b856d87bd46b437f243b57dc9b41db0a72814c67a9016ea0f9f8b5",
+      "sha256": "b70642d8e6f10e229ea6b04fbd28f2e6da22bc6a6731e6ce9cf8ad199f4d24c8",
       "mode": 420
     },
     {

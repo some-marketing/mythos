@@ -1,0 +1,11 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "instructions/canonical/commands/write-handoff.yaml",
+  "source_sha256": "846f9a12409e8ecee7c9fdc749b1e4b01c6216818c9304ea8ff67798993d1a1a",
+  "projection_kind": "canonical_command",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "reviewed_safe",
+  "target_exact_path": ".agents/skills/source-command-write-handoff/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "already_aligned"
+}

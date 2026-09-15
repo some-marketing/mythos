@@ -1,0 +1,11 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "instructions/canonical/commands/orchestrate.yaml",
+  "source_sha256": "79d11f92dd85b3580ac4933d9ca4231f64e71faeb8c64d9161d9a87bfbfb6381",
+  "projection_kind": "canonical_command",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "reviewed_safe",
+  "target_exact_path": ".agents/skills/source-command-orchestrate/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "already_aligned"
+}

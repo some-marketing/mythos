@@ -1,0 +1,11 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "instructions/canonical/commands/sync-manifest.yaml",
+  "source_sha256": "725a33099588011acdc6a120f7df788b9679c2745d803b23927492f54ae09832",
+  "projection_kind": "canonical_command",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "reviewed_safe",
+  "target_exact_path": ".agents/skills/source-command-sync-manifest/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "already_aligned"
+}

@@ -1,0 +1,13 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "frameworks/deliverables/presentation-review/.claude/skills/presentation-review/SKILL.md",
+  "source_sha256": "0df34e648472e6c9b85bb58724e573afe391c4353ea36d15fd3ec00c43a84cc7",
+  "projection_kind": "framework_helper",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "pending_review",
+  "target_exact_path": ".agents/skills/guild-deliverables-presentation-review-presentation-review/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "candidate",
+  "resource_manifest": [],
+  "package_sha256": "c28c049f3cc1f611e7c405718fb04b0949395de71b420960934992001209eb45"
+}

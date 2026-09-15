@@ -1,0 +1,11 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "instructions/canonical/commands/whats-next.yaml",
+  "source_sha256": "2207e0864f5c1a23beb4783e191b3c6cc397f3f6e8d35ba05753d800c21581c4",
+  "projection_kind": "canonical_command",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "reviewed_safe",
+  "target_exact_path": ".agents/skills/source-command-whats-next/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "already_aligned"
+}

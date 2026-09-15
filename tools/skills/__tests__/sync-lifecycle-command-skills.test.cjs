@@ -105,6 +105,21 @@ test('lifecycle application preflights canonical custody before target writes', 
   assert.equal(fs.existsSync(path.join(targetDir, 'source-command-boot', 'SKILL.md')), false);
 });
 
+test('lifecycle application rejects a symlinked canonical custody root before reading', () => {
+  const root = fixture();
+  const targetDir = path.join(root, '.agents', 'skills');
+  const externalRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'external-lifecycle-custody-'));
+  write(externalRoot, 'managed-targets.json', 'malformed\n');
+  const candidateRoot = path.join(root, '_dev/reports/analysis/codex-skill-projections');
+  fs.mkdirSync(path.dirname(candidateRoot), { recursive: true });
+  fs.symlinkSync(externalRoot, candidateRoot);
+  assert.throws(
+    () => syncLifecycle({ root, targetDir, handlerIds: new Set(), apply: true }),
+    /Refusing symbolic-link candidate directory component/
+  );
+  assert.equal(fs.existsSync(path.join(targetDir, 'source-command-boot', 'SKILL.md')), false);
+});
+
 test('lifecycle checks ignore unrelated installed package drift', () => {
   const root = fixture();
   const targetDir = path.join(root, '.agents', 'skills');

@@ -17,7 +17,7 @@ const {
 } = require('../sync-codex-skills.cjs');
 
 const PROJECT_ROOT = path.resolve(__dirname, '..', '..', '..');
-const ALLOWED_FRONTMATTER = new Set(['name', 'description', 'license', 'compatibility', 'metadata', 'allowed-tools']);
+const ALLOWED_FRONTMATTER = new Set(['name', 'description', 'license', 'metadata', 'allowed-tools']);
 
 function sha256ForTest(value) {
   return crypto.createHash('sha256').update(value).digest('hex');
@@ -88,7 +88,7 @@ test('repo pins only Codex-supported projection frontmatter keys', () => {
   const toolBounded = normalizeDirectSkill('---\nname: old\ndescription: demo\nlicense: MIT\ncompatibility: Codex\nallowed-tools: Read\n---\nbody\n', 'new');
   assert.equal(toolBounded.ok, true);
   assert.match(toolBounded.content, /license: "MIT"/);
-  assert.match(toolBounded.content, /compatibility: "Codex"/);
+  assert.doesNotMatch(toolBounded.content, /compatibility:/);
   assert.match(toolBounded.content, /allowed-tools: "Read"/);
 
   const listBounded = normalizeDirectSkill('---\nname: old\ndescription: demo\nallowed-tools:\n  - Read\n  - "Bash(ls *)"\n---\nbody\n', 'new');
@@ -312,6 +312,14 @@ test('canonical projections exceeding the Codex skill-name limit are blocked', (
   assert.equal(candidate.receipt.application_status, 'blocked_malformed');
   assert.match(candidate.receipt.detail, /exceeds 64 characters/);
   assert.equal(fs.existsSync(path.join(root, `.agents/skills/source-command-${id}/SKILL.md`)), false);
+});
+
+test('canonical descriptions replace angle brackets rejected by Codex validation', () => {
+  const root = fixture();
+  command(root, 'sample', { description: 'Run <task> safely' });
+  const candidate = byId(buildCandidates({ root, handlerIds: new Set() }), 'command-sample');
+  assert.match(candidate.content, /description: "Run \(task\) safely"/);
+  assert.doesNotMatch(candidate.content, /<task>/);
 });
 
 test('credential-bearing direct paths are rejected before identifiers or receipts are staged', () => {

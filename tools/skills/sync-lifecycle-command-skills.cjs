@@ -3,7 +3,7 @@
 
 // Compatibility entry point. Projection authority lives in sync-codex-skills.cjs.
 const path = require('node:path');
-const { isApplicable, loadProjectionConfig, mergeManagedTargetCustody, parseArgs, preflightManagedTargetCustody, sync } = require('./sync-codex-skills.cjs');
+const { isApplicable, loadProjectionConfig, mergeManagedTargetCustody, parseArgs, preflightManagedTargetCustody, sync, validateCandidateDir, validateTargetRoot } = require('./sync-codex-skills.cjs');
 
 const PROJECT_ROOT = path.resolve(__dirname, '..', '..');
 const LIFECYCLE_COMMANDS = Object.freeze(['boot', 'new-session', 'next-session', 'cross-session', 'end-session', 'shutdown']);
@@ -39,8 +39,12 @@ function syncLifecycle(options = {}) {
     return result;
   }
   const candidateDir = options.candidateDir || path.join(root, config.candidate_root, 'lifecycle');
+  const canonicalCandidateDir = path.join(root, config.candidate_root);
+  let validatedCanonicalCandidateDir;
   if (options.apply && !options.candidateDir) {
-    preflightManagedTargetCustody(path.join(root, config.candidate_root), config.generator_id);
+    const targetRoot = validateTargetRoot(root, options.targetDir || path.join(root, config.target_root));
+    validatedCanonicalCandidateDir = validateCandidateDir(root, targetRoot, canonicalCandidateDir, canonicalCandidateDir);
+    preflightManagedTargetCustody(validatedCanonicalCandidateDir, config.generator_id);
   }
   const result = sync({ ...options, root, candidateDir, includeCandidate: isLifecycle });
   if (options.check) result.drift += lifecycleAvailabilityDrift(result.candidates);
@@ -48,7 +52,7 @@ function syncLifecycle(options = {}) {
     const appliedTargets = result.candidates
       .filter((candidate) => ['applied_additive', 'already_aligned'].includes(candidate.receipt.application_status))
       .map((candidate) => candidate.receipt.target_exact_path);
-    mergeManagedTargetCustody(path.join(root, config.candidate_root), config.generator_id, appliedTargets);
+    mergeManagedTargetCustody(validatedCanonicalCandidateDir, config.generator_id, appliedTargets);
   }
   return result;
 }

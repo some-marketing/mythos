@@ -170,7 +170,7 @@ function normalizeDirectSkill(text, targetName, aliases = []) {
 }
 
 function projectionSupportedFrontmatter(metadata) {
-  const fields = ['license', 'compatibility', 'allowed-tools'].filter((key) => metadata[key]);
+  const fields = ['license', 'allowed-tools'].filter((key) => metadata[key]);
   return fields.map((key) => `${key}: ${JSON.stringify(metadata[key])}\n`).join('');
 }
 
@@ -439,12 +439,14 @@ function aliasesByTerminal(aliasResults, canonicalCommands = new Map()) {
 
 function renderCanonicalSkill(commandId, spec, capabilityTier, override, aliases = []) {
   const aliasText = aliases.length ? ` Aliases resolved at generation time: ${aliases.map((id) => `/${id}`).join(', ')}.` : '';
+  const description = `${spec.description || `Canonical /${commandId} command.`}${aliasText}`
+    .replace(/[<>]/g, (value) => value === '<' ? '(' : ')');
   const execution = override && override.codex_execution
     ? override.codex_execution
     : capabilityTier === 'BLOCKING'
       ? `Run \`node tools/commands/mythos-command-runner.cjs\` with one positional command string formed from \`/${commandId}\` followed by the user's actual invocation arguments. With no arguments, pass exactly \`/${commandId}\`. Never pass placeholder text in place of the user's arguments. The exported HANDLERS registry is the evidence for deterministic execution.`
       : `Read the canonical command at execution time and carry out its workflow with Codex capabilities. This projection is ${capabilityTier}; availability of this skill is not a blocking runtime mechanism.`;
-  return `---\nname: source-command-${commandId}\ndescription: ${JSON.stringify(`${spec.description || `Canonical /${commandId} command.`}${aliasText}`)}\n---\n\n# /${commandId}\n\nCanonical authority: \`instructions/canonical/commands/${commandId}.yaml\`. Read that file at execution time; this projection never copies or overrides its behavioral body.\n\nCapability tier: **${capabilityTier}**.\n\n${execution}\n`;
+  return `---\nname: source-command-${commandId}\ndescription: ${JSON.stringify(description)}\n---\n\n# /${commandId}\n\nCanonical authority: \`instructions/canonical/commands/${commandId}.yaml\`. Read that file at execution time; this projection never copies or overrides its behavioral body.\n\nCapability tier: **${capabilityTier}**.\n\n${execution}\n`;
 }
 
 function frameworkIdentity(root, sourcePath) {
@@ -1277,5 +1279,6 @@ module.exports = {
   renderFrameworkSkill,
   resolveAliases,
   sync,
-  validateCandidateDir
+  validateCandidateDir,
+  validateTargetRoot
 };

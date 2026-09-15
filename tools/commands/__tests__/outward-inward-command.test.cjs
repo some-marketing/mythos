@@ -59,6 +59,8 @@ test('coordinator contract keeps default analysis write-free and reports executi
   assert.equal(canonical.capability_status.prompt_receipt_validator, 'ADVISORY');
   assert.equal(canonical.capability_status.comparative_execution, 'ABSENT');
   assert.match(contract, /record execution_blocked until a registered runner invokes the provenance validator/);
+  assert.match(contract, /every required artifact.*output_contract_v2/);
+  assert.match(contract, /partial artifact set is not completion/);
 });
 
 test('prompt-provenance receipt validator rejects missing or matching identities', () => {
@@ -118,6 +120,29 @@ test('prompt-provenance receipt validator rejects missing or matching identities
   assert.equal(validatePromptProvenanceReceipt(receipt, expectedPrompts, expectedSourceEnvelope).ok, false);
   receipt.prompts[1].source_revisions = [{ source_id: 'source-b', content_sha256: 'e'.repeat(64) }];
   assert.equal(validatePromptProvenanceReceipt(receipt, expectedPrompts, expectedSourceEnvelope).ok, true);
+});
+
+test('prompt-provenance receipt validator reports malformed entries without throwing', () => {
+  const expectedPrompts = [{ prompt_id: '01_SCOPE', prompt_sha256: 'a'.repeat(64) }];
+  const expectedSourceEnvelope = {
+    source_envelope_id: 'chi-source-envelope',
+    source_envelope_sha256: 'c'.repeat(64),
+    sources: { 'source-a': 'd'.repeat(64) },
+    prompt_sources: { '01_SCOPE': ['source-a'] }
+  };
+  const receipt = {
+    schema: 'PromptProvenanceReceipt/1.0',
+    prompts: [null, 'not-an-object', []]
+  };
+
+  const result = validatePromptProvenanceReceipt(receipt, expectedPrompts, expectedSourceEnvelope);
+  assert.equal(result.ok, false);
+  assert.deepEqual(result.errors.slice(0, 3), [
+    'prompts[0] must be a non-null object',
+    'prompts[1] must be a non-null object',
+    'prompts[2] must be a non-null object'
+  ]);
+  assert.ok(result.errors.includes('missing prompt receipt: 01_SCOPE'));
 });
 
 test('source envelope loader requires hashed source revisions', (t) => {

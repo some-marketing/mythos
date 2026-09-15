@@ -84,6 +84,10 @@ function validatePromptProvenanceReceipt(receipt, expectedPrompts = [], expected
   }
   for (const [index, prompt] of receipt.prompts.entries()) {
     const label = `prompts[${index}]`;
+    if (!prompt || typeof prompt !== 'object' || Array.isArray(prompt)) {
+      errors.push(`${label} must be a non-null object`);
+      continue;
+    }
     for (const field of [
       'prompt_id',
       'prompt_sha256',
@@ -154,6 +158,7 @@ function validatePromptProvenanceReceipt(receipt, expectedPrompts = [], expected
     const expected = new Map(expectedPrompts.map((prompt) => [prompt.prompt_id, prompt.prompt_sha256]));
     const observed = new Map();
     for (const prompt of receipt.prompts) {
+      if (!prompt || typeof prompt !== 'object' || Array.isArray(prompt)) continue;
       if (observed.has(prompt.prompt_id)) errors.push(`duplicate prompt receipt: ${prompt.prompt_id}`);
       observed.set(prompt.prompt_id, prompt.prompt_sha256);
     }

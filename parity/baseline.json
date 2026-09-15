@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "f9f90051a0e4805d4f5be0ebaf817d456ac6a1ffba6810dd08be26bcc4d55968",
+    "expected_tree_sha256": "28f48d7777c2cdaa8afeb234419d8e0152627c4b3369392df688219f0c9280a1",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -1427,7 +1427,7 @@
       },
       {
         "path": ".claude/skills/outward-inward-loop/SKILL.md",
-        "sha256": "a1df064fb4442531da2e5fc622dde119795ab689ceb5c286aec2cbd4704d6c5b",
+        "sha256": "2d7895a0d19af0506aa2cd62b75d1771685a8ba2dc7a74065496b3e597b5cd7b",
         "mode": 420
       },
       {
@@ -5457,7 +5457,7 @@
       },
       {
         "path": "instructions/canonical/commands/outward-inward.yaml",
-        "sha256": "8584ada3b534deb089a2d0de4301258288a56b77d7c02f1d645ee01743a623ba",
+        "sha256": "29dac58caecd8c38b1eb21b3edc991d1ec6e79cc358453fde543fbdfcdefed55",
         "mode": 420
       },
       {
@@ -6007,7 +6007,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "1fe335e1cc65345c1d9c4b2e8afda49f2d7c26f4030c04a38e824c0769a0495f",
+        "sha256": "4dd12e8ee5d010b379dcf678075cd64fec4e56569d1e76f7e476862127b14e4a",
         "mode": 420
       },
       {
@@ -7442,7 +7442,7 @@
       },
       {
         "path": "tools/commands/__tests__/outward-inward-command.test.cjs",
-        "sha256": "b01b236fda5d422011d1971dbcc1428c84b51b82992a90335ea4dce4de9de316",
+        "sha256": "d3c9946a02bb92966d27241da52a9373215823c905b15e20c8df4c7d12544cdb",
         "mode": 420
       },
       {
@@ -7527,7 +7527,7 @@
       },
       {
         "path": "tools/commands/validate-prompt-provenance-receipt.cjs",
-        "sha256": "a191d8e03c85bb408e762f4efab979a160d0a948800722921a4ea440041972e5",
+        "sha256": "f458efbeccd4519ff4659c1f58f0b68a38c5305fe680a6e986e19249976c1d56",
         "mode": 420
       },
       {
@@ -14019,7 +14019,7 @@
     "package_script_count": 205,
     "command_alias_registry_sha256": "4a7ed7af401f9b4695dcd2dca5ca64f4a0dae975d0b94f95e24e9b5f3a6ce3fc",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "1fe335e1cc65345c1d9c4b2e8afda49f2d7c26f4030c04a38e824c0769a0495f",
+    "graph_sha256": "4dd12e8ee5d010b379dcf678075cd64fec4e56569d1e76f7e476862127b14e4a",
     "graph_nodes": 3895,
     "graph_edges": 2851
   },

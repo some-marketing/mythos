@@ -131,9 +131,10 @@ function stripYamlInlineComment(value) {
   return text;
 }
 
-function decodeQuotedYamlScalar(value) {
+function decodeQuotedYamlScalar(value, allowUnmatched = false) {
   if (value.length < 2) return value;
-  if (value.startsWith('"') && value.endsWith('"')) {
+  if (value.startsWith('"') || value.endsWith('"')) {
+    if (!(value.startsWith('"') && value.endsWith('"'))) return allowUnmatched ? value : INVALID_YAML_SCALAR;
     try {
       const decoded = JSON.parse(value);
       return typeof decoded === 'string' ? decoded : value;
@@ -141,7 +142,8 @@ function decodeQuotedYamlScalar(value) {
       return INVALID_YAML_SCALAR;
     }
   }
-  if (value.startsWith("'") && value.endsWith("'")) {
+  if (value.startsWith("'") || value.endsWith("'")) {
+    if (!(value.startsWith("'") && value.endsWith("'"))) return allowUnmatched ? value : INVALID_YAML_SCALAR;
     return value.slice(1, -1).replace(/''/g, "'");
   }
   return value;
@@ -228,7 +230,7 @@ function parseFrontmatter(text, sourcePath = '<memory>') {
       const quoted = (value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"));
       if (!quoted && ['name', 'description'].includes(key) && isYamlNonStringToken(value)) value = null;
       else {
-        value = decodeQuotedYamlScalar(value);
+        value = decodeQuotedYamlScalar(value, Boolean(blockScalar));
         if (value === INVALID_YAML_SCALAR) return { ok: false, error: 'invalid quoted frontmatter scalar', sourcePath };
       }
     }
@@ -531,7 +533,7 @@ function resolveAliases(root, config, commands, directNames, registryOverride) {
 
   for (const row of aliases.values()) {
     const resolved = resolve(row.id);
-    if (resolved.ok && commands.has(row.id) && row.authority_source && row.authority_source !== resolved.terminal) {
+    if (resolved.ok && row.authority_source && row.authority_source !== resolved.terminal) {
       throw new Error(`Alias authority source must match resolved terminal for ${row.id}`);
     }
     results.push({ alias: row, ...resolved });

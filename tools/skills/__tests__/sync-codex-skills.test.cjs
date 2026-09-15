@@ -126,9 +126,11 @@ test('frontmatter parsing decodes quoted YAML scalar escapes', () => {
 });
 
 test('frontmatter parsing rejects invalid quoted YAML escapes', () => {
-  const direct = normalizeDirectSkill('---\nname: demo\ndescription: "bad\\q"\n---\nbody\n', 'demo');
-  assert.equal(direct.ok, false);
-  assert.match(direct.error, /invalid quoted frontmatter scalar/);
+  for (const description of ['"bad\\q"', '"unfinished', "'unfinished"]) {
+    const direct = normalizeDirectSkill(`---\nname: demo\ndescription: ${description}\n---\nbody\n`, 'demo');
+    assert.equal(direct.ok, false);
+    assert.match(direct.error, /invalid quoted frontmatter scalar/);
+  }
 
   const root = fixture();
   write(root, 'frameworks/a/b/.claude/skills/demo/SKILL.md', '---\nname: demo\ndescription: "bad\\q"\n---\nbody\n');
@@ -318,6 +320,17 @@ test('typed aliases reject authorities that diverge from their resolved terminal
   assert.throws(
     () => buildCandidates({ root, handlerIds: new Set(), aliasRegistry: aliases }),
     /Alias authority source must match resolved terminal for wrapper/
+  );
+});
+
+test('metadata-only typed aliases reject authorities that diverge from their resolved terminal', () => {
+  const root = fixture();
+  command(root, 'route');
+  command(root, 'debrief-run');
+  const aliases = { aliases: [{ id: 'shortcut', target: 'route', authority_source: 'debrief-run' }] };
+  assert.throws(
+    () => buildCandidates({ root, handlerIds: new Set(), aliasRegistry: aliases }),
+    /Alias authority source must match resolved terminal for shortcut/
   );
 });
 

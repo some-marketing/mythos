@@ -4,7 +4,7 @@ Refreshed under the approved parity amendment at `2026-09-14T18:51:57Z` in the d
 
 ## Mechanical results
 
-- Combined projector, lifecycle, and alias regressions: 122 passed, 0 failed.
+- Combined projector, lifecycle, and alias regressions: 123 passed, 0 failed.
 - `node tools/skills/sync-codex-skills.cjs --check`: aligned.
 - `node tools/skills/sync-lifecycle-command-skills.cjs --check`: six lifecycle skills aligned against the committed general projection evidence.
 - Pinned Codex `quick_validate.py`, using the repository PyYAML environment: 131 of 131 applied packages valid; 176 of 176 top-level staged candidate packages valid. Nested child skills are excluded from parent resources, so the staged tree contains exactly 176 independently projected `SKILL.md` files.
@@ -104,6 +104,8 @@ The sixtieth Cloud Codex review found typed wrapper projections omitting their i
 The sixty-first Cloud Codex review found PascalCase credential assignments bypassing the camelCase detector and safe property-based environment references being classified as literal secrets. Credential-key suffix recognition now accepts both lower- and upper-initial provider prefixes, while bounded `process.env`, `import.meta.env`, `env`, `config`, and `secrets` property references remain nonliteral. Focused regressions cover both rejection and safe-reference paths.
 
 The sixty-second Cloud Codex review found bare token assignments bypassing credential detection and invalid double-quoted YAML escapes being silently repaired. Bare `TOKEN` and `token` keys now enter the same redacted rejection path with existing placeholder exemptions, while malformed or unmatched quoted scalars fail closed as malformed frontmatter. Focused regressions cover both findings.
+
+The sixty-third Cloud Codex review found metadata-only typed aliases exempt from authority/terminal consistency and unterminated inline quotes still accepted after invalid-escape hardening. Authority validation now applies to every resolved typed alias, and quoted-scalar decoding rejects unmatched delimiters except within already-recognized block scalar content. Focused regressions cover both findings while retaining the shipped quoted block description.
 
 ## Falsifiers and residuals
 

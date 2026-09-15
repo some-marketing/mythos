@@ -100,6 +100,12 @@ test('repo pins only Codex-supported projection frontmatter keys', () => {
   assert.equal(flowBounded.ok, true);
   assert.match(flowBounded.content, /allowed-tools: \["Read","Write"\]/);
   assert.deepEqual(parseFrontmatter(flowBounded.content).metadata['allowed-tools'], ['Read', 'Write']);
+
+  for (const item of ['false', '123']) {
+    const malformed = normalizeDirectSkill(`---\nname: old\ndescription: demo\nallowed-tools:\n  - ${item}\n---\nbody\n`, 'new');
+    assert.equal(malformed.ok, false);
+    assert.match(malformed.error, /allowed-tools block sequence must contain only strings/);
+  }
 });
 
 test('frontmatter parsing accepts and normalizes CRLF line endings', () => {
@@ -1232,6 +1238,8 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     'Authorization: Basic dTpw\n',
     'Authorization: Token supersecret\n',
     'Authorization: Token exampleRealSecret123\n',
+    'Authorization: supersecretvalue\n',
+    'Authorization: `Bearer supersecretvalue`\n',
     'Cookie: sessionid=eyJhbGciOiJIUzI1NiJ9\n',
     'Cookie: sessionid="supersecret"\n',
     'Cookie: csrftoken=placeholder; sessionid=supersecret\n',
@@ -1250,9 +1258,9 @@ test('credential assignments and temporary AWS keys are rejected without retaini
   }
 });
 
-test('shell-variable credential references are not treated as literal secrets', () => {
+test('credential references are not treated as literal secrets', () => {
   const root = fixture();
-  skill(root, 'ticktock', 'export OPENAI_API_KEY="$OPENAI_API_KEY"\nexport AUTH_TOKEN=${AUTH_TOKEN}\nAuthorization: Bearer $ACCESS_TOKEN\nAuthorization: Basic ${BASIC_AUTH}\nCookie: csrftoken=placeholder; sessionid="$SESSION_ID"\npassword: process.env.DB_PASSWORD,\nsessionToken = import.meta.env.SESSION_TOKEN;\ndbPassword: config.dbPassword\n');
+  skill(root, 'ticktock', 'export OPENAI_API_KEY="$OPENAI_API_KEY"\nexport AUTH_TOKEN=${AUTH_TOKEN}\nAuthorization: Bearer $ACCESS_TOKEN\nAuthorization: Basic ${BASIC_AUTH}\nAuthorization: `Bearer ${AUTH_TOKEN}`\nAuthorization: process.env.AUTH_TOKEN,\nCookie: csrftoken=placeholder; sessionid="$SESSION_ID"\npassword: process.env.DB_PASSWORD,\nsessionToken = import.meta.env.SESSION_TOKEN;\ndbPassword: config.dbPassword\n');
   const result = sync({ root, handlerIds: new Set(), apply: true });
   const candidate = byId(result, 'direct-ticktock');
   assert.equal(candidate.receipt.semantic_review_state, 'reviewed_safe');

@@ -215,6 +215,9 @@ function parseFrontmatter(text, sourcePath = '<memory>') {
         if (!itemMatch) break;
         index += 1;
         let item = stripYamlInlineComment(itemMatch[1].trim()).trim();
+        if (key === 'allowed-tools' && isYamlNonStringToken(item)) {
+          return { ok: false, error: 'frontmatter allowed-tools block sequence must contain only strings', sourcePath };
+        }
         item = decodeQuotedYamlScalar(item);
         if (item === INVALID_YAML_SCALAR) return { ok: false, error: 'invalid quoted frontmatter scalar', sourcePath };
         items.push(item);
@@ -662,11 +665,26 @@ function containsLiteralCookieCredential(text) {
   return false;
 }
 
+function containsLiteralAuthorizationCredential(text) {
+  const authorizationHeader = /(?:^|[^A-Z0-9_])["'`]?AUTHORIZATION["'`]?\s*[:=]\s*([^\r\n]+)/gim;
+  for (const match of String(text).matchAll(authorizationHeader)) {
+    let value = match[1].trim().replace(/[,;]\s*$/, '').trim();
+    if (value.length >= 2 && value[0] === value[value.length - 1] && ['"', "'", '`'].includes(value[0])) {
+      value = value.slice(1, -1).trim();
+    }
+    value = value.replace(/^[A-Z][A-Z0-9._~-]*\s+/i, '').trim();
+    if (isCredentialPlaceholder(value)) continue;
+    if (/^(?:\$\{)?(?:process\.env|import\.meta\.env|env|config|secrets)\.[A-Za-z_$][A-Za-z0-9_$]*(?:\})?$/.test(value)) continue;
+    return true;
+  }
+  return false;
+}
+
 function containsCredentialMaterial(bytes) {
   const text = String(bytes);
   return /-----BEGIN (?:[A-Z0-9]+ )*PRIVATE KEY-----/.test(text)
     || /(?:^|[^A-Za-z0-9])(?:sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|(?:AKIA|ASIA)[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|glpat-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{35})(?:$|[^A-Za-z0-9_-])/m.test(text)
-    || /(?:^|[^A-Z0-9_])["']?AUTHORIZATION["']?\s*[:=]\s*["']?[A-Z][A-Z0-9._~-]*\s+(?!(?:<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=$|[\s;"'`]))[^\s"'`]+/im.test(text)
+    || containsLiteralAuthorizationCredential(text)
     || containsLiteralCookieCredential(text)
     || /[A-Za-z][A-Za-z0-9+.-]*:\/\/[^\s/@:]+:(?!(?:<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=@))[^@\s/]+@/im.test(text)
     || /(?:^|[^A-Za-z0-9_])["']?(?:(?:[A-Za-z][A-Za-z0-9]*)?(?:ApiKey|ClientSecret|Password|Passwd|AccessToken|RefreshToken|AuthToken|SessionToken|SecretKey|PrivateKey|Secret)|apiKey|clientSecret|password|passwd|accessToken|refreshToken|authToken|sessionToken|token|secretKey|privateKey|secret)["']?\s*[:=]\s*["']?(?!(?:(?:process\.env|import\.meta\.env|env|config|secrets)\.[A-Za-z_$][A-Za-z0-9_$]*|<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=$|[\s,;}"'`]))[^\s"'`]+/m.test(text)

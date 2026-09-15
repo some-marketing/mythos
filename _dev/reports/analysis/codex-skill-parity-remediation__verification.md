@@ -107,6 +107,8 @@ The sixty-second Cloud Codex review found bare token assignments bypassing crede
 
 The sixty-third Cloud Codex review found metadata-only typed aliases exempt from authority/terminal consistency and unterminated inline quotes still accepted after invalid-escape hardening. Authority validation now applies to every resolved typed alias, and quoted-scalar decoding rejects unmatched delimiters except within already-recognized block scalar content. Focused regressions cover both findings while retaining the shipped quoted block description.
 
+The sixty-fourth Cloud Codex review found opaque and template-literal Authorization header values bypassing credential rejection, and non-string items in block-form `allowed-tools` sequences being silently converted to strings. Authorization scanning now rejects every literal header value while preserving bounded variable and property references, and block tool lists apply the same string-only validation as flow lists. Focused regressions cover both rejection paths and the nonliteral reference exemptions.
+
 ## Falsifiers and residuals
 
 Acceptance would be disproved by an applied `UNKNOWN` or pending candidate, copied alias behavior, a non-handler command marked `BLOCKING`, a private path in a shipped projection, a canonical/client diff, a failed runtime discovery claim, or an unresolved distinct-family blocker. None was observed.

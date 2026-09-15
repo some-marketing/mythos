@@ -85,6 +85,8 @@ The fifty-first Cloud Codex review found URI-userinfo credentials escaping detec
 
 The fifty-second Cloud Codex review found direct dependency gating could become stale when collision classification later invalidated a required package. The same fixed-point dependency gate now runs after collision resolution and before alias availability is finalized, so both dependent skills and their aliases become unavailable. A focused collision-plus-dependency regression covers the ordering.
 
+The fifty-third Cloud Codex review found literal credentials under non-Bearer/Basic Authorization schemes and valid multi-paragraph YAML block scalars being rejected at blank lines. Authorization scanning now treats any non-placeholder scheme-plus-credential header as protected material, and block scalar parsing consumes blank lines belonging to the scalar before later indented content. Existing redaction and block-indicator regressions cover both findings.
+
 ## Falsifiers and residuals
 
 Acceptance would be disproved by an applied `UNKNOWN` or pending candidate, copied alias behavior, a non-handler command marked `BLOCKING`, a private path in a shipped projection, a canonical/client diff, a failed runtime discovery claim, or an unresolved distinct-family blocker. None was observed.

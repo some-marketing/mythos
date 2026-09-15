@@ -127,6 +127,9 @@ test('frontmatter parsing accepts YAML block scalar chomping and indentation ind
     assert.match(parsed.metadata.description, /first line/);
     assert.match(parsed.metadata.description, /second line/);
   }
+  const paragraphs = parseFrontmatter('---\nname: demo\ndescription: |\n  first paragraph\n\n  second paragraph\n---\nbody\n');
+  assert.equal(paragraphs.ok, true);
+  assert.equal(paragraphs.metadata.description, 'first paragraph\n\nsecond paragraph');
 });
 
 test('direct descriptions replace angle brackets rejected by Codex validation', () => {
@@ -1145,6 +1148,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     `Authorization: Bearer ordinarysecretvalue${'b'.repeat(16)}\n`,
     'Authorization: Bearer secret\n',
     'Authorization: Basic dTpw\n',
+    'Authorization: Token supersecret\n',
     'https://alice:s3cret@example.com\n',
     `-----BEGIN ENCRYPTED PRIVATE KEY-----\nencryptedprivatebytes${'e'.repeat(16)}\n-----END ENCRYPTED PRIVATE KEY-----\n`,
     `temporary ASIA${'A'.repeat(16)}\n`

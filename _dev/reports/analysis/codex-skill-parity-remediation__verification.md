@@ -99,6 +99,8 @@ The fifty-eighth Cloud Codex review found provider-prefixed secret variables, ty
 
 The fifty-ninth Cloud Codex review found typed YAML sequence records using standalone dash markers being misread as legacy maps and legacy authority resolution being lost in domains that also contained typed aliases. The shared parser now attaches fields following a standalone sequence marker to one record, and alias rendering chooses typed or legacy behavior per record while preserving primary-to-cross-alias authority resolution. Focused regressions cover both findings.
 
+The sixtieth Cloud Codex review found typed wrapper projections omitting their invocation-specific workflow lens and camelCase credential assignments bypassing secret detection. Typed wrappers now direct Codex to read and apply the wrapper workflow as an invocation lens before consulting the resolved authority for governing behavior, and bounded camelCase credential-key families enter the redacted rejection path. Focused regressions cover both findings.
+
 ## Falsifiers and residuals
 
 Acceptance would be disproved by an applied `UNKNOWN` or pending candidate, copied alias behavior, a non-handler command marked `BLOCKING`, a private path in a shipped projection, a canonical/client diff, a failed runtime discovery claim, or an unresolved distinct-family blocker. None was observed.

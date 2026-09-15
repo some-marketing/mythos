@@ -282,6 +282,8 @@ test('typed aliases with canonical workflows retain their own runtime pointer', 
   const terminal = byId(result, 'command-orchestrate-loop');
   assert.match(typed.content, /instructions\/canonical\/commands\/deliberate\.yaml/);
   assert.match(typed.content, /Canonical behavioral authority: `instructions\/canonical\/commands\/orchestrate-loop\.yaml`/);
+  assert.match(typed.content, /Read the wrapper file at execution time for its invocation-specific workflow and provenance/);
+  assert.match(typed.content, /Apply the wrapper as an invocation lens/);
   assert.doesNotMatch(terminal.content, /Aliases resolved at generation time: \/deliberate/);
   assert.equal(byId(result, 'alias-deliberate').receipt.target_exact_path, '.agents/skills/source-command-deliberate/SKILL.md');
 });
@@ -1195,6 +1197,9 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     `STRIPE_API_KEY=stripevalue${'r'.repeat(16)}\n`,
     `DB_PASSWORD=dbvalue${'d'.repeat(16)}\n`,
     `FOO_ACCESS_TOKEN=foovalue${'f'.repeat(16)}\n`,
+    `dbPassword: "dbcamelvalue${'d'.repeat(16)}"\n`,
+    `sessionToken = "sessioncamelvalue${'t'.repeat(16)}"\n`,
+    `stripeApiKey = "stripecamelvalue${'k'.repeat(16)}"\n`,
     `Authorization: Bearer ordinarysecretvalue${'b'.repeat(16)}\n`,
     'Authorization: Bearer secret\n',
     'Authorization: Basic dTpw\n',

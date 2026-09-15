@@ -553,7 +553,7 @@ function renderCanonicalSkill(commandId, spec, capabilityTier, override, aliases
   const sourceRoot = posix(path.normalize(authoritySourceRoot)).replace(/\/$/, '');
   const authority = authorityCommandId === commandId
     ? `Canonical authority: \`${sourceRoot}/${commandId}.yaml\`. Read that file at execution time; this projection never copies or overrides its behavioral body.`
-    : `Typed-wrapper provenance: \`${sourceRoot}/${commandId}.yaml\`. Canonical behavioral authority: \`${sourceRoot}/${authorityCommandId}.yaml\`. Read the authority file at execution time; the wrapper preserves invocation provenance but never overrides authoritative behavior.`;
+    : `Typed-wrapper provenance: \`${sourceRoot}/${commandId}.yaml\`. Canonical behavioral authority: \`${sourceRoot}/${authorityCommandId}.yaml\`. Read the wrapper file at execution time for its invocation-specific workflow and provenance, then read the authority file for governing behavior. Apply the wrapper as an invocation lens; the authority file controls any conflict.`;
   return `---\nname: ${projectionName}\ndescription: ${JSON.stringify(description)}\n---\n\n# /${commandId}\n\n${authority}\n\nCapability tier: **${capabilityTier}**.\n\n${execution}\n`;
 }
 
@@ -658,6 +658,7 @@ function containsCredentialMaterial(bytes) {
     || /(?:^|[^A-Z0-9_])["']?AUTHORIZATION["']?\s*[:=]\s*["']?[A-Z][A-Z0-9._~-]*\s+(?!(?:<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=$|[\s;"'`]))[^\s"'`]+/im.test(text)
     || containsLiteralCookieCredential(text)
     || /[A-Za-z][A-Za-z0-9+.-]*:\/\/[^\s/@:]+:(?!(?:<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=@))[^@\s/]+@/im.test(text)
+    || /(?:^|[^A-Za-z0-9_])["']?(?:(?:[a-z][A-Za-z0-9]*)?(?:ApiKey|ClientSecret|Password|Passwd|AccessToken|RefreshToken|AuthToken|SessionToken|SecretKey|PrivateKey|Secret)|apiKey|clientSecret|password|passwd|accessToken|refreshToken|authToken|sessionToken|secretKey|privateKey|secret)["']?\s*[:=]\s*["']?(?!(?:<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=$|[\s"'`]))[^\s"'`]+/m.test(text)
     || /(?:^|[^A-Z0-9_])["']?(?:[A-Z][A-Z0-9_-]*[_-])?(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY|API[_-]?KEY|CLIENT[_-]?SECRET|PASSWORD|PASSWD|ACCESS[_-]?TOKEN|REFRESH[_-]?TOKEN|AUTH[_-]?TOKEN|SECRET|SECRET[_-]?KEY|PRIVATE[_-]?KEY)["']?\s*[:=]\s*["']?(?!(?:<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=$|[\s"'`]))[^\s"'`]+/im.test(text);
 }
 

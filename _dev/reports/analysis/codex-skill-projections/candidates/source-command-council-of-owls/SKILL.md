@@ -5,7 +5,7 @@ description: "Human-friendly shorthand for consult-then-route work: convene the 
 
 # /council-of-owls
 
-Typed-wrapper provenance: `instructions/canonical/commands/council-of-owls.yaml`. Canonical behavioral authority: `instructions/canonical/commands/orchestrate-loop.yaml`. Read the authority file at execution time; the wrapper preserves invocation provenance but never overrides authoritative behavior.
+Typed-wrapper provenance: `instructions/canonical/commands/council-of-owls.yaml`. Canonical behavioral authority: `instructions/canonical/commands/orchestrate-loop.yaml`. Read the wrapper file at execution time for its invocation-specific workflow and provenance, then read the authority file for governing behavior. Apply the wrapper as an invocation lens; the authority file controls any conflict.
 
 Capability tier: **ADVISORY**.
 

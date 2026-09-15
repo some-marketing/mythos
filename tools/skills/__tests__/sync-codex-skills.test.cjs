@@ -106,6 +106,12 @@ test('repo pins only Codex-supported projection frontmatter keys', () => {
     assert.equal(malformed.ok, false);
     assert.match(malformed.error, /allowed-tools block sequence must contain only strings/);
   }
+
+  for (const value of ['false', '123', 'null']) {
+    const malformed = normalizeDirectSkill(`---\nname: old\ndescription: demo\nallowed-tools: ${value}\n---\nbody\n`, 'new');
+    assert.equal(malformed.ok, false);
+    assert.match(malformed.error, /allowed-tools scalar must be a string/);
+  }
 });
 
 test('frontmatter parsing accepts and normalizes CRLF line endings', () => {
@@ -1233,6 +1239,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     `StripeApiKey = "stripepascalvalue${'i'.repeat(16)}"\n`,
     `TOKEN="tokenvalue${'o'.repeat(16)}"\n`,
     `token: "lowertokenvalue${'l'.repeat(16)}"\n`,
+    `export PAT=github_pat_${'g'.repeat(24)}\n`,
     `Authorization: Bearer ordinarysecretvalue${'b'.repeat(16)}\n`,
     'Authorization: Bearer secret\n',
     'Authorization: Basic dTpw\n',
@@ -1244,6 +1251,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     'Cookie: sessionid=eyJhbGciOiJIUzI1NiJ9\n',
     'Cookie: sessionid="supersecret"\n',
     'Cookie: csrftoken=placeholder; sessionid=supersecret\n',
+    'curl -H "Cookie: sessionid=supersecret" https://example.test\n',
     'https://alice:s3cret@example.com\n',
     `-----BEGIN ENCRYPTED PRIVATE KEY-----\nencryptedprivatebytes${'e'.repeat(16)}\n-----END ENCRYPTED PRIVATE KEY-----\n`,
     `temporary ASIA${'A'.repeat(16)}\n`
@@ -1261,7 +1269,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
 
 test('credential references are not treated as literal secrets', () => {
   const root = fixture();
-  skill(root, 'ticktock', 'export OPENAI_API_KEY="$OPENAI_API_KEY"\nexport AUTH_TOKEN=${AUTH_TOKEN}\nAuthorization: Bearer $ACCESS_TOKEN\nAuthorization: Basic ${BASIC_AUTH}\nAuthorization: `Bearer ${AUTH_TOKEN}`\nAuthorization: process.env.AUTH_TOKEN,\ncurl -H "Authorization: Bearer $ACCESS_TOKEN" https://example.test\nCookie: csrftoken=placeholder; sessionid="$SESSION_ID"\npassword: process.env.DB_PASSWORD,\nsessionToken = import.meta.env.SESSION_TOKEN;\ndbPassword: config.dbPassword\n');
+  skill(root, 'ticktock', 'export OPENAI_API_KEY="$OPENAI_API_KEY"\nexport AUTH_TOKEN=${AUTH_TOKEN}\nAuthorization: Bearer $ACCESS_TOKEN\nAuthorization: Basic ${BASIC_AUTH}\nAuthorization: `Bearer ${AUTH_TOKEN}`\nAuthorization: process.env.AUTH_TOKEN,\ncurl -H "Authorization: Bearer $ACCESS_TOKEN" https://example.test\nCookie: csrftoken=placeholder; sessionid="$SESSION_ID"\ncurl -H "Cookie: sessionid=$SESSION_ID" https://example.test\ncurl -H \'Cookie: sessionid=$SESSION_ID\' https://example.test\npassword: process.env.DB_PASSWORD,\nsessionToken = import.meta.env.SESSION_TOKEN;\ndbPassword: config.dbPassword\n');
   const result = sync({ root, handlerIds: new Set(), apply: true });
   const candidate = byId(result, 'direct-ticktock');
   assert.equal(candidate.receipt.semantic_review_state, 'reviewed_safe');

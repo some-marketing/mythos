@@ -231,6 +231,9 @@ function parseFrontmatter(text, sourcePath = '<memory>') {
     }
     if (typeof value === 'string') {
       const quoted = (value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"));
+      if (!quoted && key === 'allowed-tools' && isYamlNonStringToken(value)) {
+        return { ok: false, error: 'frontmatter allowed-tools scalar must be a string', sourcePath };
+      }
       if (!quoted && ['name', 'description'].includes(key) && isYamlNonStringToken(value)) value = null;
       else {
         value = decodeQuotedYamlScalar(value, Boolean(blockScalar));
@@ -651,11 +654,14 @@ function isCredentialPlaceholder(value) {
 }
 
 function containsLiteralCookieCredential(text) {
-  const cookieHeader = /(?:^|[^A-Z0-9_])["']?COOKIE["']?\s*[:=]\s*([^\r\n]+)/gim;
+  const cookieHeader = /(?:^|[^A-Z0-9_"'`])(["'`]?)COOKIE(["'`]?)\s*[:=]\s*([^\r\n]+)/gim;
   for (const match of String(text).matchAll(cookieHeader)) {
-    let header = match[1].trim();
-    if (header.length >= 2 && header[0] === header[header.length - 1] && (header[0] === '"' || header[0] === "'")) {
-      header = header.slice(1, -1);
+    let header = match[3].trim();
+    const headerQuote = match[1] && !match[2] ? match[1] : null;
+    const valueQuote = headerQuote || (['"', "'", '`'].includes(header[0]) ? header[0] : null);
+    if (valueQuote) {
+      const end = header.indexOf(valueQuote, headerQuote ? 0 : 1);
+      if (end >= 0) header = header.slice(headerQuote ? 0 : 1, end).trim();
     }
     for (const pair of header.split(';')) {
       const pairMatch = pair.match(/^\s*[^=;\s]+\s*=\s*(.*?)\s*$/);
@@ -687,7 +693,7 @@ function containsLiteralAuthorizationCredential(text) {
 function containsCredentialMaterial(bytes) {
   const text = String(bytes);
   return /-----BEGIN (?:[A-Z0-9]+ )*PRIVATE KEY-----/.test(text)
-    || /(?:^|[^A-Za-z0-9])(?:sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|(?:AKIA|ASIA)[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|glpat-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{35})(?:$|[^A-Za-z0-9_-])/m.test(text)
+    || /(?:^|[^A-Za-z0-9])(?:sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|(?:AKIA|ASIA)[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|glpat-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{35})(?:$|[^A-Za-z0-9_-])/m.test(text)
     || containsLiteralAuthorizationCredential(text)
     || containsLiteralCookieCredential(text)
     || /[A-Za-z][A-Za-z0-9+.-]*:\/\/[^\s/@:]+:(?!(?:<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=@))[^@\s/]+@/im.test(text)

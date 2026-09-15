@@ -111,6 +111,8 @@ The sixty-fourth Cloud Codex review found opaque and template-literal Authorizat
 
 The sixty-fifth Cloud Codex review found quoted shell-header references being captured through the remainder of their command line and rejected as literal credentials. Authorization scanning now bounds a quoted header at its matching delimiter before classifying the credential value, preserving quoted variable references while continuing to reject literal credentials in the same command form. Focused regressions cover both outcomes.
 
+The sixty-sixth Cloud Codex review found fine-grained GitHub PATs outside recognized assignments, quoted Cookie references captured through their command lines, and scalar non-string `allowed-tools` values being coerced to strings. The projector now shares the publisher's bounded `github_pat_` signature, bounds quoted Cookie headers before pair inspection, and rejects scalar non-string tool constraints. Focused regressions cover the literal and reference paths.
+
 ## Falsifiers and residuals
 
 Acceptance would be disproved by an applied `UNKNOWN` or pending candidate, copied alias behavior, a non-handler command marked `BLOCKING`, a private path in a shipped projection, a canonical/client diff, a failed runtime discovery claim, or an unresolved distinct-family blocker. None was observed.

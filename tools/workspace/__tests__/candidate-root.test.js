@@ -11,6 +11,7 @@ const { inspectBundle, inspectOutputDir, loadOutputContract } = require('../lib/
 const { collectCandidateBlockingIssues } = require('../lib/capture-candidate');
 const { loadSchema, validateRequiredFields } = require('../lib/models');
 const { requireCandidateRoot } = require('../lib/workspace');
+const { computeLedger } = require('../lib/learning-ledger');
 
 test('recognizes candidates staged at the repository framework_candidates root', () => {
   const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
@@ -87,6 +88,11 @@ test('imported candidates authorize report outputs and declare consumed artifact
         '02_DISCOVERY_EVIDENCE.md',
         '03_PRODUCT_BRIEF_AND_PRFAQ.md'
       ],
+      producerStages: [
+        '01_SCOPE_AND_INTENT',
+        '02_DISCOVERY_EVIDENCE',
+        '03_PRODUCT_BRIEF_AND_PRFAQ'
+      ],
       requiredArtifacts: [
         'outputs/product-intake/scope-and-intent.json',
         'outputs/product-intake/hypothesis-tests.json'
@@ -99,6 +105,12 @@ test('imported candidates authorize report outputs and declare consumed artifact
         '02_CHANGE_PROPOSAL.md',
         '03_DELTA_REQUIREMENTS.md',
         '04_DEPENDENCY_AND_ACCEPTANCE_MAP.md'
+      ],
+      producerStages: [
+        '01_BASELINE_INVENTORY',
+        '02_CHANGE_PROPOSAL',
+        '03_DELTA_REQUIREMENTS',
+        '04_DEPENDENCY_AND_ACCEPTANCE_MAP'
       ],
       requiredArtifacts: []
     }
@@ -122,6 +134,7 @@ test('imported candidates authorize report outputs and declare consumed artifact
       manifest.output_contract.artifacts
     );
     const bundleType = manifest.output_contract_v2.bundle_types[0];
+    assert.deepEqual(bundleType.producer_stages, candidate.producerStages);
     assert.deepEqual(
       Object.keys(bundleType.file_schemas).sort(),
       bundleType.required_files.filter((file) => file.endsWith('.json')).sort()
@@ -242,12 +255,23 @@ test('imported candidate review schemas reject incomplete or non-distinct PASS v
     {
       root: 'product-management__product-intake',
       bundle: 'product-intake-output',
-      reviewFile: 'readiness-review.json'
+      reviewFile: 'readiness-review.json',
+      producerStages: [
+        '01_SCOPE_AND_INTENT',
+        '02_DISCOVERY_EVIDENCE',
+        '03_PRODUCT_BRIEF_AND_PRFAQ'
+      ]
     },
     {
       root: 'project-management__delta-specification',
       bundle: 'delta-specification-output',
-      reviewFile: 'review.json'
+      reviewFile: 'review.json',
+      producerStages: [
+        '01_BASELINE_INVENTORY',
+        '02_CHANGE_PROPOSAL',
+        '03_DELTA_REQUIREMENTS',
+        '04_DEPENDENCY_AND_ACCEPTANCE_MAP'
+      ]
     }
   ];
 
@@ -290,11 +314,17 @@ test('imported candidate review schemas reject incomplete or non-distinct PASS v
       harness_id: 'producer-harness',
       model_provider_family: 'Anthropic'
     };
+    const producers = candidate.producerStages.map((stage, index) => ({
+      ...producer,
+      actor_id: `${producer.actor_id}-${index}`,
+      harness_id: `${producer.harness_id}-${index}`,
+      stage
+    }));
     fs.writeFileSync(path.join(bundleRoot, candidate.reviewFile), JSON.stringify({
       verdict: 'PASS',
       findings: [],
       falsifier: 'none',
-      producer_provenance: [producer],
+      producer_provenance: producers,
       reviewer_provenance: {
         ...producer,
         actor_id: 'reviewer-actor',
@@ -312,7 +342,24 @@ test('imported candidate review schemas reject incomplete or non-distinct PASS v
       verdict: 'PASS',
       findings: [],
       falsifier: 'none',
-      producer_provenance: [producer],
+      producer_provenance: producers.slice(1),
+      reviewer_provenance: {
+        actor_id: 'reviewer-actor',
+        harness_id: 'reviewer-harness',
+        model_provider_family: 'reviewer-family'
+      }
+    }));
+    const missingStageFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+    assert.ok(missingStageFindings.some((finding) =>
+      finding.path === path.join(bundleRoot, candidate.reviewFile) &&
+      finding.code === 'BUNDLE_SCHEMA_FAIL' && /exactly one entry for each producer stage/.test(finding.message)
+    ));
+
+    fs.writeFileSync(path.join(bundleRoot, candidate.reviewFile), JSON.stringify({
+      verdict: 'PASS',
+      findings: [],
+      falsifier: 'none',
+      producer_provenance: producers,
       reviewer_provenance: {
         actor_id: 'reviewer-actor',
         harness_id: 'reviewer-harness',
@@ -321,6 +368,23 @@ test('imported candidate review schemas reject incomplete or non-distinct PASS v
     }));
     const distinctMindFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
     assert.ok(!reviewSchemaFailed(distinctMindFindings));
+
+    fs.writeFileSync(path.join(bundleRoot, candidate.reviewFile), JSON.stringify({
+      verdict: 'PASS',
+      findings: [],
+      falsifier: '   ',
+      producer_provenance: producers,
+      reviewer_provenance: {
+        actor_id: 'reviewer-actor',
+        harness_id: 'reviewer-harness',
+        model_provider_family: 'reviewer-family'
+      }
+    }));
+    const blankFalsifierFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+    assert.ok(blankFalsifierFindings.some((finding) =>
+      finding.path === path.join(bundleRoot, candidate.reviewFile) &&
+      finding.code === 'BUNDLE_SCHEMA_FAIL' && /falsifier must match pattern/.test(finding.message)
+    ));
   }
 });
 
@@ -372,6 +436,43 @@ test('imported candidate producer schemas reject empty JSON artifacts', (t) => {
       }
     }
   }
+});
+
+test('required text and delta contracts reject empty content', (t) => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const productRoot = path.join(repositoryRoot, 'framework_candidates', 'product-management__product-intake', 'proposed_framework');
+  const productManifest = JSON.parse(fs.readFileSync(path.join(productRoot, 'manifest.json'), 'utf8'));
+  const productBundle = productManifest.output_contract_v2.bundle_types[0];
+  const productOutput = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-empty-product-output-'));
+  t.after(() => fs.rmSync(productOutput, { recursive: true, force: true }));
+  fs.writeFileSync(path.join(productOutput, 'prfaq.md'), ' \n');
+  const productFindings = inspectBundle(productOutput, productBundle, productRoot);
+  assert.ok(productFindings.some((finding) => finding.code === 'BUNDLE_FILE_EMPTY'));
+
+  const deltaRoot = path.join(repositoryRoot, 'framework_candidates', 'project-management__delta-specification', 'proposed_framework');
+  const deltaManifest = JSON.parse(fs.readFileSync(path.join(deltaRoot, 'manifest.json'), 'utf8'));
+  const deltaBundle = deltaManifest.output_contract_v2.bundle_types[0];
+  const deltaOutput = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-empty-delta-output-'));
+  t.after(() => fs.rmSync(deltaOutput, { recursive: true, force: true }));
+  fs.writeFileSync(path.join(deltaOutput, 'delta-spec.json'), JSON.stringify({
+    added: [], modified: [], removed: [], preserved_invariants: []
+  }));
+  fs.writeFileSync(path.join(deltaOutput, 'dependency-acceptance-map.json'), JSON.stringify({
+    read_first: [], dependencies: [], acceptance_criteria: []
+  }));
+  const deltaFindings = inspectBundle(deltaOutput, deltaBundle, deltaRoot);
+  assert.ok(deltaFindings.some((finding) => finding.code === 'DELTA_EMPTY'));
+});
+
+test('candidate status computes learning state without writing the tracked ledger', () => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const candidateRoot = path.join(repositoryRoot, 'framework_candidates', 'product-management__product-intake');
+  const ledgerPath = path.join(candidateRoot, 'learning', 'learning-ledger.json');
+  const before = fs.readFileSync(ledgerPath);
+  const ledger = computeLedger(candidateRoot, 'product-management/product-intake');
+  const after = fs.readFileSync(ledgerPath);
+  assert.equal(ledger.framework_id, 'product-management/product-intake');
+  assert.deepEqual(after, before);
 });
 
 test('product evidence provenance rejects blank values', (t) => {

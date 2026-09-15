@@ -19,7 +19,7 @@
 const path = require('path');
 const crypto = require('node:crypto');
 const fs = require('node:fs');
-const { exists, isDir, isFile, readJson, listFiles, listFilesRecursive } = require('./fs');
+const { exists, isDir, isFile, readJson, readText, listFiles, listFilesRecursive } = require('./fs');
 const { loadSchema, validateRequiredFields } = require('./models');
 
 /**
@@ -93,7 +93,7 @@ function simpleGlob(baseDir, pattern) {
   return allFiles.filter((f) => regex.test(f));
 }
 
-function validateDistinctReviewProvenance(content, label) {
+function validateDistinctReviewProvenance(content, label, expectedProducerStages = []) {
   const fields = ['actor_id', 'harness_id', 'model_provider_family'];
   const normalizeIdentity = (value) => value.trim().toLowerCase();
   const producers = content.producer_provenance;
@@ -123,6 +123,19 @@ function validateDistinctReviewProvenance(content, label) {
       if (normalizeIdentity(reviewer[field]) === normalizeIdentity(producer[field])) {
         throw new Error(`${label}.reviewer_provenance.${field} must differ from producer_provenance[${index}].${field}`);
       }
+    }
+  }
+
+  if (expectedProducerStages.length > 0) {
+    const actualStages = producers.map((producer) => producer.stage);
+    const uniqueStages = new Set(actualStages);
+    const missingStages = expectedProducerStages.filter((stage) => !uniqueStages.has(stage));
+    const unexpectedStages = actualStages.filter((stage) => !expectedProducerStages.includes(stage));
+    if (uniqueStages.size !== actualStages.length || missingStages.length > 0 || unexpectedStages.length > 0) {
+      throw new Error(
+        `${label}.producer_provenance must contain exactly one entry for each producer stage; ` +
+        `missing=${missingStages.join(',') || 'none'} unexpected=${unexpectedStages.join(',') || 'none'}`
+      );
     }
   }
 }
@@ -206,6 +219,18 @@ function inspectBundle(bundleRoot, bundleType, frameworkRoot) {
     }
   }
 
+  for (const file of bundleType.non_empty_files || []) {
+    const filePath = path.join(bundleRoot, file);
+    if (exists(filePath) && isFile(filePath) && readText(filePath).trim() === '') {
+      findings.push({
+        severity: 'blocker',
+        code: 'BUNDLE_FILE_EMPTY',
+        message: `Required bundle file is empty: ${file}`,
+        path: filePath
+      });
+    }
+  }
+
   // Validate JSON artifacts against file_schemas
   for (const [fileName, schemaRef] of Object.entries(bundleType.file_schemas || {})) {
     const filePath = path.join(bundleRoot, fileName);
@@ -238,7 +263,7 @@ function inspectBundle(bundleRoot, bundleType, frameworkRoot) {
     try {
       validateRequiredFields(content, schema, fileName);
       if (schema.x_mythos_distinct_review_provenance === true) {
-        validateDistinctReviewProvenance(content, fileName);
+        validateDistinctReviewProvenance(content, fileName, bundleType.producer_stages || []);
       }
     } catch (err) {
       findings.push({
@@ -273,6 +298,14 @@ function checkBundleConsistency(bundleRoot, frameworkRoot) {
       const deltaEntries = ['added', 'modified', 'removed']
         .flatMap((section) => (Array.isArray(deltaSpec[section]) ? deltaSpec[section] : [])
           .map((entry) => ({ ...entry, section })));
+      if (deltaEntries.length === 0) {
+        findings.push({
+          severity: 'blocker',
+          code: 'DELTA_EMPTY',
+          message: 'Delta specification must contain at least one added, modified, or removed requirement.',
+          path: deltaSpecPath
+        });
+      }
       const deltaIdCounts = new Map();
       for (const entry of deltaEntries) {
         if (!entry.requirement_id) continue;

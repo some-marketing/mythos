@@ -63,27 +63,32 @@
       {
         "name": "scope-and-intent.json",
         "path_pattern": "outputs/product-intake/scope-and-intent.json",
-        "required": true
+        "required": true,
+        "producer_stage": "01_SCOPE_AND_INTENT"
       },
       {
         "name": "hypothesis-tests.json",
         "path_pattern": "outputs/product-intake/hypothesis-tests.json",
-        "required": true
+        "required": true,
+        "producer_stage": "02_DISCOVERY_EVIDENCE"
       },
       {
         "name": "product-brief.json",
         "path_pattern": "outputs/product-intake/product-brief.json",
-        "required": true
+        "required": true,
+        "producer_stage": "03_PRODUCT_BRIEF_AND_PRFAQ"
       },
       {
         "name": "evidence-ledger.json",
         "path_pattern": "outputs/product-intake/evidence-ledger.json",
-        "required": true
+        "required": true,
+        "producer_stage": "02_DISCOVERY_EVIDENCE"
       },
       {
         "name": "prfaq.md",
         "path_pattern": "outputs/product-intake/prfaq.md",
-        "required": true
+        "required": true,
+        "producer_stage": "03_PRODUCT_BRIEF_AND_PRFAQ"
       },
       {
         "name": "readiness-review.json",
@@ -102,6 +107,12 @@
           "evidence-ledger.json",
           "prfaq.md",
           "readiness-review.json"
+        ],
+        "non_empty_files": ["prfaq.md"],
+        "producer_stages": [
+          "01_SCOPE_AND_INTENT",
+          "02_DISCOVERY_EVIDENCE",
+          "03_PRODUCT_BRIEF_AND_PRFAQ"
         ],
         "file_schemas": {
           "scope-and-intent.json": "scope-and-intent.schema.json",

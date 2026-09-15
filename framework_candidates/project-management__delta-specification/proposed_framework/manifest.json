@@ -54,22 +54,26 @@
       {
         "name": "baseline-inventory.json",
         "path_pattern": "outputs/delta-specification/baseline-inventory.json",
-        "required": true
+        "required": true,
+        "producer_stage": "01_BASELINE_INVENTORY"
       },
       {
         "name": "change-proposal.json",
         "path_pattern": "outputs/delta-specification/change-proposal.json",
-        "required": true
+        "required": true,
+        "producer_stage": "02_CHANGE_PROPOSAL"
       },
       {
         "name": "delta-spec.json",
         "path_pattern": "outputs/delta-specification/delta-spec.json",
-        "required": true
+        "required": true,
+        "producer_stage": "03_DELTA_REQUIREMENTS"
       },
       {
         "name": "dependency-acceptance-map.json",
         "path_pattern": "outputs/delta-specification/dependency-acceptance-map.json",
-        "required": true
+        "required": true,
+        "producer_stage": "04_DEPENDENCY_AND_ACCEPTANCE_MAP"
       },
       {
         "name": "review.json",
@@ -87,6 +91,12 @@
           "delta-spec.json",
           "dependency-acceptance-map.json",
           "review.json"
+        ],
+        "producer_stages": [
+          "01_BASELINE_INVENTORY",
+          "02_CHANGE_PROPOSAL",
+          "03_DELTA_REQUIREMENTS",
+          "04_DEPENDENCY_AND_ACCEPTANCE_MAP"
         ],
         "file_schemas": {
           "baseline-inventory.json": "baseline-inventory.schema.json",

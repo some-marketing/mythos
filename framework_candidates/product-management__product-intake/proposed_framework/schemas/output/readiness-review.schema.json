@@ -24,7 +24,9 @@
       }
     },
     "falsifier": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
     },
     "producer_provenance": {
       "type": "array",
@@ -34,8 +36,15 @@
         "required": [
           "actor_id",
           "harness_id",
-          "model_provider_family"
-        ]
+          "model_provider_family",
+          "stage"
+        ],
+        "properties": {
+          "actor_id": { "type": "string", "minLength": 1, "pattern": "\\S" },
+          "harness_id": { "type": "string", "minLength": 1, "pattern": "\\S" },
+          "model_provider_family": { "type": "string", "minLength": 1, "pattern": "\\S" },
+          "stage": { "type": "string", "minLength": 1, "pattern": "\\S" }
+        }
       }
     },
     "reviewer_provenance": {
@@ -44,7 +53,12 @@
         "actor_id",
         "harness_id",
         "model_provider_family"
-      ]
+      ],
+      "properties": {
+        "actor_id": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "harness_id": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "model_provider_family": { "type": "string", "minLength": 1, "pattern": "\\S" }
+      }
     }
   }
 }

@@ -3877,7 +3877,7 @@
       "id": "file:framework_candidates/product-management__product-intake/proposed_framework/manifest.json",
       "type": "file",
       "path": "framework_candidates/product-management__product-intake/proposed_framework/manifest.json",
-      "sha256": "e412e01295c29f25c6c03704b630387807fb3c1f9426376926e830a0bb2f0eca",
+      "sha256": "df04ae12fa83f224117c91b8719a1d9f4077af697731e351f31425553d1082cd",
       "mode": 420
     },
     {
@@ -3919,7 +3919,7 @@
       "id": "file:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/evidence-ledger.schema.json",
       "type": "file",
       "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/evidence-ledger.schema.json",
-      "sha256": "90676a9441f71fcbfb02537781646ab560137c12f4b58e88626f44c74edb5d63",
+      "sha256": "8ab2a2730e7b675fe3c8e03eece1f54116cc85c81f6131a770e9ecfcb0afe75f",
       "mode": 420
     },
     {
@@ -3933,14 +3933,14 @@
       "id": "file:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-brief.schema.json",
       "type": "file",
       "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/product-brief.schema.json",
-      "sha256": "8f8e04a70964808c9918edcd6b2d5ffc8fa817e9b340682536de2f3befebd2a6",
+      "sha256": "d5ac65cf8874800544306b1b9c611fbfe6b38b12cb343fb43b4e901342c196e3",
       "mode": 420
     },
     {
       "id": "file:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/readiness-review.schema.json",
       "type": "file",
       "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/readiness-review.schema.json",
-      "sha256": "c9d6ef8637e6e97e3ce0805f7fda8282b45821dcc0ff34e3410bcc0de343bdc5",
+      "sha256": "584f21ffa5e4e9a54cb28465196e29f7cda8fab6ac1f56e4c8ef0d7c68a3cfbe",
       "mode": 420
     },
     {
@@ -4157,7 +4157,7 @@
       "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/manifest.json",
       "type": "file",
       "path": "framework_candidates/project-management__delta-specification/proposed_framework/manifest.json",
-      "sha256": "a89c633c950b7c48cc676aee47cf727fc4b1aae896d66ae0bdcb6d922d21f053",
+      "sha256": "395e4e3a50543c43fff3e98d87af3d69285daed6eb28f330a210e5f1be9bd432",
       "mode": 420
     },
     {
@@ -4213,14 +4213,14 @@
       "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/change-proposal.schema.json",
       "type": "file",
       "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/change-proposal.schema.json",
-      "sha256": "6fa44ea55dffe1a6be0c0a9eb5af7a2d34dee27eca2a4e965fba300d7916c576",
+      "sha256": "6c5702dcafd2312a30e35803891d1679ec92039f41e550ec310fb961ee75ac42",
       "mode": 420
     },
     {
       "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-spec.schema.json",
       "type": "file",
       "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-spec.schema.json",
-      "sha256": "b0205adac61c4a1c8a1249c5b179d20d93ca16e357d61c265e6669417e65ff6d",
+      "sha256": "8afbd1412b63108310cfc9372b0b75ae2b2e55e12c58f921237de55eda39d408",
       "mode": 420
     },
     {
@@ -4234,7 +4234,7 @@
       "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/review.schema.json",
       "type": "file",
       "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/review.schema.json",
-      "sha256": "c9d6ef8637e6e97e3ce0805f7fda8282b45821dcc0ff34e3410bcc0de343bdc5",
+      "sha256": "584f21ffa5e4e9a54cb28465196e29f7cda8fab6ac1f56e4c8ef0d7c68a3cfbe",
       "mode": 420
     },
     {
@@ -21062,14 +21062,14 @@
       "id": "file:tools/workspace/__tests__/candidate-root.test.js",
       "type": "file",
       "path": "tools/workspace/__tests__/candidate-root.test.js",
-      "sha256": "e2e820b5f07574b71d59b956e0c9d63ac86be062e8f7e07aeb3f8f4ef4503492",
+      "sha256": "6bbbbdcdde036ab62de8f480f8beb2d5da69f477cf18d6ca154acbc5b4707d17",
       "mode": 420
     },
     {
       "id": "file:tools/workspace/candidate-status.js",
       "type": "file",
       "path": "tools/workspace/candidate-status.js",
-      "sha256": "7a156954be8eca456ddde8c3e200ca9619e9d0915b2538d51e2aa3e12ad9ab96",
+      "sha256": "58aaf546acea749c8a0298535bc48b4653b076cb61c3410e625844f6359cf6cd",
       "mode": 420
     },
     {
@@ -21132,7 +21132,7 @@
       "id": "file:tools/workspace/lib/learning-ledger.js",
       "type": "file",
       "path": "tools/workspace/lib/learning-ledger.js",
-      "sha256": "54bb69bfe1fbaeba46a636e521e4d965b892be5e66ddf50407ce89d5a56826a2",
+      "sha256": "f6d2928f416f0939a99f4fa798dc2f0f2335043b3393fcd989e1812af19c5971",
       "mode": 420
     },
     {
@@ -21146,7 +21146,7 @@
       "id": "file:tools/workspace/lib/output-contract.js",
       "type": "file",
       "path": "tools/workspace/lib/output-contract.js",
-      "sha256": "748e662f35cca7d9b191b4ede238ac36bf673702df1b8efbb371426de9c97ce4",
+      "sha256": "34f4c0d6a062d270e7cda3e0e24e6de7ce4a28db867b71522af8d1df33081120",
       "mode": 420
     },
     {
@@ -21279,7 +21279,7 @@
       "id": "file:tools/workspace/schemas/output-contract-v2.schema.json",
       "type": "file",
       "path": "tools/workspace/schemas/output-contract-v2.schema.json",
-      "sha256": "a92b25220ed275fdb1dea260e1f482096799160020557c28893786cf820d7f48",
+      "sha256": "c9d104a6d0329c59de8f707c688cf60c04caa7a7f19c81775220695efe6e62a1",
       "mode": 420
     },
     {
@@ -36176,6 +36176,15 @@
       "required": true,
       "declared_target": "tools/planning/plan-visibility.js",
       "resolution": "tracked"
+    },
+    {
+      "id": "655831309c642f405739c1b525496301683260273548cf2f3c1184b4cad44ab7",
+      "type": "static-import",
+      "from": "file:tools/workspace/__tests__/candidate-root.test.js",
+      "to": "file:tools/workspace/lib/learning-ledger.js",
+      "target": "tools/workspace/lib/learning-ledger.js",
+      "required": true,
+      "specifier": "../lib/learning-ledger"
     },
     {
       "id": "65597f31dcff53123ae43c12ec8fb853bf129652a7e7a431b89a67991d7dd9b4",
@@ -52105,7 +52114,7 @@
   ],
   "counts": {
     "nodes": 3988,
-    "edges": 2870,
+    "edges": 2871,
     "unresolved": 0
   }
 }

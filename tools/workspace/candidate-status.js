@@ -4,7 +4,7 @@
 const { parseArgs } = require('./lib/args');
 const { computePromotionReadiness, loadCandidate } = require('./lib/capture-candidate');
 const { die, requireCandidateRoot } = require('./lib/workspace');
-const { refreshLedger, computeLearningGate } = require('./lib/learning-ledger');
+const { computeLedger, computeLearningGate } = require('./lib/learning-ledger');
 
 function help() {
   console.log(`
@@ -28,9 +28,9 @@ const ctx = requireCandidateRoot(candidateArg);
 const candidate = loadCandidate(ctx.candidateRoot);
 const readiness = computePromotionReadiness(ctx.candidateRoot, candidate, ctx);
 
-// Refresh learning ledger from disk
+// Compute learning ledger from disk without mutating a tracked candidate.
 const frameworkId = `${candidate.service_category}/${candidate.framework_name}`;
-const ledger = refreshLedger(ctx.candidateRoot, frameworkId);
+const ledger = computeLedger(ctx.candidateRoot, frameworkId);
 const gateMode = candidate.learning_required || 'advisory';
 const learningGate = computeLearningGate(ledger, gateMode);
 

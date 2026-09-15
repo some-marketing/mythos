@@ -198,6 +198,17 @@ function loadOrInitLedger(candidateRoot, frameworkId) {
  * Refresh the learning ledger by scanning feedback and signal entries on disk.
  */
 function refreshLedger(candidateRoot, frameworkId) {
+  const ledger = computeLedger(candidateRoot, frameworkId);
+  const learningRoot = path.join(candidateRoot, 'learning');
+  ensureDir(learningRoot);
+  writeJson(path.join(learningRoot, 'learning-ledger.json'), ledger);
+  return ledger;
+}
+
+/**
+ * Compute the current learning ledger without persisting a status refresh.
+ */
+function computeLedger(candidateRoot, frameworkId) {
   const learningRoot = path.join(candidateRoot, 'learning');
   const feedbackEntries = loadFeedbackEntries(learningRoot);
   const signalEntries = loadSignalEntries(learningRoot);
@@ -213,8 +224,6 @@ function refreshLedger(candidateRoot, frameworkId) {
   }
 
   validateNamedModel('learning-ledger.schema.json', ledger, 'learning-ledger.json');
-  ensureDir(learningRoot);
-  writeJson(ledgerPath, ledger);
   return ledger;
 }
 
@@ -281,6 +290,7 @@ function computeLearningGate(ledger, gateMode) {
 module.exports = {
   computeLearningGate,
   computeLearningReadiness,
+  computeLedger,
   hasDistinctIntelligenceValidation,
   hasProvenance,
   initLedger,

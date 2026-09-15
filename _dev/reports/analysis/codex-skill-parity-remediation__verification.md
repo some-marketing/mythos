@@ -117,6 +117,8 @@ The sixty-seventh Cloud Codex review found literal `credential` and `credentials
 
 The sixty-eighth Cloud Codex review found backtick-delimited credential assignments and leading-dot YAML floats bypassing validation. Assignment scanning now consumes backtick delimiters while retaining exact template-variable exemptions, and `.5`/`-.5` forms are classified as YAML non-strings. Focused regressions cover literal rejection, safe references, and both direct and framework metadata paths.
 
+The sixty-ninth Cloud Codex review found acronym-cased credential keys and Cookie property references misclassified in opposite directions. The bounded mixed-case assignment matcher now handles acronym casing such as `APIKey` and `PASSWORD`, while the shared credential-reference predicate accepts quoted or unquoted `process.env`, `import.meta.env`, `env`, `config`, and `secrets` properties. Focused regressions cover both rejection and safe-reference paths.
+
 ## Falsifiers and residuals
 
 Acceptance would be disproved by an applied `UNKNOWN` or pending candidate, copied alias behavior, a non-handler command marked `BLOCKING`, a private path in a shipped projection, a canonical/client diff, a failed runtime discovery claim, or an unresolved distinct-family blocker. None was observed.

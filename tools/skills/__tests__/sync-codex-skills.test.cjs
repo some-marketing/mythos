@@ -1242,6 +1242,9 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     'token: `supersecretvalue`\n',
     `export PAT=github_pat_${'g'.repeat(24)}\n`,
     'credentials: "supersecretvalue"\n',
+    'stripeAPIKey = "supersecretvalue"\n',
+    'openAIAPIKey: `supersecretvalue`\n',
+    'dbPASSWORD = "supersecretvalue"\n',
     `Authorization: Bearer ordinarysecretvalue${'b'.repeat(16)}\n`,
     'Authorization: Bearer secret\n',
     'Authorization: Basic dTpw\n',
@@ -1271,7 +1274,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
 
 test('credential references are not treated as literal secrets', () => {
   const root = fixture();
-  skill(root, 'ticktock', 'export OPENAI_API_KEY="$OPENAI_API_KEY"\nexport AUTH_TOKEN=${AUTH_TOKEN}\ntoken: `${AUTH_TOKEN}`\nAuthorization: Bearer $ACCESS_TOKEN\nAuthorization: Basic ${BASIC_AUTH}\nAuthorization: `Bearer ${AUTH_TOKEN}`\nAuthorization: process.env.AUTH_TOKEN,\ncurl -H "Authorization: Bearer $ACCESS_TOKEN" https://example.test\nCookie: csrftoken=placeholder; sessionid="$SESSION_ID"\ncurl -H "Cookie: sessionid=$SESSION_ID" https://example.test\ncurl -H \'Cookie: sessionid=$SESSION_ID\' https://example.test\npassword: process.env.DB_PASSWORD,\nsessionToken = import.meta.env.SESSION_TOKEN;\ndbPassword: config.dbPassword\ncredentials: secrets.credentials\n');
+  skill(root, 'ticktock', 'export OPENAI_API_KEY="$OPENAI_API_KEY"\nexport AUTH_TOKEN=${AUTH_TOKEN}\ntoken: `${AUTH_TOKEN}`\nAuthorization: Bearer $ACCESS_TOKEN\nAuthorization: Basic ${BASIC_AUTH}\nAuthorization: `Bearer ${AUTH_TOKEN}`\nAuthorization: process.env.AUTH_TOKEN,\ncurl -H "Authorization: Bearer $ACCESS_TOKEN" https://example.test\nCookie: csrftoken=placeholder; sessionid="$SESSION_ID"\nCookie: `sessionid=${process.env.SESSION_ID}`\nCookie: sessionid=config.sessionId\ncurl -H "Cookie: sessionid=$SESSION_ID" https://example.test\ncurl -H \'Cookie: sessionid=$SESSION_ID\' https://example.test\npassword: process.env.DB_PASSWORD,\nsessionToken = import.meta.env.SESSION_TOKEN;\ndbPassword: config.dbPassword\ncredentials: secrets.credentials\n');
   const result = sync({ root, handlerIds: new Set(), apply: true });
   const candidate = byId(result, 'direct-ticktock');
   assert.equal(candidate.receipt.semantic_review_state, 'reviewed_safe');

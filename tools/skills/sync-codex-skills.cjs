@@ -647,10 +647,11 @@ function containsPrivateAbsolutePath(bytes) {
 
 function isCredentialPlaceholder(value) {
   const token = String(value).trim();
-  const unquoted = token.length >= 2 && token[0] === token[token.length - 1] && (token[0] === '"' || token[0] === "'")
+  const unquoted = token.length >= 2 && token[0] === token[token.length - 1] && ['"', "'", '`'].includes(token[0])
     ? token.slice(1, -1)
     : token;
-  return /^(?:<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)$/i.test(unquoted);
+  return /^(?:<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)$/i.test(unquoted)
+    || /^(?:\$\{)?(?:process\.env|import\.meta\.env|env|config|secrets)\.[A-Za-z_$][A-Za-z0-9_$]*(?:\})?$/.test(unquoted);
 }
 
 function containsLiteralCookieCredential(text) {
@@ -697,7 +698,7 @@ function containsCredentialMaterial(bytes) {
     || containsLiteralAuthorizationCredential(text)
     || containsLiteralCookieCredential(text)
     || /[A-Za-z][A-Za-z0-9+.-]*:\/\/[^\s/@:]+:(?!(?:<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=@))[^@\s/]+@/im.test(text)
-    || /(?:^|[^A-Za-z0-9_])["']?(?:(?:[A-Za-z][A-Za-z0-9]*)?(?:ApiKey|ClientSecret|Password|Passwd|AccessToken|RefreshToken|AuthToken|SessionToken|SecretKey|PrivateKey|Secret|Credentials?)|apiKey|clientSecret|password|passwd|accessToken|refreshToken|authToken|sessionToken|token|secretKey|privateKey|secret|credentials?)["']?\s*[:=]\s*["'`]?(?!(?:(?:process\.env|import\.meta\.env|env|config|secrets)\.[A-Za-z_$][A-Za-z0-9_$]*|<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=$|[\s,;}"'`]))[^\s"'`]+/m.test(text)
+    || /(?:^|[^A-Za-z0-9_])["']?(?:(?:[A-Za-z][A-Za-z0-9]*)?(?:ApiKey|ClientSecret|Password|Passwd|AccessToken|RefreshToken|AuthToken|SessionToken|SecretKey|PrivateKey|Secret|Credentials?)|apiKey|clientSecret|password|passwd|accessToken|refreshToken|authToken|sessionToken|token|secretKey|privateKey|secret|credentials?)["']?\s*[:=]\s*["'`]?(?!(?:(?:process\.env|import\.meta\.env|env|config|secrets)\.[A-Za-z_$][A-Za-z0-9_$]*|<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=$|[\s,;}"'`]))[^\s"'`]+/im.test(text)
     || /(?:^|[^A-Z0-9_])["']?(?:[A-Z][A-Z0-9_-]*[_-])?(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY|API[_-]?KEY|CLIENT[_-]?SECRET|PASSWORD|PASSWD|ACCESS[_-]?TOKEN|REFRESH[_-]?TOKEN|AUTH[_-]?TOKEN|TOKEN|SECRET|CREDENTIALS?|SECRET[_-]?KEY|PRIVATE[_-]?KEY)["']?\s*[:=]\s*["'`]?(?!(?:(?:process\.env|import\.meta\.env|env|config|secrets)\.[A-Za-z_$][A-Za-z0-9_$]*|<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=$|[\s,;}"'`]))[^\s"'`]+/im.test(text);
 }
 

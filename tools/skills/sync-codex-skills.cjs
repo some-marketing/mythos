@@ -118,10 +118,16 @@ function normalizeDirectSkill(text, targetName, aliases = []) {
   if (!parsed.ok) return parsed;
   const aliasSuffix = aliases.length ? ` Aliases: ${aliases.map((id) => `/${id}`).join(', ')}.` : '';
   const executionMetadata = projectionExecutionMetadata(parsed.metadata);
+  const supportedFields = projectionSupportedFrontmatter(parsed.metadata);
   return {
     ok: true,
-    content: `---\nname: ${targetName}\ndescription: ${JSON.stringify(`${parsed.metadata.description}${aliasSuffix}`)}\n${executionMetadata}---\n${parsed.body}`
+    content: `---\nname: ${targetName}\ndescription: ${JSON.stringify(`${parsed.metadata.description}${aliasSuffix}`)}\n${supportedFields}${executionMetadata}---\n${parsed.body}`
   };
+}
+
+function projectionSupportedFrontmatter(metadata) {
+  const fields = ['license', 'compatibility', 'allowed-tools'].filter((key) => metadata[key]);
+  return fields.map((key) => `${key}: ${JSON.stringify(metadata[key])}\n`).join('');
 }
 
 function projectionExecutionMetadata(metadata) {
@@ -385,9 +391,10 @@ function renderFrameworkSkill(text, identity) {
   if (!parsed.ok) return parsed;
   const lineage = `Framework lineage: \`frameworks/${identity.service}/${identity.framework}\`. Read its \`manifest.json\` and \`guardrails.md\` before execution. Source helper: \`${identity.rel}\`.`;
   const executionMetadata = projectionExecutionMetadata(parsed.metadata);
+  const supportedFields = projectionSupportedFrontmatter(parsed.metadata);
   return {
     ok: true,
-    content: `---\nname: ${identity.slug}\ndescription: ${JSON.stringify(parsed.metadata.description.replace(/[<>]/g, (value) => value === '<' ? '(' : ')'))}\n${executionMetadata}---\n\n${lineage}\n\n${parsed.body}`
+    content: `---\nname: ${identity.slug}\ndescription: ${JSON.stringify(parsed.metadata.description.replace(/[<>]/g, (value) => value === '<' ? '(' : ')'))}\n${supportedFields}${executionMetadata}---\n\n${lineage}\n\n${parsed.body}`
   };
 }
 
@@ -434,7 +441,7 @@ function containsCredentialMaterial(bytes) {
   const text = String(bytes);
   return /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/.test(text)
     || /(?:^|[^A-Za-z0-9])(?:sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|(?:AKIA|ASIA)[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|glpat-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{35})(?:$|[^A-Za-z0-9_-])/m.test(text)
-    || /(?:^|[^A-Z0-9_])(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY)\s*=\s*(?!["']?(?:<|\$\{|your[-_]|example|redacted|placeholder))[^\s"'`]+/im.test(text);
+    || /(?:^|[^A-Z0-9_])(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY)\s*=\s*["']?(?!(?:<|\$\{|your[-_]|example|redacted|placeholder))[^\s"'`]+/im.test(text);
 }
 
 function isSensitiveResourcePath(relativePath) {
@@ -883,7 +890,7 @@ function receiptEvidence(receipt) {
   return evidence;
 }
 
-function stagedEvidenceAligned(candidateDir, candidates, generatorId, handlers, managedTargets) {
+function stagedEvidenceAligned(candidateDir, candidates, generatorId, handlers, managedTargets, options = {}) {
   const receiptsDir = safeOutputPath(candidateDir, 'receipts');
   const candidatesDir = safeOutputPath(candidateDir, 'candidates');
   const indexPath = safeOutputPath(candidateDir, 'projection-index.json');
@@ -905,7 +912,7 @@ function stagedEvidenceAligned(candidateDir, candidates, generatorId, handlers, 
 
   const expectedReceiptPaths = new Set(candidates.map((candidate) => safeOutputPath(receiptsDir, `${candidate.id}.json`)));
   const actualReceiptPaths = new Set(walk(receiptsDir));
-  if (expectedReceiptPaths.size !== actualReceiptPaths.size
+  if ((!options.allowAdditionalEvidence && expectedReceiptPaths.size !== actualReceiptPaths.size)
     || [...expectedReceiptPaths].some((filePath) => !actualReceiptPaths.has(filePath))) return false;
 
   const actualReceipts = [];
@@ -935,7 +942,7 @@ function stagedEvidenceAligned(candidateDir, candidates, generatorId, handlers, 
     }
   }
   const actualCandidatePaths = new Set(walk(candidatesDir));
-  if (expectedCandidateFiles.size !== actualCandidatePaths.size
+  if ((!options.allowAdditionalEvidence && expectedCandidateFiles.size !== actualCandidatePaths.size)
     || [...expectedCandidateFiles.keys()].some((filePath) => !actualCandidatePaths.has(filePath))) return false;
   for (const [filePath, expected] of expectedCandidateFiles) {
     const metadata = fs.lstatSync(filePath);
@@ -955,12 +962,15 @@ function stagedEvidenceAligned(candidateDir, candidates, generatorId, handlers, 
     counts[key] = (counts[key] || 0) + 1;
     return counts;
   }, {});
+  const receiptsAligned = Array.isArray(index.receipts) && (options.allowAdditionalEvidence
+    ? expectedReceiptRefs.every((receiptPath) => index.receipts.includes(receiptPath))
+    : JSON.stringify(index.receipts) === JSON.stringify(expectedReceiptRefs));
   return index.schema === 'CodexSkillProjectionIndex/1.0'
     && index.generator_id === generatorId
     && JSON.stringify(index.handler_ids) === JSON.stringify(handlers)
-    && JSON.stringify(index.receipts) === JSON.stringify(expectedReceiptRefs)
+    && receiptsAligned
     && index.managed_targets_sha256 === sha256(Buffer.from(JSON.stringify(managedList)))
-    && JSON.stringify(index.counts) === JSON.stringify(actualCounts);
+    && (options.allowAdditionalEvidence || JSON.stringify(index.counts) === JSON.stringify(actualCounts));
 }
 
 function writeManagedTargets(candidateDir, generatorId, managed) {
@@ -1072,7 +1082,10 @@ function sync(options = {}) {
       if (checkedManagedTargets.has(candidate.receipt.target_exact_path) && blockedTargetInstalled(candidate, targetRoot)) drift += 1;
     }
     drift += orphanedManagedTargets(checkedManagedTargets, checked, targetRoot).length;
-    if (!stagedEvidenceAligned(validatedCandidateDir, selected, built.config.generator_id, built.handlers, managedTargets)) drift += 1;
+    const evidenceCandidates = options.checkEvidenceCandidate ? selected.filter(options.checkEvidenceCandidate) : selected;
+    if (!stagedEvidenceAligned(validatedCandidateDir, evidenceCandidates, built.config.generator_id, built.handlers, managedTargets, {
+      allowAdditionalEvidence: Boolean(options.checkEvidenceCandidate)
+    })) drift += 1;
     return { ...built, allCandidates: built.candidates, candidates: selected, candidateDir: validatedCandidateDir, drift, applied };
   }
 

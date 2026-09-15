@@ -84,6 +84,12 @@ test('repo pins only Codex-supported projection frontmatter keys', () => {
   const bounded = normalizeDirectSkill('---\nname: old\ndescription: demo\nexecution_mode: COORDINATOR\ntrust_tier: report_write_scoped\n---\nbody\n', 'new');
   assert.equal(bounded.ok, true);
   assert.match(bounded.content, /metadata:\n  execution_mode: "COORDINATOR"\n  trust_tier: "report_write_scoped"/);
+
+  const toolBounded = normalizeDirectSkill('---\nname: old\ndescription: demo\nlicense: MIT\ncompatibility: Codex\nallowed-tools: Read\n---\nbody\n', 'new');
+  assert.equal(toolBounded.ok, true);
+  assert.match(toolBounded.content, /license: "MIT"/);
+  assert.match(toolBounded.content, /compatibility: "Codex"/);
+  assert.match(toolBounded.content, /allowed-tools: "Read"/);
 });
 
 test('frontmatter parsing accepts and normalizes CRLF line endings', () => {
@@ -665,6 +671,7 @@ test('sensitive and credential-bearing bundled resources are rejected', () => {
 test('credential assignments and temporary AWS keys are rejected without retaining their bytes', () => {
   for (const body of [
     `AWS_SECRET_ACCESS_KEY=${'z'.repeat(32)}\n`,
+    `OPENAI_API_KEY="ordinarysecretvalue${'q'.repeat(16)}"\n`,
     `temporary ASIA${'A'.repeat(16)}\n`
   ]) {
     const root = fixture();
@@ -674,7 +681,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     assert.equal(candidate.receipt.semantic_review_state, 'private_path_rejected');
     assert.equal(candidate.receipt.source_sha256, null);
     assert.equal(fs.existsSync(path.join(root, '.agents/skills/ticktock/SKILL.md')), false);
-    assert.doesNotMatch(JSON.stringify(candidate.receipt), /zzzzzzzz|ASIAAAAA/);
+    assert.doesNotMatch(JSON.stringify(candidate.receipt), /zzzzzzzz|ordinarysecretvalue|ASIAAAAA/);
   }
 });
 

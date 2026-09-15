@@ -26,6 +26,7 @@ function syncLifecycle(options = {}) {
       root,
       candidateDir: path.join(root, config.candidate_root),
       checkCandidate: isLifecycle,
+      checkEvidenceCandidate: isLifecycle,
       checkManagedTarget: isLifecycleManagedTarget
     });
   }

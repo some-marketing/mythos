@@ -101,4 +101,6 @@ test('lifecycle checks ignore unrelated installed package drift', () => {
   fs.writeFileSync(path.join(targetDir, 'source-command-route', 'SKILL.md'), 'foreign\n');
   assert.ok(sync({ root, targetDir, handlerIds: new Set(), check: true }).drift > 0);
   assert.equal(syncLifecycle({ root, targetDir, handlerIds: new Set(), check: true }).drift, 0);
+  fs.writeFileSync(path.join(root, 'instructions', 'canonical', 'commands', 'route.yaml'), '{"id":"route","description":"changed route","mode":"REVIEW_ONLY"}\n');
+  assert.equal(syncLifecycle({ root, targetDir, handlerIds: new Set(), check: true }).drift, 0);
 });

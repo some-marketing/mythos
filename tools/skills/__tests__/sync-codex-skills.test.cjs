@@ -125,6 +125,16 @@ test('frontmatter parsing decodes quoted YAML scalar escapes', () => {
   assert.equal(singleQuoted.metadata.description, "It's safe");
 });
 
+test('frontmatter parsing rejects invalid quoted YAML escapes', () => {
+  const direct = normalizeDirectSkill('---\nname: demo\ndescription: "bad\\q"\n---\nbody\n', 'demo');
+  assert.equal(direct.ok, false);
+  assert.match(direct.error, /invalid quoted frontmatter scalar/);
+
+  const root = fixture();
+  write(root, 'frameworks/a/b/.claude/skills/demo/SKILL.md', '---\nname: demo\ndescription: "bad\\q"\n---\nbody\n');
+  assert.equal(byId(buildCandidates({ root, handlerIds: new Set() }), 'framework-guild-a-b-demo').receipt.semantic_review_state, 'malformed');
+});
+
 test('frontmatter parsing accepts YAML block scalar chomping and indentation indicators', () => {
   for (const marker of ['>-', '|+', '>2-', '|-2']) {
     const parsed = parseFrontmatter(`---\nname: demo\ndescription: ${marker}\n  first line\n  second line\n---\nbody\n`);
@@ -1202,6 +1212,8 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     `stripeApiKey = "stripecamelvalue${'k'.repeat(16)}"\n`,
     `DbPassword: "dbpascalvalue${'p'.repeat(16)}"\n`,
     `StripeApiKey = "stripepascalvalue${'i'.repeat(16)}"\n`,
+    `TOKEN="tokenvalue${'o'.repeat(16)}"\n`,
+    `token: "lowertokenvalue${'l'.repeat(16)}"\n`,
     `Authorization: Bearer ordinarysecretvalue${'b'.repeat(16)}\n`,
     'Authorization: Bearer secret\n',
     'Authorization: Basic dTpw\n',

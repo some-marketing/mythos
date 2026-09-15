@@ -12,6 +12,7 @@ const SAFE_REVIEW_STATES = new Set(['reviewed_safe']);
 const EXECUTION_MODES = new Set(['FINDINGS_ONLY', 'RUN_ONLY', 'REVIEW_ONLY', 'PATCH_ALLOWED', 'COORDINATOR', 'REPO_HYGIENE']);
 const SAFE_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const CODEX_FRONTMATTER_KEYS = new Set(['name', 'description', 'license', 'metadata', 'allowed-tools']);
+const INVALID_YAML_SCALAR = Symbol('invalid-yaml-scalar');
 
 function sha256(bytes) {
   return crypto.createHash('sha256').update(bytes).digest('hex');
@@ -137,10 +138,12 @@ function decodeQuotedYamlScalar(value) {
       const decoded = JSON.parse(value);
       return typeof decoded === 'string' ? decoded : value;
     } catch {
-      return value.slice(1, -1);
+      return INVALID_YAML_SCALAR;
     }
   }
-  if (value.startsWith("'") && value.endsWith("'")) return value.slice(1, -1).replace(/''/g, "'");
+  if (value.startsWith("'") && value.endsWith("'")) {
+    return value.slice(1, -1).replace(/''/g, "'");
+  }
   return value;
 }
 
@@ -171,7 +174,9 @@ function parseYamlFlowStringList(value) {
     else if (character === ',' || index === inner.length) {
       const rawItem = inner.slice(start, index).trim();
       if (!rawItem || isYamlNonStringToken(rawItem)) return null;
-      items.push(decodeQuotedYamlScalar(rawItem));
+      const decoded = decodeQuotedYamlScalar(rawItem);
+      if (decoded === INVALID_YAML_SCALAR) return null;
+      items.push(decoded);
       start = index + 1;
     }
   }
@@ -209,6 +214,7 @@ function parseFrontmatter(text, sourcePath = '<memory>') {
         index += 1;
         let item = stripYamlInlineComment(itemMatch[1].trim()).trim();
         item = decodeQuotedYamlScalar(item);
+        if (item === INVALID_YAML_SCALAR) return { ok: false, error: 'invalid quoted frontmatter scalar', sourcePath };
         items.push(item);
       }
       value = items;
@@ -221,7 +227,10 @@ function parseFrontmatter(text, sourcePath = '<memory>') {
     if (typeof value === 'string') {
       const quoted = (value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"));
       if (!quoted && ['name', 'description'].includes(key) && isYamlNonStringToken(value)) value = null;
-      else value = decodeQuotedYamlScalar(value);
+      else {
+        value = decodeQuotedYamlScalar(value);
+        if (value === INVALID_YAML_SCALAR) return { ok: false, error: 'invalid quoted frontmatter scalar', sourcePath };
+      }
     }
     metadata[key] = value;
   }
@@ -658,8 +667,8 @@ function containsCredentialMaterial(bytes) {
     || /(?:^|[^A-Z0-9_])["']?AUTHORIZATION["']?\s*[:=]\s*["']?[A-Z][A-Z0-9._~-]*\s+(?!(?:<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=$|[\s;"'`]))[^\s"'`]+/im.test(text)
     || containsLiteralCookieCredential(text)
     || /[A-Za-z][A-Za-z0-9+.-]*:\/\/[^\s/@:]+:(?!(?:<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=@))[^@\s/]+@/im.test(text)
-    || /(?:^|[^A-Za-z0-9_])["']?(?:(?:[A-Za-z][A-Za-z0-9]*)?(?:ApiKey|ClientSecret|Password|Passwd|AccessToken|RefreshToken|AuthToken|SessionToken|SecretKey|PrivateKey|Secret)|apiKey|clientSecret|password|passwd|accessToken|refreshToken|authToken|sessionToken|secretKey|privateKey|secret)["']?\s*[:=]\s*["']?(?!(?:(?:process\.env|import\.meta\.env|env|config|secrets)\.[A-Za-z_$][A-Za-z0-9_$]*|<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=$|[\s,;}"'`]))[^\s"'`]+/m.test(text)
-    || /(?:^|[^A-Z0-9_])["']?(?:[A-Z][A-Z0-9_-]*[_-])?(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY|API[_-]?KEY|CLIENT[_-]?SECRET|PASSWORD|PASSWD|ACCESS[_-]?TOKEN|REFRESH[_-]?TOKEN|AUTH[_-]?TOKEN|SECRET|SECRET[_-]?KEY|PRIVATE[_-]?KEY)["']?\s*[:=]\s*["']?(?!(?:(?:process\.env|import\.meta\.env|env|config|secrets)\.[A-Za-z_$][A-Za-z0-9_$]*|<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=$|[\s,;}"'`]))[^\s"'`]+/im.test(text);
+    || /(?:^|[^A-Za-z0-9_])["']?(?:(?:[A-Za-z][A-Za-z0-9]*)?(?:ApiKey|ClientSecret|Password|Passwd|AccessToken|RefreshToken|AuthToken|SessionToken|SecretKey|PrivateKey|Secret)|apiKey|clientSecret|password|passwd|accessToken|refreshToken|authToken|sessionToken|token|secretKey|privateKey|secret)["']?\s*[:=]\s*["']?(?!(?:(?:process\.env|import\.meta\.env|env|config|secrets)\.[A-Za-z_$][A-Za-z0-9_$]*|<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=$|[\s,;}"'`]))[^\s"'`]+/m.test(text)
+    || /(?:^|[^A-Z0-9_])["']?(?:[A-Z][A-Z0-9_-]*[_-])?(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY|API[_-]?KEY|CLIENT[_-]?SECRET|PASSWORD|PASSWD|ACCESS[_-]?TOKEN|REFRESH[_-]?TOKEN|AUTH[_-]?TOKEN|TOKEN|SECRET|SECRET[_-]?KEY|PRIVATE[_-]?KEY)["']?\s*[:=]\s*["']?(?!(?:(?:process\.env|import\.meta\.env|env|config|secrets)\.[A-Za-z_$][A-Za-z0-9_$]*|<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=$|[\s,;}"'`]))[^\s"'`]+/im.test(text);
 }
 
 function isSensitiveResourcePath(relativePath) {

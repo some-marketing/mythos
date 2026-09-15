@@ -10,6 +10,13 @@ const PROJECT_ROOT = path.resolve(__dirname, '..', '..');
 const CAPABILITY_TIERS = new Set(['BLOCKING', 'ADVISORY', 'ABSENT', 'UNKNOWN']);
 const SAFE_REVIEW_STATES = new Set(['reviewed_safe']);
 const EXECUTION_MODES = new Set(['FINDINGS_ONLY', 'RUN_ONLY', 'REVIEW_ONLY', 'PATCH_ALLOWED', 'COORDINATOR', 'REPO_HYGIENE']);
+const TRUST_TIER_MODES = new Map([
+  ['instruction_only', new Set(['FINDINGS_ONLY'])],
+  ['report_write_scoped', new Set(['RUN_ONLY', 'REVIEW_ONLY', 'REPO_HYGIENE'])],
+  ['patch_scoped', new Set(['PATCH_ALLOWED'])],
+  ['external_service_touching', new Set(['PATCH_ALLOWED', 'COORDINATOR'])],
+  ['meta_modifying', new Set(['PATCH_ALLOWED', 'COORDINATOR'])]
+]);
 const SAFE_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const CODEX_FRONTMATTER_KEYS = new Set(['name', 'description', 'license', 'metadata', 'allowed-tools']);
 const INVALID_YAML_SCALAR = Symbol('invalid-yaml-scalar');
@@ -305,10 +312,8 @@ function parseFrontmatter(text, sourcePath = '<memory>') {
 function normalizeDirectSkill(text, targetName, aliases = [], allowedFrontmatterKeys = CODEX_FRONTMATTER_KEYS) {
   const parsed = parseFrontmatter(text);
   if (!parsed.ok) return parsed;
-  if (parsed.metadata.execution_mode != null
-    && (typeof parsed.metadata.execution_mode !== 'string' || !EXECUTION_MODES.has(parsed.metadata.execution_mode))) {
-    return { ok: false, error: 'frontmatter execution_mode must be one declared execution mode' };
-  }
+  const contractError = executionContractError(parsed.metadata);
+  if (contractError) return { ok: false, error: contractError };
   const aliasSuffix = aliases.length ? ` Aliases: ${aliases.map((id) => `/${id}`).join(', ')}.` : '';
   const description = `${parsed.metadata.description}${aliasSuffix}`
     .replace(/[<>]/g, (value) => value === '<' ? '(' : ')');
@@ -331,6 +336,22 @@ function projectionExecutionMetadata(metadata, allowedFrontmatterKeys = CODEX_FR
   const fields = ['execution_mode', 'trust_tier'].filter((key) => metadata[key]);
   if (!fields.length) return '';
   return `metadata:\n${fields.map((key) => `  ${key}: ${JSON.stringify(metadata[key])}`).join('\n')}\n`;
+}
+
+function executionContractError(metadata) {
+  const mode = metadata.execution_mode;
+  const trustTier = metadata.trust_tier;
+  if (mode != null && (typeof mode !== 'string' || !EXECUTION_MODES.has(mode))) {
+    return 'frontmatter execution_mode must be one declared execution mode';
+  }
+  if (trustTier == null) return null;
+  if (typeof trustTier !== 'string' || !TRUST_TIER_MODES.has(trustTier)) {
+    return 'frontmatter trust_tier must be one canonical trust tier';
+  }
+  if (!mode || !TRUST_TIER_MODES.get(trustTier).has(mode)) {
+    return `frontmatter trust_tier ${trustTier} is incompatible with execution_mode ${mode || 'missing'}`;
+  }
+  return null;
 }
 
 function loadHandlerIds(root, config) {
@@ -645,10 +666,8 @@ function frameworkIdentity(root, sourcePath, targetPrefix = 'guild-') {
 function renderFrameworkSkill(text, identity, allowedFrontmatterKeys = CODEX_FRONTMATTER_KEYS) {
   const parsed = parseFrontmatter(text, identity.rel);
   if (!parsed.ok) return parsed;
-  if (parsed.metadata.execution_mode != null
-    && (typeof parsed.metadata.execution_mode !== 'string' || !EXECUTION_MODES.has(parsed.metadata.execution_mode))) {
-    return { ok: false, error: 'frontmatter execution_mode must be one declared execution mode', sourcePath: identity.rel };
-  }
+  const contractError = executionContractError(parsed.metadata);
+  if (contractError) return { ok: false, error: contractError, sourcePath: identity.rel };
   const lineage = `Framework lineage: \`frameworks/${identity.service}/${identity.framework}\`. Read its \`manifest.json\` and \`guardrails.md\` before execution. Source helper: \`${identity.rel}\`.`;
   const executionMetadata = projectionExecutionMetadata(parsed.metadata, allowedFrontmatterKeys);
   const supportedFields = projectionSupportedFrontmatter(parsed.metadata, allowedFrontmatterKeys);

@@ -81,9 +81,9 @@ test('repo pins only Codex-supported projection frontmatter keys', () => {
   const parsed = parseFrontmatter(normalized.content);
   assert.deepEqual(new Set(Object.keys(parsed.metadata)), new Set(['name', 'description']));
 
-  const bounded = normalizeDirectSkill('---\nname: old\ndescription: demo\nexecution_mode: COORDINATOR\ntrust_tier: report_write_scoped\n---\nbody\n', 'new');
+  const bounded = normalizeDirectSkill('---\nname: old\ndescription: demo\nexecution_mode: COORDINATOR\ntrust_tier: meta_modifying\n---\nbody\n', 'new');
   assert.equal(bounded.ok, true);
-  assert.match(bounded.content, /metadata:\n  execution_mode: "COORDINATOR"\n  trust_tier: "report_write_scoped"/);
+  assert.match(bounded.content, /metadata:\n  execution_mode: "COORDINATOR"\n  trust_tier: "meta_modifying"/);
 
   const toolBounded = normalizeDirectSkill('---\nname: old\ndescription: demo\nlicense: MIT\ncompatibility: Codex\nallowed-tools: Read\n---\nbody\n', 'new');
   assert.equal(toolBounded.ok, true);
@@ -128,11 +128,11 @@ test('frontmatter parsing accepts and normalizes CRLF line endings', () => {
 });
 
 test('frontmatter parsing removes YAML comments without corrupting quoted hashes', () => {
-  const normalized = normalizeDirectSkill('---\nname: demo\ndescription: "demo # retained"\nexecution_mode: REVIEW_ONLY # no writes\ntrust_tier: report_only # bounded\n---\nbody\n', 'demo');
+  const normalized = normalizeDirectSkill('---\nname: demo\ndescription: "demo # retained"\nexecution_mode: REVIEW_ONLY # no writes\ntrust_tier: report_write_scoped # bounded\n---\nbody\n', 'demo');
   assert.equal(normalized.ok, true);
   assert.match(normalized.content, /description: "demo # retained"/);
   assert.match(normalized.content, /execution_mode: "REVIEW_ONLY"/);
-  assert.match(normalized.content, /trust_tier: "report_only"/);
+  assert.match(normalized.content, /trust_tier: "report_write_scoped"/);
   assert.doesNotMatch(normalized.content, /no writes|bounded/);
 });
 
@@ -182,6 +182,19 @@ test('direct skills reject non-scalar and unknown execution modes', () => {
   }
 });
 
+test('direct and framework skills reject unknown or mode-incompatible trust tiers', () => {
+  for (const trustTier of ['reviewed', 'report_write_scoped']) {
+    const normalized = normalizeDirectSkill(`---\nname: demo\ndescription: demo\nexecution_mode: COORDINATOR\ntrust_tier: ${trustTier}\n---\nbody\n`, 'demo');
+    assert.equal(normalized.ok, false);
+    assert.match(normalized.error, /trust_tier/);
+
+    const root = fixture();
+    write(root, 'frameworks/a/b/.claude/skills/helper/SKILL.md', `---\nname: helper\ndescription: helper\nexecution_mode: COORDINATOR\ntrust_tier: ${trustTier}\n---\nbody\n`);
+    const candidate = byId(sync({ root, handlerIds: new Set(), apply: true }), 'framework-guild-a-b-helper');
+    assert.equal(candidate.receipt.semantic_review_state, 'malformed');
+  }
+});
+
 test('direct and framework skills preserve execution modes declared in inline metadata', () => {
   const normalized = normalizeDirectSkill('---\nname: demo\ndescription: demo\nmetadata: {execution_mode: FINDINGS_ONLY}\n---\nbody\n', 'demo');
   assert.equal(normalized.ok, true);
@@ -206,9 +219,9 @@ test('direct and framework skills preserve execution modes declared in inline me
   assert.equal(nestedDuplicate.ok, false);
   assert.match(nestedDuplicate.error, /metadata flow mapping must contain only scalar strings/);
 
-  const block = normalizeDirectSkill('---\nname: demo\ndescription: demo\nmetadata:\n  execution_mode: FINDINGS_ONLY\n  trust_tier: report_only\n---\nbody\n', 'demo');
+  const block = normalizeDirectSkill('---\nname: demo\ndescription: demo\nmetadata:\n  execution_mode: FINDINGS_ONLY\n  trust_tier: instruction_only\n---\nbody\n', 'demo');
   assert.equal(block.ok, true);
-  assert.match(block.content, /metadata:\n  execution_mode: "FINDINGS_ONLY"\n  trust_tier: "report_only"/);
+  assert.match(block.content, /metadata:\n  execution_mode: "FINDINGS_ONLY"\n  trust_tier: "instruction_only"/);
 
   const invalidFrameworkRoot = fixture();
   write(invalidFrameworkRoot, 'frameworks/a/b/.claude/skills/helper/SKILL.md', '---\nname: helper\ndescription: helper\nlicense: false\n---\nbody\n');

@@ -1,7 +1,7 @@
 {
   "generator_id": "mythos-codex-skill-projector/1.0.0",
   "source_relative_path": ".claude/skills/go/SKILL.md",
-  "source_sha256": "c9cdb2579148f6ffdb8bd399223ae1f469031b03b41e93e38197a6ce7ca1a8aa",
+  "source_sha256": "7eaac68ae8b8968e0e19d05797de6208ab7606f64d3d08b8abdbc6159823d000",
   "projection_kind": "direct_system_skill",
   "capability_tier": "ADVISORY",
   "semantic_review_state": "reviewed_safe",
@@ -9,5 +9,5 @@
   "collision_state": "clear",
   "application_status": "already_aligned",
   "resource_manifest": [],
-  "package_sha256": "277977c6bfd97990f4f137fda6e1d6e49b3880d455c13e5416cfe7a252a2edec"
+  "package_sha256": "afcce84359cc0b90175bf5e09015331f2b2a8bfcb4770d2bda53eb002843c3df"
 }

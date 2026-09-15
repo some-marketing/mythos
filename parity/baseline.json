@@ -43,11 +43,11 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "115cfbb5fd5cd0912877434aefb3dbb59c6185f1ac9e1873ff29b573a5082082",
+    "expected_tree_sha256": "974e72fdb9c933b266392653d4e7791c4725e67e679c8c474182aa03969c7b97",
     "expected_files": [
       {
         "path": ".agents/skills/go/SKILL.md",
-        "sha256": "432a385e7ea9a0b6a13e8b2f30d16ba3f7bb6605fd517e362e754bd915881990",
+        "sha256": "1a441653a5c5ff6408d0e6b5e175f4b1f1f336b77b08e18a3a28f69eb6cf0f55",
         "mode": 420
       },
       {
@@ -1847,7 +1847,7 @@
       },
       {
         "path": ".claude/skills/go/SKILL.md",
-        "sha256": "c9cdb2579148f6ffdb8bd399223ae1f469031b03b41e93e38197a6ce7ca1a8aa",
+        "sha256": "7eaac68ae8b8968e0e19d05797de6208ab7606f64d3d08b8abdbc6159823d000",
         "mode": 420
       },
       {
@@ -2112,7 +2112,7 @@
       },
       {
         "path": ".claude/skills/ticktock/SKILL.md",
-        "sha256": "4c44b35d9c7cfc0b9da1b43c8f98e96659a2a941ddf344ab1e5ceaa5e674e631",
+        "sha256": "f726f614a1110b9d873e2c9eb83818bc46d69095d2dc209c5ef7d2448569cf80",
         "mode": 420
       },
       {
@@ -2217,12 +2217,12 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-parity-remediation__verification.md",
-        "sha256": "2cdcdeebf37c530b483ab318a6d6d59034063b8fa0707ffd813d397d8eaa3f81",
+        "sha256": "8aaf463ff29c5c986d726af1bb98819216216cb080955cd36d8082eeaf2137f1",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/candidates/go/SKILL.md",
-        "sha256": "432a385e7ea9a0b6a13e8b2f30d16ba3f7bb6605fd517e362e754bd915881990",
+        "sha256": "1a441653a5c5ff6408d0e6b5e175f4b1f1f336b77b08e18a3a28f69eb6cf0f55",
         "mode": 420
       },
       {
@@ -3827,7 +3827,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/direct-go.json",
-        "sha256": "11fbbf160ba5eccca3bd496aa44e8b92480f1045281b902e6b8b50533f2dc222",
+        "sha256": "e9d5b277dcf7f3f237a1506ed87c2652bc11f508fef270efa26005c53223464a",
         "mode": 420
       },
       {
@@ -3842,7 +3842,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/direct-ticktock.json",
-        "sha256": "35beeb155b5acc547d57bdd1d03029b8f20311d7ecd93c4458d921d3ed8f38ca",
+        "sha256": "c6152b580d60def5c81b11f39028c042056fe1b29bd1eccee451a154dd0bec8d",
         "mode": 420
       },
       {
@@ -8772,7 +8772,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "31cd6752a077b48a85e9d2b7ec1bb031d2c8d85509d08fca2f48ba35603a08fd",
+        "sha256": "f737a5bce41a05d6fd98e695ffde5db3179eaca473c86c530cdeb3383ea3268f",
         "mode": 420
       },
       {
@@ -15147,7 +15147,7 @@
       },
       {
         "path": "tools/skills/__tests__/sync-codex-skills.test.cjs",
-        "sha256": "cbe24395435384ff42f1f58a3fa7b67976c42adb5d4da733d4d039d7dab6c81c",
+        "sha256": "6ee2c8098fdbc9ba0344d31979b32070d9c3b914e6e57e51f3f78223c35c3d74",
         "mode": 420
       },
       {
@@ -15157,7 +15157,7 @@
       },
       {
         "path": "tools/skills/sync-codex-skills.cjs",
-        "sha256": "93129e4ca0db875651f68a886c0b8f9315f9a3e01a5336e036b223e4f3e51fab",
+        "sha256": "ab6e7091c35adbc2f976c7d5681fd935ff09cb01d79b7d2243d0be23c1547c9e",
         "mode": 420
       },
       {
@@ -16884,7 +16884,7 @@
     "package_script_count": 206,
     "command_alias_registry_sha256": "9bbc50aa1343a5502258e0e067eca0bb4cf4ea9f560abc5b998247a0e04b9901",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "31cd6752a077b48a85e9d2b7ec1bb031d2c8d85509d08fca2f48ba35603a08fd",
+    "graph_sha256": "f737a5bce41a05d6fd98e695ffde5db3179eaca473c86c530cdeb3383ea3268f",
     "graph_nodes": 4092,
     "graph_edges": 2908
   },

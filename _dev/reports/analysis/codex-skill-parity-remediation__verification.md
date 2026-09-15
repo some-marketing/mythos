@@ -4,7 +4,7 @@ Refreshed under the approved parity amendment at `2026-09-14T18:51:57Z` in the d
 
 ## Mechanical results
 
-- Combined projector, lifecycle, and alias regressions: 128 passed, 0 failed.
+- Combined projector, lifecycle, and alias regressions: 129 passed, 0 failed.
 - `node tools/skills/sync-codex-skills.cjs --check`: aligned.
 - `node tools/skills/sync-lifecycle-command-skills.cjs --check`: six lifecycle skills aligned against the committed general projection evidence.
 - Pinned Codex `quick_validate.py`, using the repository PyYAML environment: 131 of 131 applied packages valid; 176 of 176 top-level staged candidate packages valid. Nested child skills are excluded from parent resources, so the staged tree contains exactly 176 independently projected `SKILL.md` files.
@@ -142,6 +142,8 @@ The seventy-ninth Cloud Codex review found canonical self-target aliases such as
 The eightieth Cloud Codex review found duplicate YAML alias fields silently replacing earlier routing authority and credential terms embedded within longer assignment keys escaping projection scanning. The alias parser now rejects repeated record fields in block and flow mappings, and the credential detector rejects separator-delimited sensitive terms anywhere in assignment keys while retaining whole-value reference exemptions. Focused regressions cover direct and framework projections plus safe references.
 
 The eighty-first Cloud Codex review found bare secret-shaped tokens with long hexadecimal or alphanumeric tails escaping assignment-oriented scanning. The projector now applies the repository publisher's standalone secret-token signature before staging, and direct plus framework regressions verify rejection without retaining the sensitive bytes.
+
+The eighty-second Cloud Codex review found valid execution modes being projected alongside unknown or mode-incompatible trust tiers. Direct and framework normalization now accepts only canonical trust-tier names and their declared mode combinations. The two shipped coordinator skills now declare the compatible `meta_modifying` tier, and focused regressions cover valid, unknown, and incompatible pairs.
 
 ## Falsifiers and residuals
 

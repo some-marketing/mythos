@@ -1695,7 +1695,7 @@
       "id": "file:.agents/skills/go/SKILL.md",
       "type": "file",
       "path": ".agents/skills/go/SKILL.md",
-      "sha256": "432a385e7ea9a0b6a13e8b2f30d16ba3f7bb6605fd517e362e754bd915881990",
+      "sha256": "1a441653a5c5ff6408d0e6b5e175f4b1f1f336b77b08e18a3a28f69eb6cf0f55",
       "mode": 420
     },
     {
@@ -4215,7 +4215,7 @@
       "id": "file:.claude/skills/go/SKILL.md",
       "type": "file",
       "path": ".claude/skills/go/SKILL.md",
-      "sha256": "c9cdb2579148f6ffdb8bd399223ae1f469031b03b41e93e38197a6ce7ca1a8aa",
+      "sha256": "7eaac68ae8b8968e0e19d05797de6208ab7606f64d3d08b8abdbc6159823d000",
       "mode": 420
     },
     {
@@ -4586,7 +4586,7 @@
       "id": "file:.claude/skills/ticktock/SKILL.md",
       "type": "file",
       "path": ".claude/skills/ticktock/SKILL.md",
-      "sha256": "4c44b35d9c7cfc0b9da1b43c8f98e96659a2a941ddf344ab1e5ceaa5e674e631",
+      "sha256": "f726f614a1110b9d873e2c9eb83818bc46d69095d2dc209c5ef7d2448569cf80",
       "mode": 420
     },
     {
@@ -19769,7 +19769,7 @@
       "id": "file:tools/skills/__tests__/sync-codex-skills.test.cjs",
       "type": "file",
       "path": "tools/skills/__tests__/sync-codex-skills.test.cjs",
-      "sha256": "cbe24395435384ff42f1f58a3fa7b67976c42adb5d4da733d4d039d7dab6c81c",
+      "sha256": "6ee2c8098fdbc9ba0344d31979b32070d9c3b914e6e57e51f3f78223c35c3d74",
       "mode": 420
     },
     {
@@ -19790,7 +19790,7 @@
       "id": "file:tools/skills/sync-codex-skills.cjs",
       "type": "file",
       "path": "tools/skills/sync-codex-skills.cjs",
-      "sha256": "93129e4ca0db875651f68a886c0b8f9315f9a3e01a5336e036b223e4f3e51fab",
+      "sha256": "ab6e7091c35adbc2f976c7d5681fd935ff09cb01d79b7d2243d0be23c1547c9e",
       "mode": 420
     },
     {

@@ -154,7 +154,7 @@ function isYamlNonStringToken(value) {
   return (/^\[.*\]$/.test(token) || /^\{.*\}$/.test(token))
     || /^(?:~|null|true|false)$/i.test(token)
     || /^[-+]?(?:[0-9][0-9_]*(?:\.[0-9_]*)?(?:e[-+]?[0-9]+)?|0x[0-9a-f_]+|0o[0-7_]+|0b[01_]+|\.inf|\.nan)$/i.test(token)
-    || /^\d{4}-\d{2}-\d{2}(?:[Tt]|\s)\d{2}:\d{2}/.test(token);
+    || /^\d{4}-\d{2}-\d{2}(?:$|[Tt\s]\d{2}:\d{2})/.test(token);
 }
 
 function parseYamlFlowStringList(value) {
@@ -242,7 +242,7 @@ function parseFrontmatter(text, sourcePath = '<memory>') {
     }
     metadata[key] = value;
   }
-  if (typeof metadata.name !== 'string' || !metadata.name || typeof metadata.description !== 'string' || !metadata.description) {
+  if (typeof metadata.name !== 'string' || !metadata.name || typeof metadata.description !== 'string' || !metadata.description.trim()) {
     return { ok: false, error: 'frontmatter requires scalar name and description', sourcePath };
   }
   return { ok: true, metadata, body, sourcePath };
@@ -697,8 +697,8 @@ function containsCredentialMaterial(bytes) {
     || containsLiteralAuthorizationCredential(text)
     || containsLiteralCookieCredential(text)
     || /[A-Za-z][A-Za-z0-9+.-]*:\/\/[^\s/@:]+:(?!(?:<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=@))[^@\s/]+@/im.test(text)
-    || /(?:^|[^A-Za-z0-9_])["']?(?:(?:[A-Za-z][A-Za-z0-9]*)?(?:ApiKey|ClientSecret|Password|Passwd|AccessToken|RefreshToken|AuthToken|SessionToken|SecretKey|PrivateKey|Secret)|apiKey|clientSecret|password|passwd|accessToken|refreshToken|authToken|sessionToken|token|secretKey|privateKey|secret)["']?\s*[:=]\s*["']?(?!(?:(?:process\.env|import\.meta\.env|env|config|secrets)\.[A-Za-z_$][A-Za-z0-9_$]*|<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=$|[\s,;}"'`]))[^\s"'`]+/m.test(text)
-    || /(?:^|[^A-Z0-9_])["']?(?:[A-Z][A-Z0-9_-]*[_-])?(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY|API[_-]?KEY|CLIENT[_-]?SECRET|PASSWORD|PASSWD|ACCESS[_-]?TOKEN|REFRESH[_-]?TOKEN|AUTH[_-]?TOKEN|TOKEN|SECRET|SECRET[_-]?KEY|PRIVATE[_-]?KEY)["']?\s*[:=]\s*["']?(?!(?:(?:process\.env|import\.meta\.env|env|config|secrets)\.[A-Za-z_$][A-Za-z0-9_$]*|<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=$|[\s,;}"'`]))[^\s"'`]+/im.test(text);
+    || /(?:^|[^A-Za-z0-9_])["']?(?:(?:[A-Za-z][A-Za-z0-9]*)?(?:ApiKey|ClientSecret|Password|Passwd|AccessToken|RefreshToken|AuthToken|SessionToken|SecretKey|PrivateKey|Secret|Credentials?)|apiKey|clientSecret|password|passwd|accessToken|refreshToken|authToken|sessionToken|token|secretKey|privateKey|secret|credentials?)["']?\s*[:=]\s*["']?(?!(?:(?:process\.env|import\.meta\.env|env|config|secrets)\.[A-Za-z_$][A-Za-z0-9_$]*|<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=$|[\s,;}"'`]))[^\s"'`]+/m.test(text)
+    || /(?:^|[^A-Z0-9_])["']?(?:[A-Z][A-Z0-9_-]*[_-])?(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY|API[_-]?KEY|CLIENT[_-]?SECRET|PASSWORD|PASSWD|ACCESS[_-]?TOKEN|REFRESH[_-]?TOKEN|AUTH[_-]?TOKEN|TOKEN|SECRET|CREDENTIALS?|SECRET[_-]?KEY|PRIVATE[_-]?KEY)["']?\s*[:=]\s*["']?(?!(?:(?:process\.env|import\.meta\.env|env|config|secrets)\.[A-Za-z_$][A-Za-z0-9_$]*|<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=$|[\s,;}"'`]))[^\s"'`]+/im.test(text);
 }
 
 function isSensitiveResourcePath(relativePath) {

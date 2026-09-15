@@ -113,6 +113,8 @@ The sixty-fifth Cloud Codex review found quoted shell-header references being ca
 
 The sixty-sixth Cloud Codex review found fine-grained GitHub PATs outside recognized assignments, quoted Cookie references captured through their command lines, and scalar non-string `allowed-tools` values being coerced to strings. The projector now shares the publisher's bounded `github_pat_` signature, bounds quoted Cookie headers before pair inspection, and rejects scalar non-string tool constraints. Focused regressions cover the literal and reference paths.
 
+The sixty-seventh Cloud Codex review found literal `credential` and `credentials` fields, date-only YAML descriptions, and whitespace-only direct or framework descriptions remaining applicable. Credential-field families now enter the redacted rejection path with bounded property-reference exemptions, date-only timestamps are classified as YAML non-strings, and projected descriptions must contain non-whitespace text. Focused regressions cover all three findings.
+
 ## Falsifiers and residuals
 
 Acceptance would be disproved by an applied `UNKNOWN` or pending candidate, copied alias behavior, a non-handler command marked `BLOCKING`, a private path in a shipped projection, a canonical/client diff, a failed runtime discovery claim, or an unresolved distinct-family blocker. None was observed.

@@ -132,6 +132,25 @@ test('handler registry loading rejects traversal and external symlinks before re
   assert.throws(() => buildCandidates({ root: symlinkRoot }), /Refusing symbolic-link handler registry source/);
 });
 
+test('alias registry loading rejects traversal and external symlinks before reading', () => {
+  const traversalRoot = fixture();
+  const traversalAdapterPath = path.join(traversalRoot, 'instructions/adapters/codex.yaml');
+  const traversalAdapter = JSON.parse(fs.readFileSync(traversalAdapterPath, 'utf8'));
+  const outsideName = `${path.basename(traversalRoot)}-aliases.json`;
+  traversalAdapter.skill_projection.alias_registry = `../${outsideName}`;
+  fs.writeFileSync(traversalAdapterPath, `${JSON.stringify(traversalAdapter, null, 2)}\n`);
+  fs.writeFileSync(path.join(traversalRoot, '..', outsideName), '{"aliases":[]}\n');
+  assert.throws(() => buildCandidates({ root: traversalRoot, handlerIds: new Set() }), /Refusing alias registry outside repository/);
+
+  const symlinkRoot = fixture();
+  const externalRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'external-aliases-'));
+  const externalRegistry = write(externalRoot, 'aliases.json', '{"aliases":[]}\n');
+  const registryPath = path.join(symlinkRoot, 'instructions/canonical/command-aliases.yaml');
+  fs.unlinkSync(registryPath);
+  fs.symlinkSync(externalRegistry, registryPath);
+  assert.throws(() => buildCandidates({ root: symlinkRoot, handlerIds: new Set() }), /Refusing symbolic-link alias registry source/);
+});
+
 test('ground-in-philosophy uses the explicit Codex override and rejects Pi fallback text', () => {
   const root = fixture();
   command(root, 'ground-in-philosophy', { objective: 'Pi cannot natively spawn sub-agents', process: ['manual grounding (pi harness — no sub-agent)'] });
@@ -761,6 +780,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     `ACCESS_TOKEN="accesssecretvalue${'a'.repeat(16)}"\n`,
     `PRIVATE_KEY="privatesecretvalue${'v'.repeat(16)}"\n`,
     `AUTH_TOKEN: authsecretvalue${'h'.repeat(16)}\n`,
+    `SECRET=baresecretvalue${'s'.repeat(16)}\n`,
     `-----BEGIN ENCRYPTED PRIVATE KEY-----\nencryptedprivatebytes${'e'.repeat(16)}\n-----END ENCRYPTED PRIVATE KEY-----\n`,
     `temporary ASIA${'A'.repeat(16)}\n`
   ]) {
@@ -771,7 +791,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     assert.equal(candidate.receipt.semantic_review_state, 'private_path_rejected');
     assert.equal(candidate.receipt.source_sha256, null);
     assert.equal(fs.existsSync(path.join(root, '.agents/skills/ticktock/SKILL.md')), false);
-    assert.doesNotMatch(JSON.stringify(candidate.receipt), /zzzzzzzz|ordinarysecretvalue|yamlsecretvalue|jsonsecretvalue|genericsecretvalue|clientsecretvalue|passwordsecretvalue|accesssecretvalue|privatesecretvalue|authsecretvalue|encryptedprivatebytes|ASIAAAAA/);
+    assert.doesNotMatch(JSON.stringify(candidate.receipt), /zzzzzzzz|ordinarysecretvalue|yamlsecretvalue|jsonsecretvalue|genericsecretvalue|clientsecretvalue|passwordsecretvalue|accesssecretvalue|privatesecretvalue|authsecretvalue|baresecretvalue|encryptedprivatebytes|ASIAAAAA/);
   }
 });
 

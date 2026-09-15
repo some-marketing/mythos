@@ -176,9 +176,7 @@ function projectionExecutionMetadata(metadata) {
 }
 
 function loadHandlerIds(root, config) {
-  const handlerPath = path.resolve(root, String(config.handler_registry || ''));
-  if (!isWithin(path.resolve(root), handlerPath)) throw new Error('Refusing handler registry outside repository');
-  validateSourceFile(handlerPath, root, 'handler registry', root);
+  const handlerPath = validateConfiguredSource(root, config.handler_registry, 'handler registry');
   delete require.cache[require.resolve(handlerPath)];
   const runtime = require(handlerPath);
   if (!runtime.HANDLERS || typeof runtime.HANDLERS !== 'object') throw new Error(`HANDLERS export missing: ${handlerPath}`);
@@ -283,6 +281,13 @@ function validateSourceFile(sourcePath, sourceRoot, label, projectRoot = PROJECT
   return realSource;
 }
 
+function validateConfiguredSource(root, configuredPath, label) {
+  const sourcePath = path.resolve(root, String(configuredPath || ''));
+  if (!isWithin(path.resolve(root), sourcePath)) throw new Error(`Refusing ${label} outside repository`);
+  validateSourceFile(sourcePath, root, label, root);
+  return sourcePath;
+}
+
 function safeOutputPath(root, ...segments) {
   const lexicalRoot = path.resolve(root);
   const lexicalOutput = path.resolve(root, ...segments);
@@ -382,7 +387,7 @@ function clearGeneratedProjectionArtifacts(candidateDir) {
 }
 
 function resolveAliases(root, config, commands, directNames, registryOverride) {
-  const registryPath = path.join(root, config.alias_registry);
+  const registryPath = validateConfiguredSource(root, config.alias_registry, 'alias registry');
   const registry = registryOverride || readJson(registryPath);
   const rows = Array.isArray(registry.aliases) ? registry.aliases : [];
   const aliases = new Map();
@@ -502,7 +507,7 @@ function containsCredentialMaterial(bytes) {
   const text = String(bytes);
   return /-----BEGIN (?:[A-Z0-9]+ )*PRIVATE KEY-----/.test(text)
     || /(?:^|[^A-Za-z0-9])(?:sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|(?:AKIA|ASIA)[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|glpat-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{35})(?:$|[^A-Za-z0-9_-])/m.test(text)
-    || /(?:^|[^A-Z0-9_])["']?(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY|API[_-]?KEY|CLIENT[_-]?SECRET|PASSWORD|PASSWD|ACCESS[_-]?TOKEN|REFRESH[_-]?TOKEN|AUTH[_-]?TOKEN|SECRET[_-]?KEY|PRIVATE[_-]?KEY)["']?\s*[:=]\s*["']?(?!(?:<|\$(?:\{|[A-Za-z_])|your[-_]|example|redacted|placeholder))[^\s"'`]+/im.test(text);
+    || /(?:^|[^A-Z0-9_])["']?(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY|API[_-]?KEY|CLIENT[_-]?SECRET|PASSWORD|PASSWD|ACCESS[_-]?TOKEN|REFRESH[_-]?TOKEN|AUTH[_-]?TOKEN|SECRET|SECRET[_-]?KEY|PRIVATE[_-]?KEY)["']?\s*[:=]\s*["']?(?!(?:<|\$(?:\{|[A-Za-z_])|your[-_]|example|redacted|placeholder))[^\s"'`]+/im.test(text);
 }
 
 function isSensitiveResourcePath(relativePath) {
@@ -559,6 +564,10 @@ function buildCandidates(options = {}) {
     .filter((result) => result.ok && commands.has(result.alias.id))
     .map((result) => [result.alias.id, result.terminal]));
   const candidates = [];
+  const aliasRegistryPath = validateConfiguredSource(root, config.alias_registry, 'alias registry');
+  const aliasRegistryBytes = options.aliasRegistry
+    ? Buffer.from(JSON.stringify(options.aliasRegistry))
+    : fs.readFileSync(aliasRegistryPath);
 
   for (const [id, command] of commands) {
     const targetRel = posix(path.join(config.target_root, `source-command-${id}`, 'SKILL.md'));
@@ -705,13 +714,10 @@ function buildCandidates(options = {}) {
     const targetCandidate = candidates.find((candidate) => candidate.receipt.target_exact_path === targetRel);
     const targetAvailable = result.ok && isApplicable(targetCandidate || {});
     const tier = !result.ok ? 'UNKNOWN' : targetAvailable ? targetCandidate.receipt.capability_tier : 'ABSENT';
-    const registryBytes = fs.existsSync(path.join(root, config.alias_registry))
-      ? fs.readFileSync(path.join(root, config.alias_registry))
-      : Buffer.from(JSON.stringify(options.aliasRegistry || {}));
     const reviewState = !result.ok
       ? 'unresolved'
       : targetAvailable ? config.families.aliases.semantic_review_state : 'target_unavailable';
-    const receipt = receiptBase(config, relative(root, path.join(root, config.alias_registry)), registryBytes, 'alias_metadata', tier, reviewState, targetRel);
+    const receipt = receiptBase(config, relative(root, aliasRegistryPath), aliasRegistryBytes, 'alias_metadata', tier, reviewState, targetRel);
     receipt.application_status = !result.ok ? 'blocked' : targetAvailable ? 'metadata_candidate' : 'blocked_target_unavailable';
     if (!result.ok) receipt.detail = `${result.reason}: ${result.trail.join(' -> ')}`;
     else if (!targetAvailable) receipt.detail = 'resolved target is not an applicable Codex skill';

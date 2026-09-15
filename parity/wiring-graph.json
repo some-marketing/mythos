@@ -1905,7 +1905,7 @@
       "id": "file:.agents/skills/source-command-council-of-owls/SKILL.md",
       "type": "file",
       "path": ".agents/skills/source-command-council-of-owls/SKILL.md",
-      "sha256": "f74ea22cff412b353ee39b5f6488501236c4113f7981244103c9547d3bae5c45",
+      "sha256": "2732b26bd134e7499229f916b6c4a528306ed70e12d61d68be6ac64f914072ad",
       "mode": 420
     },
     {
@@ -1947,7 +1947,7 @@
       "id": "file:.agents/skills/source-command-deliberate/SKILL.md",
       "type": "file",
       "path": ".agents/skills/source-command-deliberate/SKILL.md",
-      "sha256": "d39aa80ff418cbb4d91d5df5c9160f422a36621073df2a693a1b239e5bea4474",
+      "sha256": "3077df5457f3a46ddcf6eb5a93857ecde86122bba6e1231e8e17ba421a0b8a05",
       "mode": 420
     },
     {
@@ -1982,14 +1982,14 @@
       "id": "file:.agents/skills/source-command-dl/SKILL.md",
       "type": "file",
       "path": ".agents/skills/source-command-dl/SKILL.md",
-      "sha256": "fcd16a20372bcd0d8ddd956b572fecd4b46117859b3cb37d302bc2707266750c",
+      "sha256": "c4d827ab4ade16f402aa551e6a9507ced661eec0a9b6b0a83030b30081e9af2a",
       "mode": 420
     },
     {
       "id": "file:.agents/skills/source-command-el/SKILL.md",
       "type": "file",
       "path": ".agents/skills/source-command-el/SKILL.md",
-      "sha256": "8f30d215bc0260c4ecafb8454c07ef92d487afc0eda215b9d31d1f0b1a95b7aa",
+      "sha256": "bbb26e19e3da76ea7e62119ff63f7d26d9132226f658d68a4c8b59741a71dc98",
       "mode": 420
     },
     {
@@ -2206,7 +2206,7 @@
       "id": "file:.agents/skills/source-command-help-me-route/SKILL.md",
       "type": "file",
       "path": ".agents/skills/source-command-help-me-route/SKILL.md",
-      "sha256": "6878d64846d94b9b5919c197eb92ae09876b7426c36807616fc4f4fa50cd6fa7",
+      "sha256": "7facf492d5bc6a7b2c775650bff09029c1ab5804171a86b0358bee98a3b92248",
       "mode": 420
     },
     {
@@ -2325,14 +2325,14 @@
       "id": "file:.agents/skills/source-command-oa/SKILL.md",
       "type": "file",
       "path": ".agents/skills/source-command-oa/SKILL.md",
-      "sha256": "2212057d2b5aaa83434a5b9034d449be0a818f9667acfab59c8a88bcaaf35543",
+      "sha256": "2802b8ebe3483233d41066e4eff7d527eb99e17adcd18ef0b53b3b11ca9c3482",
       "mode": 420
     },
     {
       "id": "file:.agents/skills/source-command-oc/SKILL.md",
       "type": "file",
       "path": ".agents/skills/source-command-oc/SKILL.md",
-      "sha256": "ff9033c8ca2585d5f15cba622c2c65184aff59168f47f4f2a2e9eed186807fe1",
+      "sha256": "f61109baa909f7cdc5b661060f18263c6740560af2532030c823b48bcee5ff24",
       "mode": 420
     },
     {
@@ -2360,7 +2360,7 @@
       "id": "file:.agents/skills/source-command-owl/SKILL.md",
       "type": "file",
       "path": ".agents/skills/source-command-owl/SKILL.md",
-      "sha256": "70a2ec8542305a4790aa25ee086b404b397fb7f9512ad9464540a12ed0eb104f",
+      "sha256": "307758dba86be090a8c8c3d977e95e8c8bc3c79d34a449c5edc8194e45300de9",
       "mode": 420
     },
     {
@@ -19769,7 +19769,7 @@
       "id": "file:tools/skills/__tests__/sync-codex-skills.test.cjs",
       "type": "file",
       "path": "tools/skills/__tests__/sync-codex-skills.test.cjs",
-      "sha256": "682499e7eef5597aa203b04370e3763f3f324907faea32b39ef15f673632c23b",
+      "sha256": "1074e4e0bcc5153bd9e2bebab5e53b8e9492dfaad65870c8dafc86df31064d48",
       "mode": 420
     },
     {
@@ -19790,7 +19790,7 @@
       "id": "file:tools/skills/sync-codex-skills.cjs",
       "type": "file",
       "path": "tools/skills/sync-codex-skills.cjs",
-      "sha256": "c2c6ba9bacb037419f7f6205417e04eb82522a6547f69d2d1bb22d8a4d2659fd",
+      "sha256": "c48b5ad36219aea2c1ff650815ce1e4ba0726c221ff547f66ac82bac6248982d",
       "mode": 420
     },
     {

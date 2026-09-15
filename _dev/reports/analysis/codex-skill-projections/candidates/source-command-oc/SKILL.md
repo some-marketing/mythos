@@ -5,7 +5,7 @@ description: "Shortest operator alias for council-of-owls: Owl Council"
 
 # /oc
 
-Canonical authority: `instructions/canonical/commands/oc.yaml`. Read that file at execution time; this projection never copies or overrides its behavioral body.
+Typed-wrapper provenance: `instructions/canonical/commands/oc.yaml`. Canonical behavioral authority: `instructions/canonical/commands/orchestrate-loop.yaml`. Read the authority file at execution time; the wrapper preserves invocation provenance but never overrides authoritative behavior.
 
 Capability tier: **ADVISORY**.
 

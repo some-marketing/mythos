@@ -222,11 +222,12 @@ test('typed aliases with canonical workflows retain their own runtime pointer', 
   const root = fixture();
   command(root, 'orchestrate-loop');
   command(root, 'deliberate', { objective: 'Reason solo, convene, and synthesize before routing.' });
-  const aliases = { aliases: [{ id: 'deliberate', target: 'orchestrate-loop' }] };
+  const aliases = { aliases: [{ id: 'deliberate', target: 'orchestrate-loop', authority_source: 'orchestrate-loop' }] };
   const result = buildCandidates({ root, handlerIds: new Set(), aliasRegistry: aliases });
   const typed = byId(result, 'command-deliberate');
   const terminal = byId(result, 'command-orchestrate-loop');
   assert.match(typed.content, /instructions\/canonical\/commands\/deliberate\.yaml/);
+  assert.match(typed.content, /Canonical behavioral authority: `instructions\/canonical\/commands\/orchestrate-loop\.yaml`/);
   assert.doesNotMatch(terminal.content, /Aliases resolved at generation time: \/deliberate/);
   assert.equal(byId(result, 'alias-deliberate').receipt.target_exact_path, '.agents/skills/source-command-deliberate/SKILL.md');
 });
@@ -326,6 +327,20 @@ test('canonical projections exceeding the Codex skill-name limit are blocked', (
   assert.equal(candidate.receipt.application_status, 'blocked_malformed');
   assert.match(candidate.receipt.detail, /exceeds 64 characters/);
   assert.equal(fs.existsSync(path.join(root, `.agents/skills/source-command-${id}/SKILL.md`)), false);
+});
+
+test('canonical projections honor the configured target prefix', () => {
+  const root = fixture();
+  const adapterPath = path.join(root, 'instructions/adapters/codex.yaml');
+  const adapter = JSON.parse(fs.readFileSync(adapterPath, 'utf8'));
+  adapter.skill_projection.families.canonical_commands.target_prefix = 'cmd-';
+  fs.writeFileSync(adapterPath, `${JSON.stringify(adapter, null, 2)}\n`);
+  command(root, 'sample');
+  const candidate = byId(sync({ root, handlerIds: new Set(), apply: true }), 'command-sample');
+  assert.equal(candidate.receipt.target_exact_path, '.agents/skills/cmd-sample/SKILL.md');
+  assert.match(candidate.content, /^---\nname: cmd-sample\n/);
+  assert.equal(fs.existsSync(path.join(root, '.agents/skills/cmd-sample/SKILL.md')), true);
+  assert.equal(fs.existsSync(path.join(root, '.agents/skills/source-command-sample/SKILL.md')), false);
 });
 
 test('canonical descriptions replace angle brackets rejected by Codex validation', () => {
@@ -915,6 +930,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     `AUTH_TOKEN: authsecretvalue${'h'.repeat(16)}\n`,
     `SECRET=baresecretvalue${'s'.repeat(16)}\n`,
     `Authorization: Bearer ordinarysecretvalue${'b'.repeat(16)}\n`,
+    `Authorization: Basic basicsecretvalue${'i'.repeat(16)}\n`,
     `-----BEGIN ENCRYPTED PRIVATE KEY-----\nencryptedprivatebytes${'e'.repeat(16)}\n-----END ENCRYPTED PRIVATE KEY-----\n`,
     `temporary ASIA${'A'.repeat(16)}\n`
   ]) {
@@ -931,7 +947,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
 
 test('shell-variable credential references are not treated as literal secrets', () => {
   const root = fixture();
-  skill(root, 'ticktock', 'export OPENAI_API_KEY="$OPENAI_API_KEY"\nexport AUTH_TOKEN=${AUTH_TOKEN}\nAuthorization: Bearer $ACCESS_TOKEN\n');
+  skill(root, 'ticktock', 'export OPENAI_API_KEY="$OPENAI_API_KEY"\nexport AUTH_TOKEN=${AUTH_TOKEN}\nAuthorization: Bearer $ACCESS_TOKEN\nAuthorization: Basic ${BASIC_AUTH}\n');
   const result = sync({ root, handlerIds: new Set(), apply: true });
   const candidate = byId(result, 'direct-ticktock');
   assert.equal(candidate.receipt.semantic_review_state, 'reviewed_safe');

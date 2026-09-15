@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "75514cddd044af0cff7d850c51515bbad5ffdd14d8b672f4d57428f2f7db3832",
+    "expected_tree_sha256": "7df9ec9e6724bce37438f8826b06b01ca9ce4d22310313ff4352856bc42afd42",
     "expected_files": [
       {
         "path": ".agents/skills/go/SKILL.md",
@@ -197,7 +197,7 @@
       },
       {
         "path": ".agents/skills/source-command-council-of-owls/SKILL.md",
-        "sha256": "f74ea22cff412b353ee39b5f6488501236c4113f7981244103c9547d3bae5c45",
+        "sha256": "2732b26bd134e7499229f916b6c4a528306ed70e12d61d68be6ac64f914072ad",
         "mode": 420
       },
       {
@@ -227,7 +227,7 @@
       },
       {
         "path": ".agents/skills/source-command-deliberate/SKILL.md",
-        "sha256": "d39aa80ff418cbb4d91d5df5c9160f422a36621073df2a693a1b239e5bea4474",
+        "sha256": "3077df5457f3a46ddcf6eb5a93857ecde86122bba6e1231e8e17ba421a0b8a05",
         "mode": 420
       },
       {
@@ -252,12 +252,12 @@
       },
       {
         "path": ".agents/skills/source-command-dl/SKILL.md",
-        "sha256": "fcd16a20372bcd0d8ddd956b572fecd4b46117859b3cb37d302bc2707266750c",
+        "sha256": "c4d827ab4ade16f402aa551e6a9507ced661eec0a9b6b0a83030b30081e9af2a",
         "mode": 420
       },
       {
         "path": ".agents/skills/source-command-el/SKILL.md",
-        "sha256": "8f30d215bc0260c4ecafb8454c07ef92d487afc0eda215b9d31d1f0b1a95b7aa",
+        "sha256": "bbb26e19e3da76ea7e62119ff63f7d26d9132226f658d68a4c8b59741a71dc98",
         "mode": 420
       },
       {
@@ -412,7 +412,7 @@
       },
       {
         "path": ".agents/skills/source-command-help-me-route/SKILL.md",
-        "sha256": "6878d64846d94b9b5919c197eb92ae09876b7426c36807616fc4f4fa50cd6fa7",
+        "sha256": "7facf492d5bc6a7b2c775650bff09029c1ab5804171a86b0358bee98a3b92248",
         "mode": 420
       },
       {
@@ -497,12 +497,12 @@
       },
       {
         "path": ".agents/skills/source-command-oa/SKILL.md",
-        "sha256": "2212057d2b5aaa83434a5b9034d449be0a818f9667acfab59c8a88bcaaf35543",
+        "sha256": "2802b8ebe3483233d41066e4eff7d527eb99e17adcd18ef0b53b3b11ca9c3482",
         "mode": 420
       },
       {
         "path": ".agents/skills/source-command-oc/SKILL.md",
-        "sha256": "ff9033c8ca2585d5f15cba622c2c65184aff59168f47f4f2a2e9eed186807fe1",
+        "sha256": "f61109baa909f7cdc5b661060f18263c6740560af2532030c823b48bcee5ff24",
         "mode": 420
       },
       {
@@ -522,7 +522,7 @@
       },
       {
         "path": ".agents/skills/source-command-owl/SKILL.md",
-        "sha256": "70a2ec8542305a4790aa25ee086b404b397fb7f9512ad9464540a12ed0eb104f",
+        "sha256": "307758dba86be090a8c8c3d977e95e8c8bc3c79d34a449c5edc8194e45300de9",
         "mode": 420
       },
       {
@@ -2217,7 +2217,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-parity-remediation__verification.md",
-        "sha256": "71d02f019144358bb37f80d92205d63f224a27896154f61b77eba6312447ffe5",
+        "sha256": "c3fb746f949a7df8ac86191176dc97a7de78013f5e92db91cc18c9955cecfe08",
         "mode": 420
       },
       {
@@ -2612,7 +2612,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-council-of-owls/SKILL.md",
-        "sha256": "f74ea22cff412b353ee39b5f6488501236c4113f7981244103c9547d3bae5c45",
+        "sha256": "2732b26bd134e7499229f916b6c4a528306ed70e12d61d68be6ac64f914072ad",
         "mode": 420
       },
       {
@@ -2642,7 +2642,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-deliberate/SKILL.md",
-        "sha256": "d39aa80ff418cbb4d91d5df5c9160f422a36621073df2a693a1b239e5bea4474",
+        "sha256": "3077df5457f3a46ddcf6eb5a93857ecde86122bba6e1231e8e17ba421a0b8a05",
         "mode": 420
       },
       {
@@ -2667,12 +2667,12 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-dl/SKILL.md",
-        "sha256": "fcd16a20372bcd0d8ddd956b572fecd4b46117859b3cb37d302bc2707266750c",
+        "sha256": "c4d827ab4ade16f402aa551e6a9507ced661eec0a9b6b0a83030b30081e9af2a",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-el/SKILL.md",
-        "sha256": "8f30d215bc0260c4ecafb8454c07ef92d487afc0eda215b9d31d1f0b1a95b7aa",
+        "sha256": "bbb26e19e3da76ea7e62119ff63f7d26d9132226f658d68a4c8b59741a71dc98",
         "mode": 420
       },
       {
@@ -2827,7 +2827,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-help-me-route/SKILL.md",
-        "sha256": "6878d64846d94b9b5919c197eb92ae09876b7426c36807616fc4f4fa50cd6fa7",
+        "sha256": "7facf492d5bc6a7b2c775650bff09029c1ab5804171a86b0358bee98a3b92248",
         "mode": 420
       },
       {
@@ -2912,12 +2912,12 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-oa/SKILL.md",
-        "sha256": "2212057d2b5aaa83434a5b9034d449be0a818f9667acfab59c8a88bcaaf35543",
+        "sha256": "2802b8ebe3483233d41066e4eff7d527eb99e17adcd18ef0b53b3b11ca9c3482",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-oc/SKILL.md",
-        "sha256": "ff9033c8ca2585d5f15cba622c2c65184aff59168f47f4f2a2e9eed186807fe1",
+        "sha256": "f61109baa909f7cdc5b661060f18263c6740560af2532030c823b48bcee5ff24",
         "mode": 420
       },
       {
@@ -2937,7 +2937,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-owl/SKILL.md",
-        "sha256": "70a2ec8542305a4790aa25ee086b404b397fb7f9512ad9464540a12ed0eb104f",
+        "sha256": "307758dba86be090a8c8c3d977e95e8c8bc3c79d34a449c5edc8194e45300de9",
         "mode": 420
       },
       {
@@ -8772,7 +8772,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "4a86256800b3d5d61f0626af274c0892ec31b7d4f983125394e87dd3db5f6f2f",
+        "sha256": "ce480ce9705c897a9bb1dee0ad8592763bd79837bb8e69c0a275f68b30964162",
         "mode": 420
       },
       {
@@ -15147,7 +15147,7 @@
       },
       {
         "path": "tools/skills/__tests__/sync-codex-skills.test.cjs",
-        "sha256": "682499e7eef5597aa203b04370e3763f3f324907faea32b39ef15f673632c23b",
+        "sha256": "1074e4e0bcc5153bd9e2bebab5e53b8e9492dfaad65870c8dafc86df31064d48",
         "mode": 420
       },
       {
@@ -15157,7 +15157,7 @@
       },
       {
         "path": "tools/skills/sync-codex-skills.cjs",
-        "sha256": "c2c6ba9bacb037419f7f6205417e04eb82522a6547f69d2d1bb22d8a4d2659fd",
+        "sha256": "c48b5ad36219aea2c1ff650815ce1e4ba0726c221ff547f66ac82bac6248982d",
         "mode": 420
       },
       {
@@ -16884,7 +16884,7 @@
     "package_script_count": 206,
     "command_alias_registry_sha256": "9bbc50aa1343a5502258e0e067eca0bb4cf4ea9f560abc5b998247a0e04b9901",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "4a86256800b3d5d61f0626af274c0892ec31b7d4f983125394e87dd3db5f6f2f",
+    "graph_sha256": "ce480ce9705c897a9bb1dee0ad8592763bd79837bb8e69c0a275f68b30964162",
     "graph_nodes": 4092,
     "graph_edges": 2905
   },

@@ -5,7 +5,7 @@ description: "Shortest operator alias for Evidence Loop: distinct-family review,
 
 # /el
 
-Canonical authority: `instructions/canonical/commands/el.yaml`. Read that file at execution time; this projection never copies or overrides its behavioral body.
+Typed-wrapper provenance: `instructions/canonical/commands/el.yaml`. Canonical behavioral authority: `instructions/canonical/commands/evidence-loop.yaml`. Read the authority file at execution time; the wrapper preserves invocation provenance but never overrides authoritative behavior.
 
 Capability tier: **ADVISORY**.
 

@@ -4,7 +4,7 @@ Refreshed under the approved parity amendment at `2026-09-14T18:51:57Z` in the d
 
 ## Mechanical results
 
-- Combined projector, lifecycle, and alias regressions: 96 passed, 0 failed.
+- Combined projector, lifecycle, and alias regressions: 97 passed, 0 failed.
 - `node tools/skills/sync-codex-skills.cjs --check`: aligned.
 - `node tools/skills/sync-lifecycle-command-skills.cjs --check`: six lifecycle skills aligned against the committed general projection evidence.
 - Pinned Codex `quick_validate.py`, using the repository PyYAML environment: 131 of 131 applied packages valid; 176 of 176 top-level staged candidate packages valid. Nested child skills are excluded from parent resources, so the staged tree contains exactly 176 independently projected `SKILL.md` files.
@@ -16,7 +16,7 @@ Refreshed under the approved parity amendment at `2026-09-14T18:51:57Z` in the d
 
 ## Protected parity amendment
 
-- Wiring graph regenerated: 4,091 nodes, 2,900 edges, 0 unresolved.
+- Wiring graph regenerated: 4,092 nodes, 2,905 edges, 0 unresolved.
 - Target-only baseline repair registered 3,361 expected files while preserving the complete source and membrane policy objects byte-for-byte.
 - Portable `npm run verify:parity`: `ok: true`, 0 findings.
 - Authoritative private-denylist verification against the existing bound hash: `ok: true`, 0 findings. The external file and its location are not serialized in tracked artifacts.
@@ -66,6 +66,8 @@ The forty-first Cloud Codex review found direct descriptions retained validator-
 The forty-second Cloud Codex review found literal bearer credentials, projected descriptions beyond Codex's 1,024-character bound, and quoted YAML scalars whose escapes were not decoded. Bearer headers now enter the redacted rejection path while shell-variable references remain allowed, final descriptions are bounded across direct, canonical, and framework projections, and supported quoted scalar escapes are decoded before rendering; focused regressions cover all three.
 
 The forty-third Cloud Codex review found credential-shaped alias routing fields, unbounded framework execution modes, and inline YAML comments corrupting typed sequence aliases. Alias identifiers and targets now pass a sanitized private/credential gate before evidence construction, framework modes use the same declared-mode validation as direct skills, and the alias parser strips comments outside quoted scalars; focused regressions cover all three.
+
+The forty-fourth Cloud Codex review found typed wrappers citing provenance as behavioral authority, literal Basic authorization credentials escaping rejection, and the configured canonical target prefix being ignored. Typed wrappers now preserve their alias file as provenance while loading the resolved authority source, Basic and Bearer headers share the redacted credential path with placeholder exemptions, and canonical names and targets derive from the validated configured prefix; focused regressions cover all three.
 
 ## Falsifiers and residuals
 

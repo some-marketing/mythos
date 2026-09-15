@@ -29,6 +29,15 @@ function validateSlugId(value, label) {
   return id;
 }
 
+function canonicalProjectionName(config, commandId) {
+  const prefix = String(config.families.canonical_commands.target_prefix || '');
+  if (containsPrivateAbsolutePath(prefix) || containsCredentialMaterial(prefix)
+    || !SAFE_ID_PATTERN.test(`${prefix}x`)) {
+    throw new Error('Invalid canonical command target prefix');
+  }
+  return validateSlugId(`${prefix}${commandId}`, 'canonical projection name');
+}
+
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }
@@ -229,7 +238,7 @@ function loadCanonicalCommands(root, config) {
           : null;
       command = { spec, sourcePath, filenameId, declaredId, malformed };
     }
-    if (`source-command-${filenameId}`.length > 64) {
+    if (canonicalProjectionName(config, filenameId).length > 64) {
       command.malformed = `canonical command projection name exceeds 64 characters for filename ${JSON.stringify(filenameId)}`;
     }
     if (nested) command.malformed = `nested canonical command path rejected for filename ${JSON.stringify(filenameId)}`;
@@ -413,13 +422,15 @@ function resolveAliases(root, config, commands, directNames, registryOverride) {
     if (!row || !row.id) continue;
     const rawId = String(row.id).trim();
     const target = String(row.execution_target || row.target || '').trim();
-    if ([rawId, target].some((value) => containsPrivateAbsolutePath(value) || containsCredentialMaterial(value))) {
+    const authoritySource = String(row.authority_source || '').trim();
+    if ([rawId, target, authoritySource].some((value) => containsPrivateAbsolutePath(value) || containsCredentialMaterial(value))) {
       throw new Error('Refusing private or credential-bearing alias routing field');
     }
     const id = validateSlugId(rawId, 'alias id');
     if (target) validateSlugId(target, `target for alias ${id}`);
+    if (authoritySource) validateSlugId(authoritySource, `authority for alias ${id}`);
     if (aliases.has(id)) throw new Error(`Duplicate alias id: ${id}`);
-    aliases.set(id, { ...row, id });
+    aliases.set(id, { ...row, id, ...(authoritySource ? { authority_source: authoritySource } : {}) });
   }
   const results = [];
 
@@ -454,7 +465,7 @@ function aliasesByTerminal(aliasResults, canonicalCommands = new Map()) {
   return map;
 }
 
-function renderCanonicalSkill(commandId, spec, capabilityTier, override, aliases = []) {
+function renderCanonicalSkill(commandId, spec, capabilityTier, override, aliases = [], projectionName = `source-command-${commandId}`, authorityCommandId = commandId) {
   const aliasText = aliases.length ? ` Aliases resolved at generation time: ${aliases.map((id) => `/${id}`).join(', ')}.` : '';
   const description = `${spec.description || `Canonical /${commandId} command.`}${aliasText}`
     .replace(/[<>]/g, (value) => value === '<' ? '(' : ')');
@@ -463,7 +474,10 @@ function renderCanonicalSkill(commandId, spec, capabilityTier, override, aliases
     : capabilityTier === 'BLOCKING'
       ? `Run \`node tools/commands/mythos-command-runner.cjs\` with one positional command string formed from \`/${commandId}\` followed by the user's actual invocation arguments. With no arguments, pass exactly \`/${commandId}\`. Never pass placeholder text in place of the user's arguments. The exported HANDLERS registry is the evidence for deterministic execution.`
       : `Read the canonical command at execution time and carry out its workflow with Codex capabilities. This projection is ${capabilityTier}; availability of this skill is not a blocking runtime mechanism.`;
-  return `---\nname: source-command-${commandId}\ndescription: ${JSON.stringify(description)}\n---\n\n# /${commandId}\n\nCanonical authority: \`instructions/canonical/commands/${commandId}.yaml\`. Read that file at execution time; this projection never copies or overrides its behavioral body.\n\nCapability tier: **${capabilityTier}**.\n\n${execution}\n`;
+  const authority = authorityCommandId === commandId
+    ? `Canonical authority: \`instructions/canonical/commands/${commandId}.yaml\`. Read that file at execution time; this projection never copies or overrides its behavioral body.`
+    : `Typed-wrapper provenance: \`instructions/canonical/commands/${commandId}.yaml\`. Canonical behavioral authority: \`instructions/canonical/commands/${authorityCommandId}.yaml\`. Read the authority file at execution time; the wrapper preserves invocation provenance but never overrides authoritative behavior.`;
+  return `---\nname: ${projectionName}\ndescription: ${JSON.stringify(description)}\n---\n\n# /${commandId}\n\n${authority}\n\nCapability tier: **${capabilityTier}**.\n\n${execution}\n`;
 }
 
 function frameworkIdentity(root, sourcePath) {
@@ -537,7 +551,7 @@ function containsCredentialMaterial(bytes) {
   const text = String(bytes);
   return /-----BEGIN (?:[A-Z0-9]+ )*PRIVATE KEY-----/.test(text)
     || /(?:^|[^A-Za-z0-9])(?:sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|(?:AKIA|ASIA)[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|glpat-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{35})(?:$|[^A-Za-z0-9_-])/m.test(text)
-    || /(?:^|[^A-Z0-9_])["']?AUTHORIZATION["']?\s*[:=]\s*["']?BEARER\s+(?!(?:<|\$(?:\{|[A-Za-z_])|your[-_]|example|redacted|placeholder))[A-Za-z0-9._~+/=-]{16,}/im.test(text)
+    || /(?:^|[^A-Z0-9_])["']?AUTHORIZATION["']?\s*[:=]\s*["']?(?:BEARER|BASIC)\s+(?!(?:<|\$(?:\{|[A-Za-z_])|your[-_]|example|redacted|placeholder))[A-Za-z0-9._~+/=-]{16,}/im.test(text)
     || /(?:^|[^A-Z0-9_])["']?(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY|API[_-]?KEY|CLIENT[_-]?SECRET|PASSWORD|PASSWD|ACCESS[_-]?TOKEN|REFRESH[_-]?TOKEN|AUTH[_-]?TOKEN|SECRET|SECRET[_-]?KEY|PRIVATE[_-]?KEY)["']?\s*[:=]\s*["']?(?!(?:<|\$(?:\{|[A-Za-z_])|your[-_]|example|redacted|placeholder))[^\s"'`]+/im.test(text);
 }
 
@@ -600,6 +614,9 @@ function buildCandidates(options = {}) {
   const typedAliasTerminals = new Map(aliasResults
     .filter((result) => result.ok && commands.has(result.alias.id))
     .map((result) => [result.alias.id, result.terminal]));
+  const typedAliasAuthorities = new Map(aliasResults
+    .filter((result) => result.ok && commands.has(result.alias.id))
+    .map((result) => [result.alias.id, result.alias.authority_source || result.terminal]));
   const candidates = [];
   const aliasRegistryPath = validateConfiguredSource(root, config.alias_registry, 'alias registry');
   const aliasRegistryBytes = options.aliasRegistry
@@ -607,7 +624,8 @@ function buildCandidates(options = {}) {
     : fs.readFileSync(aliasRegistryPath);
 
   for (const [id, command] of commands) {
-    const targetRel = posix(path.join(config.target_root, `source-command-${id}`, 'SKILL.md'));
+    const projectionName = canonicalProjectionName(config, id);
+    const targetRel = posix(path.join(config.target_root, projectionName, 'SKILL.md'));
     if (command.duplicates) {
       for (const duplicate of command.duplicates) {
         const sourceRel = relative(root, duplicate.sourcePath);
@@ -637,7 +655,7 @@ function buildCandidates(options = {}) {
       : handlers.has(executionTarget) ? 'BLOCKING' : 'ADVISORY';
     const reviewState = (override && override.semantic_review_state) || config.families.canonical_commands.semantic_review_state;
     const sourceBytes = fs.readFileSync(command.sourcePath);
-    const content = renderCanonicalSkill(id, command.spec, tier, override, terminalAliases.get(id) || []);
+    const content = renderCanonicalSkill(id, command.spec, tier, override, terminalAliases.get(id) || [], projectionName, typedAliasAuthorities.get(id) || id);
     const rendered = parseFrontmatter(content);
     const invalidDescription = !rendered.ok || rendered.metadata.description.length > 1024;
     const forbidden = (override && override.forbidden_source_fragments) || [];
@@ -751,7 +769,7 @@ function buildCandidates(options = {}) {
     const typedCommandTarget = result.ok && commands.has(alias.id);
     const commandTarget = terminal && commands.has(terminal);
     const targetRel = terminal
-      ? posix(path.join(config.target_root, typedCommandTarget ? `source-command-${alias.id}` : commandTarget ? `source-command-${terminal}` : terminal, 'SKILL.md'))
+      ? posix(path.join(config.target_root, typedCommandTarget ? canonicalProjectionName(config, alias.id) : commandTarget ? canonicalProjectionName(config, terminal) : terminal, 'SKILL.md'))
       : posix(path.join(config.target_root, `unresolved-alias-${alias.id}`, 'SKILL.md'));
     const targetCandidate = candidates.find((candidate) => candidate.receipt.target_exact_path === targetRel);
     const targetAvailable = result.ok && isApplicable(targetCandidate || {});

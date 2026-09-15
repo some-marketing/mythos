@@ -5,7 +5,7 @@ description: "Human-friendly alias for /route"
 
 # /help-me-route
 
-Canonical authority: `instructions/canonical/commands/help-me-route.yaml`. Read that file at execution time; this projection never copies or overrides its behavioral body.
+Typed-wrapper provenance: `instructions/canonical/commands/help-me-route.yaml`. Canonical behavioral authority: `instructions/canonical/commands/route.yaml`. Read the authority file at execution time; the wrapper preserves invocation provenance but never overrides authoritative behavior.
 
 Capability tier: **BLOCKING**.
 

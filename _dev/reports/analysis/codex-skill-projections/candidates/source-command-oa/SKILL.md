@@ -5,7 +5,7 @@ description: "Shortest operator alias for Owl Audit: review-first orchestration 
 
 # /oa
 
-Canonical authority: `instructions/canonical/commands/oa.yaml`. Read that file at execution time; this projection never copies or overrides its behavioral body.
+Typed-wrapper provenance: `instructions/canonical/commands/oa.yaml`. Canonical behavioral authority: `instructions/canonical/commands/orchestrate-loop.yaml`. Read the authority file at execution time; the wrapper preserves invocation provenance but never overrides authoritative behavior.
 
 Capability tier: **ADVISORY**.
 

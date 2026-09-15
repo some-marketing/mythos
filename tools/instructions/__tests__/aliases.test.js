@@ -77,6 +77,24 @@ test('parseAliasRegistry tolerates the commented YAML form across domains', () =
   assert.deepEqual(reg.skill_aliases, []);
 });
 
+test('parseAliasRegistry preserves typed aliases in YAML sequence form', () => {
+  const raw = [
+    'aliases:',
+    '  - id: dl',
+    '    kind: operator_shorthand',
+    '    target: deliberate',
+    '    execution_target: orchestrate-loop',
+    '    authority_source: orchestrate-loop'
+  ].join('\n');
+  assert.deepEqual(parseAliasRegistry(raw).aliases, [{
+    id: 'dl',
+    kind: 'operator_shorthand',
+    target: 'deliberate',
+    execution_target: 'orchestrate-loop',
+    authority_source: 'orchestrate-loop'
+  }]);
+});
+
 test('loads the shipped typed command registry without losing target or authority', () => {
   const aliases = loadCommandAliases(SURFACE_ROOT);
   assert.equal(aliases.length, 10);

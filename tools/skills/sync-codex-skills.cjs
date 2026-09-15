@@ -161,11 +161,13 @@ function normalizeDirectSkill(text, targetName, aliases = []) {
     return { ok: false, error: 'frontmatter execution_mode must be one declared execution mode' };
   }
   const aliasSuffix = aliases.length ? ` Aliases: ${aliases.map((id) => `/${id}`).join(', ')}.` : '';
+  const description = `${parsed.metadata.description}${aliasSuffix}`
+    .replace(/[<>]/g, (value) => value === '<' ? '(' : ')');
   const executionMetadata = projectionExecutionMetadata(parsed.metadata);
   const supportedFields = projectionSupportedFrontmatter(parsed.metadata);
   return {
     ok: true,
-    content: `---\nname: ${targetName}\ndescription: ${JSON.stringify(`${parsed.metadata.description}${aliasSuffix}`)}\n${supportedFields}${executionMetadata}---\n${parsed.body}`
+    content: `---\nname: ${targetName}\ndescription: ${JSON.stringify(description)}\n${supportedFields}${executionMetadata}---\n${parsed.body}`
   };
 }
 

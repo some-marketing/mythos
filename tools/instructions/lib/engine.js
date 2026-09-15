@@ -88,6 +88,7 @@ function parseSimpleAliasYaml(raw) {
     const trimmedLine = line.trim();
     if (!trimmedLine || trimmedLine.startsWith('#')) continue;
     const indent = line.length - line.trimStart().length;
+    const sequenceMatch = trimmedLine.match(/^-\s+([^:]+):\s*(.*)$/);
     const match = trimmedLine.match(/^([^:]+):\s*(.*)$/);
     if (!match) continue;
     const key = match[1].trim();
@@ -96,11 +97,16 @@ function parseSimpleAliasYaml(raw) {
       currentDomain = ALIAS_DOMAIN_KEYS.includes(key) ? key : null;
       currentEntry = null;
       if (currentDomain) maps[currentDomain] = maps[currentDomain] || {};
+    } else if (currentDomain && indent <= 2 && sequenceMatch) {
+      if (!Array.isArray(maps[currentDomain])) maps[currentDomain] = [];
+      currentEntry = { [sequenceMatch[1].trim()]: stripQuotes(sequenceMatch[2].trim()) };
+      maps[currentDomain].push(currentEntry);
     } else if (currentDomain && indent <= 2) {
-      currentEntry = key;
-      maps[currentDomain][currentEntry] = {};
+      if (Array.isArray(maps[currentDomain])) continue;
+      currentEntry = {};
+      maps[currentDomain][key] = currentEntry;
     } else if (currentDomain && currentEntry) {
-      maps[currentDomain][currentEntry][key] = value;
+      currentEntry[key] = value;
     }
   }
   return maps;

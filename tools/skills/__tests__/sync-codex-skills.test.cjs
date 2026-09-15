@@ -113,6 +113,13 @@ test('frontmatter parsing removes YAML comments without corrupting quoted hashes
   assert.doesNotMatch(normalized.content, /no writes|bounded/);
 });
 
+test('direct descriptions replace angle brackets rejected by Codex validation', () => {
+  const normalized = normalizeDirectSkill('---\nname: demo\ndescription: Run <task> safely\n---\nbody\n', 'demo');
+  assert.equal(normalized.ok, true);
+  assert.match(normalized.content, /description: "Run \(task\) safely"/);
+  assert.doesNotMatch(normalized.content, /<task>/);
+});
+
 test('direct skills reject non-scalar and unknown execution modes', () => {
   for (const mode of ['execution_mode:\n  - REVIEW_ONLY\n  - PATCH_ALLOWED', 'execution_mode: SUPERUSER']) {
     const normalized = normalizeDirectSkill(`---\nname: demo\ndescription: demo\n${mode}\n---\nbody\n`, 'demo');

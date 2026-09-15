@@ -634,6 +634,27 @@ test('alias metadata becomes unavailable when its target is collision-rejected',
   assert.equal(alias.receipt.application_status, 'blocked_target_unavailable');
 });
 
+test('collision-rejected dependencies block direct dependents and their aliases', () => {
+  const root = fixture();
+  const adapterPath = path.join(root, 'instructions/adapters/codex.yaml');
+  const adapter = JSON.parse(fs.readFileSync(adapterPath, 'utf8'));
+  adapter.skill_projection.families.direct_system_skills.sources = [
+    '.claude/skills/source-command-sample/SKILL.md',
+    '.claude/skills/child/SKILL.md'
+  ];
+  adapter.skill_projection.families.direct_system_skills.dependencies = { child: ['source-command-sample'] };
+  fs.writeFileSync(adapterPath, `${JSON.stringify(adapter, null, 2)}\n`);
+  command(root, 'sample');
+  skill(root, 'source-command-sample');
+  skill(root, 'child');
+  const aliases = { aliases: [{ id: 'child-alias', target: 'child' }] };
+  const result = buildCandidates({ root, handlerIds: new Set(), aliasRegistry: aliases });
+  const child = byId(result, 'direct-child');
+  assert.equal(child.receipt.capability_tier, 'ABSENT');
+  assert.equal(child.receipt.semantic_review_state, 'dependency_unavailable');
+  assert.equal(byId(result, 'alias-child-alias').receipt.semantic_review_state, 'target_unavailable');
+});
+
 test('framework projections honor the configured target prefix', () => {
   const root = fixture();
   const adapterPath = path.join(root, 'instructions/adapters/codex.yaml');

@@ -771,22 +771,25 @@ function buildCandidates(options = {}) {
       dependencies: dependencies.map((dependency) => validateSlugId(dependency, `dependency for direct skill ${name}`))
     });
   }
-  let dependencyChanged;
-  do {
-    dependencyChanged = false;
-    for (const { candidate, dependencies } of validatedDependencies) {
-      if (!isApplicable(candidate)) continue;
-      const missing = dependencies.filter((dependency) => !isApplicable(directCandidates.get(dependency) || {}));
-      if (!missing.length) continue;
-      candidate.content = null;
-      candidate.resources = [];
-      candidate.receipt.capability_tier = 'ABSENT';
-      candidate.receipt.semantic_review_state = 'dependency_unavailable';
-      candidate.receipt.application_status = 'blocked_dependency';
-      candidate.receipt.detail = `required direct skill dependency unavailable: ${missing.join(', ')}`;
-      dependencyChanged = true;
-    }
-  } while (dependencyChanged);
+  const blockUnavailableDirectDependencies = () => {
+    let dependencyChanged;
+    do {
+      dependencyChanged = false;
+      for (const { candidate, dependencies } of validatedDependencies) {
+        if (!isApplicable(candidate)) continue;
+        const missing = dependencies.filter((dependency) => !isApplicable(directCandidates.get(dependency) || {}));
+        if (!missing.length) continue;
+        candidate.content = null;
+        candidate.resources = [];
+        candidate.receipt.capability_tier = 'ABSENT';
+        candidate.receipt.semantic_review_state = 'dependency_unavailable';
+        candidate.receipt.application_status = 'blocked_dependency';
+        candidate.receipt.detail = `required direct skill dependency unavailable: ${missing.join(', ')}`;
+        dependencyChanged = true;
+      }
+    } while (dependencyChanged);
+  };
+  blockUnavailableDirectDependencies();
 
   const frameworkSourcePattern = String(config.families.framework_helpers.source_pattern || '');
   if (frameworkSourcePattern !== 'frameworks/*/*/.claude/skills/**/SKILL.md') {
@@ -857,6 +860,8 @@ function buildCandidates(options = {}) {
       candidate.id = `${candidate.id}-${sha256(candidate.receipt.source_relative_path).slice(0, 8)}`;
     }
   }
+
+  blockUnavailableDirectDependencies();
 
   for (const [wrapperId, authorityId] of typedAliasAuthorities) {
     const wrapperTarget = posix(path.join(config.target_root, canonicalProjectionName(config, wrapperId), 'SKILL.md'));

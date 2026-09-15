@@ -4,7 +4,7 @@ Refreshed under the approved parity amendment at `2026-09-14T18:51:57Z` in the d
 
 ## Mechanical results
 
-- Combined projector, lifecycle, and alias regressions: 113 passed, 0 failed.
+- Combined projector, lifecycle, and alias regressions: 114 passed, 0 failed.
 - `node tools/skills/sync-codex-skills.cjs --check`: aligned.
 - `node tools/skills/sync-lifecycle-command-skills.cjs --check`: six lifecycle skills aligned against the committed general projection evidence.
 - Pinned Codex `quick_validate.py`, using the repository PyYAML environment: 131 of 131 applied packages valid; 176 of 176 top-level staged candidate packages valid. Nested child skills are excluded from parent resources, so the staged tree contains exactly 176 independently projected `SKILL.md` files.
@@ -82,6 +82,8 @@ The forty-ninth Cloud Codex review found that valid short Bearer credentials rem
 The fiftieth Cloud Codex review found that typed aliases could reference an existing but inapplicable canonical authority and that non-handler canonical commands ignored the adapter's configured default capability tier. Typed wrappers now become unavailable unless their evaluated authority candidate is applicable, and canonical defaults are read from a validated declared capability tier while handler evidence still promotes deterministic commands to `BLOCKING`. Focused regressions cover malformed authorities plus `UNKNOWN` and invalid configured defaults.
 
 The fifty-first Cloud Codex review found URI-userinfo credentials escaping detection, direct and framework projections ignoring tightened configured frontmatter keys, and valid YAML block scalars with chomping or indentation indicators being rejected. URI authority credentials now enter the redacted rejection path, the validated adapter allowlist governs optional retained fields and metadata, and block scalar parsing accepts both indicator orders. Focused regressions cover all three findings.
+
+The fifty-second Cloud Codex review found direct dependency gating could become stale when collision classification later invalidated a required package. The same fixed-point dependency gate now runs after collision resolution and before alias availability is finalized, so both dependent skills and their aliases become unavailable. A focused collision-plus-dependency regression covers the ordering.
 
 ## Falsifiers and residuals
 

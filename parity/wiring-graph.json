@@ -1726,6 +1726,20 @@
       "mode": 420
     },
     {
+      "id": "file:.agents/skills/outward-inward-loop/references/tt-adaptation.md",
+      "type": "file",
+      "path": ".agents/skills/outward-inward-loop/references/tt-adaptation.md",
+      "sha256": "a2b3b66dc5b9fedf6cc2ff12a3e2699f7ecdfa6776ccee05574693edd1141ffb",
+      "mode": 420
+    },
+    {
+      "id": "file:.agents/skills/outward-inward-loop/SKILL.md",
+      "type": "file",
+      "path": ".agents/skills/outward-inward-loop/SKILL.md",
+      "sha256": "02a1f3c57a1328f5e3b8ec78d1de59de26f85218f156a653b22c4a7614e14942",
+      "mode": 420
+    },
+    {
       "id": "file:.agents/skills/source-command-ad-copy-dev/SKILL.md",
       "type": "file",
       "path": ".agents/skills/source-command-ad-copy-dev/SKILL.md",
@@ -2381,6 +2395,13 @@
       "type": "file",
       "path": ".agents/skills/source-command-orchestrate/SKILL.md",
       "sha256": "a413a0e204b64cbbdc08085c02f7de2520c40e3c897d6745b0bbfd67219ae3e2",
+      "mode": 420
+    },
+    {
+      "id": "file:.agents/skills/source-command-outward-inward/SKILL.md",
+      "type": "file",
+      "path": ".agents/skills/source-command-outward-inward/SKILL.md",
+      "sha256": "6963505634587efba03f24f717ef6bf11319d5ef27a8d755b6093a00b10b5d7f",
       "mode": 420
     },
     {
@@ -53423,7 +53444,7 @@
     }
   ],
   "counts": {
-    "nodes": 4110,
+    "nodes": 4113,
     "edges": 2926,
     "unresolved": 0
   }

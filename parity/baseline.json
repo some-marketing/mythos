@@ -43,11 +43,21 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "e98a17c267ca44a4508750d80c1ef3fb23b90adb1b4cacd3395fe531d9329704",
+    "expected_tree_sha256": "49d33a3fc5875df0fff6d3c0b91516c3c9d5b3017853a32f191f175264267014",
     "expected_files": [
       {
         "path": ".agents/skills/go/SKILL.md",
         "sha256": "1a441653a5c5ff6408d0e6b5e175f4b1f1f336b77b08e18a3a28f69eb6cf0f55",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/outward-inward-loop/SKILL.md",
+        "sha256": "02a1f3c57a1328f5e3b8ec78d1de59de26f85218f156a653b22c4a7614e14942",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/outward-inward-loop/references/tt-adaptation.md",
+        "sha256": "a2b3b66dc5b9fedf6cc2ff12a3e2699f7ecdfa6776ccee05574693edd1141ffb",
         "mode": 420
       },
       {
@@ -518,6 +528,11 @@
       {
         "path": ".agents/skills/source-command-orchestrate/SKILL.md",
         "sha256": "a413a0e204b64cbbdc08085c02f7de2520c40e3c897d6745b0bbfd67219ae3e2",
+        "mode": 420
+      },
+      {
+        "path": ".agents/skills/source-command-outward-inward/SKILL.md",
+        "sha256": "6963505634587efba03f24f717ef6bf11319d5ef27a8d755b6093a00b10b5d7f",
         "mode": 420
       },
       {
@@ -2491,6 +2506,16 @@
         "mode": 420
       },
       {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/outward-inward-loop/SKILL.md",
+        "sha256": "02a1f3c57a1328f5e3b8ec78d1de59de26f85218f156a653b22c4a7614e14942",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/outward-inward-loop/references/tt-adaptation.md",
+        "sha256": "a2b3b66dc5b9fedf6cc2ff12a3e2699f7ecdfa6776ccee05574693edd1141ffb",
+        "mode": 420
+      },
+      {
         "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-ad-copy-dev/SKILL.md",
         "sha256": "9f0071a981b3fbf5b24daf347b7b9847a7adc818cbcf9b5443b053b40414be71",
         "mode": 420
@@ -2961,6 +2986,11 @@
         "mode": 420
       },
       {
+        "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-outward-inward/SKILL.md",
+        "sha256": "6963505634587efba03f24f717ef6bf11319d5ef27a8d755b6093a00b10b5d7f",
+        "mode": 420
+      },
+      {
         "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-owl/SKILL.md",
         "sha256": "128b7ef0ea8e85af24d608278dca5357546e61cabf6d5edd5e1b34ea95c34663",
         "mode": 420
@@ -3141,63 +3171,143 @@
         "mode": 420
       },
       {
+        "path": "_dev/reports/analysis/codex-skill-projections/lifecycle/candidates/source-command-boot/SKILL.md",
+        "sha256": "848d519e3cceb67121b3bb814b2a7e6d10b495ace8567b57399febe2cace08db",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/lifecycle/candidates/source-command-cross-session/SKILL.md",
+        "sha256": "3deea9c0c20f41aae56acdc3071974aad9199f8fab71134512f0b12d6af51905",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/lifecycle/candidates/source-command-end-session/SKILL.md",
+        "sha256": "909ad5ac729c7ed423683cb313852b6e0aeae2961111f2cce965bbd18ac5ba8a",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/lifecycle/candidates/source-command-new-session/SKILL.md",
+        "sha256": "270e5077fc4452915e5f0caaa20af362fd61f73439cb4edb30027086d814d2a6",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/lifecycle/candidates/source-command-next-session/SKILL.md",
+        "sha256": "ba121ea60ab2ac109630f8d899ec2d7647fd9341d97001a82f1dd0df248dca76",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/lifecycle/candidates/source-command-shutdown/SKILL.md",
+        "sha256": "b33512ec700249b382a1da8e8ec79545528b334a26e42cfa490762df0e0ec359",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/lifecycle/managed-targets.json",
+        "sha256": "da606f17372e6a4c097e03a428ed9d5d0e93ce7a8530a75387d2c09b0ccd0920",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/lifecycle/projection-index.json",
+        "sha256": "c99531d0d39c2f430060924e0ed50f097a18ce6f084767db558dc1d416bc0157",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/lifecycle/receipts/command-boot.json",
+        "sha256": "fe5e9a594af6980e14dc029127b5b19ba34b937ec1e59af53e8409fd2bd890be",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/lifecycle/receipts/command-cross-session.json",
+        "sha256": "d9060a14ba85b227d4add5f5e6d8d641bec00667b5aa1e4b1e73d083ab0fcfd5",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/lifecycle/receipts/command-end-session.json",
+        "sha256": "2c25174c566e4153ca6b12070080dbb795bd1b1071d2ba3a7d5c8a9ce7fc9201",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/lifecycle/receipts/command-new-session.json",
+        "sha256": "583390747ab4872ed9de5882952769a7a15cdf69c1bc3b30f1e3e4b5c30f6290",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/lifecycle/receipts/command-next-session.json",
+        "sha256": "0ac61d2e91beb0199fa6a735b40ae7689b155294119d9153d6eaa58606dd69a8",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/lifecycle/receipts/command-shutdown.json",
+        "sha256": "4f9c0b9e5860a43d87f5eafa5111ae8a2e82852d181f0b141acd007c7057be8e",
+        "mode": 420
+      },
+      {
         "path": "_dev/reports/analysis/codex-skill-projections/managed-targets.json",
-        "sha256": "1469fe3275eb816c628bb67a0cabcf2f3ea39df7d50a57038ec46ab7beefd0f3",
+        "sha256": "8b0e2aff959cd7ae9c8f8fbae79a2e116a6df1defe0c447b802743098d5b6d56",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/projection-index.json",
-        "sha256": "40fb2cc8588532e5f82af4b7095b237e460e839698e99167f78b84cb8dda1a82",
+        "sha256": "b31e09c6ea28fc470c17c8e00ed5149cba94172487e985e505472196728ca3b3",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-blueprint.json",
-        "sha256": "92355c301e41853ee3a01c68c6fee538f735cce15fd22a13d03d79e515330d4a",
+        "sha256": "98b3616905ac1a65b3013b6748b64bb14c11a937fda6b7e582cd79bacf8ba0ec",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-chi.json",
+        "sha256": "0d0da2c363e408a0dbe686ba73579be5aa95b442f1888e01bf28a9f75632e07c",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-council-of-owls.json",
-        "sha256": "c6db838b6bc908e6090b128190c86c2c53151aab4fc407db4c200f3ad2971aeb",
+        "sha256": "79f94d4df7147a285aeac0b6fb1003f1682b75c6cad8b926f257179143892d35",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-deliberate.json",
-        "sha256": "f54702ae447942605406d3dacd8fc31ddb50efb47cb6d578274b4c0ddd02a37a",
+        "sha256": "26b4afe4e1cd47714060f83d5060403164a15dad39e22a49f6355390efb35086",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-dl.json",
-        "sha256": "1a804d964a62da6be2253eafc74cbbb3e9b60a272a940bc0b9a10996dfc6ed15",
+        "sha256": "91b2c0caa2f39ff97e79da5d686eb90a30a05cd88dc49f032846b7da1a959daa",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-el.json",
-        "sha256": "ad1328814fcd2f76c88b0f21e54750ab45ff1f8bc9ab216f63f1cf154cecf3f2",
+        "sha256": "d662a0ff0467e8d70cbc689fe63d408686e6a7be719c73422768093becf8966f",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-help-me-route.json",
-        "sha256": "795ce93f47e536a5d653db4eaa199b9aa05f16f5be3872045ffca45b737bf246",
+        "sha256": "25aac4697df5f72c51d7f7691daf38a40a35ccae520ef8008a4bbeaafa1f2e7e",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-oa.json",
-        "sha256": "2e881eed4100da2d1409496764b7d68a2ee2d71ec9ac47d61114e4ddac8845c0",
+        "sha256": "f5b1195bce803dbcfd14c886d9448ae6de1639868a8af5424d51a48d5548b795",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-oc.json",
-        "sha256": "05c1f539c6135b0f407c64b2ec94f8dc8b1a3cb55c26da78f6ae5f7ac3a32982",
+        "sha256": "b5ad4ab6a1a12ff4e015e5b263ee4919a25892ba35dc5e8cb42a8788c93beb21",
+        "mode": 420
+      },
+      {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-oil.json",
+        "sha256": "0d0da2c363e408a0dbe686ba73579be5aa95b442f1888e01bf28a9f75632e07c",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-owl.json",
-        "sha256": "8a12dd447069eb2e0d33440b6b14957b84bce6866274554db8a56c31d4d9c0d6",
+        "sha256": "6489d38b87a036ee69c062df0dfef3a929e56378f76459109c80ebe930e013b7",
         "mode": 420
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/alias-tt.json",
-        "sha256": "1b09664f982b8ed2b390085360cea369c019b834d27332041a8354caac220494",
+        "sha256": "cce5e0d2666e28df8f73d0276e7c838d56819286727b6b84a50fb6150a57b189",
         "mode": 420
       },
       {
@@ -3671,6 +3781,11 @@
         "mode": 420
       },
       {
+        "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-outward-inward.json",
+        "sha256": "cae3df5d212f4468d3aaec743c5dece01ebf3d96062dc1403c382a7064908d5a",
+        "mode": 420
+      },
+      {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-owl.json",
         "sha256": "b6aae03c007b420d117ae0c76d45060cfbf23e234a6e0b0af62f0f2678e828dc",
         "mode": 420
@@ -3862,7 +3977,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/direct-outward-inward-loop.json",
-        "sha256": "81da7f215181a3fbf752eea8b1201906b5ba76df601f9614cfeffe593c403f6d",
+        "sha256": "ab8d0cd815c7e6d6a6e23560896721cd127e7621e5316e92b7845dfc193e410d",
         "mode": 420
       },
       {
@@ -8802,7 +8917,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "ec6881d5bf74becbe0e502ee07c2dd2faac257066164085a756a4af7d7774ce5",
+        "sha256": "f0a49159d6758f5b8dc38fa86e0576ec4b4342612c9146c9449be28b3071c6dc",
         "mode": 420
       },
       {
@@ -16924,8 +17039,8 @@
     "package_script_count": 206,
     "command_alias_registry_sha256": "bf0f8b941e0dc0d7b7d3938b765ac379a62b1c3bac50984358cd133afd1012d2",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "ec6881d5bf74becbe0e502ee07c2dd2faac257066164085a756a4af7d7774ce5",
-    "graph_nodes": 4110,
+    "graph_sha256": "f0a49159d6758f5b8dc38fa86e0576ec4b4342612c9146c9449be28b3071c6dc",
+    "graph_nodes": 4113,
     "graph_edges": 2926
   },
   "runtime_exclusions": [

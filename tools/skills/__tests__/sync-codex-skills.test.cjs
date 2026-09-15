@@ -345,6 +345,18 @@ test('canonical commands require one declared execution mode', () => {
   }
 });
 
+test('canonical descriptions must be scalar strings', () => {
+  for (const description of [{ text: 'object' }, ['sequence']]) {
+    const root = fixture();
+    command(root, 'sample', { description });
+    const candidate = byId(sync({ root, handlerIds: new Set(), apply: true }), 'command-sample');
+    assert.equal(candidate.content, null);
+    assert.equal(candidate.receipt.semantic_review_state, 'malformed');
+    assert.match(candidate.receipt.detail, /canonical command description must be a scalar string/);
+    assert.equal(fs.existsSync(path.join(root, '.agents/skills/source-command-sample/SKILL.md')), false);
+  }
+});
+
 test('canonical rendered content is rejected without retaining private or credential bytes', () => {
   const root = fixture();
   const secret = `sk-${'q'.repeat(24)}`;
@@ -547,6 +559,24 @@ test('framework namespace collisions are rejected', () => {
     assert.equal(fs.existsSync(path.join(staged.candidateDir, 'receipts', `${candidate.id}.json`)), true);
     assert.equal(fs.existsSync(path.join(staged.candidateDir, 'candidates', candidate.id, 'SKILL.md')), true);
   }
+});
+
+test('alias metadata becomes unavailable when its target is collision-rejected', () => {
+  const root = fixture();
+  const adapterPath = path.join(root, 'instructions/adapters/codex.yaml');
+  const adapter = JSON.parse(fs.readFileSync(adapterPath, 'utf8'));
+  adapter.skill_projection.families.direct_system_skills.sources = ['.claude/skills/source-command-sample/SKILL.md'];
+  fs.writeFileSync(adapterPath, `${JSON.stringify(adapter, null, 2)}\n`);
+  command(root, 'sample');
+  skill(root, 'source-command-sample');
+  const aliases = { aliases: [{ id: 'sample-alias', target: 'sample' }] };
+  const result = buildCandidates({ root, handlerIds: new Set(), aliasRegistry: aliases });
+  const targets = result.candidates.filter((candidate) => candidate.receipt.target_exact_path === '.agents/skills/source-command-sample/SKILL.md');
+  assert.equal(targets.filter((candidate) => candidate.receipt.projection_kind !== 'alias_metadata').every((candidate) => candidate.receipt.collision_state === 'collision'), true);
+  const alias = byId(result, 'alias-sample-alias');
+  assert.equal(alias.receipt.capability_tier, 'ABSENT');
+  assert.equal(alias.receipt.semantic_review_state, 'target_unavailable');
+  assert.equal(alias.receipt.application_status, 'blocked_target_unavailable');
 });
 
 test('framework projections honor the configured target prefix', () => {
@@ -1013,7 +1043,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     `AUTH_TOKEN: authsecretvalue${'h'.repeat(16)}\n`,
     `SECRET=baresecretvalue${'s'.repeat(16)}\n`,
     `Authorization: Bearer ordinarysecretvalue${'b'.repeat(16)}\n`,
-    `Authorization: Basic basicsecretvalue${'i'.repeat(16)}\n`,
+    'Authorization: Basic dTpw\n',
     `-----BEGIN ENCRYPTED PRIVATE KEY-----\nencryptedprivatebytes${'e'.repeat(16)}\n-----END ENCRYPTED PRIVATE KEY-----\n`,
     `temporary ASIA${'A'.repeat(16)}\n`
   ]) {

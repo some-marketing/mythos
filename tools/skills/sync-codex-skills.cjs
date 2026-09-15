@@ -261,7 +261,9 @@ function loadCanonicalCommands(root, config) {
             ? `canonical id mismatch for filename ${JSON.stringify(filenameId)}`
             : typeof spec.mode !== 'string' || !EXECUTION_MODES.has(spec.mode)
               ? 'canonical command mode must be one declared execution mode'
-              : null;
+              : typeof spec.description !== 'string'
+                ? 'canonical command description must be a scalar string'
+                : null;
         command = { spec, sourcePath, filenameId, declaredId, malformed };
       }
     }
@@ -585,7 +587,8 @@ function containsCredentialMaterial(bytes) {
   const text = String(bytes);
   return /-----BEGIN (?:[A-Z0-9]+ )*PRIVATE KEY-----/.test(text)
     || /(?:^|[^A-Za-z0-9])(?:sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|(?:AKIA|ASIA)[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|glpat-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{35})(?:$|[^A-Za-z0-9_-])/m.test(text)
-    || /(?:^|[^A-Z0-9_])["']?AUTHORIZATION["']?\s*[:=]\s*["']?(?:BEARER|BASIC)\s+(?!(?:<|\$(?:\{|[A-Za-z_])|your[-_]|example|redacted|placeholder))[A-Za-z0-9._~+/=-]{16,}/im.test(text)
+    || /(?:^|[^A-Z0-9_])["']?AUTHORIZATION["']?\s*[:=]\s*["']?BEARER\s+(?!(?:<|\$(?:\{|[A-Za-z_])|your[-_]|example|redacted|placeholder))[A-Za-z0-9._~+/=-]{16,}/im.test(text)
+    || /(?:^|[^A-Z0-9_])["']?AUTHORIZATION["']?\s*[:=]\s*["']?BASIC\s+(?!(?:<|\$(?:\{|[A-Za-z_])|your[-_]|example|redacted|placeholder))[A-Za-z0-9+/=]{4,}/im.test(text)
     || /(?:^|[^A-Z0-9_])["']?(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY|API[_-]?KEY|CLIENT[_-]?SECRET|PASSWORD|PASSWD|ACCESS[_-]?TOKEN|REFRESH[_-]?TOKEN|AUTH[_-]?TOKEN|SECRET|SECRET[_-]?KEY|PRIVATE[_-]?KEY)["']?\s*[:=]\s*["']?(?!(?:<|\$(?:\{|[A-Za-z_])|your[-_]|example|redacted|placeholder))[^\s"'`]+/im.test(text);
 }
 
@@ -833,6 +836,16 @@ function buildCandidates(options = {}) {
       candidate.receipt.application_status = 'blocked';
       candidate.id = `${candidate.id}-${sha256(candidate.receipt.source_relative_path).slice(0, 8)}`;
     }
+  }
+
+  for (const candidate of candidates.filter((item) => item.receipt.projection_kind === 'alias_metadata' && item.aliasTerminal)) {
+    const targetCandidate = candidates.find((item) => item.receipt.projection_kind !== 'alias_metadata'
+      && item.receipt.target_exact_path === candidate.receipt.target_exact_path);
+    if (isApplicable(targetCandidate || {})) continue;
+    candidate.receipt.capability_tier = 'ABSENT';
+    candidate.receipt.semantic_review_state = 'target_unavailable';
+    candidate.receipt.application_status = 'blocked_target_unavailable';
+    candidate.receipt.detail = 'resolved target is not an applicable Codex skill';
   }
 
   const configuredTargetRoot = normalizedConfiguredTargetRoot(config.target_root);

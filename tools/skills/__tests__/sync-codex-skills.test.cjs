@@ -641,6 +641,20 @@ test('symlinked source roots cannot redefine repository containment', () => {
   assert.throws(() => sync({ root, handlerIds: new Set() }), /Refusing symbolic-link direct skill source root/);
 });
 
+test('canonical and framework discovery roots are validated before recursive walking', () => {
+  const canonicalRoot = fixture();
+  const externalCanonical = fs.mkdtempSync(path.join(os.tmpdir(), 'external-commands-'));
+  fs.mkdirSync(path.join(canonicalRoot, 'instructions/canonical'), { recursive: true });
+  fs.symlinkSync(externalCanonical, path.join(canonicalRoot, 'instructions/canonical/commands'));
+  assert.throws(() => buildCandidates({ root: canonicalRoot, handlerIds: new Set() }), /Refusing symbolic-link canonical command source root/);
+
+  const frameworkRoot = fixture();
+  command(frameworkRoot, 'sample');
+  const externalFrameworks = fs.mkdtempSync(path.join(os.tmpdir(), 'external-frameworks-'));
+  fs.symlinkSync(externalFrameworks, path.join(frameworkRoot, 'frameworks'));
+  assert.throws(() => buildCandidates({ root: frameworkRoot, handlerIds: new Set() }), /Refusing symbolic-link framework skill source root/);
+});
+
 test('sensitive and credential-bearing bundled resources are rejected', () => {
   const envRoot = fixture();
   skill(envRoot, 'ticktock');
@@ -680,6 +694,9 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     `OPENAI_API_KEY: yamlsecretvalue${'y'.repeat(16)}\n`,
     `"OPENAI_API_KEY": "jsonsecretvalue${'j'.repeat(16)}"\n`,
     `api_key: genericsecretvalue${'g'.repeat(16)}\n`,
+    `CLIENT_SECRET=clientsecretvalue${'c'.repeat(16)}\n`,
+    `PASSWORD: passwordsecretvalue${'p'.repeat(16)}\n`,
+    `ACCESS_TOKEN="accesssecretvalue${'a'.repeat(16)}"\n`,
     `temporary ASIA${'A'.repeat(16)}\n`
   ]) {
     const root = fixture();
@@ -689,7 +706,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     assert.equal(candidate.receipt.semantic_review_state, 'private_path_rejected');
     assert.equal(candidate.receipt.source_sha256, null);
     assert.equal(fs.existsSync(path.join(root, '.agents/skills/ticktock/SKILL.md')), false);
-    assert.doesNotMatch(JSON.stringify(candidate.receipt), /zzzzzzzz|ordinarysecretvalue|yamlsecretvalue|jsonsecretvalue|genericsecretvalue|ASIAAAAA/);
+    assert.doesNotMatch(JSON.stringify(candidate.receipt), /zzzzzzzz|ordinarysecretvalue|yamlsecretvalue|jsonsecretvalue|genericsecretvalue|clientsecretvalue|passwordsecretvalue|accesssecretvalue|ASIAAAAA/);
   }
 });
 

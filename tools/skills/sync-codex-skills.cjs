@@ -168,6 +168,7 @@ function loadHandlerIds(root, config) {
 function loadCanonicalCommands(root, config) {
   const sourceRoot = path.join(root, config.families.canonical_commands.source_root);
   const commands = new Map();
+  validateSourceRoot(sourceRoot, 'canonical command', root);
   for (const sourcePath of walk(sourceRoot, (file) => file.endsWith('.yaml'))) {
     validateSourceFile(sourcePath, sourceRoot, 'canonical command', root);
     const filenameId = validateSlugId(path.basename(sourcePath, '.yaml'), 'canonical command filename');
@@ -218,7 +219,7 @@ function isWithin(parent, child) {
   return relation !== '' && relation !== '..' && !relation.startsWith(`..${path.sep}`) && !path.isAbsolute(relation);
 }
 
-function validateSourceFile(sourcePath, sourceRoot, label, projectRoot = PROJECT_ROOT) {
+function validateSourceRoot(sourceRoot, label, projectRoot = PROJECT_ROOT) {
   const lexicalProjectRoot = path.resolve(projectRoot);
   const lexicalSourceRoot = path.resolve(sourceRoot);
   if (lexicalSourceRoot !== lexicalProjectRoot && !isWithin(lexicalProjectRoot, lexicalSourceRoot)) {
@@ -226,15 +227,27 @@ function validateSourceFile(sourcePath, sourceRoot, label, projectRoot = PROJECT
   }
   let cursor = lexicalSourceRoot;
   while (cursor !== lexicalProjectRoot) {
-    const rootMetadata = fs.lstatSync(cursor);
-    if (rootMetadata.isSymbolicLink()) throw new Error(`Refusing symbolic-link ${label} source root: ${cursor}`);
+    try {
+      const rootMetadata = fs.lstatSync(cursor);
+      if (rootMetadata.isSymbolicLink()) throw new Error(`Refusing symbolic-link ${label} source root: ${cursor}`);
+    } catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+    }
     cursor = path.dirname(cursor);
   }
   const realProjectRoot = fs.realpathSync(lexicalProjectRoot);
-  const realRoot = fs.realpathSync(lexicalSourceRoot);
+  const realRoot = resolvedPath(lexicalSourceRoot);
   if (realRoot !== realProjectRoot && !isWithin(realProjectRoot, realRoot)) {
     throw new Error(`Refusing resolved ${label} source root outside repository: ${sourceRoot}`);
   }
+  if (fs.existsSync(lexicalSourceRoot) && !fs.lstatSync(lexicalSourceRoot).isDirectory()) {
+    throw new Error(`Refusing non-directory ${label} source root: ${sourceRoot}`);
+  }
+  return realRoot;
+}
+
+function validateSourceFile(sourcePath, sourceRoot, label, projectRoot = PROJECT_ROOT) {
+  const realRoot = validateSourceRoot(sourceRoot, label, projectRoot);
   const metadata = fs.lstatSync(sourcePath);
   if (metadata.isSymbolicLink()) throw new Error(`Refusing symbolic-link ${label} source: ${relative(sourceRoot, sourcePath)}`);
   if (!metadata.isFile()) throw new Error(`Refusing non-file ${label} source: ${relative(sourceRoot, sourcePath)}`);
@@ -462,7 +475,7 @@ function containsCredentialMaterial(bytes) {
   const text = String(bytes);
   return /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/.test(text)
     || /(?:^|[^A-Za-z0-9])(?:sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|(?:AKIA|ASIA)[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|glpat-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{35})(?:$|[^A-Za-z0-9_-])/m.test(text)
-    || /(?:^|[^A-Z0-9_])["']?(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY|API[_-]?KEY)["']?\s*[:=]\s*["']?(?!(?:<|\$\{|your[-_]|example|redacted|placeholder))[^\s"'`]+/im.test(text);
+    || /(?:^|[^A-Z0-9_])["']?(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY|API[_-]?KEY|CLIENT[_-]?SECRET|PASSWORD|PASSWD|ACCESS[_-]?TOKEN|REFRESH[_-]?TOKEN|SECRET[_-]?KEY)["']?\s*[:=]\s*["']?(?!(?:<|\$\{|your[-_]|example|redacted|placeholder))[^\s"'`]+/im.test(text);
 }
 
 function isSensitiveResourcePath(relativePath) {
@@ -627,6 +640,7 @@ function buildCandidates(options = {}) {
   } while (dependencyChanged);
 
   const frameworkRoot = path.join(root, 'frameworks');
+  validateSourceRoot(frameworkRoot, 'framework skill', root);
   for (const sourcePath of walk(frameworkRoot, (file) => file.endsWith(`${path.sep}SKILL.md`) && file.includes(`${path.sep}.claude${path.sep}skills${path.sep}`))) {
     if (sourcePath.split(path.sep).includes('_template')) continue;
     const identity = frameworkIdentity(root, sourcePath);

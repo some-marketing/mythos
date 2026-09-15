@@ -199,6 +199,10 @@ test('direct and framework skills preserve execution modes declared in inline me
   const nestedDuplicate = normalizeDirectSkill('---\nname: demo\ndescription: demo\nmetadata: {execution_mode: FINDINGS_ONLY, execution_mode: PATCH_ALLOWED}\n---\nbody\n', 'demo');
   assert.equal(nestedDuplicate.ok, false);
   assert.match(nestedDuplicate.error, /metadata flow mapping must contain only scalar strings/);
+
+  const block = normalizeDirectSkill('---\nname: demo\ndescription: demo\nmetadata:\n  execution_mode: FINDINGS_ONLY\n  trust_tier: report_only\n---\nbody\n', 'demo');
+  assert.equal(block.ok, true);
+  assert.match(block.content, /metadata:\n  execution_mode: "FINDINGS_ONLY"\n  trust_tier: "report_only"/);
 });
 
 test('direct and framework descriptions reject YAML non-string tokens and empty text', () => {
@@ -1274,6 +1278,8 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     'bearer = "supersecretvalue"\n',
     'auth: "supersecretvalue"\n',
     'accessKey: "supersecretvalue"\n',
+    'password: process.env.DB_PASSWORD || "supersecretvalue"\n',
+    'token: config.token ?? `supersecretvalue`\n',
     'stripeAPIKey = "supersecretvalue"\n',
     'openAIAPIKey: `supersecretvalue`\n',
     'dbPASSWORD = "supersecretvalue"\n',

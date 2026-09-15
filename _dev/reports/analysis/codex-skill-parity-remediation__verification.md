@@ -131,6 +131,8 @@ The seventy-fourth Cloud Codex review found duplicate execution-mode keys weaken
 
 The seventy-fifth Cloud Codex review found bare `auth` assignments escaping credential rejection and duplicate execution keys inside inline metadata mappings retaining only the later value. Bare auth fields now enter the same placeholder-aware rejection path, and flow-mapping parsing fails closed on duplicate keys. Focused regressions cover both variants.
 
+The seventy-sixth Cloud Codex review found property-reference exemptions accepting trailing literal fallback secrets and block-style metadata mappings being rejected despite matching generated projection form. Credential references are now exempt only when they consume the complete assignment value, and scalar block metadata mappings preserve supported execution fields while rejecting non-string or duplicate entries. Focused regressions cover both paths.
+
 ## Falsifiers and residuals
 
 Acceptance would be disproved by an applied `UNKNOWN` or pending candidate, copied alias behavior, a non-handler command marked `BLOCKING`, a private path in a shipped projection, a canonical/client diff, a failed runtime discovery claim, or an unresolved distinct-family blocker. None was observed.

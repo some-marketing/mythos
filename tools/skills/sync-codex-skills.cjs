@@ -240,6 +240,23 @@ function parseFrontmatter(text, sourcePath = '<memory>') {
         items.push(item);
       }
       value = items;
+    } else if (!value && key === 'metadata' && index + 1 < lines.length && /^\s+[A-Za-z0-9_-]+:/.test(lines[index + 1])) {
+      const fields = {};
+      while (index + 1 < lines.length) {
+        const fieldMatch = lines[index + 1].match(/^\s+([A-Za-z0-9_-]+):\s*(.+)$/);
+        if (!fieldMatch) break;
+        index += 1;
+        const rawField = stripYamlInlineComment(fieldMatch[2].trim()).trim();
+        if (!rawField || isYamlNonStringToken(rawField)) {
+          return { ok: false, error: 'frontmatter metadata block mapping must contain only scalar strings', sourcePath };
+        }
+        const decoded = decodeQuotedYamlScalar(rawField);
+        if (decoded === INVALID_YAML_SCALAR || Object.prototype.hasOwnProperty.call(fields, fieldMatch[1])) {
+          return { ok: false, error: 'frontmatter metadata block mapping must contain unique scalar strings', sourcePath };
+        }
+        fields[fieldMatch[1]] = decoded;
+      }
+      value = fields;
     }
     if (key === 'allowed-tools' && typeof value === 'string' && value.startsWith('[') && value.endsWith(']')) {
       const items = parseYamlFlowStringList(value);
@@ -734,8 +751,8 @@ function containsCredentialMaterial(bytes) {
     || containsLiteralAuthorizationCredential(text)
     || containsLiteralCookieCredential(text)
     || /[A-Za-z][A-Za-z0-9+.-]*:\/\/[^\s/@:]+:(?!(?:<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=@))[^@\s/]+@/im.test(text)
-    || /(?:^|[^A-Za-z0-9_])["']?(?:(?:[A-Za-z][A-Za-z0-9]*)?(?:ApiKey|ClientSecret|Password|Passwd|AccessKey|AccessToken|RefreshToken|AuthToken|SessionToken|SecretKey|PrivateKey|Secret|Credentials?)|apiKey|clientSecret|password|passwd|accessKey|accessToken|refreshToken|authToken|sessionToken|auth|bearer|token|secretKey|privateKey|secret|credentials?)["']?\s*[:=]\s*["'`]?(?!(?:(?:process\.env|import\.meta\.env|env|config|secrets)\.[A-Za-z_$][A-Za-z0-9_$]*|<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=$|[\s,;}"'`]))[^\s"'`]+/im.test(text)
-    || /(?:^|[^A-Z0-9_])["']?(?:[A-Z][A-Z0-9_-]*[_-])?(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY|API[_-]?KEY|CLIENT[_-]?SECRET|PASSWORD|PASSWD|ACCESS[_-]?KEY|ACCESS[_-]?TOKEN|REFRESH[_-]?TOKEN|AUTH[_-]?TOKEN|AUTH|BEARER|TOKEN|SECRET|CREDENTIALS?|SECRET[_-]?KEY|PRIVATE[_-]?KEY)["']?\s*[:=]\s*["'`]?(?!(?:(?:process\.env|import\.meta\.env|env|config|secrets)\.[A-Za-z_$][A-Za-z0-9_$]*|<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=$|[\s,;}"'`]))[^\s"'`]+/im.test(text);
+    || /(?:^|[^A-Za-z0-9_])["']?(?:(?:[A-Za-z][A-Za-z0-9]*)?(?:ApiKey|ClientSecret|Password|Passwd|AccessKey|AccessToken|RefreshToken|AuthToken|SessionToken|SecretKey|PrivateKey|Secret|Credentials?)|apiKey|clientSecret|password|passwd|accessKey|accessToken|refreshToken|authToken|sessionToken|auth|bearer|token|secretKey|privateKey|secret|credentials?)["']?\s*[:=]\s*["'`]?(?!(?:(?:process\.env|import\.meta\.env|env|config|secrets)\.[A-Za-z_$][A-Za-z0-9_$]*|<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)[ \t]*(?=$|[,;}"'`]))[^\s"'`]+/im.test(text)
+    || /(?:^|[^A-Z0-9_])["']?(?:[A-Z][A-Z0-9_-]*[_-])?(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY|API[_-]?KEY|CLIENT[_-]?SECRET|PASSWORD|PASSWD|ACCESS[_-]?KEY|ACCESS[_-]?TOKEN|REFRESH[_-]?TOKEN|AUTH[_-]?TOKEN|AUTH|BEARER|TOKEN|SECRET|CREDENTIALS?|SECRET[_-]?KEY|PRIVATE[_-]?KEY)["']?\s*[:=]\s*["'`]?(?!(?:(?:process\.env|import\.meta\.env|env|config|secrets)\.[A-Za-z_$][A-Za-z0-9_$]*|<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)[ \t]*(?=$|[,;}"'`]))[^\s"'`]+/im.test(text);
 }
 
 function isSensitiveResourcePath(relativePath) {

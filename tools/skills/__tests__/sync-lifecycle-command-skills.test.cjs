@@ -50,6 +50,23 @@ test('compatibility wrapper selects the complete lifecycle family from the gener
   assert.equal(result.index.receipts.every((receipt) => receipt.startsWith('receipts/command-')), true);
 });
 
+test('compatibility wrapper honors configured target roots and canonical prefixes', () => {
+  const root = fixture();
+  const adapterPath = path.join(root, 'instructions', 'adapters', 'codex.yaml');
+  const adapter = JSON.parse(fs.readFileSync(adapterPath, 'utf8'));
+  adapter.skill_projection.target_root = '.codex/skills';
+  adapter.skill_projection.families.canonical_commands.target_prefix = 'cmd-';
+  fs.writeFileSync(adapterPath, `${JSON.stringify(adapter, null, 2)}\n`);
+  const result = syncLifecycle({ root, handlerIds: new Set(), apply: true });
+  assert.equal(result.candidates.length, LIFECYCLE_COMMANDS.length);
+  for (const id of LIFECYCLE_COMMANDS) {
+    assert.equal(fs.existsSync(path.join(root, '.codex/skills', `cmd-${id}`, 'SKILL.md')), true);
+  }
+  const ledgerPath = path.join(root, '_dev/reports/analysis/codex-skill-projections/managed-targets.json');
+  const ledger = JSON.parse(fs.readFileSync(ledgerPath, 'utf8'));
+  assert.equal(ledger.targets.includes('.codex/skills/cmd-boot/SKILL.md'), true);
+});
+
 test('compatibility wrapper is additive-only and reports existing drift', () => {
   const root = fixture();
   const targetDir = path.join(root, '.agents', 'skills');

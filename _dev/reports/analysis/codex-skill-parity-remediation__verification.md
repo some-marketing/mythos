@@ -4,7 +4,7 @@ Refreshed under the approved parity amendment at `2026-09-14T18:51:57Z` in the d
 
 ## Mechanical results
 
-- Combined projector, lifecycle, and alias regressions: 97 passed, 0 failed.
+- Combined projector, lifecycle, and alias regressions: 101 passed, 0 failed.
 - `node tools/skills/sync-codex-skills.cjs --check`: aligned.
 - `node tools/skills/sync-lifecycle-command-skills.cjs --check`: six lifecycle skills aligned against the committed general projection evidence.
 - Pinned Codex `quick_validate.py`, using the repository PyYAML environment: 131 of 131 applied packages valid; 176 of 176 top-level staged candidate packages valid. Nested child skills are excluded from parent resources, so the staged tree contains exactly 176 independently projected `SKILL.md` files.
@@ -68,6 +68,8 @@ The forty-second Cloud Codex review found literal bearer credentials, projected 
 The forty-third Cloud Codex review found credential-shaped alias routing fields, unbounded framework execution modes, and inline YAML comments corrupting typed sequence aliases. Alias identifiers and targets now pass a sanitized private/credential gate before evidence construction, framework modes use the same declared-mode validation as direct skills, and the alias parser strips comments outside quoted scalars; focused regressions cover all three.
 
 The forty-fourth Cloud Codex review found typed wrappers citing provenance as behavioral authority, literal Basic authorization credentials escaping rejection, and the configured canonical target prefix being ignored. Typed wrappers now preserve their alias file as provenance while loading the resolved authority source, Basic and Bearer headers share the redacted credential path with placeholder exemptions, and canonical names and targets derive from the validated configured prefix; focused regressions cover all three.
+
+The forty-fifth Cloud Codex review found package suffix and custody validation still tied to the default target root, non-object canonical documents aborting discovery, and typed wrappers accepting nonexistent canonical authority sources. Package staging, application, drift checks, and custody now derive suffixes from the validated configured target root; non-object documents produce blocked malformed evidence; and typed wrappers require their declared behavioral authority to resolve to an existing canonical command. Focused regressions cover all three.
 
 ## Falsifiers and residuals
 

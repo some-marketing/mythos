@@ -232,6 +232,17 @@ test('typed aliases with canonical workflows retain their own runtime pointer', 
   assert.equal(byId(result, 'alias-deliberate').receipt.target_exact_path, '.agents/skills/source-command-deliberate/SKILL.md');
 });
 
+test('typed aliases reject missing canonical authority sources', () => {
+  const root = fixture();
+  command(root, 'wrapper');
+  command(root, 'orchestrate-loop');
+  const aliases = { aliases: [{ id: 'wrapper', target: 'orchestrate-loop', authority_source: 'missing-authority' }] };
+  assert.throws(
+    () => buildCandidates({ root, handlerIds: new Set(), aliasRegistry: aliases }),
+    /Alias authority source is not a canonical command: missing-authority/
+  );
+});
+
 test('handler-backed typed aliases retain their wrapper and deterministic execution', () => {
   const root = fixture();
   command(root, 'route');
@@ -293,6 +304,19 @@ test('canonical JSON parse errors are sanitized before entering receipts', () =>
   assert.doesNotMatch(JSON.stringify(candidate.receipt), /sk-zzzz/);
 });
 
+test('non-object canonical documents stage as malformed instead of aborting', () => {
+  for (const document of ['null', '[]']) {
+    const root = fixture();
+    write(root, 'instructions/canonical/commands/broken.yaml', `${document}\n`);
+    const candidate = byId(sync({ root, handlerIds: new Set(), apply: true }), 'command-broken');
+    assert.equal(candidate.content, null);
+    assert.equal(candidate.receipt.semantic_review_state, 'malformed');
+    assert.equal(candidate.receipt.application_status, 'blocked_malformed');
+    assert.match(candidate.receipt.detail, /canonical command document must be an object/);
+    assert.equal(fs.existsSync(path.join(root, '.agents/skills/source-command-broken/SKILL.md')), false);
+  }
+});
+
 test('canonical rendered content is rejected without retaining private or credential bytes', () => {
   const root = fixture();
   const secret = `sk-${'q'.repeat(24)}`;
@@ -341,6 +365,23 @@ test('canonical projections honor the configured target prefix', () => {
   assert.match(candidate.content, /^---\nname: cmd-sample\n/);
   assert.equal(fs.existsSync(path.join(root, '.agents/skills/cmd-sample/SKILL.md')), true);
   assert.equal(fs.existsSync(path.join(root, '.agents/skills/source-command-sample/SKILL.md')), false);
+});
+
+test('projection application and custody honor the configured target root', () => {
+  const root = fixture();
+  const adapterPath = path.join(root, 'instructions/adapters/codex.yaml');
+  const adapter = JSON.parse(fs.readFileSync(adapterPath, 'utf8'));
+  adapter.skill_projection.target_root = '.codex/skills';
+  fs.writeFileSync(adapterPath, `${JSON.stringify(adapter, null, 2)}\n`);
+  command(root, 'sample');
+  const applied = sync({ root, handlerIds: new Set(), apply: true });
+  const candidate = byId(applied, 'command-sample');
+  assert.equal(candidate.receipt.target_exact_path, '.codex/skills/source-command-sample/SKILL.md');
+  assert.equal(fs.existsSync(path.join(root, '.codex/skills/source-command-sample/SKILL.md')), true);
+  assert.equal(fs.existsSync(path.join(root, '.codex/skills/.codex/skills/source-command-sample/SKILL.md')), false);
+  const ledger = JSON.parse(fs.readFileSync(path.join(root, '_dev/reports/analysis/codex-skill-projections/managed-targets.json'), 'utf8'));
+  assert.deepEqual(ledger.targets, ['.codex/skills/source-command-sample/SKILL.md']);
+  assert.equal(sync({ root, handlerIds: new Set(), check: true }).drift, 0);
 });
 
 test('canonical descriptions replace angle brackets rejected by Codex validation', () => {

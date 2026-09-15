@@ -38,6 +38,26 @@ function canonicalProjectionName(config, commandId) {
   return validateSlugId(`${prefix}${commandId}`, 'canonical projection name');
 }
 
+function normalizedConfiguredTargetRoot(value) {
+  const root = posix(path.normalize(String(value || ''))).replace(/\/$/, '');
+  if (!root || root === '.' || path.posix.isAbsolute(root) || root === '..' || root.startsWith('../')) {
+    throw new Error('Invalid configured target root');
+  }
+  return root;
+}
+
+function managedTargetSuffix(value, configuredTargetRoot = '.agents/skills') {
+  const target = String(value || '');
+  const root = normalizedConfiguredTargetRoot(configuredTargetRoot);
+  const prefix = `${root}/`;
+  if (!target.startsWith(prefix)) throw new Error(`Invalid managed target path: ${JSON.stringify(value)}`);
+  const suffix = target.slice(prefix.length);
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*\/SKILL\.md$/.test(suffix)) {
+    throw new Error(`Invalid managed target path: ${JSON.stringify(value)}`);
+  }
+  return suffix;
+}
+
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }
@@ -230,13 +250,17 @@ function loadCanonicalCommands(root, config) {
       command = { malformed: sanitizedJsonError(error), sourcePath, filenameId };
     }
     if (!command) {
-      const declaredId = spec.id == null ? filenameId : String(spec.id).trim();
-      const malformed = !SAFE_ID_PATTERN.test(declaredId)
-        ? `invalid canonical id for filename ${JSON.stringify(filenameId)}`
-        : declaredId !== filenameId
-          ? `canonical id mismatch for filename ${JSON.stringify(filenameId)}`
-          : null;
-      command = { spec, sourcePath, filenameId, declaredId, malformed };
+      if (!spec || typeof spec !== 'object' || Array.isArray(spec)) {
+        command = { spec: null, sourcePath, filenameId, malformed: 'canonical command document must be an object' };
+      } else {
+        const declaredId = spec.id == null ? filenameId : String(spec.id).trim();
+        const malformed = !SAFE_ID_PATTERN.test(declaredId)
+          ? `invalid canonical id for filename ${JSON.stringify(filenameId)}`
+          : declaredId !== filenameId
+            ? `canonical id mismatch for filename ${JSON.stringify(filenameId)}`
+            : null;
+        command = { spec, sourcePath, filenameId, declaredId, malformed };
+      }
     }
     if (canonicalProjectionName(config, filenameId).length > 64) {
       command.malformed = `canonical command projection name exceeds 64 characters for filename ${JSON.stringify(filenameId)}`;
@@ -429,6 +453,9 @@ function resolveAliases(root, config, commands, directNames, registryOverride) {
     const id = validateSlugId(rawId, 'alias id');
     if (target) validateSlugId(target, `target for alias ${id}`);
     if (authoritySource) validateSlugId(authoritySource, `authority for alias ${id}`);
+    if (authoritySource && commands.has(id) && !commands.has(authoritySource)) {
+      throw new Error(`Alias authority source is not a canonical command: ${authoritySource}`);
+    }
     if (aliases.has(id)) throw new Error(`Duplicate alias id: ${id}`);
     aliases.set(id, { ...row, id, ...(authoritySource ? { authority_source: authoritySource } : {}) });
   }
@@ -801,6 +828,9 @@ function buildCandidates(options = {}) {
     }
   }
 
+  const configuredTargetRoot = normalizedConfiguredTargetRoot(config.target_root);
+  for (const candidate of candidates) candidate.configuredTargetRoot = configuredTargetRoot;
+
   return { adapter, config, candidates, targetRoot, handlers: [...handlers].sort() };
 }
 
@@ -825,7 +855,7 @@ function writeCandidate(candidateDir, candidate) {
 function stagedCandidateRelativePath(candidate) {
   return candidate.receipt.collision_state === 'collision'
     ? path.join(candidate.id, 'SKILL.md')
-    : candidate.receipt.target_exact_path.replace(/^\.agents\/skills\//, '');
+    : managedTargetSuffix(candidate.receipt.target_exact_path, candidate.configuredTargetRoot);
 }
 
 function preflightCandidateStaging(candidateDir, candidates) {
@@ -892,7 +922,7 @@ function blockApplicationDependencies(config, candidates, applicationPreflight) 
 }
 
 function expectedPackageFiles(candidate, targetRoot) {
-  const suffix = candidate.receipt.target_exact_path.replace(/^\.agents\/skills\//, '');
+  const suffix = managedTargetSuffix(candidate.receipt.target_exact_path, candidate.configuredTargetRoot);
   const skillPath = safeOutputPath(targetRoot, suffix);
   return [
     { filePath: skillPath, bytes: Buffer.from(candidate.content) },
@@ -975,20 +1005,18 @@ function packageRootHasArtifacts(packageRoot) {
 
 function blockedTargetInstalled(candidate, targetRoot) {
   if (candidate.receipt.projection_kind === 'alias_metadata' || isApplicable(candidate)) return false;
-  const suffix = candidate.receipt.target_exact_path.replace(/^\.agents\/skills\//, '');
+  const suffix = managedTargetSuffix(candidate.receipt.target_exact_path, candidate.configuredTargetRoot);
   const targetPath = safeOutputPath(targetRoot, suffix);
   const packageRoot = path.dirname(targetPath);
   return packageRootHasArtifacts(packageRoot);
 }
 
-function validateManagedTarget(value) {
-  if (typeof value !== 'string' || !/^\.agents\/skills\/[a-z0-9]+(?:-[a-z0-9]+)*\/SKILL\.md$/.test(value)) {
-    throw new Error(`Invalid managed target path: ${JSON.stringify(value)}`);
-  }
+function validateManagedTarget(value, configuredTargetRoot = '.agents/skills') {
+  managedTargetSuffix(value, configuredTargetRoot);
   return value;
 }
 
-function loadManagedTargets(candidateDir, generatorId) {
+function loadManagedTargets(candidateDir, generatorId, configuredTargetRoot = '.agents/skills') {
   const managed = new Set();
   const ledgerPath = safeOutputPath(candidateDir, 'managed-targets.json');
   const hasLedger = fs.existsSync(ledgerPath);
@@ -997,7 +1025,7 @@ function loadManagedTargets(candidateDir, generatorId) {
     if (ledger.schema !== 'CodexSkillManagedTargets/1.0' || ledger.generator_id !== generatorId || !Array.isArray(ledger.targets)) {
       throw new Error(`Invalid managed target ledger: ${ledgerPath}`);
     }
-    for (const target of ledger.targets) managed.add(validateManagedTarget(target));
+    for (const target of ledger.targets) managed.add(validateManagedTarget(target, configuredTargetRoot));
   }
   const receiptsDir = path.join(candidateDir, 'receipts');
   if (!fs.existsSync(receiptsDir)) return managed;
@@ -1016,7 +1044,7 @@ function loadManagedTargets(candidateDir, generatorId) {
     }
     if (receipt.generator_id !== generatorId || receipt.projection_kind === 'alias_metadata') continue;
     if (['already_aligned', 'applied_additive'].includes(receipt.application_status)) {
-      managed.add(validateManagedTarget(receipt.target_exact_path));
+      managed.add(validateManagedTarget(receipt.target_exact_path, configuredTargetRoot));
     }
   }
   return managed;
@@ -1143,9 +1171,9 @@ function writeManagedTargets(candidateDir, generatorId, managed) {
   }, null, 2)}\n`);
 }
 
-function preflightManagedTargetCustody(candidateDir, generatorId, targets = []) {
-  const managed = loadManagedTargets(candidateDir, generatorId);
-  for (const target of targets) managed.add(validateManagedTarget(target));
+function preflightManagedTargetCustody(candidateDir, generatorId, targets = [], configuredTargetRoot = '.agents/skills') {
+  const managed = loadManagedTargets(candidateDir, generatorId, configuredTargetRoot);
+  for (const target of targets) managed.add(validateManagedTarget(target, configuredTargetRoot));
   const indexPath = safeOutputPath(candidateDir, 'projection-index.json');
   let index = null;
   if (fs.existsSync(indexPath)) {
@@ -1157,8 +1185,8 @@ function preflightManagedTargetCustody(candidateDir, generatorId, targets = []) 
   return { managed, index, indexPath };
 }
 
-function mergeManagedTargetCustody(candidateDir, generatorId, targets) {
-  const { managed, index, indexPath } = preflightManagedTargetCustody(candidateDir, generatorId, targets);
+function mergeManagedTargetCustody(candidateDir, generatorId, targets, configuredTargetRoot = '.agents/skills') {
+  const { managed, index, indexPath } = preflightManagedTargetCustody(candidateDir, generatorId, targets, configuredTargetRoot);
   fs.mkdirSync(candidateDir, { recursive: true });
   writeManagedTargets(candidateDir, generatorId, managed);
   if (index) {
@@ -1168,14 +1196,14 @@ function mergeManagedTargetCustody(candidateDir, generatorId, targets) {
   return managed;
 }
 
-function orphanedManagedTargets(managedTargets, candidates, targetRoot) {
+function orphanedManagedTargets(managedTargets, candidates, targetRoot, configuredTargetRoot = '.agents/skills') {
   const currentTargets = new Set(candidates
     .filter((candidate) => candidate.receipt.projection_kind !== 'alias_metadata')
     .map((candidate) => candidate.receipt.target_exact_path));
   const orphaned = new Set();
   for (const target of managedTargets) {
     if (currentTargets.has(target)) continue;
-    const suffix = String(target || '').replace(/^\.agents\/skills\//, '');
+    const suffix = managedTargetSuffix(target, configuredTargetRoot);
     const targetPath = safeOutputPath(targetRoot, suffix);
     const packageRoot = path.dirname(targetPath);
     if (packageRootHasArtifacts(packageRoot)) orphaned.add(target);
@@ -1222,7 +1250,7 @@ function sync(options = {}) {
   let applied = 0;
   const configuredCandidateRoot = path.join(root, built.config.candidate_root);
   const validatedCandidateDir = validateCandidateDir(root, targetRoot, candidateDir, configuredCandidateRoot);
-  const managedTargets = loadManagedTargets(validatedCandidateDir, built.config.generator_id);
+  const managedTargets = loadManagedTargets(validatedCandidateDir, built.config.generator_id, built.config.target_root);
   preflightCandidateStaging(validatedCandidateDir, selected);
   const applicationPreflight = new Map();
   if (options.apply) {
@@ -1243,7 +1271,7 @@ function sync(options = {}) {
     for (const candidate of checked) {
       if (checkedManagedTargets.has(candidate.receipt.target_exact_path) && blockedTargetInstalled(candidate, targetRoot)) drift += 1;
     }
-    drift += orphanedManagedTargets(checkedManagedTargets, checked, targetRoot).length;
+    drift += orphanedManagedTargets(checkedManagedTargets, checked, targetRoot, built.config.target_root).length;
     const evidenceCandidates = options.checkEvidenceCandidate ? selected.filter(options.checkEvidenceCandidate) : selected;
     if (!stagedEvidenceAligned(validatedCandidateDir, evidenceCandidates, built.config.generator_id, built.handlers, managedTargets, {
       allowAdditionalEvidence: Boolean(options.checkEvidenceCandidate)
@@ -1257,7 +1285,7 @@ function sync(options = {}) {
     for (const candidate of selected) if (applyCandidate(root, candidate, targetRoot, applicationPreflight.get(candidate))) applied += 1;
     for (const candidate of selected.filter((item) => item.receipt.projection_kind !== 'alias_metadata'
       && ['applied_additive', 'already_aligned'].includes(item.receipt.application_status))) {
-      managedTargets.add(validateManagedTarget(candidate.receipt.target_exact_path));
+      managedTargets.add(validateManagedTarget(candidate.receipt.target_exact_path, built.config.target_root));
     }
     const appliedTerminals = new Set(selected.filter((item) => ['applied_additive', 'already_aligned'].includes(item.receipt.application_status)).map((item) => item.receipt.target_exact_path));
     for (const candidate of selected.filter((item) => item.receipt.projection_kind === 'alias_metadata' && item.receipt.application_status === 'metadata_candidate')) {

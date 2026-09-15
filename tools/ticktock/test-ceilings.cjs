@@ -349,6 +349,86 @@ check('a fabricated ledger whose observed_spend contradicts the receipt is refus
     `expected SPEND-RECEIPT-PROVENANCE, got ${threw ? threw.code + ': ' + threw.message : 'NO THROW'}`);
 });
 
+// ---------------------------------------------------------------------------
+// Codex PR#20 (round 3): appendRecord recomputes the ceiling verdict from
+// the ledger's own observed spend and ceilings at the lowest append
+// boundary, and refuses a completion that exceeds them unless it is
+// represented by the required CEILING-EXCEEDED halt flow.
+// ---------------------------------------------------------------------------
+process.stdout.write('\nT-round3: appendRecord recomputes and enforces the ceiling verdict, not just observed_spend consistency\n');
+
+function genuineOverLimitReceipt(dirSuffix, phaseId) {
+  const dir = fs.mkdtempSync(path.join(tmpRoot, dirSuffix));
+  const ledger = ceilings.createSpendLedger(TEST_CHARTER);
+  // TEST_CHARTER's ceiling is 10 lines_changed / 3 files_changed / 2 external
+  // actions -- 999 lines is genuinely, unambiguously over the line ceiling.
+  ceilings.accumulate(ledger, { lines_changed: 999, files: ['a.js'], external_actions: 0, phase_id: 'tt.improve', cycle_index: 0 });
+  const { ledger_path, ledger_sha256 } = ceilings.persistSpendLedger(ledger, path.join(dir, `${TEST_CHARTER.charter_id}.json`));
+  return {
+    charter_hash: TEST_CHARTER.charter_hash,
+    cycle_index: 0,
+    phase_id: phaseId,
+    ledger_path,
+    ledger_sha256,
+    observed_spend: ceilings.observedSpend(ledger),
+    checked_at: new Date().toISOString()
+  };
+}
+
+check('a receipt that LIES about within_ceiling (claims true for a genuinely over-limit ledger) is refused (CEILING-VERDICT-MISMATCH)', () => {
+  const receipt = Object.assign(genuineOverLimitReceipt('ceiling-lie-true-', 'tt.orient'), { within_ceiling: true });
+  const jp = path.join(tmpRoot, `t-ceiling-lie-${receiptSeq++}.jsonl`);
+  const artifact = path.join(tmpRoot, `t-ceiling-lie-artifact-${receiptSeq}.txt`);
+  fs.writeFileSync(artifact, 'artifact\n');
+  let threw = null;
+  try { journal.completePhase(jp, { charter_hash: TEST_CHARTER.charter_hash, cycle_index: 0, phase_id: 'tt.orient', spend_receipt: receipt }, [artifact]); } catch (err) { threw = err; }
+  assert(threw && threw.code === 'CEILING-VERDICT-MISMATCH',
+    `expected CEILING-VERDICT-MISMATCH, got ${threw ? threw.code + ': ' + threw.message : 'NO THROW'}`);
+});
+
+check('a genuinely over-limit ledger with an HONEST within_ceiling:false receipt, but NO CEILING-EXCEEDED halt_state, is refused as a successful completion (CEILING-EXCEEDED-NOT-HALTED)', () => {
+  const receipt = Object.assign(genuineOverLimitReceipt('ceiling-unhalted-', 'tt.orient'), { within_ceiling: false });
+  const jp = path.join(tmpRoot, `t-ceiling-unhalted-${receiptSeq++}.jsonl`);
+  const artifact = path.join(tmpRoot, `t-ceiling-unhalted-artifact-${receiptSeq}.txt`);
+  fs.writeFileSync(artifact, 'artifact\n');
+  let threw = null;
+  // completed !== null (completePhase always stamps completed), halt_state
+  // defaults to null -- exactly the "appended as a successful completion
+  // despite exceeding its declared ceilings" shape the finding named.
+  try { journal.completePhase(jp, { charter_hash: TEST_CHARTER.charter_hash, cycle_index: 0, phase_id: 'tt.orient', spend_receipt: receipt }, [artifact]); } catch (err) { threw = err; }
+  assert(threw && threw.code === 'CEILING-EXCEEDED-NOT-HALTED',
+    `expected CEILING-EXCEEDED-NOT-HALTED, got ${threw ? threw.code + ': ' + threw.message : 'NO THROW'}`);
+});
+
+check('a genuinely over-limit ledger, honestly reported, and represented by an actual CEILING-EXCEEDED halt_state is accepted', () => {
+  const receipt = Object.assign(genuineOverLimitReceipt('ceiling-honest-halt-', 'tt.orient'), { within_ceiling: false });
+  const jp = path.join(tmpRoot, `t-ceiling-honest-${receiptSeq++}.jsonl`);
+  const artifact = path.join(tmpRoot, `t-ceiling-honest-artifact-${receiptSeq}.txt`);
+  fs.writeFileSync(artifact, 'artifact\n');
+  const record = journal.completePhase(jp, {
+    charter_hash: TEST_CHARTER.charter_hash, cycle_index: 0, phase_id: 'tt.orient',
+    halt_state: 'CEILING-EXCEEDED', spend_receipt: receipt
+  }, [artifact]);
+  assert(record.halt_state === 'CEILING-EXCEEDED', 'the accepted record must actually carry the CEILING-EXCEEDED halt_state');
+});
+
+check('a within-limit ledger with an honest within_ceiling:true receipt is unaffected by the new recomputation (no false positive)', () => {
+  const dir = fs.mkdtempSync(path.join(tmpRoot, 'ceiling-within-'));
+  const ledger = ceilings.createSpendLedger(TEST_CHARTER);
+  ceilings.accumulate(ledger, { lines_changed: 3, files: ['a.js'], external_actions: 0, phase_id: 'tt.improve', cycle_index: 0 });
+  const { ledger_path, ledger_sha256 } = ceilings.persistSpendLedger(ledger, path.join(dir, `${TEST_CHARTER.charter_id}.json`));
+  const receipt = {
+    charter_hash: TEST_CHARTER.charter_hash, cycle_index: 0, phase_id: 'tt.orient',
+    ledger_path, ledger_sha256, observed_spend: ceilings.observedSpend(ledger),
+    within_ceiling: true, checked_at: new Date().toISOString()
+  };
+  const jp = path.join(tmpRoot, `t-ceiling-within-${receiptSeq++}.jsonl`);
+  const artifact = path.join(tmpRoot, `t-ceiling-within-artifact-${receiptSeq}.txt`);
+  fs.writeFileSync(artifact, 'artifact\n');
+  const record = journal.completePhase(jp, { charter_hash: TEST_CHARTER.charter_hash, cycle_index: 0, phase_id: 'tt.orient', spend_receipt: receipt }, [artifact]);
+  assert(record.halt_state === null, 'a genuinely within-limit completion must still append cleanly');
+});
+
 check('a fabricated ledger at a NON-CANONICAL path (not <ledgerDir>/<charter_id>.json) is refused at append (bytes match)', () => {
   const dir = fs.mkdtempSync(path.join(tmpRoot, 'fab-path-'));
   // A ledger claiming the receipt's charter identity, but stored at a path
@@ -377,12 +457,20 @@ check('a fabricated ledger at a NON-CANONICAL path (not <ledgerDir>/<charter_id>
     `expected SPEND-RECEIPT-PROVENANCE, got ${threw ? threw.code + ': ' + threw.message : 'NO THROW'}`);
 });
 
-// Compatibility guard: a bare schema-only stub ledger at a non-canonical path
-// (the shape the pre-existing journal-anchor / resume-terminal-halts /
-// append-after-truncation suites write, and what cycle-driver.cjs writes for
-// its own scratch ledgers) must STILL pass -- provenance is required only when
-// the ledger carries an identity to verify against.
-check('a bare schema-only stub ledger (no charter identity) still appends -- stub-suite compatibility', () => {
+// Codex PR#20 (round 2) REVERSED this guard's original claim. The
+// schema-only-ledger exemption below was the bug: "provenance is required
+// only when the ledger carries an identity to verify against" meant a caller
+// could fabricate a zero-spend ledger with NO charter_hash/charter_id at all,
+// hash it, and have appendRecordLocked accept a completed phase with no
+// ledger actually tied to the run or its ceilings -- the receipt-level
+// charter_hash check earlier in the function does not verify the LEDGER
+// CONTENT itself carries that identity. identity fields are now REQUIRED
+// unconditionally on this production append path; a bare schema-only ledger
+// is refused, not exempted. (The journal-anchor / resume-terminal-halts /
+// append-after-truncation suites were updated to stamp a throwaway
+// charter_id + canonical filename on their stub ledgers instead of relying
+// on this exemption.)
+check('a bare schema-only stub ledger (no charter identity) is REFUSED, not exempted', () => {
   const dir = fs.mkdtempSync(path.join(tmpRoot, 'stub-compat-'));
   const ledgerPath = path.join(dir, 'stub-ledger.json');
   const stub = { schema: 'TickTockSpendLedger/1.0', lines_changed: 0, files: [], external_actions: 0 };
@@ -400,7 +488,8 @@ check('a bare schema-only stub ledger (no charter identity) still appends -- stu
   let threw = null;
   let rec = null;
   try { rec = completePhaseWithReceipt(receipt); } catch (err) { threw = err; }
-  assert(threw === null && rec && rec.spend_receipt, `bare stub ledger must append, got ${threw ? threw.message : 'no record'}`);
+  assert(threw && threw.code === 'SPEND-RECEIPT-PROVENANCE' && !rec,
+    `expected SPEND-RECEIPT-PROVENANCE for a no-identity ledger, got ${threw ? threw.code + ': ' + threw.message : 'no throw, record: ' + JSON.stringify(rec)}`);
 });
 
 // ---------------------------------------------------------------------------
@@ -469,33 +558,37 @@ check('a run-004 spec instantiated from the template covers the full gen-2 write
   });
   const run004 = charterMod.createCharter(run004Spec);
 
-  const repoRoot = path.resolve(__dirname, '..', '..');
   const surfaceMatches = (relPath) => run004.allowed_write_surfaces.some((s) => {
     const prefix = s.replace(/\*+$/, '');
     return relPath.startsWith(prefix);
   });
 
-  // The real gen-2 write inventory this oracle checks: every journal + its
-  // head anchor under _dev/state/ticktock/journals/ (the run-history surface
-  // gen-2 actually wrote to), and every file under
-  // tools/ant-hive-world/unreal-export/ that is NOT the module's own source
-  // (import-index.jsonl and the unreal-import__*.json payloads -- the
-  // projection surface gen-1's charter omitted).
-  const inventory = [];
-  const journalsDir = path.join(repoRoot, '_dev', 'state', 'ticktock', 'journals');
-  if (fs.existsSync(journalsDir)) {
-    for (const f of fs.readdirSync(journalsDir)) inventory.push(path.join('_dev', 'state', 'ticktock', 'journals', f));
-  }
-  const unrealDir = path.join(repoRoot, 'tools', 'ant-hive-world', 'unreal-export');
-  if (fs.existsSync(unrealDir)) {
-    for (const f of fs.readdirSync(unrealDir)) {
-      if (f === 'watch-imports.js' || f === 'README.md' || f === '__tests__' || f === 'ue') continue;
-      const abs = path.join(unrealDir, f);
-      if (fs.statSync(abs).isFile()) inventory.push(path.join('tools', 'ant-hive-world', 'unreal-export', f));
-    }
-  }
+  // The gen-2 write inventory this oracle checks against the charter's
+  // allowed_write_surfaces: every journal + its head anchor under
+  // _dev/state/ticktock/journals/ (the run-history surface gen-2 actually
+  // wrote to), and every non-source file under
+  // tools/ant-hive-world/unreal-export/ (import-index.jsonl and the
+  // unreal-import__*.json payloads -- the projection surface gen-1's charter
+  // omitted).
+  //
+  // This used to enumerate those two directories LIVE off disk. That made
+  // the oracle non-hermetic: a clean checkout of this repo (a fresh clone, a
+  // CI runner, or an exported/graft target) has neither directory populated
+  // -- both are operational run state, correctly never checked in -- so the
+  // "inventory must be non-empty" assertion failed before the surface-match
+  // check ever ran, on every environment except whichever machine happened
+  // to have live /tt run history on disk. Replaced with an explicit fixture
+  // inventory naming the same real shapes this oracle is meant to prove
+  // coverage for; the tradeoff (fixture drift vs. whatever real files exist
+  // right now) is worth paying for portability, per codex review 2026-08-17
+  // (scope tt-foundation-pr20-full-review, finding F1).
+  const inventory = [
+    path.join('_dev', 'state', 'ticktock', 'journals', 'run-004.jsonl'),
+    path.join('_dev', 'state', 'ticktock', 'journals', 'run-004.head-anchor.json'),
+    path.join('tools', 'ant-hive-world', 'unreal-export', 'import-index.jsonl'),
+    path.join('tools', 'ant-hive-world', 'unreal-export', 'unreal-import__20260812T000000Z.json'),
+  ];
 
-  assert(inventory.length > 0, 'the gen-2 write inventory must be non-empty for this oracle to prove anything');
   const outOfSurface = inventory.filter((p) => !surfaceMatches(p));
   assert(outOfSurface.length === 0, `every gen-2 write-inventory path must fall inside the run-004 charter's allowed_write_surfaces; out-of-surface: ${JSON.stringify(outOfSurface)}`);
 });

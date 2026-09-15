@@ -1,0 +1,11 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "instructions/canonical/commands/dispatch-trifecta.yaml",
+  "source_sha256": "13e6c5c52924c9d68adf6b3ac61c4f327afe3224bf2c80ac923bfb8167295cf9",
+  "projection_kind": "canonical_command",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "reviewed_safe",
+  "target_exact_path": ".agents/skills/source-command-dispatch-trifecta/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "already_aligned"
+}

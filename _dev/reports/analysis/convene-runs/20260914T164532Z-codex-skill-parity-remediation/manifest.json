@@ -1,0 +1,84 @@
+{
+  "schema": "ConveneRun/3.0",
+  "previous_schema": "ConveneRun/2.0",
+  "timestamp": "2026-09-14T16:47:03.884Z",
+  "scope": "codex-skill-parity-remediation",
+  "task": "Adversarially review the proposed Codex skill parity remediation architecture before planning. Test canonical authority, alias behavior, capability honesty, framework-local exposure policy, validator choice, multi-actor custody, implementation slicing, and acceptance evidence. Identify CRITICAL or MAJOR defects that must be repaired before a task plan is written.",
+  "context_files": [
+    "_dev/reports/analysis/bp-r__codex-skill-parity-remediation__solo-reasoning.md",
+    "/tmp/mythos-codex-skill-parity-audit.md",
+    "instructions/adapters/codex.yaml",
+    "tools/skills/sync-lifecycle-command-skills.cjs"
+  ],
+  "origin": "codex",
+  "profile": {
+    "id": "kernel",
+    "label": "Kernel triad",
+    "consequence_grade": true
+  },
+  "triad_slots": [
+    {
+      "id": "alpha",
+      "label": "ALPHA",
+      "function": "Intent, memory, originating principle, and fast orchestration.",
+      "actor": "claude",
+      "pinned_model": null,
+      "is_origin": false
+    },
+    {
+      "id": "now",
+      "label": "NOW",
+      "function": "Repo truth, executable constraints, implementation reality, and falsification.",
+      "actor": "codex",
+      "pinned_model": null,
+      "is_origin": true
+    },
+    {
+      "id": "omega",
+      "label": "OMEGA",
+      "function": "Breadth, consequence, future-facing context, and community impact.",
+      "actor": "gemini",
+      "pinned_model": null,
+      "is_origin": false
+    }
+  ],
+  "participants": [
+    "claude",
+    "gemini"
+  ],
+  "participant_slots": [
+    {
+      "id": "alpha",
+      "actor": "claude"
+    },
+    {
+      "id": "omega",
+      "actor": "gemini"
+    }
+  ],
+  "duplicate_actors": [],
+  "timeout_seconds": 180,
+  "dry_run": false,
+  "only": null,
+  "results": {
+    "alpha": {
+      "actor": "claude",
+      "pinned_model": null,
+      "status": "success",
+      "duration_ms": 91059,
+      "exit_code": 0,
+      "error": null,
+      "output_length": 5496
+    },
+    "now": null,
+    "omega": {
+      "actor": "gemini",
+      "pinned_model": null,
+      "status": "success",
+      "duration_ms": 40529,
+      "exit_code": 0,
+      "error": null,
+      "output_length": 3953
+    }
+  }
+}

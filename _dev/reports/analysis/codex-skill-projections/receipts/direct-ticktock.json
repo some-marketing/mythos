@@ -1,0 +1,14 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": ".claude/skills/ticktock/SKILL.md",
+  "source_sha256": "f726f614a1110b9d873e2c9eb83818bc46d69095d2dc209c5ef7d2448569cf80",
+  "projection_kind": "direct_system_skill",
+  "capability_tier": "ABSENT",
+  "semantic_review_state": "dependency_unavailable",
+  "target_exact_path": ".agents/skills/ticktock/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "blocked_dependency",
+  "resource_manifest": [],
+  "package_sha256": "cdb8f8cf9518c3c032fb45d96278fe021fb3d8e48e37deddbc5c4ceaee6f92f6",
+  "detail": "required direct skill dependency unavailable: meditate"
+}

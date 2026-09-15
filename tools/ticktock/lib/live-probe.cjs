@@ -32,6 +32,11 @@ const DISPATCH_ENTRYPOINT_REL = path.join('tools', 'kernel', 'hooks', 'dispatch-
 const GATE_MODULE_REL = path.join('tools', 'kernel', 'hooks', 'pretool-remote-mutation-gate.cjs');
 const SETTINGS_PATH_REL = path.join('.claude', 'settings.json');
 const STAMPS_DIR_REL = path.join('_dev', 'state', 'remote-mutation-stamps');
+// Second, independently-authored leg (plan pretooluse-live-second-verifier).
+// require()'d lazily inside independentProbe() so a load failure there is
+// caught and reported per-leg, matching the pattern already used for
+// requireGateModule() in directModuleProbe().
+const INDEPENDENT_VERIFIER_REL = path.join('tools', 'kernel', 'hooks', 'verify-stamp-independently.cjs');
 
 // Verified 2026-08-11 against all currently-valid stamp sidecars (named
 // scripts / narrow anchored `re:` regexes -- none matches a raw ssh-to-orwell
@@ -124,9 +129,29 @@ function checkWiring(repoRoot, readSettings) {
  * enumerate filenames (round-4b F3). Fails closed on any unreadable or
  * unparseable sidecar: an evidence check that cannot read its evidence must
  * not silently pass.
+ *
+ * ticktock-remote-mutation-canary-stamp-collision S0 (2026-08-16): a voided,
+ * expired, or superseded stamp used to still be checked against the canary
+ * here, even though the real gate (pretool-remote-mutation-gate.cjs) already
+ * excludes exactly those stamps from real enforcement via its own
+ * stampInvalidReason(). That divergence meant voiding a colliding stamp did
+ * not restore this probe's ability to prove enforcement -- confirmed live
+ * this session. Call the gate module's OWN validity predicate first (never
+ * reimplement it a second time, per the module-reuse rule this file already
+ * follows for scopeCovers()) and skip invalid stamps before checking coverage.
+ * nowMs is accepted (defaulting to Date.now()) so tests can exercise expiry
+ * deterministically instead of depending on wall-clock timing.
+ *
+ * stampsDirAbs (optional) overrides the stamps directory read here -- a
+ * test-only injection point, like nowMs: the stamp sidecars live in
+ * untracked _dev/state, so a fixture that needs "at least one valid stamp
+ * on disk" cannot depend on the real directory's contents and must supply
+ * its own scratch directory instead. Every real caller omits it and gets
+ * the real directory.
  */
-function verifyStampScopes(repoRoot, gateModule) {
-  const dir = path.resolve(repoRoot, STAMPS_DIR_REL);
+function verifyStampScopes(repoRoot, gateModule, nowMs, stampsDirAbs) {
+  const now = typeof nowMs === 'number' ? nowMs : Date.now();
+  const dir = stampsDirAbs ? path.resolve(stampsDirAbs) : path.resolve(repoRoot, STAMPS_DIR_REL);
   let names;
   try {
     names = fs.readdirSync(dir).filter((n) => n.endsWith('.json'));
@@ -170,6 +195,19 @@ function verifyStampScopes(repoRoot, gateModule) {
         checked
       };
     }
+    // S0: a stamp the real gate would already reject (voided, expired,
+    // superseded, malformed) cannot authorize anything for real enforcement,
+    // so it must not be treated as covering the canary here either.
+    let invalidReason;
+    try {
+      invalidReason = gateModule.stampInvalidReason(stamp, { projectDir: repoRoot, fs, nowMs: now });
+    } catch (err) {
+      invalidReason = null; // a predicate that throws is not proof of invalidity -- fall through to scope check, fail closed on coverage instead
+    }
+    if (invalidReason) {
+      checked.push({ file: name, stamp_id: stamp && stamp.stamp_id, scope: stamp.scope, covers_canary: false, invalid_reason: invalidReason });
+      continue;
+    }
     const scope = stamp.scope;
     const coversAny = mutatingKeys.some(({ key, raw }) => {
       try {
@@ -180,30 +218,44 @@ function verifyStampScopes(repoRoot, gateModule) {
     });
     checked.push({ file: name, stamp_id: stamp && stamp.stamp_id, scope, covers_canary: coversAny });
     if (coversAny) {
-      return { ok: false, reason_code: 'CANARY-COVERED-BY-STAMP', detail: `${name} scope covers the canary`, checked };
+      return {
+        ok: false,
+        reason_code: 'CANARY-COVERED-BY-STAMP',
+        detail: `${name} (stamp_id: ${stamp && stamp.stamp_id}) scope covers the canary`,
+        checked
+      };
     }
   }
   return { ok: true, checked, mutating_keys: mutatingKeys.map((m) => m.key) };
 }
 
 /** Leg 2: require() the live gate module and evaluate() the canary in-process. */
-function directModuleProbe(repoRoot, requireGateModule) {
+function directModuleProbe(repoRoot, requireGateModule, nowMs, stampsDirAbs) {
   let gateModule;
   try {
     gateModule = (requireGateModule || ((r) => defaultRequireGateModule(r)))(repoRoot);
   } catch (err) {
-    return { ok: false, reason_code: 'GATE-MODULE-LOAD-FAILED', detail: err.message };
+    return { ok: false, reason_code: 'GATE-MODULE-LOAD-FAILED', detail: err.message, scope_covered: null };
   }
   if (!gateModule || typeof gateModule.evaluate !== 'function') {
-    return { ok: false, reason_code: 'GATE-MODULE-MALFORMED', detail: 'evaluate() is not exported by the required module' };
+    return { ok: false, reason_code: 'GATE-MODULE-MALFORMED', detail: 'evaluate() is not exported by the required module', scope_covered: null };
   }
-  const scopeEvidence = verifyStampScopes(repoRoot, gateModule);
+  const scopeEvidence = verifyStampScopes(repoRoot, gateModule, nowMs, stampsDirAbs);
   if (!scopeEvidence.ok) {
+    // scope_covered is knowable specifically for CANARY-COVERED-BY-STAMP
+    // (the primary path's own scope-verification leg reached a definite
+    // coverage verdict before failing for that reason); every other
+    // scopeEvidence failure (unreadable dir, unparseable stamp, etc.) means
+    // no coverage verdict was reachable at all -- null, not false, so the
+    // independent leg (verify-stamp-independently.cjs) correctly treats
+    // this as "no primary verdict to compare against" rather than a
+    // false disagreement.
     return {
       ok: false,
       reason_code: scopeEvidence.reason_code,
       detail: scopeEvidence.detail,
-      stamp_files_checked: scopeEvidence.checked
+      stamp_files_checked: scopeEvidence.checked,
+      scope_covered: scopeEvidence.reason_code === 'CANARY-COVERED-BY-STAMP' ? true : null
     };
   }
   let result;
@@ -211,20 +263,25 @@ function directModuleProbe(repoRoot, requireGateModule) {
     result = gateModule.evaluate(CANARY_COMMAND, {
       projectDir: repoRoot,
       fs,
-      nowMs: Date.now(),
+      nowMs: typeof nowMs === 'number' ? nowMs : Date.now(),
       sessionId: 'ticktock-preflight-probe'
     });
   } catch (err) {
-    return { ok: false, reason_code: 'PROBE-INTERNAL-ERROR', detail: err.message, stamp_files_checked: scopeEvidence.checked };
+    return { ok: false, reason_code: 'PROBE-INTERNAL-ERROR', detail: err.message, stamp_files_checked: scopeEvidence.checked, scope_covered: false };
   }
   if (result && result.status === 2 && result.reason === 'no-covering-stamp') {
-    return { ok: true, stamp_files_checked: scopeEvidence.checked };
+    return { ok: true, stamp_files_checked: scopeEvidence.checked, scope_covered: false };
   }
   return {
     ok: false,
     reason_code: 'DIRECT-PROBE-NOT-DENIED',
     detail: `evaluate() returned ${JSON.stringify(result)}; expected status 2 / reason 'no-covering-stamp'`,
-    stamp_files_checked: scopeEvidence.checked
+    stamp_files_checked: scopeEvidence.checked,
+    // scopeEvidence itself found no covering stamp (scope_covered: false) --
+    // evaluate() disagreeing for some OTHER reason is a different bug class,
+    // not a coverage disagreement, so the independent leg still has a valid
+    // scope-coverage primary verdict to compare against here.
+    scope_covered: false
   };
 }
 
@@ -255,23 +312,82 @@ function spawnProbe(repoRoot, spawnDispatcher) {
   };
 }
 
+function defaultRequireIndependentVerifier(repoRoot) {
+  return require(path.resolve(repoRoot, INDEPENDENT_VERIFIER_REL));
+}
+
 /**
- * Run all three legs against repoRoot, short-circuiting on the first failure
- * (a broken earlier leg means later legs were never meaningfully reachable).
- * opts.readSettings/requireGateModule/spawnDispatcher are test-only injection
- * points (S5-REDESIGNED); each defaults to the real dependency when omitted.
+ * Leg 4 (plan pretooluse-live-second-verifier): the independently-authored
+ * verifier. Runs whenever wiring succeeds, regardless of whether the direct
+ * leg itself succeeded -- per kernel-triad review round 2 (codex): gating
+ * this leg on direct/spawn's short-circuit would make it unable to run in
+ * exactly the incident shape (AC3) it exists to catch. `primaryVerdict` is
+ * derived by the caller from `direct.scope_covered` (null when the primary
+ * path never reached a coverage verdict at all -- see directModuleProbe).
+ */
+function independentProbe(repoRoot, nowMs, beforeFingerprint, primaryScopeCovered, opts) {
+  const o = opts || {};
+  let verifier;
+  try {
+    verifier = (o.requireIndependentVerifier || ((r) => defaultRequireIndependentVerifier(r)))(repoRoot);
+  } catch (err) {
+    return { ok: false, reason_code: 'INDEPENDENT-MODULE-LOAD-FAILED', detail: err.message };
+  }
+  if (!verifier || typeof verifier.verifyStampIndependently !== 'function') {
+    return { ok: false, reason_code: 'INDEPENDENT-MODULE-MALFORMED', detail: 'verifyStampIndependently() is not exported by the required module' };
+  }
+  const primaryVerdict = primaryScopeCovered === null ? null : { covered: primaryScopeCovered };
+  try {
+    return verifier.verifyStampIndependently(repoRoot, CANARY_COMMAND, primaryVerdict, {
+      nowMs,
+      beforeFingerprint,
+      existsSync: o.independentExistsSync,
+      statSync: o.independentStatSync
+    });
+  } catch (err) {
+    return { ok: false, reason_code: 'INDEPENDENT-PROBE-INTERNAL-ERROR', detail: err.message };
+  }
+}
+
+/**
+ * Run all four legs against repoRoot. Legs 1-3 short-circuit on the first
+ * failure (a broken earlier leg means later legs were never meaningfully
+ * reachable). Leg 4 (independent) runs whenever wiring succeeds, in
+ * parallel with -- not gated behind -- legs 2/3's own short-circuit chain,
+ * per the plan's redesigned wiring (guard-spec.md, "Wiring (revised)").
+ * opts.readSettings/requireGateModule/spawnDispatcher/requireIndependentVerifier
+ * (and opts.stampsDir, threaded to verifyStampScopes) are test-only injection
+ * points; each defaults to the real dependency when omitted.
  */
 function runLiveProbe(repoRoot, opts) {
   const o = opts || {};
+  const nowMs = typeof o.nowMs === 'number' ? o.nowMs : Date.now();
   const wiring = checkWiring(repoRoot, o.readSettings);
-  const direct = wiring.ok ? directModuleProbe(repoRoot, o.requireGateModule) : null;
+
+  let beforeFingerprint = null;
+  let independentModule = null;
+  if (wiring.ok) {
+    try {
+      independentModule = (o.requireIndependentVerifier || ((r) => defaultRequireIndependentVerifier(r)))(repoRoot);
+      beforeFingerprint = independentModule.fingerprintStampsDir(repoRoot, o.independentStatSync);
+    } catch (_) {
+      beforeFingerprint = null; // independentProbe() below will surface the load failure itself
+    }
+  }
+
+  const direct = wiring.ok ? directModuleProbe(repoRoot, o.requireGateModule, nowMs, o.stampsDir) : null;
+  const independent = wiring.ok
+    ? independentProbe(repoRoot, nowMs, beforeFingerprint, direct ? direct.scope_covered : null, o)
+    : null;
   const spawn = (wiring.ok && direct && direct.ok) ? spawnProbe(repoRoot, o.spawnDispatcher) : null;
+
   return {
     wiring,
     direct,
+    independent,
     spawn,
     canary_command: CANARY_COMMAND,
-    ok: Boolean(wiring.ok && direct && direct.ok && spawn && spawn.ok)
+    ok: Boolean(wiring.ok && direct && direct.ok && independent && independent.ok && spawn && spawn.ok)
   };
 }
 
@@ -280,15 +396,18 @@ module.exports = {
   GATE_MODULE_REL,
   SETTINGS_PATH_REL,
   STAMPS_DIR_REL,
+  INDEPENDENT_VERIFIER_REL,
   CANARY_COMMAND,
   defaultReadSettings,
   defaultRequireGateModule,
+  defaultRequireIndependentVerifier,
   defaultSpawnDispatcher,
   enumerateStamps,
   parseExactNodeCommand,
   checkWiring,
   verifyStampScopes,
   directModuleProbe,
+  independentProbe,
   spawnProbe,
   runLiveProbe
 };

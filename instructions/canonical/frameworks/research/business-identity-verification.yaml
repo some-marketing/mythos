@@ -1,0 +1,11 @@
+{
+  "id": "research/business-identity-verification",
+  "manifest_path": "frameworks/research/business-identity-verification/manifest.json",
+  "description": "Verify a business identity and public contact footprint using lawful, public sources.",
+  "inputs": ["subject.json", "search_context.md"],
+  "outputs": ["outputs/business-identity-verification/report.json", "outputs/business-identity-verification/evidence-log.json"],
+  "modes": ["FINDINGS_ONLY", "REVIEW_ONLY"],
+  "operations": ["identity-intake", "public-search", "evidence-review"],
+  "agent_profiles": ["identity-intake-agent", "public-search-agent", "evidence-review-agent"],
+  "guardrail_overrides": ["Public business sources only", "No private-person profiling", "Every finding needs a source and confidence"]
+}

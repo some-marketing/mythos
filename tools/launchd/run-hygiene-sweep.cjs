@@ -86,7 +86,7 @@ function runChild(child, root = REPO_ROOT) {
 
   const timeout = child.timeout_ms || DEFAULT_TIMEOUT_MS;
   const proc = spawnSync(child.bin, [scriptAbs, ...(child.args || [])], {
-    cwd: root, encoding: 'utf8', timeout
+    cwd: root, encoding: 'utf8', timeout, stdio: ['ignore', 'pipe', 'pipe']
   });
 
   const duration_s = Math.round((Date.now() - started) / 1000);

@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { classifyPlanState, createCompletionReadContext } = require('./completion-classifier');
 
 const SYSTEM_PLAN_ROOT = path.join('_dev', 'reports', 'analysis', 'task-plans');
 const CLIENTS_ROOT = 'clients';
@@ -46,27 +47,25 @@ function walkPlanFiles(projectRoot, options = {}) {
   return files;
 }
 
-function classifyPlan(plan) {
-  // An explicit operator-set terminal top-level status is a stronger signal than
-  // derived step state — honor it before falling back to step/approval derivation.
-  // Only terminal values are honored here; non-terminal declared values
-  // (planned/in_progress/ready) defer to live step-derivation below, which is
-  // more current for in-flight work.
-  const declared = String(plan?.status || '').trim().toLowerCase();
-  if (declared === 'complete' || declared === 'completed' || declared === 'done') return 'complete';
-  if (declared === 'blocked') return 'blocked';
+// Completion belongs to the shared classifier. Dashboard-only readiness
+// remains a refinement of its planned state; declared progress cannot complete
+// a plan. Next-command rendering remains a separate grammar and follow-on.
+function classifyPlan(plan, projectRoot = null, readContext) {
+  if (String(plan?.status || '').trim().toLowerCase() === 'blocked') return 'blocked';
+  if (typeof projectRoot === 'string' && projectRoot.trim() && plan && typeof plan === 'object') {
+    const { state } = classifyPlanState(projectRoot, plan, { readContext });
+    if (state === 'complete' || state === 'blocked' || state === 'in_progress') return state;
+  }
 
+  // No project root means no artifact lookup: this fallback never completes.
   const steps = Array.isArray(plan?.bounded_plan?.steps) ? plan.bounded_plan.steps : [];
   const statuses = steps.map((step) => normalizeStepStatus(step.status)).filter(Boolean);
   const approvalStatus = String(plan?.approval?.status || plan?.operator_review?.decision || '').toLowerCase();
-
+  // Explicit blockers outrank dashboard readiness. The shared classifier only
+  // reports artifact-backed execution blockers, so retain declared admission
+  // blockers while refining its pre-execution `planned` state.
   if (approvalStatus === 'blocked' || statuses.includes('blocked')) return 'blocked';
-  if (steps.length > 0 && statuses.length === steps.length && statuses.every((status) => status === 'complete')) {
-    return 'complete';
-  }
   if (statuses.includes('ready') || approvalStatus === 'approved') return 'ready';
-  if (statuses.includes('in_progress') || statuses.includes('in-progress')) return 'in_progress';
-  if (approvalStatus === 'approved') return 'ready';
   if (approvalStatus === 'pending' || approvalStatus === 'needs_review') return 'needs_review';
   return 'planned';
 }
@@ -96,8 +95,16 @@ function summarizeSteps(plan) {
   return counts;
 }
 
-function summarizeNextStep(plan) {
+function summarizeNextStep(plan, lifecycleState = null) {
   const steps = Array.isArray(plan?.bounded_plan?.steps) ? plan.bounded_plan.steps : [];
+  if (lifecycleState === 'complete') {
+    return {
+      step_id: 'none',
+      status: 'complete',
+      description: 'All completion evidence is satisfied.',
+      mode: 'not-recorded'
+    };
+  }
   const next = steps.find((step) => normalizeStepStatus(step.status) !== 'complete');
   if (!next) {
     return {
@@ -134,8 +141,16 @@ function hasDebriefArtifacts(projectRoot, taskId) {
   ));
 }
 
-function inferNextCommand(plan, projectRoot = null) {
+function inferNextCommand(plan, projectRoot = null, lifecycleState = null) {
   const taskId = plan?.task_id || '<task-id>';
+  const state = lifecycleState || (
+    typeof projectRoot === 'string' && projectRoot.trim() && plan && typeof plan === 'object'
+      ? classifyPlan(plan, projectRoot)
+      : null
+  );
+  if (state === 'complete') {
+    return hasDebriefArtifacts(projectRoot, taskId) ? 'none' : `/debrief-run ${taskId}`;
+  }
   if (plan?.outcome_delta?.completed === true && plan?.outcome_delta?.verification_passed === true && hasDebriefArtifacts(projectRoot, taskId)) {
     return 'none';
   }
@@ -160,6 +175,7 @@ function toRelative(projectRoot, filePath) {
 }
 
 function collectPlanSummaries(projectRoot, options = {}) {
+  const readContext = createCompletionReadContext(projectRoot);
   return walkPlanFiles(projectRoot, options)
     .map((filePath) => {
       const plan = readJson(filePath);
@@ -180,13 +196,14 @@ function collectPlanSummaries(projectRoot, options = {}) {
         };
       }
 
+      const status = classifyPlan(plan, projectRoot, readContext);
       return {
         task_id: plan.task_id || path.basename(filePath, '__plan.json'),
         title: plan.title || plan.task_summary || plan.task_id || path.basename(filePath),
         path: toRelative(projectRoot, filePath),
         source_mtime: fs.statSync(filePath).mtime.toISOString(),
         raw_plan: plan,
-        status: classifyPlan(plan),
+        status,
         scope_type: plan.scope_type || 'unknown',
         client_code: plan.client_code || plan.origin_client_code || inferClientCode(projectRoot, filePath),
         project_id: plan.project_id || plan.origin_project_id || 'not-recorded',
@@ -195,8 +212,8 @@ function collectPlanSummaries(projectRoot, options = {}) {
         review_lane: plan.routing_expectations?.review_lane || 'not-recorded',
         risk_tier: plan.routing_expectations?.risk_tier || 'not-recorded',
         step_counts: summarizeSteps(plan),
-        next_step: summarizeNextStep(plan),
-        next_command: inferNextCommand(plan, projectRoot)
+        next_step: summarizeNextStep(plan, status),
+        next_command: inferNextCommand(plan, projectRoot, status)
       };
     })
     .sort((a, b) => {
@@ -3642,16 +3659,16 @@ function buildPlanDocumentLead(plan, context = {}) {
   const scopeType = plan?.scope_type || (plan?.client_code ? 'client' : 'system');
   const clientCode = plan?.client_code ? ` (${plan.client_code})` : '';
   const scope = scopeType === 'client' ? `client${clientCode}` : scopeType;
-  const status = context.status || classifyPlan(plan);
+  const status = context.status || classifyPlan(plan, context.projectRoot);
   const reviewLane = context.reviewLane || plan?.routing_expectations?.review_lane || plan?.review_lane || 'not-recorded';
   const steps = Array.isArray(context.steps) ? context.steps : resolvePlanSteps(plan).steps;
   const nextStep = steps.find((step) => {
     const stepStatus = String(step.status || step.state || '').toLowerCase();
     return !['complete', 'completed', 'done', 'closed'].includes(stepStatus);
   });
-  const nextAction = nextStep
+  const nextAction = status !== 'complete' && nextStep
     ? `${stepId(nextStep)}: ${summarizeLeadText(nextStep.description || nextStep.summary || nextStep.name || 'No step description recorded.')}`
-    : (context.nextCommand || inferNextCommand(plan));
+    : (context.nextCommand || inferNextCommand(plan, context.projectRoot, status));
 
   return `This is a ${scope} plan for ${title}; it is currently ${status}, review runs through ${reviewLane}, and the next action is ${nextAction}.`;
 }
@@ -3920,8 +3937,8 @@ function renderPlanDocumentMarkdown(projectRoot, options = {}) {
   const reviewLaneRationale = plan.routing_expectations?.review_lane_rationale
     || plan.review_lane_rationale || 'Not recorded.';
   const riskTier = plan.routing_expectations?.risk_tier || plan.risk_tier || 'not-recorded';
-  const status = classifyPlan(plan);
-  const nextCommand = inferNextCommand(plan);
+  const status = classifyPlan(plan, projectRoot);
+  const nextCommand = inferNextCommand(plan, projectRoot, status);
 
   // ---- (a) Context — readable prose lead (matches the readable-plan format:
   // a "Context" section in plain prose before any structured body) ----
@@ -3932,7 +3949,7 @@ function renderPlanDocumentMarkdown(projectRoot, options = {}) {
   lines.push('');
   lines.push('## Context');
   lines.push('');
-  lines.push(`**What this is:** ${buildPlanDocumentLead(plan, { title, status, reviewLane, nextCommand, steps })}`);
+  lines.push(`**What this is:** ${buildPlanDocumentLead(plan, { projectRoot, title, status, reviewLane, nextCommand, steps })}`);
   lines.push('');
   const whatWhy = asList(plan.task_summary).concat(asList(plan.description));
   if (whatWhy.length) {

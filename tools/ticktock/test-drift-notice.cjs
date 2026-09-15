@@ -32,6 +32,17 @@ const benchmark = require('./run-benchmark.js');
 const COPY_ROOT = path.join(__dirname, '.drift-test-engine');
 const SOURCE_ROOT = benchmark.DEFAULT_ENGINE_ROOT;
 
+// The recorded baseline these tests compare against is RECORDED HERE, at the
+// start of the run, from the engine as it exists in this checkout -- never
+// read from DEFAULT_FINGERPRINT_PATH. That file lives in untracked
+// _dev/state, so its contents are machine state, not repo state: on a fresh
+// checkout it is absent, and on a machine where /tt has run it was recorded
+// against whatever engine that run used, which may not be this one. Either
+// way it says nothing about whether the DRIFT DETECTOR under test works.
+// Recording our own baseline is what makes every assertion below about the
+// detector's semantics instead of about one machine's history.
+const FINGERPRINT_PATH = path.join(__dirname, '.drift-test-fingerprint.json');
+
 let passed = 0;
 let failed = 0;
 
@@ -53,15 +64,21 @@ function cleanup() {
   fs.rmSync(COPY_ROOT, { recursive: true, force: true });
 }
 
-process.on('exit', cleanup);
+process.on('exit', () => {
+  cleanup();
+  fs.rmSync(FINGERPRINT_PATH, { force: true });
+});
 cleanup();
 fs.cpSync(SOURCE_ROOT, COPY_ROOT, { recursive: true });
+
+const { fingerprint } = benchmark.record({ engineRoot: SOURCE_ROOT });
+fs.writeFileSync(FINGERPRINT_PATH, JSON.stringify(fingerprint, null, 2));
 
 // ---------------------------------------------------------------------------
 section('1. A byte-identical copy at a DIFFERENT PATH: no drift, no divergence');
 // ---------------------------------------------------------------------------
 {
-  const { result } = benchmark.check({ engineRoot: COPY_ROOT });
+  const { result } = benchmark.check({ engineRoot: COPY_ROOT, fingerprintPath: FINGERPRINT_PATH });
   check('the copied engine reproduces the fingerprint', result.identical === true, result.diverging_dimensions);
   check('no source drift is reported for an unmodified copy', result.source_drift.detected === false, result.source_drift.changed_files);
   check('the absolute path difference does not register as drift', result.drift_detected === false, result.drift_notice);
@@ -80,7 +97,7 @@ section('2. THE F2 DEFECT: a behavior-neutral source edit must be REPORTED');
   const target = path.join(COPY_ROOT, 'untrained-network.js');
   fs.appendFileSync(target, '\n// a comment added by test-drift-notice.cjs -- changes no decision\n');
 
-  const { result } = benchmark.check({ engineRoot: COPY_ROOT });
+  const { result } = benchmark.check({ engineRoot: COPY_ROOT, fingerprintPath: FINGERPRINT_PATH });
 
   check('the comment edit does NOT change behavior', result.identical === true, result.diverging_dimensions);
   check('drift IS detected (the old code was silent here -- this is the defect)', result.drift_detected === true);
@@ -124,7 +141,7 @@ section('3. Real edits this trajectory does NOT exercise -- the gap F2 is about'
     if (!src.includes(constant)) { check(`the probe constant "${constant}" still exists`, false); continue; }
     fs.writeFileSync(target, src.replace(constant, replacement));
 
-    const { result } = benchmark.check({ engineRoot: COPY_ROOT });
+    const { result } = benchmark.check({ engineRoot: COPY_ROOT, fingerprintPath: FINGERPRINT_PATH });
     check(`${constant.split(' ')[1]}: the behavioral gate does not fire (this trajectory never reaches it)`, result.identical === true, result.diverging_dimensions);
     check(`${constant.split(' ')[1]}: the edit is nonetheless REPORTED`, result.drift_detected === true && result.source_drift.changed_files.some((f) => f.path === 'untrained-network.js'));
     check(`${constant.split(' ')[1]}: and the run is not halted for it`, result.halt === false);
@@ -135,17 +152,26 @@ section('3. Real edits this trajectory does NOT exercise -- the gap F2 is about'
 section('4. A source change that DOES change behavior: both signals fire');
 // ---------------------------------------------------------------------------
 {
-  // RESOURCE_NORM_K feeds encodeState() on every decision of every tick, so it
-  // is genuinely on the trajectory -- the behavioral gate must be the thing
-  // that halts here, with the drift notice riding alongside.
+  // VERB_ORDER maps every sampled action index to the verb the world actually
+  // executes, on every decision of every tick, so it is genuinely on the
+  // trajectory -- the behavioral gate must be the thing that halts here, with
+  // the drift notice riding alongside. Swapping its first two entries changes
+  // the executed verb every time index 0 or 1 is drawn, which under a FROZEN
+  // network (the F1 repair) is the kind of edit this probe needs: with
+  // learning off, an untrained network's policy stays near-uniform for the
+  // whole run, so a numeric-constant nudge (the original probe edited
+  // RESOURCE_NORM_K) shifts the sampling boundaries by ~1e-4 and can complete
+  // 300 ticks without flipping a single draw -- probing the sampling
+  // threshold, not the behavioral gate.
   cleanup();
   fs.cpSync(SOURCE_ROOT, COPY_ROOT, { recursive: true });
   const target = path.join(COPY_ROOT, 'untrained-network.js');
   const src = fs.readFileSync(target, 'utf8');
-  check('the probe constant RESOURCE_NORM_K still exists', src.includes('const RESOURCE_NORM_K = 20;'));
-  fs.writeFileSync(target, src.replace('const RESOURCE_NORM_K = 20;', 'const RESOURCE_NORM_K = 21;'));
+  const verbOrderLine = "const VERB_ORDER = ['gather-food', 'gather-wood', 'build', 'claim-territory', 'idle'];";
+  check('the probe constant VERB_ORDER still exists', src.includes(verbOrderLine));
+  fs.writeFileSync(target, src.replace(verbOrderLine, "const VERB_ORDER = ['gather-wood', 'gather-food', 'build', 'claim-territory', 'idle'];"));
 
-  const { result } = benchmark.check({ engineRoot: COPY_ROOT });
+  const { result } = benchmark.check({ engineRoot: COPY_ROOT, fingerprintPath: FINGERPRINT_PATH });
   check('the behavioral gate halts', result.identical === false && result.halt === true, result.diverging_dimensions);
   check('halt_state is BENCHMARK-DIVERGENCE, from BEHAVIOR not from the digest', result.halt_state === 'BENCHMARK-DIVERGENCE');
   check('a first diverging tick is attributed', Number.isInteger(result.first_diverging_tick), result.first_diverging_tick);
@@ -157,7 +183,7 @@ section('4. A source change that DOES change behavior: both signals fire');
 section('5. A missing engine file is drift too, not an absence');
 // ---------------------------------------------------------------------------
 {
-  const recorded = JSON.parse(fs.readFileSync(benchmark.DEFAULT_FINGERPRINT_PATH, 'utf8'));
+  const recorded = JSON.parse(fs.readFileSync(FINGERPRINT_PATH, 'utf8'));
   const observed = JSON.parse(JSON.stringify(recorded));
   observed.engine.files = observed.engine.files.filter((f) => f.path !== 'harness.js');
   const drift = benchmark.compareSourceDrift(recorded, observed);
@@ -173,7 +199,7 @@ section('5. A missing engine file is drift too, not an absence');
 section('6. F5: environment differences are reported, and an absent baseline is not agreement');
 // ---------------------------------------------------------------------------
 {
-  const recorded = JSON.parse(fs.readFileSync(benchmark.DEFAULT_FINGERPRINT_PATH, 'utf8'));
+  const recorded = JSON.parse(fs.readFileSync(FINGERPRINT_PATH, 'utf8'));
   check('the recorded fingerprint pins node version', typeof recorded.environment.node_version === 'string' && recorded.environment.node_version === process.version);
   check('the recorded fingerprint pins platform and arch', recorded.environment.platform === process.platform && recorded.environment.arch === process.arch);
   check('the recorded fingerprint pins engine dependency identity', Array.isArray(recorded.environment.engine_dependencies) && recorded.environment.engine_dependencies.length > 0, recorded.environment.engine_dependencies);
@@ -305,7 +331,7 @@ section('8. DEFECT D3: the recorded block does not overstate itself');
 
   // The comparison surface must carry the caveat too: a reader who sees
   // `detected: false` should not be able to read it as "the environments matched".
-  const recorded = JSON.parse(fs.readFileSync(benchmark.DEFAULT_FINGERPRINT_PATH, 'utf8'));
+  const recorded = JSON.parse(fs.readFileSync(FINGERPRINT_PATH, 'utf8'));
   const observed = JSON.parse(JSON.stringify(recorded));
   observed.environment = env;
   const drift = benchmark.compareEnvironmentDrift(recorded, observed);

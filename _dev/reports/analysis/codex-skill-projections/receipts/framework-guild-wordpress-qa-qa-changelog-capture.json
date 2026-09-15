@@ -1,0 +1,13 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "frameworks/wordpress/qa/.claude/skills/qa/changelog-capture/SKILL.md",
+  "source_sha256": "c0469915a7f96c35572ebb4426fd0425838949bb9020a8b7d38391ef5914706b",
+  "projection_kind": "framework_helper",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "pending_review",
+  "target_exact_path": ".agents/skills/guild-wordpress-qa-qa-changelog-capture/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "candidate",
+  "resource_manifest": [],
+  "package_sha256": "a4eb63f215d6d838a89cc7ef73bd2f6d9710f0ce78e03e4d4c528b89f2053aa5"
+}

@@ -114,6 +114,7 @@ function main() {
     'tools/context/repo-awareness-init.cjs',
     'tools/sessions/session-start-cross-session-consumer.cjs',
     'tools/memory/build-memory-db.js',
+    'tools/memory/contextual-sweep.js',
     'tools/memory/contextual-inject.cjs'
   ]) {
     const status = runNodeScript(script, [], payload, { toolName: 'SessionStart' });

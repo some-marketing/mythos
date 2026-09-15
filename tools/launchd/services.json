@@ -43,6 +43,12 @@
       "interpreter": "bash",
       "watch_path": "_dev/reports/signals/cowork-out",
       "binding": null
+    },
+    {
+      "id": "contextual-sweep",
+      "runner": "tools/memory/contextual-sweep.js",
+      "interval_seconds": 120,
+      "binding": null
     }
   ]
 }

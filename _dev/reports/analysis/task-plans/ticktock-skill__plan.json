@@ -1,0 +1,615 @@
+{
+  "schema": "TaskIntake/1.0",
+  "task_id": "ticktock-skill",
+  "title": "/ticktock (/tt) — the co-evolution loop as one command, under a fixed frame",
+  "timestamp": "2026-08-05T05:50:00.000Z",
+  "requested_by": "operator",
+  "source": "operator design 2026-08-05T05:27-05:48Z + kernel-triad convene 20260805T053904Z-ticktock-skill-design (consequence-grade synthesis)",
+  "scope_type": "system",
+  "storage_root": "_dev/reports/analysis/task-plans",
+  "description": "Build /ticktock (alias /tt): a resumable, argument-driven state machine that runs the Mythos<->simulation co-evolution loop end to end — ORIENT, TICK, OBSERVE, TEXT, RESEARCH, TOCK, IMPROVE, SHIP, SCHEDULE — under an immutable run charter, a full frozen-colony drift detector, a locked maximum-reviewer merge contract, and a meta-file block with a ratification path. '/tt 5' runs five generations unattended, halting honestly at any gate it cannot pass.",
+  "context": {
+    "operator_rulings": [
+      "FULL FROZEN COLONY (not metrics subset) — 'we should do the more durable and rigourus one' (05:48Z); intentional divergence requires explicit reviewed RE-BASELINING, never silent acceptance",
+      "MAXIMUM REVIEWERS — 'we need to include as many reviewers as possible from the services we have access to' (05:45Z): the locked roster is every available distinct family, not one",
+      "GEMINI'S PHRASING IS CANON on the merge gate: zero-findings only with a cryptographically locked lane; zero-findings from sub-frontier models = validation failure",
+      "META-BLOCK AGREED 'for now' WITH A RE-EVALUATION MECHANISM — the ratification path: /tt may PROPOSE meta-changes as plans; only the operator ratifies",
+      "PHASE-IDENTITY (Q2) delegated to the coordinator/loop — 'i need some options or you should run the loop to figure it out' — RESOLVED as a decision, not deferred further: see _dev/reports/analysis/ticktock-phase-identity-decision.md (nine stable phase_ids, PURE vs EFFECTFUL classes by re-runnability, exact idempotency-key formulas; owner: coordinator, 2026-08-05). Delegation is a request to decide, not a request to keep presenting options.",
+      "PARTIAL-PHASE ROLLBACK ON RESUME — gemini's convene ruling (adopted via this amendment): resume rolls the workspace back to the last VERIFIED CHECKPOINT rather than replaying mid-phase work"
+    ],
+    "hard_constraints": [
+      "Nine phases, identity-stable, journal-keyed (codex: phase identity controls resumability and exactly-once effects)",
+      "No cycle may modify: its evaluator, gate definitions, reviewer roster, its own authority, the charter, or the meta-orchestration files (go/meditate/ticktock SKILL.md, dispatch-routing-rule.yaml, mind-capabilities-matrix.md) — proposals only, operator ratifies",
+      "--until halts on DETERMINISTIC milestones only; statistics computed POST-halt under a preregistered contract (gemini's anti-p-hacking rule, adopted over the looser form)",
+      "Irreducible never-authority: canonical safety/gate policy, evaluator/metric definitions, self-review acceptance, evidence/checkpoint deletion, silent fresh-state fallback, credential or private-mind-state export, merging outside the contract",
+      "Rotation mandatory per cycle (>=1 untested mind/harness lane, recorded in the matrix) — evidence-gathering, never permission to lower a gate",
+      "All existing gates survive: G-REMOTE-MUTATION and every operator-gate lane still halt /tt — each inherited gate is mapped to an explicit checker, and G-REMOTE-MUTATION now has a mechanical fail-closed one (tools/kernel/hooks/pretool-remote-mutation-gate.cjs, registration pending) (see required_gates and S3)",
+      "Unattended cycles must never raise a macOS 1Password/Automation desktop authentication prompt — credential resolution is Keychain-first (see S1b)"
+    ]
+  },
+  "bounded_plan": {
+    "steps": [
+      {
+        "step_id": "S0",
+        "title": "Charter + journal + phase-identity implementation (Q2 decided; this step implements it)",
+        "description": "Define RunCharter/1.0 (immutable, committed before cycle 1): target, cycle ceiling, evaluator versions, allowed write surfaces, max cumulative diff, max external actions, resource/time ceilings, LOCKED REVIEWER ROSTER (every available distinct family: codex, gemini, hermes, deepseek-via-codewhale, pi-routed, Claude frontier — assigned BEFORE outputs exist), stopping rules, benchmark fingerprint reference. Define GenerationManifest/1.0 per cycle (parent hash, inputs, outputs, reviews with per-reviewer verdicts, metrics, rotation record). PHASE IDENTITY (Q2, DECIDED — see _dev/reports/analysis/ticktock-phase-identity-decision.md, the decision record; this step implements that decision, it does not re-open it): nine stable string phase_ids in fixed order — tt.orient, tt.tick, tt.observe, tt.text, tt.research, tt.tock, tt.improve, tt.ship, tt.schedule — each with an exactly-once effect class assigned by re-runnability. PURE (re-runnable, no external/durable effect, safe to re-execute unconditionally on resume): tt.orient, tt.observe, tt.research, tt.tock. EFFECTFUL (produces an external or durable effect; needs an idempotency key checked before re-execution): tt.tick (starts a remote sim turn), tt.text (sends a message), tt.improve (mutates the repo), tt.ship (commits/pushes/merges), tt.schedule (writes the next trigger). Idempotency key formulas (exact, per the decision record): tt.tick = sha256(charter_hash + cycle_index + \"tick\" + resume_from_generation); tt.text = sha256(charter_hash + cycle_index + \"text\" + observe_artifact_hash); tt.improve = sha256(charter_hash + cycle_index + \"improve\" + plan_ids_sorted); tt.ship = sha256(charter_hash + cycle_index + \"ship\" + tree_hash_before); tt.schedule = sha256(charter_hash + cycle_index + \"schedule\" + next_trigger_spec). Before executing any EFFECTFUL phase, /tt queries the journal for that key: present-and-completed = skip (already done, resume proceeds); present-and-uncertain (EFFECT-RECEIPT-MISSING) = halt into reconciliation, never auto-retry; absent = execute. The journal records {phase_id, entered, completed, artifact_hashes, idempotency_key} per transition. RESUMABILITY CONTRACT (TT-001): the journal is APPEND-ONLY — every phase transition writes a new record, no prior record is ever mutated. Every phase boundary (on completion) writes a VERIFIED CHECKPOINT: the journal record plus a content hash of every artifact the phase produced, confirmed by an independent re-read-and-re-hash after write (tool-reported success is not sufficient). Resume reads only the last VERIFIED CHECKPOINT; a phase that was interrupted before its checkpoint verified is treated as never having completed. PARTIAL-PHASE ROLLBACK (gemini's convene ruling, adopted): on resume, the workspace is restored to the last VERIFIED CHECKPOINT's committed state (via its recorded artifact hashes / git state) — mid-phase partial work for the interrupted phase is discarded, never replayed forward. UNCERTAIN-EXTERNAL-EFFECT repair states: EFFECTFUL phases that halt after dispatching an external action but before confirming a receipt enter a named halt reason distinct from a phase that halted before dispatch — EFFECT-RECEIPT-MISSING ('the effect may have happened; the receipt is unknown') versus EFFECT-DID-NOT-HAPPEN ('halted before any external call was made'). EFFECT-RECEIPT-MISSING requires an explicit reconciliation step before resume (query the external system — did the commit land, did the text send, did the PR open) and must never auto-retry or auto-assume success; EFFECT-DID-NOT-HAPPEN resumes normally from the last verified checkpoint. Both states are named journal fields with distinct recovery paths, not prose. REVIEWER-ROSTER BINDING (TT-002): RunCharter/1.0 additionally captures, at cycle-start commit time, a durable AVAILABILITY SNAPSHOT (which lanes were reachable, checked and recorded, not assumed), a MODEL PIN per lane (exact model/version string) with a post-response VERIFICATION that the pin held (tonight's openrouter substitution — a resolved model silently diverging from its pinned model without being caught — is the precedent motivating this check), PRE-OUTPUT ASSIGNMENT (the roster is bound to the charter before any reviewed artifact exists, never chosen after), and a CRYPTOGRAPHIC LANE-BINDING HASH: the roster (family + model pin + assignment order) is hashed into the charter at commit time so it cannot be edited mid-run; any mismatch between the recomputed roster hash and the charter's stored hash at any point in the run halts the cycle. S0 must also enumerate the full inherited-gate matrix (see required_gates.inherited_gate_matrix) so every phase's `inherited_gate_checks` field names the exact gates that can fire against it.",
+        "is_gap": true,
+        "mode": "PATCH_ALLOWED",
+        "files_touched": [
+          "tools/ticktock/charter-schema.json (NEW)",
+          "tools/ticktock/generation-manifest-schema.json (NEW)",
+          "tools/ticktock/journal-schema.json (NEW)",
+          "_dev/reports/analysis/ticktock-phase-identity-decision.md (decision record, already written — S0 implements it, does not re-derive it)"
+        ]
+      },
+      {
+        "step_id": "S1",
+        "title": "Frozen benchmark colony + re-baselining ritual",
+        "description": "Create benchmark-colony-v1: a frozen, learning-OFF, goal-FREE simulation spec (fixed seeds, world, ticks) plus its recorded fingerprint (final world-state hash, full decision-stream hash, resource curves, applied-rates, entropy, build placements). tools/ticktock/run-benchmark.js executes it and diffs against the fingerprint, emitting {identical: bool, diverging_dimensions: [...], first_diverging_tick}. Divergence HALTS the run. RE-BASELINING RITUAL: a halt can only clear via an explicit reviewed re-baseline — a plan naming what changed, why the change is intentional, which cycle caused it, distinct review, operator ratification — then the charter records benchmark-colony-vN+1 with that reason. Silent drift impossible; intentional change loud. Every re-baseline record carries a LINEAGE CHAIN: prior fingerprint hash, new fingerprint hash, the cycle that triggered it, the review artifact reference, and the ratification reference — so history can be walked mechanically, not reconstructed from narrative. REPEATED-USE DETECTOR (TT-003, mechanical, coordinator default): if re-baselining occurs in more than N of the last M cycles (N=2, M=5 by default, operator-overridable in the charter), that frequency is ITSELF a HALT + FINDING — 'the frame is too tight or the loop is drifting deliberately' — never a routine event. The halt requires an explicit operator decision (widen the frame in a reviewed charter amendment, or investigate the drift) before further cycles run; the detector walks the lineage chain to compute the ratio and cannot be satisfied by narrative claims alone.",
+        "is_gap": true,
+        "mode": "PATCH_ALLOWED",
+        "files_touched": [
+          "tools/ticktock/run-benchmark.js (NEW)",
+          "tools/ticktock/benchmark-colony-v1.json (NEW, frozen spec)",
+          "_dev/state/ticktock/benchmark-fingerprint-v1.json (NEW)"
+        ]
+      },
+      {
+        "step_id": "S1b",
+        "title": "Credential prompt-elimination (Keychain-first wrapper resolution)",
+        "description": "Unattended /tt cycles must never raise a macOS 1Password/Automation desktop authentication prompt (operator: approvals happen 'by clicking my wrist' — not available headlessly). tools/ai-bridge/perplexity-api/run-with-op.sh already applies a Keychain-first pattern to the 1Password SERVICE-ACCOUNT TOKEN (`security find-generic-password -a Mythos -s smos-1p-automation-token -w`, falling back to op only on a miss) but the PERPLEXITY_API_KEY value itself is still resolved via `op read` on every call. tools/ai-bridge/adapters/openrouter.js and tools/ai-bridge/adapters/gemini-api.js read OPENROUTER_API_KEY / GEMINI_API_KEY directly from process.env with no Keychain-first path at all — any caller that has not pre-populated the env falls straight through to interactive op auth. Verified facts (credential audit _dev/reports/credentials/2026-08-05T05-53-16Z__audit.md): smos-1p-automation-token IS present in macOS Keychain (headless, no prompt). PERPLEXITY_API_KEY, OPENROUTER_API_KEY, and GEMINI_API_KEY are NOT present under wrapper-recognized Keychain account/service names and currently route through op, which can fall back to desktop auth. The audit's Keychain listing does show differently-named generic entries `openrouter-api-key` and `gemini-api-key`; this step must confirm whether those hold the same secret and, if so, re-store them under the exact account/service name each wrapper will query using tools/boot/keychain-store.sh — operator-provided values never transit chat. Deliverable: extend the Keychain-first-then-op pattern to all three keys (perplexity, openrouter, gemini) at the exact point each value is resolved (`security find-generic-password -a <account> -s <KEY_NAME>` first; `op read` only on a miss); add a `--dry-run-cred-check` mode reporting which lane resolved from Keychain vs. op vs. desktop-fallback. S3 dry-run evidence must prove a full /tt cycle produces zero desktop-auth prompts.",
+        "is_gap": true,
+        "mode": "PATCH_ALLOWED",
+        "files_touched": [
+          "tools/ai-bridge/perplexity-api/run-with-op.sh",
+          "tools/ai-bridge/adapters/openrouter.js",
+          "tools/ai-bridge/adapters/gemini-api.js",
+          "_dev/reports/credentials/2026-08-05T05-53-16Z__audit.md (reference, not owned — pre-existing artifact)"
+        ]
+      },
+      {
+        "step_id": "S2",
+        "title": "The skill + the nine phases",
+        "description": ".claude/skills/ticktock/SKILL.md: ORIENT (state from artifacts) -> TICK (sim round under its stamp) -> OBSERVE (science readout) -> TEXT (operator pulse; truthful contract per the /meditate rules) -> RESEARCH (Perplexity world-context wing feeding BOTH the sim's next challenge AND Mythos's own architecture — biological/collective-intelligence findings as design input; receipts required) -> TOCK (/meditate; no sim authority; not a second research phase) -> IMPROVE (candidates via blueprint->review->/go) -> SHIP (commit/snapshot/PR; merge ONLY under the locked-roster zero-unresolved-findings contract, timeouts/substitutions/model-pin failures = NOT clean) -> SCHEDULE (prepares the next trigger only; ACTIVATION is a separate, later action — see S4). Arguments: /tt, /tt N, /tt deep, /tt quick, /tt tock, /tt --until <deterministic milestone>. Every cycle: benchmark first, rotation dispatch, generation manifest, journal transitions. Each phase definition explicitly lists which inherited operator-gate(s) apply to it (e.g. TICK/SHIP/SCHEDULE check G-REMOTE-MUTATION before any remote-mutating action; see required_gates.inherited_gate_checks) — gates are never left as unstated background assumptions. `/tt` IS THE ALIAS, UNCONDITIONALLY: the authoritative command is `/ticktock`, registered as `.claude/commands/ticktock.md`; `/tt` is registered as a primary alias in `instructions/canonical/command-aliases.yaml` (`tt: {resolves_to: ticktock, status: primary}`), which generates `.claude/commands/tt.md`. This is not conditional on 'if the harness needs it' — both files are required deliverables of S2, and a mechanical check (does `/tt` resolve to the same command id and behavior as `/ticktock`) is part of the S3 acceptance matrix.",
+        "is_gap": true,
+        "mode": "PATCH_ALLOWED",
+        "files_touched": [
+          ".claude/skills/ticktock/SKILL.md (NEW)",
+          ".claude/commands/ticktock.md (NEW)",
+          ".claude/commands/tt.md (NEW, generated from the alias registry entry)",
+          "instructions/canonical/command-aliases.yaml (amend: add tt -> ticktock, status: primary)"
+        ]
+      },
+      {
+        "step_id": "S3",
+        "title": "Dry-run verification (no sim mutation)",
+        "description": "Prove the machine before it drives, as an explicit acceptance matrix — every test below has an exact {test_id, what it proves, artifact, field} contract; see bounded_plan.acceptance_matrix (the authoritative table, 20 tests; see bounded_plan.acceptance_matrix_authority) — no test may exist without an artifact+field binding. S3-a1 injected drift; S3-a2 repeated-rebaseline detector; S3-b1 partial-phase rollback + idempotency on kill-before-checkpoint; S3-b2 EFFECT-RECEIPT-MISSING reconciliation on kill-after-dispatch-before-receipt; S3-c charter/meta immutability + ratification-path proposal artifact; S3-d1 reviewer timeout/substitution/pin-mismatch = not-clean; S3-d2 unavailable-lane availability snapshot + roster hash still binds remaining lanes; S3-d3 roster-hash tamper halts; S3-e statistical --until refused; S3-f lineage integrity across generations; S3-g ceiling enforcement (diff + external actions); S3-h inherited-gate probes, one per gate_id in required_gates.inherited_gate_matrix; S3-h2 the G-REMOTE-MUTATION mechanical checker (deny unstamped / allow stamped / allow read-only lanes / audit rows); S3-h3 (TT-R4-002, new) the pretooluse-live BLOCKING precondition refuses unattended/remote-capable modes while enforcement_path_observed_live is false; S3-i rotation enforcement; S3-j1 evidence-deletion refusal; S3-j2 fresh-state-fallback refusal; S3-k credential-prompt elimination (S1b, all three wrappers, `--dry-run-cred-check`); S3-l multi-generation replay (>=3 simulated cycles) over all of the above; S3-m alias resolution (`/tt` -> `/ticktock`, TT-005). All 20 tests write into the single evidence artifact _dev/state/ticktock/ticktock-dryrun-evidence.json, one distinct field (or field group) per test, per bounded_plan.acceptance_matrix.",
+        "is_gap": false,
+        "mode": "RUN_ONLY",
+        "files_touched": [
+          "_dev/state/ticktock/ticktock-dryrun-evidence.json (NEW)"
+        ]
+      },
+      {
+        "step_id": "S4",
+        "title": "Maximum-reviewer trial + debrief",
+        "description": "The plan's own review uses the design it proposes: dispatch the FULL available roster (codex, gemini, hermes, deepseek-via-codewhale, pi-routed model, Claude frontier) on the implementation; merge only at zero unresolved findings from every one. Records the first max-roster dataset in the capabilities matrix. Debrief written. SCHEDULE REMAINS INERT (TT-007): S2's SCHEDULE phase only PREPARES the next trigger artifact; ACTIVATING it (registering a live cron/launchd/self-invoking trigger that can start a real cycle) is a separate action gated on G-TICKTOCK-REVIEW clearing AND an explicit operator stamp on the trial results — activation before the gate clears is out of scope for this plan and must not occur as a side effect of S4.",
+        "is_gap": false,
+        "mode": "REVIEW_ONLY",
+        "files_touched": [
+          "_dev/reports/analysis/run-debrief__ticktock-skill__<date>.md"
+        ]
+      }
+    ],
+    "required_gates": [
+      {
+        "gate_id": "G-TICKTOCK-REVIEW",
+        "status": "pending — mechanical checker implemented, decision not cleared",
+        "decision": "S4 max-roster trial must return zero unresolved findings from every locked reviewer before /tt runs a real cycle; SCHEDULE activation is downstream of this gate clearing and an operator stamp (TT-007). AMENDED 2026-08-11T23:38Z (plan tt-unowned-blockers L3, codewhale-reviewed): the runtime check this field previously demanded of S2 now EXISTS AND IS INVOKED — evaluateTicktockReview() in tools/ticktock/preflight-ticktock.cjs:350-445 ajv-validates the decision artifact _dev/state/ticktock/g-ticktock-review-decision.json (TickTockReviewDecision/1.0) and refuses unless decision.cleared is strictly true, corroborated by unresolved_findings_total 0 and every reviewer lane APPROVE-and-clean; refusal codes distinguish a read-and-evaluated decision (DECISION-NOT-CLEARED, ROSTER-NOT-CLEAN) from a missing artifact (ARTIFACT-ABSENT). Invocation paths: the /tt pre-invocation and phase-entry preflight CLI (preflight-ticktock.cjs), test-generation-manifest.cjs:218-224, and dryrun-s3.cjs:725. NO CI HOOK invokes it — invocation is preflight/test-harness only, stated so this amendment does not manufacture a narrative-only assurance one level up. Current decision artifact: tt-review-20260806T002500Z, cleared false. The prior value of this field (accurate when written, 2026-08-05, paraphrased not quoted per this plan's own machine-parsing rules) recorded that no checker existed yet and assigned S2 to build one; S2 built it and this field was the stale copy."
+      },
+      {
+        "gate_id": "G-REMOTE-MUTATION",
+        "status": "inherited + mechanically enforced",
+        "decision": "TT-R3-001 RESOLVED (2026-08-05): the gate is no longer convention-only. A mechanical checker now exists — tools/kernel/hooks/pretool-remote-mutation-gate.cjs (PreToolUse/Bash), enforcement_mode: FAIL-CLOSED. It classifies each command segment as MUTATING or READ-ONLY against the orwell host (psrunfile.sh/psrun.sh script invocations, inbound-push.sh, build-export->push chains, ssh orwell payloads carrying Hyper-V or filesystem mutation cmdlets, and scp whose DESTINATION is the remote host), and denies every MUTATING command that is not covered by a valid stamp. A stamp is a machine-checkable sidecar _dev/state/remote-mutation-stamps/<stamp-id>.json conforming to schema RemoteMutationStamp/1.0 {schema, stamp_id, source_doc, granted_at, operator_authorization (verbatim line), scope[] (action keys or 're:<regex>'), conditions[] (non-empty), expires_at|null, voided, superseded_by} whose source_doc must exist on disk and match the g-remote-mutation-{packet,prestamp}__*.md artifact pattern. Fail-closed on all of: no stamp, expired, voided, superseded, scope mismatch, unparseable sidecar, unknown/unlisted remote script, unprovable ad-hoc ssh payload, or an exception inside the gate itself when the command touches the remote surface. TT-R4-001 RESOLVED (2026-08-05, MAJOR): the classifier had three holes where an unrecognized remote-surface command fell through to gate-does-not-apply instead of denying — rsync had no classifier at all, an unrecognized executable naming the orwell host or a D:\\HyperV path directly was invisible to the gate, and a NEW wrapper script (not psrun.sh/psrunfile.sh, not on the read-only allowlist) that shells to ssh/scp/rsync internally bypassed classification entirely because the invoking command line never named orwell itself. Fixed: rsync now classifies push/pull like scp (destination-is-orwell = MUTATING, source-is-orwell = READ-ONLY); any unrecognized executable whose segment or whole command line names the orwell host or a D:\\HyperV / D:/HyperV path is fail-closed MUTATING (key prefix unknown:); any unrecognized .sh/.ps1 invocation is scanned for remote-mutation indicators in its own body (hard mutation tokens, or an ssh/scp/rsync reference to the orwell host) and denied if found OR if the body cannot be resolved and read at all (key prefix wrapper:). No agent-settable bypass exists (no kill-switch env, no repo-writable disable file, no inline self-justification). Every decision appends a row to _dev/state/remote-mutation-stamps/audit.jsonl {ts, decision, reason, stamp_id, keys, command}. Two stamps are backfilled from the existing operator artifacts: ant-world-orwell-live-dashboard__20260804T2023Z and continuity-control__20260805T0306Z. VERIFIED BY EXECUTION: 46/46 fixture tests pass (_dev/staged/kernel-hooks/__tests__/pretool-remote-mutation-gate.test.cjs; 38 baseline + 8 new TT-R4-001 cases: rsync push denied unstamped, rsync pull allowed, unknown-remote-reference-via-unrecognized-exe denied x2, unknown-script-with-ssh-inside denied x2, unresolvable-script denied, clean-unrelated-script allowed), covering unstamped deny, scope-mismatch deny, voided/expired/superseded/unparseable deny, read-only-lane allow with no stamp, stamped allow, catch-all + wrapper-detection deny, and audit-log content for all outcomes. HONEST STATUS CAVEAT: the module is written and tested but NOT YET REGISTERED — tools/kernel/ sits inside the convene authority perimeter and no ConveneReceipt/1.0 covers it, so the file is staged at _dev/staged/kernel-hooks/pretool-remote-mutation-gate.cjs with a ready-to-apply registration patch at _dev/staged/kernel-hooks/REGISTRATION-PATCH.md. Capability tier until that patch lands and a live PreToolUse denial is observed: the CHECKER is fail-closed, the HARNESS ENFORCEMENT is ABSENT — see the new pretooluse-live precondition below (TT-R4-002), which is BLOCKING for enabling any unattended or remote-capable /tt mode, not merely advisory. S3 evidence fields: inherited_gate_probes[\"G-REMOTE-MUTATION\"] (S3-h) and remote_mutation_gate_test (S3-h2). TT-R4-003 (MINOR, stamp expiry): the two backfilled stamps (08-04 and continuity-control) carry expires_at: null because the operator never set one when granting them — this is NOT a defect to silently repair. A stamp with expires_at: null is a SINGLE-PROGRAM authorization: valid for the program of work named in its source_doc and conditions, not time-bounded. A future amendment may add expiry semantics (e.g. a default TTL) if the operator ratifies one; this plan does not invent an expiry value now."
+      },
+      {
+        "gate_id": "inherited_operator_gates",
+        "status": "enumerated",
+        "decision": "Replaced 'pending_enumeration' with a finite, sourced matrix (TT-R2-002 fix, 2026-08-05): see bounded_plan.inherited_gate_matrix, eleven entries (10 gates plus the bubble-up-gates vocabulary module), each {gate_id, trigger, tt_phases, mechanical_checker, wired_at, enforcement_mode, evidence_artifact}. Sources: kernel/lib/bubble-up-gates.cjs (the seven-category taxonomy, consumed by other layers, not itself a blocker), tools/planning/lib/resolve-task-plan.js (extractOperatorGates/resolveOperatorGates for plan-scoped gates like G-REMOTE-MUTATION), and live repo hooks under tools/kernel/hooks/*.cjs wired through tools/kernel/hooks/dispatch-pretool.cjs. Where no mechanical checker exists, the matrix says so explicitly rather than implying coverage. S3-h exercises every gate_id in the matrix, one probe each."
+      },
+      {
+        "gate_id": "pretooluse-live",
+        "status": "new — BLOCKING precondition on enabling unattended/remote-capable /tt modes (TT-R4-002, 2026-08-05, MAJOR)",
+        "decision": "Codex r4 ruling: /tt must refuse to enable any unattended or remote-capable mode until LIVE PreToolUse enforcement of G-REMOTE-MUTATION has been observed — a module-direct test (calling evaluate()/main() by hand, or under the test harness) is NOT sufficient to clear this precondition, even though it is sufficient to pass acceptance test S3-h2's checker-correctness assertions. (a) HOW VERIFIED: a real Bash tool call issued through the live Claude Code harness (not a require()'d module invocation) against a command the gate is expected to deny, producing two independent pieces of evidence in the same session: (i) a new row in _dev/state/remote-mutation-stamps/audit.jsonl with decision:'deny' whose command field matches the issued command, and (ii) the harness's OWN denial surface (the PreToolUse hook-error message shown to the calling agent, verbatim) — not the module's return value re-narrated by the agent. Both must be captured; the module's own JSON return object alone does not satisfy this. (b) EVIDENCE FIELD: _dev/state/ticktock/ticktock-dryrun-evidence.json gains remote_mutation_gate_test.enforcement_path_observed_live: true (a strict boolean, distinct from the existing tri-state remote_mutation_gate_test.enforcement_path_observed used by S3-h2's checker-correctness assertion) plus a new field remote_mutation_gate_test.harness_denial_transcript_path pointing at a saved transcript/log excerpt of the live harness denial (path under _dev/reports/analysis/ or _dev/state/ticktock/). enforcement_path_observed_live may only be set true once both (a) artifacts exist; module-direct-only runs must record enforcement_path_observed_live: false and harness_denial_transcript_path: null — this is a materially different, weaker claim than a live observation and must never be reported as equivalent. (c) EXPLICIT REFUSAL STATEMENT: S2 must implement the refusal mechanically — the outer /tt cycle loop (or the specific phase-entry precondition on tt.tick/tt.ship/tt.schedule) reads remote_mutation_gate_test.enforcement_path_observed_live from the evidence artifact before permitting entry into any unattended (`/tt N` for N>1 unattended, `--until`) or remote-capable (any phase that can reach the orwell host) mode; if false, /tt halts honestly naming this precondition rather than proceeding on a module-direct result. Dry-run and single-cycle attended modes that never reach the remote surface are NOT blocked by this precondition. S3 must add a dedicated test S3-h3 that positively exercises the refusal: with enforcement_path_observed_live:false in the evidence artifact, attempting to enter an unattended/remote-capable mode halts with a named reason citing this gate_id; the test fails if /tt proceeds anyway."
+      }
+    ],
+    "inherited_gate_matrix": [
+      {
+        "gate_id": "G-TICKTOCK-REVIEW",
+        "trigger": "an attempt to run a real (non-dry-run) /tt cycle, or to activate SCHEDULE",
+        "tt_phases": [
+          "tt.tick",
+          "tt.schedule"
+        ],
+        "mechanical_checker": "tools/ticktock/preflight-ticktock.cjs evaluateTicktockReview() — ajv-validated read of _dev/state/ticktock/g-ticktock-review-decision.json, fail-closed, corroborated clearing (strict decision.cleared plus clean roster). AMENDED 2026-08-11T23:38Z (plan tt-unowned-blockers L3); prior value recorded no checker, which was true until S2 landed it.",
+        "wired_at": "tools/ticktock/preflight-ticktock.cjs:350-445, invoked by the /tt preflight CLI at pre-invocation and tt.tick/tt.ship/tt.schedule entry; exercised by test-generation-manifest.cjs:218-224 and dryrun-s3.cjs:725. Not a harness hook and not in CI — module-level, ADVISORY tier.",
+        "enforcement_mode": "ADVISORY (module): fail-closed whenever the preflight is called; nothing at the harness level compels the call. Never report BLOCKING.",
+        "evidence_artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json field inherited_gate_probes[\"G-TICKTOCK-REVIEW\"]"
+      },
+      {
+        "gate_id": "G-REMOTE-MUTATION",
+        "trigger": "a remote-mutating action (deploying to a remote host/VM, pushing to a shared remote resource)",
+        "tt_phases": [
+          "tt.tick",
+          "tt.ship",
+          "tt.schedule"
+        ],
+        "mechanical_checker": "tools/kernel/hooks/pretool-remote-mutation-gate.cjs (classifyCommand/evaluate/loadStamps) — replaces the r2 finding of \"NONE\". Stamp sidecars: _dev/state/remote-mutation-stamps/<stamp-id>.json (schema RemoteMutationStamp/1.0). Plan-scoped convention resolution in tools/planning/lib/resolve-task-plan.js (extractOperatorGates/resolveOperatorGates) still exists but is no longer the only enforcement.",
+        "wired_at": "WIRED 2026-08-05 at commit 3a952db1b, under an operator-minted ConveneReceipt/1.0 scoped to tools/kernel/. Module landed at tools/kernel/hooks/pretool-remote-mutation-gate.cjs and required by the Bash branch of tools/kernel/hooks/dispatch-pretool.cjs:223. PRIOR VALUE (accurate when written): this field previously recorded the module as un-wired, naming the Bash branch of dispatch-pretool.cjs as the intended insertion point and the convene perimeter as the blocker. That blocker is cleared. The prior wording is deliberately PARAPHRASED rather than quoted, and this note deliberately carries no file-and-line reference of its own. Two reasons, both learned by breaking it: the S3-h probe derives wired_expected by regex-testing this very string for un-wired phrasings, so quoting the old value verbatim re-triggers the detector; and it also extracts every file-colon-line pattern in this string as a wiring claim to verify, so an explanatory citation becomes a false claim about where the gate is wired. A machine-parsed field can carry neither a quote of its own history nor an incidental citation. Amended by session 6085ee68 after acceptance test S3-h correctly FAILED against this field — the probe observed dispatcher_wiring true while this matrix still expected false. The test was right; this matrix was the stale copy. Third instance in one session of a ratified determination not propagating to a machine-read surface (see memory: determinations-are-dual-writes).",
+        "enforcement_mode": "CHECKER: fail-closed, no bypass, classification holes closed (verified by 46/46 fixture tests, TT-R4-001). HARNESS: BLOCKING as of 2026-08-05 — the registration landed (3a952db1b) and a live PreToolUse denial was observed and independently confirmed against the six-part standard by two distinct-family reviewers, so enforcement_path_observed_live is true and the pretooluse-live precondition now clears. The bar stated here was met, not lowered. SCOPE LIMIT, still true: this is a Bash-lane lock only. Non-Bash lanes (MCP, any direct-execution tool) and processes already running when the gate evaluates remain outside it, and the gate reasons about command TEXT rather than the syscall. Do not report BLOCKING for those. PRIOR VALUE: 'HARNESS: ABSENT until the registration patch lands and a live PreToolUse denial is observed.'",
+        "evidence_artifact": "_dev/state/remote-mutation-stamps/audit.jsonl (one row per decision) + the stamp sidecars in that directory + ticktock-dryrun-evidence.json:inherited_gate_probes[\"G-REMOTE-MUTATION\"] and :remote_mutation_gate_test"
+      },
+      {
+        "gate_id": "userprompt-plan-review-gate",
+        "trigger": "a /run-plan prompt lacking a durable distinct-mind review record for the plan being run",
+        "tt_phases": [
+          "tt.improve"
+        ],
+        "mechanical_checker": "tools/kernel/hooks/userprompt-plan-review-gate.cjs",
+        "wired_at": "tools/kernel/hooks/dispatch-userprompt.cjs:108",
+        "enforcement_mode": "ADVISORY — LOUD-INJECTION (stdout directive, always exits 0 per the hook's own header comment; verified hard-blocking is established only for PreToolUse hooks in this repo, not UserPromptSubmit); operator override via --skip-distinct-review is always available",
+        "evidence_artifact": "_dev/state/plan-task-review-state/<plan-id>.json field distinct_reviews[].verdict"
+      },
+      {
+        "gate_id": "pretool-orchestrator-worker-gate",
+        "trigger": "the coordinator self-executing mutation/analysis work that should be delegated to a subagent",
+        "tt_phases": [
+          "tt.improve",
+          "tt.ship"
+        ],
+        "mechanical_checker": "tools/kernel/hooks/pretool-orchestrator-worker-gate.cjs",
+        "wired_at": "tools/kernel/hooks/dispatch-pretool.cjs:269 (require of ./pretool-orchestrator-worker-gate.cjs). Amended 2026-08-05 by session 6085ee68: this field previously claimed lines 221-227, which drifted when commit 3a952db1b inserted the G-REMOTE-MUTATION block above it. The code did not change; the line numbers did. Acceptance test S3-h verifies each claimed line against the file and correctly failed on the stale number — a hardcoded line reference in a machine-verified field is a maintenance liability, and is only tolerable here because S3-h actually checks it rather than trusting it.",
+        "enforcement_mode": "BLOCKING only when env MYTHOS_ORCHESTRATOR_GATE=1; OBSERVE-ONLY otherwise (logs would-block, does not block); fail-open on internal error; subagents exempt",
+        "evidence_artifact": "_dev/state/orchestrator-worker-gate/<session_id>.json"
+      },
+      {
+        "gate_id": "convene-perimeter-gate",
+        "trigger": "Write/Edit/MultiEdit/Bash targeting a PROTECTED_PATHS governance path (includes instructions/canonical/command-aliases.yaml, the exact file S2/tt.improve touches to register the /tt alias) without a live path-scoped ConveneReceipt/1.0",
+        "tt_phases": [
+          "tt.improve",
+          "tt.ship"
+        ],
+        "mechanical_checker": "tools/verify/hooks/pre-write-convene-required.cjs (evaluate() for Write/Edit/MultiEdit; evaluateBash() for Bash)",
+        "wired_at": "tools/kernel/hooks/dispatch-pretool.cjs:149-154 (Write/Edit/MultiEdit) and :178-199 (Bash)",
+        "enforcement_mode": "BLOCKING, FAIL-CLOSED by explicit design (a load failure hard-stops rather than passing through, unlike every other gate in this matrix) — observed live twice this session: blocking the alias-registry write itself, and blocking a read-only shell command that merely named a protected hook path in its arguments (tools/kernel/hooks/pretool-mutation-plan-gate.cjs) during this very amendment, evidence the Bash-channel matcher scans command text broadly rather than distinguishing read from write intent",
+        "evidence_artifact": "a ConveneReceipt/1.0 artifact scoped to the path, under _dev/reports/analysis/convene-runs/*, checked inside evaluate()/evaluateBash()"
+      },
+      {
+        "gate_id": "pretool-secret-access-gate",
+        "trigger": ".env* file read/write, or a Bash command carrying a key-shaped credential token (credential_access category)",
+        "tt_phases": [
+          "tt.tick",
+          "tt.text",
+          "tt.research",
+          "tt.improve"
+        ],
+        "mechanical_checker": "tools/kernel/hooks/pretool-secret-access-gate.cjs",
+        "wired_at": "tools/kernel/hooks/dispatch-pretool.cjs:96-104 (first in the Write/Edit/MultiEdit/Bash chain)",
+        "enforcement_mode": "BLOCKING only when env MYTHOS_SECRET_ACCESS_GATE=1; OBSERVE-ONLY otherwise; fail-open on internal error",
+        "evidence_artifact": "_dev/state/secret-access-gate/<session_id>.json"
+      },
+      {
+        "gate_id": "pretool-write-boundary-gate",
+        "trigger": "a write/delete resolving outside the Mythos workspace or into a declared external/observed repo (denylist)",
+        "tt_phases": [
+          "tt.orient",
+          "tt.tick",
+          "tt.observe",
+          "tt.text",
+          "tt.research",
+          "tt.tock",
+          "tt.improve",
+          "tt.ship",
+          "tt.schedule"
+        ],
+        "mechanical_checker": "tools/kernel/hooks/pretool-write-boundary-gate.cjs",
+        "wired_at": "tools/kernel/hooks/dispatch-pretool.cjs:111-119",
+        "enforcement_mode": "BLOCKING only when env MYTHOS_WRITE_BOUNDARY_GATE=1; OBSERVE-ONLY otherwise (the module's own header comment calls it 'the consent gate' and says 'NEVER disable,' but the wired code path is conditional on the env flag, not unconditionally blocking — recorded as an observed discrepancy, not assumed-away)",
+        "evidence_artifact": "_dev/state/write-boundary-gate/<session_id>.json and bypass-ledger.jsonl"
+      },
+      {
+        "gate_id": "pretool-git-custody-gate",
+        "trigger": "git add/commit of a path owned by another session's write_log (the custody/git gate observed live this session)",
+        "tt_phases": [
+          "tt.ship"
+        ],
+        "mechanical_checker": "tools/kernel/hooks/pretool-git-custody-gate.cjs",
+        "wired_at": "tools/kernel/hooks/dispatch-pretool.cjs:255 (require of ./pretool-git-custody-gate.cjs, Bash channel only). Amended 2026-08-05: previously claimed 207-213; the code is unchanged, the line numbers drifted when commit 3a952db1b inserted the G-REMOTE-MUTATION block above it.",
+        "enforcement_mode": "BLOCKING on a positively-proven foreign-custody path; unknown-custody paths pass with an advisory unresolved_custody record; fail-open on internal error",
+        "evidence_artifact": "_dev/state/git-custody-gate/<session_id>.json"
+      },
+      {
+        "gate_id": "pretool-mutation-plan-gate",
+        "trigger": "Edit/Write/MultiEdit or mutating-Bash against a session's governed-path add without a covering approved plan/review pair (quality-process tier, not a safety gate)",
+        "tt_phases": [
+          "tt.improve",
+          "tt.ship"
+        ],
+        "mechanical_checker": "tools/kernel/hooks/pretool-mutation-plan-gate.cjs via runMutationPlanGate()",
+        "wired_at": "tools/kernel/hooks/dispatch-pretool.cjs:67-73, 142-146 (edit), 164-168 (bash)",
+        "enforcement_mode": "REPORT-ONLY repo-wide today — blocks only if a session's add_registry.adds.mutation-plan-gate.mode is separately flipped to 'blocking' by the operator after a soak review; no /tt session should assume this blocks anything yet",
+        "evidence_artifact": "_dev/state/tier-gate-soak/mutation-plan-gate.jsonl"
+      },
+      {
+        "gate_id": "pretool-delegation-altitude",
+        "trigger": "Agent/Task dispatch, or Write/Edit/MultiEdit/Bash calls exceeding the session's delegation-altitude cap (same_rank_authority_conflict / orchestration-discipline category)",
+        "tt_phases": [
+          "tt.improve",
+          "tt.ship"
+        ],
+        "mechanical_checker": "tools/kernel/hooks/pretool-delegation-altitude.cjs",
+        "wired_at": "tools/kernel/hooks/dispatch-pretool.cjs:84-86, 137, 161-162",
+        "enforcement_mode": "gated behind marker files _dev/state/delegation-altitude/enforce and /override — not unconditionally blocking",
+        "evidence_artifact": "_dev/state/tier-gate-soak/delegation-altitude-cap.jsonl and _dev/state/delegation-altitude/<session_id>.json"
+      },
+      {
+        "gate_id": "bubble-up-gates-taxonomy",
+        "trigger": "not itself a trigger — this is the seven-category vocabulary (human_judgment, explicit_approval, budget_scope_timeline_commitment, client_facing_risk, irreversible_destructive, credential_access, same_rank_authority_conflict) that other layers validate their own bubble_up_gate fields against",
+        "tt_phases": [
+          "any phase whose journal/manifest record carries a bubble_up_gate field"
+        ],
+        "mechanical_checker": "kernel/lib/bubble-up-gates.cjs and tools/kernel/lib/bubble-up-gates.cjs (isValidGate/isBubbleUpGate/describeGate) — a vocabulary module, NOT itself a PreToolUse/PostToolUse blocker",
+        "wired_at": "consumed by other layers (signal validators, worker-return contracts, the delegation-altitude breaker); not independently wired into dispatch-pretool.cjs",
+        "enforcement_mode": "n/a — provides shared vocabulary only; enforcement lives in the consuming gate",
+        "evidence_artifact": "none independently; evidence lives with whichever consuming gate performed the check"
+      }
+    ],
+    "acceptance_matrix": [
+      {
+        "test_id": "S3-a1",
+        "proves": "the benchmark detects an injected behavioral drift and names the first diverging tick",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "injected_drift_test.halted == true AND injected_drift_test.first_diverging_tick is a non-null integer"
+      },
+      {
+        "test_id": "S3-a2",
+        "proves": "TT-003's mechanical repeated-rebaseline detector halts and files a finding when re-baselining exceeds N of the last M cycles, and does not silently clear",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "rebaseline_detector_test.halted_on_threshold == true AND rebaseline_detector_test.finding_recorded == true AND rebaseline_detector_test.ratio_computed matches \"<N>/<M>\""
+      },
+      {
+        "test_id": "S3-b1",
+        "proves": "resume after a kill before checkpoint-verify restores the workspace to the last VERIFIED CHECKPOINT (partial-phase rollback) and does not double-fire the interrupted phase's effect",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "journal_resume_test.partial_phase_rollback_confirmed == true AND journal_resume_test.idempotency_key_honored == true AND journal_resume_test.double_effect_detected == false"
+      },
+      {
+        "test_id": "S3-b2",
+        "proves": "a kill after external dispatch but before receipt confirmation halts into EFFECT-RECEIPT-MISSING (not EFFECT-DID-NOT-HAPPEN) and requires reconciliation before resume",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "journal_resume_test.uncertain_effect_halt_reason == \"EFFECT-RECEIPT-MISSING\" AND journal_resume_test.reconciliation_required_before_resume == true"
+      },
+      {
+        "test_id": "S3-c",
+        "proves": "a charter/meta-file edit attempted from within a simulated cycle is refused, and a ratification-path PROPOSAL artifact is produced instead of an edit",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json (field references the produced proposal artifact path)",
+        "field": "charter_immutability_test.edit_refused == true AND charter_immutability_test.proposal_artifact_produced == true AND charter_immutability_test.proposal_artifact_path resolves to an existing file"
+      },
+      {
+        "test_id": "S3-d1",
+        "proves": "a reviewer timeout, substitution, or MODEL PIN verification failure each independently marks the merge NOT-clean",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "merge_contract_tests.not_clean_on_timeout == true AND merge_contract_tests.not_clean_on_substitution == true AND merge_contract_tests.not_clean_on_pin_mismatch == true"
+      },
+      {
+        "test_id": "S3-d2",
+        "proves": "an unavailable lane at cycle start is recorded in the availability snapshot, and the roster hash still correctly binds the remaining lanes",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "merge_contract_tests.availability_snapshot_records_unavailable_lane == true AND merge_contract_tests.roster_hash_binds_remaining_lanes == true"
+      },
+      {
+        "test_id": "S3-d3",
+        "proves": "tampering with the charter's stored roster hash mid-run is detected and halts the cycle",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "merge_contract_tests.roster_hash_tamper_halts == true"
+      },
+      {
+        "test_id": "S3-e",
+        "proves": "a statistical --until condition is refused; a deterministic milestone condition is accepted",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "until_refusal_test.statistical_condition_refused == true AND until_refusal_test.deterministic_condition_accepted == true"
+      },
+      {
+        "test_id": "S3-f",
+        "proves": "the parent-hash lineage chain across generations is unbroken and independently re-verifiable end to end",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "lineage_integrity_test.chain_unbroken == true AND lineage_integrity_test.independently_verified == true"
+      },
+      {
+        "test_id": "S3-g",
+        "proves": "both the max-cumulative-diff ceiling and the max-external-actions ceiling halt the cycle when exceeded",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "ceiling_enforcement_test.diff_ceiling_halts == true AND ceiling_enforcement_test.external_action_ceiling_halts == true"
+      },
+      {
+        "test_id": "S3-h",
+        "proves": "every gate_id in bounded_plan.inherited_gate_matrix halts /tt exactly as it halts any other actor, one probe per gate_id (gates recorded with no mechanical checker are probed as narrative/advisory, not silently skipped)",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "inherited_gate_probes[<gate_id>].halted == true (or .enforcement_mode_observed matches the matrix's recorded enforcement_mode) for every gate_id in bounded_plan.inherited_gate_matrix — no gate_id may be absent"
+      },
+      {
+        "test_id": "S3-h2",
+        "proves": "the G-REMOTE-MUTATION mechanical checker denies an unstamped remote-mutating command, allows the same command under a valid scope-matching stamp, allows read-only remote lanes with no stamp, and records both outcomes in the audit log — and that the checker is actually reached from the live PreToolUse path, not merely importable",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json (+ the checker's own audit trail at _dev/state/remote-mutation-stamps/audit.jsonl)",
+        "field": "remote_mutation_gate_test.unstamped_mutation_denied == true AND remote_mutation_gate_test.stamped_mutation_allowed == true AND remote_mutation_gate_test.readonly_lane_allowed_without_stamp == true AND remote_mutation_gate_test.audit_rows_recorded >= 2 AND remote_mutation_gate_test.enforcement_path_observed in [\"pretooluse-live\",\"module-direct\"] (a \"module-direct\" value means the registration patch has not landed and the harness tier is ABSENT, not BLOCKING) (TT-R4-002, 2026-08-05: S3-h2 verifies the CHECKER's correctness only — a module-direct pass here is not sufficient to clear the separate required_gates[\"pretooluse-live\"] BLOCKING precondition, which requires the stricter boolean remote_mutation_gate_test.enforcement_path_observed_live == true plus a saved harness_denial_transcript_path from a live PreToolUse call, see that gate entry and S3-h3)"
+      },
+      {
+        "test_id": "S3-h3",
+        "proves": "TT-R4-002 (new, MAJOR): with remote_mutation_gate_test.enforcement_path_observed_live left false (no live harness denial has ever been observed), /tt refuses to enter any unattended (`/tt N` for N>1, `--until`) or remote-capable (any phase that can reach the orwell host) mode, halting with a named reason that cites required_gates[\"pretooluse-live\"] rather than proceeding on a module-direct-only result; a single-cycle attended dry-run that never reaches the remote surface is unaffected",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "pretooluse_live_precondition.refused_unattended_mode == true AND pretooluse_live_precondition.halt_reason == \"pretooluse-live\" AND pretooluse_live_precondition.enforcement_path_observed_live_at_refusal == false AND pretooluse_live_precondition.attended_dry_run_unaffected == true"
+      },
+      {
+        "test_id": "S3-i",
+        "proves": "a simulated cycle that skips mandatory rotation fails acceptance",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "rotation_enforcement_test.skipped_rotation_fails_acceptance == true"
+      },
+      {
+        "test_id": "S3-j1",
+        "proves": "an attempt to delete checkpoint/evidence artifacts is refused",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "evidence_deletion_test.deletion_refused == true"
+      },
+      {
+        "test_id": "S3-j2",
+        "proves": "an attempt to silently fall back to a fresh state (bypassing the journal) is refused",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "fresh_state_fallback_test.fallback_refused == true"
+      },
+      {
+        "test_id": "S3-k",
+        "proves": "a full dry-run cycle invoking all three external-API wrappers (perplexity, openrouter, gemini) produces zero desktop-auth prompts",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "credential_prompt_elimination_test.desktop_prompts_observed == 0 AND credential_prompt_elimination_test.lanes_reported == [\"perplexity\",\"openrouter\",\"gemini\"]"
+      },
+      {
+        "test_id": "S3-l",
+        "proves": "all preceding tests hold across a simulated run of at least 3 generations, not a single cycle",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "multi_generation_run.generations_completed >= 3 AND multi_generation_run.charter_hash_stable == true"
+      },
+      {
+        "test_id": "S3-m",
+        "proves": "/tt resolves through the alias registry to /ticktock with an identical command id and behavior",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "alias_resolution_test.resolves_to == \"ticktock\" AND alias_resolution_test.behavior_identical == true"
+      }
+    ],
+    "expected_outcomes": [
+      {
+        "test_id": "S3-a1",
+        "outcome": "S3-a1 — injected drift is caught by full behavioral comparison, not chosen metrics",
+        "artifact": "_dev/state/ticktock/benchmark-fingerprint-v1.json + ticktock-dryrun-evidence.json",
+        "field": "injected_drift_test.halted == true AND injected_drift_test.first_diverging_tick is a non-null integer",
+        "artifact_superset_of_matrix": true,
+        "synced_from": "bounded_plan.acceptance_matrix[S3-a1]"
+      },
+      {
+        "test_id": "S3-a2",
+        "outcome": "S3-a2 — repeated re-baselining is caught mechanically, not left to narrative trust",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "rebaseline_detector_test.halted_on_threshold == true AND rebaseline_detector_test.finding_recorded == true AND rebaseline_detector_test.ratio_computed matches \"<N>/<M>\"",
+        "synced_from": "bounded_plan.acceptance_matrix[S3-a2]"
+      },
+      {
+        "test_id": "S3-b1",
+        "outcome": "S3-b1 — resume rolls back to the last verified checkpoint and never double-fires an effect",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "journal_resume_test.partial_phase_rollback_confirmed == true AND journal_resume_test.idempotency_key_honored == true AND journal_resume_test.double_effect_detected == false",
+        "synced_from": "bounded_plan.acceptance_matrix[S3-b1]"
+      },
+      {
+        "test_id": "S3-b2",
+        "outcome": "S3-b2 — uncertain external effects halt into reconciliation, never auto-retry",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "journal_resume_test.uncertain_effect_halt_reason == \"EFFECT-RECEIPT-MISSING\" AND journal_resume_test.reconciliation_required_before_resume == true",
+        "synced_from": "bounded_plan.acceptance_matrix[S3-b2]"
+      },
+      {
+        "test_id": "S3-c",
+        "outcome": "S3-c — meta-evolution is possible via ratification, impossible unilaterally",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json (field references the produced proposal artifact path)",
+        "field": "charter_immutability_test.edit_refused == true AND charter_immutability_test.proposal_artifact_produced == true AND charter_immutability_test.proposal_artifact_path resolves to an existing file",
+        "synced_from": "bounded_plan.acceptance_matrix[S3-c]"
+      },
+      {
+        "test_id": "S3-d1",
+        "outcome": "S3-d1 — merge autonomy carries a higher bar than a single lane: any reviewer failure marks the merge not-clean",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "merge_contract_tests.not_clean_on_timeout == true AND merge_contract_tests.not_clean_on_substitution == true AND merge_contract_tests.not_clean_on_pin_mismatch == true",
+        "synced_from": "bounded_plan.acceptance_matrix[S3-d1]"
+      },
+      {
+        "test_id": "S3-d2",
+        "outcome": "S3-d2 — lane availability is checked and recorded, never assumed",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "merge_contract_tests.availability_snapshot_records_unavailable_lane == true AND merge_contract_tests.roster_hash_binds_remaining_lanes == true",
+        "synced_from": "bounded_plan.acceptance_matrix[S3-d2]"
+      },
+      {
+        "test_id": "S3-d3",
+        "outcome": "S3-d3 — the roster hash cannot be edited mid-run without detection",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "merge_contract_tests.roster_hash_tamper_halts == true",
+        "synced_from": "bounded_plan.acceptance_matrix[S3-d3]"
+      },
+      {
+        "test_id": "S3-e",
+        "outcome": "S3-e — --until accepts only deterministic milestones, never statistical stopping",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "until_refusal_test.statistical_condition_refused == true AND until_refusal_test.deterministic_condition_accepted == true",
+        "synced_from": "bounded_plan.acceptance_matrix[S3-e]"
+      },
+      {
+        "test_id": "S3-f",
+        "outcome": "S3-f — generation lineage is mechanically walkable, not reconstructed from narrative",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "lineage_integrity_test.chain_unbroken == true AND lineage_integrity_test.independently_verified == true",
+        "synced_from": "bounded_plan.acceptance_matrix[S3-f]"
+      },
+      {
+        "test_id": "S3-g",
+        "outcome": "S3-g — resource ceilings halt the cycle mechanically when exceeded",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "ceiling_enforcement_test.diff_ceiling_halts == true AND ceiling_enforcement_test.external_action_ceiling_halts == true",
+        "synced_from": "bounded_plan.acceptance_matrix[S3-g]"
+      },
+      {
+        "test_id": "S3-h",
+        "outcome": "S3-h — every enumerated inherited gate halts /tt exactly as it halts any other actor (or is honestly recorded as non-mechanical where that is the truth)",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "inherited_gate_probes[<gate_id>].halted == true (or .enforcement_mode_observed matches the matrix's recorded enforcement_mode) for every gate_id in bounded_plan.inherited_gate_matrix — no gate_id may be absent",
+        "synced_from": "bounded_plan.acceptance_matrix[S3-h]"
+      },
+      {
+        "test_id": "S3-h2",
+        "outcome": "S3-h2 — the G-REMOTE-MUTATION mechanical checker denies an unstamped remote-mutating command, allows the same command under a valid scope-matching stamp, allows read-only remote lanes with no stamp, and records both outcomes in the audit log — and that the checker is actually reached from the live PreToolUse path, not merely importable",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json (+ the checker's own audit trail at _dev/state/remote-mutation-stamps/audit.jsonl)",
+        "field": "remote_mutation_gate_test.unstamped_mutation_denied == true AND remote_mutation_gate_test.stamped_mutation_allowed == true AND remote_mutation_gate_test.readonly_lane_allowed_without_stamp == true AND remote_mutation_gate_test.audit_rows_recorded >= 2 AND remote_mutation_gate_test.enforcement_path_observed in [\"pretooluse-live\",\"module-direct\"] (a \"module-direct\" value means the registration patch has not landed and the harness tier is ABSENT, not BLOCKING) (TT-R4-002, 2026-08-05: S3-h2 verifies the CHECKER's correctness only — a module-direct pass here is not sufficient to clear the separate required_gates[\"pretooluse-live\"] BLOCKING precondition, which requires the stricter boolean remote_mutation_gate_test.enforcement_path_observed_live == true plus a saved harness_denial_transcript_path from a live PreToolUse call, see that gate entry and S3-h3)",
+        "synced_from": "bounded_plan.acceptance_matrix[S3-h2]"
+      },
+      {
+        "test_id": "S3-h3",
+        "outcome": "S3-h3 — TT-R4-002 (new, MAJOR): with enforcement_path_observed_live left false, /tt refuses to enter any unattended or remote-capable mode, halting with a named reason citing required_gates[\"pretooluse-live\"] rather than proceeding on a module-direct-only result; a single-cycle attended dry-run that never reaches the remote surface is unaffected",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "pretooluse_live_precondition.refused_unattended_mode == true AND pretooluse_live_precondition.halt_reason == \"pretooluse-live\" AND pretooluse_live_precondition.enforcement_path_observed_live_at_refusal == false AND pretooluse_live_precondition.attended_dry_run_unaffected == true",
+        "synced_from": "bounded_plan.acceptance_matrix[S3-h3]"
+      },
+      {
+        "test_id": "S3-i",
+        "outcome": "S3-i — rotation is enforced, not merely encouraged",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "rotation_enforcement_test.skipped_rotation_fails_acceptance == true",
+        "synced_from": "bounded_plan.acceptance_matrix[S3-i]"
+      },
+      {
+        "test_id": "S3-j1",
+        "outcome": "S3-j1 — evidence and checkpoints cannot be silently deleted",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "evidence_deletion_test.deletion_refused == true",
+        "synced_from": "bounded_plan.acceptance_matrix[S3-j1]"
+      },
+      {
+        "test_id": "S3-j2",
+        "outcome": "S3-j2 — the loop cannot silently fall back to a fresh state",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "fresh_state_fallback_test.fallback_refused == true",
+        "synced_from": "bounded_plan.acceptance_matrix[S3-j2]"
+      },
+      {
+        "test_id": "S3-k",
+        "outcome": "S3-k — unattended cycles never raise a desktop credential-authentication prompt",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "credential_prompt_elimination_test.desktop_prompts_observed == 0 AND credential_prompt_elimination_test.lanes_reported == [\"perplexity\",\"openrouter\",\"gemini\"]",
+        "synced_from": "bounded_plan.acceptance_matrix[S3-k]"
+      },
+      {
+        "test_id": "S3-l",
+        "outcome": "S3-l — /tt N runs the co-evolution loop unattended under a frame it cannot move, proven across multiple generations, not one",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "multi_generation_run.generations_completed >= 3 AND multi_generation_run.charter_hash_stable == true",
+        "synced_from": "bounded_plan.acceptance_matrix[S3-l]"
+      },
+      {
+        "test_id": "S3-m",
+        "outcome": "S3-m — /tt is a true alias of /ticktock, not a divergent shortcut",
+        "artifact": "_dev/state/ticktock/ticktock-dryrun-evidence.json",
+        "field": "alias_resolution_test.resolves_to == \"ticktock\" AND alias_resolution_test.behavior_identical == true",
+        "synced_from": "bounded_plan.acceptance_matrix[S3-m]"
+      }
+    ],
+    "risk_notes": [
+      "The benchmark must be insulated from LEGITIMATE improvements or it becomes a straitjacket — the re-baselining ritual is that valve; if re-baselining happens every cycle, the frame is too tight and that itself is a finding — now enforced mechanically by the repeated-use detector (N=2 of last M=5 by default, operator-overridable), not left to review discretion alone",
+      "Max-roster reviews cost latency per cycle — measure it; if a lane is chronically slow, the charter may assign it to a subset of cycles rather than dropping it silently",
+      "Escalation: any pressure to weaken the charter, roster, or benchmark mid-run is itself a halt condition",
+      "A roster hash bound into the charter is only as strong as the hash's coverage — S0 must confirm the hash covers family + model pin + assignment order, not just lane names, or a substitution within a 'covered' family could pass unnoticed"
+    ],
+    "acceptance_matrix_authority": "TT-R3-002 (2026-08-05): bounded_plan.acceptance_matrix is the AUTHORITATIVE contract for S3. bounded_plan.expected_outcomes mirrors it one-to-one, keyed by test_id, and each outcome's artifact/field strings are copied verbatim from the matrix row. Comparison between the two surfaces is assertion-level, not id-level: a divergence in any assertion clause is a defect in expected_outcomes, and the matrix wins. The only permitted deviation is an outcome artifact that is a strict SUPERSET of the matrix artifact (recorded per-entry as artifact_superset_of_matrix: true)."
+  },
+  "scope_identity": {
+    "owned_artifacts": [
+      ".claude/skills/ticktock/SKILL.md",
+      ".claude/commands/ticktock.md",
+      ".claude/commands/tt.md",
+      "instructions/canonical/command-aliases.yaml",
+      "tools/ticktock/**",
+      "tools/ai-bridge/perplexity-api/run-with-op.sh",
+      "tools/ai-bridge/adapters/openrouter.js",
+      "tools/ai-bridge/adapters/gemini-api.js",
+      "_dev/state/ticktock/**",
+      "_dev/reports/analysis/ticktock-phase-identity-decision.md",
+      "_dev/reports/analysis/run-debrief__ticktock-skill__<date>.md"
+    ]
+  },
+  "routing_expectations": {
+    "risk_tier": "high",
+    "review_lane": "codex-bridge",
+    "review_lane_rationale": "A self-directing loop with merge authority — the highest-consequence artifact in the system; reviewed by the maximum roster it proposes.",
+    "escalation_triggers": [
+      "any design that lets a cycle alter charter/roster/benchmark/meta-files",
+      "any --until accepting statistical halts",
+      "any merge path bypassing the locked roster",
+      "any resume path that replays a partial phase instead of rolling back to the last verified checkpoint",
+      "any credential resolution path that can raise a desktop authentication prompt during an unattended cycle",
+      "any unattended or remote-capable /tt mode entered while required_gates[\"pretooluse-live\"].enforcement_path_observed_live is false (TT-R4-002)"
+    ]
+  },
+  "amendment_history": [
+    {
+      "amended_at": "2026-08-05T05:56:00.000Z",
+      "amendment_reason": "AMEND_REQUIRED per Codex distinct review",
+      "review_reference": "_dev/reports/analysis/task-plan-reviews/ticktock-skill__review.json (run_id codex-20260805T055133Z-ticktock-plan-review)",
+      "findings_addressed": [
+        "TT-001",
+        "TT-002",
+        "TT-003",
+        "TT-004",
+        "TT-005",
+        "TT-006",
+        "TT-007",
+        "TT-008"
+      ],
+      "changes_summary": "Added S0 resumability contract (append-only journal, verified checkpoints, partial-phase rollback, uncertain-external-effect repair states). Added S0 reviewer-roster binding (availability snapshot, model pins with verification, pre-output assignment, cryptographic lane-binding hash). Added S1 repeated-rebaseline mechanical detector (N=2/M=5 default, operator-overridable) plus lineage chain fields. Added new step S1b (credential prompt-elimination, Keychain-first wrapper resolution). Made /tt an unconditional alias-registry entry and added its files to scope_identity (S2). Expanded S3 into a full acceptance matrix (lineage integrity, ceiling enforcement, inherited gates, rotation enforcement, ratification-path enforcement, evidence-deletion refusal, fresh-state-fallback refusal, credential-prompt test, multi-generation testing >=3 cycles, alias resolution). Added inherited-gate entries to required_gates (TT-006). Made SCHEDULE activation explicitly downstream of G-TICKTOCK-REVIEW + operator stamp (TT-007, S4). Converted expected_outcomes into artifact+field contracts (TT-008)."
+    },
+    {
+      "amended_at": "2026-08-05T06:10:00.000Z",
+      "amendment_reason": "AMEND_REQUIRED per Codex round-2 distinct review",
+      "review_reference": "_dev/reports/analysis/codex-cli-run__20260805T060247Z__ticktock-plan-review-r2.md (findings TT-R2-001 MAJOR, TT-R2-002 MAJOR, TT-R2-003 MINOR)",
+      "findings_addressed": [
+        "TT-R2-001",
+        "TT-R2-002",
+        "TT-R2-003"
+      ],
+      "changes_summary": "TT-R2-003: resolved the Q2 phase-identity delegation as a DECISION, not a deferred options doc — see the new artifact _dev/reports/analysis/ticktock-phase-identity-decision.md (nine stable phase_ids, PURE/EFFECTFUL classification by re-runnability, exact idempotency-key SHA-256 formulas, owner: coordinator 2026-08-05); S0's description and files_touched, scope_identity.owned_artifacts, and operator_rulings updated to reference the decision record instead of an options doc. TT-R2-002: replaced required_gates' 'pending_enumeration' entry with a sourced, finite bounded_plan.inherited_gate_matrix (11 entries: G-TICKTOCK-REVIEW, G-REMOTE-MUTATION, userprompt-plan-review-gate, pretool-orchestrator-worker-gate, convene-perimeter-gate, pretool-secret-access-gate, pretool-write-boundary-gate, pretool-git-custody-gate, pretool-mutation-plan-gate, pretool-delegation-altitude, plus the bubble-up-gates taxonomy as shared vocabulary, not a blocker) — each entry names its trigger, the /tt phases it can hit, its mechanical checker (file:function or 'NONE' where no checker exists), where it is wired, its true enforcement mode (blocking/observe-only/fail-open/fail-closed/advisory/narrative), and its evidence artifact; gates without a mechanical checker (G-TICKTOCK-REVIEW, G-REMOTE-MUTATION) say so explicitly rather than implying coverage. TT-R2-001: added bounded_plan.acceptance_matrix with all 18 individual S3 tests (S3-a1..S3-m), each with an exact {test_id, proves, artifact, field} contract; rewrote S3's description to enumerate the 18 test_ids instead of prose; expanded expected_outcomes from 6 entries to 18, one per acceptance_matrix test, so every S3 test now maps to an outcome contract."
+    },
+    {
+      "amended_at": "2026-08-05T07:05:00Z",
+      "round": 3,
+      "review": "codex round-3 ticktock plan review (TT-R3-001 MAJOR, TT-R3-002)",
+      "changes_summary": "TT-R3-001 (MAJOR, \"A convention-only safety gate cannot support unattended execution\") RESOLVED: G-REMOTE-MUTATION now has a mechanical checker — tools/kernel/hooks/pretool-remote-mutation-gate.cjs (staged at _dev/staged/kernel-hooks/pretool-remote-mutation-gate.cjs pending a convene receipt for the tools/kernel/ perimeter), enforcement_mode fail-closed, stamp sidecar format RemoteMutationStamp/1.0 at _dev/state/remote-mutation-stamps/<stamp-id>.json, audit trail at _dev/state/remote-mutation-stamps/audit.jsonl, two stamps backfilled from the existing operator artifacts, 38/38 fixture tests passing. required_gates and inherited_gate_matrix entries rewritten from \"NONE / advisory convention\" to the real checker, with the registration blocker recorded honestly (harness tier ABSENT until the patch lands and a live denial is observed). New acceptance test S3-h2 with evidence field remote_mutation_gate_test. TT-R3-002 RESOLVED: bounded_plan.acceptance_matrix declared authoritative via the new bounded_plan.acceptance_matrix_authority clause; expected_outcomes regenerated one-to-one from the matrix with test_id keys and verbatim artifact/field strings, so comparison is assertion-level rather than id-level. Assertion drift repaired in S3-a2 (ratio_computed clause was missing), S3-b1 (idempotency_key_honored missing), S3-c (proposal_artifact_path-resolves clause and the parenthetical artifact note missing), S3-h (vague \"present and consistent\" replaced by the matrix's halted/enforcement_mode_observed contract plus \"no gate_id may be absent\"), S3-k (lanes_reported clause missing). S3-a1 keeps a superset artifact string, flagged artifact_superset_of_matrix. Matrix grew 18 -> 19 tests.",
+      "authored_by": "subagent (harness-parity session), on the /go orchestrator's dispatch"
+    },
+    {
+      "amended_at": "2026-08-05T08:00:00Z",
+      "round": 4,
+      "review": "codex round-4 ticktock plan review (TT-R4-001 MAJOR, TT-R4-002 MAJOR, TT-R4-003 MINOR)",
+      "changes_summary": "TT-R4-001 (MAJOR) RESOLVED: closed three classification holes in the G-REMOTE-MUTATION checker where an unrecognized command touching the remote surface fell through to gate-does-not-apply instead of denying — rsync had no classifier, an unrecognized executable naming the orwell host or a D:\\HyperV path was invisible to the gate, and an unrecognized wrapper script (not psrun.sh/psrunfile.sh, not read-only-allowlisted) that shells to ssh/scp/rsync internally bypassed classification when the invoking command line never named orwell itself. Fixed in tools/kernel/hooks/pretool-remote-mutation-gate.cjs (still staged, same location as round 3): rsync push/pull classification mirroring scp; a catch-all that fail-closes any unrecognized executable naming the remote host or a D:\\HyperV/D:/HyperV path directly; wrapper-script body scanning (resolve + read the script, deny on a hard mutation token or an ssh/scp/rsync-to-orwell reference, deny if the body cannot be resolved at all). Fixture suite grew 38 -> 46 (8 new cases: rsync push denied unstamped, rsync pull allowed, two unknown-remote-reference-via-unrecognized-exe denials, two unknown-script-with-ssh-inside denials, one unresolvable-script denial, one clean-unrelated-script allow) — all 46 pass. required_gates[\"G-REMOTE-MUTATION\"].decision and the inherited_gate_matrix row updated with the new count and a summary of the fix. TT-R4-002 (MAJOR) RESOLVED: added a new required_gates entry pretooluse-live — a BLOCKING precondition that /tt must refuse to clear any unattended or remote-capable mode against until LIVE PreToolUse enforcement has actually been observed (a real Bash tool call denied by the live harness, evidenced by both an audit.jsonl deny row and the harness's own denial transcript), not merely a module-direct test. Encoded: (a) the verification method, (b) the new strict boolean evidence field remote_mutation_gate_test.enforcement_path_observed_live plus remote_mutation_gate_test.harness_denial_transcript_path in ticktock-dryrun-evidence.json, distinct from S3-h2's existing tri-state enforcement_path_observed field, (c) an explicit S2-must-implement / S3-must-test statement. Added acceptance_matrix + expected_outcomes test S3-h3 (matrix grew 19 -> 20) and an escalation_triggers entry. TT-R4-003 (MINOR) RESOLVED: added an explicit note to the G-REMOTE-MUTATION gate decision that the two backfilled stamps' expires_at: null is a deliberate SINGLE-PROGRAM-authorization reading, not a defect, because the operator never set an expiry when granting them; a future amendment may add expiry semantics if the operator ratifies one — none is invented here.",
+      "authored_by": "subagent (bounded-fix session, TT-R4-001/002/003), on operator dispatch"
+    }
+  ],
+  "artifacts": [
+    "_dev/reports/analysis/task-plans/ticktock-skill__plan.json",
+    "_dev/reports/analysis/task-plans/ticktock-skill__plan.md"
+  ]
+}

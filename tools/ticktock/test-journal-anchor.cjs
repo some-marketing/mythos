@@ -66,8 +66,19 @@ const CHARTER_HASH = 'a'.repeat(64);
 let receiptSeq = 0;
 function stubReceipt(charterHash, cycleIndex, phaseId, dir) {
   receiptSeq += 1;
-  const ledgerPath = path.join(dir, `stub-ledger-${receiptSeq}.json`);
-  fs.writeFileSync(ledgerPath, JSON.stringify({ schema: 'TickTockSpendLedger/1.0', lines_changed: 0, files: [], external_actions: 0 }) + '\n');
+  // Codex PR#20 (round 2): appendRecordLocked now requires the ledger's own
+  // charter_hash/charter_id identity fields unconditionally, with charter_id
+  // resolving to the ledger's canonical <charter_id>.json filename.
+  const stubCharterId = `stub-ledger-${receiptSeq}`;
+  const ledgerPath = path.join(dir, `${stubCharterId}.json`);
+  fs.writeFileSync(ledgerPath, JSON.stringify({
+    schema: 'TickTockSpendLedger/1.0',
+    charter_hash: charterHash,
+    charter_id: stubCharterId,
+    lines_changed: 0,
+    files: [],
+    external_actions: 0
+  }) + '\n');
   const ledger_sha256 = require('crypto').createHash('sha256').update(fs.readFileSync(ledgerPath)).digest('hex');
   return {
     charter_hash: charterHash,

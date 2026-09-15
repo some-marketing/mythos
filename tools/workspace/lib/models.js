@@ -13,7 +13,7 @@ function loadSchema(name) {
   return readJson(filePath);
 }
 
-function validateRequiredFields(obj, schema, label) {
+function validateObjectFields(obj, schema, label) {
   const required = Array.isArray(schema.required) ? schema.required : [];
   const missing = required.filter((key) => !(key in obj));
   if (missing.length) {
@@ -23,22 +23,42 @@ function validateRequiredFields(obj, schema, label) {
   const properties = schema.properties || {};
   for (const [key, rule] of Object.entries(properties)) {
     if (!(key in obj)) continue;
-    if (Array.isArray(rule.enum) && !rule.enum.includes(obj[key])) {
-      throw new Error(`${label}.${key} must be one of: ${rule.enum.join(', ')}`);
+    validateSchemaValue(obj[key], rule, `${label}.${key}`);
+  }
+}
+
+function validateSchemaValue(obj, schema, label) {
+  if (Array.isArray(schema.enum) && !schema.enum.includes(obj)) {
+    throw new Error(`${label} must be one of: ${schema.enum.join(', ')}`);
+  }
+  if (schema.type === 'array') {
+    if (!Array.isArray(obj)) {
+      throw new Error(`${label} must be an array`);
     }
-    if (rule.type === 'array' && !Array.isArray(obj[key])) {
-      throw new Error(`${label}.${key} must be an array`);
-    }
-    if (rule.type === 'object' && (typeof obj[key] !== 'object' || obj[key] === null || Array.isArray(obj[key]))) {
-      throw new Error(`${label}.${key} must be an object`);
-    }
-    if (rule.type === 'string' && typeof obj[key] !== 'string') {
-      throw new Error(`${label}.${key} must be a string`);
-    }
-    if (rule.type === 'boolean' && typeof obj[key] !== 'boolean') {
-      throw new Error(`${label}.${key} must be a boolean`);
+    if (schema.items) {
+      obj.forEach((item, index) => validateSchemaValue(item, schema.items, `${label}[${index}]`));
     }
   }
+  if (schema.type === 'object') {
+    if (typeof obj !== 'object' || obj === null || Array.isArray(obj)) {
+      throw new Error(`${label} must be an object`);
+    }
+    validateObjectFields(obj, schema, label);
+  }
+  if (schema.type === 'string' && typeof obj !== 'string') {
+    throw new Error(`${label} must be a string`);
+  }
+  if (schema.type === 'boolean' && typeof obj !== 'boolean') {
+    throw new Error(`${label} must be a boolean`);
+  }
+}
+
+function validateRequiredFields(obj, schema, label) {
+  if (schema.type === 'array') {
+    validateSchemaValue(obj, schema, label);
+    return;
+  }
+  validateObjectFields(obj, schema, label);
 }
 
 function validateNamedModel(name, obj, label) {

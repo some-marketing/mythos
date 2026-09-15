@@ -257,6 +257,146 @@ section('(e) writer round-trip: a real --record with lineage flags APPENDS to th
 }
 
 // ---------------------------------------------------------------------------
+section('(f) codex PR#20: the FIRST rebaseline entry is validated too, not silently skipped');
+// ---------------------------------------------------------------------------
+{
+  // A single-entry lineage missing a required field. Before the fix,
+  // verifyLineageChain's adjacent-pair loop starts at i=1 and never runs for
+  // a 1-entry array, so this was reported chain_unbroken:true.
+  const incompleteFirstEntry = [{
+    prior_fingerprint_hash: 'a'.repeat(64),
+    triggering_cycle: 0,
+    // review_artifact deliberately omitted
+    ratification_reference: 'operator-stamp-0',
+    reason: 'fixture missing a required field on entry 0',
+    new_fingerprint_hash: 'b'.repeat(64)
+  }];
+  const chain = bench.verifyLineageChain(incompleteFirstEntry);
+  check('a 1-entry lineage missing a required field is now reported chain_unbroken:false', chain.chain_unbroken === false, chain);
+  check('the error names index 0, not skipped as having no predecessor to check', chain.errors.some((e) => e.index === 0 && /review_artifact/.test(e.message)), chain.errors);
+
+  // Differential control: a complete single entry still passes -- the fix
+  // must not reject legitimate first rebaselines.
+  const completeFirstEntry = [mkEntry(0)];
+  const cleanChain = bench.verifyLineageChain(completeFirstEntry);
+  check('a complete 1-entry lineage still passes (no false-positive from the fix)', cleanChain.chain_unbroken === true, cleanChain);
+}
+
+// ---------------------------------------------------------------------------
+section('(g) codex PR#20: an array-form lineage with a genuinely BROKEN adjacent-hash link now fails cycle-driver\'s lineage-check exit code too, not just the object-form (unreadable) case');
+// ---------------------------------------------------------------------------
+{
+  const dir = fs.mkdtempSync(path.join(tmpRoot, 'broken-chain-'));
+  const brokenFingerprint = writeJson(path.join(dir, 'fingerprint-broken.json'), {
+    schema: 'BenchmarkFingerprint/1.0',
+    lineage: [
+      mkEntry(0, { prior: 'a'.repeat(64), next: 'b'.repeat(64) }),
+      // Deliberately does not link: prior_fingerprint_hash should be 'b'.repeat(64) to match entry 0's new_fingerprint_hash.
+      mkEntry(2, { prior: 'WRONG-LINK'.padEnd(64, '0'), next: 'c'.repeat(64) })
+    ],
+    fingerprint_hash: 'c'.repeat(64)
+  });
+  const charterPath = writeJson(path.join(dir, 'charter.json'), fixtureCharter('rebaseline-freq-broken-link', brokenFingerprint));
+
+  const lc = runNode(DRIVER, ['lineage-check', charterPath]);
+  let lcOut = null;
+  try { lcOut = JSON.parse(lc.stdout); } catch { /* handled below */ }
+  check('lineage-check reports chain_unbroken:false for a genuinely broken adjacent-hash link', Boolean(lcOut) && lcOut.chain.chain_unbroken === false, lcOut);
+  check(
+    'codex PR#20 fix: lineage-check now exits NONZERO for this case too -- before the fix, only the non-array (unreadable) branch controlled the exit code, so this printed the failure and still exited 0',
+    lc.status !== 0,
+    lc.stdout + lc.stderr
+  );
+}
+
+// ---------------------------------------------------------------------------
+section('(g2) codex PR#20 round 3: both fingerprint hash fields are required and hash-shaped on EVERY entry');
+// ---------------------------------------------------------------------------
+{
+  // A single entry with all four metadata fields but no hashes at all. Before
+  // the fix, the adjacent-pair loop never runs for a 1-entry array and the
+  // required-field list did not cover the hash fields, so this was reported
+  // chain_unbroken:true despite having no fingerprint hashes whatsoever.
+  const noHashesEntry = [{
+    triggering_cycle: 0,
+    review_artifact: '_dev/reports/analysis/rebaseline-review-0.md',
+    ratification_reference: 'operator-stamp-0',
+    reason: 'fixture with all metadata but no hashes'
+  }];
+  const chain1 = bench.verifyLineageChain(noHashesEntry);
+  check('a 1-entry lineage with no fingerprint hashes at all is reported chain_unbroken:false', chain1.chain_unbroken === false, chain1);
+  check('the error names both missing hash fields on index 0',
+    chain1.errors.some((e) => e.index === 0 && /prior_fingerprint_hash/.test(e.message))
+    && chain1.errors.some((e) => e.index === 0 && /new_fingerprint_hash/.test(e.message)),
+    chain1.errors);
+
+  // Two adjacent entries BOTH missing new_fingerprint_hash / prior_fingerprint_hash
+  // respectively would previously compare `undefined === undefined` in the
+  // adjacent-link check and pass it -- required-field/hash-shape validation
+  // must catch this before the link comparison ever gets a chance to.
+  const bothMissingAdjacent = [
+    { triggering_cycle: 0, review_artifact: 'r0.md', ratification_reference: 'op-0', reason: 'r0', prior_fingerprint_hash: 'a'.repeat(64) /* new_fingerprint_hash omitted */ },
+    { triggering_cycle: 1, review_artifact: 'r1.md', ratification_reference: 'op-1', reason: 'r1', new_fingerprint_hash: 'c'.repeat(64) /* prior_fingerprint_hash omitted */ }
+  ];
+  const chain2 = bench.verifyLineageChain(bothMissingAdjacent);
+  check('adjacent entries with complementary missing hashes do not compare undefined===undefined into a pass', chain2.chain_unbroken === false, chain2);
+  check('missing new_fingerprint_hash on entry 0 is reported', chain2.errors.some((e) => e.index === 0 && /new_fingerprint_hash/.test(e.message)), chain2.errors);
+  check('missing prior_fingerprint_hash on entry 1 is reported', chain2.errors.some((e) => e.index === 1 && /prior_fingerprint_hash/.test(e.message)), chain2.errors);
+
+  // A malformed (non-64-hex) hash value is refused too, not just an absent one.
+  const malformedHash = [mkEntry(0, { prior: 'not-a-real-hash', next: 'b'.repeat(64) })];
+  const chain3 = bench.verifyLineageChain(malformedHash);
+  check('a non-64-hex prior_fingerprint_hash is reported chain_unbroken:false', chain3.chain_unbroken === false, chain3);
+
+  // Differential control: a genuinely complete, correctly-linked 2-entry
+  // chain with real 64-hex hashes still passes.
+  const cleanTwo = [mkEntry(0, { prior: 'a'.repeat(64), next: 'b'.repeat(64) }), mkEntry(1, { prior: 'b'.repeat(64), next: 'c'.repeat(64) })];
+  const cleanChain = bench.verifyLineageChain(cleanTwo);
+  check('a complete, correctly-hashed 2-entry chain still passes (no false-positive from the fix)', cleanChain.chain_unbroken === true, cleanChain);
+}
+
+// ---------------------------------------------------------------------------
+section('(h) codex PR#20: charter fingerprint-binding mismatch is now a distinct halt, not silently absorbed into a benchmark-identical pass');
+// ---------------------------------------------------------------------------
+{
+  const dir = fs.mkdtempSync(path.join(tmpRoot, 'binding-mismatch-'));
+  // The charter is bound (via fixtureCharter's benchmark.fingerprint_hash)
+  // to 'a'.repeat(64). Record a fingerprint file whose OWN fingerprint_hash
+  // is a DIFFERENT value -- simulating the baseline having been edited or
+  // re-recorded after charter creation.
+  const reboundFingerprint = writeJson(path.join(dir, 'fingerprint-rebound.json'), {
+    schema: 'BenchmarkFingerprint/1.0',
+    fingerprint_hash: 'z'.repeat(64) // charter is bound to 'a'.repeat(64) -- mismatch
+  });
+  const charterPath = writeJson(path.join(dir, 'charter.json'), fixtureCharter('rebaseline-freq-binding-mismatch', reboundFingerprint));
+  const benchOut = path.join(dir, 'benchmark-check.json');
+  const result = runNode(DRIVER, ['benchmark', charterPath, benchOut, '0']);
+  let payload = null;
+  try { payload = JSON.parse(fs.readFileSync(benchOut, 'utf8')); } catch { /* handled below */ }
+
+  check('the benchmark command halts on a fingerprint-binding mismatch (nonzero exit)', result.status !== 0, result.stdout + result.stderr);
+  check('the halt state is FINGERPRINT-BINDING-MISMATCH', Boolean(payload) && payload.halt_state === 'FINGERPRINT-BINDING-MISMATCH', payload && payload.halt_state);
+  check('the payload names both the declared and recorded hashes for operator diagnosis',
+    Boolean(payload) && payload.fingerprint_hash_declared === 'a'.repeat(64) && payload.fingerprint_hash_recorded === 'z'.repeat(64),
+    payload && { declared: payload.fingerprint_hash_declared, recorded: payload.fingerprint_hash_recorded });
+
+  // Differential control: a matching fingerprint_hash must NOT halt on this
+  // check (the fix must not false-positive on the normal, bound case).
+  const dir2 = fs.mkdtempSync(path.join(tmpRoot, 'binding-match-'));
+  const matchingFingerprint = writeJson(path.join(dir2, 'fingerprint-matching.json'), {
+    schema: 'BenchmarkFingerprint/1.0',
+    fingerprint_hash: 'a'.repeat(64) // matches fixtureCharter's declared hash
+  });
+  const charterPath2 = writeJson(path.join(dir2, 'charter.json'), fixtureCharter('rebaseline-freq-binding-match', matchingFingerprint));
+  const benchOut2 = path.join(dir2, 'benchmark-check.json');
+  const result2 = runNode(DRIVER, ['benchmark', charterPath2, benchOut2, '0']);
+  let payload2 = null;
+  try { payload2 = JSON.parse(fs.readFileSync(benchOut2, 'utf8')); } catch { /* handled below */ }
+  check('a matching fingerprint_hash does not trigger FINGERPRINT-BINDING-MISMATCH',
+    Boolean(payload2) && payload2.halt_state !== 'FINGERPRINT-BINDING-MISMATCH', payload2 && payload2.halt_state);
+}
+
+// ---------------------------------------------------------------------------
 fs.rmSync(tmpRoot, { recursive: true, force: true });
 process.stdout.write(`\n${passed} passed, ${failed} failed\n`);
 process.exit(failed === 0 ? 0 : 1);

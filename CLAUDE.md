@@ -202,6 +202,9 @@ Mythos could otherwise quietly stop deserving the trust it asks for.
 | meta/execution-normalization | 11 | REVIEW_ONLY, RUN_ONLY, PATCH_ALLOWED, COORDINATOR | none |
 | project-management/dart-collaboration | 2 | REVIEW_ONLY, PATCH_ALLOWED | none |
 | project-management/feedback-to-tasks | 5 | FINDINGS_ONLY, RUN_ONLY, PATCH_ALLOWED | dart, notion |
+| research/business-identity-verification | 3 | FINDINGS_ONLY, REVIEW_ONLY | none |
+| research/contractor-credential-review | 3 | FINDINGS_ONLY, REVIEW_ONLY | none |
+| research/osint-discovery | 4 | FINDINGS_ONLY, REVIEW_ONLY | none |
 | wordpress/design-mockup-validation | 3 | RUN_ONLY, REVIEW_ONLY, PATCH_ALLOWED | playwright |
 | wordpress/design-research | 3 | FINDINGS_ONLY, PATCH_ALLOWED | playwright |
 | wordpress/documentation | 4 | FINDINGS_ONLY, PATCH_ALLOWED, REVIEW_ONLY | playwright, notion |
@@ -215,6 +218,7 @@ Mythos could otherwise quietly stop deserving the trust it asks for.
 | wordpress/seo-audit | 5 | FINDINGS_ONLY, RUN_ONLY, REVIEW_ONLY | playwright |
 | paid-media/google-ads-search-campaign-build | 6 | FINDINGS_ONLY, REVIEW_ONLY, PATCH_ALLOWED, RUN_ONLY | google-ads |
 | paid-media/meta-creative-iteration | 9 | FINDINGS_ONLY, REVIEW_ONLY, PATCH_ALLOWED | meta-ads, delesign, claude-in-chrome |
+| wordpress/livecanvas-onepager-build | 5 | FINDINGS_ONLY, RUN_ONLY, REVIEW_ONLY, PATCH_ALLOWED | claude-in-chrome, gmail |
 | wordpress/livecanvas-rebuild | 5 | FINDINGS_ONLY, PATCH_ALLOWED | playwright |
 | media/video-editing | 6 | FINDINGS_ONLY, PATCH_ALLOWED, REVIEW_ONLY | none |
 | meta/dreaming-system | 7 | FINDINGS_ONLY, REVIEW_ONLY, PATCH_ALLOWED, RUN_ONLY | none |
@@ -223,12 +227,13 @@ Mythos could otherwise quietly stop deserving the trust it asks for.
 
 Command names are mechanical aliases. The typed alias is provenance; authority, state, errors, evidence, and closeout belong to the resolved generic command.
 
-- `/0` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/1` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/2` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/3` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/4` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/5` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/6` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/7` -> `/undefined` [compatibility]; authority: `/undefined`
-- `/8` -> `/undefined` [compatibility]; authority: `/undefined`
+- `/owl` -> `/orchestrate-loop` [terminal_alias]; authority: `/orchestrate-loop`
+- `/oa` -> `/orchestrate-loop` [terminal_alias]; authority: `/orchestrate-loop`
+- `/council-of-owls` -> `/orchestrate-loop` [conditional_expansion]; authority: `/orchestrate-loop`
+- `/deliberate` -> `/orchestrate-loop` [conditional_expansion]; authority: `/orchestrate-loop`
+- `/dl` -> `/deliberate` [operator_shorthand]; execution: `/orchestrate-loop`; authority: `/orchestrate-loop`
+- `/oc` -> `/council-of-owls` [operator_shorthand]; execution: `/orchestrate-loop`; authority: `/orchestrate-loop`
+- `/help-me-route` -> `/route` [terminal_alias]; authority: `/route`
+- `/blueprint` -> `/blueprint` [terminal_alias]; authority: `/blueprint`
+- `/el` -> `/evidence-loop` [operator_shorthand]; authority: `/evidence-loop`
+- `/tt` -> `/ticktock` [terminal_alias]; authority: `/ticktock`

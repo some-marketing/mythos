@@ -17,6 +17,7 @@ const {
   planOutputs
 } = require('../lib/engine');
 const { commandAliasSection, coreDoctrineSection } = require('../lib/render');
+const { resolveCommandAlias } = require('../../commands/lib/command-aliases.cjs');
 
 // mythos-surface root (…/tools/instructions/__tests__ -> up three).
 const SURFACE_ROOT = path.resolve(__dirname, '..', '..', '..');
@@ -34,11 +35,23 @@ test('no aliases -> no section (stays mythos-compatible)', () => {
 
 test('parseAliasRegistry returns all four domains as arrays (JSON form)', () => {
   const raw = JSON.stringify({
-    aliases: { 'plan-quest': { resolves_to: 'plan-task', status: 'primary' } },
+    aliases: [{
+      id: 'dl',
+      kind: 'operator_shorthand',
+      target: 'deliberate',
+      execution_target: 'orchestrate-loop',
+      authority_source: 'orchestrate-loop'
+    }],
     framework_aliases: { 'page-glamour': { resolves_to: 'wordpress/page-cro', status: 'primary' } }
   });
   assert.deepEqual(parseAliasRegistry(raw), {
-    aliases: [{ id: 'plan-quest', resolves_to: 'plan-task', status: 'primary' }],
+    aliases: [{
+      id: 'dl',
+      kind: 'operator_shorthand',
+      target: 'deliberate',
+      execution_target: 'orchestrate-loop',
+      authority_source: 'orchestrate-loop'
+    }],
     framework_aliases: [{ id: 'page-glamour', resolves_to: 'wordpress/page-cro', status: 'primary' }],
     skill_aliases: [],
     tool_aliases: []
@@ -65,18 +78,195 @@ test('parseAliasRegistry tolerates the commented YAML form across domains', () =
   assert.deepEqual(reg.skill_aliases, []);
 });
 
-test('loads the shipped 55-entry command registry with correct status split', () => {
+test('parseAliasRegistry preserves typed aliases in YAML sequence form', () => {
+  const raw = [
+    'aliases:',
+    '    - id: dl # shorthand',
+    '      kind: "operator # shorthand"',
+    '      target: deliberate',
+    '      execution_target: orchestrate-loop',
+    '      authority_source: orchestrate-loop'
+  ].join('\n');
+  assert.deepEqual(parseAliasRegistry(raw).aliases, [{
+    id: 'dl',
+    kind: 'operator # shorthand',
+    target: 'deliberate',
+    execution_target: 'orchestrate-loop',
+    authority_source: 'orchestrate-loop'
+  }]);
+});
+
+test('parseAliasRegistry preserves indentationless YAML sequences', () => {
+  const raw = [
+    'aliases:',
+    '- id: dl',
+    '  target: deliberate',
+    '  authority_source: orchestrate-loop'
+  ].join('\n');
+  assert.deepEqual(parseAliasRegistry(raw).aliases, [{
+    id: 'dl',
+    target: 'deliberate',
+    authority_source: 'orchestrate-loop'
+  }]);
+});
+
+test('parseAliasRegistry preserves sequence records with standalone dash markers', () => {
+  const raw = [
+    'aliases:',
+    '  -',
+    '    id: shortcut',
+    '    target: route'
+  ].join('\n');
+  assert.deepEqual(parseAliasRegistry(raw).aliases, [{ id: 'shortcut', target: 'route' }]);
+});
+
+test('parseAliasRegistry preserves flow-style YAML sequence records', () => {
+  const raw = [
+    'aliases:',
+    '  - { id: shortcut, target: route } # shorthand'
+  ].join('\n');
+  assert.deepEqual(parseAliasRegistry(raw).aliases, [{ id: 'shortcut', target: 'route' }]);
+});
+
+test('parseAliasRegistry preserves inline mappings in legacy map records', () => {
+  const raw = [
+    'aliases:',
+    '  shortcut: { target: route } # shorthand'
+  ].join('\n');
+  assert.deepEqual(parseAliasRegistry(raw).aliases, [{ id: 'shortcut', target: 'route' }]);
+});
+
+test('parseAliasRegistry rejects duplicate YAML alias fields', () => {
+  assert.throws(
+    () => parseAliasRegistry('aliases:\n  - id: shortcut\n    target: review-progress\n    target: run-framework\n'),
+    /Duplicate alias field: target/
+  );
+  assert.throws(
+    () => parseAliasRegistry('aliases:\n  - { id: shortcut, target: review-progress, target: run-framework }\n'),
+    /Duplicate alias field: target/
+  );
+});
+
+test('loads the shipped typed command registry without losing target or authority', () => {
   const aliases = loadCommandAliases(SURFACE_ROOT);
-  assert.equal(aliases.length, 55);
-  const byStatus = (s) => aliases.filter((a) => a.status === s).length;
-  assert.equal(byStatus('primary'), 35);
-  assert.equal(byStatus('cross-alias'), 15);
-  assert.equal(byStatus('compatibility'), 5);
+  assert.equal(aliases.length, 10);
+  assert.deepEqual(
+    aliases.map((alias) => alias.id),
+    ['owl', 'oa', 'council-of-owls', 'deliberate', 'dl', 'oc', 'help-me-route', 'blueprint', 'el', 'tt']
+  );
+  assert.ok(aliases.every((alias) => alias.id && alias.kind && alias.target && alias.authority_source));
+  const byKind = (kind) => aliases.filter((alias) => alias.kind === kind).length;
+  assert.equal(byKind('terminal_alias'), 5);
+  assert.equal(byKind('conditional_expansion'), 2);
+  assert.equal(byKind('operator_shorthand'), 3);
 
   const find = (id) => aliases.find((a) => a.id === id);
-  assert.deepEqual(find('guild-ledger'), { id: 'guild-ledger', resolves_to: 'system-status', status: 'primary' });
-  assert.deepEqual(find('aura'), { id: 'aura', resolves_to: 'system-status', status: 'cross-alias' });
-  assert.deepEqual(find('owl'), { id: 'owl', resolves_to: 'orchestrate-loop', status: 'compatibility' });
+  assert.deepEqual(
+    {
+      id: find('owl').id,
+      kind: find('owl').kind,
+      target: find('owl').target,
+      authority_source: find('owl').authority_source
+    },
+    { id: 'owl', kind: 'terminal_alias', target: 'orchestrate-loop', authority_source: 'orchestrate-loop' }
+  );
+  assert.deepEqual(
+    {
+      id: find('dl').id,
+      kind: find('dl').kind,
+      target: find('dl').target,
+      execution_target: find('dl').execution_target,
+      authority_source: find('dl').authority_source
+    },
+    {
+      id: 'dl',
+      kind: 'operator_shorthand',
+      target: 'deliberate',
+      execution_target: 'orchestrate-loop',
+      authority_source: 'orchestrate-loop'
+    }
+  );
+  assert.deepEqual(
+    {
+      id: find('tt').id,
+      kind: find('tt').kind,
+      target: find('tt').target,
+      authority_source: find('tt').authority_source
+    },
+    { id: 'tt', kind: 'terminal_alias', target: 'ticktock', authority_source: 'ticktock' }
+  );
+});
+
+test('typed aliases render their declared target, execution target, and authority', () => {
+  const section = commandAliasSection({ aliases: [
+    {
+      id: 'dl',
+      kind: 'operator_shorthand',
+      target: 'deliberate',
+      execution_target: 'orchestrate-loop',
+      authority_source: 'orchestrate-loop'
+    },
+    {
+      id: 'tt',
+      kind: 'terminal_alias',
+      target: 'ticktock',
+      authority_source: 'ticktock'
+    }
+  ] });
+
+  assert.match(section, /- `\/dl` -> `\/deliberate` \[operator_shorthand\]; execution: `\/orchestrate-loop`; authority: `\/orchestrate-loop`/);
+  assert.match(section, /- `\/tt` -> `\/ticktock` \[terminal_alias\]; authority: `\/ticktock`/);
+  assert.doesNotMatch(section, /\/undefined|`\/0`/);
+});
+
+test('mixed typed and legacy aliases retain resolved legacy authority', () => {
+  const section = commandAliasSection({ aliases: [
+    { id: 'dl', kind: 'operator_shorthand', target: 'deliberate', execution_target: 'orchestrate-loop', authority_source: 'orchestrate-loop' },
+    { id: 'cast', kind: 'terminal_alias', target: 'run-framework', authority_source: 'run-framework' },
+    { id: 'spell', resolves_to: 'cast', status: 'cross-alias' }
+  ] });
+  assert.match(section, /- `\/spell` -> `\/cast` \[cross-alias\]; authority: `\/run-framework`/);
+});
+
+test('legacy alias authorities resolve transitively to their terminal', () => {
+  const section = commandAliasSection([
+    { id: 'cast', resolves_to: 'run-framework', status: 'primary' },
+    { id: 'spell', resolves_to: 'cast', status: 'cross-alias' },
+    { id: 'chant', resolves_to: 'spell', status: 'compatibility' }
+  ]);
+  assert.match(section, /- `\/chant` -> `\/spell` \[compatibility\]; authority: `\/run-framework`/);
+});
+
+test('runtime command resolution follows legacy aliases transitively and rejects cycles', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'command-alias-runtime-'));
+  const registryPath = path.join(root, 'instructions', 'canonical', 'command-aliases.yaml');
+  fs.mkdirSync(path.dirname(registryPath), { recursive: true });
+  fs.writeFileSync(registryPath, JSON.stringify({ aliases: [
+    { id: 'cast', resolves_to: 'route' },
+    { id: 'spell', resolves_to: 'cast' },
+    { id: 'chant', resolves_to: 'spell' }
+  ] }));
+
+  const resolved = resolveCommandAlias(root, 'chant');
+  assert.equal(resolved.resolvedCommand, 'spell');
+  assert.equal(resolved.executionCommand, 'route');
+  assert.equal(resolved.authoritySource, 'route');
+  assert.deepEqual(resolved.expansionEdges, ['chant', 'spell', 'cast', 'route']);
+
+  fs.writeFileSync(registryPath, 'aliases:\n  - id: shortcut\n    resolves_to: route\n');
+  assert.equal(resolveCommandAlias(root, 'shortcut').executionCommand, 'route');
+
+  fs.mkdirSync(path.join(root, 'instructions', 'canonical', 'commands'), { recursive: true });
+  fs.writeFileSync(path.join(root, 'instructions', 'canonical', 'commands', 'blueprint.yaml'), '{}\n');
+  fs.writeFileSync(registryPath, 'aliases:\n  - id: blueprint\n    execution_target: blueprint\n');
+  assert.equal(resolveCommandAlias(root, 'blueprint').executionCommand, 'blueprint');
+
+  fs.writeFileSync(registryPath, 'aliases:\n  - id: one\n    resolves_to: two\n  - id: two\n    resolves_to: one\n');
+  assert.throws(() => resolveCommandAlias(root, 'one'), /Command alias cycle detected: one -> two -> one/);
+
+  fs.writeFileSync(registryPath, '{"aliases":[{"id":"broken","resolves_to":"route"}]');
+  assert.throws(() => resolveCommandAlias(root, 'broken'), /Failed to parse command alias registry/);
+  fs.rmSync(root, { recursive: true, force: true });
 });
 
 test('command aliases render primaries first, then cross-alias, then compatibility', () => {

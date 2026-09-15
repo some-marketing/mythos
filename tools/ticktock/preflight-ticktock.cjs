@@ -58,6 +58,14 @@ const path = require('path');
 const Ajv = require('ajv');
 
 const REVIEW_DECISION_SCHEMA = require('./ticktock-review-decision-schema.json');
+// Codex PR#20 review: charter artifacts consulted for G-TICKTOCK-REVIEW's
+// self-binding and run-roster checks were read via readJsonArtifact() (a
+// bare JSON.parse), never through charterMod.readCharter()/validateCharter().
+// If reviewer_roster.lanes is edited after charter creation while the stored
+// charter_hash/lane_binding_hash fields are left unchanged, a bare parse
+// cannot detect that -- readCharter() recomputes both hashes from the actual
+// content and refuses on mismatch, which a bare parse never attempts.
+const charterMod = require('./charter.cjs');
 
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
 
@@ -165,6 +173,42 @@ function readJsonArtifact(relPath) {
   }
 }
 
+/**
+ * Same shape as readJsonArtifact(), but for charter artifacts specifically:
+ * after the bare parse, runs charterMod.checkImmutability() to RECOMPUTE
+ * charter_hash and reviewer_roster.lane_binding_hash from the actual loaded
+ * content and refuse on mismatch. Deliberately checkImmutability() (a narrow,
+ * two-hash recompute-and-compare), NOT the full charterMod.readCharter() /
+ * validateCharter() schema pipeline -- this call site only ever needs the
+ * roster/charter hash fields, and full-schema fixtures (cycle_ceiling,
+ * evaluator_versions, allowed_write_surfaces, etc.) are not part of what
+ * G-TICKTOCK-REVIEW is checking here. An edited roster with stale hash
+ * fields left in place cannot pass silently (codex PR#20 review).
+ */
+function readValidatedCharterArtifact(relPath) {
+  const abs = path.resolve(REPO_ROOT, relPath);
+  if (!fs.existsSync(abs)) {
+    return { ok: false, reason_code: 'ARTIFACT-ABSENT', path: relPath, abs };
+  }
+  let raw;
+  try {
+    raw = fs.readFileSync(abs, 'utf8');
+  } catch (err) {
+    return { ok: false, reason_code: 'ARTIFACT-UNREADABLE', path: relPath, abs, detail: err.message };
+  }
+  let doc;
+  try {
+    doc = JSON.parse(raw);
+  } catch (err) {
+    return { ok: false, reason_code: 'ARTIFACT-UNPARSEABLE', path: relPath, abs, detail: err.message };
+  }
+  const immut = charterMod.checkImmutability(doc);
+  if (!immut.ok) {
+    return { ok: false, reason_code: `CHARTER-${immut.halt_state}`, path: relPath, abs, detail: immut.detail };
+  }
+  return { ok: true, path: relPath, abs, doc };
+}
+
 // ---------------------------------------------------------------------------
 // Gate: pretooluse-live
 // ---------------------------------------------------------------------------
@@ -256,23 +300,99 @@ function evaluatePretooluseLive(invocation, opts) {
       applies: true,
       verdict: PROCEED,
       reason_code: 'LIVE-ENFORCEMENT-PROBED',
-      reason: 'All three probe legs (settings wiring, direct gate-module evaluate(), spawned dispatch-pretool.cjs) denied a synthetic remote-mutation canary this run. Nothing was read from a stored boolean.',
+      reason: 'All four probe legs (settings wiring, direct gate-module evaluate(), independently-authored stamp verifier, spawned dispatch-pretool.cjs) denied a synthetic remote-mutation canary this run. Nothing was read from a stored boolean.',
       probe
     };
   }
 
-  const failedLeg = !probe.wiring.ok ? 'wiring' : (!probe.direct || !probe.direct.ok) ? 'direct-module' : 'spawn';
-  const failedDetail = !probe.wiring.ok ? probe.wiring : (!probe.direct || !probe.direct.ok) ? probe.direct : probe.spawn;
+  // Leg 4 (plan pretooluse-live-second-verifier) gets its OWN distinct halt
+  // path, checked before the legacy wiring/direct/spawn ordering: a
+  // DISAGREEMENT or CONFLICTING-TERMINAL-STATE finding from the independent
+  // leg is never folded into the generic 'direct-module'/'spawn' failure
+  // text, per AC2 -- both verdicts (primary and independent) must be named
+  // explicitly so a human reading the halt immediately sees WHICH leg said
+  // what, not just that something disagreed.
+  if (probe.independent && !probe.independent.ok
+    && (probe.independent.reason_code === 'DISAGREEMENT' || probe.independent.reason_code === 'CONFLICTING-TERMINAL-STATE')) {
+    return {
+      gate_id: 'pretooluse-live',
+      applies: true,
+      verdict: REFUSE,
+      reason_code: probe.independent.reason_code,
+      reason: `The primary path and the independently-authored second verifier (tools/kernel/hooks/verify-stamp-independently.cjs) DISAGREE on whether a stamp covers the canary: ${probe.independent.detail}. This is exactly the class of finding the second verifier exists to catch -- fail-closed, do not proceed.`,
+      probe,
+      halt_text: [
+        PRETOOLUSE_LIVE_HALT_TEXT,
+        '',
+        `SECOND-VERIFIER DISAGREEMENT: primary_covered=${probe.independent.primary_covered} independent_covered=${probe.independent.independent_covered}`,
+        `Detail: ${probe.independent.detail}`,
+        '',
+        'This does NOT necessarily mean either check is wrong -- it means the two',
+        'implementations of stamp validity/scope-matching reached different',
+        'conclusions over the same stamp files. Investigate both',
+        'tools/kernel/hooks/pretool-remote-mutation-gate.cjs and',
+        'tools/kernel/hooks/verify-stamp-independently.cjs against the live',
+        'stamp files before resuming /tt.'
+      ].join('\n')
+    };
+  }
+
+  const failedLeg = !probe.wiring.ok
+    ? 'wiring'
+    : (!probe.direct || !probe.direct.ok)
+      ? 'direct-module'
+      : (!probe.independent || !probe.independent.ok)
+        ? 'independent-verifier'
+        : 'spawn';
+  const failedDetail = !probe.wiring.ok
+    ? probe.wiring
+    : (!probe.direct || !probe.direct.ok)
+      ? probe.direct
+      : (!probe.independent || !probe.independent.ok)
+        ? probe.independent
+        : probe.spawn;
+  const reasonCode = (failedDetail && failedDetail.reason_code) || 'PROBE-FAILED';
 
   return {
     gate_id: 'pretooluse-live',
     applies: true,
     verdict: REFUSE,
-    reason_code: (failedDetail && failedDetail.reason_code) || 'PROBE-FAILED',
+    reason_code: reasonCode,
     reason: `Live probe leg '${failedLeg}' did not confirm G-REMOTE-MUTATION denies a canary this run: ${(failedDetail && failedDetail.detail) || 'no detail'}. Fail-closed.`,
     probe,
-    halt_text: PRETOOLUSE_LIVE_HALT_TEXT
+    halt_text: buildPretoolUseLiveHaltText(reasonCode, failedDetail)
   };
+}
+
+// ticktock-remote-mutation-canary-stamp-collision S3 (2026-08-16): a
+// CANARY-COVERED-BY-STAMP refusal used to render the SAME static generic
+// text as every other refusal reason, leaving a reader to dig through
+// gates[0].probe JSON to find out WHICH stamp is responsible. Interpolate
+// the covering stamp's id (now present in live-probe.cjs's own detail
+// string as of S0/S3's live-probe.cjs fix) and point at the scope-broadness
+// guard (tools/kernel/hooks/validate-stamp-scope.cjs) as the actual remedy
+// for an overly broad stamp -- narrowing or voiding is the remedy for a
+// stamp that is merely stale/no-longer-needed.
+function buildPretoolUseLiveHaltText(reasonCode, failedDetail) {
+  if (reasonCode !== 'CANARY-COVERED-BY-STAMP') return PRETOOLUSE_LIVE_HALT_TEXT;
+  const detail = (failedDetail && failedDetail.detail) || '';
+  return [
+    PRETOOLUSE_LIVE_HALT_TEXT,
+    '',
+    `COVERING STAMP: ${detail}`,
+    '',
+    'This is not necessarily a broken gate -- a stamp currently authorizes a',
+    'command shape that also matches this probe\'s synthetic canary. Remedy:',
+    '  - If the stamp is stale or no longer needed: void or narrow it',
+    '    (_dev/state/remote-mutation-stamps/<stamp-id>.json, set voided: true).',
+    '  - If the stamp\'s scope is unintentionally broad (a bare shell verb or an',
+    '    unanchored wildcard regex): tools/kernel/hooks/validate-stamp-scope.cjs',
+    '    documents what "too broad" means and rejects that shape at the source',
+    '    -- re-grant the stamp with a narrower scope.',
+    '  - Voiding alone only helps if the gate module\'s stampInvalidReason() is',
+    '    the one being consulted (it is, as of this fix) -- confirm by',
+    '    re-running this exact preflight command after voiding.'
+  ].join('\n');
 }
 
 // ---------------------------------------------------------------------------
@@ -419,7 +539,7 @@ function evaluateTicktockReview(invocation, opts) {
   // the minds this run's merge contract binds.
   const charterRelPath = (opts && opts.charterPath) ||
     `_dev/state/ticktock/charter__${read.doc.charter_id}.json`;
-  const charterRead = readJsonArtifact(charterRelPath);
+  const charterRead = readValidatedCharterArtifact(charterRelPath);
   if (!charterRead.ok) {
     return {
       gate_id: 'G-TICKTOCK-REVIEW',
@@ -448,7 +568,7 @@ function evaluateTicktockReview(invocation, opts) {
   // lane_id + family + model_pin — a review by different minds (or the same
   // minds under different pins) does not authorize this run's merge contract.
   if (opts && opts.runCharterPath) {
-    const runCharterRead = readJsonArtifact(opts.runCharterPath);
+    const runCharterRead = readValidatedCharterArtifact(opts.runCharterPath);
     if (!runCharterRead.ok) {
       return {
         gate_id: 'G-TICKTOCK-REVIEW',

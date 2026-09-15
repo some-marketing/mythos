@@ -37,15 +37,16 @@ const REPO_ROOT = path.resolve(__dirname, '..', '..');
 const INVOCATION = { unattended: false, remote_capable: true, form: 'bare', phases: ['tt.tick'] };
 
 // ---------------------------------------------------------------------------
-// Fixture: the legitimate path, all three legs real, run once for real.
+// Fixture: the legitimate path, all four legs real, run once for real.
 // ---------------------------------------------------------------------------
 
-check('legitimate path: all three legs real -> PROCEED, naming all three denied the canary', () => {
+check('legitimate path: all four legs real -> PROCEED, naming all four denied the canary (plan pretooluse-live-second-verifier added leg 4)', () => {
   const result = pf.evaluatePretooluseLive(INVOCATION, {});
   assert(result.verdict === pf.PROCEED, `expected PROCEED, got ${result.verdict}: ${result.reason}`);
   assert(result.reason_code === 'LIVE-ENFORCEMENT-PROBED', `unexpected reason_code: ${result.reason_code}`);
   assert(result.probe.wiring.ok === true, 'wiring leg must be ok');
   assert(result.probe.direct.ok === true, 'direct-module leg must be ok');
+  assert(result.probe.independent.ok === true, 'independent leg must be ok');
   assert(result.probe.spawn.ok === true, 'spawn leg must be ok');
 });
 
@@ -154,17 +155,121 @@ check('malformed stamp sidecar (non-array scope) -> REFUSE naming STAMP-SCOPE-UN
   });
 });
 
-check('divergent: scope-verification stub reporting canary-covered -> REFUSE naming CANARY-COVERED-BY-STAMP, spawn short-circuited', () => {
-  const result = pf.evaluatePretooluseLive(INVOCATION, {
+check('divergent: scope-verification stub reporting canary-covered -> REFUSE naming CANARY-COVERED-BY-STAMP, spawn short-circuited (independent leg stubbed to AGREE, isolating this fixture to the direct-module leg alone -- plan pretooluse-live-second-verifier)', () => {
+  // The stubbed scopeCovers() is only consulted once verifyStampScopes() has
+  // at least one valid stamp sidecar to check it against, and the real stamps
+  // directory is untracked _dev/state whose contents vary by checkout -- so
+  // this fixture supplies its own scratch stamp via opts.stampsDir instead of
+  // depending on whatever stamps this machine happens to hold.
+  const result = withScratchStampsDir({
+    'covering.json': { stamp_id: 'test-covering-stamp', voided: false, scope: ['stub:mutate'] }
+  }, (scratchRoot) => pf.evaluatePretooluseLive(INVOCATION, {
+    stampsDir: path.join(scratchRoot, '_dev', 'state', 'remote-mutation-stamps'),
     requireGateModule: () => ({
       classifyCommand: () => ({ mutating: [{ key: 'stub:mutate', raw: 'stub' }] }),
+      stampInvalidReason: () => null, // the scratch stamp is valid -- coverage must be checked
       scopeCovers: () => true, // simulates a stamp that (wrongly) covers the canary
       evaluate: () => ({ status: 2, reason: 'no-covering-stamp' })
+    }),
+    // Stub the independent leg to agree (covered: true) so this fixture
+    // still isolates exactly the direct-module leg's effect, matching the
+    // file's existing per-fixture isolation pattern. A separate fixture
+    // below exercises genuine primary-vs-independent DISAGREEMENT.
+    requireIndependentVerifier: () => ({
+      verifyStampIndependently: () => ({ ok: true, reason_code: 'CONSISTENT', detail: 'stubbed agreement', independent_covered: true, primary_covered: true, checked: [] })
     })
-  });
+  }));
   assert(result.verdict === pf.REFUSE, 'expected REFUSE when scope verification finds a covering stamp');
   assert(result.reason_code === 'CANARY-COVERED-BY-STAMP', `unexpected reason_code: ${result.reason_code}`);
+  assert(result.halt_text.includes('COVERING STAMP:'), 'halt_text must identify the covering stamp');
+  assert(/stamp_id:/.test(result.halt_text), 'halt_text must include the covering stamp_id');
+  assert(result.halt_text.includes('tools/kernel/hooks/validate-stamp-scope.cjs'), 'halt_text must point to the scope guard remedy');
   assert(result.probe.spawn === null, 'spawn leg must be short-circuited when scope verification fails');
+});
+
+// ---------------------------------------------------------------------------
+// Integration fixtures for the fourth (independent) leg's wiring through the
+// REAL live-probe.cjs -> preflight-ticktock.cjs path (plan
+// pretooluse-live-second-verifier, amendment F1 -- codex S3 review finding
+// R2: the fixture above stubs the independent leg to AGREE, so it proves
+// nothing about the disagreement/race control flow itself).
+// ---------------------------------------------------------------------------
+
+check('integration: independent leg still runs (and its verdict is surfaced) when the direct-module leg has already failed -- proves leg 4 is not gated behind leg 2 (guard-spec "Wiring (revised)")', () => {
+  let independentWasInvoked = false;
+  const result = pf.evaluatePretooluseLive(INVOCATION, {
+    requireGateModule: () => stubGateModuleWithEvaluate(() => ({ status: 0, reason: 'stubbed-allow' })),
+    requireIndependentVerifier: () => ({
+      fingerprintStampsDir: () => 'stub-fingerprint',
+      verifyStampIndependently: () => {
+        independentWasInvoked = true;
+        return { ok: true, reason_code: 'CONSISTENT', detail: 'stubbed agreement', independent_covered: false, primary_covered: null, checked: [] };
+      }
+    })
+  });
+  assert(independentWasInvoked, 'the independent leg must be invoked even though the direct-module leg failed');
+  assert(result.probe.independent !== null, 'probe.independent must not be short-circuited to null when only the direct leg failed');
+  assert(result.reason_code === 'DIRECT-PROBE-NOT-DENIED', 'the direct-module failure must still be the reported reason (independent leg agreed)');
+});
+
+check('integration: primary-vs-independent DISAGREEMENT halts distinctly, naming BOTH verdicts in halt_text, ahead of the legacy failed-leg chain', () => {
+  const result = pf.evaluatePretooluseLive(INVOCATION, {
+    requireIndependentVerifier: () => ({
+      fingerprintStampsDir: () => 'stub-fingerprint',
+      verifyStampIndependently: () => ({
+        ok: false,
+        reason_code: 'DISAGREEMENT',
+        detail: 'synthetic: primary says covered, independent says not covered',
+        primary_covered: true,
+        independent_covered: false,
+        checked: []
+      })
+    })
+  });
+  assert(result.verdict === pf.REFUSE, 'a primary/independent DISAGREEMENT must REFUSE');
+  assert(result.reason_code === 'DISAGREEMENT', `expected reason_code DISAGREEMENT, got ${result.reason_code}`);
+  assert(result.halt_text.includes('SECOND-VERIFIER DISAGREEMENT'), 'halt_text must clearly label this as a second-verifier disagreement, not a generic leg failure');
+  assert(result.halt_text.includes('primary_covered=true'), 'halt_text must name the primary leg\'s verdict');
+  assert(result.halt_text.includes('independent_covered=false'), 'halt_text must name the independent leg\'s verdict');
+});
+
+check('integration: CONFLICTING-TERMINAL-STATE from the independent leg takes the same dedicated disagreement halt path as DISAGREEMENT', () => {
+  const result = pf.evaluatePretooluseLive(INVOCATION, {
+    requireIndependentVerifier: () => ({
+      fingerprintStampsDir: () => 'stub-fingerprint',
+      verifyStampIndependently: () => ({
+        ok: false,
+        reason_code: 'CONFLICTING-TERMINAL-STATE',
+        detail: 'synthetic: stamp history reached two mutually exclusive terminal states',
+        primary_covered: false,
+        independent_covered: true,
+        checked: []
+      })
+    })
+  });
+  assert(result.verdict === pf.REFUSE, 'CONFLICTING-TERMINAL-STATE must REFUSE');
+  assert(result.reason_code === 'CONFLICTING-TERMINAL-STATE', `expected reason_code CONFLICTING-TERMINAL-STATE, got ${result.reason_code}`);
+  assert(result.halt_text.includes('SECOND-VERIFIER DISAGREEMENT'), 'CONFLICTING-TERMINAL-STATE must take the same dedicated halt path as DISAGREEMENT (per preflight-ticktock.cjs\'s explicit OR check), not the generic failed-leg chain');
+});
+
+check('integration: STAMP-STATE-CHANGED-DURING-PROBE is a DISTINCT, fail-closed outcome -- REFUSE via the generic independent-verifier leg path, never silently folded into a DISAGREEMENT halt', () => {
+  const result = pf.evaluatePretooluseLive(INVOCATION, {
+    requireIndependentVerifier: () => ({
+      fingerprintStampsDir: () => 'stub-fingerprint',
+      verifyStampIndependently: () => ({
+        ok: false,
+        reason_code: 'STAMP-STATE-CHANGED-DURING-PROBE',
+        detail: 'synthetic: stamps dir fingerprint changed mid-probe',
+        primary_covered: null,
+        independent_covered: null,
+        checked: []
+      })
+    })
+  });
+  assert(result.verdict === pf.REFUSE, 'a race during the probe must fail closed, not PROCEED');
+  assert(result.reason_code === 'STAMP-STATE-CHANGED-DURING-PROBE', `expected reason_code STAMP-STATE-CHANGED-DURING-PROBE, got ${result.reason_code}`);
+  assert(!result.halt_text.includes('SECOND-VERIFIER DISAGREEMENT'), 'a race must not be mislabeled as a primary/independent disagreement -- they are different failure classes with different remedies');
+  assert(result.probe.wiring.ok === true, 'wiring leg (real) must have passed to reach the independent leg at all');
 });
 
 check('divergent: direct-module require() that throws -> caught as GATE-MODULE-LOAD-FAILED', () => {

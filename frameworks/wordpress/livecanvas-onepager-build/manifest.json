@@ -1,0 +1,144 @@
+{
+  "service_category": "wordpress",
+  "framework_name": "livecanvas-onepager-build",
+  "version": "0.1.0",
+  "status": "candidate",
+  "description": "Build a new one-page marketing site for a local trades/service business on WordPress + Picostrap 5 + LiveCanvas: intake and research with brand facts pinned, a reviewed design spec (sourced copy, hex tokens, font-licence reality), design tokens applied through the Customizer API, page and header/footer partials injected through the LiveCanvas editor API with every save verified on the public URL, a phone-first check in the editor's device emulator, and a client design-direction review email drafted for the operator to send. Distilled from the first reference run (client code BRE), 2026-09-09.",
+  "prompt_count": 5,
+  "input_contract": {
+    "required": [
+      {
+        "name": "client.json",
+        "description": "SM_OS client registry record (brand block: wordmark font, colours, services list, live-site URL, demo-site URL)"
+      },
+      {
+        "name": "intake.json",
+        "description": "Kickoff form answers: business description, service area, audience (B2C/B2B), top services in priority order, high-stakes trigger, top comparison factors, differentiator, elevator pitch, credentials, named competitors, inspiration sites, style preference, assets on hand, target search phrases"
+      },
+      {
+        "name": "context-bundle/",
+        "description": "Kickoff-call transcript (verbatim), raw questionnaire answers, brand assets (card front/back, logo exports), all client-supplied photos with a hero-quality rating table, current live-site copy review"
+      }
+    ],
+    "optional": [
+      {
+        "name": "reference_page_html.md",
+        "description": "A previous LiveCanvas page from the same agency as a markup-conventions reference (section per band, .lc-block wrappers, editable attrs)"
+      },
+      {
+        "name": "1password_item",
+        "description": "1P item title resolving to the demo site's wp-admin user/pass; never inlined. The run may instead use an already-authenticated Chrome session."
+      }
+    ]
+  },
+  "output_contract": {
+    "directories": [
+      "outputs/",
+      "outputs/recordings/",
+      "plans/",
+      "captures/"
+    ],
+    "artifacts": [
+      "context-bundle/README.md",
+      "outputs/design-research-report.md",
+      "outputs/design-research-brief.pdf",
+      "outputs/open-gates.md",
+      "plans/<slug>__concept.md",
+      "plans/<slug>__content.md",
+      "plans/<slug>__visual-spec.md",
+      "plans/<slug>__wireframe.md",
+      "plans/<slug>__plan.json",
+      "plans/<slug>__plan.md",
+      "outputs/picostrap-customizer-setting-map.md",
+      "outputs/home-page__lc-html__v1.html",
+      "outputs/header-partial__lc-html__v1.html",
+      "outputs/footer-partial__lc-html__v1.html",
+      "outputs/recordings/*.gif",
+      "outputs/recordings/desktop__*.jpg",
+      "outputs/recordings/xs__*.jpg",
+      "outputs/email-to-client__design-direction-review.md",
+      "outputs/email-to-client__draft-receipt.json"
+    ]
+  },
+  "output_contract_v2": {
+    "directories": [],
+    "artifacts": [],
+    "bundle_types": [],
+    "schemas": [
+      {
+        "name": "draft-receipt",
+        "path": "schemas/draft-receipt.schema.json",
+        "description": "Stage 5 outputs/email-to-client__draft-receipt.json — ids, subject, recipient sha256, demo-gate checks, sent_by_framework=false"
+      }
+    ]
+  },
+  "execution_modes": [
+    "FINDINGS_ONLY",
+    "RUN_ONLY",
+    "REVIEW_ONLY",
+    "PATCH_ALLOWED"
+  ],
+  "mcp_requirements": [
+    "claude-in-chrome",
+    "gmail"
+  ],
+  "mcp_requirements_note": "claude-in-chrome for Customizer/LiveCanvas/media work in an already-authenticated admin session; gmail (the operator's connected account) for Stage 5 draft creation only — the framework never sends.",
+  "prompt_chain": {
+    "intake": [
+      "01_INTAKE_AND_RESEARCH"
+    ],
+    "design": [
+      "02_DESIGN_SPEC"
+    ],
+    "theme": [
+      "03_THEME_TOKENS"
+    ],
+    "build": [
+      "04_PAGE_BUILD"
+    ],
+    "client_review": [
+      "05_CLIENT_REVIEW"
+    ]
+  },
+  "skills_path": ".claude/skills/livecanvas-onepager-build/",
+  "commands_path": ".claude/commands/livecanvas-onepager-build/",
+  "agents_path": ".claude/agents/livecanvas-onepager-build/",
+  "reference_runs": [
+    {
+      "client_code": "BRE",
+      "project_slug": "one-pager-site",
+      "project_path": "clients/BRE/projects/wordpress__content-editing__one-pager-site/",
+      "stage_completed": "intake + design + theme + build + client_review (plan re-review pending)",
+      "capture": "captures/20260909T134835Z__livecanvas-onepager-build",
+      "started": "2026-08-28",
+      "built": "2026-09-09"
+    }
+  ],
+  "skills": [
+    "livecanvas-onepager-build/SKILL.md"
+  ],
+  "commands": [
+    "run",
+    "status",
+    "intake-and-research",
+    "design-spec",
+    "theme-tokens",
+    "page-build",
+    "client-review"
+  ],
+  "agents": [
+    "intake-and-research-agent",
+    "design-spec-agent",
+    "theme-tokens-agent",
+    "page-build-agent",
+    "client-review-agent"
+  ],
+  "patterns": [
+    "wordpress-page-build",
+    "livecanvas-block-editing",
+    "picostrap-customizer-api",
+    "visual-design-implementation",
+    "browser-render-validation",
+    "client-review-communication"
+  ]
+}

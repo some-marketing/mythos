@@ -18,6 +18,7 @@ const path = require('path');
 
 const gm = require('./generation-manifest.cjs');
 const pf = require('./preflight-ticktock.cjs');
+const charterMod = require('./charter.cjs');
 
 let passed = 0;
 let failed = 0;
@@ -46,6 +47,17 @@ function expectThrow(fn, fragment) {
 
 const tmpRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'tt-manifest-'));
 const tmpDir = path.relative(path.resolve(__dirname, '..', '..'), tmpRoot);
+
+// Codex PR#20 (round 3): outputs[].path must now resolve to a path AT OR
+// BENEATH the repo root (the path-traversal fix). "Real output" fixtures
+// that a manifest legitimately claims to have produced must therefore live
+// IN-REPO, not under os.tmpdir() (which is always outside REPO_ROOT and
+// would now be refused by that same guard, correctly). This scratch
+// directory is gitignored (_dev/state/** ) and removed at the end of this
+// file, same as tmpRoot.
+const REPO_ROOT = path.resolve(__dirname, '..', '..');
+const inRepoScratch = path.join(REPO_ROOT, '_dev/state/ticktock/__test-scratch__', `gm-artifacts-${process.pid}`);
+fs.mkdirSync(inRepoScratch, { recursive: true });
 
 function fixture(overrides) {
   return Object.assign({
@@ -110,8 +122,15 @@ check('read-back detects post-write tampering', () => {
 });
 
 check('lineage link requires the parent hash', () => {
+  // A real parent manifest is always read back from disk after
+  // writeGenerationManifest() has injected its manifest_hash field (Codex
+  // PR#20 round 2: verifyLineageLink now refuses a parent whose OWN stored
+  // manifest_hash does not match its recomputed content hash, to catch a
+  // parent silently edited after the fact). Set it here to model that real
+  // shape rather than a bare in-memory fixture that was never "written".
   const parent = fixture();
   const parentHash = gm.computeManifestHash(parent);
+  parent.manifest_hash = parentHash;
   const childGood = fixture({
     generation_id: 'tt-gen-1-fixture',
     cycle_index: 1,
@@ -124,6 +143,64 @@ check('lineage link requires the parent hash', () => {
     parent: { parent_generation_id: 'tt-gen-0-fixture', parent_manifest_hash: 'd'.repeat(64) }
   });
   assert(gm.verifyLineageLink(childBad, parent).linked === false, 'a wrong parent hash must not verify');
+});
+
+// Codex PR#20 review: writeGenerationManifest() ran schema, rotation, and
+// artifact checks but never called verifyLineageLink() -- a non-genesis
+// manifest with a null parent was written successfully and received a
+// read_back_verified:true receipt even though its lineage could not be
+// traversed. These tests exercise the WRITER, not the standalone function.
+check('writeGenerationManifest REFUSES a non-genesis manifest with a null parent (LINEAGE-LINK-BROKEN)', () => {
+  expectThrow(
+    () => gm.writeGenerationManifest(fixture({
+      generation_id: 'tt-gen-1-null-parent',
+      cycle_index: 1,
+      parent: { parent_generation_id: null, parent_manifest_hash: null }
+    }), { dir: tmpDir }),
+    'LINEAGE-LINK-BROKEN'
+  );
+  assert(!fs.existsSync(path.join(tmpRoot, 'tt-gen-1-null-parent.json')), 'a refused manifest must not be written to disk');
+});
+check('writeGenerationManifest REFUSES a non-genesis manifest whose parent_generation_id names a file that does not exist', () => {
+  expectThrow(
+    () => gm.writeGenerationManifest(fixture({
+      generation_id: 'tt-gen-1-missing-parent',
+      cycle_index: 1,
+      parent: { parent_generation_id: 'tt-gen-0-never-written', parent_manifest_hash: 'c'.repeat(64) }
+    }), { dir: tmpDir }),
+    'LINEAGE-LINK-BROKEN'
+  );
+});
+check('writeGenerationManifest ACCEPTS a non-genesis manifest whose parent hash correctly links to a real written parent', () => {
+  const parentReceipt = gm.writeGenerationManifest(fixture({ generation_id: 'tt-gen-0-real-parent' }), { dir: tmpDir });
+  const receipt = gm.writeGenerationManifest(fixture({
+    generation_id: 'tt-gen-1-real-child',
+    cycle_index: 1,
+    parent: { parent_generation_id: 'tt-gen-0-real-parent', parent_manifest_hash: parentReceipt.manifest_hash }
+  }), { dir: tmpDir });
+  assert(receipt.lineage_link_verified === true, 'the receipt must record lineage verification');
+  assert(receipt.read_back_verified === true, JSON.stringify(receipt));
+});
+check('writeGenerationManifest REFUSES a non-genesis manifest whose parent hash does not match the real parent on disk', () => {
+  gm.writeGenerationManifest(fixture({ generation_id: 'tt-gen-0-real-parent-2' }), { dir: tmpDir });
+  expectThrow(
+    () => gm.writeGenerationManifest(fixture({
+      generation_id: 'tt-gen-1-wrong-hash',
+      cycle_index: 1,
+      parent: { parent_generation_id: 'tt-gen-0-real-parent-2', parent_manifest_hash: 'd'.repeat(64) }
+    }), { dir: tmpDir }),
+    'LINEAGE-LINK-BROKEN'
+  );
+});
+check('writeGenerationManifest still REFUSES a genesis (cycle_index 0) manifest that declares a non-null parent', () => {
+  expectThrow(
+    () => gm.writeGenerationManifest(fixture({
+      generation_id: 'tt-gen-0-bad-genesis',
+      cycle_index: 0,
+      parent: { parent_generation_id: 'tt-gen-should-not-exist', parent_manifest_hash: 'e'.repeat(64) }
+    }), { dir: tmpDir }),
+    'LINEAGE-LINK-BROKEN'
+  );
 });
 
 check('refuses a generation that skipped rotation (ROTATION-MISSING)', () => {
@@ -182,7 +259,7 @@ check('default-on: a real file whose declared hash does not match refuses', () =
 });
 
 check('default-on: a real, correctly hashed file writes and records artifacts_verified true', () => {
-  const realFile = path.join(tmpRoot, 'b4-good-output.txt');
+  const realFile = path.join(inRepoScratch, 'b4-good-output.txt');
   const bytes = Buffer.from('genuine output\n', 'utf8');
   fs.writeFileSync(realFile, bytes);
   const relOutput = path.relative(path.resolve(__dirname, '..', '..'), realFile);
@@ -214,7 +291,7 @@ check('existing outputs:[] fixtures (empty array) still write with artifacts_ver
 });
 
 check('B6 amendment (codex#4): a correct sha256 with NO bytes field refuses by default, not artifacts_verified:true', () => {
-  const realFile = path.join(tmpRoot, 'b4-sha-ok-no-bytes.txt');
+  const realFile = path.join(inRepoScratch, 'b4-sha-ok-no-bytes.txt');
   const bytes = Buffer.from('genuine output, no declared byte count\n', 'utf8');
   fs.writeFileSync(realFile, bytes);
   const relOutput = path.relative(path.resolve(__dirname, '..', '..'), realFile);
@@ -237,7 +314,7 @@ check('B6 amendment (codex#4): a correct sha256 with NO bytes field refuses by d
 
 check('artifact paths resolve against the repo root, not process.cwd() (convene execution note 2)', () => {
   const originalCwd = process.cwd();
-  const realFile = path.join(tmpRoot, 'b4-cwd-output.txt');
+  const realFile = path.join(inRepoScratch, 'b4-cwd-output.txt');
   const bytes = Buffer.from('cwd-independent output\n', 'utf8');
   fs.writeFileSync(realFile, bytes);
   const relOutput = path.relative(path.resolve(__dirname, '..', '..'), realFile);
@@ -308,16 +385,43 @@ check('pretooluse-live ignores the retired evidence boolean entirely', () => {
 // Charter-binding fixture (2026-08-12, S4 codex finding 4): evaluateTicktockReview
 // now binds every decision to its charter by hash, so review fixtures carry a
 // matching charter file passed via opts.charterPath.
+// Codex PR#20 review: G-TICKTOCK-REVIEW's charter reads now run
+// charterMod.checkImmutability() (recomputes reviewer_roster.lane_binding_hash
+// and charter_hash from the ACTUAL loaded content) rather than trusting a
+// bare JSON.parse. Every charter fixture below must be internally
+// self-consistent for checkImmutability to accept it at all -- the
+// "wrongness" these tests exercise is charter-vs-DECISION binding mismatch,
+// never charter self-inconsistency (nothing here targets checkImmutability
+// itself, so a hand-typed placeholder hash would now be refused before ever
+// reaching the logic under test).
+function selfConsistentCharter(partial) {
+  // Preserve whether reviewer_roster.lanes was explicitly provided (a real
+  // empty roster) vs entirely omitted (an ABSENT lanes[] array -- a distinct
+  // fail-closed shape preflight-ticktock.cjs's coverage checks specifically
+  // test for, ROSTER-COVERAGE-UNRESOLVED vs -MISMATCH). computeLaneBindingHash
+  // treats a missing lanes the same as [] for hashing purposes either way, so
+  // hashing does not force the field into existence on the output document.
+  const inputRoster = partial.reviewer_roster || {};
+  const roster = Object.assign({}, inputRoster, { lanes: inputRoster.lanes || [] });
+  const lane_binding_hash = charterMod.computeLaneBindingHash(roster);
+  const outputRoster = Object.assign({}, inputRoster, { lane_binding_hash });
+  const withRoster = Object.assign({}, partial, { reviewer_roster: outputRoster });
+  const charter_hash = charterMod.computeCharterHash(withRoster);
+  return Object.assign({}, withRoster, { charter_hash });
+}
+
 const CHARTER_FIXTURE_FILE = path.join(tmpRoot, 'charter-fixture.json');
 const CHARTER_FIXTURE_REL = path.join(tmpDir, 'charter-fixture.json');
-fs.writeFileSync(CHARTER_FIXTURE_FILE, JSON.stringify({
+const CHARTER_FIXTURE_CONTENT = selfConsistentCharter({
   charter_id: 'fixture',
-  charter_hash: 'a'.repeat(64),
   // family/model_pin/assignment_order (B3): populated so this fixture also
   // works as the TRIAL charter half of the run-roster-binding tuple
   // comparison, not merely as a lane_id-only coverage fixture.
-  reviewer_roster: { lane_binding_hash: 'b'.repeat(64), lanes: [{ lane_id: 'codex-1', family: 'codex', model_pin: 'x', assignment_order: 0 }] }
-}));
+  reviewer_roster: { lanes: [{ lane_id: 'codex-1', family: 'codex', model_pin: 'x', assignment_order: 0 }] }
+});
+fs.writeFileSync(CHARTER_FIXTURE_FILE, JSON.stringify(CHARTER_FIXTURE_CONTENT));
+const FIXTURE_CHARTER_HASH = CHARTER_FIXTURE_CONTENT.charter_hash;
+const FIXTURE_ROSTER_HASH = CHARTER_FIXTURE_CONTENT.reviewer_roster.lane_binding_hash;
 
 check('G-TICKTOCK-REVIEW refuses a cleared flag its roster does not support', () => {
   const file = path.join(tmpRoot, 'review.json');
@@ -329,8 +433,8 @@ check('G-TICKTOCK-REVIEW refuses a cleared flag its roster does not support', ()
     produced_by_step: 'S4',
     created_at: '2026-08-05T00:00:00.000Z',
     charter_id: 'fixture',
-    charter_hash: 'a'.repeat(64),
-    roster_hash: 'b'.repeat(64),
+    charter_hash: FIXTURE_CHARTER_HASH,
+    roster_hash: FIXTURE_ROSTER_HASH,
     reviewers: [{
       lane_id: 'codex-1', family: 'codex', model_pin_requested: 'x', model_pin_observed: 'x',
       pin_verified: true, status: 'findings', verdict: 'AMEND_REQUIRED', unresolved_findings: 2,
@@ -358,8 +462,8 @@ check('G-TICKTOCK-REVIEW binds a decision to its charter by hash', () => {
     produced_by_step: 'S4',
     created_at: '2026-08-05T00:00:00.000Z',
     charter_id: 'fixture',
-    charter_hash: 'a'.repeat(64),
-    roster_hash: 'b'.repeat(64),
+    charter_hash: FIXTURE_CHARTER_HASH,
+    roster_hash: FIXTURE_ROSTER_HASH,
     reviewers: [{
       lane_id: 'codex-1', family: 'codex', model_pin_requested: 'x', model_pin_observed: 'x',
       pin_verified: true, status: 'clean', verdict: 'APPROVE', unresolved_findings: 0,
@@ -375,14 +479,19 @@ check('G-TICKTOCK-REVIEW binds a decision to its charter by hash', () => {
   // Arm 2: same decision against a charter with a different charter_hash refuses —
   // this is the "cleared artifact from another charter" laundering shape.
   const wrongCharter = path.join(tmpRoot, 'charter-wrong.json');
-  fs.writeFileSync(wrongCharter, JSON.stringify({ charter_id: 'fixture', charter_hash: 'c'.repeat(64), reviewer_roster: { lane_binding_hash: 'b'.repeat(64) } }));
+  fs.writeFileSync(wrongCharter, JSON.stringify(selfConsistentCharter({ charter_id: 'fixture', reviewer_roster: {} })));
   const mismatch = pf.evaluateTicktockReview(pf.classifyInvocation([]), { reviewDecisionPath: rel, charterPath: path.join(tmpDir, 'charter-wrong.json') });
   assert(mismatch.verdict === 'REFUSE' && mismatch.reason_code === 'CHARTER-BINDING-MISMATCH',
     `foreign-charter decision must refuse, got ${mismatch.verdict}/${mismatch.reason_code}`);
-  // Arm 3: roster_hash alone mismatching also refuses (a re-rostered trial may not
-  // reuse the old charter's cleared decision).
+  // Arm 3: a re-rostered trial (different lane content, hence a naturally
+  // different charter_hash AND roster_hash -- checkImmutability now makes the
+  // two move together, since roster_hash is nested inside the hashed charter
+  // document) may not reuse the old charter's cleared decision.
   const wrongRoster = path.join(tmpRoot, 'charter-wrong-roster.json');
-  fs.writeFileSync(wrongRoster, JSON.stringify({ charter_id: 'fixture', charter_hash: 'a'.repeat(64), reviewer_roster: { lane_binding_hash: 'd'.repeat(64) } }));
+  fs.writeFileSync(wrongRoster, JSON.stringify(selfConsistentCharter({
+    charter_id: 'fixture',
+    reviewer_roster: { lanes: [{ lane_id: 'codex-1', family: 'codex', model_pin: 'RE-ROSTERED-PIN', assignment_order: 0 }] }
+  })));
   const rosterMismatch = pf.evaluateTicktockReview(pf.classifyInvocation([]), { reviewDecisionPath: rel, charterPath: path.join(tmpDir, 'charter-wrong-roster.json') });
   assert(rosterMismatch.verdict === 'REFUSE' && rosterMismatch.reason_code === 'CHARTER-BINDING-MISMATCH',
     `re-rostered decision must refuse, got ${rosterMismatch.verdict}/${rosterMismatch.reason_code}`);
@@ -399,29 +508,34 @@ check('G-TICKTOCK-REVIEW requires exact roster coverage and run-charter identity
     pin_verified: true, status: 'clean', verdict: 'APPROVE', unresolved_findings: 0,
     review_artifact_path: 'r.md'
   });
-  const doc = (reviewers) => ({
+  const doc = (reviewers, hashes) => ({
     schema: 'TickTockReviewDecision/1.0',
     gate_id: 'G-TICKTOCK-REVIEW',
     decision_id: 'tt-review-20260805T000000Z',
     produced_by_step: 'S4',
     created_at: '2026-08-05T00:00:00.000Z',
     charter_id: 'fixture',
-    charter_hash: 'a'.repeat(64),
-    roster_hash: 'b'.repeat(64),
+    charter_hash: (hashes && hashes.charter_hash) || FIXTURE_CHARTER_HASH,
+    roster_hash: (hashes && hashes.roster_hash) || FIXTURE_ROSTER_HASH,
     reviewers,
     decision: { cleared: true, unresolved_findings_total: 0, reasons: [], decided_at: 'now', decided_by: 'operator' }
   });
-  // Three-lane charter for the coverage arms.
+  // Three-lane charter for the coverage arms. Self-binds with its OWN real
+  // hashes (a decision testing roster-coverage against a DIFFERENT charter
+  // than the main fixture must claim binding to THAT charter, not the
+  // single-lane one, or CHARTER-BINDING-MISMATCH fires first and the
+  // roster-coverage logic under test is never reached).
   const threeLaneCharter = path.join(tmpRoot, 'charter-three-lane.json');
   const threeLaneCharterRel = path.join(tmpDir, 'charter-three-lane.json');
-  fs.writeFileSync(threeLaneCharter, JSON.stringify({
+  const threeLaneCharterContent = selfConsistentCharter({
     charter_id: 'fixture',
-    charter_hash: 'a'.repeat(64),
-    reviewer_roster: { lane_binding_hash: 'b'.repeat(64), lanes: [{ lane_id: 'codex-1' }, { lane_id: 'gemini-1' }, { lane_id: 'codewhale-1' }] }
-  }));
+    reviewer_roster: { lanes: [{ lane_id: 'codex-1' }, { lane_id: 'gemini-1' }, { lane_id: 'codewhale-1' }] }
+  });
+  fs.writeFileSync(threeLaneCharter, JSON.stringify(threeLaneCharterContent));
+  const THREE_LANE_HASHES = { charter_hash: threeLaneCharterContent.charter_hash, roster_hash: threeLaneCharterContent.reviewer_roster.lane_binding_hash };
   // Arm 1: ONE clean lane against a THREE-lane roster refuses — the partial-artifact
   // laundering shape S4-C finding 2 proved live.
-  fs.writeFileSync(file, JSON.stringify(doc([cleanReviewer('codex-1')])));
+  fs.writeFileSync(file, JSON.stringify(doc([cleanReviewer('codex-1')], THREE_LANE_HASHES)));
   const partial = pf.evaluateTicktockReview(pf.classifyInvocation([]), { reviewDecisionPath: rel, charterPath: threeLaneCharterRel });
   assert(partial.verdict === 'REFUSE' && partial.reason_code === 'ROSTER-COVERAGE-MISMATCH',
     `one-of-three coverage must refuse, got ${partial.verdict}/${partial.reason_code}`);
@@ -436,9 +550,12 @@ check('G-TICKTOCK-REVIEW requires exact roster coverage and run-charter identity
   assert(duped.verdict === 'REFUSE' && duped.reason_code === 'ROSTER-COVERAGE-MISMATCH',
     `duplicate lanes must refuse, got ${duped.verdict}/${duped.reason_code}`);
   // Arm 4: a charter with no lanes[] cannot prove coverage — fail-closed.
+  // Self-binds with its OWN real hashes, same reason as the three-lane charter above.
   const laneless = path.join(tmpRoot, 'charter-laneless.json');
-  fs.writeFileSync(laneless, JSON.stringify({ charter_id: 'fixture', charter_hash: 'a'.repeat(64), reviewer_roster: { lane_binding_hash: 'b'.repeat(64) } }));
-  fs.writeFileSync(file, JSON.stringify(doc([cleanReviewer('codex-1')])));
+  const lanelessContent = selfConsistentCharter({ charter_id: 'fixture', reviewer_roster: {} });
+  fs.writeFileSync(laneless, JSON.stringify(lanelessContent));
+  const LANELESS_HASHES = { charter_hash: lanelessContent.charter_hash, roster_hash: lanelessContent.reviewer_roster.lane_binding_hash };
+  fs.writeFileSync(file, JSON.stringify(doc([cleanReviewer('codex-1')], LANELESS_HASHES)));
   const unprovable = pf.evaluateTicktockReview(pf.classifyInvocation([]), { reviewDecisionPath: rel, charterPath: path.join(tmpDir, 'charter-laneless.json') });
   assert(unprovable.verdict === 'REFUSE' && unprovable.reason_code === 'ROSTER-COVERAGE-UNRESOLVED',
     `laneless charter must refuse, got ${unprovable.verdict}/${unprovable.reason_code}`);
@@ -449,11 +566,10 @@ check('G-TICKTOCK-REVIEW requires exact roster coverage and run-charter identity
   // assignment_order 0 -- comparisons below hold two of the three fields fixed
   // and vary one at a time.
   const otherCharter = path.join(tmpRoot, 'charter-other-run.json');
-  fs.writeFileSync(otherCharter, JSON.stringify({
+  fs.writeFileSync(otherCharter, JSON.stringify(selfConsistentCharter({
     charter_id: 'other-run',
-    charter_hash: 'z'.repeat(64),
-    reviewer_roster: { lane_binding_hash: 'y'.repeat(64), lanes: [{ lane_id: 'codex-1', family: 'codex', model_pin: 'DIFFERENT-PIN', assignment_order: 0 }] }
-  }));
+    reviewer_roster: { lanes: [{ lane_id: 'codex-1', family: 'codex', model_pin: 'DIFFERENT-PIN', assignment_order: 0 }] }
+  })));
   fs.writeFileSync(file, JSON.stringify(doc([cleanReviewer('codex-1')])));
   const wrongRun = pf.evaluateTicktockReview(pf.classifyInvocation([]), { reviewDecisionPath: rel, charterPath: CHARTER_FIXTURE_REL, runCharterPath: path.join(tmpDir, 'charter-other-run.json') });
   assert(wrongRun.verdict === 'REFUSE' && wrongRun.reason_code === 'RUN-ROSTER-MISMATCH',
@@ -465,11 +581,10 @@ check('G-TICKTOCK-REVIEW requires exact roster coverage and run-charter identity
   // pre-B3 comparison (lane_id+family+model_pin only) would have matched this
   // pair; this is the fixture that fails on pre-B3 code and passes after.
   const reorderedRun = path.join(tmpRoot, 'charter-reordered-run.json');
-  fs.writeFileSync(reorderedRun, JSON.stringify({
+  fs.writeFileSync(reorderedRun, JSON.stringify(selfConsistentCharter({
     charter_id: 'run-fixture-reordered',
-    charter_hash: 'z'.repeat(64),
-    reviewer_roster: { lane_binding_hash: 'y'.repeat(64), lanes: [{ lane_id: 'codex-1', family: 'codex', model_pin: 'x', assignment_order: 1 }] }
-  }));
+    reviewer_roster: { lanes: [{ lane_id: 'codex-1', family: 'codex', model_pin: 'x', assignment_order: 1 }] }
+  })));
   fs.writeFileSync(file, JSON.stringify(doc([cleanReviewer('codex-1')])));
   const reordered = pf.evaluateTicktockReview(pf.classifyInvocation([]), { reviewDecisionPath: rel, charterPath: CHARTER_FIXTURE_REL, runCharterPath: path.join(tmpDir, 'charter-reordered-run.json') });
   assert(reordered.verdict === 'REFUSE' && reordered.reason_code === 'RUN-ROSTER-MISMATCH',
@@ -478,11 +593,10 @@ check('G-TICKTOCK-REVIEW requires exact roster coverage and run-charter identity
   // charter clears even though the run charter's identity differs from the
   // trial's.
   const matchingRun = path.join(tmpRoot, 'charter-matching-run.json');
-  fs.writeFileSync(matchingRun, JSON.stringify({
+  fs.writeFileSync(matchingRun, JSON.stringify(selfConsistentCharter({
     charter_id: 'run-fixture',
-    charter_hash: 'z'.repeat(64),
-    reviewer_roster: { lane_binding_hash: 'y'.repeat(64), lanes: [{ lane_id: 'codex-1', family: 'codex', model_pin: 'x', assignment_order: 0 }] }
-  }));
+    reviewer_roster: { lanes: [{ lane_id: 'codex-1', family: 'codex', model_pin: 'x', assignment_order: 0 }] }
+  })));
   fs.writeFileSync(file, JSON.stringify(doc([cleanReviewer('codex-1')])));
   const ok = pf.evaluateTicktockReview(pf.classifyInvocation([]), { reviewDecisionPath: rel, charterPath: CHARTER_FIXTURE_REL, runCharterPath: path.join(tmpDir, 'charter-matching-run.json') });
   assert(ok.verdict === 'PROCEED', `same-minds run roster must clear, got ${ok.reason_code}: ${ok.reason}`);
@@ -498,8 +612,8 @@ check('B6 amendment (codex#2/codewhale#3): a reviewer entry whose family/pin doe
     produced_by_step: 'S4',
     created_at: '2026-08-05T00:00:00.000Z',
     charter_id: 'fixture',
-    charter_hash: 'a'.repeat(64),
-    roster_hash: 'b'.repeat(64),
+    charter_hash: FIXTURE_CHARTER_HASH,
+    roster_hash: FIXTURE_ROSTER_HASH,
     reviewers: [reviewer],
     decision: { cleared: true, unresolved_findings_total: 0, reasons: [], decided_at: 'now', decided_by: 'operator' }
   });
@@ -549,8 +663,8 @@ check('B6 round-2 (codex 20260814T0012Z): pin_verified:true with a null observed
     produced_by_step: 'S4',
     created_at: '2026-08-05T00:00:00.000Z',
     charter_id: 'fixture',
-    charter_hash: 'a'.repeat(64),
-    roster_hash: 'b'.repeat(64),
+    charter_hash: FIXTURE_CHARTER_HASH,
+    roster_hash: FIXTURE_ROSTER_HASH,
     reviewers: [reviewer],
     decision: { cleared: true, unresolved_findings_total: 0, reasons: [], decided_at: 'now', decided_by: 'operator' }
   });
@@ -620,8 +734,8 @@ check('timeout / substitution / pin_mismatch each independently refuse, even wit
       produced_by_step: 'S4',
       created_at: '2026-08-05T00:00:00.000Z',
       charter_id: 'fixture',
-      charter_hash: 'a'.repeat(64),
-      roster_hash: 'b'.repeat(64),
+      charter_hash: FIXTURE_CHARTER_HASH,
+      roster_hash: FIXTURE_ROSTER_HASH,
       reviewers: [Object.assign({
         lane_id: 'codex-1', family: 'codex', model_pin_requested: 'x', model_pin_observed: 'x',
         pin_verified: true, status: 'clean', verdict: 'APPROVE', unresolved_findings: 0,
@@ -650,6 +764,55 @@ check('timeout / substitution / pin_mismatch each independently refuse, even wit
   assert(ok.verdict === 'PROCEED', `the clean control must proceed, got ${ok.reason_code}: ${ok.reason}`);
 });
 
+check('codex PR#20: a charter roster edited AFTER commit, with the OLD lane_binding_hash left in place, is refused (not silently trusted at read time)', () => {
+  // The exact defect: reviewer_roster.lanes is edited (substituting a
+  // reviewer) while charter_hash and lane_binding_hash are left as their
+  // ORIGINAL (now-stale) values. Before this fix, evaluateTicktockReview read
+  // the charter via a bare JSON.parse and never recomputed either hash, so a
+  // schema-valid decision self-claiming the ORIGINAL (stale) hashes would
+  // clear this gate against the TAMPERED roster.
+  const tamperedCharterPath = path.join(tmpRoot, 'charter-tampered-roster.json');
+  const tamperedCharterRel = path.join(tmpDir, 'charter-tampered-roster.json');
+  const tampered = Object.assign({}, CHARTER_FIXTURE_CONTENT, {
+    reviewer_roster: Object.assign({}, CHARTER_FIXTURE_CONTENT.reviewer_roster, {
+      // Substitute the locked reviewer for a different one -- the producer
+      // being reviewed, in the shape codex's finding names explicitly --
+      // while literally copying the OLD lane_binding_hash and charter_hash
+      // (this is exactly what "stale hash fields left in place" means).
+      lanes: [{ lane_id: 'the-producer-itself', family: 'codex', model_pin: 'x', assignment_order: 0 }]
+      // lane_binding_hash intentionally NOT recomputed -- copied verbatim below.
+    })
+    // charter_hash intentionally NOT recomputed -- copied verbatim below.
+  });
+  fs.writeFileSync(tamperedCharterPath, JSON.stringify(tampered));
+
+  const file = path.join(tmpRoot, 'review-tampered-roster.json');
+  const rel = path.join(tmpDir, 'review-tampered-roster.json');
+  fs.writeFileSync(file, JSON.stringify({
+    schema: 'TickTockReviewDecision/1.0',
+    gate_id: 'G-TICKTOCK-REVIEW',
+    decision_id: 'tt-review-20260817T000000Z',
+    produced_by_step: 'S4',
+    created_at: '2026-08-17T00:00:00.000Z',
+    charter_id: 'fixture',
+    // Self-claims the ORIGINAL (stale) hashes -- which is exactly what the
+    // tampered charter file still carries too, so a bare-parse self-binding
+    // check would have seen them "match".
+    charter_hash: FIXTURE_CHARTER_HASH,
+    roster_hash: FIXTURE_ROSTER_HASH,
+    reviewers: [{
+      lane_id: 'the-producer-itself', family: 'codex', model_pin_requested: 'x', model_pin_observed: 'x',
+      pin_verified: true, status: 'clean', verdict: 'APPROVE', unresolved_findings: 0,
+      review_artifact_path: 'r.md'
+    }],
+    decision: { cleared: true, unresolved_findings_total: 0, reasons: [], decided_at: 'now', decided_by: 'operator' }
+  }));
+
+  const g = pf.evaluateTicktockReview(pf.classifyInvocation([]), { reviewDecisionPath: rel, charterPath: tamperedCharterRel });
+  assert(g.verdict === 'REFUSE', `a charter whose roster was edited without recomputing its hash must refuse, got ${g.verdict}/${g.reason_code}`);
+  assert(g.reason_code === 'CHARTER-BINDING-UNRESOLVED', `expected CHARTER-BINDING-UNRESOLVED (the charter itself fails immutability), got ${g.reason_code}: ${g.reason}`);
+});
+
 check('a missing status or missing pin_verified fails closed', () => {
   for (const bad of [{ lane_id: 'l', verdict: 'APPROVE', unresolved_findings: 0, pin_verified: true },
     { lane_id: 'l', verdict: 'APPROVE', unresolved_findings: 0, status: 'clean' }]) {
@@ -660,7 +823,200 @@ check('a missing status or missing pin_verified fails closed', () => {
     'an unrecognised status must fail closed');
 });
 
+// ---------------------------------------------------------------------------
+// Codex PR#20 (round 3): output-path traversal is refused before disk is
+// ever touched.
+// ---------------------------------------------------------------------------
+process.stdout.write('generation-manifest: output-path traversal (round 3)\n');
+
+check('an absolute outputs[].path is refused outright, never resolved', () => {
+  const bad = fixture({
+    generation_id: 'tt-gen-50-traversal-absolute',
+    outputs: [{ path: '/etc/passwd', sha256: 'f'.repeat(64), bytes: 10 }]
+  });
+  expectThrow(() => gm.writeGenerationManifest(bad, { dir: tmpDir }), 'ARTIFACT-VERIFICATION-FAILED');
+  assert(!fs.existsSync(path.join(tmpRoot, 'tt-gen-50-traversal-absolute.json')), 'no file may exist after a path-traversal refusal');
+});
+
+check('a relative outputs[].path with enough ../ segments to escape the repo root is refused, not resolved outside it', () => {
+  const bad = fixture({
+    generation_id: 'tt-gen-51-traversal-relative',
+    outputs: [{ path: '../../../../../../etc/passwd', sha256: 'f'.repeat(64), bytes: 10 }]
+  });
+  expectThrow(() => gm.writeGenerationManifest(bad, { dir: tmpDir }), 'ARTIFACT-VERIFICATION-FAILED');
+  assert(!fs.existsSync(path.join(tmpRoot, 'tt-gen-51-traversal-relative.json')), 'no file may exist after a path-traversal refusal');
+});
+
+check('a genuine in-repo relative path is unaffected by the traversal guard', () => {
+  const realFile = path.join(inRepoScratch, 'b4-traversal-control.txt');
+  const bytes = Buffer.from('control output\n', 'utf8');
+  fs.writeFileSync(realFile, bytes);
+  const relOutput = path.relative(path.resolve(__dirname, '..', '..'), realFile);
+  const sha256 = require('crypto').createHash('sha256').update(bytes).digest('hex');
+  const good = fixture({
+    generation_id: 'tt-gen-52-traversal-control',
+    outputs: [{ path: relOutput, sha256, bytes: bytes.length }]
+  });
+  const receipt = gm.writeGenerationManifest(good, { dir: tmpDir });
+  assert(receipt.artifacts_verified === true, 'a genuine in-repo path must still verify after the traversal guard');
+});
+
+// ---------------------------------------------------------------------------
+// Codex PR#20 (round 3): parent lineage must be the immediately-prior cycle
+// of the SAME charter, not merely an id/hash pair matching some file.
+// ---------------------------------------------------------------------------
+process.stdout.write('generation-manifest: parent must be the prior cycle of the same charter (round 3)\n');
+
+check('verifyLineageLink refuses a parent from a DIFFERENT charter_hash even when id/hash match', () => {
+  const parent = fixture({ charter_hash: 'a'.repeat(64) });
+  parent.manifest_hash = gm.computeManifestHash(parent);
+  const child = fixture({
+    generation_id: 'tt-gen-1-cross-charter',
+    cycle_index: 1,
+    charter_hash: 'b'.repeat(64), // a DIFFERENT charter than the parent
+    parent: { parent_generation_id: parent.generation_id, parent_manifest_hash: parent.manifest_hash }
+  });
+  const result = gm.verifyLineageLink(child, parent);
+  assert(result.linked === false, 'a parent from a different charter_hash must not verify as linked');
+  assert(/charter/i.test(result.reason), `reason must name the charter mismatch, got: ${result.reason}`);
+});
+
+check('verifyLineageLink refuses a parent that is not exactly cycle_index - 1 (e.g. cycle 5 pointing at cycle 0)', () => {
+  const parent = fixture({ generation_id: 'tt-gen-0-skip', cycle_index: 0 });
+  parent.manifest_hash = gm.computeManifestHash(parent);
+  const child = fixture({
+    generation_id: 'tt-gen-5-skip',
+    cycle_index: 5,
+    parent: { parent_generation_id: parent.generation_id, parent_manifest_hash: parent.manifest_hash }
+  });
+  const result = gm.verifyLineageLink(child, parent);
+  assert(result.linked === false, 'cycle 5 pointing at cycle 0 must not verify as linked');
+  assert(/cycle_index/.test(result.reason), `reason must name the cycle_index mismatch, got: ${result.reason}`);
+});
+
+check('verifyLineageLink still accepts a genuine immediately-prior-cycle, same-charter parent', () => {
+  const parent = fixture({ generation_id: 'tt-gen-0-genuine-chain', cycle_index: 0 });
+  parent.manifest_hash = gm.computeManifestHash(parent);
+  const child = fixture({
+    generation_id: 'tt-gen-1-genuine-chain',
+    cycle_index: 1,
+    parent: { parent_generation_id: parent.generation_id, parent_manifest_hash: parent.manifest_hash }
+  });
+  assert(gm.verifyLineageLink(child, parent).linked === true, 'a genuine same-charter, prior-cycle parent must still verify');
+});
+
+// ---------------------------------------------------------------------------
+// Codex PR#20 (round 3): merge_decision.clean must derive from EXACT,
+// duplicate-free locked-roster coverage against the bound charter -- not
+// merely a nonempty reviews[] array evaluated on its own terms.
+// ---------------------------------------------------------------------------
+process.stdout.write('generation-manifest: merge-decision requires exact locked-roster coverage (round 3)\n');
+
+function genReview(laneId, overrides) {
+  return Object.assign({
+    lane_id: laneId,
+    family: 'codex',
+    model_pin_requested: 'x',
+    model_pin_observed: 'x',
+    pin_verified: true,
+    status: 'clean',
+    verdict: 'APPROVE',
+    unresolved_findings: 0,
+    dispatched_at: '2026-08-18T00:00:00.000Z',
+    returned_at: '2026-08-18T00:05:00.000Z'
+  }, overrides || {});
+}
+
+check('MERGE-DECISION-MISMATCH: one self-authored clean review against a THREE-lane locked roster cannot derive clean:true', () => {
+  const threeLaneCharter = path.join(tmpRoot, 'gm-charter-three-lane.json');
+  const threeLaneContent = selfConsistentCharter({
+    charter_id: 'gm-three-lane',
+    reviewer_roster: { lanes: [{ lane_id: 'codex-1', family: 'codex', model_pin: 'x', assignment_order: 0 }, { lane_id: 'gemini-1', family: 'gemini', model_pin: 'y', assignment_order: 1 }, { lane_id: 'codewhale-1', family: 'codewhale', model_pin: 'z', assignment_order: 2 }] }
+  });
+  fs.writeFileSync(threeLaneCharter, JSON.stringify(threeLaneContent));
+  expectThrow(
+    () => gm.writeGenerationManifest(fixture({
+      generation_id: 'tt-gen-60-partial-roster',
+      charter_id: 'gm-three-lane',
+      charter_hash: threeLaneContent.charter_hash,
+      reviews: [genReview('codex-1')],
+      merge_decision: { clean: true, reasons: [], decided_at: '2026-08-18T00:06:00.000Z' }
+    }), { dir: tmpDir, charterPath: threeLaneCharter }),
+    'MERGE-DECISION-MISMATCH'
+  );
+  assert(!fs.existsSync(path.join(tmpRoot, 'tt-gen-60-partial-roster.json')), 'no file may exist after a merge-decision refusal');
+});
+
+check('MERGE-DECISION-MISMATCH: an unresolvable charter binding refuses clean:true (fail-closed, not "no opinion")', () => {
+  expectThrow(
+    () => gm.writeGenerationManifest(fixture({
+      generation_id: 'tt-gen-61-unresolvable-charter',
+      charter_id: 'gm-nonexistent-charter',
+      charter_hash: 'a'.repeat(64),
+      reviews: [genReview('codex-1')],
+      merge_decision: { clean: true, reasons: [], decided_at: '2026-08-18T00:06:00.000Z' }
+    }), { dir: tmpDir, charterPath: path.join(tmpRoot, '__no-such-gm-charter__.json') }),
+    'MERGE-DECISION-MISMATCH'
+  );
+});
+
+check('MERGE-DECISION-MISMATCH: a duplicate lane entry cannot substitute for full coverage', () => {
+  const twoLaneCharter = path.join(tmpRoot, 'gm-charter-two-lane.json');
+  const twoLaneContent = selfConsistentCharter({
+    charter_id: 'gm-two-lane',
+    reviewer_roster: { lanes: [{ lane_id: 'codex-1', family: 'codex', model_pin: 'x', assignment_order: 0 }, { lane_id: 'gemini-1', family: 'gemini', model_pin: 'y', assignment_order: 1 }] }
+  });
+  fs.writeFileSync(twoLaneCharter, JSON.stringify(twoLaneContent));
+  expectThrow(
+    () => gm.writeGenerationManifest(fixture({
+      generation_id: 'tt-gen-62-dup-lane',
+      charter_id: 'gm-two-lane',
+      charter_hash: twoLaneContent.charter_hash,
+      reviews: [genReview('codex-1'), genReview('codex-1')],
+      merge_decision: { clean: true, reasons: [], decided_at: '2026-08-18T00:06:00.000Z' }
+    }), { dir: tmpDir, charterPath: twoLaneCharter }),
+    'MERGE-DECISION-MISMATCH'
+  );
+});
+
+check('MERGE-DECISION-MISMATCH: a review entry whose family/pin does not match its locked lane is refused, not laundered past lane_id coverage', () => {
+  const oneLaneCharter = path.join(tmpRoot, 'gm-charter-one-lane-forge.json');
+  const oneLaneContent = selfConsistentCharter({
+    charter_id: 'gm-one-lane-forge',
+    reviewer_roster: { lanes: [{ lane_id: 'codex-1', family: 'codex', model_pin: 'x', assignment_order: 0 }] }
+  });
+  fs.writeFileSync(oneLaneCharter, JSON.stringify(oneLaneContent));
+  expectThrow(
+    () => gm.writeGenerationManifest(fixture({
+      generation_id: 'tt-gen-63-forged-lane',
+      charter_id: 'gm-one-lane-forge',
+      charter_hash: oneLaneContent.charter_hash,
+      reviews: [genReview('codex-1', { family: 'gemini', model_pin_requested: 'forged' })],
+      merge_decision: { clean: true, reasons: [], decided_at: '2026-08-18T00:06:00.000Z' }
+    }), { dir: tmpDir, charterPath: oneLaneCharter }),
+    'MERGE-DECISION-MISMATCH'
+  );
+});
+
+check('a manifest with genuine, exact, duplicate-free locked-roster coverage derives clean:true and writes', () => {
+  const oneLaneCharter = path.join(tmpRoot, 'gm-charter-one-lane-genuine.json');
+  const oneLaneContent = selfConsistentCharter({
+    charter_id: 'gm-one-lane-genuine',
+    reviewer_roster: { lanes: [{ lane_id: 'codex-1', family: 'codex', model_pin: 'x', assignment_order: 0 }] }
+  });
+  fs.writeFileSync(oneLaneCharter, JSON.stringify(oneLaneContent));
+  const receipt = gm.writeGenerationManifest(fixture({
+    generation_id: 'tt-gen-64-genuine-clean',
+    charter_id: 'gm-one-lane-genuine',
+    charter_hash: oneLaneContent.charter_hash,
+    reviews: [genReview('codex-1')],
+    merge_decision: { clean: true, reasons: [], decided_at: '2026-08-18T00:06:00.000Z' }
+  }), { dir: tmpDir, charterPath: oneLaneCharter });
+  assert(receipt.read_back_verified === true, 'a genuinely clean, fully-covered manifest must write');
+});
+
 fs.rmSync(tmpRoot, { recursive: true, force: true });
+fs.rmSync(inRepoScratch, { recursive: true, force: true });
 
 process.stdout.write(`\n${passed} passed, ${failed} failed\n`);
 process.exit(failed === 0 ? 0 : 1);

@@ -1090,7 +1090,29 @@ function appendRecordLocked(journalPath, partial) {
       err.code = 'SPEND-RECEIPT-PROVENANCE';
       throw err;
     }
-    if (typeof ledgerDoc.charter_hash === 'string' && ledgerDoc.charter_hash !== receipt.charter_hash) {
+    // Codex PR#20 (round 2): the two checks below used to run ONLY when the
+    // field was present (`typeof ledgerDoc.charter_hash === 'string'` /
+    // `typeof ledgerDoc.charter_id === 'string' && ...`), on the theory that a
+    // "bare schema-only stub ledger" (no charter identity) has no identity
+    // claim to verify. That reasoning does not hold on THIS path:
+    // appendRecordLocked is the production completion boundary, and a caller
+    // can fabricate a zero-spend ledger with no charter_hash/charter_id at
+    // all, hash it, and hand back a receipt whose charter_hash the EARLIER
+    // boundary check already required to match record.charter_hash -- the
+    // receipt looks bound, but the ledger CONTENT was never actually tied to
+    // this charter or run. The identity fields are now REQUIRED unconditionally
+    // on this path; a schema-only ledger with no charter identity is refused,
+    // not exempted. Test fixtures that legitimately want a schema-only ledger
+    // must not route through appendRecord/appendRecordLocked.
+    if (typeof ledgerDoc.charter_hash !== 'string' || !ledgerDoc.charter_hash) {
+      const err = new Error(
+        `appendRecord: refused -- the ledger at "${receipt.ledger_path}" carries no charter_hash. `
+        + 'A ledger with no charter identity cannot certify spend for a specific charter; producer-owned identity fields are required, not optional.'
+      );
+      err.code = 'SPEND-RECEIPT-PROVENANCE';
+      throw err;
+    }
+    if (ledgerDoc.charter_hash !== receipt.charter_hash) {
       const err = new Error(
         `appendRecord: refused -- the ledger at "${receipt.ledger_path}" was measured under charter_hash ${ledgerDoc.charter_hash}, `
         + `not the receipt's ${receipt.charter_hash}. Spend measured under one charter cannot certify another.`
@@ -1098,7 +1120,15 @@ function appendRecordLocked(journalPath, partial) {
       err.code = 'SPEND-RECEIPT-PROVENANCE';
       throw err;
     }
-    if (typeof ledgerDoc.charter_id === 'string' && ledgerDoc.charter_id) {
+    if (typeof ledgerDoc.charter_id !== 'string' || !ledgerDoc.charter_id) {
+      const err = new Error(
+        `appendRecord: refused -- the ledger at "${receipt.ledger_path}" carries no charter_id. `
+        + 'A ledger with no charter identity cannot be bound to its charter-derived canonical location; producer-owned identity fields are required, not optional.'
+      );
+      err.code = 'SPEND-RECEIPT-PROVENANCE';
+      throw err;
+    }
+    {
       const canonicalName = `${ledgerDoc.charter_id}.json`;
       if (path.basename(path.resolve(receipt.ledger_path)) !== canonicalName) {
         const err = new Error(
@@ -1127,6 +1157,49 @@ function appendRecordLocked(journalPath, partial) {
         + `records ${JSON.stringify(ledgerObserved)}. A receipt cannot certify spend the ledger does not show.`
       );
       err.code = 'SPEND-RECEIPT-PROVENANCE';
+      throw err;
+    }
+
+    // Codex PR#20 (round 3): every check above confirms only that
+    // receipt.observed_spend matches the ledger's own recorded spend -- it
+    // never compares that spend with ledgerDoc.ceilings (already required and
+    // identity-bound to this record's charter above), so a completed record
+    // (completed !== null) carrying an over-limit ledger and a matching,
+    // schema-valid receipt whose OWN within_ceiling field already says false
+    // was appended as a successful completion regardless. Recompute the
+    // ceiling verdict at this lowest append boundary -- the same
+    // strictly-greater-than comparison ceilings.evaluateCeilings() uses -- and
+    // reject an over-limit completion unless it is represented by the
+    // required halt flow (halt_state === CEILING-EXCEEDED). A receipt whose
+    // self-reported within_ceiling disagrees with the recomputation is
+    // refused outright: a receipt cannot certify a ceiling verdict the ledger
+    // it is bound to does not actually show.
+    const limits = ledgerDoc.ceilings || {};
+    const ceilingChecks = [
+      { ceiling: 'max_cumulative_diff.lines_changed', observed: ledgerObserved.lines_changed, limit: limits.lines_changed },
+      { ceiling: 'max_cumulative_diff.files_changed', observed: ledgerObserved.files_changed, limit: limits.files_changed },
+      { ceiling: 'max_external_actions', observed: ledgerObserved.external_actions, limit: limits.external_actions }
+    ];
+    const exceededChecks = ceilingChecks.filter((c) => typeof c.limit === 'number' && c.observed > c.limit);
+    const recomputedWithin = exceededChecks.length === 0;
+    if (receipt.within_ceiling !== recomputedWithin) {
+      const err = new Error(
+        `appendRecord: refused -- receipt.within_ceiling is ${JSON.stringify(receipt.within_ceiling)} but recomputing observed spend `
+        + `${JSON.stringify(ledgerObserved)} against the ledger's own ceilings ${JSON.stringify(limits)} derives ${recomputedWithin}`
+        + (exceededChecks.length ? `: ${exceededChecks.map((c) => `${c.ceiling} observed ${c.observed} > limit ${c.limit}`).join('; ')}` : '')
+        + '. A receipt cannot certify a ceiling verdict the ledger it is bound to does not actually show.'
+      );
+      err.code = 'CEILING-VERDICT-MISMATCH';
+      throw err;
+    }
+    if (!recomputedWithin && record.halt_state !== 'CEILING-EXCEEDED') {
+      const err = new Error(
+        `appendRecord: refused -- observed spend ${JSON.stringify(ledgerObserved)} exceeds the ledger's own ceilings `
+        + `${JSON.stringify(limits)} (${exceededChecks.map((c) => `${c.ceiling}: ${c.observed} > ${c.limit}`).join('; ')}), `
+        + `but this record's halt_state is ${JSON.stringify(record.halt_state)}, not ${'CEILING-EXCEEDED'}. `
+        + 'An over-limit completion must be represented by the required halt flow, never appended as a successful completion.'
+      );
+      err.code = 'CEILING-EXCEEDED-NOT-HALTED';
       throw err;
     }
   }
@@ -1260,37 +1333,50 @@ function resolveIdempotency(records, idempotencyKey) {
   if (matching.length === 0) {
     return { resolution: 'execute', reason: 'no journal record carries this idempotency key', record: null };
   }
-  const completed = matching.find((r) => r.completed && r.verified_checkpoint && r.verified_checkpoint.verified === true && r.halt_state === null);
-  if (completed) {
+  // Codex PR#20 review (via effectful-phase.cjs): a producer may legitimately
+  // append MORE THAN ONE record for the same key over time -- e.g. a
+  // crash-safe pre-dispatch uncertainty marker, followed by a later record
+  // proving the effect definitely did not happen. This used to scan the
+  // WHOLE history independently for "any completed match" and then "any
+  // uncertain match" via Array.prototype.find(), which always returns the
+  // FIRST match -- so a later, more informative record (a downgrade from
+  // uncertain to definitely-not-happened) could never actually change the
+  // resolution; the earliest uncertain record won forever. Append-only
+  // history means the LATEST record for a key is always the most current,
+  // most authoritative verdict, so classify from that single record instead
+  // of scanning for the best-looking match across all of history.
+  const latest = matching[matching.length - 1];
+  const isCompleted = Boolean(latest.completed) && latest.verified_checkpoint && latest.verified_checkpoint.verified === true && latest.halt_state === null;
+  if (isCompleted) {
     return {
       resolution: 'skip',
-      reason: `phase already completed at record_index ${completed.record_index} with a verified checkpoint`,
-      record: completed
+      reason: `phase already completed at record_index ${latest.record_index} with a verified checkpoint`,
+      record: latest
     };
   }
-  const uncertain = matching.find((r) => r.halt_state === 'EFFECT-RECEIPT-MISSING'
-    || (r.dispatch && r.dispatch.dispatched === true && r.dispatch.receipt_confirmed !== true));
-  if (uncertain) {
-    const reconciled = uncertain.reconciliation && uncertain.reconciliation.resolved === true;
-    if (reconciled && uncertain.reconciliation.outcome === 'effect-happened') {
-      return { resolution: 'skip', reason: `reconciliation at record_index ${uncertain.record_index} confirmed the effect happened`, record: uncertain };
+  const isUncertain = latest.halt_state === 'EFFECT-RECEIPT-MISSING'
+    || (latest.dispatch && latest.dispatch.dispatched === true && latest.dispatch.receipt_confirmed !== true);
+  if (isUncertain) {
+    const reconciled = latest.reconciliation && latest.reconciliation.resolved === true;
+    if (reconciled && latest.reconciliation.outcome === 'effect-happened') {
+      return { resolution: 'skip', reason: `reconciliation at record_index ${latest.record_index} confirmed the effect happened`, record: latest };
     }
-    if (reconciled && uncertain.reconciliation.outcome === 'effect-did-not-happen') {
-      return { resolution: 'execute', reason: `reconciliation at record_index ${uncertain.record_index} confirmed the effect did not happen`, record: uncertain };
+    if (reconciled && latest.reconciliation.outcome === 'effect-did-not-happen') {
+      return { resolution: 'execute', reason: `reconciliation at record_index ${latest.record_index} confirmed the effect did not happen`, record: latest };
     }
     return {
       resolution: 'reconcile',
-      reason: `record_index ${uncertain.record_index} dispatched an external action with no confirmed receipt (EFFECT-RECEIPT-MISSING) -- query the external system before resuming; never auto-retry and never assume success`,
+      reason: `record_index ${latest.record_index} dispatched an external action with no confirmed receipt (EFFECT-RECEIPT-MISSING) -- query the external system before resuming; never auto-retry and never assume success`,
       halt_state: 'EFFECT-RECEIPT-MISSING',
-      record: uncertain
+      record: latest
     };
   }
-  // The key exists on a record that never dispatched: EFFECT-DID-NOT-HAPPEN.
-  // Safe to execute -- this is the case the two-state distinction buys.
+  // The key's latest record never dispatched: EFFECT-DID-NOT-HAPPEN. Safe to
+  // execute -- this is the case the two-state distinction buys.
   return {
     resolution: 'execute',
-    reason: `record_index ${matching[matching.length - 1].record_index} carries the key but never dispatched (EFFECT-DID-NOT-HAPPEN)`,
-    record: matching[matching.length - 1]
+    reason: `record_index ${latest.record_index} carries the key but never dispatched (EFFECT-DID-NOT-HAPPEN)`,
+    record: latest
   };
 }
 

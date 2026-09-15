@@ -733,7 +733,7 @@ function selectActorTargetSignal(projectRoot, actorId = '', fileName = '') {
   if (fileName) {
     let requestedName = fileName;
     if (path.basename(fileName) !== fileName) {
-      if (fileName.split(path.sep).includes('..')) return null;
+      if (fileName.split(/[\\/]+/).includes('..')) return null;
       const signalDir = path.join(projectRoot, '_dev', 'reports', 'signals');
       const requestedPath = path.resolve(projectRoot, fileName);
       requestedName = path.basename(requestedPath);

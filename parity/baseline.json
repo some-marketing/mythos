@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "5b84265b1a755ab41fc2bf87468a9c336e5e70174a91137b1ce32ab2412bf217",
+    "expected_tree_sha256": "4cd62bd73a85d6126cba99be9ecafaf3efd06a8c2869ae64902e576046520945",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -5977,7 +5977,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "4daa51e6f1adb2cc9c1f9eeda30193260ac815bfd12d7b7bdffb40483e7d3b28",
+        "sha256": "14e221ed396b78de5008cc18b842fa56f787fc0e65e7ad532e4b32dc8855e295",
         "mode": 420
       },
       {
@@ -11826,6 +11826,11 @@
         "mode": 420
       },
       {
+        "path": "tools/signals/lib/__tests__/actor-signal-selection.test.js",
+        "sha256": "32bf008aebaa0a251c74c87cba231145035571bdfd85502f6a90627ff13fa812",
+        "mode": 420
+      },
+      {
         "path": "tools/signals/lib/__tests__/actor-work-order.test.js",
         "sha256": "bfd02ddffee5caea4885ffd3b8681b1f72a07495df73d3667f6c5b0fd884c5c2",
         "mode": 420
@@ -11957,7 +11962,7 @@
       },
       {
         "path": "tools/signals/lib/actor-auto.js",
-        "sha256": "b26d423b51a00c20df8113f543b72c1573d866aad62c2a73e2c69f15a5eb8f7d",
+        "sha256": "9346a757b91f49f1d1d36197678a26a4c676fd9e0b62232d1a2ea09fc8dc243c",
         "mode": 420
       },
       {
@@ -13979,9 +13984,9 @@
     "package_script_count": 205,
     "command_alias_registry_sha256": "4ba13a91bcb371e57535acb30793695ebcaef1c8a08b1ba5bdc793df9c5b1cca",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "4daa51e6f1adb2cc9c1f9eeda30193260ac815bfd12d7b7bdffb40483e7d3b28",
-    "graph_nodes": 3877,
-    "graph_edges": 2833
+    "graph_sha256": "14e221ed396b78de5008cc18b842fa56f787fc0e65e7ad532e4b32dc8855e295",
+    "graph_nodes": 3878,
+    "graph_edges": 2834
   },
   "runtime_exclusions": [
     ".git/**",

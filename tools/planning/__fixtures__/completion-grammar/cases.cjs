@@ -53,7 +53,11 @@ function buildCases(t) {
       const id = 'cg-declared-step-' + status + '-' + (approval || 'none');
       const plan = { task_id: id, bounded_plan: { steps: [{ step_id: 'S1', status }] } };
       if (approval) plan.approval = { status: approval };
-      add(plan, approval === 'approved' ? 'ready' : approval === 'pending' ? 'needs_review' : 'planned', 'planned');
+      add(plan, status === 'blocked' || approval === 'blocked'
+        ? 'blocked'
+        : approval === 'approved'
+          ? 'ready'
+          : approval === 'pending' ? 'needs_review' : 'planned', 'planned');
     }
   }
   add({ task_id: 'cg-running', outcome_delta: { completed: false } }, 'in_progress', 'in_progress');

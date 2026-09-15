@@ -46,6 +46,34 @@ test('declared completion and completed steps cannot establish completion withou
 test('explicit declared blockers retain their dashboard override', (t) => {
   const { root } = buildCases(t);
   assert.equal(visibility.classifyPlan({ task_id: 'declared-blocker', status: 'blocked' }, root), 'blocked');
+  assert.equal(visibility.classifyPlan({
+    task_id: 'blocked-approval-with-ready-step',
+    approval: { status: 'blocked' },
+    bounded_plan: { steps: [{ step_id: 'S1', status: 'ready' }] }
+  }, root), 'blocked');
+  assert.equal(visibility.classifyPlan({
+    task_id: 'blocked-step-with-approval',
+    approval: { status: 'approved' },
+    bounded_plan: { steps: [{ step_id: 'S1', status: 'blocked' }] }
+  }, root), 'blocked');
+});
+
+test('complete summaries and readable leads derive follow-on actions from durable evidence', (t) => {
+  const { root } = buildCases(t);
+  const plan = fixture('plan-complete.json');
+  plan.bounded_plan.steps[1].status = 'ready';
+  write(root, '_dev/reports/analysis/task-plans/cg-complete__plan.json', plan);
+
+  const summary = visibility.collectPlanSummaries(root).find(row => row.task_id === plan.task_id);
+  assert.equal(summary.status, 'complete');
+  assert.deepEqual(summary.next_step, {
+    step_id: 'none',
+    status: 'complete',
+    description: 'All completion evidence is satisfied.',
+    mode: 'not-recorded'
+  });
+  assert.equal(summary.next_command, 'none');
+  assert.match(visibility.buildPlanDocumentLead(plan, { projectRoot: root }), /next action is none\.$/);
 });
 
 test('classification observes an outcome appearing or changing between reads', (t) => {
@@ -72,7 +100,7 @@ test('synthetic portfolio classification agrees with shared authority subject to
     const dashboard = visibility.classifyPlan(plan, root);
     if (String(plan.status || '').trim().toLowerCase() === 'blocked') assert.equal(dashboard, 'blocked', entry.taskId);
     else if (state !== 'planned') assert.equal(dashboard, state, entry.taskId);
-    else assert.ok(['planned', 'ready', 'needs_review'].includes(dashboard), entry.taskId + ': shared planned must not become ' + dashboard);
+    else assert.ok(['planned', 'ready', 'needs_review', 'blocked'].includes(dashboard), entry.taskId + ': invalid dashboard refinement ' + dashboard);
   }
 });
 

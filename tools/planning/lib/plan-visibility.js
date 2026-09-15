@@ -61,6 +61,10 @@ function classifyPlan(plan, projectRoot = null, readContext) {
   const steps = Array.isArray(plan?.bounded_plan?.steps) ? plan.bounded_plan.steps : [];
   const statuses = steps.map((step) => normalizeStepStatus(step.status)).filter(Boolean);
   const approvalStatus = String(plan?.approval?.status || plan?.operator_review?.decision || '').toLowerCase();
+  // Explicit blockers outrank dashboard readiness. The shared classifier only
+  // reports artifact-backed execution blockers, so retain declared admission
+  // blockers while refining its pre-execution `planned` state.
+  if (approvalStatus === 'blocked' || statuses.includes('blocked')) return 'blocked';
   if (statuses.includes('ready') || approvalStatus === 'approved') return 'ready';
   if (approvalStatus === 'pending' || approvalStatus === 'needs_review') return 'needs_review';
   return 'planned';
@@ -91,8 +95,16 @@ function summarizeSteps(plan) {
   return counts;
 }
 
-function summarizeNextStep(plan) {
+function summarizeNextStep(plan, lifecycleState = null) {
   const steps = Array.isArray(plan?.bounded_plan?.steps) ? plan.bounded_plan.steps : [];
+  if (lifecycleState === 'complete') {
+    return {
+      step_id: 'none',
+      status: 'complete',
+      description: 'All completion evidence is satisfied.',
+      mode: 'not-recorded'
+    };
+  }
   const next = steps.find((step) => normalizeStepStatus(step.status) !== 'complete');
   if (!next) {
     return {
@@ -129,8 +141,16 @@ function hasDebriefArtifacts(projectRoot, taskId) {
   ));
 }
 
-function inferNextCommand(plan, projectRoot = null) {
+function inferNextCommand(plan, projectRoot = null, lifecycleState = null) {
   const taskId = plan?.task_id || '<task-id>';
+  const state = lifecycleState || (
+    typeof projectRoot === 'string' && projectRoot.trim() && plan && typeof plan === 'object'
+      ? classifyPlan(plan, projectRoot)
+      : null
+  );
+  if (state === 'complete') {
+    return hasDebriefArtifacts(projectRoot, taskId) ? 'none' : `/debrief-run ${taskId}`;
+  }
   if (plan?.outcome_delta?.completed === true && plan?.outcome_delta?.verification_passed === true && hasDebriefArtifacts(projectRoot, taskId)) {
     return 'none';
   }
@@ -176,13 +196,14 @@ function collectPlanSummaries(projectRoot, options = {}) {
         };
       }
 
+      const status = classifyPlan(plan, projectRoot, readContext);
       return {
         task_id: plan.task_id || path.basename(filePath, '__plan.json'),
         title: plan.title || plan.task_summary || plan.task_id || path.basename(filePath),
         path: toRelative(projectRoot, filePath),
         source_mtime: fs.statSync(filePath).mtime.toISOString(),
         raw_plan: plan,
-        status: classifyPlan(plan, projectRoot, readContext),
+        status,
         scope_type: plan.scope_type || 'unknown',
         client_code: plan.client_code || plan.origin_client_code || inferClientCode(projectRoot, filePath),
         project_id: plan.project_id || plan.origin_project_id || 'not-recorded',
@@ -191,8 +212,8 @@ function collectPlanSummaries(projectRoot, options = {}) {
         review_lane: plan.routing_expectations?.review_lane || 'not-recorded',
         risk_tier: plan.routing_expectations?.risk_tier || 'not-recorded',
         step_counts: summarizeSteps(plan),
-        next_step: summarizeNextStep(plan),
-        next_command: inferNextCommand(plan, projectRoot)
+        next_step: summarizeNextStep(plan, status),
+        next_command: inferNextCommand(plan, projectRoot, status)
       };
     })
     .sort((a, b) => {
@@ -3645,9 +3666,9 @@ function buildPlanDocumentLead(plan, context = {}) {
     const stepStatus = String(step.status || step.state || '').toLowerCase();
     return !['complete', 'completed', 'done', 'closed'].includes(stepStatus);
   });
-  const nextAction = nextStep
+  const nextAction = status !== 'complete' && nextStep
     ? `${stepId(nextStep)}: ${summarizeLeadText(nextStep.description || nextStep.summary || nextStep.name || 'No step description recorded.')}`
-    : (context.nextCommand || inferNextCommand(plan, context.projectRoot));
+    : (context.nextCommand || inferNextCommand(plan, context.projectRoot, status));
 
   return `This is a ${scope} plan for ${title}; it is currently ${status}, review runs through ${reviewLane}, and the next action is ${nextAction}.`;
 }
@@ -3917,7 +3938,7 @@ function renderPlanDocumentMarkdown(projectRoot, options = {}) {
     || plan.review_lane_rationale || 'Not recorded.';
   const riskTier = plan.routing_expectations?.risk_tier || plan.risk_tier || 'not-recorded';
   const status = classifyPlan(plan, projectRoot);
-  const nextCommand = inferNextCommand(plan, projectRoot);
+  const nextCommand = inferNextCommand(plan, projectRoot, status);
 
   // ---- (a) Context — readable prose lead (matches the readable-plan format:
   // a "Context" section in plain prose before any structured body) ----

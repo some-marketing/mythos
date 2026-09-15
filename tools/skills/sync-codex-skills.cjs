@@ -103,8 +103,29 @@ function parseFrontmatter(text, sourcePath = '<memory>') {
       const chunks = [];
       while (index + 1 < lines.length && /^\s+/.test(lines[index + 1])) chunks.push(lines[++index].trim());
       value = chunks.join(value === '>' ? ' ' : '\n');
+    } else if (!value && index + 1 < lines.length && /^\s+-\s+/.test(lines[index + 1])) {
+      const items = [];
+      while (index + 1 < lines.length) {
+        const itemMatch = lines[index + 1].match(/^\s+-\s+(.+)$/);
+        if (!itemMatch) break;
+        index += 1;
+        let item = itemMatch[1].trim();
+        if ((item.startsWith('"') && item.endsWith('"')) || (item.startsWith("'") && item.endsWith("'"))) {
+          item = item.slice(1, -1);
+        }
+        items.push(item);
+      }
+      value = items;
     }
-    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+    if (key === 'allowed-tools' && typeof value === 'string' && value.startsWith('[') && value.endsWith(']')) {
+      try {
+        const items = JSON.parse(value);
+        if (Array.isArray(items) && items.every((item) => typeof item === 'string')) value = items;
+      } catch {
+        // Leave non-JSON YAML flow syntax as a scalar; the projector will preserve it verbatim.
+      }
+    }
+    if (typeof value === 'string' && ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'")))) {
       value = value.slice(1, -1);
     }
     metadata[key] = value;
@@ -441,7 +462,7 @@ function containsCredentialMaterial(bytes) {
   const text = String(bytes);
   return /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/.test(text)
     || /(?:^|[^A-Za-z0-9])(?:sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|(?:AKIA|ASIA)[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|glpat-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{35})(?:$|[^A-Za-z0-9_-])/m.test(text)
-    || /(?:^|[^A-Z0-9_])["']?(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY)["']?\s*[:=]\s*["']?(?!(?:<|\$\{|your[-_]|example|redacted|placeholder))[^\s"'`]+/im.test(text);
+    || /(?:^|[^A-Z0-9_])["']?(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY|API[_-]?KEY)["']?\s*[:=]\s*["']?(?!(?:<|\$\{|your[-_]|example|redacted|placeholder))[^\s"'`]+/im.test(text);
 }
 
 function isSensitiveResourcePath(relativePath) {

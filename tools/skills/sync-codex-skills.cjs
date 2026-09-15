@@ -99,6 +99,20 @@ function stripYamlInlineComment(value) {
   return text;
 }
 
+function decodeQuotedYamlScalar(value) {
+  if (value.length < 2) return value;
+  if (value.startsWith('"') && value.endsWith('"')) {
+    try {
+      const decoded = JSON.parse(value);
+      return typeof decoded === 'string' ? decoded : value;
+    } catch {
+      return value.slice(1, -1);
+    }
+  }
+  if (value.startsWith("'") && value.endsWith("'")) return value.slice(1, -1).replace(/''/g, "'");
+  return value;
+}
+
 function parseFrontmatter(text, sourcePath = '<memory>') {
   const normalizedText = String(text).replace(/\r\n?/g, '\n');
   if (!normalizedText.startsWith('---\n')) return { ok: false, error: 'missing frontmatter opener', sourcePath };
@@ -127,9 +141,7 @@ function parseFrontmatter(text, sourcePath = '<memory>') {
         if (!itemMatch) break;
         index += 1;
         let item = stripYamlInlineComment(itemMatch[1].trim()).trim();
-        if ((item.startsWith('"') && item.endsWith('"')) || (item.startsWith("'") && item.endsWith("'"))) {
-          item = item.slice(1, -1);
-        }
+        item = decodeQuotedYamlScalar(item);
         items.push(item);
       }
       value = items;
@@ -142,9 +154,7 @@ function parseFrontmatter(text, sourcePath = '<memory>') {
         // Leave non-JSON YAML flow syntax as a scalar; the projector will preserve it verbatim.
       }
     }
-    if (typeof value === 'string' && ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'")))) {
-      value = value.slice(1, -1);
-    }
+    if (typeof value === 'string') value = decodeQuotedYamlScalar(value);
     metadata[key] = value;
   }
   if (typeof metadata.name !== 'string' || !metadata.name || typeof metadata.description !== 'string' || !metadata.description) {
@@ -163,6 +173,7 @@ function normalizeDirectSkill(text, targetName, aliases = []) {
   const aliasSuffix = aliases.length ? ` Aliases: ${aliases.map((id) => `/${id}`).join(', ')}.` : '';
   const description = `${parsed.metadata.description}${aliasSuffix}`
     .replace(/[<>]/g, (value) => value === '<' ? '(' : ')');
+  if (description.length > 1024) return { ok: false, error: 'frontmatter description exceeds 1024 characters' };
   const executionMetadata = projectionExecutionMetadata(parsed.metadata);
   const supportedFields = projectionSupportedFrontmatter(parsed.metadata);
   return {
@@ -467,9 +478,11 @@ function renderFrameworkSkill(text, identity) {
   const lineage = `Framework lineage: \`frameworks/${identity.service}/${identity.framework}\`. Read its \`manifest.json\` and \`guardrails.md\` before execution. Source helper: \`${identity.rel}\`.`;
   const executionMetadata = projectionExecutionMetadata(parsed.metadata);
   const supportedFields = projectionSupportedFrontmatter(parsed.metadata);
+  const description = parsed.metadata.description.replace(/[<>]/g, (value) => value === '<' ? '(' : ')');
+  if (description.length > 1024) return { ok: false, error: 'frontmatter description exceeds 1024 characters', sourcePath: identity.rel };
   return {
     ok: true,
-    content: `---\nname: ${identity.slug}\ndescription: ${JSON.stringify(parsed.metadata.description.replace(/[<>]/g, (value) => value === '<' ? '(' : ')'))}\n${supportedFields}${executionMetadata}---\n\n${lineage}\n\n${parsed.body}`
+    content: `---\nname: ${identity.slug}\ndescription: ${JSON.stringify(description)}\n${supportedFields}${executionMetadata}---\n\n${lineage}\n\n${parsed.body}`
   };
 }
 
@@ -516,6 +529,7 @@ function containsCredentialMaterial(bytes) {
   const text = String(bytes);
   return /-----BEGIN (?:[A-Z0-9]+ )*PRIVATE KEY-----/.test(text)
     || /(?:^|[^A-Za-z0-9])(?:sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|(?:AKIA|ASIA)[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|glpat-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{35})(?:$|[^A-Za-z0-9_-])/m.test(text)
+    || /(?:^|[^A-Z0-9_])["']?AUTHORIZATION["']?\s*[:=]\s*["']?BEARER\s+(?!(?:<|\$(?:\{|[A-Za-z_])|your[-_]|example|redacted|placeholder))[A-Za-z0-9._~+/=-]{16,}/im.test(text)
     || /(?:^|[^A-Z0-9_])["']?(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY|API[_-]?KEY|CLIENT[_-]?SECRET|PASSWORD|PASSWD|ACCESS[_-]?TOKEN|REFRESH[_-]?TOKEN|AUTH[_-]?TOKEN|SECRET|SECRET[_-]?KEY|PRIVATE[_-]?KEY)["']?\s*[:=]\s*["']?(?!(?:<|\$(?:\{|[A-Za-z_])|your[-_]|example|redacted|placeholder))[^\s"'`]+/im.test(text);
 }
 
@@ -616,20 +630,24 @@ function buildCandidates(options = {}) {
     const reviewState = (override && override.semantic_review_state) || config.families.canonical_commands.semantic_review_state;
     const sourceBytes = fs.readFileSync(command.sourcePath);
     const content = renderCanonicalSkill(id, command.spec, tier, override, terminalAliases.get(id) || []);
+    const rendered = parseFrontmatter(content);
+    const invalidDescription = !rendered.ok || rendered.metadata.description.length > 1024;
     const forbidden = (override && override.forbidden_source_fragments) || [];
     const leakedHarnessText = forbidden.some((fragment) => content.includes(fragment));
     const privateLeak = containsPrivateAbsolutePath(content) || containsCredentialMaterial(content);
     const receipt = receiptBase(config, sourceRel, sourceBytes, 'canonical_command', tier, reviewState, targetRel);
-    if (!CAPABILITY_TIERS.has(tier) || leakedHarnessText || privateLeak) {
+    if (!CAPABILITY_TIERS.has(tier) || leakedHarnessText || privateLeak || invalidDescription) {
       receipt.capability_tier = 'UNKNOWN';
       receipt.semantic_review_state = privateLeak ? 'private_path_rejected' : leakedHarnessText ? 'harness_specific_rejected' : 'malformed';
       receipt.application_status = 'blocked';
       if (privateLeak) {
         receipt.detail = 'private or credential content detected';
         redactRejectedPackage(receipt);
+      } else if (invalidDescription) {
+        receipt.detail = 'projected description exceeds 1024 characters';
       }
     }
-    candidates.push({ id: `command-${id}`, content: privateLeak ? null : content, resources: [], receipt, targetRoot });
+    candidates.push({ id: `command-${id}`, content: privateLeak || invalidDescription ? null : content, resources: [], receipt, targetRoot });
   }
 
   for (const { sourceRel, name } of directDescriptors) {

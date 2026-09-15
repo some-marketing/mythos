@@ -113,6 +113,13 @@ test('frontmatter parsing removes YAML comments without corrupting quoted hashes
   assert.doesNotMatch(normalized.content, /no writes|bounded/);
 });
 
+test('frontmatter parsing decodes quoted YAML scalar escapes', () => {
+  const doubleQuoted = parseFrontmatter('---\nname: demo\ndescription: "Run \\"quoted\\" task"\n---\nbody\n');
+  assert.equal(doubleQuoted.metadata.description, 'Run "quoted" task');
+  const singleQuoted = parseFrontmatter("---\nname: demo\ndescription: 'It''s safe'\n---\nbody\n");
+  assert.equal(singleQuoted.metadata.description, "It's safe");
+});
+
 test('direct descriptions replace angle brackets rejected by Codex validation', () => {
   const normalized = normalizeDirectSkill('---\nname: demo\ndescription: Run <task> safely\n---\nbody\n', 'demo');
   assert.equal(normalized.ok, true);
@@ -327,6 +334,22 @@ test('canonical descriptions replace angle brackets rejected by Codex validation
   const candidate = byId(buildCandidates({ root, handlerIds: new Set() }), 'command-sample');
   assert.match(candidate.content, /description: "Run \(task\) safely"/);
   assert.doesNotMatch(candidate.content, /<task>/);
+});
+
+test('overlong projected descriptions are blocked across projection families', () => {
+  const description = 'x'.repeat(1025);
+  assert.match(normalizeDirectSkill(`---\nname: demo\ndescription: ${description}\n---\nbody\n`, 'demo').error, /exceeds 1024 characters/);
+
+  const root = fixture();
+  command(root, 'sample', { description });
+  write(root, 'frameworks/a/b/.claude/skills/demo/SKILL.md', `---\nname: demo\ndescription: ${description}\n---\nbody\n`);
+  const result = buildCandidates({ root, handlerIds: new Set() });
+  const canonical = byId(result, 'command-sample');
+  const framework = result.candidates.find((candidate) => candidate.receipt.projection_kind === 'framework_helper');
+  assert.equal(canonical.content, null);
+  assert.match(canonical.receipt.detail, /exceeds 1024 characters/);
+  assert.equal(framework.content, null);
+  assert.match(framework.receipt.detail, /exceeds 1024 characters/);
 });
 
 test('credential-bearing direct paths are rejected before identifiers or receipts are staged', () => {
@@ -866,6 +889,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     `PRIVATE_KEY="privatesecretvalue${'v'.repeat(16)}"\n`,
     `AUTH_TOKEN: authsecretvalue${'h'.repeat(16)}\n`,
     `SECRET=baresecretvalue${'s'.repeat(16)}\n`,
+    `Authorization: Bearer ordinarysecretvalue${'b'.repeat(16)}\n`,
     `-----BEGIN ENCRYPTED PRIVATE KEY-----\nencryptedprivatebytes${'e'.repeat(16)}\n-----END ENCRYPTED PRIVATE KEY-----\n`,
     `temporary ASIA${'A'.repeat(16)}\n`
   ]) {
@@ -882,7 +906,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
 
 test('shell-variable credential references are not treated as literal secrets', () => {
   const root = fixture();
-  skill(root, 'ticktock', 'export OPENAI_API_KEY="$OPENAI_API_KEY"\nexport AUTH_TOKEN=${AUTH_TOKEN}\n');
+  skill(root, 'ticktock', 'export OPENAI_API_KEY="$OPENAI_API_KEY"\nexport AUTH_TOKEN=${AUTH_TOKEN}\nAuthorization: Bearer $ACCESS_TOKEN\n');
   const result = sync({ root, handlerIds: new Set(), apply: true });
   const candidate = byId(result, 'direct-ticktock');
   assert.equal(candidate.receipt.semantic_review_state, 'reviewed_safe');

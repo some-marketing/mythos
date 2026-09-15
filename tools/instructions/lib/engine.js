@@ -95,11 +95,7 @@ function parseSimpleAliasYaml(raw) {
     if (!match && !flowSequenceMatch) continue;
     if (currentDomain && flowSequenceMatch) {
       if (!Array.isArray(maps[currentDomain])) maps[currentDomain] = [];
-      currentEntry = {};
-      for (const field of flowSequenceMatch[1].split(',')) {
-        const fieldMatch = field.trim().match(/^([^:]+):\s*(.*)$/);
-        if (fieldMatch) currentEntry[fieldMatch[1].trim()] = parseSimpleYamlScalar(fieldMatch[2].trim());
-      }
+      currentEntry = parseSimpleYamlInlineMapping(`{${flowSequenceMatch[1]}}`) || {};
       currentEntryIndent = indent;
       maps[currentDomain].push(currentEntry);
       continue;
@@ -120,12 +116,23 @@ function parseSimpleAliasYaml(raw) {
       currentEntry[key] = value;
     } else if (currentDomain) {
       if (Array.isArray(maps[currentDomain])) continue;
-      currentEntry = {};
+      currentEntry = parseSimpleYamlInlineMapping(value) || {};
       currentEntryIndent = indent;
       maps[currentDomain][key] = currentEntry;
     }
   }
   return maps;
+}
+
+function parseSimpleYamlInlineMapping(value) {
+  const match = String(value).match(/^\{(.*)\}$/);
+  if (!match) return null;
+  const entry = {};
+  for (const field of match[1].split(',')) {
+    const fieldMatch = field.trim().match(/^([^:]+):\s*(.*)$/);
+    if (fieldMatch) entry[fieldMatch[1].trim()] = parseSimpleYamlScalar(fieldMatch[2].trim());
+  }
+  return entry;
 }
 
 function parseSimpleYamlScalar(value) {

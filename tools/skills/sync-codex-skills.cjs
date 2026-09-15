@@ -602,12 +602,35 @@ function containsPrivateAbsolutePath(bytes) {
     || /\/root(?=$|[\\/\s"'`;,])/m.test(text);
 }
 
+function isCredentialPlaceholder(value) {
+  const token = String(value).trim();
+  const unquoted = token.length >= 2 && token[0] === token[token.length - 1] && (token[0] === '"' || token[0] === "'")
+    ? token.slice(1, -1)
+    : token;
+  return /^(?:<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)$/i.test(unquoted);
+}
+
+function containsLiteralCookieCredential(text) {
+  const cookieHeader = /(?:^|[^A-Z0-9_])["']?COOKIE["']?\s*[:=]\s*([^\r\n]+)/gim;
+  for (const match of String(text).matchAll(cookieHeader)) {
+    let header = match[1].trim();
+    if (header.length >= 2 && header[0] === header[header.length - 1] && (header[0] === '"' || header[0] === "'")) {
+      header = header.slice(1, -1);
+    }
+    for (const pair of header.split(';')) {
+      const pairMatch = pair.match(/^\s*[^=;\s]+\s*=\s*(.*?)\s*$/);
+      if (pairMatch && pairMatch[1] && !isCredentialPlaceholder(pairMatch[1])) return true;
+    }
+  }
+  return false;
+}
+
 function containsCredentialMaterial(bytes) {
   const text = String(bytes);
   return /-----BEGIN (?:[A-Z0-9]+ )*PRIVATE KEY-----/.test(text)
     || /(?:^|[^A-Za-z0-9])(?:sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|(?:AKIA|ASIA)[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|glpat-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{35})(?:$|[^A-Za-z0-9_-])/m.test(text)
     || /(?:^|[^A-Z0-9_])["']?AUTHORIZATION["']?\s*[:=]\s*["']?[A-Z][A-Z0-9._~-]*\s+(?!(?:<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=$|[\s;"'`]))[^\s"'`]+/im.test(text)
-    || /(?:^|[^A-Z0-9_])["']?COOKIE["']?\s*[:=]\s*["']?[^=;\s]+\s*=\s*["']?(?!(?:<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=$|[\s;"'`]))[^;\s"'`]+/im.test(text)
+    || containsLiteralCookieCredential(text)
     || /[A-Za-z][A-Za-z0-9+.-]*:\/\/[^\s/@:]+:(?!(?:<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=@))[^@\s/]+@/im.test(text)
     || /(?:^|[^A-Z0-9_])["']?(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY|API[_-]?KEY|CLIENT[_-]?SECRET|PASSWORD|PASSWD|ACCESS[_-]?TOKEN|REFRESH[_-]?TOKEN|AUTH[_-]?TOKEN|SECRET|SECRET[_-]?KEY|PRIVATE[_-]?KEY)["']?\s*[:=]\s*["']?(?!(?:<[^>\s]+>|\$\{?[A-Z_][A-Z0-9_]*\}?|your[-_][A-Z0-9_-]+|example(?:[-_][A-Z0-9_-]+)?|redacted|placeholder)(?=$|[\s"'`]))[^\s"'`]+/im.test(text);
 }

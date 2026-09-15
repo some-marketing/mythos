@@ -4,7 +4,7 @@ Refreshed under the approved parity amendment at `2026-09-14T18:51:57Z` in the d
 
 ## Mechanical results
 
-- Combined projector, lifecycle, and alias regressions: 117 passed, 0 failed.
+- Combined projector, lifecycle, and alias regressions: 118 passed, 0 failed.
 - `node tools/skills/sync-codex-skills.cjs --check`: aligned.
 - `node tools/skills/sync-lifecycle-command-skills.cjs --check`: six lifecycle skills aligned against the committed general projection evidence.
 - Pinned Codex `quick_validate.py`, using the repository PyYAML environment: 131 of 131 applied packages valid; 176 of 176 top-level staged candidate packages valid. Nested child skills are excluded from parent resources, so the staged tree contains exactly 176 independently projected `SKILL.md` files.
@@ -92,6 +92,8 @@ The fifty-fourth Cloud Codex review found literal Cookie credentials, legacy `re
 The fifty-fifth Cloud Codex review found prefix-only credential placeholder exemptions, flow-style YAML alias records being dropped, and non-decimal YAML numbers bypassing discovery scalar validation. Placeholder exemptions now require a complete approved placeholder value, the shared alias parser accepts flow sequence records, and hexadecimal, octal, and binary numeric forms are classified as non-string. Focused regressions cover all three findings.
 
 The fifty-sixth Cloud Codex review found quoted Cookie credentials, comments after flow-style alias records, leading-zero YAML numbers, and empty canonical descriptions. Cookie scanning now consumes an optional value quote before applying exact placeholder exemptions, flow records accept trailing comments, leading-zero numeric tokens fail scalar-string validation, and canonical descriptions must contain non-whitespace text. Focused regressions cover all four findings.
+
+The fifty-seventh Cloud Codex review found later credentials in multi-value Cookie headers escaping inspection and inline mappings in legacy map-form alias records losing their routing fields. Cookie headers are now inspected pair by pair with exact placeholder handling for every value, and the shared alias parser preserves inline mapping fields in both sequence and legacy map records. Focused regressions cover both findings.
 
 ## Falsifiers and residuals
 

@@ -1183,6 +1183,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     'Authorization: Token exampleRealSecret123\n',
     'Cookie: sessionid=eyJhbGciOiJIUzI1NiJ9\n',
     'Cookie: sessionid="supersecret"\n',
+    'Cookie: csrftoken=placeholder; sessionid=supersecret\n',
     'https://alice:s3cret@example.com\n',
     `-----BEGIN ENCRYPTED PRIVATE KEY-----\nencryptedprivatebytes${'e'.repeat(16)}\n-----END ENCRYPTED PRIVATE KEY-----\n`,
     `temporary ASIA${'A'.repeat(16)}\n`
@@ -1200,7 +1201,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
 
 test('shell-variable credential references are not treated as literal secrets', () => {
   const root = fixture();
-  skill(root, 'ticktock', 'export OPENAI_API_KEY="$OPENAI_API_KEY"\nexport AUTH_TOKEN=${AUTH_TOKEN}\nAuthorization: Bearer $ACCESS_TOKEN\nAuthorization: Basic ${BASIC_AUTH}\nCookie: sessionid="$SESSION_ID"\n');
+  skill(root, 'ticktock', 'export OPENAI_API_KEY="$OPENAI_API_KEY"\nexport AUTH_TOKEN=${AUTH_TOKEN}\nAuthorization: Bearer $ACCESS_TOKEN\nAuthorization: Basic ${BASIC_AUTH}\nCookie: csrftoken=placeholder; sessionid="$SESSION_ID"\n');
   const result = sync({ root, handlerIds: new Set(), apply: true });
   const candidate = byId(result, 'direct-ticktock');
   assert.equal(candidate.receipt.semantic_review_state, 'reviewed_safe');

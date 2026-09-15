@@ -1240,6 +1240,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     'Authorization: Token exampleRealSecret123\n',
     'Authorization: supersecretvalue\n',
     'Authorization: `Bearer supersecretvalue`\n',
+    'curl -H "Authorization: Bearer supersecretvalue" https://example.test\n',
     'Cookie: sessionid=eyJhbGciOiJIUzI1NiJ9\n',
     'Cookie: sessionid="supersecret"\n',
     'Cookie: csrftoken=placeholder; sessionid=supersecret\n',
@@ -1260,7 +1261,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
 
 test('credential references are not treated as literal secrets', () => {
   const root = fixture();
-  skill(root, 'ticktock', 'export OPENAI_API_KEY="$OPENAI_API_KEY"\nexport AUTH_TOKEN=${AUTH_TOKEN}\nAuthorization: Bearer $ACCESS_TOKEN\nAuthorization: Basic ${BASIC_AUTH}\nAuthorization: `Bearer ${AUTH_TOKEN}`\nAuthorization: process.env.AUTH_TOKEN,\nCookie: csrftoken=placeholder; sessionid="$SESSION_ID"\npassword: process.env.DB_PASSWORD,\nsessionToken = import.meta.env.SESSION_TOKEN;\ndbPassword: config.dbPassword\n');
+  skill(root, 'ticktock', 'export OPENAI_API_KEY="$OPENAI_API_KEY"\nexport AUTH_TOKEN=${AUTH_TOKEN}\nAuthorization: Bearer $ACCESS_TOKEN\nAuthorization: Basic ${BASIC_AUTH}\nAuthorization: `Bearer ${AUTH_TOKEN}`\nAuthorization: process.env.AUTH_TOKEN,\ncurl -H "Authorization: Bearer $ACCESS_TOKEN" https://example.test\nCookie: csrftoken=placeholder; sessionid="$SESSION_ID"\npassword: process.env.DB_PASSWORD,\nsessionToken = import.meta.env.SESSION_TOKEN;\ndbPassword: config.dbPassword\n');
   const result = sync({ root, handlerIds: new Set(), apply: true });
   const candidate = byId(result, 'direct-ticktock');
   assert.equal(candidate.receipt.semantic_review_state, 'reviewed_safe');

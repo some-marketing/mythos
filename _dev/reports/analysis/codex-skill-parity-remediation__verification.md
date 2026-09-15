@@ -109,6 +109,8 @@ The sixty-third Cloud Codex review found metadata-only typed aliases exempt from
 
 The sixty-fourth Cloud Codex review found opaque and template-literal Authorization header values bypassing credential rejection, and non-string items in block-form `allowed-tools` sequences being silently converted to strings. Authorization scanning now rejects every literal header value while preserving bounded variable and property references, and block tool lists apply the same string-only validation as flow lists. Focused regressions cover both rejection paths and the nonliteral reference exemptions.
 
+The sixty-fifth Cloud Codex review found quoted shell-header references being captured through the remainder of their command line and rejected as literal credentials. Authorization scanning now bounds a quoted header at its matching delimiter before classifying the credential value, preserving quoted variable references while continuing to reject literal credentials in the same command form. Focused regressions cover both outcomes.
+
 ## Falsifiers and residuals
 
 Acceptance would be disproved by an applied `UNKNOWN` or pending candidate, copied alias behavior, a non-handler command marked `BLOCKING`, a private path in a shipped projection, a canonical/client diff, a failed runtime discovery claim, or an unresolved distinct-family blocker. None was observed.

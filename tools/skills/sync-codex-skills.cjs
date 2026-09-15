@@ -666,12 +666,16 @@ function containsLiteralCookieCredential(text) {
 }
 
 function containsLiteralAuthorizationCredential(text) {
-  const authorizationHeader = /(?:^|[^A-Z0-9_])["'`]?AUTHORIZATION["'`]?\s*[:=]\s*([^\r\n]+)/gim;
+  const authorizationHeader = /(?:^|[^A-Z0-9_"'`])(["'`]?)AUTHORIZATION(["'`]?)\s*[:=]\s*([^\r\n]+)/gim;
   for (const match of String(text).matchAll(authorizationHeader)) {
-    let value = match[1].trim().replace(/[,;]\s*$/, '').trim();
-    if (value.length >= 2 && value[0] === value[value.length - 1] && ['"', "'", '`'].includes(value[0])) {
-      value = value.slice(1, -1).trim();
+    let value = match[3].trim();
+    const headerQuote = match[1] && !match[2] ? match[1] : null;
+    const valueQuote = headerQuote || (['"', "'", '`'].includes(value[0]) ? value[0] : null);
+    if (valueQuote) {
+      const end = value.indexOf(valueQuote, headerQuote ? 0 : 1);
+      if (end >= 0) value = value.slice(headerQuote ? 0 : 1, end).trim();
     }
+    value = value.replace(/[,;]\s*$/, '').trim();
     value = value.replace(/^[A-Z][A-Z0-9._~-]*\s+/i, '').trim();
     if (isCredentialPlaceholder(value)) continue;
     if (/^(?:\$\{)?(?:process\.env|import\.meta\.env|env|config|secrets)\.[A-Za-z_$][A-Za-z0-9_$]*(?:\})?$/.test(value)) continue;

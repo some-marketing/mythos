@@ -115,6 +115,8 @@ The sixty-sixth Cloud Codex review found fine-grained GitHub PATs outside recogn
 
 The sixty-seventh Cloud Codex review found literal `credential` and `credentials` fields, date-only YAML descriptions, and whitespace-only direct or framework descriptions remaining applicable. Credential-field families now enter the redacted rejection path with bounded property-reference exemptions, date-only timestamps are classified as YAML non-strings, and projected descriptions must contain non-whitespace text. Focused regressions cover all three findings.
 
+The sixty-eighth Cloud Codex review found backtick-delimited credential assignments and leading-dot YAML floats bypassing validation. Assignment scanning now consumes backtick delimiters while retaining exact template-variable exemptions, and `.5`/`-.5` forms are classified as YAML non-strings. Focused regressions cover literal rejection, safe references, and both direct and framework metadata paths.
+
 ## Falsifiers and residuals
 
 Acceptance would be disproved by an applied `UNKNOWN` or pending candidate, copied alias behavior, a non-handler command marked `BLOCKING`, a private path in a shipped projection, a canonical/client diff, a failed runtime discovery claim, or an unresolved distinct-family blocker. None was observed.

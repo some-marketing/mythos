@@ -177,7 +177,7 @@ test('direct skills reject non-scalar and unknown execution modes', () => {
 });
 
 test('direct and framework descriptions reject YAML non-string tokens and empty text', () => {
-  for (const description of ['[one, two]', '{text: hello}', 'null', '0x10', '0o10', '0123', '2026-09-15', '"   "']) {
+  for (const description of ['[one, two]', '{text: hello}', 'null', '0x10', '0o10', '0123', '.5', '-.5', '2026-09-15', '"   "']) {
     const root = fixture();
     write(root, '.claude/skills/ticktock/SKILL.md', `---\nname: ticktock\ndescription: ${description}\n---\nbody\n`);
     write(root, 'frameworks/a/b/.claude/skills/demo/SKILL.md', `---\nname: demo\ndescription: ${description}\n---\nbody\n`);
@@ -1239,6 +1239,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     `StripeApiKey = "stripepascalvalue${'i'.repeat(16)}"\n`,
     `TOKEN="tokenvalue${'o'.repeat(16)}"\n`,
     `token: "lowertokenvalue${'l'.repeat(16)}"\n`,
+    'token: `supersecretvalue`\n',
     `export PAT=github_pat_${'g'.repeat(24)}\n`,
     'credentials: "supersecretvalue"\n',
     `Authorization: Bearer ordinarysecretvalue${'b'.repeat(16)}\n`,
@@ -1270,7 +1271,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
 
 test('credential references are not treated as literal secrets', () => {
   const root = fixture();
-  skill(root, 'ticktock', 'export OPENAI_API_KEY="$OPENAI_API_KEY"\nexport AUTH_TOKEN=${AUTH_TOKEN}\nAuthorization: Bearer $ACCESS_TOKEN\nAuthorization: Basic ${BASIC_AUTH}\nAuthorization: `Bearer ${AUTH_TOKEN}`\nAuthorization: process.env.AUTH_TOKEN,\ncurl -H "Authorization: Bearer $ACCESS_TOKEN" https://example.test\nCookie: csrftoken=placeholder; sessionid="$SESSION_ID"\ncurl -H "Cookie: sessionid=$SESSION_ID" https://example.test\ncurl -H \'Cookie: sessionid=$SESSION_ID\' https://example.test\npassword: process.env.DB_PASSWORD,\nsessionToken = import.meta.env.SESSION_TOKEN;\ndbPassword: config.dbPassword\ncredentials: secrets.credentials\n');
+  skill(root, 'ticktock', 'export OPENAI_API_KEY="$OPENAI_API_KEY"\nexport AUTH_TOKEN=${AUTH_TOKEN}\ntoken: `${AUTH_TOKEN}`\nAuthorization: Bearer $ACCESS_TOKEN\nAuthorization: Basic ${BASIC_AUTH}\nAuthorization: `Bearer ${AUTH_TOKEN}`\nAuthorization: process.env.AUTH_TOKEN,\ncurl -H "Authorization: Bearer $ACCESS_TOKEN" https://example.test\nCookie: csrftoken=placeholder; sessionid="$SESSION_ID"\ncurl -H "Cookie: sessionid=$SESSION_ID" https://example.test\ncurl -H \'Cookie: sessionid=$SESSION_ID\' https://example.test\npassword: process.env.DB_PASSWORD,\nsessionToken = import.meta.env.SESSION_TOKEN;\ndbPassword: config.dbPassword\ncredentials: secrets.credentials\n');
   const result = sync({ root, handlerIds: new Set(), apply: true });
   const candidate = byId(result, 'direct-ticktock');
   assert.equal(candidate.receipt.semantic_review_state, 'reviewed_safe');

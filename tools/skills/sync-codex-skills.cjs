@@ -130,7 +130,9 @@ function parseFrontmatter(text, sourcePath = '<memory>') {
     }
     metadata[key] = value;
   }
-  if (!metadata.name || !metadata.description) return { ok: false, error: 'frontmatter requires name and description', sourcePath };
+  if (typeof metadata.name !== 'string' || !metadata.name || typeof metadata.description !== 'string' || !metadata.description) {
+    return { ok: false, error: 'frontmatter requires scalar name and description', sourcePath };
+  }
   return { ok: true, metadata, body, sourcePath };
 }
 
@@ -192,6 +194,9 @@ function loadCanonicalCommands(root, config) {
           ? `canonical id mismatch for filename ${JSON.stringify(filenameId)}`
           : null;
       command = { spec, sourcePath, filenameId, declaredId, malformed };
+    }
+    if (`source-command-${filenameId}`.length > 64) {
+      command.malformed = `canonical command projection name exceeds 64 characters for filename ${JSON.stringify(filenameId)}`;
     }
     if (nested) command.malformed = `nested canonical command path rejected for filename ${JSON.stringify(filenameId)}`;
     const existing = commands.get(filenameId);
@@ -477,7 +482,7 @@ function containsPrivateAbsolutePath(bytes) {
 
 function containsCredentialMaterial(bytes) {
   const text = String(bytes);
-  return /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/.test(text)
+  return /-----BEGIN (?:[A-Z0-9]+ )*PRIVATE KEY-----/.test(text)
     || /(?:^|[^A-Za-z0-9])(?:sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|(?:AKIA|ASIA)[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|glpat-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{35})(?:$|[^A-Za-z0-9_-])/m.test(text)
     || /(?:^|[^A-Z0-9_])["']?(?:AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|GITHUB_TOKEN|GH_TOKEN|GITLAB_TOKEN|SLACK_BOT_TOKEN|GOOGLE_API_KEY|API[_-]?KEY|CLIENT[_-]?SECRET|PASSWORD|PASSWD|ACCESS[_-]?TOKEN|REFRESH[_-]?TOKEN|AUTH[_-]?TOKEN|SECRET[_-]?KEY|PRIVATE[_-]?KEY)["']?\s*[:=]\s*["']?(?!(?:<|\$\{|your[-_]|example|redacted|placeholder))[^\s"'`]+/im.test(text);
 }

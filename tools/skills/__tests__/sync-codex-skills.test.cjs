@@ -237,6 +237,18 @@ test('credential-bearing canonical paths are rejected before identifiers or rece
   assert.equal(fs.existsSync(path.join(root, '_dev/reports/analysis/codex-skill-projections/receipts')), false);
 });
 
+test('canonical projections exceeding the Codex skill-name limit are blocked', () => {
+  const root = fixture();
+  const id = 'x'.repeat(50);
+  command(root, id);
+  const result = sync({ root, handlerIds: new Set(), apply: true });
+  const candidate = byId(result, `command-${id}`);
+  assert.equal(candidate.receipt.semantic_review_state, 'malformed');
+  assert.equal(candidate.receipt.application_status, 'blocked_malformed');
+  assert.match(candidate.receipt.detail, /exceeds 64 characters/);
+  assert.equal(fs.existsSync(path.join(root, `.agents/skills/source-command-${id}/SKILL.md`)), false);
+});
+
 test('unsafe canonical and alias IDs cannot construct projection output paths', () => {
   const root = fixture();
   const privateId = ['', 'Users', 'private-operator', 'escape'].join('/');
@@ -326,6 +338,16 @@ test('blocked framework candidates still participate in target collision rejecti
   assert.equal(colliding.every((item) => item.receipt.collision_state === 'collision'), true);
   assert.equal(new Set(colliding.map((item) => item.id)).size, 2);
   assert.equal(fs.existsSync(path.join(root, '.agents/skills/guild-a-b-x-y/SKILL.md')), false);
+});
+
+test('sequence-valued framework names and descriptions produce malformed receipts', () => {
+  const root = fixture();
+  write(root, 'frameworks/a/b/.claude/skills/helper/SKILL.md', '---\nname: helper\ndescription:\n  - invalid\n---\nbody\n');
+  const result = sync({ root, handlerIds: new Set(), apply: true });
+  const candidate = byId(result, 'framework-guild-a-b-helper');
+  assert.equal(candidate.receipt.semantic_review_state, 'malformed');
+  assert.equal(candidate.receipt.application_status, 'blocked');
+  assert.equal(fs.existsSync(path.join(root, '.agents/skills/guild-a-b-helper/SKILL.md')), false);
 });
 
 test('nested framework skills project independently instead of becoming parent resources', () => {
@@ -711,6 +733,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     `ACCESS_TOKEN="accesssecretvalue${'a'.repeat(16)}"\n`,
     `PRIVATE_KEY="privatesecretvalue${'v'.repeat(16)}"\n`,
     `AUTH_TOKEN: authsecretvalue${'h'.repeat(16)}\n`,
+    `-----BEGIN ENCRYPTED PRIVATE KEY-----\nencryptedprivatebytes${'e'.repeat(16)}\n-----END ENCRYPTED PRIVATE KEY-----\n`,
     `temporary ASIA${'A'.repeat(16)}\n`
   ]) {
     const root = fixture();
@@ -720,7 +743,7 @@ test('credential assignments and temporary AWS keys are rejected without retaini
     assert.equal(candidate.receipt.semantic_review_state, 'private_path_rejected');
     assert.equal(candidate.receipt.source_sha256, null);
     assert.equal(fs.existsSync(path.join(root, '.agents/skills/ticktock/SKILL.md')), false);
-    assert.doesNotMatch(JSON.stringify(candidate.receipt), /zzzzzzzz|ordinarysecretvalue|yamlsecretvalue|jsonsecretvalue|genericsecretvalue|clientsecretvalue|passwordsecretvalue|accesssecretvalue|privatesecretvalue|authsecretvalue|ASIAAAAA/);
+    assert.doesNotMatch(JSON.stringify(candidate.receipt), /zzzzzzzz|ordinarysecretvalue|yamlsecretvalue|jsonsecretvalue|genericsecretvalue|clientsecretvalue|passwordsecretvalue|accesssecretvalue|privatesecretvalue|authsecretvalue|encryptedprivatebytes|ASIAAAAA/);
   }
 });
 

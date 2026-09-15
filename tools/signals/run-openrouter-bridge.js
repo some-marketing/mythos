@@ -43,7 +43,11 @@ const {
   closeSignalInfo
 } = require('./lib/actor-auto');
 const { scanLiveHandoffSignals } = require('./lib/pipeline-loop');
-const { getBridgeTargetPolicy, getBridgeTransportPolicy } = require('./lib/bridge-target-policy');
+const {
+  getBridgeTargetPolicy,
+  getBridgeTransportPolicy,
+  validateBridgeTargetModel
+} = require('./lib/bridge-target-policy');
 
 // Reads openrouter/api's stale_models straight from the single source of
 // truth (bridge-target-policy.js) rather than duplicating the list here.
@@ -520,7 +524,8 @@ async function runOpenRouterForSignal(projectRoot, signalInfo, opts = {}) {
   // legitimately pass any OpenRouter-hosted slug that isn't in that list.
   // Only an EXPLICITLY stale-flagged slug is rejected.
   const staleModels = STALE_OPENROUTER_MODELS();
-  if (staleModels.includes(model)) {
+  const modelValidation = validateBridgeTargetModel('openrouter', model, { transport: 'api' });
+  if (!modelValidation.valid && staleModels.includes(model)) {
     return {
       mode: 'blocked',
       reason: 'stale_bridge_model',
@@ -528,7 +533,7 @@ async function runOpenRouterForSignal(projectRoot, signalInfo, opts = {}) {
       actor: ACTOR_ID,
       model,
       signalName: signalInfo.name,
-      freshnessReason: `Bridge model "${model}" is stale for openrouter/api and must not be dispatched. See tools/signals/lib/bridge-target-policy.js stale_models.`
+      freshnessReason: modelValidation.reason
     };
   }
 
@@ -912,6 +917,15 @@ async function main() {
       (result.descriptorPath ? ` (${result.descriptorPath})` : '') + '\n' +
       'No payload was sent to the endpoint. The data-ban is a safety invariant ' +
       'and cannot be bypassed without a valid operator exception.'
+    );
+    process.exit(1);
+  }
+
+  if (result.mode === 'blocked' && result.reason === 'stale_bridge_model') {
+    console.error(
+      `REFUSED: stale bridge model "${result.model}" cannot be dispatched.\n` +
+      `${result.freshnessReason}\n` +
+      'No payload was sent to the endpoint.'
     );
     process.exit(1);
   }

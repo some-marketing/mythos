@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "bc7d58682860ef9b7b6fec2245264a8c5f669de46748dc31e871dca3470be8d1",
+    "expected_tree_sha256": "1de281ec64599f094a83a425bf01420c0992cc7fc524e661b51d50224ad67e0a",
     "expected_files": [
       {
         "path": ".claude/CLAUDE.md",
@@ -1543,6 +1543,11 @@
       {
         "path": "README.md",
         "sha256": "00d3a5c0166b310765da763c4eb2aefa909b3af5dd1ea5fde2c05096de9ad841",
+        "mode": 420
+      },
+      {
+        "path": "_dev/config/dispatch-targets/qwen3.8-max-hosted.json",
+        "sha256": "bdde984ba60b10708acb6e85ae5768f4fb9eb8b5e591193ae538f6e09543e1d7",
         "mode": 420
       },
       {
@@ -6107,7 +6112,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "67ef6386259c03a46c7f66e1c06574acc3ad5ff7df87876ae34852c17a9f25c1",
+        "sha256": "d20e2fbd8985db4588be6b25c5ef3b06dece6b86818e19a275fb14c6a07e9275",
         "mode": 420
       },
       {
@@ -12032,7 +12037,7 @@
       },
       {
         "path": "tools/signals/lib/__tests__/bridge-target-policy.test.js",
-        "sha256": "cef6bc3ece66c8ba59ec213bedaec249d082bf8a93645f73f2e963d0e5dda9e9",
+        "sha256": "8edb332e30d04e8364991ae209f960c23107c6a45d680fca660a0e85a1758115",
         "mode": 420
       },
       {
@@ -12122,7 +12127,7 @@
       },
       {
         "path": "tools/signals/lib/__tests__/run-openrouter-jurisdiction-gate.test.js",
-        "sha256": "1c9a8ec2b1941ecd600a013d57ac19f37f13e3debf838fb5f7fa4306a92c7213",
+        "sha256": "e8fd6420d05bb7182ee12f8cde40017f02fe7f7455c31cc5381d9c380349afed",
         "mode": 420
       },
       {
@@ -12172,7 +12177,7 @@
       },
       {
         "path": "tools/signals/lib/bridge-target-policy.js",
-        "sha256": "db2368c67dec242265e6ded80ffc2bf3a8b2f55d4d587ce0b1b1ebcb03a97f09",
+        "sha256": "4a8ce114c518ebe04d28b56d98092ae84fc664446862439a3b1f092889b16eb1",
         "mode": 420
       },
       {
@@ -12367,7 +12372,7 @@
       },
       {
         "path": "tools/signals/run-openrouter-bridge.js",
-        "sha256": "c698ac599668bba1b248167ca16bdf7487db17444cad2d7bbcd92623fa6bcc84",
+        "sha256": "2be4069db12871e5b556be99589ff98192b3b09a39f166d64070d9c3dacd24dd",
         "mode": 420
       },
       {
@@ -14199,9 +14204,9 @@
     "package_script_count": 205,
     "command_alias_registry_sha256": "9bbc50aa1343a5502258e0e067eca0bb4cf4ea9f560abc5b998247a0e04b9901",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "67ef6386259c03a46c7f66e1c06574acc3ad5ff7df87876ae34852c17a9f25c1",
-    "graph_nodes": 3955,
-    "graph_edges": 2896
+    "graph_sha256": "d20e2fbd8985db4588be6b25c5ef3b06dece6b86818e19a275fb14c6a07e9275",
+    "graph_nodes": 3956,
+    "graph_edges": 2897
   },
   "runtime_exclusions": [
     ".git/**",

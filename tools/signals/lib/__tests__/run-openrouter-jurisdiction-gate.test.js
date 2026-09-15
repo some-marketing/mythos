@@ -2,7 +2,7 @@
 
 // S4 enforcement tests for the cross-jurisdiction DATA-BAN gate wired into the
 // OpenRouter bridge. These prove that a sensitive payload bound for a PRC-hosted
-// endpoint (the GLM-5.2 hosted target) can NEVER reach egress, that normal
+// endpoint (the GLM-5.2 and Qwen3.8 Max hosted targets) can NEVER reach egress, that normal
 // non-PRC openrouter calls pass through UNCHANGED, that a missing/garbled
 // descriptor fails closed, and that a valid operator exception is honored AND
 // produces a durable receipt. NO real network call is ever made — egress is a
@@ -49,6 +49,15 @@ function writeDescriptor(root, content) {
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(
     path.join(dir, 'glm-5.2-hosted.json'),
+    typeof content === 'string' ? content : JSON.stringify(content, null, 2)
+  );
+}
+
+function writeQwenDescriptor(root, content) {
+  const dir = path.join(root, '_dev', 'config', 'dispatch-targets');
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(
+    path.join(dir, 'qwen3.8-max-hosted.json'),
     typeof content === 'string' ? content : JSON.stringify(content, null, 2)
   );
 }
@@ -334,16 +343,25 @@ describe('run-openrouter-bridge — jurisdiction data-ban enforcement (S4)', () 
     assert.ok(!res.descriptor.labels.includes('prc-origin-risk'));
   });
 
-  it('resolveDispatchTarget registers the Qwen3.8 Max slug as known-PRC and fails closed (no descriptor file authored yet)', () => {
-    // Regression test for PR #33 Codex review (P1): before this slug was
-    // added to PRC_JURISDICTION_MODEL_DESCRIPTORS, this exact call returned
-    // source:'non-prc-default' and the pre-egress data-ban gate skipped
-    // sensitivity classification entirely for this PRC-hosted-via-OpenRouter
-    // model. It must now resolve as a known-PRC slug with no descriptor
-    // file present, which fails closed (blocks), same as z-ai/glm-5.2 above.
-    const res = resolveDispatchTarget('/nonexistent-root', 'qwen/qwen3.8-max-0902');
-    assert.equal(res.source, 'missing-descriptor');
-    assert.equal(res.descriptor.load_error, 'missing-descriptor');
+  it('resolveDispatchTarget loads the Qwen3.8 Max PRC descriptor', () => {
+    const root = makeTempRoot();
+    try {
+      writeQwenDescriptor(root, {
+        id: 'qwen3.8-max-hosted',
+        provider: 'openrouter',
+        model_slug: 'qwen/qwen3.8-max-0902',
+        labels: ['hosted-open-weight', 'not-local', 'text-only', 'prc-origin-risk', 'anthropic-compatible'],
+        jurisdiction: 'PRC',
+        migration_path: 'self-host on onshore metal then repoint slug',
+        credential: '<operator-gated, stubbed>'
+      });
+      const res = resolveDispatchTarget(root, 'qwen/qwen3.8-max-0902');
+      assert.equal(res.source, 'descriptor-file');
+      assert.equal(res.descriptor.model_slug, 'qwen/qwen3.8-max-0902');
+      assert.ok(res.descriptor.labels.includes('prc-origin-risk'));
+    } finally {
+      cleanupTempRoot(root);
+    }
   });
 
   it('a declared-stale model slug is blocked before egress, before the jurisdiction gate even runs', async () => {

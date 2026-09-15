@@ -598,7 +598,11 @@ function resolveBridgeInvocation(target, opts = {}) {
     docs: {
       model_docs: transportPolicy.model_docs || '',
       bridge_docs: transportPolicy.bridge_docs || '',
-      checked_at: transportPolicy.docs_checked_at || BRIDGE_MODEL_SOURCE.checked_at
+      checked_at: (
+        model === 'qwen/qwen3.8-max-0902' && transportPolicy.qwen_docs_checked_at
+          ? transportPolicy.qwen_docs_checked_at
+          : transportPolicy.docs_checked_at || BRIDGE_MODEL_SOURCE.checked_at
+      )
     },
     routing: {
       scope_tier: scopeTier || '',

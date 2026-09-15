@@ -635,6 +635,10 @@ function redactRejectedPackage(receipt) {
 function buildCandidates(options = {}) {
   const root = options.root || PROJECT_ROOT;
   const { adapter, config } = loadProjectionConfig(root);
+  const defaultCanonicalTier = config.families.canonical_commands.default_capability_tier;
+  if (typeof defaultCanonicalTier !== 'string' || !CAPABILITY_TIERS.has(defaultCanonicalTier)) {
+    throw new Error('Canonical command default capability tier must be one declared capability tier');
+  }
   const targetRoot = options.targetDir || path.join(root, config.target_root);
   const handlers = options.handlerIds || loadHandlerIds(root, config);
   const commands = loadCanonicalCommands(root, config);
@@ -690,7 +694,7 @@ function buildCandidates(options = {}) {
     const executionTarget = typedAliasTerminals.get(id) || id;
     const tier = override && override.capability_tier
       ? override.capability_tier
-      : handlers.has(executionTarget) ? 'BLOCKING' : 'ADVISORY';
+      : handlers.has(executionTarget) ? 'BLOCKING' : defaultCanonicalTier;
     const reviewState = (override && override.semantic_review_state) || config.families.canonical_commands.semantic_review_state;
     const sourceBytes = fs.readFileSync(command.sourcePath);
     const content = renderCanonicalSkill(id, command.spec, tier, override, terminalAliases.get(id) || [], projectionName, typedAliasAuthorities.get(id) || id, config.families.canonical_commands.source_root);
@@ -841,6 +845,22 @@ function buildCandidates(options = {}) {
       candidate.receipt.application_status = 'blocked';
       candidate.id = `${candidate.id}-${sha256(candidate.receipt.source_relative_path).slice(0, 8)}`;
     }
+  }
+
+  for (const [wrapperId, authorityId] of typedAliasAuthorities) {
+    const wrapperTarget = posix(path.join(config.target_root, canonicalProjectionName(config, wrapperId), 'SKILL.md'));
+    const authorityTarget = posix(path.join(config.target_root, canonicalProjectionName(config, authorityId), 'SKILL.md'));
+    const wrapperCandidate = candidates.find((item) => item.receipt.projection_kind === 'canonical_command'
+      && item.receipt.target_exact_path === wrapperTarget);
+    const authorityCandidate = candidates.find((item) => item.receipt.projection_kind === 'canonical_command'
+      && item.receipt.target_exact_path === authorityTarget);
+    if (!wrapperCandidate || isApplicable(authorityCandidate || {})) continue;
+    wrapperCandidate.content = null;
+    wrapperCandidate.resources = [];
+    wrapperCandidate.receipt.capability_tier = 'ABSENT';
+    wrapperCandidate.receipt.semantic_review_state = 'authority_unavailable';
+    wrapperCandidate.receipt.application_status = 'blocked_authority_unavailable';
+    wrapperCandidate.receipt.detail = 'typed alias authority is not an applicable canonical command';
   }
 
   for (const candidate of candidates.filter((item) => item.receipt.projection_kind === 'alias_metadata' && item.aliasTerminal)) {

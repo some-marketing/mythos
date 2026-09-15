@@ -259,6 +259,21 @@ test('typed aliases reject missing canonical authority sources', () => {
   );
 });
 
+test('typed aliases remain unavailable when their canonical authority is malformed', () => {
+  const root = fixture();
+  command(root, 'wrapper');
+  command(root, 'route');
+  command(root, 'broken-authority', { mode: 'SUPERUSER' });
+  const aliases = { aliases: [{ id: 'wrapper', target: 'route', authority_source: 'broken-authority' }] };
+  const result = sync({ root, handlerIds: new Set(), aliasRegistry: aliases, apply: true });
+  const wrapper = byId(result, 'command-wrapper');
+  assert.equal(wrapper.content, null);
+  assert.equal(wrapper.receipt.capability_tier, 'ABSENT');
+  assert.equal(wrapper.receipt.semantic_review_state, 'authority_unavailable');
+  assert.equal(byId(result, 'alias-wrapper').receipt.semantic_review_state, 'target_unavailable');
+  assert.equal(fs.existsSync(path.join(root, '.agents/skills/source-command-wrapper/SKILL.md')), false);
+});
+
 test('handler-backed typed aliases retain their wrapper and deterministic execution', () => {
   const root = fixture();
   command(root, 'route');
@@ -343,6 +358,25 @@ test('canonical commands require one declared execution mode', () => {
     assert.match(candidate.receipt.detail, /canonical command mode must be one declared execution mode/);
     assert.equal(fs.existsSync(path.join(root, '.agents/skills/source-command-sample/SKILL.md')), false);
   }
+});
+
+test('canonical commands honor and validate the configured default capability tier', () => {
+  const root = fixture();
+  const adapterPath = path.join(root, 'instructions/adapters/codex.yaml');
+  const adapter = JSON.parse(fs.readFileSync(adapterPath, 'utf8'));
+  adapter.skill_projection.families.canonical_commands.default_capability_tier = 'UNKNOWN';
+  fs.writeFileSync(adapterPath, `${JSON.stringify(adapter, null, 2)}\n`);
+  command(root, 'sample');
+  const candidate = byId(sync({ root, handlerIds: new Set(), apply: true }), 'command-sample');
+  assert.equal(candidate.receipt.capability_tier, 'UNKNOWN');
+  assert.equal(fs.existsSync(path.join(root, '.agents/skills/source-command-sample/SKILL.md')), false);
+
+  adapter.skill_projection.families.canonical_commands.default_capability_tier = 'UNDECLARED';
+  fs.writeFileSync(adapterPath, `${JSON.stringify(adapter, null, 2)}\n`);
+  assert.throws(
+    () => buildCandidates({ root, handlerIds: new Set() }),
+    /Canonical command default capability tier must be one declared capability tier/
+  );
 });
 
 test('canonical descriptions must be scalar strings', () => {

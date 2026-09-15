@@ -1,0 +1,13 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "frameworks/project-management/feedback-to-tasks/.claude/skills/feedback-to-tasks/SKILL.md",
+  "source_sha256": "54d8be5cda01901c727cd3119e63c0d99b1ff0e52641eeaa242859ae7824a118",
+  "projection_kind": "framework_helper",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "pending_review",
+  "target_exact_path": ".agents/skills/guild-project-management-feedback-to-tasks-feedback-to-tasks/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "candidate",
+  "resource_manifest": [],
+  "package_sha256": "837565b3d879b8942f9eee7093e99f40b7afc77ad3f9954102fd9b3ae76dcef0"
+}

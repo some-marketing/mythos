@@ -36,11 +36,10 @@ function ensureKernelSafety(system, kernel) {
   }
 }
 
-// Minimal, dependency-free parser for the simple alias registry schema:
-// a top-level `aliases:` map of `alias-key: { resolves_to, status }`. Tolerates
-// the JSON-compatible form used elsewhere in the canonical layer as well as the
-// commented YAML form. The registry carries up to four alias domains beside
-// each other; each normalizes to an ordered array of { id, resolves_to, status }.
+// Minimal, dependency-free parser for the alias registry schema. The canonical
+// command domain is an ordered array of typed records ({ id, kind, target,
+// execution_target, authority_source }); legacy map-form domains remain
+// readable so older exported surfaces do not break.
 const ALIAS_DOMAIN_KEYS = ['aliases', 'framework_aliases', 'skill_aliases', 'tool_aliases'];
 
 function emptyAliasRegistry() {
@@ -61,24 +60,17 @@ function parseAliasRegistry(raw) {
   const out = emptyAliasRegistry();
   if (!maps || typeof maps !== 'object') return out;
   for (const key of ALIAS_DOMAIN_KEYS) {
-    const domainMap = maps[key];
-    if (!domainMap || typeof domainMap !== 'object') continue;
-    if (Array.isArray(domainMap)) {
-      out[key] = domainMap.map((entry) => ({
-        id: entry && entry.id,
-        resolves_to: entry && (entry.resolves_to || entry.target),
-        ...(entry && entry.execution_target ? { execution_target: entry.execution_target } : {}),
-        ...(entry && entry.authority_source ? { authority_source: entry.authority_source } : {}),
-        status: entry && (entry.status || 'compatibility')
-      }));
+    const domain = maps[key];
+    if (!domain || typeof domain !== 'object') continue;
+    if (Array.isArray(domain)) {
+      out[key] = domain
+        .filter((entry) => entry && typeof entry === 'object' && entry.id)
+        .map((entry) => ({ ...entry }));
       continue;
     }
-    out[key] = Object.entries(domainMap).map(([id, entry]) => ({
+    out[key] = Object.entries(domain).map(([id, entry]) => ({
       id,
-      resolves_to: entry && entry.resolves_to,
-      ...(entry && entry.execution_target ? { execution_target: entry.execution_target } : {}),
-      ...(entry && entry.authority_source ? { authority_source: entry.authority_source } : {}),
-      status: entry && entry.status
+      ...(entry && typeof entry === 'object' ? entry : {})
     }));
   }
   return out;
@@ -92,26 +84,89 @@ function parseSimpleAliasYaml(raw) {
   const maps = {};
   let currentDomain = null;
   let currentEntry = null;
+  let currentEntryIndent = null;
   for (const line of raw.split('\n')) {
     const trimmedLine = line.trim();
     if (!trimmedLine || trimmedLine.startsWith('#')) continue;
     const indent = line.length - line.trimStart().length;
+    const bareSequenceMatch = trimmedLine.match(/^-\s*(?:#.*)?$/);
+    const flowSequenceMatch = trimmedLine.match(/^-\s*\{(.*)\}\s*(?:#.*)?$/);
+    const sequenceMatch = trimmedLine.match(/^-\s+([^:]+):\s*(.*)$/);
     const match = trimmedLine.match(/^([^:]+):\s*(.*)$/);
-    if (!match) continue;
+    if (currentDomain && bareSequenceMatch) {
+      if (!Array.isArray(maps[currentDomain])) maps[currentDomain] = [];
+      currentEntry = {};
+      currentEntryIndent = indent;
+      maps[currentDomain].push(currentEntry);
+      continue;
+    }
+    if (!match && !flowSequenceMatch) continue;
+    if (currentDomain && flowSequenceMatch) {
+      if (!Array.isArray(maps[currentDomain])) maps[currentDomain] = [];
+      currentEntry = parseSimpleYamlInlineMapping(`{${flowSequenceMatch[1]}}`) || {};
+      currentEntryIndent = indent;
+      maps[currentDomain].push(currentEntry);
+      continue;
+    }
     const key = match[1].trim();
-    const value = stripQuotes(match[2].trim());
-    if (indent === 0) {
+    const value = parseSimpleYamlScalar(match[2].trim());
+    if (currentDomain && sequenceMatch) {
+      if (!Array.isArray(maps[currentDomain])) maps[currentDomain] = [];
+      currentEntry = { [sequenceMatch[1].trim()]: parseSimpleYamlScalar(sequenceMatch[2].trim()) };
+      currentEntryIndent = indent;
+      maps[currentDomain].push(currentEntry);
+    } else if (indent === 0) {
       currentDomain = ALIAS_DOMAIN_KEYS.includes(key) ? key : null;
       currentEntry = null;
+      currentEntryIndent = null;
       if (currentDomain) maps[currentDomain] = maps[currentDomain] || {};
-    } else if (currentDomain && indent <= 2) {
-      currentEntry = key;
-      maps[currentDomain][currentEntry] = {};
-    } else if (currentDomain && currentEntry) {
-      maps[currentDomain][currentEntry][key] = value;
+    } else if (currentDomain && currentEntry && currentEntryIndent != null && indent > currentEntryIndent) {
+      if (Object.prototype.hasOwnProperty.call(currentEntry, key)) {
+        throw new Error(`Duplicate alias field: ${key}`);
+      }
+      currentEntry[key] = value;
+    } else if (currentDomain) {
+      if (Array.isArray(maps[currentDomain])) continue;
+      currentEntry = parseSimpleYamlInlineMapping(value) || {};
+      currentEntryIndent = indent;
+      maps[currentDomain][key] = currentEntry;
     }
   }
   return maps;
+}
+
+function parseSimpleYamlInlineMapping(value) {
+  const match = String(value).match(/^\{(.*)\}$/);
+  if (!match) return null;
+  const entry = {};
+  for (const field of match[1].split(',')) {
+    const fieldMatch = field.trim().match(/^([^:]+):\s*(.*)$/);
+    if (fieldMatch) {
+      const key = fieldMatch[1].trim();
+      if (Object.prototype.hasOwnProperty.call(entry, key)) {
+        throw new Error(`Duplicate alias field: ${key}`);
+      }
+      entry[key] = parseSimpleYamlScalar(fieldMatch[2].trim());
+    }
+  }
+  return entry;
+}
+
+function parseSimpleYamlScalar(value) {
+  let quote = null;
+  for (let index = 0; index < value.length; index += 1) {
+    const character = value[index];
+    if (quote) {
+      if (quote === '"' && character === '\\') index += 1;
+      else if (character === quote) quote = null;
+      continue;
+    }
+    if (character === '"' || character === "'") quote = character;
+    else if (character === '#' && (index === 0 || /\s/.test(value[index - 1]))) {
+      return stripQuotes(value.slice(0, index).trimEnd());
+    }
+  }
+  return stripQuotes(value);
 }
 
 function stripQuotes(value) {

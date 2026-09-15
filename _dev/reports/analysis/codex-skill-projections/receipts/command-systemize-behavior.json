@@ -1,0 +1,11 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "instructions/canonical/commands/systemize-behavior.yaml",
+  "source_sha256": "8b6cbad41a797776cfc34c8f83a35172f1e9b7adc6bfd2c61dd5127c8da9ef47",
+  "projection_kind": "canonical_command",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "reviewed_safe",
+  "target_exact_path": ".agents/skills/source-command-systemize-behavior/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "already_aligned"
+}

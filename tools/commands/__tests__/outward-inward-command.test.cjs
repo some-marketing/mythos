@@ -55,6 +55,8 @@ test('coordinator contract keeps default analysis write-free and reports executi
   assert.match(contract, /delegated FINDINGS_ONLY and REVIEW_ONLY lanes never write repository state/);
   assert.match(contract, /return the logical source manifest.*in-session/);
   assert.match(contract, /rewriter_actor_id.*attester_actor_id/);
+  assert.match(contract, /rewrite_performed/);
+  assert.match(contract, /resolved_model_id/);
   assert.match(contract, /validate-prompt-provenance-receipt\.cjs/);
   assert.equal(canonical.capability_status.prompt_receipt_validator, 'ADVISORY');
   assert.equal(canonical.capability_status.comparative_execution, 'ABSENT');
@@ -88,10 +90,13 @@ test('prompt-provenance receipt validator rejects missing or matching identities
       source_envelope_id: 'chi-source-envelope',
       source_envelope_sha256: 'c'.repeat(64),
       source_revisions: [{ source_id: 'source-a', content_sha256: 'd'.repeat(64) }],
+      rewrite_performed: true,
       rewriter_actor_id: 'rewriter',
       rewriter_model_provider_family: 'anthropic',
+      rewriter_resolved_model_id: 'model-rewriter',
       attester_actor_id: 'rewriter',
       attester_model_provider_family: 'Anthropic ',
+      attester_resolved_model_id: 'model-attester',
       attestation: 'pass'
     }]
   };
@@ -107,10 +112,13 @@ test('prompt-provenance receipt validator rejects missing or matching identities
     source_envelope_id: 'chi-source-envelope',
     source_envelope_sha256: 'stale',
     source_revisions: [{ source_id: 'source-a', content_sha256: 'd'.repeat(64) }],
+    rewrite_performed: true,
     rewriter_actor_id: 'rewriter',
     rewriter_model_provider_family: 'anthropic',
+    rewriter_resolved_model_id: 'model-rewriter',
     attester_actor_id: 'attester',
     attester_model_provider_family: 'openai',
+    attester_resolved_model_id: 'model-attester',
     attestation: 'pass'
   });
   assert.equal(validatePromptProvenanceReceipt(receipt, expectedPrompts, expectedSourceEnvelope).ok, false);
@@ -120,6 +128,64 @@ test('prompt-provenance receipt validator rejects missing or matching identities
   assert.equal(validatePromptProvenanceReceipt(receipt, expectedPrompts, expectedSourceEnvelope).ok, false);
   receipt.prompts[1].source_revisions = [{ source_id: 'source-b', content_sha256: 'e'.repeat(64) }];
   assert.equal(validatePromptProvenanceReceipt(receipt, expectedPrompts, expectedSourceEnvelope).ok, true);
+});
+
+test('prompt-provenance receipt rejects same resolved model behind different labels', () => {
+  const prompt = {
+    prompt_id: '01_SCOPE',
+    prompt_sha256: 'a'.repeat(64),
+    source_envelope_id: 'chi-source-envelope',
+    source_envelope_sha256: 'c'.repeat(64),
+    source_revisions: [{ source_id: 'source-a', content_sha256: 'd'.repeat(64) }],
+    rewrite_performed: true,
+    rewriter_actor_id: 'rewriter',
+    rewriter_model_provider_family: 'anthropic',
+    rewriter_resolved_model_id: 'same-model',
+    attester_actor_id: 'attester',
+    attester_model_provider_family: 'openai',
+    attester_resolved_model_id: 'same-model',
+    attestation: 'pass'
+  };
+  const result = validatePromptProvenanceReceipt(
+    { schema: 'PromptProvenanceReceipt/1.0', prompts: [prompt] },
+    [{ prompt_id: '01_SCOPE', prompt_sha256: 'a'.repeat(64) }],
+    {
+      source_envelope_id: 'chi-source-envelope',
+      source_envelope_sha256: 'c'.repeat(64),
+      sources: { 'source-a': 'd'.repeat(64) },
+      prompt_sources: { '01_SCOPE': ['source-a'] }
+    }
+  );
+  assert.equal(result.ok, false);
+  assert.ok(result.errors.includes('prompts[0] rewriter_resolved_model_id and attester_resolved_model_id must be distinct'));
+});
+
+test('prompt-provenance receipt accepts a documented no-rewrite path', () => {
+  const result = validatePromptProvenanceReceipt(
+    {
+      schema: 'PromptProvenanceReceipt/1.0',
+      prompts: [{
+        prompt_id: '01_SCOPE',
+        prompt_sha256: 'a'.repeat(64),
+        source_envelope_id: 'chi-source-envelope',
+        source_envelope_sha256: 'c'.repeat(64),
+        source_revisions: [{ source_id: 'source-a', content_sha256: 'd'.repeat(64) }],
+        rewrite_performed: false,
+        attester_actor_id: 'attester',
+        attester_model_provider_family: 'openai',
+        attester_resolved_model_id: 'model-attester',
+        attestation: 'pass'
+      }]
+    },
+    [{ prompt_id: '01_SCOPE', prompt_sha256: 'a'.repeat(64) }],
+    {
+      source_envelope_id: 'chi-source-envelope',
+      source_envelope_sha256: 'c'.repeat(64),
+      sources: { 'source-a': 'd'.repeat(64) },
+      prompt_sources: { '01_SCOPE': ['source-a'] }
+    }
+  );
+  assert.equal(result.ok, true);
 });
 
 test('prompt-provenance receipt validator reports malformed entries without throwing', () => {

@@ -1,0 +1,88 @@
+{
+  "schema": "ConveneRun/3.0",
+  "previous_schema": "ConveneRun/2.0",
+  "timestamp": "2026-09-14T18:53:45.828Z",
+  "scope": "codex-skill-parity-final-code-review",
+  "task": "Review the final PR #32 repairs against GitHub findings 4007847477, 4007847484, 4007847488, 4007847498, and 4007847507. Check candidate-directory deletion safety, typed alias workflow preservation, resource reconciliation, lifecycle staging scope, canonical array alias parsing/rendering, test adequacy, and regression risk. Also verify the approved parity amendment remains executable. Do not modify files. Return APPROVE, AMEND_REQUIRED, or BLOCK with blocking findings first.",
+  "context_files": [
+    "_dev/reports/analysis/task-plans/codex-skill-parity-remediation__amendment__20260914T173619Z.json",
+    "tools/skills/sync-codex-skills.cjs",
+    "tools/skills/sync-lifecycle-command-skills.cjs",
+    "tools/skills/__tests__/sync-codex-skills.test.cjs",
+    "tools/skills/__tests__/sync-lifecycle-command-skills.test.cjs",
+    "tools/instructions/lib/engine.js",
+    "tools/instructions/lib/render.js",
+    "tools/instructions/__tests__/aliases.test.js"
+  ],
+  "origin": "now",
+  "profile": {
+    "id": "openrouter-triad",
+    "label": "OpenRouter triad",
+    "consequence_grade": false
+  },
+  "triad_slots": [
+    {
+      "id": "alpha",
+      "label": "ALPHA",
+      "function": "Fast reasoning, intent, orchestration.",
+      "actor": "openrouter-anthropic/claude-sonnet-4",
+      "pinned_model": null,
+      "is_origin": false
+    },
+    {
+      "id": "now",
+      "label": "NOW",
+      "function": "Repo truth, code verification, falsification.",
+      "actor": "openrouter-openai/gpt-4o",
+      "pinned_model": null,
+      "is_origin": true
+    },
+    {
+      "id": "omega",
+      "label": "OMEGA",
+      "function": "Breadth, consequence, reframing, big picture.",
+      "actor": "openrouter-google/gemini-2.5-pro",
+      "pinned_model": null,
+      "is_origin": false
+    }
+  ],
+  "participants": [
+    "openrouter-anthropic/claude-sonnet-4",
+    "openrouter-google/gemini-2.5-pro"
+  ],
+  "participant_slots": [
+    {
+      "id": "alpha",
+      "actor": "openrouter-anthropic/claude-sonnet-4"
+    },
+    {
+      "id": "omega",
+      "actor": "openrouter-google/gemini-2.5-pro"
+    }
+  ],
+  "duplicate_actors": [],
+  "timeout_seconds": 180,
+  "dry_run": false,
+  "only": null,
+  "results": {
+    "alpha": {
+      "actor": "openrouter-anthropic/claude-sonnet-4",
+      "pinned_model": null,
+      "status": "success",
+      "duration_ms": 24149,
+      "exit_code": 0,
+      "error": null,
+      "output_length": 3957
+    },
+    "now": null,
+    "omega": {
+      "actor": "openrouter-google/gemini-2.5-pro",
+      "pinned_model": null,
+      "status": "success",
+      "duration_ms": 50078,
+      "exit_code": 0,
+      "error": null,
+      "output_length": 4089
+    }
+  }
+}

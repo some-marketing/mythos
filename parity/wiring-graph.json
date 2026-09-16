@@ -19303,6 +19303,13 @@
       "mode": 420
     },
     {
+      "id": "file:tools/signals/lib/__tests__/actor-signal-selection.test.js",
+      "type": "file",
+      "path": "tools/signals/lib/__tests__/actor-signal-selection.test.js",
+      "sha256": "32bf008aebaa0a251c74c87cba231145035571bdfd85502f6a90627ff13fa812",
+      "mode": 420
+    },
+    {
       "id": "file:tools/signals/lib/__tests__/actor-work-order.test.js",
       "type": "file",
       "path": "tools/signals/lib/__tests__/actor-work-order.test.js",
@@ -19488,7 +19495,7 @@
       "id": "file:tools/signals/lib/actor-auto.js",
       "type": "file",
       "path": "tools/signals/lib/actor-auto.js",
-      "sha256": "b26d423b51a00c20df8113f543b72c1573d866aad62c2a73e2c69f15a5eb8f7d",
+      "sha256": "9346a757b91f49f1d1d36197678a26a4c676fd9e0b62232d1a2ea09fc8dc243c",
       "mode": 420
     },
     {
@@ -48844,6 +48851,15 @@
       "event": "SubagentStop"
     },
     {
+      "id": "d56893d3b1edee20fb1adb5bb7fb9d7bef0450049b4e9c1dd61cac72d33b8950",
+      "type": "static-import",
+      "from": "file:tools/signals/lib/__tests__/actor-signal-selection.test.js",
+      "to": "file:tools/signals/lib/actor-auto.js",
+      "target": "tools/signals/lib/actor-auto.js",
+      "required": true,
+      "specifier": "../actor-auto"
+    },
+    {
       "id": "d583bb997ca12f760873dead02b5616a2f5339b41fbc79ceba7ca405ba595fbb",
       "type": "schema-definition-file",
       "from": "schema-definition:tools/framework-execution/compiler/compiler-observation.schema.json",
@@ -53575,8 +53591,8 @@
     }
   ],
   "counts": {
-    "nodes": 4124,
-    "edges": 2932,
+    "nodes": 4125,
+    "edges": 2933,
     "unresolved": 0
   }
 }

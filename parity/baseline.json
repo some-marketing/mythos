@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "a186c48e4656eea6a7ef0a12508f4ef5090c0e7b211f6b335d90ea564fecad8e",
+    "expected_tree_sha256": "c0bcbcd5db1e9cab141ed3761d0a95a13a77e1e3cf913c1855a708cd1142da1d",
     "expected_files": [
       {
         "path": ".agents/skills/go/SKILL.md",
@@ -4626,6 +4626,11 @@
         "mode": 420
       },
       {
+        "path": "framework_candidates/product-management__product-intake/proposed_framework/PromptProvenanceSourceManifest.json",
+        "sha256": "d914b43bfb3ecd6afa70ab333973ea782b1178bc73a2fee81a99040875819577",
+        "mode": 420
+      },
+      {
         "path": "framework_candidates/product-management__product-intake/proposed_framework/guardrails.md",
         "sha256": "96bea91e05f310332abba0a7b4bf5eda41aecc986a408e4d899e574590641329",
         "mode": 420
@@ -4637,22 +4642,22 @@
       },
       {
         "path": "framework_candidates/product-management__product-intake/proposed_framework/prompts/01_SCOPE_AND_INTENT.md",
-        "sha256": "19d6505e236767479ab43f518a8ee7d258e1e79d3623320b942cf5a641ee59dd",
+        "sha256": "f9696e1ca8a65402eec0f72b35db046f758447519405578ea22a22951ca4118f",
         "mode": 420
       },
       {
         "path": "framework_candidates/product-management__product-intake/proposed_framework/prompts/02_DISCOVERY_EVIDENCE.md",
-        "sha256": "a973cd1dc2e9e6ccc91bac22a44194a6da35a8508cca9ea131677b9424034271",
+        "sha256": "111bd7499958c7afb9dd06ba98f5c1d10d3c289275cb83ced748183962b0fab6",
         "mode": 420
       },
       {
         "path": "framework_candidates/product-management__product-intake/proposed_framework/prompts/03_PRODUCT_BRIEF_AND_PRFAQ.md",
-        "sha256": "47627850f07a3af48331a445bc533a279f5d2eefc50d3a53ad312c824b862342",
+        "sha256": "cc6721f12a894b2162ae42371ee6fed84dde123500484fe31bcfc52dc257b47e",
         "mode": 420
       },
       {
         "path": "framework_candidates/product-management__product-intake/proposed_framework/prompts/04_READINESS_REVIEW.md",
-        "sha256": "e06654604569b144caf777dccfded6f12176b9397219e78d40d7f2f4840952e7",
+        "sha256": "eee78ff7f863808ce8546a2c37ba77350f56dd9859a92cc8e124211043f6ed5e",
         "mode": 420
       },
       {
@@ -4683,6 +4688,11 @@
       {
         "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/scope-and-intent.schema.json",
         "sha256": "eac6899a44609a1bba5d71a05a416d5f06ff805af1d0e2c75c7d33cb708c29a8",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/product-management__product-intake/provenance-receipt.json",
+        "sha256": "479fa22c5de573910d1a1e435527d7d60632de20added64d2f821a3586f13c60",
         "mode": 420
       },
       {
@@ -4826,6 +4836,11 @@
         "mode": 420
       },
       {
+        "path": "framework_candidates/project-management__delta-specification/proposed_framework/PromptProvenanceSourceManifest.json",
+        "sha256": "3941e69cc186353c0c9e7facfdefd32cb3f1a919498b7103c6f5702c6e4cd287",
+        "mode": 420
+      },
+      {
         "path": "framework_candidates/project-management__delta-specification/proposed_framework/guardrails.md",
         "sha256": "82300d6e03dc112f4a55927c82c2ac4620f337af733de45d1e6d70b8cc5ecacb",
         "mode": 420
@@ -4837,27 +4852,27 @@
       },
       {
         "path": "framework_candidates/project-management__delta-specification/proposed_framework/prompts/01_BASELINE_INVENTORY.md",
-        "sha256": "957420f54fcb937322ea0b5400c96691bfeba35e419c900eb15d09c5d9382626",
+        "sha256": "c332a625ee278134c27687e986b768a35cfeb980875016c6f0dc61442a70f5f1",
         "mode": 420
       },
       {
         "path": "framework_candidates/project-management__delta-specification/proposed_framework/prompts/02_CHANGE_PROPOSAL.md",
-        "sha256": "0c182e6bb121319efc0741058bdf8106f4de3390523bb15a79dafaefab657650",
+        "sha256": "c0035e0b99c26ca4f758edf9848eaba0e9ed8cd406b6ca5d4abe581a2a88181f",
         "mode": 420
       },
       {
         "path": "framework_candidates/project-management__delta-specification/proposed_framework/prompts/03_DELTA_REQUIREMENTS.md",
-        "sha256": "05325b4a87ca80fa375add5182155d14c486293a7e6b004c8ef4bb8485a0c848",
+        "sha256": "c6ffd57185dd4e56df9c272166d004b74847a00bf41fa0bccd50367fa8fde61e",
         "mode": 420
       },
       {
         "path": "framework_candidates/project-management__delta-specification/proposed_framework/prompts/04_DEPENDENCY_AND_ACCEPTANCE_MAP.md",
-        "sha256": "5391d487ce6c811fa242564bad59de662d5d9d1b8e37aaec6074a2fa95fe6d59",
+        "sha256": "dcbee2cf7c885736230ce06b8f8761e9d54484de2097361b461d78e00f00be0d",
         "mode": 420
       },
       {
         "path": "framework_candidates/project-management__delta-specification/proposed_framework/prompts/05_INDEPENDENT_REVIEW.md",
-        "sha256": "96a4e9ad61e8868a8bc2ec8e1decb888b20a06e161acf958901a96cdd841bca7",
+        "sha256": "3cac3c1116d3cf97f69400f30e3bcd27fa579f2beaf53ea070572e1dce791935",
         "mode": 420
       },
       {
@@ -4877,7 +4892,7 @@
       },
       {
         "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-spec.schema.json",
-        "sha256": "0bf937a5c133717bd0333f7048d6fb71482caf79009514c482a14c7fb05dbaa3",
+        "sha256": "7f7d85baaf1f86a488fcc7536779fc8b735706615b5693e3c3364c3f2f1d6fc1",
         "mode": 420
       },
       {
@@ -4888,6 +4903,11 @@
       {
         "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/review.schema.json",
         "sha256": "584f21ffa5e4e9a54cb28465196e29f7cda8fab6ac1f56e4c8ef0d7c68a3cfbe",
+        "mode": 420
+      },
+      {
+        "path": "framework_candidates/project-management__delta-specification/provenance-receipt.json",
+        "sha256": "4bd9053e438e43cf2c4fa6adc8cac9f9563517b6ec01c5551518abdb5ff1019c",
         "mode": 420
       },
       {
@@ -9322,7 +9342,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "6a62f73e8bf99dbaaba2275e0c33df85ea3ea391826aadc232ef0948d5abeb6b",
+        "sha256": "16d2f1d748ab520b7b194765a36a7dc3f0d54459e7ad8baa5f6825a586fe87af",
         "mode": 420
       },
       {
@@ -10817,7 +10837,7 @@
       },
       {
         "path": "tools/commands/__tests__/outward-inward-command.test.cjs",
-        "sha256": "70087d4072e86e8d0cde6d5bff018ed443b58ed84c584c2bcc819fc6b05a296b",
+        "sha256": "f8d2d5bd8bffbf0b39e37b299fdb9ca2fca13e1d2189f6d25cbb4295b854ed0e",
         "mode": 420
       },
       {
@@ -10902,7 +10922,7 @@
       },
       {
         "path": "tools/commands/validate-prompt-provenance-receipt.cjs",
-        "sha256": "f330c7beba5278d225c4f9875f0b5edf3ab50c5ead0255ce95e77656f1e67613",
+        "sha256": "e80e65609d57500e4616bc41a45ccf7731406c0a1e54d19e5199b583458b6738",
         "mode": 420
       },
       {
@@ -16501,6 +16521,11 @@
         "mode": 420
       },
       {
+        "path": "tools/verify/__tests__/schema.test.cjs",
+        "sha256": "c2b8e308c7776bcb8255d81887d07deae8d7fe6d4383b05c56f7cd8a7f49cd17",
+        "mode": 420
+      },
+      {
         "path": "tools/verify/__tests__/scratch-leak-check.test.cjs",
         "sha256": "a863c7956c158f58cf7a2853d4c7ea10267136781496e013fd0ec917195d8fd5",
         "mode": 420
@@ -16652,7 +16677,7 @@
       },
       {
         "path": "tools/verify/lib/schema.cjs",
-        "sha256": "39fe6b459c84cfee1f6a941d9ac8f8fc7b6684d76df91bae95e426197dde42d5",
+        "sha256": "d591c4c7cdd0400bab239890783a37d2039f02c5417b2850ddd7197f98d9fcd6",
         "mode": 420
       },
       {
@@ -17177,7 +17202,7 @@
       },
       {
         "path": "tools/workspace/__tests__/candidate-root.test.js",
-        "sha256": "e53152d72e0acb5d8b98d194e63c24502dda87795d6f9c4ff8e80ba91ea7e22e",
+        "sha256": "db48407a1d1c431181ac4b732cbb1e6b8fc429adf6e8224d3689f12e0a5eedeb",
         "mode": 420
       },
       {
@@ -17504,9 +17529,9 @@
     "package_script_count": 206,
     "command_alias_registry_sha256": "bf0f8b941e0dc0d7b7d3938b765ac379a62b1c3bac50984358cd133afd1012d2",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "6a62f73e8bf99dbaaba2275e0c33df85ea3ea391826aadc232ef0948d5abeb6b",
-    "graph_nodes": 4218,
-    "graph_edges": 2953
+    "graph_sha256": "16d2f1d748ab520b7b194765a36a7dc3f0d54459e7ad8baa5f6825a586fe87af",
+    "graph_nodes": 4223,
+    "graph_edges": 2955
   },
   "runtime_exclusions": [
     ".git/**",

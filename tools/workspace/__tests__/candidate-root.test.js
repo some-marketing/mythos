@@ -488,19 +488,28 @@ test('delta schema requires at least one valid change collection', (t) => {
   const additions = [{
     requirement_id: 'ADD-1',
     requirement: 'System MUST add the requested behavior.',
-    scenarios: ['The added behavior is observable.']
+    provenance: { status: 'source', reference: 'source.md#L10' },
+    scenarios: [{
+      text: 'The added behavior is observable.',
+      provenance: { status: 'source', reference: 'source.md#L12' }
+    }]
   }];
   const modifications = [{
     requirement_id: 'MOD-1',
     baseline_requirement_id: 'BASE-1',
     behavioral_difference: 'The behavior changes in the requested way.',
     requirement: 'System MUST change the existing behavior.',
-    scenarios: ['The changed behavior is observable.']
+    provenance: { status: 'source', reference: 'source.md#L20' },
+    scenarios: [{
+      text: 'The changed behavior is observable.',
+      provenance: { status: 'source', reference: 'source.md#L22' }
+    }]
   }];
   const removals = [{
     requirement_id: 'REM-1',
     baseline_requirement_id: 'BASE-2',
-    intended_absence: 'The obsolete behavior is intentionally absent.'
+    intended_absence: 'The obsolete behavior is intentionally absent.',
+    provenance: { status: 'source', reference: 'source.md#L30' }
   }];
   const empty = {
     added: [],
@@ -560,6 +569,133 @@ test('delta schema requires at least one valid change collection', (t) => {
   assert.ok(invalidFindings.some((finding) =>
     finding.code === 'BUNDLE_SCHEMA_FAIL' && finding.path === path.join(bundleRoot, 'delta-spec.json')
   ), 'native output validator must reject hollow entries');
+
+  const inspectSchemaFailure = (delta) => {
+    fs.writeFileSync(path.join(bundleRoot, 'delta-spec.json'), JSON.stringify(delta));
+    const findings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+    return findings.some((finding) =>
+      finding.code === 'BUNDLE_SCHEMA_FAIL' && finding.path === path.join(bundleRoot, 'delta-spec.json')
+    );
+  };
+  const sharedSchemaFailure = (delta) => validateSchema(delta, deltaSchema).length > 0;
+  const sourcedEntries = {
+    added: additions[0],
+    modified: modifications[0],
+    removed: removals[0]
+  };
+
+  for (const collection of ['added', 'modified', 'removed']) {
+    const missingRequirementProvenance = {
+      ...empty,
+      [collection]: [{ ...sourcedEntries[collection], provenance: undefined }]
+    };
+    delete missingRequirementProvenance[collection][0].provenance;
+    assert.equal(sharedSchemaFailure(missingRequirementProvenance), true,
+      `${collection} without requirement provenance must fail shared schema validation`);
+    assert.equal(inspectSchemaFailure(missingRequirementProvenance), true,
+      `${collection} without requirement provenance must fail native output validation`);
+  }
+
+  for (const collection of ['added', 'modified']) {
+    const missingScenarioProvenance = {
+      ...empty,
+      [collection]: [{
+        ...sourcedEntries[collection],
+        scenarios: [{ text: sourcedEntries[collection].scenarios[0].text }]
+      }]
+    };
+    assert.equal(sharedSchemaFailure(missingScenarioProvenance), true,
+      `${collection} scenario without provenance must fail shared schema validation`);
+    assert.equal(inspectSchemaFailure(missingScenarioProvenance), true,
+      `${collection} scenario without provenance must fail native output validation`);
+
+    const blankScenarioReference = {
+      ...empty,
+      [collection]: [{
+        ...sourcedEntries[collection],
+        scenarios: [{
+          ...sourcedEntries[collection].scenarios[0],
+          provenance: { status: 'source', reference: '' }
+        }]
+      }]
+    };
+    assert.equal(sharedSchemaFailure(blankScenarioReference), true,
+      `${collection} scenario with blank provenance must fail shared schema validation`);
+    assert.equal(inspectSchemaFailure(blankScenarioReference), true,
+      `${collection} scenario with blank provenance must fail native output validation`);
+
+    const whitespaceScenarioReference = {
+      ...empty,
+      [collection]: [{
+        ...sourcedEntries[collection],
+        scenarios: [{
+          ...sourcedEntries[collection].scenarios[0],
+          provenance: { status: 'source', reference: '  ' }
+        }]
+      }]
+    };
+    assert.equal(sharedSchemaFailure(whitespaceScenarioReference), true,
+      `${collection} scenario with whitespace-only provenance must fail shared schema validation`);
+    assert.equal(inspectSchemaFailure(whitespaceScenarioReference), true,
+      `${collection} scenario with whitespace-only provenance must fail native output validation`);
+  }
+
+  for (const collection of ['added', 'modified', 'removed']) {
+    const whitespaceRequirementReference = {
+      ...empty,
+      [collection]: [{
+        ...sourcedEntries[collection],
+        provenance: { status: 'source', reference: '  ' }
+      }]
+    };
+    assert.equal(sharedSchemaFailure(whitespaceRequirementReference), true,
+      `${collection} requirement with whitespace-only provenance must fail shared schema validation`);
+    assert.equal(inspectSchemaFailure(whitespaceRequirementReference), true,
+      `${collection} requirement with whitespace-only provenance must fail native output validation`);
+  }
+
+  for (const invalidStatus of ['unknown', undefined]) {
+    const invalidProvenance = {
+      ...empty,
+      added: [{
+        ...additions[0],
+        provenance: { status: invalidStatus, reference: 'source.md#L10' }
+      }]
+    };
+    if (invalidStatus === undefined) delete invalidProvenance.added[0].provenance.status;
+    assert.equal(sharedSchemaFailure(invalidProvenance), true,
+      `invalid or missing status (${invalidStatus ?? 'missing'}) must fail shared schema validation`);
+    assert.equal(inspectSchemaFailure(invalidProvenance), true,
+      `invalid or missing status (${invalidStatus ?? 'missing'}) must fail native output validation`);
+  }
+
+  const stringScenario = {
+    ...empty,
+    added: [{ ...additions[0], scenarios: ['The old string scenario shape.'] }]
+  };
+  assert.equal(sharedSchemaFailure(stringScenario), true,
+    'string scenarios must fail shared schema validation');
+  assert.equal(inspectSchemaFailure(stringScenario), true,
+    'string scenarios must fail native output validation');
+
+  for (const collection of ['added', 'modified', 'removed']) {
+    const gapEntry = JSON.parse(JSON.stringify(sourcedEntries[collection]));
+    gapEntry.provenance = {
+      status: 'evidence_gap',
+      reference: 'No authoritative source was available for this requirement.'
+    };
+    if (gapEntry.scenarios) {
+      gapEntry.scenarios[0].provenance = {
+        status: 'evidence_gap',
+        reference: 'No authoritative source was available for this scenario.'
+      };
+    }
+    const gapDelta = { ...empty, [collection]: [gapEntry] };
+    assert.deepEqual(validateSchema(gapDelta, deltaSchema), [],
+      `${collection} explicit evidence gaps must pass shared schema validation`);
+    assert.equal(inspectSchemaFailure(gapDelta), false,
+      `${collection} explicit evidence gaps must pass native output validation`);
+  }
 });
 
 test('meaning-bearing candidate strings reject whitespace-only values', () => {
@@ -632,13 +768,25 @@ test('meaning-bearing candidate strings reject whitespace-only values', () => {
   const deltaSchema = readCandidateSchema('project-management__delta-specification', 'delta-spec.schema.json');
   for (const collection of ['added', 'modified']) {
     const item = collection === 'added'
-      ? { requirement_id: 'ADD-1', requirement: 'Add behavior', scenarios: [' '] }
+      ? {
+        requirement_id: 'ADD-1',
+        requirement: 'Add behavior',
+        provenance: { status: 'source', reference: 'source.md#L10' },
+        scenarios: [{
+          text: ' ',
+          provenance: { status: 'source', reference: 'source.md#L12' }
+        }]
+      }
       : {
         requirement_id: 'MOD-1',
         baseline_requirement_id: 'BASE-1',
         behavioral_difference: 'Difference',
         requirement: 'Modify behavior',
-        scenarios: [' ']
+        provenance: { status: 'source', reference: 'source.md#L20' },
+        scenarios: [{
+          text: ' ',
+          provenance: { status: 'source', reference: 'source.md#L22' }
+        }]
       };
     assert.throws(() => validateRequiredFields({
       added: collection === 'added' ? [item] : [],
@@ -716,8 +864,18 @@ test('delta bundle consistency rejects cyclic dependency graphs', (t) => {
   t.after(() => fs.rmSync(bundleRoot, { recursive: true, force: true }));
   fs.writeFileSync(path.join(bundleRoot, 'delta-spec.json'), JSON.stringify({
     added: [
-      { requirement_id: 'A', requirement: 'System MUST emit A.', scenarios: ['A is observable.'] },
-      { requirement_id: 'B', requirement: 'System MUST emit B.', scenarios: ['B is observable.'] }
+      {
+        requirement_id: 'A',
+        requirement: 'System MUST emit A.',
+        provenance: { status: 'source', reference: 'source-a' },
+        scenarios: [{ text: 'A is observable.', provenance: { status: 'source', reference: 'source-a#scenario' } }]
+      },
+      {
+        requirement_id: 'B',
+        requirement: 'System MUST emit B.',
+        provenance: { status: 'source', reference: 'source-b' },
+        scenarios: [{ text: 'B is observable.', provenance: { status: 'source', reference: 'source-b#scenario' } }]
+      }
     ],
     modified: [],
     removed: [],
@@ -758,8 +916,18 @@ test('delta bundle consistency rejects cyclic dependency graphs', (t) => {
 
   fs.writeFileSync(path.join(bundleRoot, 'delta-spec.json'), JSON.stringify({
     added: [
-      { requirement_id: 'DUP', requirement: 'First behavior.', scenarios: ['First is observable.'] },
-      { requirement_id: 'DUP', requirement: 'Second behavior.', scenarios: ['Second is observable.'] }
+      {
+        requirement_id: 'DUP',
+        requirement: 'First behavior.',
+        provenance: { status: 'source', reference: 'source-a' },
+        scenarios: [{ text: 'First is observable.', provenance: { status: 'source', reference: 'source-a#scenario' } }]
+      },
+      {
+        requirement_id: 'DUP',
+        requirement: 'Second behavior.',
+        provenance: { status: 'source', reference: 'source-b' },
+        scenarios: [{ text: 'Second is observable.', provenance: { status: 'source', reference: 'source-b#scenario' } }]
+      }
     ],
     modified: [],
     removed: [],
@@ -786,7 +954,8 @@ test('delta bundle consistency rejects cyclic dependency graphs', (t) => {
       baseline_requirement_id: 'DOES-NOT-EXIST',
       behavioral_difference: 'Behavior changes.',
       requirement: 'System MUST change.',
-      scenarios: ['Change is observable.']
+      provenance: { status: 'source', reference: 'source.md#change' },
+      scenarios: [{ text: 'Change is observable.', provenance: { status: 'source', reference: 'source.md#scenario' } }]
     }],
     removed: [],
     preserved_invariants: []

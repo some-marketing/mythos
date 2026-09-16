@@ -69,6 +69,9 @@ function validate(data, schema, options = {}) {
     if (schema.minLength !== undefined && data.length < schema.minLength) {
       errors.push({ path: dataPath, message: `String length ${data.length} < minLength ${schema.minLength}` });
     }
+    if (typeof schema.pattern === 'string' && !new RegExp(schema.pattern).test(data)) {
+      errors.push({ path: dataPath, message: `String does not match pattern: ${schema.pattern}` });
+    }
   }
 
   if (typeof data === 'number') {

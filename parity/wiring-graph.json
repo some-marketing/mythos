@@ -19614,7 +19614,7 @@
       "id": "file:tools/sessions/__tests__/watcher-lifecycle.test.cjs",
       "type": "file",
       "path": "tools/sessions/__tests__/watcher-lifecycle.test.cjs",
-      "sha256": "c8c54a7260434066af170d63644d314f84b7b7e5acb4616ce0f242e47cf8950c",
+      "sha256": "8bf69a4cf08522e018f1d5c77e0ffc838021e9ff1022879f3c0cab90f4bcf1b6",
       "mode": 420
     },
     {
@@ -19747,7 +19747,7 @@
       "id": "file:tools/sessions/watcher-lifecycle.cjs",
       "type": "file",
       "path": "tools/sessions/watcher-lifecycle.cjs",
-      "sha256": "39c30d8decf2ea4e63a222c1d3bb4903ccdc8455f34c03148097c802ff4023ba",
+      "sha256": "a3a3f456821c9d19740e88bf183f51b63af292bc4b8aabae1f7d1dc929f5b87a",
       "mode": 420
     },
     {

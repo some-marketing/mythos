@@ -24,6 +24,11 @@
 //      rolled back fail-closed.
 //   11. partial-start failure rolls back the already-started set and records
 //      no identity for the failed spawn.
+//   12. startup liveness rejects a child that exits after identity capture.
+//   13. registry persistence failure reaps owned children and releases lock.
+//   14. lock contention fails closed for both start and stop.
+//   15. concurrent same-session starts cannot create two owned generations.
+//   16. cleanup failure preserves the original error and owned identity.
 //
 // Live daemons are harmless long-running children
 // (node -e 'setInterval(()=>{},1000)'); every spawned process is reaped.
@@ -52,6 +57,7 @@ const {
   normalizeStartTime,
   computeArgvFingerprint,
   verifyIdentity,
+  liveCommand,
   processExists,
   spawnedChildren
 } = require('../watcher-lifecycle.cjs');
@@ -86,6 +92,31 @@ function waitExit(child, timeoutMs) {
       resolve({ code, signal });
     });
   });
+}
+
+async function waitForFile(file, timeoutMs = 2000) {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    if (fs.existsSync(file)) return;
+    await new Promise((r) => setTimeout(r, 10));
+  }
+  throw new Error(`timed out waiting for ${file}`);
+}
+
+function reapFixturePid(pidFile, daemonPath, identity) {
+  if (!fs.existsSync(pidFile)) return false;
+  const pid = Number(fs.readFileSync(pidFile, 'utf8'));
+  if (!Number.isInteger(pid) || pid <= 0 || pid === process.pid || !processExists(pid)) return false;
+  // PID files are only a locator. Fail closed unless the live command proves
+  // this is the unique temporary fixture daemon; verify recorded identity too
+  // when the registry still has it.
+  if (!liveCommand(pid).includes(daemonPath)) return false;
+  if (identity) {
+    const verification = verifyIdentity(identity);
+    if (!verification.ok) return false;
+  }
+  try { process.kill(pid, 'SIGKILL'); } catch (_) { /* already gone */ }
+  return true;
 }
 
 // Safety net: reap every child this file spawned, live or not.
@@ -215,6 +246,33 @@ test('spawnWatcher settles an asynchronous nonexistent-executable failure before
   assert.equal(report.failed[0].name, 'broken');
   assert.match(report.failed[0].error, /ENOENT/);
   assert.deepStrictEqual(report.registry, [], 'failed spawn must record no identity');
+});
+
+test('startup liveness check rejects a watcher that exits after identity capture', async () => {
+  const root = freshRoot();
+  const sid = freshSession(root);
+  const pidPath = path.join(root, 'startup-exit.pid');
+  const daemonPath = path.join(root, 'startup-exit.cjs');
+  fs.writeFileSync(daemonPath, [
+    `'use strict';`,
+    `require('fs').writeFileSync(${JSON.stringify(pidPath)}, String(process.pid));`,
+    `setTimeout(() => process.exit(7), 50);`
+  ].join('\n'), 'utf8');
+
+  const result = await startWatchers(
+    sid,
+    [{ name: 'startup-exit', command: process.execPath, args: [daemonPath] }],
+    { projectRoot: root }
+  );
+
+  await waitForFile(pidPath);
+  assert.strictEqual(result.ok, false, JSON.stringify(result));
+  assert.strictEqual(result.started.length, 0);
+  assert.strictEqual(result.failed.length, 1);
+  assert.match(result.failed[0].error, /exited during startup|unverifiable/);
+  const pid = Number(fs.readFileSync(pidPath, 'utf8'));
+  assert.strictEqual(processExists(pid), false, 'startup-failed child must be reaped');
+  assert.deepStrictEqual(listRegistry(sid, { projectRoot: root }), []);
 });
 
 test('spawnWatcher bounds unavailable start-time retries and reaps only its owned child', { skip: POSIX ? false : 'POSIX ps simulation only' }, async () => {
@@ -518,6 +576,190 @@ test('a failed spawn is reported in failed, rolls back the started set, and reco
   assert.deepStrictEqual(listRegistry(sid, { projectRoot: root }), []);
 
   await stopWatchers(sid, { projectRoot: root });
+});
+
+test('registry persistence failure reaps owned children and releases the session lock', async () => {
+  const root = freshRoot();
+  const sid = freshSession(root);
+  const pidPath = path.join(root, 'persist-fail.pid');
+  const daemonPath = path.join(root, 'persist-fail.cjs');
+  fs.writeFileSync(daemonPath, [
+    `'use strict';`,
+    `require('fs').writeFileSync(${JSON.stringify(pidPath)}, String(process.pid));`,
+    `setInterval(() => {}, 1000);`
+  ].join('\n'), 'utf8');
+  const registryPath = registryFilePath(sid, root);
+  const lockPath = path.join(path.dirname(registryPath), 'watchers.lock');
+  fs.mkdirSync(registryPath, { recursive: true });
+
+  let failure;
+  await assert.rejects(
+    () => startWatchers(sid, [{ name: 'persist-fail', command: process.execPath, args: [daemonPath] }], { projectRoot: root }),
+    (err) => {
+      failure = err;
+      return err && err.code === 'EISDIR' && /EISDIR/.test(err.message);
+    }
+  );
+  await waitForFile(pidPath);
+  const pid = Number(fs.readFileSync(pidPath, 'utf8'));
+  assert.strictEqual(processExists(pid), false, 'persistence-failed child must be reaped directly');
+  assert.strictEqual(fs.existsSync(lockPath), false, 'lock must release after persistence failure');
+  assert.match(failure.message, /EISDIR/);
+
+  // A removed failing fixture can immediately acquire the same session lock.
+  fs.rmdirSync(registryPath);
+  const recovered = await startWatchers(
+    sid,
+    [{ name: 'recovered', command: process.execPath, args: HARM_ARGS }],
+    { projectRoot: root }
+  );
+  assert.strictEqual(recovered.ok, true, JSON.stringify(recovered));
+  await stopWatchers(sid, { projectRoot: root });
+});
+
+test('owned cleanup failure preserves the persistence error and unreaped identity', async () => {
+  const root = freshRoot();
+  const sid = freshSession(root);
+  const pidPath = path.join(root, 'cleanup-fail.pid');
+  const daemonPath = path.join(root, 'cleanup-fail.cjs');
+  fs.writeFileSync(daemonPath, [
+    `'use strict';`,
+    `require('fs').writeFileSync(${JSON.stringify(pidPath)}, String(process.pid));`,
+    `setInterval(() => {}, 1000);`
+  ].join('\n'), 'utf8');
+  const registryPath = registryFilePath(sid, root);
+  const lockPath = path.join(path.dirname(registryPath), 'watchers.lock');
+  const originalRenameSync = fs.renameSync;
+  let ownedChild;
+  let originalChildKill;
+  let failure;
+  try {
+    fs.renameSync = (from, to) => {
+      if (to === registryPath) {
+        ownedChild = spawnedChildren().get(`${sid}::cleanup-fail`);
+        if (ownedChild) {
+          originalChildKill = ownedChild.kill;
+          ownedChild.kill = () => { throw new Error('simulated cleanup denial'); };
+        }
+        const err = new Error('simulated registry persistence failure');
+        err.code = 'EIO';
+        throw err;
+      }
+      return originalRenameSync(from, to);
+    };
+    await assert.rejects(
+      () => startWatchers(sid, [{ name: 'cleanup-fail', command: process.execPath, args: [daemonPath] }], { projectRoot: root }),
+      (err) => {
+        failure = err;
+        return err && err.code === 'EIO' && /simulated registry persistence failure/.test(err.message);
+      }
+    );
+    await waitForFile(pidPath);
+    assert.match(failure.message, /owned watcher cleanup-fail \(pid \d+\) cleanup failed: simulated cleanup denial/);
+    assert.strictEqual(spawnedChildren().has(`${sid}::cleanup-fail`), true, 'unreaped owned handle must remain visible');
+    assert.strictEqual(fs.existsSync(lockPath), false, 'lock releases after cleanup failure');
+  } finally {
+    fs.renameSync = originalRenameSync;
+    const child = ownedChild || spawnedChildren().get(`${sid}::cleanup-fail`);
+    if (child) {
+      if (originalChildKill) child.kill = originalChildKill;
+      try { child.kill('SIGKILL'); } catch (_) { /* already gone */ }
+      await waitExit(child);
+      spawnedChildren().delete(`${sid}::cleanup-fail`);
+    }
+  }
+});
+
+test('session lock contention fails closed before start and stop', async () => {
+  const root = freshRoot();
+  const sid = freshSession(root);
+  const registryPath = registryFilePath(sid, root);
+  const lockPath = path.join(path.dirname(registryPath), 'watchers.lock');
+  fs.mkdirSync(path.dirname(lockPath), { recursive: true });
+  fs.writeFileSync(lockPath, JSON.stringify({ pid: process.pid, token: 'other-owner' }) + '\n', 'utf8');
+
+  await assert.rejects(
+    () => startWatchers(sid, [{ name: 'blocked', command: process.execPath, args: HARM_ARGS }], { projectRoot: root }),
+    (err) => err && err.code === 'WATCHER_LOCK_BUSY'
+  );
+  assert.deepStrictEqual(listRegistry(sid, { projectRoot: root }), []);
+
+  await assert.rejects(
+    () => stopWatchers(sid, { projectRoot: root }),
+    (err) => err && err.code === 'WATCHER_LOCK_BUSY'
+  );
+  fs.unlinkSync(lockPath);
+  const stop = await stopWatchers(sid, { projectRoot: root });
+  assert.strictEqual(stop.registry_missing, true);
+});
+
+test('concurrent same-session starts leave one owned generation', async () => {
+  const root = freshRoot();
+  const sid = freshSession(root);
+  const modulePath = path.resolve(__dirname, '..', 'watcher-lifecycle.cjs');
+  const daemonPath = path.join(root, 'concurrent.cjs');
+  const pidA = path.join(root, 'a.pid');
+  const pidB = path.join(root, 'b.pid');
+  fs.writeFileSync(daemonPath, [
+    `'use strict';`,
+    `require('fs').writeFileSync(process.env.PR17_PID_FILE, String(process.pid));`,
+    `setInterval(() => {}, 1000);`
+  ].join('\n'), 'utf8');
+  const runnerPath = path.join(root, 'runner.cjs');
+  fs.writeFileSync(runnerPath, [
+    `'use strict';`,
+    `const { startWatchers } = require(${JSON.stringify(modulePath)});`,
+    `(async () => {`,
+    `  try {`,
+    `    const result = await startWatchers(${JSON.stringify(sid)}, [{ name: 'concurrent', command: process.execPath, args: [${JSON.stringify(daemonPath)}] }], { projectRoot: ${JSON.stringify(root)} });`,
+    `    process.stdout.write(JSON.stringify({ ok: result.ok, started: result.started, failed: result.failed }));`,
+    `  } catch (err) {`,
+    `    process.stdout.write(JSON.stringify({ error: { code: err.code, message: err.message } }));`,
+    `    process.exitCode = 1;`,
+    `  }`,
+    `})();`
+  ].join('\n'), 'utf8');
+  const launch = (pidFile) => spawn(process.execPath, [runnerPath], {
+    env: Object.assign({}, process.env, { PR17_PID_FILE: pidFile }),
+    stdio: ['ignore', 'pipe', 'pipe']
+  });
+  const a = launch(pidA);
+  const b = launch(pidB);
+  const runners = [a, b];
+  let stdoutA = '';
+  let stdoutB = '';
+  try {
+    a.stdout.on('data', (chunk) => { stdoutA += chunk.toString(); });
+    b.stdout.on('data', (chunk) => { stdoutB += chunk.toString(); });
+    const [exitA, exitB] = await Promise.all([waitExit(a, 5000), waitExit(b, 5000)]);
+    const reports = [JSON.parse(stdoutA), JSON.parse(stdoutB)];
+    assert.strictEqual([exitA.code, exitB.code].filter((code) => code === 0).length, 1, JSON.stringify(reports));
+    assert.strictEqual(reports.filter((report) => report.ok === true).length, 1, JSON.stringify(reports));
+    assert.strictEqual(reports.filter((report) => report.error && report.error.code === 'WATCHER_LOCK_BUSY').length, 1, JSON.stringify(reports));
+    const entries = listRegistry(sid, { projectRoot: root });
+    assert.strictEqual(entries.length, 1);
+    const pids = [pidA, pidB].filter((file) => fs.existsSync(file)).map((file) => Number(fs.readFileSync(file, 'utf8')));
+    assert.strictEqual(pids.length, 1, 'only the lock winner may spawn');
+    assert.strictEqual(entries[0].pid, pids[0]);
+    assert.strictEqual(processExists(entries[0].pid), true);
+    await stopWatchers(sid, { projectRoot: root });
+    assert.strictEqual(processExists(entries[0].pid), false);
+  } finally {
+    // These runners own their fixture daemons in separate processes, so the
+    // parent test after-hook cannot see their spawnedChildren() maps.
+    for (const runner of runners) {
+      if (runner.exitCode === null && runner.signalCode === null) {
+        try { runner.kill('SIGKILL'); } catch (_) { /* already gone */ }
+      }
+    }
+    const remainingEntries = listRegistry(sid, { projectRoot: root });
+    for (const file of [pidA, pidB]) {
+      const pid = fs.existsSync(file) ? Number(fs.readFileSync(file, 'utf8')) : null;
+      const identity = remainingEntries.find((entry) => entry.pid === pid);
+      reapFixturePid(file, daemonPath, identity);
+    }
+    try { fs.unlinkSync(path.join(path.dirname(registryFilePath(sid, root)), 'watchers.lock')); } catch (_) { /* already gone */ }
+  }
 });
 
 test('pre-emptive cleanup: starting twice never orphans duplicate daemons', async () => {

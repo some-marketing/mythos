@@ -80,6 +80,11 @@ const REGISTRY_SCHEMA = 'watcher-registry/1';
 const START_TIME_RETRIES = 5;
 const START_TIME_RETRY_MS = 50;
 const PS_TIMEOUT_MS = 2000;
+// This is a startup liveness check, not a readiness protocol. Watchers have
+// no shared handshake contract, so successful registration waits briefly and
+// observes exit/liveness plus a final start-time sample before detaching.
+const STARTUP_SETTLE_MS = 100;
+const SESSION_LOCK_FILE = 'watchers.lock';
 
 // In-memory spawned ChildProcess handles, keyed `${sessionId}::${name}`.
 // Exported for test introspection (signalCode/exitCode evidence).
@@ -116,6 +121,56 @@ function registryFilePath(sessionId, projectRoot) {
     normalizeSessionId(sessionId),
     REGISTRY_FILE
   );
+}
+
+function sessionLockFilePath(sessionId, projectRoot) {
+  return path.join(path.dirname(registryFilePath(sessionId, projectRoot)), SESSION_LOCK_FILE);
+}
+
+// Lifecycle operations are serialized per session. Contention fails closed:
+// there is no stale-PID recovery here because unlinking a lock after a PID
+// check can remove a newly replaced owner's lock.
+function acquireSessionLock(sessionId, projectRoot) {
+  const file = sessionLockFilePath(sessionId, projectRoot);
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  const token = `${process.pid}:${crypto.randomBytes(16).toString('hex')}`;
+  let fd;
+  try {
+    fd = fs.openSync(file, 'wx');
+    fs.writeFileSync(fd, JSON.stringify({ pid: process.pid, token, acquired_at: new Date().toISOString() }) + '\n');
+    fs.closeSync(fd);
+    fd = undefined;
+    return { file, token };
+  } catch (err) {
+    if (fd !== undefined) {
+      try { fs.closeSync(fd); } catch (_) { /* preserve acquisition error */ }
+      try { fs.unlinkSync(file); } catch (_) { /* preserve acquisition error */ }
+    }
+    if (err && err.code === 'EEXIST') {
+      const busy = new Error(`watcher-lifecycle: session lock busy for ${normalizeSessionId(sessionId)}`);
+      busy.code = 'WATCHER_LOCK_BUSY';
+      busy.cause = err;
+      throw busy;
+    }
+    throw err;
+  }
+}
+
+function releaseSessionLock(lock) {
+  if (!lock) return;
+  try {
+    const current = JSON.parse(fs.readFileSync(lock.file, 'utf8'));
+    if (!current || current.token !== lock.token) return;
+    fs.unlinkSync(lock.file);
+  } catch (err) {
+    if (err && err.code !== 'ENOENT') throw err;
+  }
+}
+
+function attachSecondaryError(primary, property, label, secondary) {
+  primary[property] = secondary;
+  primary.message = `${primary.message}; ${label}: ${secondary.message}`;
+  return primary;
 }
 
 function readRegistry(sessionId, projectRoot) {
@@ -173,32 +228,69 @@ function liveCommand(pid) {
 function reapOwnedChild(child) {
   return new Promise((resolve) => {
     if (!child || child.exitCode !== null || child.signalCode !== null) {
-      resolve();
+      resolve({ ok: true });
       return;
     }
 
     let finished = false;
     let killTimer;
-    const finish = () => {
+    let hardTimer;
+    const finish = (error) => {
       if (finished) return;
       finished = true;
       clearTimeout(killTimer);
-      child.removeListener('exit', finish);
-      resolve();
+      clearTimeout(hardTimer);
+      child.removeListener('exit', onExit);
+      resolve(error ? { ok: false, error } : { ok: true });
     };
-    child.once('exit', finish);
+    const onExit = () => finish();
+    child.once('exit', onExit);
     try {
       child.kill('SIGTERM');
-    } catch (_) {
-      finish();
+    } catch (err) {
+      finish(err);
       return;
     }
     killTimer = setTimeout(() => {
       if (child.exitCode === null && child.signalCode === null) {
-        try { child.kill('SIGKILL'); } catch (_) { /* already gone */ }
+        try {
+          child.kill('SIGKILL');
+          hardTimer = setTimeout(() => {
+            if (child.exitCode === null && child.signalCode === null) {
+              finish(new Error(`watcher-lifecycle: owned child ${child.pid} remained alive after SIGKILL`));
+            }
+          }, START_TIME_RETRY_MS);
+        } catch (err) {
+          finish(err);
+        }
       }
     }, START_TIME_RETRY_MS);
   });
+}
+
+async function reapStartedWatchers(sessionId, started) {
+  const cleanupErrors = [];
+  for (const identity of started) {
+    const key = `${sessionId}::${identity.name}`;
+    const child = spawned.get(key);
+    let cleanupFailed = false;
+    try {
+      const result = await reapOwnedChild(child);
+      if (result && result.ok === false) {
+        cleanupFailed = true;
+        cleanupErrors.push(new Error(`owned watcher ${identity.name} (pid ${identity.pid}) cleanup failed: ${result.error.message}`));
+      }
+    } catch (err) {
+      cleanupFailed = true;
+      cleanupErrors.push(new Error(`owned watcher ${identity.name} (pid ${identity.pid}) cleanup failed: ${err.message}`));
+    } finally {
+      if (!cleanupFailed) spawned.delete(key);
+    }
+  }
+  if (cleanupErrors.length === 0) return null;
+  const cleanupError = new Error(cleanupErrors.map((err) => err.message).join('; '));
+  cleanupError.errors = cleanupErrors;
+  return cleanupError;
 }
 
 function processExists(pid) {
@@ -366,17 +458,35 @@ function spawnWatcher(entry, opts) {
     const name = entry.name;
     let child;
     let settled = false;
+    let settleTimer;
     const fail = (err, reapChild) => {
       if (settled) return;
       settled = true;
-      if (child) child.removeListener('error', onError);
+      clearTimeout(settleTimer);
+      if (child) {
+        child.removeListener('error', onError);
+        child.removeListener('exit', onExit);
+      }
       if (reapChild && child && child.pid != null) {
-        reapOwnedChild(child).then(() => reject(err));
+        reapOwnedChild(child).then((result) => {
+          if (result && result.ok === false) {
+            attachSecondaryError(
+              err,
+              'cleanup_error',
+              `owned watcher ${name} (pid ${child.pid}) cleanup failed`,
+              result.error
+            );
+          }
+          reject(err);
+        });
       } else {
         reject(err);
       }
     };
     const onError = (err) => fail(err, true);
+    const onExit = (code, signal) => {
+      fail(new Error(`watcher-lifecycle: watcher ${name} exited during startup (code ${code}, signal ${signal || 'none'})`), true);
+    };
     try {
       child = spawn(entry.executable, entry.argv.slice(1), {
         stdio: (opts && opts.stdio) || 'ignore'
@@ -388,6 +498,7 @@ function spawnWatcher(entry, opts) {
     // Asynchronous spawn failure (e.g. ENOENT for a bad command): reject
     // rather than recording a pid-less identity.
     child.once('error', onError);
+    child.once('exit', onExit);
 
     const record = (attempt = 0) => {
       if (settled || child.pid == null) return; // settles via 'error' or next retry
@@ -411,14 +522,30 @@ function spawnWatcher(entry, opts) {
         script: entry.script || null,
         spawned_at: new Date().toISOString()
       };
-      spawned.set(`${opts && opts.sessionId}::${name}`, child);
-      settled = true;
-      child.removeListener('error', onError);
-      // The watcher is an intentionally detached lifecycle child. Retain the
-      // ChildProcess handle for later identity-verified signaling, but do not
-      // let that handle keep the start CLI alive after the registry is written.
-      child.unref();
-      resolve({ name, child, identity });
+      // Wait for a bounded startup interval. This catches a child that can be
+      // interrogated by ps but exits before initialization is complete. It is
+      // only a liveness check; arbitrary child readiness is not claimed.
+      settleTimer = setTimeout(() => {
+        if (settled) return;
+        if (child.exitCode !== null || child.signalCode !== null || !processExists(child.pid)) {
+          fail(new Error(`watcher-lifecycle: watcher ${name} exited during startup`), true);
+          return;
+        }
+        const finalStartTime = liveStartTime(child.pid);
+        if (!finalStartTime || normalizeStartTime(finalStartTime) !== normalizeStartTime(startTime)) {
+          fail(new Error(`watcher-lifecycle: watcher ${name} became unverifiable during startup`), true);
+          return;
+        }
+        spawned.set(`${opts && opts.sessionId}::${name}`, child);
+        settled = true;
+        child.removeListener('error', onError);
+        child.removeListener('exit', onExit);
+        // The watcher is an intentionally detached lifecycle child. Retain the
+        // ChildProcess handle for later identity-verified signaling, but do not
+        // let that handle keep the start CLI alive after the registry is written.
+        child.unref();
+        resolve({ name, child, identity });
+      }, STARTUP_SETTLE_MS);
     };
     record();
   });
@@ -452,64 +579,94 @@ async function startWatchers(sessionId, watcherSet, opts) {
   const root = (opts && opts.projectRoot) || PROJECT_ROOT;
   const sid = normalizeSessionId(sessionId);
   const entries = normalizeWatcherSet(watcherSet, root);
+  const lock = acquireSessionLock(sid, root);
+  let operationError;
 
-  const preemptivelyStopped = [];
-  const cleanupRefused = [];
-  const existing = readRegistry(sid, root);
-  if (existing && Object.keys(existing.watchers).length > 0) {
-    const stop = await stopWatchers(sid, { projectRoot: root });
-    preemptivelyStopped.push(...stop.signaled, ...stop.stale);
-    for (const refusal of stop.refused) {
-      cleanupRefused.push({ name: refusal.name, mismatches: refusal.mismatches, reason: refusal.reason });
+  try {
+    const preemptivelyStopped = [];
+    const cleanupRefused = [];
+    const existing = readRegistry(sid, root);
+    if (existing && Object.keys(existing.watchers).length > 0) {
+      const stop = await stopWatchersUnlocked(sid, { projectRoot: root });
+      preemptivelyStopped.push(...stop.signaled, ...stop.stale);
+      for (const refusal of stop.refused) {
+        cleanupRefused.push({ name: refusal.name, mismatches: refusal.mismatches, reason: refusal.reason });
+      }
     }
-  }
 
-  const registry = readRegistry(sid, root) || { watchers: {} };
-  const started = [];
-  const failed = cleanupRefused.map((refusal) => ({
-    name: refusal.name,
-    error: `pre-emptive cleanup refused: ${refusal.reason} (${refusal.mismatches.join(', ')})`
-  }));
+    const registry = readRegistry(sid, root) || { watchers: {} };
+    const started = [];
+    const failed = cleanupRefused.map((refusal) => ({
+      name: refusal.name,
+      error: `pre-emptive cleanup refused: ${refusal.reason} (${refusal.mismatches.join(', ')})`
+    }));
 
-  for (const entry of entries) {
+    for (const entry of entries) {
+      try {
+        const { identity } = await spawnWatcher(entry, { projectRoot: root, sessionId: sid });
+        registry.watchers[identity.name] = identity;
+        started.push(identity);
+      } catch (err) {
+        failed.push({ name: entry.name, error: err.message });
+      }
+    }
+
     try {
-      const { identity } = await spawnWatcher(entry, { projectRoot: root, sessionId: sid });
-      registry.watchers[identity.name] = identity;
-      started.push(identity);
+      // Persist the freshly started identities BEFORE any rollback decision:
+      // stopWatchers re-reads the registry from disk, so an in-memory-only set
+      // would be invisible to the rollback and the fresh daemon would be orphaned.
+      writeRegistry(sid, registry, root);
+
+      // Partial-start failure: roll back the set started in THIS call so a broken
+      // session open never leaves an orphaned subset running. The registry at this
+      // point holds exactly the freshly started identities (any previous generation
+      // was cleaned above), so stopWatchers is a precise identity-verified rollback.
+      const rolledBack = [];
+      if (failed.length > 0 && started.length > 0) {
+        const stop = await stopWatchersUnlocked(sid, { projectRoot: root });
+        rolledBack.push(...stop.signaled, ...stop.stale);
+        for (const refusal of stop.refused) {
+          failed.push({ name: refusal.name, error: `rollback refused: ${refusal.reason} (${refusal.mismatches.join(', ')})` });
+        }
+      }
+
+      // Persist the post-rollback state from a fresh disk read: after a rollback
+      // the in-memory registry is stale (stopWatchers mutated the on-disk copy).
+      writeRegistry(sid, readRegistry(sid, root) || { watchers: {} }, root);
+      return {
+        ok: failed.length === 0,
+        started,
+        failed,
+        preemptively_stopped: preemptivelyStopped,
+        cleanup_refused: cleanupRefused,
+        rolled_back: rolledBack
+      };
     } catch (err) {
-      failed.push({ name: entry.name, error: err.message });
+      // The registry is not a reliable ownership source when persistence failed.
+      // Reap handles owned by this invocation directly before propagating the
+      // original error; preserve cleanup failure truth if reaping also fails.
+      const cleanupError = await reapStartedWatchers(sid, started);
+      if (cleanupError) {
+        err.cleanup_error = cleanupError;
+        err.message = `${err.message}; owned-child cleanup failed: ${cleanupError.message}`;
+      }
+      throw err;
+    }
+  } catch (err) {
+    operationError = err;
+    throw err;
+  }
+  finally {
+    try {
+      releaseSessionLock(lock);
+    } catch (err) {
+      if (operationError) {
+        attachSecondaryError(operationError, 'lock_release_error', 'session lock release failed', err);
+      } else {
+        throw err;
+      }
     }
   }
-
-  // Persist the freshly started identities BEFORE any rollback decision:
-  // stopWatchers re-reads the registry from disk, so an in-memory-only set
-  // would be invisible to the rollback and the fresh daemon would be orphaned.
-  writeRegistry(sid, registry, root);
-
-  // Partial-start failure: roll back the set started in THIS call so a broken
-  // session open never leaves an orphaned subset running. The registry at this
-  // point holds exactly the freshly started identities (any previous generation
-  // was cleaned above), so stopWatchers is a precise identity-verified rollback.
-  const rolledBack = [];
-  if (failed.length > 0 && started.length > 0) {
-    const stop = await stopWatchers(sid, { projectRoot: root });
-    rolledBack.push(...stop.signaled, ...stop.stale);
-    for (const refusal of stop.refused) {
-      failed.push({ name: refusal.name, error: `rollback refused: ${refusal.reason} (${refusal.mismatches.join(', ')})` });
-    }
-  }
-
-  // Persist the post-rollback state from a fresh disk read: after a rollback
-  // the in-memory registry is stale (stopWatchers mutated the on-disk copy).
-  writeRegistry(sid, readRegistry(sid, root) || { watchers: {} }, root);
-  return {
-    ok: failed.length === 0,
-    started,
-    failed,
-    preemptively_stopped: preemptivelyStopped,
-    cleanup_refused: cleanupRefused,
-    rolled_back: rolledBack
-  };
 }
 
 // Stop exactly the session-start set recorded in the registry. Each entry is
@@ -519,7 +676,7 @@ async function startWatchers(sessionId, watcherSet, opts) {
 // after `graceMs` if still alive, re-verifying start_time before escalation).
 // Resolves { signaled: [name...], refused: [{name, mismatches, reason}],
 //            stale: [name...], registry_missing: bool }.
-async function stopWatchers(sessionId, opts) {
+async function stopWatchersUnlocked(sessionId, opts) {
   const root = (opts && opts.projectRoot) || PROJECT_ROOT;
   const sid = normalizeSessionId(sessionId);
   const signal = (opts && opts.signal) || 'SIGTERM';
@@ -614,6 +771,29 @@ async function stopWatchers(sessionId, opts) {
 
   if (names.length > 0) writeRegistry(sid, registry, root);
   return { signaled, refused, stale, registry_missing: false };
+}
+
+async function stopWatchers(sessionId, opts) {
+  const root = (opts && opts.projectRoot) || PROJECT_ROOT;
+  const sid = normalizeSessionId(sessionId);
+  const lock = acquireSessionLock(sid, root);
+  let operationError;
+  try {
+    return await stopWatchersUnlocked(sid, opts);
+  } catch (err) {
+    operationError = err;
+    throw err;
+  } finally {
+    try {
+      releaseSessionLock(lock);
+    } catch (err) {
+      if (operationError) {
+        attachSecondaryError(operationError, 'lock_release_error', 'session lock release failed', err);
+      } else {
+        throw err;
+      }
+    }
+  }
 }
 
 // List the current registry entries for a session (array of identities, in

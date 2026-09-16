@@ -74,7 +74,7 @@
   },
   "operator_guidance_phase_1": true,
   "operator_guidance_contract": {
-    "rule": "This command must end with conditional next-step options (each with condition, command, why), plus a concrete request for operator input that would improve or harden the system."
+    "rule": "This command must end with conditional next-step options (each with condition, command, why). It must NOT ask the human operator for permission to amend or to run the follow-on /repair-plan: amendments are review-gated overlays and are safe by default, so the agent proceeds and reports. Request operator input only when a divergence encodes an operator judgement about the larger workings of the system (how the simulation should function for the minds in it, what the system is for, a named operator gate in the plan, or a fact only the operator knows); technical and mechanical divergences are not operator questions. Otherwise state 'no operator decision required' and emit the exact next command. Any technical item that must reach the operator is explained jargon-free as: what it is, what it would impact, why it matters. (Operator standing rule 2026-09-16.)"
   },
   "multi_agent_contract": {
     "rule": "Amendment artifacts use structured JSON with machine-readable divergence types, not prose-only summaries. Any agent can read the amendment JSON to determine whether the plan's assumptions still hold for a given step.",

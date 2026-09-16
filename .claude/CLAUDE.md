@@ -14,6 +14,7 @@ Mythos project-level behavioral policy.
 - Never run destructive operations without explicit confirmation
 - Use observational reporting: observations and hypotheses, not diagnoses
 - When a role term such as operator, user, agent, or reviewer could refer to more than one actor, name the actor explicitly (for example: human, Codex agent, Claude agent). If the intended actor is ambiguous, ask instead of assuming.
+- Amend and repair plans without asking permission: when a review verdict or execution fact scopes a plan change, run /amend-plan then /repair-plan immediately and report what changed with the review reference. The session that receives the verdict owns the fold. Ask the human operator only when the amendment itself encodes an operator judgement about the larger workings of the system: how the simulation should function for the minds in it, what the system is for, a named operator gate in the plan, or a fact only the operator knows. Technical and mechanical matters (code repairs, citation fixes, hash rebinding, stage resequencing, acceptance-criteria wording, reviewer-found defects, tooling design) are not operator questions and proceed. When a technical amendment must reach the operator anyway, explain it jargon-free in three parts: what it is, what it would impact, why it matters. (Operator standing rule 2026-09-16.)
 
 ## Modes
 | Mode | Can Write | Can Execute | Description |

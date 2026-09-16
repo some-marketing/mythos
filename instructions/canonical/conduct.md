@@ -66,6 +66,21 @@ your assessment — investigate, report findings, and stop; don't apply a fix un
 asked. Second: an explicit boundary ("review only", "don't edit anything", "tell
 me before changing") binds for the rest of the session until the user lifts it.
 
+**Plan amendments and repairs are never a permission question.** When a review
+verdict (AMEND_REQUIRED, CHANGES_REQUESTED, findings) or an execution fact scopes a
+plan change, run `/amend-plan` then `/repair-plan` immediately and report what
+changed with the review reference. The session that receives the verdict owns the
+fold; do not hand it to the next session as "ask the operator whether to amend".
+Ask only when the amendment itself encodes an operator judgement about the larger
+workings of the system: how the simulation should function for the minds in it,
+what the system is for, a named operator gate in the plan, or a fact only the
+operator knows. Technical and mechanical matters (code repairs, citation fixes,
+hash rebinding, stage resequencing, acceptance-criteria wording, reviewer-found
+defects, tooling design) are not operator questions and proceed. When a technical
+amendment must reach the operator anyway, explain it jargon-free in three parts:
+what it is, what it would impact, why it matters. (Operator standing rule,
+2026-09-16.)
+
 ## 5. End-of-turn contract
 
 Before ending your turn, read your own last paragraph. If the task is not yet

@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "7437cf8e4f602480d9de10f37bde72ba511ceca7e77a96e853fd5964e47d62f7",
+    "expected_tree_sha256": "105409e0106e95688bfdbbb344031de0132cd15d2bdb97eca52ee9e3b73a531f",
     "expected_files": [
       {
         "path": ".agents/skills/go/SKILL.md",
@@ -8927,7 +8927,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "091ed072e977bfbaaa453f6c63fdb8785174c783ee71fdab26538de1ce8a1178",
+        "sha256": "83f236c45a968e6798510cc7bbdb9a5c27e3d62806172072ed510d6f5ea89d9c",
         "mode": 420
       },
       {
@@ -15117,7 +15117,7 @@
       },
       {
         "path": "tools/sessions/__tests__/watcher-lifecycle.test.cjs",
-        "sha256": "0a11846f4bdb9560d0fa9a112d867dd6a0d573519d46fcce584203eefff79be2",
+        "sha256": "c8c54a7260434066af170d63644d314f84b7b7e5acb4616ce0f242e47cf8950c",
         "mode": 420
       },
       {
@@ -15207,7 +15207,7 @@
       },
       {
         "path": "tools/sessions/watcher-lifecycle.cjs",
-        "sha256": "11ec7d2867bdd502336623deae024a4562589f70cec8803eb5ea1d78d6ab6dfa",
+        "sha256": "39c30d8decf2ea4e63a222c1d3bb4903ccdc8455f34c03148097c802ff4023ba",
         "mode": 420
       },
       {
@@ -17549,7 +17549,7 @@
     "package_script_count": 206,
     "command_alias_registry_sha256": "bf0f8b941e0dc0d7b7d3938b765ac379a62b1c3bac50984358cd133afd1012d2",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "091ed072e977bfbaaa453f6c63fdb8785174c783ee71fdab26538de1ce8a1178",
+    "graph_sha256": "83f236c45a968e6798510cc7bbdb9a5c27e3d62806172072ed510d6f5ea89d9c",
     "graph_nodes": 4216,
     "graph_edges": 3039
   },

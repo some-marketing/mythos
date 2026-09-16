@@ -794,7 +794,12 @@ function commitCheckpoint(absoluteTick) {
   // same run-end sequence, same function. Flips pending->committed for
   // every vault entry carrying this run's now-committed generation_id. A
   // guarded no-op when the vault has never been scaffolded.
-  const dreamCommit = dreamMemory.commitGenerationEntries(VAULT_PATH, commitResult.generation_id, WORLD_STATE_PATH);
+  const dreamState = dreamLane.getRunState(WORLD_STATE_PATH);
+  const dreamCommit = dreamMemory.commitGenerationEntries(
+    VAULT_PATH,
+    commitResult.generation_id,
+    dreamState ? dreamState.provisionalGenerationId : null
+  );
   if (dreamCommit.flipped.length) {
     process.stdout.write(`dream vault: committed ${dreamCommit.flipped.length} entr${dreamCommit.flipped.length === 1 ? 'y' : 'ies'} for generation ${commitResult.generation_id}\n`);
   }

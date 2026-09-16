@@ -43,6 +43,6 @@ test('goal projection carries the packet hash without exporting its source path'
   const source = fs.readFileSync(path.resolve(__dirname, '../../run-live.js'), 'utf8');
   assert.match(source, /packet_path: null/);
   assert.doesNotMatch(source, /packet_path:\s*GOAL_PACKET_PATH/);
-  assert.match(source, /commitGenerationEntries\(VAULT_PATH, commitResult\.generation_id, WORLD_STATE_PATH\)/);
+  assert.match(source, /commitGenerationEntries\(\n\s+VAULT_PATH,\n\s+commitResult\.generation_id/);
   assert.match(source, /const finalized = dreamLane\.finalizeRun\(WORLD_STATE_PATH\)/);
 });

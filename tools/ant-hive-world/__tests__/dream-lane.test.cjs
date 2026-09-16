@@ -517,7 +517,9 @@ test('AC14(d) generation isolation: a reused worldStatePath gets a new provision
   assert.deepEqual(flip.flipped, [2]);
   const entries = dreamMemory.materialize(vaultPath);
   assert.equal(entries.find((entry) => entry.text_or_data.run === 'old').commit_status, 'pending');
-  assert.equal(entries.find((entry) => entry.text_or_data.run === 'fresh').commit_status, 'committed');
+  const freshEntry = entries.find((entry) => entry.text_or_data.run === 'fresh');
+  assert.equal(freshEntry.commit_status, 'committed');
+  assert.equal(freshEntry.generation_id, 'gen-2-fresh');
   dreamLane.deregisterRun(p);
 });
 

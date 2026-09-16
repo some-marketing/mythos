@@ -277,7 +277,10 @@ function materialize(vaultPath) {
     if (line.entry_type !== 'status_change') continue;
     for (const id of line.entry_ids) {
       const entry = entries.get(id);
-      if (entry) entry.commit_status = line.to;
+      if (entry) {
+        entry.commit_status = line.to;
+        if (line.to === 'committed') entry.generation_id = line.generation_id;
+      }
     }
   }
   return Array.from(entries.values()).sort((a, b) => a.entry_id - b.entry_id);

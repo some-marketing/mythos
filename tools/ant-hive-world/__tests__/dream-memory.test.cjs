@@ -182,6 +182,35 @@ test('concurrent processes receive unique vault entry IDs', async () => {
   assert.equal(fs.existsSync(`${vaultPath}.lock`), false, 'concurrent writers must release the vault lock');
 });
 
+test('stale lock recovery fails closed under concurrent writers without losing or duplicating entries', async () => {
+  const vaultPath = tmpVaultPath();
+  dreamMemory.seedVault(vaultPath);
+  const dead = spawn(process.execPath, ['-e', ''], { stdio: 'ignore' });
+  await new Promise((resolve) => dead.once('close', resolve));
+  fs.writeFileSync(`${vaultPath}.lock`, JSON.stringify({ pid: dead.pid, acquired_at: new Date().toISOString() }) + '\n');
+
+  const modulePath = path.resolve(__dirname, '../dream/dream-memory.js');
+  const script = [
+    `const dm = require(${JSON.stringify(modulePath)});`,
+    `dm.appendEntry(${JSON.stringify(vaultPath)}, { entry_type: 'dream', lane: 'hope', text_or_data: { pid: process.pid }, provenance: { source: 'test', ref: String(process.pid) }, generation_id: 'gen-stale-concurrent' });`
+  ].join('\n');
+  const results = await Promise.all(Array.from({ length: 24 }, () => new Promise((resolve) => {
+    const child = spawn(process.execPath, ['-e', script], { stdio: 'pipe' });
+    let stderr = '';
+    child.stderr.on('data', (chunk) => { stderr += chunk; });
+    child.on('close', (status) => resolve({ status, stderr }));
+  })));
+
+  assert.ok(results.every((result) => result.status !== 0), 'every contender must refuse the stale lock rather than race a reclaim');
+  assert.ok(results.every((result) => result.stderr.includes('refusing automatic reclaim')), results.map((result) => result.stderr).join('\n'));
+  const rawLines = fs.readFileSync(vaultPath, 'utf8').trim().split('\n').map((line) => JSON.parse(line));
+  const entries = dreamMemory.materialize(vaultPath).slice(1);
+  assert.equal(rawLines.length, 1, 'fail-closed stale recovery must preserve the seeded vault without partial writes');
+  assert.equal(entries.length, 0);
+  assert.equal(new Set(entries.map((entry) => entry.entry_id)).size, entries.length, 'any successful entries must still have unique IDs');
+  fs.unlinkSync(`${vaultPath}.lock`); // explicit operator cleanup for the declared no-autoreclaim contract
+});
+
 test('commitGenerationEntries against a nonexistent vault is a guarded no-op', () => {
   const vaultPath = tmpVaultPath();
   const result = dreamMemory.commitGenerationEntries(vaultPath, 'gen-A');

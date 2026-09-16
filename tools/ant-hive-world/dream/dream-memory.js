@@ -129,12 +129,12 @@ function acquireVaultLock(vaultPath) {
       throw new Error(`dream vault lock ${lockPath} has no valid pid; refusing concurrent write`);
     }
     if (!isPidAlive(holder.pid)) {
-      try {
-        fs.unlinkSync(lockPath);
-      } catch (err) {
-        if (err.code !== 'ENOENT') throw err;
-      }
-      continue;
+      // Do not automatically reclaim a stale lock. The observed dead PID
+      // can be replaced between this check and unlinkSync(), allowing one
+      // contender to delete a successor's live lock and admit duplicate
+      // entry-id writers. Recovery is deliberately fail-closed: an operator
+      // must remove the lock only after verifying no writer is still active.
+      throw new Error(`dream vault lock ${lockPath} is stale (pid ${holder.pid}); refusing automatic reclaim`);
     }
     if (Date.now() >= deadline) {
       throw new Error(`dream vault lock held by pid ${holder.pid} (${lockPath}); refusing concurrent write`);

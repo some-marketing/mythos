@@ -1007,6 +1007,25 @@ test('finalizeRun resolves the SAME vault path the run actually registered with,
   assert.ok(entries.some((e) => e.commit_status === 'run-terminal'), 'finalizeRun must have found and flipped entries in the SCRATCH vault the run actually wrote to');
 });
 
+test('finalizeRun is a no-op without active state and cannot terminalize an older reused-path entry', () => {
+  const p = freshUnregisteredPath();
+  const vaultPath = path.join(SCRATCH_ROOT, `vault-no-active-${pathCounter}.jsonl`);
+  dreamMemory.seedVault(vaultPath);
+  dreamMemory.appendEntry(vaultPath, {
+    entry_type: 'dream', lane: 'darkness', text_or_data: { run: 'older-crash' },
+    provenance: { source: 'test', ref: 'old-crash' }, generation_id: p
+  });
+  const before = fs.readFileSync(vaultPath);
+
+  // This models a disabled or zero-tick --no-checkpoint invocation: no
+  // enabled call registered an active run, but the path is reused.
+  const result = dreamLane.finalizeRun(p, vaultPath);
+  assert.deepEqual(result, { flipped: [] });
+  assert.deepEqual(fs.readFileSync(vaultPath), before, 'without active state, finalization must not append a status transition');
+  assert.equal(dreamMemory.materialize(vaultPath)[1].commit_status, 'pending');
+  assert.equal(dreamLane.getRunState(p), null);
+});
+
 // --- S4b trend gate (coordinator-pinned definition 2026-08-13T17:05Z),
 // live tick path: stockpile threading through recordTickOutcome ->
 // consequence-ledger.js -> dream-composer.js, and suppression journaling ---

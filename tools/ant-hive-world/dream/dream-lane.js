@@ -826,12 +826,16 @@ function finalizeRun(worldStatePath, vaultPath) {
   // default -- tests (and any caller injecting options.vaultPath at
   // registration) must finalize the file entries actually landed in. Falls
   // back to the explicit `vaultPath` argument, then the registered state's
-  // own vaultPath, then the shared default, in that order.
+  // own vaultPath, then the shared default, in that order. With no active
+  // state there is no invocation-unique provisional generation to finalize;
+  // that boundary is a deliberate no-op so a disabled or zero-tick run can
+  // never terminalize an older run that reused this world-state path.
   const state = getRunState(worldStatePath);
+  if (!state) return { flipped: [] };
   const resolvedVaultPath = vaultPath || (state && state.vaultPath) || DEFAULT_VAULT_PATH;
   const result = dreamMemory.finalizeRunTerminal(
     resolvedVaultPath,
-    state ? state.provisionalGenerationId : worldStatePath
+    state.provisionalGenerationId
   );
   deregisterRun(worldStatePath);
   return result;

@@ -4123,7 +4123,7 @@
       "id": "file:.claude/project-claude.yml",
       "type": "file",
       "path": ".claude/project-claude.yml",
-      "sha256": "e5baf157167e2bb9b1e7bfd2b6a9a4212d6c455666221cdb31e63c33233c2b5a",
+      "sha256": "571913aeb034154b024283555125255049a390c317fb866ab12927522fe9ce70",
       "mode": 420
     },
     {
@@ -24245,6 +24245,11 @@
       "id": "manifest-path:.claude/commands/trial-quest.md",
       "type": "manifest-registration",
       "declared_target": ".claude/commands/trial-quest.md"
+    },
+    {
+      "id": "manifest-path:.claude/commands/tt.md",
+      "type": "manifest-registration",
+      "declared_target": ".claude/commands/tt.md"
     },
     {
       "id": "manifest-path:.claude/commands/validate-all-frameworks.md",
@@ -48152,6 +48157,15 @@
       "specifier": "./lib/copy-prompts.js"
     },
     {
+      "id": "bf9b900a986584c48e73f12d4f0c3f9934cae53ba7012896e6e195c3a4039854",
+      "type": "manifest-target",
+      "from": "manifest-path:.claude/commands/tt.md",
+      "to": "file:.claude/commands/tt.md",
+      "target": ".claude/commands/tt.md",
+      "required": true,
+      "declared_target": ".claude/commands/tt.md"
+    },
+    {
       "id": "bfa02789fccf6f6e83cb512bd48c370bccc05e99a0aea01ac9816645a34c9eb4",
       "type": "hook-target",
       "from": "hook:PreToolUse:644",
@@ -55166,8 +55180,8 @@
     }
   ],
   "counts": {
-    "nodes": 4215,
-    "edges": 3038,
+    "nodes": 4216,
+    "edges": 3039,
     "unresolved": 0
   }
 }

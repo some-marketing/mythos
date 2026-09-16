@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "c0bcbcd5db1e9cab141ed3761d0a95a13a77e1e3cf913c1855a708cd1142da1d",
+    "expected_tree_sha256": "622a358c6fb28e76a6d2663ca5a9539034dfdedbd4f72f9437de05a1ed223d99",
     "expected_files": [
       {
         "path": ".agents/skills/go/SKILL.md",
@@ -4862,7 +4862,7 @@
       },
       {
         "path": "framework_candidates/project-management__delta-specification/proposed_framework/prompts/03_DELTA_REQUIREMENTS.md",
-        "sha256": "c6ffd57185dd4e56df9c272166d004b74847a00bf41fa0bccd50367fa8fde61e",
+        "sha256": "e05366aaf77350002cd75c66d623bd6f13081726e1c964ec1ce1a5afac034e95",
         "mode": 420
       },
       {
@@ -4907,7 +4907,7 @@
       },
       {
         "path": "framework_candidates/project-management__delta-specification/provenance-receipt.json",
-        "sha256": "4bd9053e438e43cf2c4fa6adc8cac9f9563517b6ec01c5551518abdb5ff1019c",
+        "sha256": "c4abfb316fda230ef9a6644138bc052dda6ed3142373240676ed68907e3d53e7",
         "mode": 420
       },
       {
@@ -9342,7 +9342,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "16d2f1d748ab520b7b194765a36a7dc3f0d54459e7ad8baa5f6825a586fe87af",
+        "sha256": "d49bd5235db42698872fc3e4a98bcbc471f54d6f334453b424fe4d8341a85248",
         "mode": 420
       },
       {
@@ -17529,7 +17529,7 @@
     "package_script_count": 206,
     "command_alias_registry_sha256": "bf0f8b941e0dc0d7b7d3938b765ac379a62b1c3bac50984358cd133afd1012d2",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "16d2f1d748ab520b7b194765a36a7dc3f0d54459e7ad8baa5f6825a586fe87af",
+    "graph_sha256": "d49bd5235db42698872fc3e4a98bcbc471f54d6f334453b424fe4d8341a85248",
     "graph_nodes": 4223,
     "graph_edges": 2955
   },

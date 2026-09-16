@@ -5229,7 +5229,7 @@
       "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/prompts/03_DELTA_REQUIREMENTS.md",
       "type": "file",
       "path": "framework_candidates/project-management__delta-specification/proposed_framework/prompts/03_DELTA_REQUIREMENTS.md",
-      "sha256": "c6ffd57185dd4e56df9c272166d004b74847a00bf41fa0bccd50367fa8fde61e",
+      "sha256": "e05366aaf77350002cd75c66d623bd6f13081726e1c964ec1ce1a5afac034e95",
       "mode": 420
     },
     {
@@ -5292,7 +5292,7 @@
       "id": "file:framework_candidates/project-management__delta-specification/provenance-receipt.json",
       "type": "file",
       "path": "framework_candidates/project-management__delta-specification/provenance-receipt.json",
-      "sha256": "4bd9053e438e43cf2c4fa6adc8cac9f9563517b6ec01c5551518abdb5ff1019c",
+      "sha256": "c4abfb316fda230ef9a6644138bc052dda6ed3142373240676ed68907e3d53e7",
       "mode": 420
     },
     {

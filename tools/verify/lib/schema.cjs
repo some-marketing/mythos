@@ -44,7 +44,6 @@ function validate(data, schema, options = {}) {
     if (!valid) {
       errors.push({ path: dataPath, message: 'Value does not match any allowed schema shape' });
     }
-    return errors;
   }
 
   if (schema.type) {

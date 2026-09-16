@@ -194,7 +194,7 @@ function validatePromptProvenanceReceipt(receipt, expectedPrompts = [], expected
 
 function main() {
   const args = parseArgs(process.argv);
-  if (!args.receipt || !args.candidate || !args['source-manifest']) {
+  if (!args.receipt || !args.candidate || !args.source_manifest) {
     process.stderr.write('Usage: validate-prompt-provenance-receipt.cjs --receipt <path> --candidate <candidate-or-framework-root> --source-manifest <path>\n');
     process.exit(2);
   }
@@ -210,7 +210,7 @@ function main() {
   let expectedSourceEnvelope;
   try {
     expectedPrompts = loadExpectedPrompts(args.candidate);
-    expectedSourceEnvelope = loadSourceEnvelope(args['source-manifest']);
+    expectedSourceEnvelope = loadSourceEnvelope(args.source_manifest);
   } catch (err) {
     process.stderr.write(`Unable to load prompt provenance inputs: ${err.message}\n`);
     process.exit(2);

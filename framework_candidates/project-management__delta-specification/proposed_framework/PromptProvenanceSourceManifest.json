@@ -1,0 +1,73 @@
+{
+  "schema": "PromptProvenanceSourceManifest/1.0",
+  "source_envelope_id": "pr26-public-delta-source-envelope-05c1bcbc34a3",
+  "candidate_head": "05c1bcbc34a38db9c79240bd920642c5edc4ea8b",
+  "sources": [
+    {
+      "source_id": "openspec-readme",
+      "content_sha256": "07c4ee1a265b7c67b0c5f5b6494b795b42d6e67502d11b394ec4e3c63a46acb2",
+      "repository": "Fission-AI/OpenSpec",
+      "revision": "622c509a1349c3ad9c52cd1a4ee007bd47549204",
+      "path": "README.md"
+    },
+    {
+      "source_id": "openspec-concepts",
+      "content_sha256": "370f8ef1a1142cd1d250588f4a27f740e4fda66c6e4e15f68bbfcb86c47cf0b7",
+      "repository": "Fission-AI/OpenSpec",
+      "revision": "9d4e5974e5c0d9a09b9c6c1e1eb0975e80ec4461",
+      "path": "docs/concepts.md"
+    },
+    {
+      "source_id": "openspec-agent-contract",
+      "content_sha256": "174a34d11771f77fee084dbe744b1d7b76417427934c3eea4328565789682415",
+      "repository": "Fission-AI/OpenSpec",
+      "revision": "836442866134187434f59c44d96c78994809b9fe",
+      "path": "docs/agent-contract.md"
+    },
+    {
+      "source_id": "gsd-phase-loop",
+      "content_sha256": "4b82eb65d7583e634d7efffee9a711809411d0d36e3d587bbae2374281ebb6de",
+      "repository": "open-gsd/gsd-core",
+      "revision": "72be41d96defcd819eba0658358e0c0e2b15e56b",
+      "path": "docs/explanation/the-phase-loop.md"
+    },
+    {
+      "source_id": "gsd-context-engineering",
+      "content_sha256": "ab69ce6fe028b81fa6a2ecf2cb01555010168cb347f099aa9ff93fb4a61904ec",
+      "repository": "open-gsd/gsd-core",
+      "revision": "72be41d96defcd819eba0658358e0c0e2b15e56b",
+      "path": "docs/explanation/context-engineering.md"
+    },
+    {
+      "source_id": "gsd-agents",
+      "content_sha256": "bc189324ef1389304b4a4152bbd6fd89c5d532add3c9c273233000f8ca7b4497",
+      "repository": "open-gsd/gsd-core",
+      "revision": "3c61b4a8380100c6ed6f842b3f06a1817f4a6118",
+      "path": "docs/AGENTS.md"
+    }
+  ],
+  "prompt_sources": {
+    "01_BASELINE_INVENTORY": [
+      "openspec-readme",
+      "openspec-concepts"
+    ],
+    "02_CHANGE_PROPOSAL": [
+      "openspec-readme",
+      "openspec-concepts"
+    ],
+    "03_DELTA_REQUIREMENTS": [
+      "openspec-concepts",
+      "openspec-agent-contract"
+    ],
+    "04_DEPENDENCY_AND_ACCEPTANCE_MAP": [
+      "openspec-agent-contract",
+      "gsd-phase-loop",
+      "gsd-context-engineering"
+    ],
+    "05_INDEPENDENT_REVIEW": [
+      "openspec-agent-contract",
+      "gsd-agents",
+      "gsd-phase-loop"
+    ]
+  }
+}

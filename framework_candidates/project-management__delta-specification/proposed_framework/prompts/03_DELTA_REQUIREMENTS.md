@@ -1,35 +1,29 @@
 # 03 Delta Requirements
 
-## Objective
+## Goal
+Translate the change proposal into concrete, behavior-level delta specifications—explicitly detailing ADDED, MODIFIED, and REMOVED requirements alongside observable scenarios.
 
-Express the requested behavioral change as explicit added, modified, and removed requirements with observable scenarios.
-
-## Mode
-
+## Execution Mode
 RUN_ONLY
 
-## Inputs
+## Input Context
+- The baseline inventory
+- The change proposal
 
-- Baseline inventory
-- Change proposal
+## Process
+1. Formulate each new (ADDED) requirement and provide at least one observable scenario.
+2. Append the supporting source locator or evidence identifier to every added requirement and scenario. If a requirement lacks support, mark it as an evidence gap.
+3. For every MODIFIED requirement, explicitly cite its `baseline_requirement_id` and detail the exact difference in observable behavior.
+4. For every REMOVED requirement, cite the baseline requirement and provide the rationale for its intended deprecation or absence.
+5. Apply RFC 2119 keywords (MUST, SHOULD, MAY) with strict consistency to indicate the strength of each requirement.
+6. Document any critical system invariants that this delta must leave unchanged.
+7. Highlight any merge ambiguities, conflicting requirements, or elements that lack adequate evidence backing.
 
-## Steps
-
-1. Write each added requirement and at least one observable scenario.
-2. Attach the source locator or evidence identifier supporting each added requirement and observable scenario; mark unsupported requirements as evidence gaps.
-3. For each modified requirement, cite the baseline requirement and state the exact behavioral difference.
-4. For each removed requirement, cite the baseline and explain the intended absence.
-5. Use MUST, SHOULD, or MAY consistently to express requirement strength.
-6. Record unchanged invariants that the delta must preserve.
-7. Flag conflicts, merge ambiguity, and requirements lacking sufficient evidence.
-
-## Outputs
-
+## Output Contract
 - `delta-spec.json`
 
-## Success criteria
-
-- Added, modified, and removed requirements cannot be confused.
-- Each requirement is behavior-level and testable.
-- Each requirement and scenario is source-grounded or explicitly marked as unsupported.
-- Unchanged invariants remain visible.
+## Required Guardrails
+- ADDED, MODIFIED, and REMOVED sections must be strictly separated and impossible to conflate.
+- Every requirement must describe externally observable, testable behavior rather than internal logic.
+- Every requirement and scenario must be grounded in a source citation or explicitly flagged as unsupported.
+- Unchanged invariants that must be protected during implementation are visibly declared.

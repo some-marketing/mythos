@@ -6,6 +6,11 @@
     "removed",
     "preserved_invariants"
   ],
+  "anyOf": [
+    { "properties": { "added": { "minItems": 1 } } },
+    { "properties": { "modified": { "minItems": 1 } } },
+    { "properties": { "removed": { "minItems": 1 } } }
+  ],
   "properties": {
     "added": {
       "type": "array",

@@ -1,0 +1,133 @@
+{
+  "schema": "PromptProvenanceReceipt/1.0",
+  "prompts": [
+    {
+      "prompt_id": "01_BASELINE_INVENTORY",
+      "prompt_sha256": "c332a625ee278134c27687e986b768a35cfeb980875016c6f0dc61442a70f5f1",
+      "source_envelope_id": "pr26-public-delta-source-envelope-05c1bcbc34a3",
+      "source_envelope_sha256": "3941e69cc186353c0c9e7facfdefd32cb3f1a919498b7103c6f5702c6e4cd287",
+      "source_revisions": [
+        {
+          "source_id": "openspec-readme",
+          "content_sha256": "07c4ee1a265b7c67b0c5f5b6494b795b42d6e67502d11b394ec4e3c63a46acb2"
+        },
+        {
+          "source_id": "openspec-concepts",
+          "content_sha256": "370f8ef1a1142cd1d250588f4a27f740e4fda66c6e4e15f68bbfcb86c47cf0b7"
+        }
+      ],
+      "rewrite_performed": true,
+      "rewriter_actor_id": "pr26-gemini-rewriter",
+      "rewriter_model_provider_family": "google",
+      "rewriter_resolved_model_id": "gemini-3.1-pro-preview",
+      "attester_actor_id": "pr26-openrouter-attester",
+      "attester_model_provider_family": "openai",
+      "attester_resolved_model_id": "openai/gpt-5.1",
+      "attestation": "pass"
+    },
+    {
+      "prompt_id": "02_CHANGE_PROPOSAL",
+      "prompt_sha256": "c0035e0b99c26ca4f758edf9848eaba0e9ed8cd406b6ca5d4abe581a2a88181f",
+      "source_envelope_id": "pr26-public-delta-source-envelope-05c1bcbc34a3",
+      "source_envelope_sha256": "3941e69cc186353c0c9e7facfdefd32cb3f1a919498b7103c6f5702c6e4cd287",
+      "source_revisions": [
+        {
+          "source_id": "openspec-readme",
+          "content_sha256": "07c4ee1a265b7c67b0c5f5b6494b795b42d6e67502d11b394ec4e3c63a46acb2"
+        },
+        {
+          "source_id": "openspec-concepts",
+          "content_sha256": "370f8ef1a1142cd1d250588f4a27f740e4fda66c6e4e15f68bbfcb86c47cf0b7"
+        }
+      ],
+      "rewrite_performed": true,
+      "rewriter_actor_id": "pr26-gemini-rewriter",
+      "rewriter_model_provider_family": "google",
+      "rewriter_resolved_model_id": "gemini-3.1-pro-preview",
+      "attester_actor_id": "pr26-openrouter-attester",
+      "attester_model_provider_family": "openai",
+      "attester_resolved_model_id": "openai/gpt-5.1",
+      "attestation": "pass"
+    },
+    {
+      "prompt_id": "03_DELTA_REQUIREMENTS",
+      "prompt_sha256": "c6ffd57185dd4e56df9c272166d004b74847a00bf41fa0bccd50367fa8fde61e",
+      "source_envelope_id": "pr26-public-delta-source-envelope-05c1bcbc34a3",
+      "source_envelope_sha256": "3941e69cc186353c0c9e7facfdefd32cb3f1a919498b7103c6f5702c6e4cd287",
+      "source_revisions": [
+        {
+          "source_id": "openspec-concepts",
+          "content_sha256": "370f8ef1a1142cd1d250588f4a27f740e4fda66c6e4e15f68bbfcb86c47cf0b7"
+        },
+        {
+          "source_id": "openspec-agent-contract",
+          "content_sha256": "174a34d11771f77fee084dbe744b1d7b76417427934c3eea4328565789682415"
+        }
+      ],
+      "rewrite_performed": true,
+      "rewriter_actor_id": "pr26-gemini-rewriter",
+      "rewriter_model_provider_family": "google",
+      "rewriter_resolved_model_id": "gemini-3.1-pro-preview",
+      "attester_actor_id": "pr26-openrouter-attester",
+      "attester_model_provider_family": "openai",
+      "attester_resolved_model_id": "openai/gpt-5.1",
+      "attestation": "pass"
+    },
+    {
+      "prompt_id": "04_DEPENDENCY_AND_ACCEPTANCE_MAP",
+      "prompt_sha256": "dcbee2cf7c885736230ce06b8f8761e9d54484de2097361b461d78e00f00be0d",
+      "source_envelope_id": "pr26-public-delta-source-envelope-05c1bcbc34a3",
+      "source_envelope_sha256": "3941e69cc186353c0c9e7facfdefd32cb3f1a919498b7103c6f5702c6e4cd287",
+      "source_revisions": [
+        {
+          "source_id": "openspec-agent-contract",
+          "content_sha256": "174a34d11771f77fee084dbe744b1d7b76417427934c3eea4328565789682415"
+        },
+        {
+          "source_id": "gsd-phase-loop",
+          "content_sha256": "4b82eb65d7583e634d7efffee9a711809411d0d36e3d587bbae2374281ebb6de"
+        },
+        {
+          "source_id": "gsd-context-engineering",
+          "content_sha256": "ab69ce6fe028b81fa6a2ecf2cb01555010168cb347f099aa9ff93fb4a61904ec"
+        }
+      ],
+      "rewrite_performed": true,
+      "rewriter_actor_id": "pr26-gemini-rewriter",
+      "rewriter_model_provider_family": "google",
+      "rewriter_resolved_model_id": "gemini-3.1-pro-preview",
+      "attester_actor_id": "pr26-openrouter-attester",
+      "attester_model_provider_family": "openai",
+      "attester_resolved_model_id": "openai/gpt-5.1",
+      "attestation": "pass"
+    },
+    {
+      "prompt_id": "05_INDEPENDENT_REVIEW",
+      "prompt_sha256": "3cac3c1116d3cf97f69400f30e3bcd27fa579f2beaf53ea070572e1dce791935",
+      "source_envelope_id": "pr26-public-delta-source-envelope-05c1bcbc34a3",
+      "source_envelope_sha256": "3941e69cc186353c0c9e7facfdefd32cb3f1a919498b7103c6f5702c6e4cd287",
+      "source_revisions": [
+        {
+          "source_id": "openspec-agent-contract",
+          "content_sha256": "174a34d11771f77fee084dbe744b1d7b76417427934c3eea4328565789682415"
+        },
+        {
+          "source_id": "gsd-agents",
+          "content_sha256": "bc189324ef1389304b4a4152bbd6fd89c5d532add3c9c273233000f8ca7b4497"
+        },
+        {
+          "source_id": "gsd-phase-loop",
+          "content_sha256": "4b82eb65d7583e634d7efffee9a711809411d0d36e3d587bbae2374281ebb6de"
+        }
+      ],
+      "rewrite_performed": true,
+      "rewriter_actor_id": "pr26-gemini-rewriter",
+      "rewriter_model_provider_family": "google",
+      "rewriter_resolved_model_id": "gemini-3.1-pro-preview",
+      "attester_actor_id": "pr26-openrouter-attester",
+      "attester_model_provider_family": "openai",
+      "attester_resolved_model_id": "openai/gpt-5.1",
+      "attestation": "pass"
+    }
+  ]
+}

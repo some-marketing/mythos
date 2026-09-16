@@ -10,6 +10,7 @@ const { resolveCanonicalRoot } = require('../../lib/canonical-root.cjs');
 const { inspectBundle, inspectOutputDir, loadOutputContract } = require('../lib/output-contract');
 const { collectCandidateBlockingIssues } = require('../lib/capture-candidate');
 const { loadSchema, validateRequiredFields } = require('../lib/models');
+const { validate: validateSchema } = require('../../verify/lib/schema.cjs');
 const { requireCandidateRoot } = require('../lib/workspace');
 const { computeLedger } = require('../lib/learning-ledger');
 
@@ -152,7 +153,7 @@ test('imported candidates authorize report outputs and declare consumed artifact
     }
     for (const prompt of candidate.producerPrompts) {
       const content = fs.readFileSync(path.join(proposedRoot, 'prompts', prompt), 'utf8');
-      assert.match(content, /## Mode\n\nRUN_ONLY/);
+      assert.match(content, /## (?:Mode|Execution Mode)\n+RUN_ONLY/);
     }
   }
 });
@@ -182,8 +183,14 @@ test('imported candidate review gates require distinct minds and complete intake
   for (const promptPath of reviewPrompts) {
     const content = fs.readFileSync(promptPath, 'utf8');
     assert.match(content, /actor id, harness id, and model-provider family/);
-    assert.match(content, /same-provider subagent is not a distinct reviewing mind/);
-    assert.match(content, /missing provenance forces `FAIL`/);
+    assert.match(
+      content,
+      /same-provider subagent is not a distinct reviewing mind|(?:[Aa] )?subagent from the same provider(?: or a wiped context window)? does not (?:constitute|satisfy) (?:the distinct reviewing mind requirement|a distinct reviewing mind)/
+    );
+    assert.match(
+      content,
+      /missing provenance forces `FAIL`|Absent provenance must trigger a `FAIL`|If provenance is missing, you must fail the review \(`FAIL`\)/
+    );
   }
 });
 
@@ -462,6 +469,97 @@ test('required text and delta contracts reject empty content', (t) => {
   }));
   const deltaFindings = inspectBundle(deltaOutput, deltaBundle, deltaRoot);
   assert.ok(deltaFindings.some((finding) => finding.code === 'DELTA_EMPTY'));
+});
+
+test('delta schema requires at least one valid change collection', (t) => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const proposedRoot = path.join(
+    repositoryRoot,
+    'framework_candidates',
+    'project-management__delta-specification',
+    'proposed_framework'
+  );
+  const manifest = JSON.parse(fs.readFileSync(path.join(proposedRoot, 'manifest.json'), 'utf8'));
+  const bundleType = manifest.output_contract_v2.bundle_types[0];
+  const deltaSchema = JSON.parse(fs.readFileSync(
+    path.join(proposedRoot, 'schemas', 'output', 'delta-spec.schema.json'),
+    'utf8'
+  ));
+  const additions = [{
+    requirement_id: 'ADD-1',
+    requirement: 'System MUST add the requested behavior.',
+    scenarios: ['The added behavior is observable.']
+  }];
+  const modifications = [{
+    requirement_id: 'MOD-1',
+    baseline_requirement_id: 'BASE-1',
+    behavioral_difference: 'The behavior changes in the requested way.',
+    requirement: 'System MUST change the existing behavior.',
+    scenarios: ['The changed behavior is observable.']
+  }];
+  const removals = [{
+    requirement_id: 'REM-1',
+    baseline_requirement_id: 'BASE-2',
+    intended_absence: 'The obsolete behavior is intentionally absent.'
+  }];
+  const empty = {
+    added: [],
+    modified: [],
+    removed: [],
+    preserved_invariants: []
+  };
+  const validCases = [
+    { added: additions },
+    { modified: modifications },
+    { removed: removals },
+    { added: additions, modified: modifications },
+    { added: additions, removed: removals },
+    { modified: modifications, removed: removals },
+    { added: additions, modified: modifications, removed: removals }
+  ].map((change) => ({ ...empty, ...change }));
+
+  assert.ok(validateSchema(empty, deltaSchema).length > 0, 'all-empty delta must fail the schema');
+  assert.ok(validateSchema({ added: [], modified: [], removed: [] }, deltaSchema).length > 0, 'missing required fields must fail the schema');
+  assert.ok(validateSchema({ ...empty, added: null }, deltaSchema).length > 0, 'invalid collection type must fail the schema');
+  for (const delta of validCases) {
+    assert.deepEqual(validateSchema(delta, deltaSchema), [], 'each non-empty collection shape must pass');
+  }
+  for (const collection of ['added', 'modified', 'removed']) {
+    const invalid = { ...empty, [collection]: [{}] };
+    assert.ok(validateSchema(invalid, deltaSchema).length > 0, `${collection} with a hollow entry must fail the shared schema validator`);
+    assert.throws(
+      () => validateRequiredFields(invalid, deltaSchema, `delta-spec.${collection}`),
+      /missing required fields/,
+      `${collection} with a hollow entry must fail native model validation`
+    );
+  }
+
+  const bundleRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-delta-schema-contract-'));
+  t.after(() => fs.rmSync(bundleRoot, { recursive: true, force: true }));
+  fs.writeFileSync(path.join(bundleRoot, 'dependency-acceptance-map.json'), JSON.stringify({
+    read_first: [],
+    dependencies: [],
+    acceptance_criteria: []
+  }));
+  fs.writeFileSync(path.join(bundleRoot, 'delta-spec.json'), JSON.stringify(empty));
+  const emptyFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+  assert.ok(emptyFindings.some((finding) =>
+    finding.code === 'DELTA_EMPTY' && finding.path === path.join(bundleRoot, 'delta-spec.json')
+  ), 'native output validator must reject the all-empty fixture');
+
+  for (const delta of validCases) {
+    fs.writeFileSync(path.join(bundleRoot, 'delta-spec.json'), JSON.stringify(delta));
+    const findings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+    assert.ok(!findings.some((finding) =>
+      finding.code === 'BUNDLE_SCHEMA_FAIL' && finding.path === path.join(bundleRoot, 'delta-spec.json')
+    ), 'native output validator must accept each non-empty collection shape');
+  }
+
+  fs.writeFileSync(path.join(bundleRoot, 'delta-spec.json'), JSON.stringify({ ...empty, added: [{}] }));
+  const invalidFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+  assert.ok(invalidFindings.some((finding) =>
+    finding.code === 'BUNDLE_SCHEMA_FAIL' && finding.path === path.join(bundleRoot, 'delta-spec.json')
+  ), 'native output validator must reject hollow entries');
 });
 
 test('meaning-bearing candidate strings reject whitespace-only values', () => {

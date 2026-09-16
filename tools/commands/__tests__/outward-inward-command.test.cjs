@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('node:assert/strict');
+const { spawnSync } = require('node:child_process');
+const crypto = require('node:crypto');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
@@ -232,4 +234,50 @@ test('source envelope loader requires hashed source revisions', (t) => {
     prompt_sources: {}
   }));
   assert.throws(() => loadSourceEnvelope(manifestPath), /at least one source/);
+});
+
+test('prompt-provenance receipt validator CLI accepts --source-manifest', (t) => {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-provenance-cli-'));
+  t.after(() => fs.rmSync(tempRoot, { recursive: true, force: true }));
+  const promptId = '01_SCOPE';
+  const promptBytes = Buffer.from('Scope prompt\n');
+  const promptSha256 = crypto.createHash('sha256').update(promptBytes).digest('hex');
+  const sourceSha256 = 'd'.repeat(64);
+  const sourceManifestPath = path.join(tempRoot, 'source-manifest.json');
+  const sourceManifestBytes = Buffer.from(JSON.stringify({
+    schema: 'PromptProvenanceSourceManifest/1.0',
+    source_envelope_id: 'chi-source-envelope',
+    sources: [{ source_id: 'source-a', content_sha256: sourceSha256 }],
+    prompt_sources: { [promptId]: ['source-a'] }
+  }));
+  fs.mkdirSync(path.join(tempRoot, 'prompts'));
+  fs.writeFileSync(path.join(tempRoot, 'manifest.json'), JSON.stringify({ prompt_chain: { review: [promptId] } }));
+  fs.writeFileSync(path.join(tempRoot, 'prompts', `${promptId}.md`), promptBytes);
+  fs.writeFileSync(sourceManifestPath, sourceManifestBytes);
+  const receiptPath = path.join(tempRoot, 'provenance-receipt.json');
+  fs.writeFileSync(receiptPath, JSON.stringify({
+    schema: 'PromptProvenanceReceipt/1.0',
+    prompts: [{
+      prompt_id: promptId,
+      prompt_sha256: promptSha256,
+      source_envelope_id: 'chi-source-envelope',
+      source_envelope_sha256: crypto.createHash('sha256').update(sourceManifestBytes).digest('hex'),
+      source_revisions: [{ source_id: 'source-a', content_sha256: sourceSha256 }],
+      rewrite_performed: false,
+      attester_actor_id: 'attester',
+      attester_model_provider_family: 'openai',
+      attester_resolved_model_id: 'model-attester',
+      attestation: 'pass'
+    }]
+  }));
+
+  const result = spawnSync(process.execPath, [
+    path.join(ROOT, 'tools', 'commands', 'validate-prompt-provenance-receipt.cjs'),
+    '--receipt', receiptPath,
+    '--candidate', tempRoot,
+    '--source-manifest', sourceManifestPath
+  ], { encoding: 'utf8' });
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(result.stdout, 'Prompt-provenance receipt: PASS\n');
 });

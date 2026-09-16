@@ -1,36 +1,30 @@
 # 02 Change Proposal
 
-## Objective
+## Goal
+Outline the intended behavioral modifications, change boundaries, impacted consumers, and criteria for success without dictating technical implementation details (i.e., isolating the what and why from the how).
 
-Define the intended behavioral change, boundaries, affected consumers, and success signals without prescribing implementation.
-
-## Mode
-
+## Execution Mode
 RUN_ONLY
 
-## Inputs
+## Input Context
+- The original change request
+- The baseline inventory artifact
+- Project constraints and assessed risk level
 
-- Change request
-- Baseline inventory
-- Constraints and risk level
+## Process
+1. Articulate the core intent behind the change and the specific outcome it aims to achieve.
+2. Pinpoint which established baseline behaviors and downstream consumers will be affected.
+3. Carry forward the supplied source locators or evidence identifiers supporting the request, the consumer impacts, and the material outcome claims. If provenance is missing, insert an explicit gap marker.
+4. Document all constraints, explicit non-goals, backward-compatibility requirements, and recognized risks.
+5. Establish concrete, observable success signals for the change.
+6. Enumerate any unresolved questions regarding the baseline or affected consumers.
+7. Choose between Lite or Full specification depth based on the initiative's risk profile and ambiguity level.
 
-## Steps
-
-1. State why the change is requested and what outcome it should produce.
-2. Identify affected behaviors and consumers.
-3. Attach the supplied source locator or evidence identifier for the request, affected consumers, and material outcome claims; mark missing provenance explicitly.
-4. Record constraints, non-goals, compatibility expectations, and known risks.
-5. Define observable success signals.
-6. List unresolved baseline or consumer questions.
-7. Select Lite or Full specification depth based on risk and uncertainty.
-
-## Outputs
-
+## Output Contract
 - `change-proposal.json`
 
-## Success criteria
-
-- Intent and implementation are separate.
-- Material intent and consumer claims have an evidence reference or an explicit gap.
-- The proposal names who could be harmed by an incorrect delta.
-- Specification depth is justified rather than automatic.
+## Required Guardrails
+- Intent and expected behavior must be strictly separated from implementation mechanics.
+- All material claims regarding intent or consumer impact must carry an evidence reference or an explicit gap tag.
+- The proposal must identify any consumers or systems that could suffer harm if the delta is implemented incorrectly.
+- The choice of specification depth (Lite vs. Full) must be actively justified, not chosen by default.

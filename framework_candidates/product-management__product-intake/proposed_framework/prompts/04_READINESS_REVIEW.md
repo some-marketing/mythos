@@ -1,38 +1,32 @@
 # 04 Readiness Review
 
-## Objective
+## Goal
+Conduct an independent evaluation of the product intake bundle. Conclude whether the initiative is ready to proceed to planning, requires bounded evidence gathering, or must be halted.
 
-Independently review the intake bundle and decide whether it is ready for planning, needs a bounded evidence action, or should stop.
-
-## Mode
-
+## Execution Mode
 REVIEW_ONLY
 
-## Inputs
+## Input Context
+- The scope-and-intent artifact
+- The evidence ledger and hypothesis tests
+- The product brief and PRFAQ
 
-- Scope-and-intent artifact
-- Evidence ledger and hypothesis tests
-- Product brief and PRFAQ
+## Process
+1. Document the exact actor id, harness id, and model-provider family for the current reviewing entity, as well as for every producer of the artifacts from Prompts 01-03.
+2. You must refuse to issue a `PASS` verdict unless your reviewing actor id, harness id, and model-provider family are completely distinct from all producers. Using a new context window or a subagent from the same provider does not constitute a distinct reviewing mind. If provenance is missing, you must fail the review (`FAIL`).
+3. Differentiate between current-run provenance observations and historical source claims. Do not invent missing identities or attempt to rewrite historical provenance.
+4. Validate the traceability of claims in the product brief back to the evidence ledger or stated assumptions.
+5. Scan for premature solution framing, absent user perspectives, contradictory constraints, and success signals that cannot be measured.
+6. Evaluate the bundle against the existing blueprint or workflow map to identify any unnecessary process ceremony.
+7. Issue a final verdict: `PASS`, `CONCERNS`, or `FAIL`.
+8. For any `CONCERNS` or `FAIL` verdict, explicitly state what evidence is missing and identify the cheapest test to acquire it.
 
-## Steps
+## Output Contract
+- `readiness-review.json` (must include `producer_provenance` and `reviewer_provenance` to satisfy the distinct-mind check)
 
-1. Record the actor id, harness id, and model-provider family for the reviewer and every producer of Prompts 01–03.
-2. Refuse to issue `PASS` unless the reviewer actor id, harness id, and model-provider family are all distinct from every producer. A new context or same-provider subagent is not a distinct reviewing mind; missing provenance forces `FAIL`.
-3. Distinguish observed current-run provenance from historical producer or source claims; do not infer missing identities or rewrite history.
-4. Test traceability from brief claims back to evidence or explicit assumptions.
-5. Look for solution-first framing, missing users, contradictory constraints, and unverifiable success signals.
-6. Compare the bundle with the existing blueprint/plan path for unnecessary ceremony.
-7. Return `PASS`, `CONCERNS`, or `FAIL`.
-8. For every concern or failure, name the missing evidence and cheapest next test.
-
-## Outputs
-
-- `readiness-review.json`, including `producer_provenance` and `reviewer_provenance` used for the distinct-mind check
-
-## Success criteria
-
-- The verdict cites concrete artifacts.
-- The review artifact proves actor-, harness-, and model-family distinctness from every producer.
-- Missing historical provenance remains a named evidence gap rather than an inferred fact.
-- PASS does not authorize implementation.
-- The review identifies evidence that would reverse its verdict.
+## Required Guardrails
+- The review verdict must cite specific lines or sections from the concrete artifacts.
+- The output artifact must demonstrate that the reviewer's actor, harness, and model-family are distinct from every producer.
+- Any missing historical provenance must be explicitly flagged as an evidence gap, not inferred.
+- A `PASS` verdict solely authorizes planning, not implementation.
+- The review must name specific evidence that, if discovered, would reverse its current verdict.

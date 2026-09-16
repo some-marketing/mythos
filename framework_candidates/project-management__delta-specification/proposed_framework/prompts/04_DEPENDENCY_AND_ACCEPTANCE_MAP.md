@@ -1,36 +1,30 @@
 # 04 Dependency and Acceptance Map
 
-## Objective
+## Goal
+Construct a map of reading prerequisites, logical dependencies, acceptance criteria, and optional execution waves for the delta specifications, strictly avoiding the creation of a technical implementation plan.
 
-Map reading prerequisites, dependencies, acceptance criteria, and optional execution waves without turning the specification into an implementation plan.
-
-## Mode
-
+## Execution Mode
 RUN_ONLY
 
-## Inputs
+## Input Context
+- The baseline inventory
+- The change proposal
+- The delta requirements
 
-- Baseline inventory
-- Change proposal
-- Delta requirements
+## Process
+1. Detail the specific artifacts and files that downstream consumers or subagents must read prior to execution.
+2. Define explicit `depends_on` relationships strictly in cases where one requirement or acceptance check fundamentally relies on another.
+3. Retain the evidence identifier or requirement ID that validates each dependency and acceptance assertion; explicitly mark any claim that lacks an evidence basis.
+4. Establish clear, testable acceptance criteria for every material delta requirement.
+5. Group discrete, independent acceptance checks into optional parallel execution waves.
+6. Call out potential cross-consumer compatibility issues and sequencing risks.
+7. Deliberately leave the exact execution mechanics and tool selections completely unresolved.
 
-## Steps
-
-1. Identify artifacts that downstream work must read first.
-2. Add explicit `depends_on` relationships only where one requirement or acceptance check truly requires another.
-3. Preserve the requirement or evidence identifier that supports each dependency and acceptance claim; mark an unavailable basis explicitly.
-4. Define acceptance criteria for every material delta.
-5. Group independent acceptance work into optional waves.
-6. Identify cross-consumer sequencing and compatibility risks.
-7. Leave execution mechanism and tool choice unresolved.
-
-## Outputs
-
+## Output Contract
 - `dependency-acceptance-map.json`
 
-## Success criteria
-
-- Dependency edges are evidence-backed and acyclic.
-- Every material delta has an acceptance criterion.
-- Every dependency and acceptance claim has an evidence basis or an explicit gap.
-- Parallelism is optional and never inferred from convenience alone.
+## Required Guardrails
+- The generated dependency graph must be strictly acyclic and backed by evidence.
+- Every material change (delta) must be paired with at least one verifiable acceptance criterion.
+- All dependency relationships and acceptance claims must trace to an evidence basis or carry an explicit gap marker.
+- Parallel execution waves are framed as optional and must be driven by logical independence, not mere convenience.

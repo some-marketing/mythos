@@ -13,7 +13,7 @@ const {
   isRunPlanBlockedByPendingRepair,
   isOperatorStampEnforcementEnabled,
   assessOperatorStamp,
-  OPERATOR_STAMP_ENFORCEMENT_ENV,
+  operatorStampEnforcementFlagName,
   collectPlanRunGateDecision,
   planRunGateMode,
   appendPlanRunGateReceipt
@@ -193,8 +193,10 @@ function appendRunnerComparison(projectRoot, mode, decision, legacyResult, trace
  * A2 (plan-approval-surface) — real run-time operator_stamp blocker on the
  * DISPATCHED /run-plan path (this runPlan() is what tools/commands/smos-command-runner.cjs
  * wires as the 'run-plan' handler). DEFAULT-OFF: only enforced once the deliberate
- * flag SMOS_ENFORCE_OPERATOR_STAMP is turned on (Stage B provides the stamp
- * production path; enforcing before that would jam every /run-plan).
+ * flag MYTHOS_ENFORCE_OPERATOR_STAMP is turned on, with
+ * SMOS_ENFORCE_OPERATOR_STAMP retained as a compatibility fallback (Stage B
+ * provides the stamp production path; enforcing before that would jam every
+ * /run-plan).
  *
  * PERIMETER-SCOPED + VERIFIED: non-perimeter plans pass without a stamp. For a
  * perimeter plan under enforcement, a present operator_stamp is RE-VERIFIED here
@@ -219,7 +221,7 @@ function enforceOperatorStampGate(projectRoot, taskId, argsText, options) {
     stdout: [
       `Managed command blocked: /run-plan ${taskId}`,
       `Blocked reason [${blocker}]: ${assessment.detail}`,
-      `Gate flag ${OPERATOR_STAMP_ENFORCEMENT_ENV} is ON and the plan trips the consequential perimeter: the version-bound operator-authored GREENLIGHT proof is RE-VERIFIED at run time. PRESENCE ALONE IS NOT AUTHORITY.`,
+      `Gate flag ${operatorStampEnforcementFlagName() || 'operator-stamp enforcement'} is ON and the plan trips the consequential perimeter: the version-bound operator-authored GREENLIGHT proof is RE-VERIFIED at run time. PRESENCE ALONE IS NOT AUTHORITY.`,
       `State marker: ${assessment.markerPath || '(unresolved)'}`,
       `${STAMP_OVERRIDE_FLAG} bypasses distinct-review/convene only and cannot bypass this operator-stamp invariant.`,
       `Exact next command: /stamp ${taskId}`

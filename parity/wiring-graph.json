@@ -8493,7 +8493,7 @@
       "id": "file:instructions/canonical/commands/run-plan.yaml",
       "type": "file",
       "path": "instructions/canonical/commands/run-plan.yaml",
-      "sha256": "55b9a44e6444eceb8fd007a4a28a63403bbf24d73b8c4dbf1bbddeea7b8451f9",
+      "sha256": "6cc4d9f37d226b585afd9796394a9cf15be20e094f4ca40b270b536358b3804c",
       "mode": 420
     },
     {
@@ -11293,7 +11293,7 @@
       "id": "file:tools/codex/commands/__tests__/run-plan.operator-stamp.test.js",
       "type": "file",
       "path": "tools/codex/commands/__tests__/run-plan.operator-stamp.test.js",
-      "sha256": "97d87786313992de295da1b1c4eec3d515cd310adc0db5d061e1c6f8c59519d8",
+      "sha256": "75cf2f417be43cc4c5180840a0ad07520b830bb671821e492f71ca320b42fd16",
       "mode": 420
     },
     {
@@ -11363,7 +11363,7 @@
       "id": "file:tools/codex/commands/run-plan.js",
       "type": "file",
       "path": "tools/codex/commands/run-plan.js",
-      "sha256": "e1de5b2ab3cea41e23f8c1048d23503e81e0131c40e7a2a61a59b611257fbc8b",
+      "sha256": "84134ca56acd21f13ff924091e789e0e0fcbb5fe96126c526fdc39917206f58f",
       "mode": 420
     },
     {
@@ -13904,7 +13904,7 @@
       "id": "file:tools/kernel/hooks/__tests__/userprompt-plan-review-gate.operator-stamp.test.js",
       "type": "file",
       "path": "tools/kernel/hooks/__tests__/userprompt-plan-review-gate.operator-stamp.test.js",
-      "sha256": "b86ac604a99a5ef7b4216e7f1624a64da267293e3f8d73968017fedca7530c47",
+      "sha256": "72bbc15cdd1159eb4fbd23d994fdf47ab509f2c492b22a4df992b1d7c20efbd8",
       "mode": 420
     },
     {
@@ -13920,6 +13920,13 @@
       "path": "tools/kernel/hooks/__tests__/userprompt-plan-review-gate.test.cjs",
       "sha256": "5060352c19b89c2dfb8bd8a5fb8f89377d724e99cf7ce685e1d8c8d946aca52b",
       "mode": 493
+    },
+    {
+      "id": "file:tools/kernel/hooks/__tests__/userprompt-plan-review-gate.verdict-vocabulary.test.js",
+      "type": "file",
+      "path": "tools/kernel/hooks/__tests__/userprompt-plan-review-gate.verdict-vocabulary.test.js",
+      "sha256": "a9100b2dcb7257df823da72cbec065c58e0cd45c4767253f80c42bbd71123891",
+      "mode": 420
     },
     {
       "id": "file:tools/kernel/hooks/__tests__/userpromptsubmit-ambient-router.test.cjs",
@@ -14107,8 +14114,8 @@
       "id": "file:tools/kernel/hooks/userprompt-plan-review-gate.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/userprompt-plan-review-gate.cjs",
-      "sha256": "9a35eeb7d744b1226b6974162525b8992aaf4bd29d731a027df4a0eaba954561",
-      "mode": 493
+      "sha256": "427a62711d8dc45bbb0ffedfc615738f661c42195695f5839f0707f2a6ba4e7e",
+      "mode": 420
     },
     {
       "id": "file:tools/kernel/hooks/userpromptsubmit-ambient-router.cjs",
@@ -16711,7 +16718,7 @@
       "id": "file:tools/planning/lib/__tests__/plan-review-state.allowed-events.test.js",
       "type": "file",
       "path": "tools/planning/lib/__tests__/plan-review-state.allowed-events.test.js",
-      "sha256": "45717d9ad89db524c91f8b4678b8ca797bfd21eb3916ab0e067095a726aee43f",
+      "sha256": "71330ac86c629308297a7af10c85f4abb267fe655095fffb8cb59a23f723700b",
       "mode": 420
     },
     {
@@ -16872,7 +16879,7 @@
       "id": "file:tools/planning/lib/plan-review-state.js",
       "type": "file",
       "path": "tools/planning/lib/plan-review-state.js",
-      "sha256": "e56ef919a6d4f52ac8831d4bb977f9c0c74986f653401fb7ef43c00c67a5b9d6",
+      "sha256": "fcff8243f9bb03a1f434e9e8421928b8ce6fcdbcb604a3eb8bfc7858cf09c558",
       "mode": 420
     },
     {
@@ -41032,6 +41039,15 @@
       "specifier": "../signal-lifecycle-driver"
     },
     {
+      "id": "9d07429653b8521d14e76c5a510dcb1c550b67d46586d50ec966aa42f589954b",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/userprompt-plan-review-gate.verdict-vocabulary.test.js",
+      "to": "file:tools/kernel/hooks/userprompt-plan-review-gate.cjs",
+      "target": "tools/kernel/hooks/userprompt-plan-review-gate.cjs",
+      "required": true,
+      "specifier": "../userprompt-plan-review-gate.cjs"
+    },
+    {
       "id": "9d077060f165721b042b7cf94a7517b181f0aeb9b2698e5798d04fee12ef67d4",
       "type": "static-import",
       "from": "file:tools/sessions/__tests__/boundary-markers.test.js",
@@ -51322,8 +51338,8 @@
     }
   ],
   "counts": {
-    "nodes": 3851,
-    "edges": 2882,
+    "nodes": 3852,
+    "edges": 2883,
     "unresolved": 0
   }
 }

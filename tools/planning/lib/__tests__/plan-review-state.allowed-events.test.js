@@ -115,6 +115,36 @@ test('isOperatorStampEnforcementEnabled true only for explicit truthy values', (
   }
 });
 
+test('isOperatorStampEnforcementEnabled is MYTHOS-first with SMOS compatibility fallback', () => {
+  assert.strictEqual(
+    lib.isOperatorStampEnforcementEnabled({ MYTHOS_ENFORCE_OPERATOR_STAMP: '1' }),
+    true
+  );
+  assert.strictEqual(
+    lib.isOperatorStampEnforcementEnabled({ MYTHOS_ENFORCE_OPERATOR_STAMP: '0', SMOS_ENFORCE_OPERATOR_STAMP: '1' }),
+    false,
+    'an explicit current-name false value is the rollback and must beat the legacy fallback'
+  );
+  assert.strictEqual(
+    lib.isOperatorStampEnforcementEnabled({ SMOS_ENFORCE_OPERATOR_STAMP: '1' }),
+    true,
+    'legacy callers remain supported when the current name is absent'
+  );
+  assert.strictEqual(
+    lib.isOperatorStampEnforcementEnabled({ MYTHOS_ENFORCE_OPERATOR_STAMP: '', SMOS_ENFORCE_OPERATOR_STAMP: '1' }),
+    false,
+    'an explicit empty current-name value disables enforcement'
+  );
+  assert.strictEqual(
+    lib.operatorStampEnforcementFlagName({ MYTHOS_ENFORCE_OPERATOR_STAMP: '0', SMOS_ENFORCE_OPERATOR_STAMP: '1' }),
+    'MYTHOS_ENFORCE_OPERATOR_STAMP'
+  );
+  assert.strictEqual(
+    lib.operatorStampEnforcementFlagName({ SMOS_ENFORCE_OPERATOR_STAMP: '1' }),
+    'SMOS_ENFORCE_OPERATOR_STAMP'
+  );
+});
+
 test('assessOperatorStamp: null/absent stamp is missing; present stamp is present (presence-only)', () => {
   assert.strictEqual(lib.assessOperatorStamp(null).status, 'missing');
   assert.strictEqual(lib.assessOperatorStamp({ operator_stamp: null }).status, 'missing');

@@ -3,7 +3,8 @@
 /**
  * A2 (plan-approval-surface) — /run-plan runtime (tools/codex/commands/run-plan.js,
  * dispatched via tools/commands/smos-command-runner.cjs) enforces operator_stamp
- * as a real run-time blocker, behind the DEFAULT-OFF flag SMOS_ENFORCE_OPERATOR_STAMP.
+ * as a real run-time blocker, behind the DEFAULT-OFF flag MYTHOS_ENFORCE_OPERATOR_STAMP
+ * with SMOS_ENFORCE_OPERATOR_STAMP retained as a compatibility fallback.
  *
  * Falsifiable contract:
  *   - flag ON + marker operator_stamp:null  -> blocked (exit 2), reason operator-stamp-missing, NO execution.
@@ -28,6 +29,7 @@ const stampPlan = require('../../../planning/stamp-plan');
 const verify = require('../../../planning/lib/operator-approval-verify');
 
 const FLAG = 'SMOS_ENFORCE_OPERATOR_STAMP';
+const CURRENT_FLAG = 'MYTHOS_ENFORCE_OPERATOR_STAMP';
 
 // A TEST-ONLY GREENLIGHT seam: inject a known secret into the real synchronous
 // re-verifier so a positive path can be exercised without the on-device secret
@@ -53,6 +55,25 @@ function withFlag(value, fn) {
   } finally {
     if (prev === undefined) delete process.env[FLAG];
     else process.env[FLAG] = prev;
+  }
+}
+
+function withCompatFlags(currentValue, legacyValue, fn) {
+  const previous = {
+    current: process.env[CURRENT_FLAG],
+    legacy: process.env[FLAG]
+  };
+  if (currentValue === undefined) delete process.env[CURRENT_FLAG];
+  else process.env[CURRENT_FLAG] = currentValue;
+  if (legacyValue === undefined) delete process.env[FLAG];
+  else process.env[FLAG] = legacyValue;
+  try {
+    return fn();
+  } finally {
+    if (previous.current === undefined) delete process.env[CURRENT_FLAG];
+    else process.env[CURRENT_FLAG] = previous.current;
+    if (previous.legacy === undefined) delete process.env[FLAG];
+    else process.env[FLAG] = previous.legacy;
   }
 }
 
@@ -87,6 +108,7 @@ test('flag ON + operator_stamp:null -> blocked (exit 2), operator-stamp-missing,
     const res = runRunPlan(root, { args: ['rp-null'] });
     assert.strictEqual(res.exitCode, 2);
     assert.match(res.stdout, /operator-stamp-missing/);
+    assert.match(res.stdout, /SMOS_ENFORCE_OPERATOR_STAMP is ON/);
     assert.doesNotMatch(res.stdout, /AUTHORITY GRANTED/);
   });
 });
@@ -144,6 +166,23 @@ test('flag OFF (default) + operator_stamp:null -> NOT stamp-blocked (bootstrap s
   withFlag(undefined, () => {
     const root = makeRoot('rp-off', { operatorStamp: null });
     const res = runRunPlan(root, { args: ['rp-off'] });
+    assert.doesNotMatch(String(res.stdout || ''), /operator-stamp-missing/);
+  });
+});
+
+test('current MYTHOS flag enables the dispatched runtime stamp gate without the legacy flag', () => {
+  withCompatFlags('1', undefined, () => {
+    const root = makeRoot('rp-current-only', { operatorStamp: null });
+    const res = runRunPlan(root, { args: ['rp-current-only'] });
+    assert.strictEqual(res.exitCode, 2);
+    assert.match(String(res.stdout || ''), /operator-stamp-missing/);
+  });
+});
+
+test('explicit current MYTHOS false disables enforcement even when legacy SMOS is true', () => {
+  withCompatFlags('0', '1', () => {
+    const root = makeRoot('rp-current-rollback', { operatorStamp: null });
+    const res = runRunPlan(root, { args: ['rp-current-rollback'] });
     assert.doesNotMatch(String(res.stdout || ''), /operator-stamp-missing/);
   });
 });

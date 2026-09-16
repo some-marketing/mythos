@@ -77,13 +77,16 @@ const PLAN_RUN_GATE_MODE_ENV = 'SMOS_PLAN_RUN_GATE_MODE';
 // BOOTSTRAP SAFETY: enforcement is DEFAULT-OFF. Stage B (not built here) is what
 // produces a verifiable operator_stamp; turning enforcement on before a stamp
 // can be produced would block EVERY plan's /run-plan. Activation is a deliberate
-// one-line flip of SMOS_ENFORCE_OPERATOR_STAMP once Stage B/D land.
+// one-line flip of MYTHOS_ENFORCE_OPERATOR_STAMP once Stage B/D land. The
+// legacy SMOS_ENFORCE_OPERATOR_STAMP name remains a read-only compatibility
+// fallback for existing launchd or shell callers.
 //
 // ROLLBACK / ESCAPE HATCH (plan-approval-surface grounding adjustment #2):
-// this env var IS the kill switch. Unsetting it (or setting it empty/false)
-// disables operator-stamp enforcement everywhere it is consulted — A1
-// (userprompt-plan-review-gate.cjs), A2 (tools/codex/commands/run-plan.js) and
-// D1 (run-time re-verify). That single unset is the documented one-line rollback.
+// MYTHOS_ENFORCE_OPERATOR_STAMP is authoritative whenever it is present.
+// Set it empty/false to disable enforcement. If it is absent, the legacy
+// SMOS_ENFORCE_OPERATOR_STAMP value is consulted for compatibility, so a
+// legacy-only caller must also unset/disable SMOS to roll back. This resolver
+// controls A1 (the hook), A2 (run-plan), and D1 (run-time re-verify).
 //
 // STAGE SCOPE: assessOperatorStamp performs a PRESENCE-only check. It does NOT,
 // and cannot, verify the stamp's authenticity (Dart-authorship re-verify / HMAC
@@ -91,7 +94,8 @@ const PLAN_RUN_GATE_MODE_ENV = 'SMOS_PLAN_RUN_GATE_MODE';
 // hand-written/raw operator_stamp passes presence here but is rejected at run
 // time by Stage B/D's stamp-proof verification (see plan A3/D1 notes).
 // ---------------------------------------------------------------------------
-const OPERATOR_STAMP_ENFORCEMENT_ENV = 'SMOS_ENFORCE_OPERATOR_STAMP';
+const OPERATOR_STAMP_ENFORCEMENT_ENV = 'MYTHOS_ENFORCE_OPERATOR_STAMP';
+const LEGACY_OPERATOR_STAMP_ENFORCEMENT_ENV = 'SMOS_ENFORCE_OPERATOR_STAMP';
 
 /**
  * Is operator_stamp enforcement (A1/A2) turned on? DEFAULT FALSE.
@@ -101,10 +105,32 @@ const OPERATOR_STAMP_ENFORCEMENT_ENV = 'SMOS_ENFORCE_OPERATOR_STAMP';
  * @returns {boolean}
  */
 function isOperatorStampEnforcementEnabled(env) {
-  const raw = String(((env || process.env)[OPERATOR_STAMP_ENFORCEMENT_ENV]) || '')
+  const source = env || process.env;
+  const flagName = operatorStampEnforcementFlagName(source);
+  if (!flagName) return false;
+  const raw = String((source[flagName]) || '')
     .trim()
     .toLowerCase();
   return raw === '1' || raw === 'true' || raw === 'yes' || raw === 'on';
+}
+
+/**
+ * Return the flag name whose value is authoritative for the supplied env.
+ * MYTHOS is selected by presence, including an explicit empty/false value;
+ * SMOS is only a fallback when MYTHOS is absent.
+ *
+ * @param {object} [env=process.env]
+ * @returns {string|null}
+ */
+function operatorStampEnforcementFlagName(env) {
+  const source = env || process.env;
+  if (Object.prototype.hasOwnProperty.call(source, OPERATOR_STAMP_ENFORCEMENT_ENV)) {
+    return OPERATOR_STAMP_ENFORCEMENT_ENV;
+  }
+  if (Object.prototype.hasOwnProperty.call(source, LEGACY_OPERATOR_STAMP_ENFORCEMENT_ENV)) {
+    return LEGACY_OPERATOR_STAMP_ENFORCEMENT_ENV;
+  }
+  return null;
 }
 
 /**
@@ -785,8 +811,10 @@ module.exports = {
   LEGACY_REPAIR_EVENTS,
   PLAN_TASK_REVIEW_STATE_EVENTS,
   OPERATOR_STAMP_ENFORCEMENT_ENV,
+  LEGACY_OPERATOR_STAMP_ENFORCEMENT_ENV,
   PLAN_RUN_GATE_MODE_ENV,
   isOperatorStampEnforcementEnabled,
+  operatorStampEnforcementFlagName,
   assessOperatorStamp,
   resolveStateMarkerPath,
   readStateMarker,

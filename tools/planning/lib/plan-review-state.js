@@ -77,10 +77,14 @@ const PLAN_RUN_GATE_MODE_ENV = 'SMOS_PLAN_RUN_GATE_MODE';
 // BOOTSTRAP SAFETY: enforcement is DEFAULT-OFF. Stage B (not built here) is what
 // produces a verifiable operator_stamp; turning enforcement on before a stamp
 // can be produced would block EVERY plan's /run-plan. Activation is a deliberate
-// one-line flip of SMOS_ENFORCE_OPERATOR_STAMP once Stage B/D land.
+// one-line flip of MYTHOS_ENFORCE_OPERATOR_STAMP once Stage B/D land. The
+// legacy SMOS_ENFORCE_OPERATOR_STAMP name remains a read-only compatibility
+// fallback for existing launchd or shell callers.
 //
 // ROLLBACK / ESCAPE HATCH (plan-approval-surface grounding adjustment #2):
-// this env var IS the kill switch. Unsetting it (or setting it empty/false)
+// the current-name env var IS the kill switch. Unsetting it (or setting it
+// empty/false) disables enforcement; the legacy name is consulted only when
+// the current name is absent.
 // disables operator-stamp enforcement everywhere it is consulted — A1
 // (userprompt-plan-review-gate.cjs), A2 (tools/codex/commands/run-plan.js) and
 // D1 (run-time re-verify). That single unset is the documented one-line rollback.
@@ -91,7 +95,8 @@ const PLAN_RUN_GATE_MODE_ENV = 'SMOS_PLAN_RUN_GATE_MODE';
 // hand-written/raw operator_stamp passes presence here but is rejected at run
 // time by Stage B/D's stamp-proof verification (see plan A3/D1 notes).
 // ---------------------------------------------------------------------------
-const OPERATOR_STAMP_ENFORCEMENT_ENV = 'SMOS_ENFORCE_OPERATOR_STAMP';
+const OPERATOR_STAMP_ENFORCEMENT_ENV = 'MYTHOS_ENFORCE_OPERATOR_STAMP';
+const LEGACY_OPERATOR_STAMP_ENFORCEMENT_ENV = 'SMOS_ENFORCE_OPERATOR_STAMP';
 
 /**
  * Is operator_stamp enforcement (A1/A2) turned on? DEFAULT FALSE.
@@ -101,7 +106,11 @@ const OPERATOR_STAMP_ENFORCEMENT_ENV = 'SMOS_ENFORCE_OPERATOR_STAMP';
  * @returns {boolean}
  */
 function isOperatorStampEnforcementEnabled(env) {
-  const raw = String(((env || process.env)[OPERATOR_STAMP_ENFORCEMENT_ENV]) || '')
+  const source = env || process.env;
+  const flagName = Object.prototype.hasOwnProperty.call(source, OPERATOR_STAMP_ENFORCEMENT_ENV)
+    ? OPERATOR_STAMP_ENFORCEMENT_ENV
+    : LEGACY_OPERATOR_STAMP_ENFORCEMENT_ENV;
+  const raw = String((source[flagName]) || '')
     .trim()
     .toLowerCase();
   return raw === '1' || raw === 'true' || raw === 'yes' || raw === 'on';
@@ -785,6 +794,7 @@ module.exports = {
   LEGACY_REPAIR_EVENTS,
   PLAN_TASK_REVIEW_STATE_EVENTS,
   OPERATOR_STAMP_ENFORCEMENT_ENV,
+  LEGACY_OPERATOR_STAMP_ENFORCEMENT_ENV,
   PLAN_RUN_GATE_MODE_ENV,
   isOperatorStampEnforcementEnabled,
   assessOperatorStamp,

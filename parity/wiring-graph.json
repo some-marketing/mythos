@@ -8493,7 +8493,7 @@
       "id": "file:instructions/canonical/commands/run-plan.yaml",
       "type": "file",
       "path": "instructions/canonical/commands/run-plan.yaml",
-      "sha256": "55b9a44e6444eceb8fd007a4a28a63403bbf24d73b8c4dbf1bbddeea7b8451f9",
+      "sha256": "6cc4d9f37d226b585afd9796394a9cf15be20e094f4ca40b270b536358b3804c",
       "mode": 420
     },
     {
@@ -11293,7 +11293,7 @@
       "id": "file:tools/codex/commands/__tests__/run-plan.operator-stamp.test.js",
       "type": "file",
       "path": "tools/codex/commands/__tests__/run-plan.operator-stamp.test.js",
-      "sha256": "97d87786313992de295da1b1c4eec3d515cd310adc0db5d061e1c6f8c59519d8",
+      "sha256": "3d66fddf4c86d98b6d264b96facb921a307e3555d516ef100b63c2c6b64264a7",
       "mode": 420
     },
     {
@@ -14114,7 +14114,7 @@
       "id": "file:tools/kernel/hooks/userprompt-plan-review-gate.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/userprompt-plan-review-gate.cjs",
-      "sha256": "b519f6c15c948b86c7936d712ca3c16a7c02e128ac56e7b8a00ba15f709d5be2",
+      "sha256": "5e3a68d62f42edab8374dcb8898f6467f76aae0114bb5bcd1764d66d32a3e3db",
       "mode": 420
     },
     {
@@ -16718,7 +16718,7 @@
       "id": "file:tools/planning/lib/__tests__/plan-review-state.allowed-events.test.js",
       "type": "file",
       "path": "tools/planning/lib/__tests__/plan-review-state.allowed-events.test.js",
-      "sha256": "45717d9ad89db524c91f8b4678b8ca797bfd21eb3916ab0e067095a726aee43f",
+      "sha256": "f8cb4e78a4b75d3c5e2a5284ee6d9e19192a539bd9712bd74d010e336ab6a5f1",
       "mode": 420
     },
     {
@@ -16879,7 +16879,7 @@
       "id": "file:tools/planning/lib/plan-review-state.js",
       "type": "file",
       "path": "tools/planning/lib/plan-review-state.js",
-      "sha256": "e56ef919a6d4f52ac8831d4bb977f9c0c74986f653401fb7ef43c00c67a5b9d6",
+      "sha256": "b650b44a07a9d1c185a181d605fd91ad57bbdfa039400dc9a2dc010195a480d1",
       "mode": 420
     },
     {

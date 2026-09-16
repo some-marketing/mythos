@@ -501,27 +501,6 @@ function assessDistinctReview(projectRoot, planId, marker) {
   return { status: 'missing', source: null, detail: null };
 }
 
-// Round-4 review P1: this hook's own messages already documented
-// MYTHOS_ENFORCE_OPERATOR_STAMP (the operator-facing flag name), but the
-// shared lib's isOperatorStampEnforcementEnabled() only recognizes the legacy
-// SMOS_ENFORCE_OPERATOR_STAMP name — so enabling the documented flag left the
-// safety floor OFF, and disabling it (per the hook's own diagnostic text) did
-// nothing. Checked here through the same MYTHOS-first/SMOS-fallback
-// readCompatEnv() this file already uses elsewhere, so enforcement no longer
-// depends on the shared lib recognizing the current name; an OR with the
-// lib's own check keeps any of its future flag names honored too.
-function isOperatorStampEnforcementEnabledCompat(prs) {
-  const raw = String(readCompatEnv('MYTHOS_ENFORCE_OPERATOR_STAMP', 'SMOS_ENFORCE_OPERATOR_STAMP') || '')
-    .trim()
-    .toLowerCase();
-  if (raw === '1' || raw === 'true' || raw === 'yes' || raw === 'on') return true;
-  try {
-    return Boolean(prs && typeof prs.isOperatorStampEnforcementEnabled === 'function' && prs.isOperatorStampEnforcementEnabled());
-  } catch (_) {
-    return false;
-  }
-}
-
 /**
  * A1 operator_stamp enforcement assessment. Lazily requires the planning lib
  * (single source of truth for the flag + presence contract) inside a try/catch
@@ -531,7 +510,8 @@ function isOperatorStampEnforcementEnabledCompat(prs) {
 function assessOperatorStampEnforcement(marker) {
   try {
     const prs = require(path.join(PROJECT_ROOT, 'tools', 'planning', 'lib', 'plan-review-state.js'));
-    if (isOperatorStampEnforcementEnabledCompat(prs)) {
+    if (prs && typeof prs.isOperatorStampEnforcementEnabled === 'function' &&
+        prs.isOperatorStampEnforcementEnabled()) {
       const a = prs.assessOperatorStamp(marker);
       return { enforced: true, status: a.status, detail: a.detail };
     }
@@ -587,7 +567,7 @@ function sharedGateMode() {
 
 function collectSharedHookGate(projectRoot, planId, parsed, planJson, marker, review, bigness, resolved, convene) {
   const prs = require(path.join(PROJECT_ROOT, 'tools', 'planning', 'lib', 'plan-review-state.js'));
-  const stampEnforced = isOperatorStampEnforcementEnabledCompat(prs);
+  const stampEnforced = prs.isOperatorStampEnforcementEnabled();
   const tripsPerimeter = stampEnforced ? planTripsConsequentialPerimeter(planJson) : false;
   let stampVerification = tripsPerimeter ? 'missing' : 'not_required';
   if (tripsPerimeter && prs.assessOperatorStamp(marker).status === 'present') {

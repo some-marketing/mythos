@@ -464,6 +464,44 @@ test('required text and delta contracts reject empty content', (t) => {
   assert.ok(deltaFindings.some((finding) => finding.code === 'DELTA_EMPTY'));
 });
 
+test('meaning-bearing candidate strings reject whitespace-only values', () => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const readCandidateSchema = (candidate, schema) => JSON.parse(fs.readFileSync(path.join(
+    repositoryRoot,
+    'framework_candidates',
+    candidate,
+    'proposed_framework',
+    'schemas',
+    'output',
+    schema
+  ), 'utf8'));
+  const baselineSchema = readCandidateSchema('project-management__delta-specification', 'baseline-inventory.schema.json');
+  assert.throws(() => validateRequiredFields([{
+    baseline_requirement_id: ' ',
+    behavior: 'Current behavior',
+    source_locator: 'docs/current.md',
+    authority: 'repository',
+    consumers: []
+  }], baselineSchema, 'baseline-inventory'), /pattern/);
+
+  const dependencySchema = readCandidateSchema('project-management__delta-specification', 'dependency-acceptance-map.schema.json');
+  assert.throws(() => validateRequiredFields({
+    read_first: [],
+    dependencies: [{ delta_id: 'D-1', depends_on: ['D-0'], rationale: 'Reason' }],
+    acceptance_criteria: [{ criterion_id: 'AC-1', delta_id: 'D-1', condition: ' ', observable_result: 'Observed' }]
+  }, dependencySchema, 'dependency-map'), /pattern/);
+
+  const scopeSchema = readCandidateSchema('product-management__product-intake', 'scope-and-intent.schema.json');
+  assert.throws(() => validateRequiredFields({
+    problem: ' ',
+    users: ['document-workflow user'],
+    constraints: [],
+    non_goals: [],
+    open_questions: [],
+    stop_conditions: []
+  }, scopeSchema, 'scope-and-intent'), /pattern/);
+});
+
 test('candidate status computes learning state without writing the tracked ledger', () => {
   const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
   const candidateRoot = path.join(repositoryRoot, 'framework_candidates', 'product-management__product-intake');
@@ -473,6 +511,22 @@ test('candidate status computes learning state without writing the tracked ledge
   const after = fs.readFileSync(ledgerPath);
   assert.equal(ledger.framework_id, 'product-management/product-intake');
   assert.deepEqual(after, before);
+});
+
+test('delta replay names a domain consumer distinct from the framework reviewer', () => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const intakePath = path.join(
+    repositoryRoot,
+    'framework_candidates',
+    'project-management__delta-specification',
+    'replay_cases',
+    'neutral-retention-change',
+    'inputs',
+    'intake.json'
+  );
+  const intake = JSON.parse(fs.readFileSync(intakePath, 'utf8'));
+  assert.deepEqual(intake.affected_consumers, ['document-workflow user', 'document-retention auditor']);
+  assert.ok(!intake.affected_consumers.includes('audit reviewer'));
 });
 
 test('product evidence provenance rejects blank values', (t) => {

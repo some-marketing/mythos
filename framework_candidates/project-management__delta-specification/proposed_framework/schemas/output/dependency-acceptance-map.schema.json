@@ -13,9 +13,9 @@
         "type": "object",
         "required": ["delta_id", "depends_on", "rationale"],
         "properties": {
-          "delta_id": { "type": "string", "minLength": 1 },
-          "depends_on": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
-          "rationale": { "type": "string", "minLength": 1 }
+          "delta_id": { "type": "string", "minLength": 1, "pattern": "\\S" },
+          "depends_on": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1, "pattern": "\\S" } },
+          "rationale": { "type": "string", "minLength": 1, "pattern": "\\S" }
         }
       }
     },
@@ -25,10 +25,10 @@
         "type": "object",
         "required": ["criterion_id", "delta_id", "condition", "observable_result"],
         "properties": {
-          "criterion_id": { "type": "string", "minLength": 1 },
-          "delta_id": { "type": "string", "minLength": 1 },
-          "condition": { "type": "string", "minLength": 1 },
-          "observable_result": { "type": "string", "minLength": 1 }
+          "criterion_id": { "type": "string", "minLength": 1, "pattern": "\\S" },
+          "delta_id": { "type": "string", "minLength": 1, "pattern": "\\S" },
+          "condition": { "type": "string", "minLength": 1, "pattern": "\\S" },
+          "observable_result": { "type": "string", "minLength": 1, "pattern": "\\S" }
         }
       }
     },

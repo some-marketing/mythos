@@ -5,7 +5,7 @@
   ],
   "affected_consumers": [
     "document-workflow user",
-    "audit reviewer"
+    "document-retention auditor"
   ],
   "constraints": [
     "No implementation instructions",

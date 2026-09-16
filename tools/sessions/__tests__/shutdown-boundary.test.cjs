@@ -104,7 +104,7 @@ test('shutdown inventories live HandoffSignal 1.0 and 2.0 files and ignores the 
     timestamp: now
   });
   writeSignal(root, 'obsolete.json', {
-    schema: 'CoordinationSignal/1.0',
+    schema: 'LegacySignal/1.0',
     lifecycle_state: 'live',
     signal_scope: 'system',
     recommended_next_command: '/obsolete-command',

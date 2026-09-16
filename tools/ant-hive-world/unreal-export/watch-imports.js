@@ -56,7 +56,7 @@ const { spawnSync } = require('child_process');
 const REPO_ROOT = path.join(__dirname, '..', '..', '..');
 const IMPORT_TURN_JS = path.join(__dirname, 'import-turn.js');
 const DEFAULT_ROOT = path.join(REPO_ROOT, '_dev', 'state');
-const DEFAULT_OUT_DIR = __dirname;
+const DEFAULT_OUT_DIR = path.join(REPO_ROOT, '_dev', 'state', 'unreal-import');
 const DEFAULT_INTERVAL_S = 30;
 const DEFAULT_HOST = 'orwell';
 // AntSimV2 is the live projection target as of 2026-08-06. AntWorldProjection is
@@ -69,6 +69,10 @@ const DEFAULT_REMOTE_DIR = `${DEFAULT_PROJECT_ROOT}\\Imports`;
 const DEFAULT_BUILD_SCRIPT = `${DEFAULT_PROJECT_ROOT}\\Tools\\BuildLevel.ps1`;
 const PRESERVED_BASELINE_PROJECT = 'AntWorldProjection';
 const DEFAULT_PSRUN = path.join(REPO_ROOT, '_dev', 'sim-runs', 'vm', 'orwell', 'psrun.sh');
+
+function assertSafeTurnId(turnId) {
+  return typeof turnId === 'string' && /^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(turnId);
+}
 
 // --- logging ----------------------------------------------------------------
 
@@ -181,6 +185,9 @@ function inspectHarvestDir(harvestDir) {
   if (!turnId) {
     return { complete: false, reason: 'turn-projection.json missing run_name' };
   }
+  if (!assertSafeTurnId(turnId)) {
+    return { complete: false, reason: 'turn-projection.json run_name is not basename-safe' };
+  }
   return { complete: true, runSubdir, turnId };
 }
 
@@ -287,6 +294,7 @@ function writeDeployStateEntry(outDir, deployStatePathOverride, turnId, target, 
 // -journaled turn from a PRIOR pass can still be located for a deploy retry
 // without re-running the importer.
 function outPathForTurn(outDir, turnId) {
+  if (!assertSafeTurnId(turnId)) throw new Error('turn_id is not basename-safe');
   return path.join(outDir, `unreal-import__${turnId}.json`);
 }
 
@@ -577,6 +585,8 @@ function main() {
 }
 
 module.exports = {
+  DEFAULT_OUT_DIR,
+  assertSafeTurnId,
   runOnce,
   inspectHarvestDir,
   readJournalTurnIds,

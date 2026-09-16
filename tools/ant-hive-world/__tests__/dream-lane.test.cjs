@@ -494,6 +494,35 @@ test('AC14(d) companion: process-death recovery -- a fresh registration for the 
   dreamLane.deregisterRun(p);
 });
 
+test('AC14(d) generation isolation: a reused worldStatePath gets a new provisional generation', () => {
+  const p = freshUnregisteredPath();
+  const vaultPath = path.join(SCRATCH_ROOT, 'crash-reuse-vault.jsonl');
+  dreamLane.registerRun(p, { vaultPath, sandboxRoot: path.join(SCRATCH_ROOT, 'crash-reuse-old') });
+  const oldState = dreamLane.getRunState(p);
+  dreamMemory.seedVault(vaultPath);
+  dreamMemory.appendEntry(vaultPath, {
+    entry_type: 'dream', lane: 'darkness', text_or_data: { run: 'old' },
+    provenance: { source: 'test', ref: 'old-crash' }, generation_id: oldState.provisionalGenerationId
+  });
+  dreamLane.deregisterRun(p); // model the crashed process losing its registry
+
+  dreamLane.registerRun(p, { vaultPath, sandboxRoot: path.join(SCRATCH_ROOT, 'crash-reuse-fresh') });
+  const freshState = dreamLane.getRunState(p);
+  assert.notEqual(freshState.provisionalGenerationId, oldState.provisionalGenerationId);
+  dreamMemory.appendEntry(vaultPath, {
+    entry_type: 'dream', lane: 'hope', text_or_data: { run: 'fresh' },
+    provenance: { source: 'test', ref: 'fresh-run' }, generation_id: freshState.provisionalGenerationId
+  });
+  const flip = dreamMemory.commitGenerationEntries(vaultPath, 'gen-2-fresh', freshState.provisionalGenerationId);
+  assert.deepEqual(flip.flipped, [2]);
+  const entries = dreamMemory.materialize(vaultPath);
+  assert.equal(entries.find((entry) => entry.text_or_data.run === 'old').commit_status, 'pending');
+  const freshEntry = entries.find((entry) => entry.text_or_data.run === 'fresh');
+  assert.equal(freshEntry.commit_status, 'committed');
+  assert.equal(freshEntry.generation_id, 'gen-2-fresh');
+  dreamLane.deregisterRun(p);
+});
+
 // ============================================================================
 // S4b INTEGRATION PASS (closeout items 1-4): forecast issuance, live
 // authority movement, vault population, evidence-file shape, and the stock-
@@ -858,7 +887,7 @@ test('S4b-2 MERGE, live tick path: two trigger classes clearing the same (hive, 
   assert.equal(typeof tick3Line.dream_fired.entry_id, 'number', 'the delivered dream\'s own vault entry_id must be recorded');
   assert.deepEqual(tick3Line.dream_fired.merged_trigger_classes.sort(), ['patch-death-near-activity', 'repeating-starvation'].sort());
   assert.equal(tick3Line.run_id, p);
-  assert.equal(tick3Line.generation_id, p);
+  assert.equal(tick3Line.generation_id, state.provisionalGenerationId);
 
   dreamLane.deregisterRun(p);
 });
@@ -957,7 +986,7 @@ test('finalizeRun flips this run\'s pending vault entries to run-terminal and de
   assert.ok(result.flipped.length >= 1);
 
   entries = dreamMemory.materialize(state.vaultPath);
-  const runEntries = entries.filter((e) => e.generation_id === p);
+  const runEntries = entries.filter((e) => e.generation_id === state.provisionalGenerationId);
   assert.ok(runEntries.every((e) => e.commit_status === 'run-terminal'), 'every entry this run wrote must reach the terminal run-terminal status, never left pending');
   assert.equal(dreamLane.getRunState(p), null, 'finalizeRun must deregister the run -- it is over');
 });
@@ -976,6 +1005,25 @@ test('finalizeRun resolves the SAME vault path the run actually registered with,
 
   const entries = dreamMemory.materialize(scratchVaultPath);
   assert.ok(entries.some((e) => e.commit_status === 'run-terminal'), 'finalizeRun must have found and flipped entries in the SCRATCH vault the run actually wrote to');
+});
+
+test('finalizeRun is a no-op without active state and cannot terminalize an older reused-path entry', () => {
+  const p = freshUnregisteredPath();
+  const vaultPath = path.join(SCRATCH_ROOT, `vault-no-active-${pathCounter}.jsonl`);
+  dreamMemory.seedVault(vaultPath);
+  dreamMemory.appendEntry(vaultPath, {
+    entry_type: 'dream', lane: 'darkness', text_or_data: { run: 'older-crash' },
+    provenance: { source: 'test', ref: 'old-crash' }, generation_id: p
+  });
+  const before = fs.readFileSync(vaultPath);
+
+  // This models a disabled or zero-tick --no-checkpoint invocation: no
+  // enabled call registered an active run, but the path is reused.
+  const result = dreamLane.finalizeRun(p, vaultPath);
+  assert.deepEqual(result, { flipped: [] });
+  assert.deepEqual(fs.readFileSync(vaultPath), before, 'without active state, finalization must not append a status transition');
+  assert.equal(dreamMemory.materialize(vaultPath)[1].commit_status, 'pending');
+  assert.equal(dreamLane.getRunState(p), null);
 });
 
 // --- S4b trend gate (coordinator-pinned definition 2026-08-13T17:05Z),

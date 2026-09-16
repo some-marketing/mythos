@@ -96,6 +96,7 @@ const checkpoint = require('./checkpoint.js');
 // activity -- see commitGenerationEntries()/reconcileOnResume()'s own
 // existence guards.
 const dreamMemory = require('./dream/dream-memory.js');
+const dreamLane = require('./dream/dream-lane.js');
 const VAULT_PATH = path.join(__dirname, '..', '..', '_dev', 'state', 'ant-world-mind-memory', 'dream-memory.jsonl');
 // Required HERE and nowhere else in the simulation. The isolation audit greps
 // for `goal-evaluator` across tools/ant-hive-world/: this driver is the only
@@ -793,7 +794,12 @@ function commitCheckpoint(absoluteTick) {
   // same run-end sequence, same function. Flips pending->committed for
   // every vault entry carrying this run's now-committed generation_id. A
   // guarded no-op when the vault has never been scaffolded.
-  const dreamCommit = dreamMemory.commitGenerationEntries(VAULT_PATH, commitResult.generation_id);
+  const dreamState = dreamLane.getRunState(WORLD_STATE_PATH);
+  const dreamCommit = dreamMemory.commitGenerationEntries(
+    VAULT_PATH,
+    commitResult.generation_id,
+    dreamState ? dreamState.provisionalGenerationId : null
+  );
   if (dreamCommit.flipped.length) {
     process.stdout.write(`dream vault: committed ${dreamCommit.flipped.length} entr${dreamCommit.flipped.length === 1 ? 'y' : 'ies'} for generation ${commitResult.generation_id}\n`);
   }
@@ -811,7 +817,9 @@ function writeGoalResult(absoluteTick) {
     schema: 'GoalResult/1.0',
     goal_id: GOAL_PACKET.goal_id,
     packet_sha256: GOAL_PACKET.packet_sha256,
-    packet_path: GOAL_PACKET_PATH,
+    // The packet body is already represented by its hash above. The absolute
+    // source path is host-local and must never cross the courier boundary.
+    packet_path: null,
     evaluator_version: goalEvaluator.EVALUATOR_VERSION,
     run_name: jobEnv.RUN_NAME,
     arm_id: ARM_ID,
@@ -1148,6 +1156,10 @@ async function runTicks() {
 runTicks()
   .then((absoluteTick) => {
     if (NO_CHECKPOINT) {
+      const finalized = dreamLane.finalizeRun(WORLD_STATE_PATH);
+      if (finalized.flipped.length) {
+        process.stdout.write(`dream vault: finalized ${finalized.flipped.length} trial entr${finalized.flipped.length === 1 ? 'y' : 'ies'}\n`);
+      }
       process.stdout.write('checkpoint skipped (--no-checkpoint)\n');
       return;
     }

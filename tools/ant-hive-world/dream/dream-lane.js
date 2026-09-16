@@ -71,6 +71,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('node:crypto');
 const composer = require('./dream-composer.js');
 const calibration = require('./calibration.js');
 const ledger = require('./consequence-ledger.js');
@@ -158,26 +159,15 @@ const ZERO_DREAM_FEATURES = Object.freeze(new Array(DREAM_FEATURE_SIZE).fill(0))
 // it only ALSO persists it, closing the loop honestly rather than silently
 // swapping the encoder's actual input source).
 //
-// PROVISIONAL GENERATION_ID, DECLARED (not the real checkpoint lineage
-// identity): S1's real generation_id is only known once run-live.js's
-// commitCheckpoint() actually calls checkpoint.commitGeneration() at run
-// END -- dream-lane.js has no reachable way to predict that value from
-// inside a mid-run COMPUTE/UPDATE step without run-live.js precomputing and
-// threading it through (a larger, undispatched wiring change). Entries
-// written by this module therefore use `worldStatePath` itself as their
-// generation_id -- stable and unique for the whole run's duration, but NOT
-// the string S1's real commit-wiring (dreamMemory.commitGenerationEntries())
-// will later match against. CONSEQUENCE, NAMED HONESTLY: these entries
-// never flip from 'pending' to 'committed' by the existing S1 wiring; they
-// remain 'pending' for the life of the vault file, which is still a valid,
-// auditable, readable state (dreamMemory.activeEntries() includes pending
-// entries; only 'quarantined' entries are excluded from downstream reads).
-// For --no-checkpoint runs (every S5 ablation run, past and future) this is
-// moot regardless -- commitCheckpoint() never runs at all in that mode, so
-// generation_id would never resolve to a real committed value even if this
-// module could predict it. Reconciling a provisional run-scoped identifier
-// with the real checkpoint generation_id at commit time is a follow-up
-// integration point, named here, not solved by this pass.
+// PROVISIONAL GENERATION_ID: S1's real generation_id is only known once
+// run-live.js's commitCheckpoint() returns. Entries use `worldStatePath` as a
+// stable run-scoped provisional id while the run is active; the commit wiring
+// passes that id to dreamMemory.commitGenerationEntries() so the append-only
+// status record can bind them to the actual committed checkpoint generation.
+// For --no-checkpoint runs, finalizeRun() retains the provisional id and marks
+// entries run-terminal because no checkpoint lineage exists to bind them to.
+// The original evidence line remains immutable; the status transition carries
+// the real checkpoint generation_id.
 //
 // EVIDENCE FILE (closeout item 3): <sandboxRoot>/dream-lane-evidence.jsonl,
 // append-only, one line per (tick, hive) COMPUTE call, carrying that tick's
@@ -226,10 +216,17 @@ class DreamLanePathCollisionError extends Error {
 // restore path), which IS the cold-start guarantee, not a separate mechanism
 // for it.
 const registry = new Map();
+let provisionalGenerationCounter = 0;
+
+function nextProvisionalGenerationId() {
+  provisionalGenerationCounter += 1;
+  return `provisional-${process.pid}-${Date.now()}-${provisionalGenerationCounter}-${crypto.randomUUID()}`;
+}
 
 function createSingletonState(worldStatePath, options = {}) {
   return {
     worldStatePath,
+    provisionalGenerationId: options.provisionalGenerationId || nextProvisionalGenerationId(),
     // S4b: the vault path and sandbox root this run's forecast/dream
     // entries and evidence file are written to. `vaultPath` defaults to the
     // real, shared, durable vault (matching run-live.js's own VAULT_PATH);
@@ -395,11 +392,10 @@ function hasOpenForecast(state, metric, subject) {
 function buildForecast(state, { metric, subject, predictedP, tickIssued, horizonTicks = FORECAST_HORIZON_DEFAULT, sourceWindow = null }) {
   return {
     // Globally unique across the shared vault (many runs write to the same
-    // file): worldStatePath is unique per sandbox/run, so prefixing with it
-    // guarantees no cross-run forecast_id collision even under the
-    // provisional generation_id scheme (see module header).
+    // file): the run-scoped path and tick identify the source event, while
+    // the vault lock serializes allocation of the durable entry_id.
     forecast_id: `${state.worldStatePath}:${metric}:${subject}:${tickIssued}`,
-    generation_id: state.worldStatePath,
+    generation_id: state.provisionalGenerationId,
     tick_issued: tickIssued,
     target: { metric, subject, horizon_ticks: horizonTicks },
     predicted_p: predictedP,
@@ -699,13 +695,13 @@ function checkTriggers(worldStatePath, hiveId, tickIndex, liveConfig, currentHiv
   // field (S4b amendment, item d).
   let deliveredEntry = null;
   if (signal) {
-    const signalEntry = composer.composeSignalEntry(signal, state.worldStatePath, { suppressed: arbitration.suppressed });
+    const signalEntry = composer.composeSignalEntry(signal, state.provisionalGenerationId, { suppressed: arbitration.suppressed });
     deliveredEntry = safeAppendVaultEntry(state.vaultPath, signalEntry);
     if (!state.ratioRecordWritten) {
       const ratioRecord = composer.buildRatioRecord(
         composer.VALENCE_RATIO_DEFAULT,
         'S4b default: 1:1 darkness:hope, pilot-frozen per plan world-mind-dream-communication S3 (no per-run override configured for this run)',
-        state.worldStatePath
+        state.provisionalGenerationId
       );
       safeAppendVaultEntry(state.vaultPath, ratioRecord);
       state.ratioRecordWritten = true;
@@ -734,7 +730,7 @@ function checkTriggers(worldStatePath, hiveId, tickIndex, liveConfig, currentHiv
     tick: tickIndex,
     hive: hiveId,
     run_id: worldStatePath,
-    generation_id: state.worldStatePath,
+    generation_id: state.provisionalGenerationId,
     patch_presence: latestSnapshot ? latestSnapshot.food_sources : null,
     patch_presence_as_of_tick: latestSnapshot ? latestSnapshot.tick : null,
     recent_activity: state.activityLog.map((a) => ({ hive_id: a.hive_id, patch_id: a.patch_id, tick: a.tick, action: a.action })),
@@ -815,13 +811,10 @@ function recordTickOutcome(worldStatePath, hiveId, tickIndex, { starved, worldSt
 // FINALIZE RUN (S4b amendment, operator ratification 2026-08-13T16:46Z, call
 // S4b-3): for runs that never call checkpoint.commitGeneration() (every
 // --no-checkpoint / ablation-trial run), vault entries written under this
-// run's provisional generation_id (== worldStatePath, see PROVISIONAL
-// GENERATION_ID above) would otherwise sit 'pending' forever -- no commit
-// wiring will ever flip them, since commitGenerationEntries() only ever
-// matches a REAL checkpoint generation_id. This is the trial harness's own
-// end-of-run hook -- named here, not wired into run-live.js (that wiring is
-// a separate, undispatched integration point, exactly like the provisional
-// generation_id it finalizes): it flips every 'pending' entry carrying this
+// run's provisional generation_id (see PROVISIONAL GENERATION_ID above) would
+// otherwise sit 'pending' forever because no
+// checkpoint commit exists. This is the trial harness's own end-of-run hook:
+// it flips every 'pending' entry carrying this
 // run's generation_id to the TERMINAL 'run-terminal' commit_status.
 // Deregisters the in-memory singleton too (this run is over; a fresh
 // registration for a REUSED path after this point is a legitimately new
@@ -833,10 +826,17 @@ function finalizeRun(worldStatePath, vaultPath) {
   // default -- tests (and any caller injecting options.vaultPath at
   // registration) must finalize the file entries actually landed in. Falls
   // back to the explicit `vaultPath` argument, then the registered state's
-  // own vaultPath, then the shared default, in that order.
+  // own vaultPath, then the shared default, in that order. With no active
+  // state there is no invocation-unique provisional generation to finalize;
+  // that boundary is a deliberate no-op so a disabled or zero-tick run can
+  // never terminalize an older run that reused this world-state path.
   const state = getRunState(worldStatePath);
+  if (!state) return { flipped: [] };
   const resolvedVaultPath = vaultPath || (state && state.vaultPath) || DEFAULT_VAULT_PATH;
-  const result = dreamMemory.finalizeRunTerminal(resolvedVaultPath, worldStatePath);
+  const result = dreamMemory.finalizeRunTerminal(
+    resolvedVaultPath,
+    state.provisionalGenerationId
+  );
   deregisterRun(worldStatePath);
   return result;
 }

@@ -124,7 +124,7 @@ const SPEC_COVERAGE = Object.freeze([
   }),
   Object.freeze({
     step_id: '5',
-    label: 'Sync private remotes',
+    label: 'Sync locally configured redundancy remotes',
     lane: 'mechanical'
   }),
   Object.freeze({
@@ -316,7 +316,7 @@ function scanSignals(projectRoot, scopeInfo) {
   let newestLiveTimestamp = null;
   for (const filePath of walkJsonFiles(signalsDir)) {
     const parsed = safeReadJson(filePath);
-    if (!parsed || typeof parsed.schema !== 'string' || !parsed.schema.startsWith('CoordinationSignal/')) continue;
+    if (!parsed || !['HandoffSignal/1.0', 'HandoffSignal/2.0'].includes(parsed.schema)) continue;
     const relPath = toPosix(path.relative(projectRoot, filePath));
     const signalScope = String(parsed.signal_scope || parsed.scope || '');
     const relevant = scopeInfo.scope_type === 'system'
@@ -659,6 +659,7 @@ function runShutdownInner(projectRoot, opts) {
   const exec = opts.spawn || spawnSync;
   const commands = { ...defaultCommands(projectRoot), ...(opts.commands || {}) };
   const skipSet = new Set((opts.skip || []).map(normalizeSkipToken).filter(Boolean));
+  const sessionInfo = resolveSessionId(projectRoot);
 
   // judgment_remaining: computed at runtime from the LIVE parsed spec steps
   // filtered by SPEC_COVERAGE lane=judgment. Never hardcoded.
@@ -694,6 +695,12 @@ function runShutdownInner(projectRoot, opts) {
     if (stepMatchesSkip(coverage, skipSet)) {
       record.status = 'skipped';
       record.detail = 'skipped via --skip';
+      stepRecords.push(record);
+      continue;
+    }
+    if (coverage.step_id === '0' && sessionInfo.custody_grade !== 'authoritative') {
+      record.status = 'skipped';
+      record.detail = 'watcher-stop skipped: no authoritative session identity; no watcher control action taken';
       stepRecords.push(record);
       continue;
     }
@@ -766,7 +773,6 @@ function runShutdownInner(projectRoot, opts) {
 
   // 4b. Per-scope SessionBoundary/1.0 emission from the skeleton (leak L2).
   // Fail-closed (gate G2): no marker without handoff_path + next command.
-  const sessionInfo = resolveSessionId(projectRoot);
   const boundaryEmission = emitBoundaryMarker(projectRoot, scopeInfo, skeleton, sessionInfo, opts);
 
   // 5. SessionClosePacket/1.0.

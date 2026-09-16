@@ -158,26 +158,15 @@ const ZERO_DREAM_FEATURES = Object.freeze(new Array(DREAM_FEATURE_SIZE).fill(0))
 // it only ALSO persists it, closing the loop honestly rather than silently
 // swapping the encoder's actual input source).
 //
-// PROVISIONAL GENERATION_ID, DECLARED (not the real checkpoint lineage
-// identity): S1's real generation_id is only known once run-live.js's
-// commitCheckpoint() actually calls checkpoint.commitGeneration() at run
-// END -- dream-lane.js has no reachable way to predict that value from
-// inside a mid-run COMPUTE/UPDATE step without run-live.js precomputing and
-// threading it through (a larger, undispatched wiring change). Entries
-// written by this module therefore use `worldStatePath` itself as their
-// generation_id -- stable and unique for the whole run's duration, but NOT
-// the string S1's real commit-wiring (dreamMemory.commitGenerationEntries())
-// will later match against. CONSEQUENCE, NAMED HONESTLY: these entries
-// never flip from 'pending' to 'committed' by the existing S1 wiring; they
-// remain 'pending' for the life of the vault file, which is still a valid,
-// auditable, readable state (dreamMemory.activeEntries() includes pending
-// entries; only 'quarantined' entries are excluded from downstream reads).
-// For --no-checkpoint runs (every S5 ablation run, past and future) this is
-// moot regardless -- commitCheckpoint() never runs at all in that mode, so
-// generation_id would never resolve to a real committed value even if this
-// module could predict it. Reconciling a provisional run-scoped identifier
-// with the real checkpoint generation_id at commit time is a follow-up
-// integration point, named here, not solved by this pass.
+// PROVISIONAL GENERATION_ID: S1's real generation_id is only known once
+// run-live.js's commitCheckpoint() returns. Entries use `worldStatePath` as a
+// stable run-scoped provisional id while the run is active; the commit wiring
+// passes that id to dreamMemory.commitGenerationEntries() so the append-only
+// status record can bind them to the actual committed checkpoint generation.
+// For --no-checkpoint runs, finalizeRun() retains the provisional id and marks
+// entries run-terminal because no checkpoint lineage exists to bind them to.
+// The original evidence line remains immutable; the status transition carries
+// the real checkpoint generation_id.
 //
 // EVIDENCE FILE (closeout item 3): <sandboxRoot>/dream-lane-evidence.jsonl,
 // append-only, one line per (tick, hive) COMPUTE call, carrying that tick's
@@ -816,12 +805,9 @@ function recordTickOutcome(worldStatePath, hiveId, tickIndex, { starved, worldSt
 // S4b-3): for runs that never call checkpoint.commitGeneration() (every
 // --no-checkpoint / ablation-trial run), vault entries written under this
 // run's provisional generation_id (== worldStatePath, see PROVISIONAL
-// GENERATION_ID above) would otherwise sit 'pending' forever -- no commit
-// wiring will ever flip them, since commitGenerationEntries() only ever
-// matches a REAL checkpoint generation_id. This is the trial harness's own
-// end-of-run hook -- named here, not wired into run-live.js (that wiring is
-// a separate, undispatched integration point, exactly like the provisional
-// generation_id it finalizes): it flips every 'pending' entry carrying this
+// GENERATION_ID above) would otherwise sit 'pending' forever because no
+// checkpoint commit exists. This is the trial harness's own end-of-run hook:
+// it flips every 'pending' entry carrying this
 // run's generation_id to the TERMINAL 'run-terminal' commit_status.
 // Deregisters the in-memory singleton too (this run is over; a fresh
 // registration for a REUSED path after this point is a legitimately new

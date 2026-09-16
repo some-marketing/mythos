@@ -793,7 +793,7 @@ function commitCheckpoint(absoluteTick) {
   // same run-end sequence, same function. Flips pending->committed for
   // every vault entry carrying this run's now-committed generation_id. A
   // guarded no-op when the vault has never been scaffolded.
-  const dreamCommit = dreamMemory.commitGenerationEntries(VAULT_PATH, commitResult.generation_id);
+  const dreamCommit = dreamMemory.commitGenerationEntries(VAULT_PATH, commitResult.generation_id, WORLD_STATE_PATH);
   if (dreamCommit.flipped.length) {
     process.stdout.write(`dream vault: committed ${dreamCommit.flipped.length} entr${dreamCommit.flipped.length === 1 ? 'y' : 'ies'} for generation ${commitResult.generation_id}\n`);
   }
@@ -811,7 +811,9 @@ function writeGoalResult(absoluteTick) {
     schema: 'GoalResult/1.0',
     goal_id: GOAL_PACKET.goal_id,
     packet_sha256: GOAL_PACKET.packet_sha256,
-    packet_path: GOAL_PACKET_PATH,
+    // The packet body is already represented by its hash above. The absolute
+    // source path is host-local and must never cross the courier boundary.
+    packet_path: null,
     evaluator_version: goalEvaluator.EVALUATOR_VERSION,
     run_name: jobEnv.RUN_NAME,
     arm_id: ARM_ID,

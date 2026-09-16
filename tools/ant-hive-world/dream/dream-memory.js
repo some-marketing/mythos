@@ -61,6 +61,8 @@ const LANES = ['darkness', 'hope', 'mixed', null];
 // 'committed' would overclaim and 'pending' forever would misreport
 // abandoned evidence as still-awaiting-confirmation.
 const COMMIT_STATUSES = ['pending', 'committed', 'quarantined', 'run-terminal'];
+const VAULT_LOCK_TIMEOUT_MS = 5000;
+const VAULT_LOCK_RETRY_MS = 10;
 
 // Entry 0, the operator doctrine verbatim. CONSOLIDATED WORDING plus the full
 // supersession chain embedded as structured sub-fields (AMENDMENT v2,
@@ -90,6 +92,71 @@ function readLines(vaultPath) {
   return raw.split('\n').filter((line) => line.length > 0).map((line) => JSON.parse(line));
 }
 
+function isPidAlive(pid) {
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch (err) {
+    return err.code !== 'ESRCH';
+  }
+}
+
+function acquireVaultLock(vaultPath) {
+  const lockPath = `${vaultPath}.lock`;
+  fs.mkdirSync(path.dirname(lockPath), { recursive: true });
+  const deadline = Date.now() + VAULT_LOCK_TIMEOUT_MS;
+  while (true) {
+    try {
+      const fd = fs.openSync(lockPath, 'wx');
+      fs.writeSync(fd, `${JSON.stringify({ pid: process.pid, acquired_at: new Date().toISOString() })}\n`);
+      fs.closeSync(fd);
+      return lockPath;
+    } catch (err) {
+      if (err.code !== 'EEXIST') throw err;
+    }
+    let holder;
+    try {
+      holder = JSON.parse(fs.readFileSync(lockPath, 'utf8'));
+    } catch (err) {
+      if (err instanceof SyntaxError && Date.now() < deadline) {
+        const wait = new Int32Array(new SharedArrayBuffer(4));
+        Atomics.wait(wait, 0, 0, VAULT_LOCK_RETRY_MS);
+        continue;
+      }
+      throw new Error(`dream vault lock ${lockPath} is unreadable (${err.message}); refusing concurrent write`);
+    }
+    if (!holder || typeof holder.pid !== 'number') {
+      throw new Error(`dream vault lock ${lockPath} has no valid pid; refusing concurrent write`);
+    }
+    if (!isPidAlive(holder.pid)) {
+      fs.unlinkSync(lockPath);
+      continue;
+    }
+    if (Date.now() >= deadline) {
+      throw new Error(`dream vault lock held by pid ${holder.pid} (${lockPath}); refusing concurrent write`);
+    }
+    const wait = new Int32Array(new SharedArrayBuffer(4));
+    Atomics.wait(wait, 0, 0, VAULT_LOCK_RETRY_MS);
+  }
+}
+
+function releaseVaultLock(lockPath) {
+  try {
+    fs.unlinkSync(lockPath);
+  } catch (err) {
+    if (err.code !== 'ENOENT') throw err;
+  }
+}
+
+function withVaultLock(vaultPath, fn) {
+  const lockPath = acquireVaultLock(vaultPath);
+  try {
+    return fn();
+  } finally {
+    releaseVaultLock(lockPath);
+  }
+}
+
 function nextEntryId(lines) {
   let max = -1;
   for (const line of lines) {
@@ -110,28 +177,29 @@ function assertProvenance(provenance) {
 // running. Idempotent: calling this against an existing vault is a no-op and
 // returns { created: false }.
 function seedVault(vaultPath) {
-  if (fs.existsSync(vaultPath)) return { created: false, path: vaultPath };
-  fs.mkdirSync(path.dirname(vaultPath), { recursive: true });
-  const entry0 = {
-    entry_id: 0,
-    written_at: new Date().toISOString(),
-    entry_type: 'doctrine',
-    lane: null,
-    text_or_data: { ...SUPERSESSION_CHAIN },
-    provenance: { source: 'operator', ref: '_dev/concepts/world-mind-dream-communication.md' },
-    calibration_score_at_write: null,
-    domain: DOMAIN,
-    // No checkpoint generation exists before the vault is seeded -- the one
-    // explicitly-permitted null per the plan.
-    generation_id: null,
-    // Entry 0 is not bound to any generation's commit lifecycle -- it is
-    // immutable and durable the moment it is written, so it starts (and
-    // stays) committed rather than cycling through a pending state it can
-    // never leave.
-    commit_status: 'committed'
-  };
-  fs.appendFileSync(vaultPath, JSON.stringify(entry0) + '\n');
-  return { created: true, path: vaultPath, entry: entry0 };
+  return withVaultLock(vaultPath, () => {
+    if (fs.existsSync(vaultPath)) return { created: false, path: vaultPath };
+    const entry0 = {
+      entry_id: 0,
+      written_at: new Date().toISOString(),
+      entry_type: 'doctrine',
+      lane: null,
+      text_or_data: { ...SUPERSESSION_CHAIN },
+      provenance: { source: 'operator', ref: '_dev/concepts/world-mind-dream-communication.md' },
+      calibration_score_at_write: null,
+      domain: DOMAIN,
+      // No checkpoint generation exists before the vault is seeded -- the one
+      // explicitly-permitted null per the plan.
+      generation_id: null,
+      // Entry 0 is not bound to any generation's commit lifecycle -- it is
+      // immutable and durable the moment it is written, so it starts (and
+      // stays) committed rather than cycling through a pending state it can
+      // never leave.
+      commit_status: 'committed'
+    };
+    fs.appendFileSync(vaultPath, JSON.stringify(entry0) + '\n');
+    return { created: true, path: vaultPath, entry: entry0 };
+  });
 }
 
 // Append a new consequence/dream entry. entry_type in {'consequence','dream'}
@@ -152,24 +220,26 @@ function appendEntry(vaultPath, {
   if (generation_id === null || generation_id === undefined) {
     throw new Error('DreamMemory entry rejected: generation_id is required for non-doctrine entries');
   }
-  const lines = readLines(vaultPath);
-  const entry = {
-    entry_id: nextEntryId(lines),
-    written_at: new Date().toISOString(),
-    entry_type,
-    lane,
-    text_or_data,
-    provenance,
-    calibration_score_at_write,
-    domain: DOMAIN,
-    generation_id,
-    commit_status: 'pending'
-  };
-  fs.appendFileSync(vaultPath, JSON.stringify(entry) + '\n');
-  return entry;
+  return withVaultLock(vaultPath, () => {
+    const lines = readLines(vaultPath);
+    const entry = {
+      entry_id: nextEntryId(lines),
+      written_at: new Date().toISOString(),
+      entry_type,
+      lane,
+      text_or_data,
+      provenance,
+      calibration_score_at_write,
+      domain: DOMAIN,
+      generation_id,
+      commit_status: 'pending'
+    };
+    fs.appendFileSync(vaultPath, JSON.stringify(entry) + '\n');
+    return entry;
+  });
 }
 
-function appendStatusChange(vaultPath, { generation_id, from, to, entry_ids }) {
+function appendStatusChangeUnlocked(vaultPath, { generation_id, from, to, entry_ids }) {
   if (!COMMIT_STATUSES.includes(to)) throw new Error(`DreamMemory status-change rejected: invalid target status '${to}'`);
   if (!entry_ids.length) return null;
   const record = {
@@ -182,6 +252,10 @@ function appendStatusChange(vaultPath, { generation_id, from, to, entry_ids }) {
   };
   fs.appendFileSync(vaultPath, JSON.stringify(record) + '\n');
   return record;
+}
+
+function appendStatusChange(vaultPath, change) {
+  return withVaultLock(vaultPath, () => appendStatusChangeUnlocked(vaultPath, change));
 }
 
 // Materialize the CURRENT view of the vault: entry lines, each with its
@@ -219,16 +293,21 @@ function activeEntries(vaultPath) {
 // entry's commit_status untouched. Guarded no-op if the vault does not
 // exist -- a stock run that has never written to the vault must produce zero
 // vault activity.
-function commitGenerationEntries(vaultPath, generationId) {
+function commitGenerationEntries(vaultPath, generationId, provisionalGenerationId = null) {
   if (!fs.existsSync(vaultPath)) return { flipped: [] };
-  const entries = materialize(vaultPath);
-  const toFlip = entries
-    .filter((e) => e.commit_status === 'pending' && e.generation_id === generationId)
-    .map((e) => e.entry_id);
-  if (toFlip.length) {
-    appendStatusChange(vaultPath, { generation_id: generationId, from: 'pending', to: 'committed', entry_ids: toFlip });
-  }
-  return { flipped: toFlip };
+  return withVaultLock(vaultPath, () => {
+    if (!fs.existsSync(vaultPath)) return { flipped: [] };
+    const entries = materialize(vaultPath);
+    const toFlip = entries
+      .filter((e) => e.commit_status === 'pending' && (
+        e.generation_id === generationId || e.generation_id === provisionalGenerationId
+      ))
+      .map((e) => e.entry_id);
+    if (toFlip.length) {
+      appendStatusChangeUnlocked(vaultPath, { generation_id: generationId, from: 'pending', to: 'committed', entry_ids: toFlip });
+    }
+    return { flipped: toFlip };
+  });
 }
 
 // RESUME RECONCILIATION (plan S1, AMENDMENT v2/v3). Invoked from
@@ -294,29 +373,32 @@ function isOnActiveLineage(checkpointRoot, checkpointModule, resumedManifest, ca
 
 function reconcileOnResume(vaultPath, checkpointRoot, checkpointModule, resumedManifest = null) {
   if (!fs.existsSync(vaultPath)) return { promoted: [], quarantined: [] };
-  const entries = materialize(vaultPath).filter((e) => e.commit_status === 'pending');
-  const byGeneration = new Map();
-  for (const entry of entries) {
-    if (!byGeneration.has(entry.generation_id)) byGeneration.set(entry.generation_id, []);
-    byGeneration.get(entry.generation_id).push(entry.entry_id);
-  }
-  const promoted = [];
-  const quarantined = [];
-  for (const [generationId, entryIds] of byGeneration.entries()) {
-    const generationDir = path.join(checkpointRoot, String(generationId));
-    const committed = checkpointModule.isCommitted(generationDir);
-    const onLineage = committed && (
-      resumedManifest ? isOnActiveLineage(checkpointRoot, checkpointModule, resumedManifest, generationId) : true
-    );
-    if (onLineage) {
-      appendStatusChange(vaultPath, { generation_id: generationId, from: 'pending', to: 'committed', entry_ids: entryIds });
-      promoted.push(...entryIds);
-    } else {
-      appendStatusChange(vaultPath, { generation_id: generationId, from: 'pending', to: 'quarantined', entry_ids: entryIds });
-      quarantined.push(...entryIds);
+  return withVaultLock(vaultPath, () => {
+    if (!fs.existsSync(vaultPath)) return { promoted: [], quarantined: [] };
+    const entries = materialize(vaultPath).filter((e) => e.commit_status === 'pending');
+    const byGeneration = new Map();
+    for (const entry of entries) {
+      if (!byGeneration.has(entry.generation_id)) byGeneration.set(entry.generation_id, []);
+      byGeneration.get(entry.generation_id).push(entry.entry_id);
     }
-  }
-  return { promoted, quarantined };
+    const promoted = [];
+    const quarantined = [];
+    for (const [generationId, entryIds] of byGeneration.entries()) {
+      const generationDir = path.join(checkpointRoot, String(generationId));
+      const committed = checkpointModule.isCommitted(generationDir);
+      const onLineage = committed && (
+        resumedManifest ? isOnActiveLineage(checkpointRoot, checkpointModule, resumedManifest, generationId) : true
+      );
+      if (onLineage) {
+        appendStatusChangeUnlocked(vaultPath, { generation_id: generationId, from: 'pending', to: 'committed', entry_ids: entryIds });
+        promoted.push(...entryIds);
+      } else {
+        appendStatusChangeUnlocked(vaultPath, { generation_id: generationId, from: 'pending', to: 'quarantined', entry_ids: entryIds });
+        quarantined.push(...entryIds);
+      }
+    }
+    return { promoted, quarantined };
+  });
 }
 
 // RUN-TERMINAL FINALIZATION (S4b amendment, operator ratification
@@ -341,14 +423,17 @@ function reconcileOnResume(vaultPath, checkpointRoot, checkpointModule, resumedM
 // nothing to the vault must not create one just to finalize it.
 function finalizeRunTerminal(vaultPath, runId) {
   if (!fs.existsSync(vaultPath)) return { flipped: [] };
-  const entries = materialize(vaultPath);
-  const toFlip = entries
-    .filter((e) => e.commit_status === 'pending' && e.generation_id === runId)
-    .map((e) => e.entry_id);
-  if (toFlip.length) {
-    appendStatusChange(vaultPath, { generation_id: runId, from: 'pending', to: 'run-terminal', entry_ids: toFlip });
-  }
-  return { flipped: toFlip };
+  return withVaultLock(vaultPath, () => {
+    if (!fs.existsSync(vaultPath)) return { flipped: [] };
+    const entries = materialize(vaultPath);
+    const toFlip = entries
+      .filter((e) => e.commit_status === 'pending' && e.generation_id === runId)
+      .map((e) => e.entry_id);
+    if (toFlip.length) {
+      appendStatusChangeUnlocked(vaultPath, { generation_id: runId, from: 'pending', to: 'run-terminal', entry_ids: toFlip });
+    }
+    return { flipped: toFlip };
+  });
 }
 
 module.exports = {

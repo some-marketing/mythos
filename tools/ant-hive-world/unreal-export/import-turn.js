@@ -34,9 +34,8 @@
 // <harvest-dir> is a pulled directory such as _dev/state/baseline-3000-r6,
 // containing PULL-MANIFEST.txt, HARVEST-MANIFEST.txt and a run subdirectory
 // (e.g. baseline-3000-r6/) with RESULT-MANIFEST.txt, world-state.json, and
-// turn-projection.json. --out-dir defaults to this directory
-// (tools/ant-hive-world/unreal-export/), which is also where the journal
-// lives.
+// turn-projection.json. --out-dir defaults to an ignored runtime directory
+// under _dev/state/, which is also where the journal lives.
 
 const fs = require('fs');
 const path = require('path');
@@ -44,6 +43,7 @@ const crypto = require('crypto');
 const Ajv2020 = require('ajv/dist/2020');
 
 const { buildCoords, featureCoords, meanNearest } = require('../mirror-detector.js');
+const REPO_ROOT = path.join(__dirname, '..', '..', '..');
 
 const SCHEMA = require('./schema.json');
 const ajv = new Ajv2020({ allErrors: true, strict: true });
@@ -51,6 +51,14 @@ const validateShape = ajv.compile(SCHEMA);
 
 const DEFAULT_SHUFFLES = 1000;
 const GRID_SIZE = 10; // tools/ant-hive-world/world-state.js TILE_GRID_SIZE
+const DEFAULT_OUT_DIR = path.join(REPO_ROOT, '_dev', 'state', 'unreal-import');
+
+function assertSafeTurnId(turnId) {
+  if (typeof turnId !== 'string' || !/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(turnId)) {
+    throw new Error('turn-projection.json run_name must be a basename-safe identifier (letters, digits, dot, underscore, hyphen); path separators are refused');
+  }
+  return turnId;
+}
 
 // --- CLI ------------------------------------------------------------------
 
@@ -411,7 +419,7 @@ function assertPositiveInt(value, label) {
 
 function importTurn(harvestDir, opts) {
   const options = opts || {};
-  const outDir = options.outDir || __dirname;
+  const outDir = options.outDir || DEFAULT_OUT_DIR;
   const shuffles =
     options.shuffles === undefined || options.shuffles === null
       ? DEFAULT_SHUFFLES
@@ -438,7 +446,7 @@ function importTurn(harvestDir, opts) {
   const worldState = JSON.parse(fs.readFileSync(path.join(runSubdir, 'world-state.json'), 'utf8'));
   const turnProjection = JSON.parse(fs.readFileSync(path.join(runSubdir, 'turn-projection.json'), 'utf8'));
 
-  const turnId = turnProjection.run_name;
+  const turnId = assertSafeTurnId(turnProjection.run_name);
   const ticks = turnProjection.ticks;
   if (!turnId) throw new Error('turn-projection.json is missing run_name -- cannot derive turn_id');
   if (!Number.isInteger(ticks) || ticks < 0) {
@@ -561,6 +569,8 @@ function buildDoc({ turnId, ticks, absoluteDayStart, payloadHash, worldState, tu
 }
 
 module.exports = {
+  DEFAULT_OUT_DIR,
+  assertSafeTurnId,
   importTurn,
   parseManifest,
   mulberry32,
@@ -576,7 +586,7 @@ if (require.main === module) {
     process.stderr.write('usage: import-turn.js <harvest-dir> [--out-dir <dir>] [--shuffles <n>]\n');
     process.exit(2);
   }
-  const outDir = argVal('--out-dir', null);
+  const outDir = argVal('--out-dir', DEFAULT_OUT_DIR);
   const shufflesRaw = argVal('--shuffles', String(DEFAULT_SHUFFLES));
   let shuffles;
   try {

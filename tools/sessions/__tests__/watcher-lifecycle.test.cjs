@@ -187,6 +187,36 @@ test('spawnWatcher lets its lifecycle caller exit while the daemon remains alive
   try { process.kill(daemonPid, 'SIGTERM'); } catch (_) { /* already exited */ }
 });
 
+test('spawnWatcher settles an asynchronous nonexistent-executable failure before its caller exits', async () => {
+  const root = freshRoot();
+  const sid = freshSession(root);
+  const runnerPath = path.join(root, 'runner.cjs');
+  const modulePath = path.resolve(__dirname, '..', 'watcher-lifecycle.cjs');
+  fs.writeFileSync(runnerPath, [
+    `'use strict';`,
+    `const { startWatchers, listRegistry } = require(${JSON.stringify(modulePath)});`,
+    `(async () => {`,
+    `  const result = await startWatchers(${JSON.stringify(sid)}, [{ name: 'broken', command: '/nonexistent/watcher-binary', args: ['--x'] }], { projectRoot: ${JSON.stringify(root)} });`,
+    `  process.stdout.write(JSON.stringify({ ok: result.ok, failed: result.failed, registry: listRegistry(${JSON.stringify(sid)}, { projectRoot: ${JSON.stringify(root)} }) }));`,
+    `})().catch((err) => { process.stderr.write(String(err && err.stack || err)); process.exitCode = 1; });`
+  ].join('\n'), 'utf8');
+
+  const caller = spawn(process.execPath, [runnerPath], { stdio: ['ignore', 'pipe', 'pipe'] });
+  let stdout = '';
+  let stderr = '';
+  caller.stdout.on('data', (chunk) => { stdout += chunk.toString(); });
+  caller.stderr.on('data', (chunk) => { stderr += chunk.toString(); });
+  const result = await waitExit(caller, 2000);
+  assert.notEqual(result.timedOut, true, 'failure caller must settle promptly');
+  assert.equal(result.code, 0, stderr);
+  const report = JSON.parse(stdout);
+  assert.equal(report.ok, false);
+  assert.equal(report.failed.length, 1);
+  assert.equal(report.failed[0].name, 'broken');
+  assert.match(report.failed[0].error, /ENOENT/);
+  assert.deepStrictEqual(report.registry, [], 'failed spawn must record no identity');
+});
+
 test('stop signals exactly the session-start set after identity verification (SIGTERM)', async () => {
   const root = freshRoot();
   const sid = freshSession(root);

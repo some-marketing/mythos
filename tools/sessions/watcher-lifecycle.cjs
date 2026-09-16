@@ -332,24 +332,27 @@ function spawnWatcher(entry, opts) {
   return new Promise((resolve, reject) => {
     const name = entry.name;
     let child;
+    let settled = false;
+    const onError = (err) => {
+      if (settled) return;
+      settled = true;
+      if (child) child.removeListener('error', onError);
+      reject(err);
+    };
     try {
       child = spawn(entry.executable, entry.argv.slice(1), {
         stdio: (opts && opts.stdio) || 'ignore'
       });
-      // The watcher is an intentionally detached lifecycle child. Retain the
-      // ChildProcess handle for later identity-verified signaling, but do not
-      // let that handle keep the start CLI alive after the registry is written.
-      child.unref();
     } catch (err) {
-      reject(err);
+      onError(err);
       return;
     }
     // Asynchronous spawn failure (e.g. ENOENT for a bad command): reject
     // rather than recording a pid-less identity.
-    child.once('error', (err) => reject(err));
+    child.once('error', onError);
 
     const record = () => {
-      if (child.pid == null) return; // settles via 'error' or next retry
+      if (settled || child.pid == null) return; // settles via 'error' or next retry
       let startTime = null;
       for (let i = 0; i < START_TIME_RETRIES && !startTime; i += 1) {
         startTime = liveStartTime(child.pid);
@@ -370,6 +373,12 @@ function spawnWatcher(entry, opts) {
         spawned_at: new Date().toISOString()
       };
       spawned.set(`${opts && opts.sessionId}::${name}`, child);
+      settled = true;
+      child.removeListener('error', onError);
+      // The watcher is an intentionally detached lifecycle child. Retain the
+      // ChildProcess handle for later identity-verified signaling, but do not
+      // let that handle keep the start CLI alive after the registry is written.
+      child.unref();
       resolve({ name, child, identity });
     };
     record();

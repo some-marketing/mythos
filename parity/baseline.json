@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "29b9f38b2c014068544eee8a188cea46ceb73021cd5fc336b38dac73d1719d21",
+    "expected_tree_sha256": "cf73115e577022735837f6610c325697e8848567b119f2b57803af0c1cf5dfe9",
     "expected_files": [
       {
         "path": ".agents/skills/go/SKILL.md",
@@ -4368,11 +4368,6 @@
       {
         "path": "_dev/reports/analysis/verify-evidence__mythos-memory-dreaming__2026-08-18.json",
         "sha256": "5c6cc84caf845fd6a0d0209c8fb3f3c813ed8db6feb10c6463da2e9f196ecbed",
-        "mode": 420
-      },
-      {
-        "path": "_dev/reports/telemetry/cascade-spans.jsonl",
-        "sha256": "861a7de3b91f5c62c67d23ae7b9afa0378632ed5e1d41e13a0fb674539d1852c",
         "mode": 420
       },
       {

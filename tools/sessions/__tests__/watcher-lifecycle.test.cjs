@@ -158,6 +158,35 @@ test('start records per-daemon identity: pid + start_time + executable + argv fi
   assert.deepStrictEqual(stop.stale, []);
 });
 
+test('spawnWatcher lets its lifecycle caller exit while the daemon remains alive', async () => {
+  const root = freshRoot();
+  const daemonPath = path.join(root, 'daemon.cjs');
+  const runnerPath = path.join(root, 'runner.cjs');
+  fs.writeFileSync(daemonPath, 'setInterval(() => {}, 1000);\n', 'utf8');
+  const modulePath = path.resolve(__dirname, '..', 'watcher-lifecycle.cjs');
+  fs.writeFileSync(runnerPath, [
+    `'use strict';`,
+    `const { spawnWatcher } = require(${JSON.stringify(modulePath)});`,
+    `(async () => {`,
+    `  const result = await spawnWatcher({ name: 'daemon', executable: process.execPath, argv: [process.execPath, ${JSON.stringify(daemonPath)}], script: ${JSON.stringify(daemonPath)} }, { sessionId: 'cli-exit-test', projectRoot: ${JSON.stringify(root)} });`,
+    `  process.stdout.write(String(result.identity.pid));`,
+    `})();`
+  ].join('\n'), 'utf8');
+
+  const caller = spawn(process.execPath, [runnerPath], { stdio: ['ignore', 'pipe', 'pipe'] });
+  let stdout = '';
+  let stderr = '';
+  caller.stdout.on('data', (chunk) => { stdout += chunk.toString(); });
+  caller.stderr.on('data', (chunk) => { stderr += chunk.toString(); });
+  const result = await waitExit(caller, 2000);
+  assert.notEqual(result.timedOut, true, 'lifecycle caller must exit without waiting on the daemon');
+  assert.equal(result.code, 0, stderr);
+  const daemonPid = Number(stdout.trim());
+  assert.ok(Number.isInteger(daemonPid) && daemonPid > 0, 'runner must report daemon pid');
+  assert.equal(processExists(daemonPid), true, 'intended daemon remains alive after caller exits');
+  try { process.kill(daemonPid, 'SIGTERM'); } catch (_) { /* already exited */ }
+});
+
 test('stop signals exactly the session-start set after identity verification (SIGTERM)', async () => {
   const root = freshRoot();
   const sid = freshSession(root);

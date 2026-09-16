@@ -336,6 +336,10 @@ function spawnWatcher(entry, opts) {
       child = spawn(entry.executable, entry.argv.slice(1), {
         stdio: (opts && opts.stdio) || 'ignore'
       });
+      // The watcher is an intentionally detached lifecycle child. Retain the
+      // ChildProcess handle for later identity-verified signaling, but do not
+      // let that handle keep the start CLI alive after the registry is written.
+      child.unref();
     } catch (err) {
       reject(err);
       return;

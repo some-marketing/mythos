@@ -54,10 +54,9 @@ function resolveSessionId(projectRoot) {
         return { session_id: active[0].session_id, session_id_source: 'sole-active-session', custody_grade: 'best_effort' };
       }
       if (active.length > 1) {
-        const newest = active.slice().sort((a, b) => String(b.last_heartbeat || '').localeCompare(String(a.last_heartbeat || '')))[0];
-        if (newest && newest.session_id) {
-          return { session_id: newest.session_id, session_id_source: 'newest-active-session', custody_grade: 'best_effort' };
-        }
+        // A best-effort guess is unsafe when more than one live session could
+        // own the lifecycle action. Refuse to target any session implicitly.
+        return { session_id: null, session_id_source: 'ambiguous-active-sessions', custody_grade: 'none' };
       }
     } catch (_) { /* registry unreadable — return unavailable */ }
   }

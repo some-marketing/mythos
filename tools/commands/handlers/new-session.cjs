@@ -112,7 +112,7 @@ function defaultCommands(projectRoot) {
     '4-repo-awareness': [process.execPath, path.join('tools', 'context', 'repo-awareness-init.cjs'), '--json'],
     '4-plans-dashboard': [process.execPath, path.join('tools', 'planning', 'build-plan-visibility-dashboard.js')],
     // Step 4: bounded system status + continuity index.
-    '4-status': [process.execPath, path.join('tools', 'status', 'sm-os-status.js'), '--json'],
+    '4-status': [process.execPath, path.join('tools', 'status', 'mythos-status.js'), '--json'],
     '4-continuity': [process.execPath, path.join('tools', 'sessions', 'continuity-index.cjs'), '--json']
   };
 }
@@ -717,6 +717,7 @@ function newSession(projectRoot, argsText, options = {}) {
 module.exports = {
   SPEC_COVERAGE,
   SPEC_REL_PATH,
+  defaultCommands,
   FORBIDDEN_CHANGED_FILE_FAMILIES,
   redactChangedFiles,
   parseNewSessionArgs,

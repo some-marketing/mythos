@@ -11,9 +11,8 @@
   "counts": {
     "canonical_command:ADVISORY:reviewed_safe:already_aligned": 126,
     "canonical_command:BLOCKING:reviewed_safe:already_aligned": 5,
-    "direct_system_skill:ADVISORY:reviewed_safe:already_aligned": 1,
+    "direct_system_skill:ADVISORY:reviewed_safe:already_aligned": 2,
     "direct_system_skill:ABSENT:missing_source:blocked_missing_source": 1,
-    "direct_system_skill:ADVISORY:reviewed_safe:blocked_existing_preserved": 1,
     "direct_system_skill:ABSENT:dependency_unavailable:blocked_dependency": 1,
     "framework_helper:ADVISORY:pending_review:candidate": 45,
     "alias_metadata:ADVISORY:reviewed_safe:metadata_attached": 10,

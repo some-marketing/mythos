@@ -513,7 +513,10 @@ function assessOperatorStampEnforcement(marker) {
     if (prs && typeof prs.isOperatorStampEnforcementEnabled === 'function' &&
         prs.isOperatorStampEnforcementEnabled()) {
       const a = prs.assessOperatorStamp(marker);
-      return { enforced: true, status: a.status, detail: a.detail };
+      const flagName = typeof prs.operatorStampEnforcementFlagName === 'function'
+        ? prs.operatorStampEnforcementFlagName()
+        : null;
+      return { enforced: true, status: a.status, detail: a.detail, flagName };
     }
   } catch (_) {
     // Lib unavailable/broken — default OFF (bootstrap-safe; never break the turn).
@@ -802,7 +805,7 @@ function evaluateGate(prompt, projectRoot, sessionId) {
   const stamp = assessOperatorStampEnforcement(marker);
   if (stamp.enforced && stamp.status !== 'present' && planTripsConsequentialPerimeter(planJson)) {
     missing.push({
-      what: 'OPERATOR STAMP — ' + stamp.detail + ' (gate flag MYTHOS_ENFORCE_OPERATOR_STAMP is ON; plan trips the consequential perimeter). Stamp != convene; this is a separate requirement.',
+      what: 'OPERATOR STAMP — ' + stamp.detail + ' (' + (stamp.flagName || 'operator-stamp enforcement') + ' is ON; plan trips the consequential perimeter). Stamp != convene; this is a separate requirement.',
       fix: 'Obtain the operator approval stamp for ' + planId + ' (out-of-band proof: an operator-authored Dart approval comment, or the /stamp HMAC fallback per the plan-approval-surface concept), then re-run /run-plan ' + planId + '. NOTE: presence is necessary but run-time authenticity re-verification is Stage B/D.'
     });
   }

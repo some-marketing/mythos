@@ -3,7 +3,8 @@
 /**
  * A2 (plan-approval-surface) — /run-plan runtime (tools/codex/commands/run-plan.js,
  * dispatched via tools/commands/smos-command-runner.cjs) enforces operator_stamp
- * as a real run-time blocker, behind the DEFAULT-OFF flag SMOS_ENFORCE_OPERATOR_STAMP.
+ * as a real run-time blocker, behind the DEFAULT-OFF flag MYTHOS_ENFORCE_OPERATOR_STAMP
+ * with SMOS_ENFORCE_OPERATOR_STAMP retained as a compatibility fallback.
  *
  * Falsifiable contract:
  *   - flag ON + marker operator_stamp:null  -> blocked (exit 2), reason operator-stamp-missing, NO execution.
@@ -107,6 +108,7 @@ test('flag ON + operator_stamp:null -> blocked (exit 2), operator-stamp-missing,
     const res = runRunPlan(root, { args: ['rp-null'] });
     assert.strictEqual(res.exitCode, 2);
     assert.match(res.stdout, /operator-stamp-missing/);
+    assert.match(res.stdout, /SMOS_ENFORCE_OPERATOR_STAMP is ON/);
     assert.doesNotMatch(res.stdout, /AUTHORITY GRANTED/);
   });
 });

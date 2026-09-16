@@ -3,7 +3,8 @@
 /**
  * A1 (plan-approval-surface) — userprompt-plan-review-gate.cjs enforces
  * operator_stamp as a THIRD mechanical requirement (Stamp != convene), behind
- * the DEFAULT-OFF feature flag SMOS_ENFORCE_OPERATOR_STAMP.
+ * the DEFAULT-OFF feature flag MYTHOS_ENFORCE_OPERATOR_STAMP, with
+ * SMOS_ENFORCE_OPERATOR_STAMP retained as a compatibility fallback.
  *
  * Falsifiable contract (UPDATED by S5 perimeter scoping —
  * plan-execution-autonomy-default-perimeter-gate-and-tracking):
@@ -85,6 +86,7 @@ test('flag ON + operator_stamp:null -> OPERATOR STAMP missing entry + DO-NOT-EXE
     const res = gate.evaluateGate('/run-plan stamp-null-plan', root, 'sess-1');
     assert.strictEqual(res.action, 'inject');
     assert.match(res.text, /OPERATOR STAMP/);
+    assert.match(res.text, /SMOS_ENFORCE_OPERATOR_STAMP is ON/);
     assert.match(res.text, /DO NOT EXECUTE/);
     // The distinct review IS satisfied here, so the ONLY failure is the stamp.
     assert.doesNotMatch(res.text, /DISTINCT-MIND \(codex\) REVIEW — no distinct_reviews/);
@@ -151,11 +153,10 @@ test('assessOperatorStampEnforcement: OFF by default, ON via flag, present vs mi
   });
 });
 
-// Round-4 review P1: this hook's own diagnostic text documents the CURRENT
-// flag name MYTHOS_ENFORCE_OPERATOR_STAMP, but the shared lib
-// (tools/planning/lib/plan-review-state.js) may only recognize the legacy
-// SMOS_ENFORCE_OPERATOR_STAMP name in a given tree. Enforcement must not
-// silently stay OFF when an operator sets the documented name.
+// Compatibility contract: MYTHOS_ENFORCE_OPERATOR_STAMP is authoritative when
+// present, while SMOS_ENFORCE_OPERATOR_STAMP remains a fallback for legacy
+// callers. Enforcement must not silently stay OFF when either supported caller
+// sets its effective flag.
 test('FALSIFIER: MYTHOS_ENFORCE_OPERATOR_STAMP alone (no legacy SMOS var set) enables enforcement', () => {
   const MYTHOS_FLAG = 'MYTHOS_ENFORCE_OPERATOR_STAMP';
   const prevMythos = process.env[MYTHOS_FLAG];

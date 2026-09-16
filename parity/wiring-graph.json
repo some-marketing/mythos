@@ -11293,7 +11293,7 @@
       "id": "file:tools/codex/commands/__tests__/run-plan.operator-stamp.test.js",
       "type": "file",
       "path": "tools/codex/commands/__tests__/run-plan.operator-stamp.test.js",
-      "sha256": "3d66fddf4c86d98b6d264b96facb921a307e3555d516ef100b63c2c6b64264a7",
+      "sha256": "75cf2f417be43cc4c5180840a0ad07520b830bb671821e492f71ca320b42fd16",
       "mode": 420
     },
     {
@@ -11363,7 +11363,7 @@
       "id": "file:tools/codex/commands/run-plan.js",
       "type": "file",
       "path": "tools/codex/commands/run-plan.js",
-      "sha256": "e1de5b2ab3cea41e23f8c1048d23503e81e0131c40e7a2a61a59b611257fbc8b",
+      "sha256": "84134ca56acd21f13ff924091e789e0e0fcbb5fe96126c526fdc39917206f58f",
       "mode": 420
     },
     {
@@ -13904,7 +13904,7 @@
       "id": "file:tools/kernel/hooks/__tests__/userprompt-plan-review-gate.operator-stamp.test.js",
       "type": "file",
       "path": "tools/kernel/hooks/__tests__/userprompt-plan-review-gate.operator-stamp.test.js",
-      "sha256": "e04943b50dbeaedfca0def734a556d86846e54ebec6fdd9ae633ddf6505841ec",
+      "sha256": "72bbc15cdd1159eb4fbd23d994fdf47ab509f2c492b22a4df992b1d7c20efbd8",
       "mode": 420
     },
     {
@@ -14114,7 +14114,7 @@
       "id": "file:tools/kernel/hooks/userprompt-plan-review-gate.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/userprompt-plan-review-gate.cjs",
-      "sha256": "5e3a68d62f42edab8374dcb8898f6467f76aae0114bb5bcd1764d66d32a3e3db",
+      "sha256": "427a62711d8dc45bbb0ffedfc615738f661c42195695f5839f0707f2a6ba4e7e",
       "mode": 420
     },
     {
@@ -16718,7 +16718,7 @@
       "id": "file:tools/planning/lib/__tests__/plan-review-state.allowed-events.test.js",
       "type": "file",
       "path": "tools/planning/lib/__tests__/plan-review-state.allowed-events.test.js",
-      "sha256": "f8cb4e78a4b75d3c5e2a5284ee6d9e19192a539bd9712bd74d010e336ab6a5f1",
+      "sha256": "71330ac86c629308297a7af10c85f4abb267fe655095fffb8cb59a23f723700b",
       "mode": 420
     },
     {
@@ -16879,7 +16879,7 @@
       "id": "file:tools/planning/lib/plan-review-state.js",
       "type": "file",
       "path": "tools/planning/lib/plan-review-state.js",
-      "sha256": "b650b44a07a9d1c185a181d605fd91ad57bbdfa039400dc9a2dc010195a480d1",
+      "sha256": "fcff8243f9bb03a1f434e9e8421928b8ce6fcdbcb604a3eb8bfc7858cf09c558",
       "mode": 420
     },
     {

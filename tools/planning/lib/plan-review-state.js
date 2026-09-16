@@ -82,12 +82,11 @@ const PLAN_RUN_GATE_MODE_ENV = 'SMOS_PLAN_RUN_GATE_MODE';
 // fallback for existing launchd or shell callers.
 //
 // ROLLBACK / ESCAPE HATCH (plan-approval-surface grounding adjustment #2):
-// the current-name env var IS the kill switch. Unsetting it (or setting it
-// empty/false) disables enforcement; the legacy name is consulted only when
-// the current name is absent.
-// disables operator-stamp enforcement everywhere it is consulted — A1
-// (userprompt-plan-review-gate.cjs), A2 (tools/codex/commands/run-plan.js) and
-// D1 (run-time re-verify). That single unset is the documented one-line rollback.
+// MYTHOS_ENFORCE_OPERATOR_STAMP is authoritative whenever it is present.
+// Set it empty/false to disable enforcement. If it is absent, the legacy
+// SMOS_ENFORCE_OPERATOR_STAMP value is consulted for compatibility, so a
+// legacy-only caller must also unset/disable SMOS to roll back. This resolver
+// controls A1 (the hook), A2 (run-plan), and D1 (run-time re-verify).
 //
 // STAGE SCOPE: assessOperatorStamp performs a PRESENCE-only check. It does NOT,
 // and cannot, verify the stamp's authenticity (Dart-authorship re-verify / HMAC
@@ -107,13 +106,31 @@ const LEGACY_OPERATOR_STAMP_ENFORCEMENT_ENV = 'SMOS_ENFORCE_OPERATOR_STAMP';
  */
 function isOperatorStampEnforcementEnabled(env) {
   const source = env || process.env;
-  const flagName = Object.prototype.hasOwnProperty.call(source, OPERATOR_STAMP_ENFORCEMENT_ENV)
-    ? OPERATOR_STAMP_ENFORCEMENT_ENV
-    : LEGACY_OPERATOR_STAMP_ENFORCEMENT_ENV;
+  const flagName = operatorStampEnforcementFlagName(source);
+  if (!flagName) return false;
   const raw = String((source[flagName]) || '')
     .trim()
     .toLowerCase();
   return raw === '1' || raw === 'true' || raw === 'yes' || raw === 'on';
+}
+
+/**
+ * Return the flag name whose value is authoritative for the supplied env.
+ * MYTHOS is selected by presence, including an explicit empty/false value;
+ * SMOS is only a fallback when MYTHOS is absent.
+ *
+ * @param {object} [env=process.env]
+ * @returns {string|null}
+ */
+function operatorStampEnforcementFlagName(env) {
+  const source = env || process.env;
+  if (Object.prototype.hasOwnProperty.call(source, OPERATOR_STAMP_ENFORCEMENT_ENV)) {
+    return OPERATOR_STAMP_ENFORCEMENT_ENV;
+  }
+  if (Object.prototype.hasOwnProperty.call(source, LEGACY_OPERATOR_STAMP_ENFORCEMENT_ENV)) {
+    return LEGACY_OPERATOR_STAMP_ENFORCEMENT_ENV;
+  }
+  return null;
 }
 
 /**
@@ -797,6 +814,7 @@ module.exports = {
   LEGACY_OPERATOR_STAMP_ENFORCEMENT_ENV,
   PLAN_RUN_GATE_MODE_ENV,
   isOperatorStampEnforcementEnabled,
+  operatorStampEnforcementFlagName,
   assessOperatorStamp,
   resolveStateMarkerPath,
   readStateMarker,

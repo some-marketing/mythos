@@ -135,6 +135,14 @@ test('isOperatorStampEnforcementEnabled is MYTHOS-first with SMOS compatibility 
     false,
     'an explicit empty current-name value disables enforcement'
   );
+  assert.strictEqual(
+    lib.operatorStampEnforcementFlagName({ MYTHOS_ENFORCE_OPERATOR_STAMP: '0', SMOS_ENFORCE_OPERATOR_STAMP: '1' }),
+    'MYTHOS_ENFORCE_OPERATOR_STAMP'
+  );
+  assert.strictEqual(
+    lib.operatorStampEnforcementFlagName({ SMOS_ENFORCE_OPERATOR_STAMP: '1' }),
+    'SMOS_ENFORCE_OPERATOR_STAMP'
+  );
 });
 
 test('assessOperatorStamp: null/absent stamp is missing; present stamp is present (presence-only)', () => {

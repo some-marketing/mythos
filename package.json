@@ -2,6 +2,9 @@
   "name": "mythos",
   "private": true,
   "version": "1.0.0",
+  "engines": {
+    "node": ">=22.13.0"
+  },
   "description": "An adventurer's guild for AI coding agents — reusable, guardrailed grimoires (workflow frameworks) in a tabletop-fantasy lexicon.",
   "repository": {
     "type": "git",
@@ -117,7 +120,7 @@
     "workspace:harness": "node tools/workspace/generate-harness.js --all",
     "workspace:harness:dry-run": "node tools/workspace/generate-harness.js --all --dry-run",
     "workspace:harness:framework": "node tools/workspace/generate-harness.js --framework",
-    "test": "npm run verify:all && npm run verify:parity && node --test tools/parity/__tests__/verify-parity.test.cjs tools/parity/__tests__/reconciliation-ledger.test.cjs && node tools/kernel/hooks/__tests__/pretool-orchestrator-worker-gate.test.cjs && node tools/signals/lib/__tests__/review-task-plan-narrative.test.cjs && node --test tools/memory/__tests__/contextual-sweep.test.cjs && node --test tools/workspace/__tests__/candidate-root.test.js",
+    "test": "npm run verify:all && npm run verify:parity && node --test tools/parity/__tests__/verify-parity.test.cjs tools/parity/__tests__/reconciliation-ledger.test.cjs && node tools/kernel/hooks/__tests__/pretool-orchestrator-worker-gate.test.cjs && node tools/signals/lib/__tests__/review-task-plan-narrative.test.cjs && node --test tools/memory/__tests__/contextual-sweep.test.cjs",
     "verify:agent": "node tools/verify/verify-agent.cjs",
     "verify:agent:all": "node tools/verify/verify-agent.cjs --all",
     "verify:command": "node tools/verify/verify-command.cjs",

@@ -1,0 +1,16 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "5.8",
+	"Category": "Mythos",
+	"Description": "Data-driven 3D projection of the ant-hive-world, built from UnrealImport/1.0 files. Read-only consumer of post-turn harvests; never a channel into a running guest.",
+	"Plugins": [
+		{
+			"Name": "PythonScriptPlugin",
+			"Enabled": true
+		},
+		{
+			"Name": "EditorScriptingUtilities",
+			"Enabled": true
+		}
+	]
+}

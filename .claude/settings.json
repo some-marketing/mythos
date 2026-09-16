@@ -27,7 +27,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PROJECT_DIR}/tools/kernel/hooks/dispatch-stop.cjs\"",
+            "command": "node \"${CLAUDE_PROJECT_DIR:-$PWD}/tools/kernel/hooks/dispatch-stop.cjs\"",
             "timeout": 5
           }
         ]
@@ -38,7 +38,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PROJECT_DIR}/tools/kernel/hooks/dispatch-userprompt.cjs\"",
+            "command": "node \"${CLAUDE_PROJECT_DIR:-$PWD}/tools/kernel/hooks/dispatch-userprompt.cjs\"",
             "timeout": 15
           }
         ]

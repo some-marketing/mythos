@@ -1537,6 +1537,13 @@
       "mode": 420
     },
     {
+      "id": "file:_dev/sim-runs/summarize-reward-contract.js",
+      "type": "file",
+      "path": "_dev/sim-runs/summarize-reward-contract.js",
+      "sha256": "751a67de9c1490b93fe14f65636453f28d57fe41683784d8f792532c86d029fb",
+      "mode": 420
+    },
+    {
       "id": "file:_dev/sim-runs/vm/ant-world.yaml",
       "type": "file",
       "path": "_dev/sim-runs/vm/ant-world.yaml",
@@ -2338,7 +2345,7 @@
       "id": "file:.agents/skills/source-command-new-session/SKILL.md",
       "type": "file",
       "path": ".agents/skills/source-command-new-session/SKILL.md",
-      "sha256": "270e5077fc4452915e5f0caaa20af362fd61f73439cb4edb30027086d814d2a6",
+      "sha256": "2dcc903b56e1e98b831811a84182065c6b584625dba044aa5c8905738324182d",
       "mode": 420
     },
     {
@@ -4116,14 +4123,14 @@
       "id": "file:.claude/project-claude.yml",
       "type": "file",
       "path": ".claude/project-claude.yml",
-      "sha256": "e5baf157167e2bb9b1e7bfd2b6a9a4212d6c455666221cdb31e63c33233c2b5a",
+      "sha256": "571913aeb034154b024283555125255049a390c317fb866ab12927522fe9ce70",
       "mode": 420
     },
     {
       "id": "file:.claude/settings.json",
       "type": "file",
       "path": ".claude/settings.json",
-      "sha256": "2f5ace5b3552ef13dc51a0e9fbdb1b80ed9e7f26cfaff793ee84eae904f85207",
+      "sha256": "7f20ab907b9edf9426ad693ca8302b34cc928fe007f61894944abd547830d2bd",
       "mode": 420
     },
     {
@@ -4718,7 +4725,7 @@
       "id": "file:.github/workflows/continuity-gate.yml",
       "type": "file",
       "path": ".github/workflows/continuity-gate.yml",
-      "sha256": "69d825240264fa927443d5be2cf7cac865e4ef69b0dc003f9ec0a7dbe337907e",
+      "sha256": "65fd759e24b8c444d23a1915c308605c721a67a80db45cd3cd4384d815707dc9",
       "mode": 420
     },
     {
@@ -10668,7 +10675,7 @@
       "id": "file:instructions/canonical/commands/new-session.yaml",
       "type": "file",
       "path": "instructions/canonical/commands/new-session.yaml",
-      "sha256": "5b6e79d48e8ae94b4ee929c2e4e05ea127f2a6fc6e4b3bfcfca8d0ed2a497b3d",
+      "sha256": "017d1938ac0d57e8a53e0b144f21848ffafd5763ea2f39f249b0f184b69628ab",
       "mode": 420
     },
     {
@@ -10927,7 +10934,7 @@
       "id": "file:instructions/canonical/commands/shutdown.yaml",
       "type": "file",
       "path": "instructions/canonical/commands/shutdown.yaml",
-      "sha256": "ec520fad19bbcaba78e3923cf079646b3c5cce27ab82cd3253ea604e615c3ea5",
+      "sha256": "39781d433f57af6aec323f253156e5bb6c8b3f27be3e2870e8c0eaa22e45be16",
       "mode": 420
     },
     {
@@ -11480,14 +11487,14 @@
       "id": "file:package-lock.json",
       "type": "file",
       "path": "package-lock.json",
-      "sha256": "c028f9a0e4190af0122cb9f50216bec28ccf62f941618656c6065c66a618d17c",
+      "sha256": "da20396f57bbd2e5906a9196fbb16a3e5b7141e0ec2eb8ee5ea6f1cd83f2145b",
       "mode": 420
     },
     {
       "id": "file:package.json",
       "type": "file",
       "path": "package.json",
-      "sha256": "9af0243841d0cdc9578105a76edcd7d8c7cdf4294831391406f1699be83d0733",
+      "sha256": "196d498ebf363e5a6fc9a85a6e2bd9e9f21c649f3f5377cf061971272f2ea435",
       "mode": 420
     },
     {
@@ -12002,10 +12009,52 @@
       "mode": 420
     },
     {
+      "id": "file:tools/ant-hive-world/__tests__/checkpoint-lane-state.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/checkpoint-lane-state.test.cjs",
+      "sha256": "cff87d2024ee51ac02c2484d449b80e5566fe3fd7a3aad3adb9ba40bbe7a807e",
+      "mode": 420
+    },
+    {
       "id": "file:tools/ant-hive-world/__tests__/dashboard.test.cjs",
       "type": "file",
       "path": "tools/ant-hive-world/__tests__/dashboard.test.cjs",
-      "sha256": "3bec1baadbf811e1898f407cf96abb6fe918bb166b0ae73487f05fee76a21982",
+      "sha256": "8c11e140cbc1ece9e6b554a0b4b17a889200051f4c6ad929ef8299ae593bf0bf",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/dream-calibration.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/dream-calibration.test.cjs",
+      "sha256": "28359a785ce4a54670acc233c2d73047f88b31bd7ab5412d5706ade0e3df363e",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/dream-composer.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/dream-composer.test.cjs",
+      "sha256": "7ef1999b5c12d74aaade0a6f3222b23a067d0961fbe5c55626e7d4270976daa2",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/dream-consequence-ledger.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/dream-consequence-ledger.test.cjs",
+      "sha256": "36d17492003bd84ef651a31be7c29d9ee925b4fe460b0ab47305129bfa51aa24",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/dream-lane.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/dream-lane.test.cjs",
+      "sha256": "39275bcdca7021def46e661814562d04ce9f4295e5710fec1cab035192c14ada",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/dream-memory.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/dream-memory.test.cjs",
+      "sha256": "54a055ac22d0b4ec030fe5ef381176dc3f4337060ff176e162af0d064f39711c",
       "mode": 420
     },
     {
@@ -12013,6 +12062,27 @@
       "type": "file",
       "path": "tools/ant-hive-world/__tests__/event-schema.test.cjs",
       "sha256": "d8e53ff2a450b0600753c1530ce097c32bb4fb80ad221be87c20b94cd8e308a3",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/fixtures/fixture-v1.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/fixtures/fixture-v1.json",
+      "sha256": "44ad0a4ab6e87523ec047b7512f159e0b6bd4e00796bc7232798220e7e63e9c5",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/fixtures/fixture-v2.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/fixtures/fixture-v2.json",
+      "sha256": "f8ee5b840b4bb17c8bb10f15e921409fd8479cbc5cb86f693e277157a98de969",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/gather-yield.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/gather-yield.test.cjs",
+      "sha256": "aaf96cc8dcd981f840df1ba09845f539e7941cd0888daa2d1283df6a9d899ea7",
       "mode": 420
     },
     {
@@ -12058,17 +12128,87 @@
       "mode": 420
     },
     {
+      "id": "file:tools/ant-hive-world/__tests__/on-policy-fix.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/on-policy-fix.test.cjs",
+      "sha256": "3701606ba37a9f6eae778e07944033e2ee57e124110534177e5695ccaf64fa71",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/planner-divergence-check.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/planner-divergence-check.test.cjs",
+      "sha256": "0eed8bcaa5fa0d89cab968271650d51bf4c18be43ed9864b6004327ead99e30f",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/planner-lane.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/planner-lane.test.cjs",
+      "sha256": "8c7075a236f4730ad939289ffaf33b9b8fb64f8b9c723314bfd7fa17e04382e1",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/reward-contract-v3.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/reward-contract-v3.test.cjs",
+      "sha256": "f25a03adf5f124168d192b5a738190da35ae817f571516ecd3d70d3d0533a48b",
+      "mode": 420
+    },
+    {
       "id": "file:tools/ant-hive-world/__tests__/reward-contract.test.cjs",
       "type": "file",
       "path": "tools/ant-hive-world/__tests__/reward-contract.test.cjs",
-      "sha256": "9dac4bb4d848b33a5a8d83a6c5f2f2eecb2c8e40a2624fb742bfb63e664c4ed0",
+      "sha256": "cd939aec1be79e7b92985e3cd92fc5f39262828368d738ef63c1c41d7bdba204",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/reward-provenance.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/reward-provenance.test.cjs",
+      "sha256": "c05ba5748622ed839b28f6eb1d21fc4dbb2353def662331c1735868f2d22a116",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/run-live-argv.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/run-live-argv.test.cjs",
+      "sha256": "0bc1ea5b633fa688cc41b90de66e038780123ebc0140bfba96d44477d929fa1f",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/sweeper-lane.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/sweeper-lane.test.cjs",
+      "sha256": "84398fe4ffc6a3911c5ca224773c34978e51d06709d3896380b2af31cd5bedea",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/territory-reassertion.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/territory-reassertion.test.cjs",
+      "sha256": "8c3421ac24152443f99a536d7f8ae014b5c34ecd2ffcfc716ab64b1b32a76024",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/territory-verifier-blind-spot.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/territory-verifier-blind-spot.test.cjs",
+      "sha256": "d786f91264dce6d8603b6ff3844d5ae0ace6aded8aeb34b07eeee92a61d74f80",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/train-tick-triad-wiring.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/train-tick-triad-wiring.test.cjs",
+      "sha256": "e020cadcaf4913bb68de1759d61a87c657d8c9a0d7e4526d2d9b4b9f9567619b",
       "mode": 420
     },
     {
       "id": "file:tools/ant-hive-world/__tests__/untrained-network.test.cjs",
       "type": "file",
       "path": "tools/ant-hive-world/__tests__/untrained-network.test.cjs",
-      "sha256": "41c7cd8da5c3509c83cbeeb77aaeae6bfa20a899d9ddd6998ad7973ad9d9c77d",
+      "sha256": "260424f45f00caffb0117da7f75376a550ed6514a1198342283bf4a19ea8c066",
       "mode": 420
     },
     {
@@ -12076,6 +12216,27 @@
       "type": "file",
       "path": "tools/ant-hive-world/__tests__/validate-hive-mind.test.cjs",
       "sha256": "a884fe3b7737827957d5a69ce5b0fa24fc2a8067d47a5bc2ed709ed0227de404",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/verifier-breadth.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/verifier-breadth.test.cjs",
+      "sha256": "4e28670f78ccb134d1ecdcfb20a612bb0c0e33fd5c7a169fd682121e8b28e594",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/verifier-lane.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/verifier-lane.test.cjs",
+      "sha256": "a512806e85f3d8412f2b5f555a55519ffd745a6e231f34d46b62087e477a9c4c",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/world-mind-harness.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/world-mind-harness.test.cjs",
+      "sha256": "6bacce6c1b833bf4a1366ab29f5384a27d2eb9a80dff8cc26b7b8960ad462020",
       "mode": 420
     },
     {
@@ -12093,10 +12254,185 @@
       "mode": 420
     },
     {
+      "id": "file:tools/ant-hive-world/__tests__/world-state-replenishment.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/world-state-replenishment.test.cjs",
+      "sha256": "c650863602fe760d416bfadbbd35816934e8f63c528a67dfe08a41bfbc657a5d",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/__tests__/world-state-torn-write.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/__tests__/world-state-torn-write.test.cjs",
+      "sha256": "1c134255c6b8db758587adb25970c4f02337a4b9fc1cb0f8b607d9aacb7e9bd1",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/_dev/state/session-present.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/_dev/state/session-present.json",
+      "sha256": "ada972141b240214a3c5cafce9e9099c65029f2fff030cd6de3fa421636283b5",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/analysis/calibration-sweep.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/analysis/calibration-sweep.cjs",
+      "sha256": "fa55582f05261b274a4dbb401108cad34ff0d22b952e9fbf0fa36b8b5353e460",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/analysis/demand-decomposition.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/analysis/demand-decomposition.cjs",
+      "sha256": "ac4eb8e5c85fadba272ebc9d65fcbc4b62acc9bb9eca3beb2c3d9d133aed2b5a",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/analysis/README.md",
+      "type": "file",
+      "path": "tools/ant-hive-world/analysis/README.md",
+      "sha256": "ace97f6d44522f71183611465ee3336576c7044c2a06845afabcf839ab43bd0c",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/analysis/reward-ablation-sweep.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/analysis/reward-ablation-sweep.cjs",
+      "sha256": "6c0d76c6bb3066d832003a34d62e8ddc0ef3bcb096a0b7cadc2971f076511f91",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/analysis/reward-composition.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/analysis/reward-composition.cjs",
+      "sha256": "71b6dbe90ff11497b54824ea3745f330a4dbdba2f5791254c5994ae08bdc6a25",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/checkpoint-schema.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/checkpoint-schema.json",
+      "sha256": "b1bbddbe12c10f64cf98b1492bdced27273e2675942fe5bbd4c7b152280d77a9",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/checkpoint.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/checkpoint.js",
+      "sha256": "7fab8d04ac2a3e866ed593f3bb9e5f07dee5fe6be9e418fe4118f0d156f4d4d5",
+      "mode": 420
+    },
+    {
       "id": "file:tools/ant-hive-world/dashboard.js",
       "type": "file",
       "path": "tools/ant-hive-world/dashboard.js",
-      "sha256": "d084d46143fde338c0ce01fc927f9e0b314090c1a38afeb7d957b38dc827edf0",
+      "sha256": "519487e479ebde3468380e6155654f305479f71a428020ead4a414b256df0560",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/dream/calibration.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/dream/calibration.js",
+      "sha256": "1749930ba7b5f6029daeb430d315be805dc93c076e215d42540ba867d3bb2ba0",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/dream/consequence-ledger.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/dream/consequence-ledger.js",
+      "sha256": "0ce73c715cdac10b4436abfead678bde8225c3cd66734f28c8948d7489d95075",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/dream/dream-composer.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/dream/dream-composer.js",
+      "sha256": "ed9f9aa7ae7bc3a4bd1f7c6e8d2ef498c3430cbfc04e669effe20af020ef9715",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/dream/dream-lane.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/dream/dream-lane.js",
+      "sha256": "a22d9eb43abbb1004eb79437c413970776e19970aefd8d2dea98739751d687d9",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/dream/dream-memory.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/dream/dream-memory.js",
+      "sha256": "23079c7440d0496c1728251bf915faf7f5bf4fbe14c22676c384662ad3d92875",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/bridge_scene.xml",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/bridge_scene.xml",
+      "sha256": "6c06cc20b0724aea3b69d80c334110147751f79930c840b5e02795595fcf912c",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/bridge_step.py",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/bridge_step.py",
+      "sha256": "cce9513ae13fb1eea3554e3fa1c0dfbf15ce245384b165dd7f17a8ad8575c142",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/bridge-client.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/bridge-client.js",
+      "sha256": "4b8685b8604df75a22ff089b6a7921562a8dfd0f3f5b95b77ab1597fbbe8f528",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/bridge-network.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/bridge-network.js",
+      "sha256": "b6dc115d81498f5a86511f9372110c8dfd698e79d4cf89f16452eadd730bbe77",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/check-containment-gate.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/check-containment-gate.js",
+      "sha256": "a97c234bf909041979870c95d39e8282f7cc3f33d645539fc659a6c3294ecf7a",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/Dockerfile",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/Dockerfile",
+      "sha256": "7678b7340d3d9c567fcaf7788e368c10c9c40e59610a27032f13989db4b06adf",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/requirements-lock.txt",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/requirements-lock.txt",
+      "sha256": "e5c10c36a8d8ed18547e264b3255a7607278d5155d95fd874253b7fa2fe64987",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/verify-containment.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/verify-containment.js",
+      "sha256": "44fe62605c83d7b3c88194735bcd1d7c83a780a15ba5f35189960e1f871ae758",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/verify-s1-roundtrip.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/verify-s1-roundtrip.js",
+      "sha256": "f3697fa6f9b03d9b42d4f502d3f711037f65c981b4c73a8638e8b3136d587121",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/embodiment-bridge/verify-s2-perception.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/embodiment-bridge/verify-s2-perception.js",
+      "sha256": "95850f4d23697beaea877d2bb1d0730c6747c6a29186df933c4ddc60cbd3fa67",
       "mode": 420
     },
     {
@@ -12149,17 +12485,38 @@
       "mode": 420
     },
     {
+      "id": "file:tools/ant-hive-world/goal-evaluator.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/goal-evaluator.js",
+      "sha256": "e73b0fbe8db163f4ce7228de56395dc823c8a35f1800825b71612d1720507580",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/goal-packet-schema.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/goal-packet-schema.json",
+      "sha256": "f5195c92ad629d75b524f30d8047307a8d80883898d95e9e0fcf1ca454dc4c2e",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/goal-rehearsal-evidence-schema.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/goal-rehearsal-evidence-schema.json",
+      "sha256": "eb985455e603943049d6e64d0ad8696d33a3833a95015119580799005e2d01b6",
+      "mode": 420
+    },
+    {
       "id": "file:tools/ant-hive-world/harness.js",
       "type": "file",
       "path": "tools/ant-hive-world/harness.js",
-      "sha256": "ebde66c096f688ea95976f712e5cfa81d19ecd4ee7199298faad61f8ed913bd7",
+      "sha256": "82925053cd9cea93e66ff0c76e55df3766b4757515a93182769ab0767b014b42",
       "mode": 420
     },
     {
       "id": "file:tools/ant-hive-world/live-config.js",
       "type": "file",
       "path": "tools/ant-hive-world/live-config.js",
-      "sha256": "32f334e8bb75cb01df6f15400bd7c01503c4394f3afc32d1cb61aeed9632c7a0",
+      "sha256": "2eb0af9a45f655094a41de4fb97ed593aa0197acc2f1e6829411a66806a75ed3",
       "mode": 420
     },
     {
@@ -12198,10 +12555,24 @@
       "mode": 420
     },
     {
+      "id": "file:tools/ant-hive-world/planner-divergence-check.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/planner-divergence-check.cjs",
+      "sha256": "9835fa36aa167fd0de8d4f390f8f2e0a220f910db64f9f6011e53ad2f23c21c9",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/planner-lane.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/planner-lane.js",
+      "sha256": "8afd9f4aa24f947e20329344df1c8586f46c38308a100f9dd5d3d47c6322ab98",
+      "mode": 420
+    },
+    {
       "id": "file:tools/ant-hive-world/README.md",
       "type": "file",
       "path": "tools/ant-hive-world/README.md",
-      "sha256": "3e29f86bd6ecc45351d31531d07a9ae919f7335f86ef15a307571117f3ede92a",
+      "sha256": "91623545cafcac1567ce1b86272a1c9517224f25a24d00c38ce66198d7a2aaff",
       "mode": 420
     },
     {
@@ -12292,7 +12663,7 @@
       "id": "file:tools/ant-hive-world/run-live.js",
       "type": "file",
       "path": "tools/ant-hive-world/run-live.js",
-      "sha256": "5576659e41ac13574ef35e6a3e2c058cd011a5b752031636a5ae2ef6eb0ff445",
+      "sha256": "fc8cc5a8d6ee3e0383e0872d3754683c4986211274d13aa97cba0979881e34f9",
       "mode": 420
     },
     {
@@ -12303,17 +12674,192 @@
       "mode": 420
     },
     {
+      "id": "file:tools/ant-hive-world/sweeper-lane.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/sweeper-lane.js",
+      "sha256": "e8a144ad39eae7e585ccb08c6c4dfd861dd5b202d12d107413e3c2aa91b60481",
+      "mode": 420
+    },
+    {
       "id": "file:tools/ant-hive-world/train-tick.js",
       "type": "file",
       "path": "tools/ant-hive-world/train-tick.js",
-      "sha256": "0e8dc54c382966957e0e9fa10d9c4014e40e3dae2a918e7e90c4b1fa2966d057",
+      "sha256": "de7f775df2c128623448a2c5cb354241ed8a2909576b508c9d778bb7c15d0b97",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/__tests__/deploy-state-corrections.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/__tests__/deploy-state-corrections.test.cjs",
+      "sha256": "214c5e260a99687d17cacc476de77e853ecb72604f66b8372589c9fd58c79a1c",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/__tests__/simulation-portability.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/__tests__/simulation-portability.test.cjs",
+      "sha256": "5dc759683bfa869e688adb3c6bb4c683b09d26fb7ffcb709fc1fc7720b71b4a4",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/deploy-state.jsonl",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/deploy-state.jsonl",
+      "sha256": "562407878f989f3762c855d945892240a7a4b8f4510918331607817a995617a8",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/import-index.jsonl",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/import-index.jsonl",
+      "sha256": "aad226e21c885323ce001b67be11ed57bb037ae5989b118954457b26573913fb",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/import-turn.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/import-turn.js",
+      "sha256": "e6950706d8d385661f2d764f7cc1dd637c812f4da2e9f1893880f93af0d356df",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/README.md",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/README.md",
+      "sha256": "67b200060e2dba91b13f3646172db62e2f0bf243262231ae281e3163a1f942e5",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/schema.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/schema.json",
+      "sha256": "c8a536e8c18e2a67974f4f681b29609d91485625862ab7abacd7d6f7ab68c5a3",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/ue/AntSimV2.uproject",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/ue/AntSimV2.uproject",
+      "sha256": "910a86993ec10da65684c8d49163d5f54b3e791cb3f55e55bf6ed5b49d4a52ba",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/ue/Config/DefaultEngine.ini",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/ue/Config/DefaultEngine.ini",
+      "sha256": "d418abc5a8326359e8a6ef9f77b537d7d66929a64f70d2756255a911bd64f82c",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/ue/Config/DefaultGame.ini",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/ue/Config/DefaultGame.ini",
+      "sha256": "34f2aeb0593eeec463c84cae7d7a70742fbb063e289be609b0f709730584ee9f",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/ue/Content/Python/build_world.py",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/ue/Content/Python/build_world.py",
+      "sha256": "9072d895f08ca5888ce04610002b8e6edf3d070077ab179813d5031b8b7728da",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/ue/Content/Python/init_unreal.py",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/ue/Content/Python/init_unreal.py",
+      "sha256": "5f6321c247d7208e3999c42ace66ab364331823b267dcdc7b11cd3acebf039e2",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/ue/deploy.sh",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/ue/deploy.sh",
+      "sha256": "f895d5eaf6db2b5bda6c4ca8ceed6021aae949623ae8daf8c0b0e2cc52ca3479",
+      "mode": 493
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/ue/README.md",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/ue/README.md",
+      "sha256": "0dcc413caffffce5920822b41181352d13d60e1e231edbc8b3ecdfb830b527f1",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/ue/Tools/BuildLevel.ps1",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/ue/Tools/BuildLevel.ps1",
+      "sha256": "3c1136107786450534a66706cadfa5e0bdd1ce8d3e619cfa1b3c961877ca222d",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/unreal-import__baseline-3000-r6.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/unreal-import__baseline-3000-r6.json",
+      "sha256": "79f34b77e3bcf931705fa2aa9cb093560bb61c6752923599e7854e6a7ea424cb",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/unreal-import__baseline-3000-r7.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/unreal-import__baseline-3000-r7.json",
+      "sha256": "f198cc860c7be2fdde9b0d45e8a9c5fd1c4b7a744d93006c545fd3f2db20bc98",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/unreal-import__cc-turn1.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/unreal-import__cc-turn1.json",
+      "sha256": "92f661d5df5f13e24081cbb1f81071616fbdfbc5a22c0d588d468ede524381e2",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/unreal-import__cc-turn2.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/unreal-import__cc-turn2.json",
+      "sha256": "225ee6fe2fba98129d2a9e547ff1b2a4b6332ae7f563785595cfb79f2d63438d",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/unreal-import__cc-turn3.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/unreal-import__cc-turn3.json",
+      "sha256": "13829f0e180d39ac226622ee19542417b9d0c0ae59afd94da9ca73f2e462b6f0",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/unreal-import__tt-run-001-09a6c88b.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/unreal-import__tt-run-001-09a6c88b.json",
+      "sha256": "7eabac1d8cd0d502a727324f66763ae526f0fee343e1914636aa12d09578b528",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/unreal-import__tt-run-002r2-6028d083.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/unreal-import__tt-run-002r2-6028d083.json",
+      "sha256": "c813e8fccbf3c14ab5f52d32f0b351d12d1a19cc485471d6092f0487dee34650",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/unreal-import__tt-run-003-5c9cbe9d.json",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/unreal-import__tt-run-003-5c9cbe9d.json",
+      "sha256": "e71328c2ffc76dfac4cfeba5b39b2f8f4329de147a2f7fa613dc87743074ae15",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/unreal-export/watch-imports.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/watch-imports.js",
+      "sha256": "6281d59c157447d1b78e9d5e24a08e70ccd8812d916bd73970247abc31961cec",
       "mode": 420
     },
     {
       "id": "file:tools/ant-hive-world/untrained-network.js",
       "type": "file",
       "path": "tools/ant-hive-world/untrained-network.js",
-      "sha256": "ba12fea3115d8e2be4ea8d074ccd3828494d40bb015f97550e90bde25ea0ed6b",
+      "sha256": "c79d621bab5d553f30690cd315d571d5cca0a34b6ab7d7fddd4e66307e4e6f29",
       "mode": 420
     },
     {
@@ -12324,24 +12870,45 @@
       "mode": 420
     },
     {
+      "id": "file:tools/ant-hive-world/verifier-breadth-check.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/verifier-breadth-check.cjs",
+      "sha256": "ea465b914036e0dfc5df949cc89c2d360f498816cb5de9db20f1ab735b659ed1",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/verifier-lane.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/verifier-lane.js",
+      "sha256": "53b8e7e063452f5a52ad54b7ba059564b7c59be8c59ad24abf58eb3dae39ea02",
+      "mode": 420
+    },
+    {
       "id": "file:tools/ant-hive-world/world-mind-harness.cjs",
       "type": "file",
       "path": "tools/ant-hive-world/world-mind-harness.cjs",
-      "sha256": "eab2f9c0a5e3c88956fc3efe3184b6e45c51ceccf730affd0b0a97cc612882ef",
+      "sha256": "65980773e5371b88f69a79eeaa3fe60506a30b5cbac2385927a64a21cf847b54",
       "mode": 420
     },
     {
       "id": "file:tools/ant-hive-world/world-mind.js",
       "type": "file",
       "path": "tools/ant-hive-world/world-mind.js",
-      "sha256": "09a87ac21b493ca4410bd381a15acd2351a1b7dc7eae467ceb464d68adaaaa0d",
+      "sha256": "6d079b2a3d48bc82ec35a8d5f527e2a75fab6a9c2142b4cbd9fbbeaf5bf0521a",
       "mode": 420
     },
     {
       "id": "file:tools/ant-hive-world/world-state.js",
       "type": "file",
       "path": "tools/ant-hive-world/world-state.js",
-      "sha256": "81847138a6171f99da9b8a238e64e58e235ba3c256921420acffc6e80070860d",
+      "sha256": "090dd3026a1770aeffad5b3598a44e507f4c4bd9dacee1aadd546c2355b12b7a",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/ant-hive-world/world-train.js",
+      "type": "file",
+      "path": "tools/ant-hive-world/world-train.js",
+      "sha256": "0e2dd2e3d0491f4f58248f6e5733525f4038d1f7a23031afacfb188c23daea7c",
       "mode": 420
     },
     {
@@ -13633,6 +14200,13 @@
       "mode": 420
     },
     {
+      "id": "file:tools/commands/handlers/__tests__/new-session.test.cjs",
+      "type": "file",
+      "path": "tools/commands/handlers/__tests__/new-session.test.cjs",
+      "sha256": "c9dbbeb9e88c31f4998f6ffdcc00a48607ce6290147d1680b2cd3a8f22cc46a0",
+      "mode": 420
+    },
+    {
       "id": "file:tools/commands/handlers/concept-promote.cjs",
       "type": "file",
       "path": "tools/commands/handlers/concept-promote.cjs",
@@ -13650,7 +14224,7 @@
       "id": "file:tools/commands/handlers/new-session.cjs",
       "type": "file",
       "path": "tools/commands/handlers/new-session.cjs",
-      "sha256": "b0daec029400d5ed51e25a96f203f192db27327f81beb3092ab0ef3276447202",
+      "sha256": "d6cedb34413eada8abdc84e7c497fba898858ceebec72e31f9c9dd0a4baf8ad5",
       "mode": 420
     },
     {
@@ -13685,7 +14259,7 @@
       "id": "file:tools/commands/handlers/shutdown.cjs",
       "type": "file",
       "path": "tools/commands/handlers/shutdown.cjs",
-      "sha256": "e1622e2918d7f8b1efc0b860012de465b60ae4c7d02e8d898155fafb1f7ee3a3",
+      "sha256": "56c3025cc3f2d171369daebd81a7a742e429016c54370418b80423379f82c485",
       "mode": 420
     },
     {
@@ -15127,8 +15701,15 @@
       "id": "file:tools/hygiene/sync-private-remotes.sh",
       "type": "file",
       "path": "tools/hygiene/sync-private-remotes.sh",
-      "sha256": "cc6ea7b6267be6d3503ca8948e65b74841b5ecf3c190e8bfcac6e9bb3e4ffc43",
+      "sha256": "f522292f6b9aa7958752b6bffdc2053cf47011473e28515391062cefd7d1a1ee",
       "mode": 493
+    },
+    {
+      "id": "file:tools/hygiene/sync-private-remotes.test.cjs",
+      "type": "file",
+      "path": "tools/hygiene/sync-private-remotes.test.cjs",
+      "sha256": "a19ddf7a3e3dc5192517ba1834c4fb0d785194cfd6c03fcd9642d81b5da01882",
+      "mode": 420
     },
     {
       "id": "file:tools/image-optimize/__tests__/fixtures/sample.png",
@@ -15782,6 +16363,20 @@
       "mode": 420
     },
     {
+      "id": "file:tools/kernel/hooks/__tests__/dispatch-stop-failopen.test.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/__tests__/dispatch-stop-failopen.test.cjs",
+      "sha256": "c6f371cd3ed2d7a21e51d23642c2a688255006db556c70dfdc8183e1ef7610e8",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/kernel/hooks/__tests__/dispatch-userprompt-failopen.test.cjs",
+      "type": "file",
+      "path": "tools/kernel/hooks/__tests__/dispatch-userprompt-failopen.test.cjs",
+      "sha256": "771dee97c859b57b88eb91730f944f7f2a80a46e2828d785cf9be0ab7c5a2a91",
+      "mode": 420
+    },
+    {
       "id": "file:tools/kernel/hooks/__tests__/once-per-session.test.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/__tests__/once-per-session.test.cjs",
@@ -15974,14 +16569,14 @@
       "id": "file:tools/kernel/hooks/dispatch-stop.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/dispatch-stop.cjs",
-      "sha256": "a7eb55ef358657251267097fafbd3d9fd80a7a1f3692ecae6c344b2ef68c1977",
+      "sha256": "134e5ec30a7a8765f8980f5ba74519e410c410cbc2315532eb53dc7ed4ea1329",
       "mode": 420
     },
     {
       "id": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
       "type": "file",
       "path": "tools/kernel/hooks/dispatch-userprompt.cjs",
-      "sha256": "f158cb755cf18e980af478a7bb2b8ea8661cf5b5e9503ba6fb3e694df2b27e33",
+      "sha256": "603fac5b2968f678faa50aaddd389d5c4b76298f276106e47f6d2de4a2ac06e2",
       "mode": 420
     },
     {
@@ -18452,7 +19047,7 @@
       "id": "file:tools/parity/build-wiring-graph.cjs",
       "type": "file",
       "path": "tools/parity/build-wiring-graph.cjs",
-      "sha256": "12c11bee283fac5ad6bc5b94efdf4bee972f9e40dd69d62cf200efbd1b2ab100",
+      "sha256": "ff4d8beaebd80701a06588312391da7969df90a4a9c0fa1ce7b96cb6e9ea04cf",
       "mode": 420
     },
     {
@@ -19597,6 +20192,20 @@
       "mode": 420
     },
     {
+      "id": "file:tools/sessions/__tests__/shutdown-boundary.test.cjs",
+      "type": "file",
+      "path": "tools/sessions/__tests__/shutdown-boundary.test.cjs",
+      "sha256": "50bfb9ade808fddb0c3b049ac04dfc1833d14bc239a3fc875b8781a176968876",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/sessions/__tests__/watcher-lifecycle.test.cjs",
+      "type": "file",
+      "path": "tools/sessions/__tests__/watcher-lifecycle.test.cjs",
+      "sha256": "09f09ea4db767b608b918948ea67045156ccea8bbca518ea222d9b533c032a02",
+      "mode": 420
+    },
+    {
       "id": "file:tools/sessions/boot-dead-session-reaper.cjs",
       "type": "file",
       "path": "tools/sessions/boot-dead-session-reaper.cjs",
@@ -19653,6 +20262,13 @@
       "mode": 420
     },
     {
+      "id": "file:tools/sessions/lib/__tests__/resolve-session-id.test.cjs",
+      "type": "file",
+      "path": "tools/sessions/lib/__tests__/resolve-session-id.test.cjs",
+      "sha256": "37336f831ca480b0970c19587f0c817215de7270302c07f0dabe7d75e338b244",
+      "mode": 420
+    },
+    {
       "id": "file:tools/sessions/lib/active-session-registry.js",
       "type": "file",
       "path": "tools/sessions/lib/active-session-registry.js",
@@ -19664,6 +20280,13 @@
       "type": "file",
       "path": "tools/sessions/lib/boundary-markers.cjs",
       "sha256": "9a31937df171cee5629b1a543b229b1c2941aa91800ef138ac2d0af36015ee2e",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/sessions/lib/resolve-session-id.cjs",
+      "type": "file",
+      "path": "tools/sessions/lib/resolve-session-id.cjs",
+      "sha256": "3c7a206fe51b6f047462d02e303a8a16f9a6d3ec21aae223e062ea949230b983",
       "mode": 420
     },
     {
@@ -19706,6 +20329,13 @@
       "type": "file",
       "path": "tools/sessions/spawn-coordinator.cjs",
       "sha256": "381ea42012326efadb62d721b6cfd4ff4e307584a3d1491b88348a7170eb4d9b",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/sessions/watcher-lifecycle.cjs",
+      "type": "file",
+      "path": "tools/sessions/watcher-lifecycle.cjs",
+      "sha256": "be75ac4ac347feb2c84372475a38e0f230329a2922d93432288f48c27ef0a31a",
       "mode": 420
     },
     {
@@ -19797,6 +20427,27 @@
       "type": "file",
       "path": "tools/signals/__tests__/signal-lane.test.cjs",
       "sha256": "4bfc6ab1f6ce20e59d1b7efba090ce55306f3bed54932fd66f789ed506666378",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/signals/__tests__/watch-actor-bridge-managed-startup.test.cjs",
+      "type": "file",
+      "path": "tools/signals/__tests__/watch-actor-bridge-managed-startup.test.cjs",
+      "sha256": "f513ed7164acabb3ae0cceb0de5eff7c8720a8e5e2ce3537a879269c7f9fd825",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/signals/__tests__/watch-codex-bridge-managed-startup.test.cjs",
+      "type": "file",
+      "path": "tools/signals/__tests__/watch-codex-bridge-managed-startup.test.cjs",
+      "sha256": "2d52512757d2cc004121d6eb9cab7ba3f5b1026f53169e9e792997109129c821",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/signals/__tests__/watch-pipeline-loop-managed-startup.test.cjs",
+      "type": "file",
+      "path": "tools/signals/__tests__/watch-pipeline-loop-managed-startup.test.cjs",
+      "sha256": "a6c1acd995445d4aed7ad37fe6c43a858de4cd17cfd8adae510b8f1b257e6bf6",
       "mode": 420
     },
     {
@@ -20325,6 +20976,13 @@
       "mode": 420
     },
     {
+      "id": "file:tools/signals/lib/watcher-ready.cjs",
+      "type": "file",
+      "path": "tools/signals/lib/watcher-ready.cjs",
+      "sha256": "14296f42f8c2d101540583bc0c86d1180d190a2fe69dbe97192c71d7a19606c5",
+      "mode": 420
+    },
+    {
       "id": "file:tools/signals/lib/workstream-loop.js",
       "type": "file",
       "path": "tools/signals/lib/workstream-loop.js",
@@ -20496,7 +21154,7 @@
       "id": "file:tools/signals/watch-actor-bridge.js",
       "type": "file",
       "path": "tools/signals/watch-actor-bridge.js",
-      "sha256": "618e4c85e754ad0f4e26b96f5ab29022090c6608bc9afc3de9c3833348708929",
+      "sha256": "5920a06a78a8182d721b565bdbe304120e2551afed7f4494e376587048e32ef8",
       "mode": 420
     },
     {
@@ -20510,7 +21168,7 @@
       "id": "file:tools/signals/watch-codex-bridge.js",
       "type": "file",
       "path": "tools/signals/watch-codex-bridge.js",
-      "sha256": "a3f061db0d03e9bab7cd49db61227c01aa4dfde86c95059dccea061102dd5b29",
+      "sha256": "4fbb87f84e4f4108c18f4100785685f0dfe78e234b48821f600ed27e364d9bda",
       "mode": 420
     },
     {
@@ -20531,7 +21189,7 @@
       "id": "file:tools/signals/watch-pipeline-loop.js",
       "type": "file",
       "path": "tools/signals/watch-pipeline-loop.js",
-      "sha256": "be13c68c72c63f4897ee1b73398e054eace192a1ba1ba4dce5776a2be7f6aabd",
+      "sha256": "62ce1c6d293affa0a5ff33a12204bbd6f6dd3c1de5fcbaa6523946511a5cd3dd",
       "mode": 420
     },
     {
@@ -23080,70 +23738,70 @@
       "name": "wordpress/seo-validation"
     },
     {
-      "id": "hook:PostToolUse:660",
+      "id": "hook:PostToolUse:659",
       "type": "hook",
       "event": "PostToolUse",
       "command_sha256": "e395bd31a35362065002007d044e98d86e484bf829d16ebe2027da8a928db52c"
     },
     {
-      "id": "hook:PreToolUse:657",
+      "id": "hook:PreToolUse:656",
       "type": "hook",
       "event": "PreToolUse",
       "command_sha256": "ce97f4fd7eb07f52a0e9c6352fab2ce0e803f0920ef184d8f42261a46580103b"
     },
     {
-      "id": "hook:SessionEnd:664",
+      "id": "hook:SessionEnd:663",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "35974852e367c31bae49591ac0aa4afd518ec624f233743462e37c4c3863b1ed"
     },
     {
-      "id": "hook:SessionEnd:665",
+      "id": "hook:SessionEnd:664",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "519f522b04afb8471aa7e7ca117deb8af91976de62b5c1f5f4f6f9f60c8c217f"
     },
     {
-      "id": "hook:SessionEnd:666",
+      "id": "hook:SessionEnd:665",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "4ee05b68abff34325a3950761939e20cf2391c7b29d640b29b95233d29943fd4"
     },
     {
-      "id": "hook:SessionStart:661",
+      "id": "hook:SessionStart:660",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "26962e5976f5c689361f18050bb4e718d507df72590fbbc620e356cde47cf86b"
     },
     {
-      "id": "hook:SessionStart:662",
+      "id": "hook:SessionStart:661",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "00253242784e7853b94e1125e7c69f31085961b2dd7b3d1fcb6b4c79d94e9baf"
     },
     {
-      "id": "hook:SessionStart:663",
+      "id": "hook:SessionStart:662",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "c738ce0e54e375f17b97f1186b95e5fd1125c0675d2f3e9238e872062f5b7076"
     },
     {
-      "id": "hook:Stop:658",
+      "id": "hook:Stop:657",
       "type": "hook",
       "event": "Stop",
-      "command_sha256": "c0c0282a10c1ff35c525d7786ceb380c853b678494f400dbf1fc178cdddcbb19"
+      "command_sha256": "4f226e828c37bc4a712aab7fb0158cc46e64d013ffa001531087941dfd30cca3"
     },
     {
-      "id": "hook:SubagentStop:667",
+      "id": "hook:SubagentStop:666",
       "type": "hook",
       "event": "SubagentStop",
       "command_sha256": "4ca0f2529c8dd4023ade83508a1e40a1728dbdcfa35aadf9ea953cf8ac9a587d"
     },
     {
-      "id": "hook:UserPromptSubmit:659",
+      "id": "hook:UserPromptSubmit:658",
       "type": "hook",
       "event": "UserPromptSubmit",
-      "command_sha256": "d647b60c73e5962cae00cf1cf2bd11d28472fdb8c47074a2e62cabf0e7e89545"
+      "command_sha256": "d4ad7e134fc41713541198d7a3573ced8aea291a0528477528b08ca3c5b1dfe7"
     },
     {
       "id": "installer-definition:frameworks/wordpress/qa/runner/tools/install-browsers.js",
@@ -24217,6 +24875,11 @@
       "id": "manifest-path:.claude/commands/trial-quest.md",
       "type": "manifest-registration",
       "declared_target": ".claude/commands/trial-quest.md"
+    },
+    {
+      "id": "manifest-path:.claude/commands/tt.md",
+      "type": "manifest-registration",
+      "declared_target": ".claude/commands/tt.md"
     },
     {
       "id": "manifest-path:.claude/commands/validate-all-frameworks.md",
@@ -26433,7 +27096,7 @@
       "id": "package-script:test",
       "type": "package-script",
       "name": "test",
-      "command_sha256": "ceda2e7402d4c78ae8cfd87202c8dd14649bbd7dcbe059bdaa2e4d6f2a0cdec3"
+      "command_sha256": "c9eb3b25ef6ae6a1ae2b2e49f6c2741ae7126e89d74770452d1f1762559919d0"
     },
     {
       "id": "package-script:test:planning",
@@ -27697,6 +28360,15 @@
       "specifier": "../lib/schema.cjs"
     },
     {
+      "id": "00dd1db90d3d27a6a06aea3714da3f776c4e7d6ec5d442376bbbc64b541657e7",
+      "type": "static-import",
+      "from": "file:tools/signals/__tests__/watch-actor-bridge-managed-startup.test.cjs",
+      "to": "file:tools/signals/lib/watcher-ready.cjs",
+      "target": "tools/signals/lib/watcher-ready.cjs",
+      "required": true,
+      "specifier": "../lib/watcher-ready.cjs"
+    },
+    {
       "id": "00e5eb255d3658ece3897e6e9722c416afdce88ae91501443703edb3ac57a743",
       "type": "schema-consumer",
       "from": "file:tools/planning/lib/loop-grade-record.js",
@@ -27960,6 +28632,15 @@
       "declared_target": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/evidence-ledger.schema.json"
     },
     {
+      "id": "032a0ab4618d69d67bdf58c28bf2178e8e9ef408208e52c184dd350adc8011ac",
+      "type": "static-import",
+      "from": "file:tools/sessions/lib/__tests__/resolve-session-id.test.cjs",
+      "to": "file:tools/sessions/lib/active-session-registry.js",
+      "target": "tools/sessions/lib/active-session-registry.js",
+      "required": true,
+      "specifier": "../active-session-registry"
+    },
+    {
       "id": "03383245624918fafd9c46678ba987d1dad6aa28f9919f2b7557679e5362d43f",
       "type": "static-import",
       "from": "file:tools/user/__tests__/resolve-alias.test.cjs",
@@ -28060,16 +28741,6 @@
       "declared_target": ".claude/commands/help-me-route.md"
     },
     {
-      "id": "04354f1d6fc67cd88c46d45c576b6706215f7c1ff83867274f36f8906436c1a3",
-      "type": "hook-target",
-      "from": "hook:SessionStart:661",
-      "to": "file:tools/kernel/hooks/dispatch-session-start.cjs",
-      "target": "tools/kernel/hooks/dispatch-session-start.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-session-start.cjs",
-      "event": "SessionStart"
-    },
-    {
       "id": "04469188e1146a26d95528b27928bb2e157fe9c111d7da422ed214cbe2788fe4",
       "type": "static-import",
       "from": "file:tools/image-optimize/lib/policy.cjs",
@@ -28167,6 +28838,15 @@
       "target": "tools/notify/twilio-api.js",
       "required": true,
       "specifier": "./twilio-api"
+    },
+    {
+      "id": "0504ebb965f8950d9fb3887869c90f5acf148f25321fd13fdfd92df721ed3f74",
+      "type": "static-import",
+      "from": "file:tools/sessions/__tests__/shutdown-boundary.test.cjs",
+      "to": "file:tools/commands/handlers/shutdown.cjs",
+      "target": "tools/commands/handlers/shutdown.cjs",
+      "required": true,
+      "specifier": "../../commands/handlers/shutdown.cjs"
     },
     {
       "id": "0527050ce72075753706d400102b9d3e236d20084e851ca2a217b998451043cf",
@@ -28378,16 +29058,6 @@
       "declared_target": ".claude/commands/framework-status.md"
     },
     {
-      "id": "072e718055285d34939744b576d72a54aa486809eb280e6942583b808b6cfc2a",
-      "type": "hook-target",
-      "from": "hook:SessionStart:662",
-      "to": "file:tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "required": true,
-      "declared_target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "event": "SessionStart"
-    },
-    {
       "id": "077afc94384e4426b6bc1c8a86a59e46c9c60ee603ad1bd2acb10db29e3d2bc7",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/cast-grimoire.md",
@@ -28404,6 +29074,15 @@
       "target": "tools/soul-space/schema/subject-record.schema.json",
       "required": true,
       "specifier": "schema/subject-record.schema.json"
+    },
+    {
+      "id": "07b16a445346f4a97f28ad2cfc581af21ac57df61b42c7148d97ddb3d695b560",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/checkpoint.js",
+      "to": "file:tools/ant-hive-world/harness.js",
+      "target": "tools/ant-hive-world/harness.js",
+      "required": true,
+      "specifier": "./harness.js"
     },
     {
       "id": "07c6679b35af5c3572455d436a73173407c73009169a2b467cee33703703a0ef",
@@ -28584,6 +29263,15 @@
       "target": ".claude/commands/ticktock.md",
       "required": true,
       "declared_target": ".claude/commands/ticktock.md"
+    },
+    {
+      "id": "09a50e8817919b7b5359a9ce041aa336868028c0548b7cea357e730e6165846c",
+      "type": "static-import",
+      "from": "file:tools/commands/handlers/shutdown.cjs",
+      "to": "file:tools/commands/lib/command-registry.cjs",
+      "target": "tools/commands/lib/command-registry.cjs",
+      "required": true,
+      "specifier": "../lib/command-registry.cjs"
     },
     {
       "id": "09dede0778becb0e0ce744e5e8fd3124394ce1e74f78bbe2e7b6e5c758450be9",
@@ -28922,6 +29610,15 @@
       "specifier": "../../schemas/recursive-actor-work-order.schema.json"
     },
     {
+      "id": "0c3603e1625680803af953b92a792ab461ac8cc0924340e86e47f064d76c3b72",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/train-tick.js",
+      "to": "file:tools/ant-hive-world/dream/dream-lane.js",
+      "target": "tools/ant-hive-world/dream/dream-lane.js",
+      "required": true,
+      "specifier": "./dream/dream-lane.js"
+    },
+    {
       "id": "0c3702f777a3373b3b27826af4dd2f77e9e1103f22f8271fd5aa7ca027cf3e50",
       "type": "command-alias-authority",
       "from": "command-definition:open-contract",
@@ -29215,6 +29912,15 @@
       "specifier": "./audit.cjs"
     },
     {
+      "id": "0f2bed0d5a63008e5411bf24da3bc7c6659aef18597cb44b1b84e964eaba8880",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/train-tick-triad-wiring.test.cjs",
+      "to": "file:tools/ant-hive-world/generate-blank-hive-seed.js",
+      "target": "tools/ant-hive-world/generate-blank-hive-seed.js",
+      "required": true,
+      "specifier": "../generate-blank-hive-seed.js"
+    },
+    {
       "id": "0f507813c73afc540be888c4835dd23588ca647f5a1fff256c230df5a358bc24",
       "type": "static-import",
       "from": "file:tools/verify/verify-report-claims.cjs",
@@ -29470,6 +30176,15 @@
       "declared_target": ".claude/agents/reusable-template-extractor.md"
     },
     {
+      "id": "122a88de5f0978764266c43a8797f600c211369bef04e20e9d08299baca93c23",
+      "type": "static-import",
+      "from": "file:tools/commands/handlers/__tests__/new-session.test.cjs",
+      "to": "file:tools/commands/handlers/new-session.cjs",
+      "target": "tools/commands/handlers/new-session.cjs",
+      "required": true,
+      "specifier": "../new-session.cjs"
+    },
+    {
       "id": "124635cc32088bf146539caac3b756ba4b959a10038da1ac81247c4c103d283c",
       "type": "skill-definition-file",
       "from": "skill-definition:owl",
@@ -29579,6 +30294,15 @@
       "specifier": "./signal-lifecycle"
     },
     {
+      "id": "1337a1ff15e3b51cae42edffbdc5e321518329a2e32c50653ae7d1b46e9fb77e",
+      "type": "static-import",
+      "from": "file:tools/commands/handlers/new-session.cjs",
+      "to": "file:tools/sessions/lib/resolve-session-id.cjs",
+      "target": "tools/sessions/lib/resolve-session-id.cjs",
+      "required": true,
+      "specifier": "../../sessions/lib/resolve-session-id.cjs"
+    },
+    {
       "id": "13455559636ce5926e263fd19a185743ca1ec8e0ce9b15c6d2ea0021a582548d",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/rank-up.md",
@@ -29622,6 +30346,15 @@
       "target": ".claude/commands/council-of-owls.md",
       "required": true,
       "declared_target": ".claude/commands/council-of-owls.md"
+    },
+    {
+      "id": "1377cd3e409b3c02d03d3e2b56c065477fc20f82b63527f9bc9b0778ac0dc82f",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/verifier-breadth-check.cjs",
+      "to": "file:tools/ant-hive-world/harness.js",
+      "target": "tools/ant-hive-world/harness.js",
+      "required": true,
+      "specifier": "./harness.js"
     },
     {
       "id": "139d29197b962495ab57afe1cf81aede13ddeafae00a380242abab818b15c260",
@@ -29878,6 +30611,15 @@
       "target": "tools/sessions/boot-dead-session-reaper.cjs",
       "required": true,
       "specifier": "../boot-dead-session-reaper.cjs"
+    },
+    {
+      "id": "1680c6a82045c24af015ac3894c0296fc780a8890916fb475474ac12744d38d9",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/embodiment-bridge/verify-s1-roundtrip.js",
+      "to": "file:tools/ant-hive-world/embodiment-bridge/bridge-client.js",
+      "target": "tools/ant-hive-world/embodiment-bridge/bridge-client.js",
+      "required": true,
+      "specifier": "./bridge-client"
     },
     {
       "id": "16aed9d470bfbd97b6a7a5e73554be31628a9490ad90fb161824b1f5ccd8829f",
@@ -30225,6 +30967,15 @@
       "specifier": "./journal.cjs"
     },
     {
+      "id": "194dd400e9eaebf1d62d875db685dcfd4f806d1e2cb817b4270d7a4fcad95ee4",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/embodiment-bridge/bridge-network.js",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "../untrained-network.js"
+    },
+    {
       "id": "1955c2f476bb810a1c252a909c31982741ac02389d65b66f7dd2f41645586a09",
       "type": "static-import",
       "from": "file:tools/signals/lib/__tests__/signal-emission-evidence.test.js",
@@ -30250,16 +31001,6 @@
       "target": "tools/ai-bridge/lib/response-parser.js",
       "required": true,
       "specifier": "./lib/response-parser"
-    },
-    {
-      "id": "198579fbc45b9ac0a4061dbbb99283f0ac4bc6b9822441853b6b52f75145b80e",
-      "type": "hook-target",
-      "from": "hook:UserPromptSubmit:659",
-      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
-      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-userprompt.cjs",
-      "event": "UserPromptSubmit"
     },
     {
       "id": "1987fdcc00d1f2e02030e3257d689083f99bc5b1e333f12ff7ebe98755661f35",
@@ -31500,6 +32241,15 @@
       "specifier": "./posttool-arc-transition.cjs"
     },
     {
+      "id": "24a5f1de1876251ce314ff11ed26e2a46e169298d4f041bb8386ed535166bd95",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/territory-verifier-blind-spot.test.cjs",
+      "to": "file:tools/ant-hive-world/train-tick.js",
+      "target": "tools/ant-hive-world/train-tick.js",
+      "required": true,
+      "specifier": "../train-tick.js"
+    },
+    {
       "id": "24b59326f21825065f5dceab0ae14233cf81cfd4730c3b563311f52550fbc388",
       "type": "schema-consumer",
       "from": "file:frameworks/paid-media/meta-creative-iteration/manifest.json",
@@ -32017,6 +32767,15 @@
       "declared_target": "tools/maintenance/lib/maintenance-disposition.schema.json"
     },
     {
+      "id": "2b4066787dc3ac461899109f4c16bc9df258c257afdf52eeab5a729e1a6414ab",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/verifier-lane.js",
+      "to": "file:tools/ant-hive-world/harness.js",
+      "target": "tools/ant-hive-world/harness.js",
+      "required": true,
+      "specifier": "./harness.js"
+    },
+    {
       "id": "2b7e7555c58fdd1a0675dbb6e3e436cf467921ffb034646fed3bddc2813b740c",
       "type": "static-import",
       "from": "file:tools/notify/twilio-call.js",
@@ -32289,6 +33048,15 @@
       "resolution": "tracked"
     },
     {
+      "id": "2df964b1aa6fb44225036626c5b8798adf270c400181ce4e1f025bce5c0ad733",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/checkpoint.js",
+      "to": "file:tools/ant-hive-world/sweeper-lane.js",
+      "target": "tools/ant-hive-world/sweeper-lane.js",
+      "required": true,
+      "specifier": "./sweeper-lane.js"
+    },
+    {
       "id": "2e182ad4b07676716133bc4263a9a859163e8f64a1afe02342008b2c8e0616d2",
       "type": "static-import",
       "from": "file:tools/hygiene/auto-commit-governance-gate.verify.js",
@@ -32415,6 +33183,15 @@
       "target": "tools/kernel/lib/rest-trigger-evaluators.cjs",
       "required": true,
       "specifier": "../lib/rest-trigger-evaluators.cjs"
+    },
+    {
+      "id": "2f590d95422f391bb755b87efe27cc2bd9f6704ac2ea6dba9bebb2320fffed47",
+      "type": "static-import",
+      "from": "file:tools/commands/handlers/shutdown.cjs",
+      "to": "file:tools/verify/lib/signal.cjs",
+      "target": "tools/verify/lib/signal.cjs",
+      "required": true,
+      "specifier": "../../verify/lib/signal.cjs"
     },
     {
       "id": "2fa63d3984eabbb52bb7ae9d8dce4f35374db2cd9f0d0f1a6bf7d7fb04c9e3ec",
@@ -32762,6 +33539,15 @@
       "specifier": "./ceilings.cjs"
     },
     {
+      "id": "32b69143db771026f469fe5e92cf3cf1dd3083b41c909d0b239bee7942c5e784",
+      "type": "static-import",
+      "from": "file:tools/sessions/lib/resolve-session-id.cjs",
+      "to": "file:tools/sessions/lib/active-session-registry.js",
+      "target": "tools/sessions/lib/active-session-registry.js",
+      "required": true,
+      "specifier": "./active-session-registry.js"
+    },
+    {
       "id": "32d86cf9b073d71cd0141188278940232418e27192c38f6f9950b6fe86360467",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/fw-wordpress-seo-validation.md",
@@ -32924,6 +33710,15 @@
       "target": "tools/workspace/schemas/loop-grade-record.schema.json",
       "required": true,
       "declared_target": "tools/workspace/schemas/loop-grade-record.schema.json"
+    },
+    {
+      "id": "3433e5710365a6ddc28ab2c5a25fb1140ee1b3efdc39554d74c3f7484e5a2b75",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/territory-verifier-blind-spot.test.cjs",
+      "to": "file:tools/ant-hive-world/world-state.js",
+      "target": "tools/ant-hive-world/world-state.js",
+      "required": true,
+      "specifier": "../world-state.js"
     },
     {
       "id": "3461110f4a02da69bed0ad7fb0c60cda29f747410b6b8889799ca271586c8a90",
@@ -33307,6 +34102,15 @@
       "target": "tools/ticktock/run-benchmark.js",
       "required": true,
       "specifier": "./run-benchmark.js"
+    },
+    {
+      "id": "373fa69d61a3661f7ca9a28474571c9a27c97a2f58949ac18d318428ccdd6c7d",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/train-tick.js",
+      "to": "file:tools/ant-hive-world/planner-lane.js",
+      "target": "tools/ant-hive-world/planner-lane.js",
+      "required": true,
+      "specifier": "./planner-lane.js"
     },
     {
       "id": "37640e915f03733a799d6be8db7cdfc2a55fc2a12125f89ff226ae1f571ab5f7",
@@ -34039,6 +34843,16 @@
       "specifier": "../active-session-registry"
     },
     {
+      "id": "3df23b9ae2319af6cf942c202ddca18536f383932aa8e611b8e72743207839e2",
+      "type": "hook-target",
+      "from": "hook:Stop:657",
+      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
+      "target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "event": "Stop"
+    },
+    {
       "id": "3e090a59554a39f83a83d93a9369783c5d1a2fa5a7e7687868abbd38869fb65e",
       "type": "static-import",
       "from": "file:tools/client-storage/lib.js",
@@ -34218,6 +35032,16 @@
       "target": "tools/verify/lib/signal.cjs",
       "required": true,
       "specifier": "../../verify/lib/signal.cjs"
+    },
+    {
+      "id": "3f8d1462ff5b47879efe505c7d726fcef942c872b6d3e7dc9d7f0a5adf42fea4",
+      "type": "hook-target",
+      "from": "hook:PostToolUse:659",
+      "to": "file:tools/kernel/hooks/dispatch-posttool.cjs",
+      "target": "tools/kernel/hooks/dispatch-posttool.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-posttool.cjs",
+      "event": "PostToolUse"
     },
     {
       "id": "3f973fcafc0810792a7d03115adb12a6885510ec98e835b5893d54338766e6c1",
@@ -34623,6 +35447,16 @@
       "specifier": "../../body/private-surface-prebash.cjs"
     },
     {
+      "id": "4332d8567855916b7fef704cd726c8304ec2aa7434d43ffb179b9c6a6a8a9fd0",
+      "type": "hook-target",
+      "from": "hook:SessionStart:662",
+      "to": "file:tools/user/inject-mirror.cjs",
+      "target": "tools/user/inject-mirror.cjs",
+      "required": true,
+      "declared_target": "tools/user/inject-mirror.cjs",
+      "event": "SessionStart"
+    },
+    {
       "id": "433423affe5a80b45e3c01be5098fb9cd1852a521d3150411a958c3798a30e19",
       "type": "static-import",
       "from": "file:tools/commands/handlers/review-progress-adapters.cjs",
@@ -34851,6 +35685,15 @@
       "target": "tools/verify/lib/signal.cjs",
       "required": true,
       "specifier": "../../verify/lib/signal.cjs"
+    },
+    {
+      "id": "453a453d483a4366bbb69bcfb237e67a25677dc2e85631a367fb5568d41d6fbc",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/embodiment-bridge/verify-s2-perception.js",
+      "to": "file:tools/ant-hive-world/embodiment-bridge/bridge-network.js",
+      "target": "tools/ant-hive-world/embodiment-bridge/bridge-network.js",
+      "required": true,
+      "specifier": "./bridge-network"
     },
     {
       "id": "45424a906310fe7f27a8ed7cc0b8c5eb4af9fe480e48ead79bed67a152afaf41",
@@ -35122,6 +35965,15 @@
       "authority": "system-status"
     },
     {
+      "id": "4750bbcfb1a198d6a3325532f3ac852c8cd0387da60d603a2a4c50285dc0606a",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/unreal-export/import-turn.js",
+      "to": "file:tools/ant-hive-world/unreal-export/schema.json",
+      "target": "tools/ant-hive-world/unreal-export/schema.json",
+      "required": true,
+      "specifier": "./schema.json"
+    },
+    {
       "id": "4775f6fc8320bc2406b91bf631c2b50fa3102361e146281d31affd914deb6f41",
       "type": "package-script-target",
       "from": "package-script:verify:guardrails",
@@ -35250,6 +36102,16 @@
       "declared_target": "frameworks/wordpress/livecanvas-onepager-build/.claude/commands/livecanvas-onepager-build"
     },
     {
+      "id": "49057927ab0ed34b1f65a1ef1ce94208685267cf34a4beecdb40505225050135",
+      "type": "hook-target",
+      "from": "hook:SessionStart:661",
+      "to": "file:tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "required": true,
+      "declared_target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "event": "SessionStart"
+    },
+    {
       "id": "4917dcff0a5161b9c134c646bb5168ff005eb56bd3a27dbe36a3d300fe48224e",
       "type": "static-import",
       "from": "file:tools/signals/lib/follow-signal.js",
@@ -35275,6 +36137,15 @@
       "target": "tools/signals/schemas/actor-work-order.schema.json",
       "required": true,
       "specifier": "schemas/actor-work-order.schema.json"
+    },
+    {
+      "id": "4936960cdfffaa27dd5abe7b7523601482de8367eb2de84d8dccad34404a4c42",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/planner-divergence-check.test.cjs",
+      "to": "file:tools/ant-hive-world/planner-divergence-check.cjs",
+      "target": "tools/ant-hive-world/planner-divergence-check.cjs",
+      "required": true,
+      "specifier": "../planner-divergence-check.cjs"
     },
     {
       "id": "493d413e8424de4a8cb167dd7bc4af8637165f330054a52b3dce7d5f2c34aa7d",
@@ -35548,6 +36419,15 @@
       "specifier": "./lib/model-runtime"
     },
     {
+      "id": "4c557cbe862aa6bdff4d201968dc52fc70c3ff0840b92401ca0071f5b53608de",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/world-mind.js",
+      "to": "file:tools/ant-hive-world/world-train.js",
+      "target": "tools/ant-hive-world/world-train.js",
+      "required": true,
+      "specifier": "./world-train.js"
+    },
+    {
       "id": "4c69697fd438ffb7592abd67eaaaf4710d0c62231a77426c7661c93cb180294e",
       "type": "static-import",
       "from": "file:tools/google-ads/pmax-url-exclusions.js",
@@ -35574,6 +36454,15 @@
       "target": "tools/autonomy/schemas/run-log-entry.schema.json",
       "required": true,
       "declared_target": "tools/autonomy/schemas/run-log-entry.schema.json"
+    },
+    {
+      "id": "4c96510082daf8dc6c280e7a6f1094b21b945eeb7573662fa1bb137b1516bc0f",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/unreal-export/import-turn.js",
+      "to": "file:tools/ant-hive-world/mirror-detector.js",
+      "target": "tools/ant-hive-world/mirror-detector.js",
+      "required": true,
+      "specifier": "../mirror-detector.js"
     },
     {
       "id": "4c9f2655bcedcc8633f2d30deffbd883956c91d6a32bd65aa2a19f5fa4c145e6",
@@ -35731,6 +36620,15 @@
       "specifier": "./auditor"
     },
     {
+      "id": "4d7b1a08bca16ead68443059532b00e468fe1f426747117c6d5d19b9ec435038",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/world-state-replenishment.test.cjs",
+      "to": "file:tools/ant-hive-world/world-state.js",
+      "target": "tools/ant-hive-world/world-state.js",
+      "required": true,
+      "specifier": "../world-state.js"
+    },
+    {
       "id": "4d7b5ef8b265b936d73ed8fa63fcbc9cefd329e66f77e7d38d3575ca417dc835",
       "type": "static-import",
       "from": "file:tools/signals/lib/dispatch-bridge.js",
@@ -35796,6 +36694,24 @@
       "resolution": "tracked"
     },
     {
+      "id": "4e126200eaad632d6ab34f610064a26ae207a65e7d6485b2f3a583e19f330bfd",
+      "type": "static-import",
+      "from": "file:tools/sessions/__tests__/shutdown-boundary.test.cjs",
+      "to": "file:tools/sessions/lib/active-session-registry.js",
+      "target": "tools/sessions/lib/active-session-registry.js",
+      "required": true,
+      "specifier": "../lib/active-session-registry.js"
+    },
+    {
+      "id": "4e34955bc999836748408a56eb52e55cb5c47e91a589c47bdc926e48f5be489f",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/checkpoint.js",
+      "to": "file:tools/ant-hive-world/world-mind.js",
+      "target": "tools/ant-hive-world/world-mind.js",
+      "required": true,
+      "specifier": "./world-mind.js"
+    },
+    {
       "id": "4e609ba29d08bca203c7e6bde053ec4f0aa9d7f959dd0a882f0203146dabb375",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/fw-wordpress-design-mockup-validation.md",
@@ -35857,6 +36773,15 @@
       "target": "tools/seo-validation/lib/report.js",
       "required": true,
       "specifier": "./lib/report"
+    },
+    {
+      "id": "4fb9088cc6f618107ba9750f8a8a1684e22d2731f5e61216a877e4cb33e1f973",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/dream-lane.test.cjs",
+      "to": "file:tools/ant-hive-world/dream/dream-composer.js",
+      "target": "tools/ant-hive-world/dream/dream-composer.js",
+      "required": true,
+      "specifier": "../dream/dream-composer.js"
     },
     {
       "id": "4fc62f979a8949a651b24c42cf32d8e2dbe8a7e748fee323f0838d3dd919b54b",
@@ -35940,6 +36865,24 @@
       "declared_target": ".claude/commands/cast.md"
     },
     {
+      "id": "50b77d52a9db9b2b7d6c980f0e126f2f516697b028803ad20f600685a0ad2e20",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/dream-lane.test.cjs",
+      "to": "file:tools/ant-hive-world/dream/calibration.js",
+      "target": "tools/ant-hive-world/dream/calibration.js",
+      "required": true,
+      "specifier": "../dream/calibration.js"
+    },
+    {
+      "id": "50bc1e91b7e213b10e89939fd5148f9f236df2430e4eac0f5c080ebb1b9e23d6",
+      "type": "static-import",
+      "from": "file:tools/commands/handlers/__tests__/new-session.test.cjs",
+      "to": "file:tools/sessions/lib/active-session-registry.js",
+      "target": "tools/sessions/lib/active-session-registry.js",
+      "required": true,
+      "specifier": "../../../sessions/lib/active-session-registry"
+    },
+    {
       "id": "50c0517bd057631c7bc3efd1af8ac0c4c5060f63820d2230a7f421a387789b4c",
       "type": "schema-definition-file",
       "from": "schema-definition:tools/workspace/schemas/signal-entry.schema.json",
@@ -35966,6 +36909,15 @@
       "required": true,
       "declared_target": "tools/maintenance/status.js",
       "resolution": "tracked"
+    },
+    {
+      "id": "50d8f01c38559ca4126a14d03271c249c40cd6018643b5668935936cfcd73b9a",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/checkpoint-lane-state.test.cjs",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "../untrained-network.js"
     },
     {
       "id": "50dee5da475d8bdc5882b40ecb62549193ea801c0aee212d7bce3d712bdd2873",
@@ -36029,6 +36981,15 @@
       "target": "tools/codex/commands/telemetry-status.js",
       "required": true,
       "specifier": "../codex/commands/telemetry-status"
+    },
+    {
+      "id": "516510d3cf4efec791cb64be274ef2a9db2e5d6d06b29e894cb3c9c30d6bd0c6",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/verifier-lane.js",
+      "to": "file:tools/ant-hive-world/world-state.js",
+      "target": "tools/ant-hive-world/world-state.js",
+      "required": true,
+      "specifier": "./world-state.js"
     },
     {
       "id": "5176a33590ca6694d5c7f7bc86a1885ee1e45d9ade33a40418eb490b12449f5d",
@@ -36347,6 +37308,16 @@
       "declared_target": "frameworks/meta/execution-normalization/manifest.json"
     },
     {
+      "id": "5521bfc2f71fc9e4013c382eabe7fa447d6770ae694a131d815964b4e7e08298",
+      "type": "hook-target",
+      "from": "hook:SubagentStop:666",
+      "to": "file:.claude/hooks/subagent-telemetry-writer.cjs",
+      "target": ".claude/hooks/subagent-telemetry-writer.cjs",
+      "required": true,
+      "declared_target": ".claude/hooks/subagent-telemetry-writer.cjs",
+      "event": "SubagentStop"
+    },
+    {
       "id": "552401d55ea21dddc6dd21ce1c1389d880ad98b584549a2bd77b8d5742abe1f9",
       "type": "static-import",
       "from": "file:tools/signals/lib/actor-auto.js",
@@ -36399,6 +37370,15 @@
       "target": "frameworks/paid-media/campaign-management/.claude/agents/campaign-management",
       "required": true,
       "declared_target": "frameworks/paid-media/campaign-management/.claude/agents/campaign-management"
+    },
+    {
+      "id": "558b1bc0620cdc2a9b97a6c7610d2ee44388c6ac7b0f00097698c8c62029986a",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/dream-composer.test.cjs",
+      "to": "file:tools/ant-hive-world/dream/consequence-ledger.js",
+      "target": "tools/ant-hive-world/dream/consequence-ledger.js",
+      "required": true,
+      "specifier": "../dream/consequence-ledger.js"
     },
     {
       "id": "558cfd7bdf4a389afe3780184ac3eb2091ae3b3ad28abf48739c341f60967660",
@@ -36783,6 +37763,15 @@
       "specifier": "./adapters"
     },
     {
+      "id": "58a3db4d26f0fdb8aa30071f09873d1221c43eb9dce097f944f8ee4795184dc9",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/train-tick-triad-wiring.test.cjs",
+      "to": "file:tools/ant-hive-world/sweeper-lane.js",
+      "target": "tools/ant-hive-world/sweeper-lane.js",
+      "required": true,
+      "specifier": "../sweeper-lane.js"
+    },
+    {
       "id": "58b41c576b6b85e9b750816c44afecf61d29e6a543530757f084efc3ad64e41c",
       "type": "operation-command",
       "from": "operation:fw-wordpress-qa",
@@ -36799,6 +37788,15 @@
       "target": "tools/signals/lib/codex-bridge-hygiene.js",
       "required": true,
       "specifier": "./codex-bridge-hygiene"
+    },
+    {
+      "id": "58c4709d33835718e5210893f09ea089a83ebddb77721ed4b91b15ed887f81a0",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/planner-lane.test.cjs",
+      "to": "file:tools/ant-hive-world/planner-lane.js",
+      "target": "tools/ant-hive-world/planner-lane.js",
+      "required": true,
+      "specifier": "../planner-lane.js"
     },
     {
       "id": "58d25416b12cf01d6afb4e12e155d2d7d8bb08dab28e3ed2b3099cb71e642987",
@@ -36844,6 +37842,15 @@
       "target": "tools/bundle/lib/bundle-paths.js",
       "required": true,
       "specifier": "./bundle-paths.js"
+    },
+    {
+      "id": "59509e6299fe3f1fd9f57517064118b13bf15ae94243b67e9ac856f15eafbf48",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/verifier-breadth.test.cjs",
+      "to": "file:tools/ant-hive-world/verifier-lane.js",
+      "target": "tools/ant-hive-world/verifier-lane.js",
+      "required": true,
+      "specifier": "../verifier-lane.js"
     },
     {
       "id": "5955e89aa2643a79d877277801d14d9d1a9bea22b831bac11e6db8779a18eda5",
@@ -36998,6 +38005,16 @@
       "target": "frameworks/research/osint-discovery/guardrails.md",
       "required": true,
       "declared_target": "frameworks/research/osint-discovery/guardrails.md"
+    },
+    {
+      "id": "5abb5cfa11226e54b76f21ebb6a8358cfc97692fbdb0d9148de5f759424d60cd",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:663",
+      "to": "file:tools/hooks/session-lifecycle/session-end-close.cjs",
+      "target": "tools/hooks/session-lifecycle/session-end-close.cjs",
+      "required": true,
+      "declared_target": "tools/hooks/session-lifecycle/session-end-close.cjs",
+      "event": "SessionEnd"
     },
     {
       "id": "5abc3dd04c58b365219ac35d98dd44de86e2f2499f4c0f1e17a8a821ac982238",
@@ -37419,6 +38436,15 @@
       "declared_target": ".claude/skills/prompt-refinement/SKILL.md"
     },
     {
+      "id": "5ed8fa4fb589e53f4dd237e7d826e690fbfa484f522f4d62ff56985471c8295c",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/territory-reassertion.test.cjs",
+      "to": "file:tools/ant-hive-world/harness.js",
+      "target": "tools/ant-hive-world/harness.js",
+      "required": true,
+      "specifier": "../harness.js"
+    },
+    {
       "id": "5eed464946b40a2f3bc5301c4a864560ccc3f303c6ae7adc963d48cfddb37277",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/plans.md",
@@ -37599,6 +38625,15 @@
       "target": "tools/instructions/lib/schema/canonical-system.schema.json",
       "required": true,
       "declared_target": "tools/instructions/lib/schema/canonical-system.schema.json"
+    },
+    {
+      "id": "6023c70a2bd084baf85839cd053d98e5f0d9b93c576d1dc73d342f8a42aa5670",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/embodiment-bridge/verify-s2-perception.js",
+      "to": "file:tools/ant-hive-world/embodiment-bridge/bridge-client.js",
+      "target": "tools/ant-hive-world/embodiment-bridge/bridge-client.js",
+      "required": true,
+      "specifier": "./bridge-client"
     },
     {
       "id": "602bfc2e10f274073faa511fb3214219ad87eca8182c2987abfc5dafb355700d",
@@ -37799,6 +38834,15 @@
       "specifier": "../../planning/lib/loop-grade-record.js"
     },
     {
+      "id": "621c246eca4caae58c87e0905c449af2c3ebc3046083d06dec8996b3697829b9",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/gather-yield.test.cjs",
+      "to": "file:tools/ant-hive-world/live-config.js",
+      "target": "tools/ant-hive-world/live-config.js",
+      "required": true,
+      "specifier": "../live-config.js"
+    },
+    {
       "id": "6255b6675de52f5b509a824ecc3f176f423f63ab6ac8dd5e1c259a7b8ab041f6",
       "type": "schema-definition-file",
       "from": "schema-definition:tools/autonomy/schemas/task-profile.schema.json",
@@ -37834,6 +38878,15 @@
       "target": "tools/mcp/google-ads/config.js",
       "required": true,
       "specifier": "./config"
+    },
+    {
+      "id": "6310bb3abd1f5e28ffe8bf17faaa7e31481efc2c84a8aae77b813c5415d443ce",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/dream-composer.test.cjs",
+      "to": "file:tools/ant-hive-world/dream/dream-composer.js",
+      "target": "tools/ant-hive-world/dream/dream-composer.js",
+      "required": true,
+      "specifier": "../dream/dream-composer.js"
     },
     {
       "id": "6313601e4273b4743fd5acc548c133a260e26094670b9ed5603c34f6f7de7968",
@@ -37954,6 +39007,15 @@
       "specifier": "./handlers/shutdown.cjs"
     },
     {
+      "id": "64246820fa7e62ded70bf0e2059ec5515763379751a83213bbebb20e4cdd1920",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/dream-lane.test.cjs",
+      "to": "file:tools/ant-hive-world/dream/dream-lane.js",
+      "target": "tools/ant-hive-world/dream/dream-lane.js",
+      "required": true,
+      "specifier": "../dream/dream-lane.js"
+    },
+    {
       "id": "64288d64d78210b176a2ee7f8d28843fcf6d861f96433c087fd1be2ca61ae3e4",
       "type": "schema-definition-file",
       "from": "schema-definition:tools/signals/schemas/signal-authority-decision.schema.json",
@@ -37999,6 +39061,15 @@
       "target": "tools/verify/schemas/review-packet.schema.json",
       "required": true,
       "declared_target": "tools/verify/schemas/review-packet.schema.json"
+    },
+    {
+      "id": "64d8887d508e0b22115c037ab07807541a977046d02101a29b6945f39d5991ec",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/dream-composer.test.cjs",
+      "to": "file:tools/ant-hive-world/dream/calibration.js",
+      "target": "tools/ant-hive-world/dream/calibration.js",
+      "required": true,
+      "specifier": "../dream/calibration.js"
     },
     {
       "id": "64fcd4ee17957c98fa5de34b4a601ee8cb096197aff585a9d2713eb77f0c2fb4",
@@ -38171,6 +39242,15 @@
       "target": "tools/signals/lib/codex-auto.js",
       "required": true,
       "specifier": "../signals/lib/codex-auto"
+    },
+    {
+      "id": "6667a150d2714c5069fe7c1d97de7a94638e3e7e4ff9b2a1f38afc1811880a22",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/unreal-export/__tests__/simulation-portability.test.cjs",
+      "to": "file:tools/ant-hive-world/unreal-export/import-turn.js",
+      "target": "tools/ant-hive-world/unreal-export/import-turn.js",
+      "required": true,
+      "specifier": "../import-turn.js"
     },
     {
       "id": "668930f218ca0bd873189e23d0326d8ac2cc8a2b1da3bb8722a8cd7eb5320269",
@@ -38426,16 +39506,6 @@
       "target": "frameworks/deliverables/presentation-review/.claude/skills/presentation-review",
       "required": true,
       "declared_target": "frameworks/deliverables/presentation-review/.claude/skills/presentation-review"
-    },
-    {
-      "id": "68cdf0ac78054a709692f040a4ba0203500bad7fb8f359c1db4ab3b55859d36d",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:664",
-      "to": "file:tools/hooks/session-lifecycle/session-end-close.cjs",
-      "target": "tools/hooks/session-lifecycle/session-end-close.cjs",
-      "required": true,
-      "declared_target": "tools/hooks/session-lifecycle/session-end-close.cjs",
-      "event": "SessionEnd"
     },
     {
       "id": "68d003a421df21d45d95f696f3c1a3986413d62d665fd7d7e5ad1c34e874a75d",
@@ -39249,6 +40319,15 @@
       "specifier": "./lib/codex-auto"
     },
     {
+      "id": "6fee099cfeb325c8c2da0cef129ba20216bb75160c221ab1c4b67b48221e25cd",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/train-tick.js",
+      "to": "file:tools/ant-hive-world/sweeper-lane.js",
+      "target": "tools/ant-hive-world/sweeper-lane.js",
+      "required": true,
+      "specifier": "./sweeper-lane.js"
+    },
+    {
       "id": "6ffd6e38560f5c1ab786c9994b54f524a9d9c36309043277cdfa88154889d554",
       "type": "static-import",
       "from": "file:tools/memory/dependency-edge/write-edges.js",
@@ -39529,6 +40608,15 @@
       "declared_target": ".claude/commands/invoke.md"
     },
     {
+      "id": "71ba1b18c6006ce8acec58f3a0fa291d392737703ed1264406607e9993f1f4ad",
+      "type": "static-import",
+      "from": "file:tools/commands/handlers/shutdown.cjs",
+      "to": "file:tools/commands/lib/command-aliases.cjs",
+      "target": "tools/commands/lib/command-aliases.cjs",
+      "required": true,
+      "specifier": "../lib/command-aliases.cjs"
+    },
+    {
       "id": "71badc5e23c85ec46a228534fd4ed43101c0651b71f4ea459ed8a76fc23fe951",
       "type": "static-import",
       "from": "file:tools/ant-hive-world/__tests__/dashboard.test.cjs",
@@ -39739,6 +40827,15 @@
       "declared_target": ".claude/skills/clean-house/SKILL.md"
     },
     {
+      "id": "744df473fdbda529b18676b5e96d926b2d95f7028a33094d6eb2a4a7ab73021a",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/dream/dream-composer.js",
+      "to": "file:tools/ant-hive-world/dream/calibration.js",
+      "target": "tools/ant-hive-world/dream/calibration.js",
+      "required": true,
+      "specifier": "./calibration.js"
+    },
+    {
       "id": "7452d3493907942983c615de66b701d81b355fad609489becd405e1975588441",
       "type": "static-import",
       "from": "file:tools/signals/watch-client-board-loop.js",
@@ -39921,6 +41018,15 @@
       "declared_target": ".claude/skills/lint-attributions/SKILL.md"
     },
     {
+      "id": "75c703554e500871ebeecd9be8dce5538affc589f978e3de2819c66f777e5d3e",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/train-tick-triad-wiring.test.cjs",
+      "to": "file:tools/ant-hive-world/train-tick.js",
+      "target": "tools/ant-hive-world/train-tick.js",
+      "required": true,
+      "specifier": "../train-tick.js"
+    },
+    {
       "id": "75d8cc0a99ca11f7e041d0865be033769025dd04896e5d0a55bf708801f2054b",
       "type": "static-import",
       "from": "file:tools/signals/lib/__tests__/bridge-prompt-review-only.test.js",
@@ -39937,6 +41043,15 @@
       "target": ".claude/commands/fw-wordpress-seo-audit.md",
       "required": true,
       "declared_target": ".claude/commands/fw-wordpress-seo-audit.md"
+    },
+    {
+      "id": "763c80c10d6da8e814ee7ae788f343b207c8e0aedec15a4a6a9a50056179e472",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/planner-lane.test.cjs",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "../untrained-network.js"
     },
     {
       "id": "765bc9afedf17c48fb9cea94a275a0786edd790663d0435cf5f6da80b7cddd15",
@@ -40493,6 +41608,15 @@
       "specifier": "./lib/concept-frontmatter.cjs"
     },
     {
+      "id": "7c51a7efcb3887ee270965ebdcbc6b8c5a2b71b964889efec543bb2ad25bd203",
+      "type": "static-import",
+      "from": "file:tools/signals/__tests__/watch-actor-bridge-managed-startup.test.cjs",
+      "to": "file:tools/signals/watch-actor-bridge.js",
+      "target": "tools/signals/watch-actor-bridge.js",
+      "required": true,
+      "specifier": "../watch-actor-bridge.js"
+    },
+    {
       "id": "7c56593f052fb6ddb1bc7c7cc6c9d80bb89f3dc22ddd4bd178272801057da8df",
       "type": "static-import",
       "from": "file:tools/commands/smos-command-runner.cjs",
@@ -40528,6 +41652,24 @@
       "target": "tools/planning/lib/resolve-task-plan.js",
       "required": true,
       "specifier": "../../planning/lib/resolve-task-plan"
+    },
+    {
+      "id": "7ca53cb6f12c21b8412a3ff46177f9cf38537cdcbc35661eb861bf5e5505d342",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/world-train.js",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "./untrained-network.js"
+    },
+    {
+      "id": "7cc4d845e4e7ce186f3fdd13b4765081bf4dd54d8f9e5c8099adbc7ce0ab691c",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/dream/dream-lane.js",
+      "to": "file:tools/ant-hive-world/dream/calibration.js",
+      "target": "tools/ant-hive-world/dream/calibration.js",
+      "required": true,
+      "specifier": "./calibration.js"
     },
     {
       "id": "7cd4ece04ecf82d5a993d0ca05ecffc7c3797b974da1ef8f70703a0d122e3bf9",
@@ -40702,6 +41844,15 @@
       "specifier": "./lib/resolve-task-plan"
     },
     {
+      "id": "7eb8e20e983f46de3681a6614eff3842d7e58bf1dbb6cf7e12a437bdc41afe9b",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/dispatch-stop-failopen.test.cjs",
+      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
+      "target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "required": true,
+      "specifier": "../dispatch-stop.cjs"
+    },
+    {
       "id": "7ed237610dcfd6210477e0bdc832d2b9efe08208e4c6a93f8a553401544f3811",
       "type": "static-import",
       "from": "file:tools/kernel/loop-protocol/phase-question-loop.js",
@@ -40727,6 +41878,15 @@
       "target": "tools/mcp/google-ads/client.js",
       "required": true,
       "specifier": "./client"
+    },
+    {
+      "id": "7efd9e7c98022d1d84e424aa9e62a3b7fc6a6e7da862d501e70475786a046e7a",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/checkpoint-lane-state.test.cjs",
+      "to": "file:tools/ant-hive-world/checkpoint.js",
+      "target": "tools/ant-hive-world/checkpoint.js",
+      "required": true,
+      "specifier": "../checkpoint.js"
     },
     {
       "id": "7f3c331bcc2d52d91a30736c739ee7b133799d65e1f42dd3c83d865077f0c9ae",
@@ -41147,6 +42307,15 @@
       "target": ".claude/commands/el.md",
       "required": true,
       "declared_target": ".claude/commands/el.md"
+    },
+    {
+      "id": "82768f36fae9af63c4899fdbeb94be939586d280ea3f32ecedebf194c36489c8",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/gather-yield.test.cjs",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "../untrained-network.js"
     },
     {
       "id": "82ac19224af317f5a381065e3aaff0df1f2196f17ec6d5905de35dbcb8e4a7cb",
@@ -41670,6 +42839,15 @@
       "specifier": "../../planning/lib/resolve-task-plan"
     },
     {
+      "id": "87599993d795ceac6b2f7ae69b144a2f8858e85cfeeef76282df40f36aeb66a5",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/reward-contract-v3.test.cjs",
+      "to": "file:tools/ant-hive-world/train-tick.js",
+      "target": "tools/ant-hive-world/train-tick.js",
+      "required": true,
+      "specifier": "../train-tick.js"
+    },
+    {
       "id": "876034eaaee57eb2430cf79bd850e10eaa2d1489ee9a8de34095c2ea3d7c55ad",
       "type": "static-import",
       "from": "file:tools/kernel/hooks/__tests__/validate-stamp-scope.test.cjs",
@@ -41723,6 +42901,15 @@
       "target": "tools/workspace/schemas/output-contract-v2.schema.json",
       "required": true,
       "declared_target": "tools/workspace/schemas/output-contract-v2.schema.json"
+    },
+    {
+      "id": "88246011841ae1cbf0b52d10d0d7fefc0e4798562e776176ca8d88f241ec7ab9",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/dream-lane.test.cjs",
+      "to": "file:tools/ant-hive-world/dream/dream-memory.js",
+      "target": "tools/ant-hive-world/dream/dream-memory.js",
+      "required": true,
+      "specifier": "../dream/dream-memory.js"
     },
     {
       "id": "88642c2c7c75ac6cd1a1c4a3af00c3d6bcf4a053e3d9b3a51a5b5005b6e9ed9d",
@@ -41817,6 +43004,24 @@
       "specifier": "./lib/bridge-event"
     },
     {
+      "id": "8941ef4bfb2ac8dec04863ef51607b1dbf85e9e9b2cead55d89bc3c725633980",
+      "type": "static-import",
+      "from": "file:tools/signals/watch-pipeline-loop.js",
+      "to": "file:tools/signals/lib/watcher-ready.cjs",
+      "target": "tools/signals/lib/watcher-ready.cjs",
+      "required": true,
+      "specifier": "./lib/watcher-ready.cjs"
+    },
+    {
+      "id": "8943c12ee8d65fe24d5f2f344b495c59d5b4073586bbad2ebef8310b8942cd3c",
+      "type": "static-import",
+      "from": "file:tools/signals/watch-actor-bridge.js",
+      "to": "file:tools/signals/lib/watcher-ready.cjs",
+      "target": "tools/signals/lib/watcher-ready.cjs",
+      "required": true,
+      "specifier": "./lib/watcher-ready.cjs"
+    },
+    {
       "id": "8988302944345f43ce9910219200b1fd9d74881c1ea73c626f6ad44065155e40",
       "type": "static-import",
       "from": "file:tools/mcp/meta-ads/pause-ads-by-issue.js",
@@ -41853,16 +43058,6 @@
       "specifier": "../../../kernel/hooks/userprompt-plan-review-gate.cjs"
     },
     {
-      "id": "89d4b4b5ea406b44cf209d464252163cea4c58d0440c8d818d4c56df3e4d0a33",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:665",
-      "to": "file:tools/context/repo-awareness-closeout.cjs",
-      "target": "tools/context/repo-awareness-closeout.cjs",
-      "required": true,
-      "declared_target": "tools/context/repo-awareness-closeout.cjs",
-      "event": "SessionEnd"
-    },
-    {
       "id": "89fcf4fdddadf8a80ae1b4735e61353e852483dceaacd0db02f2240118aaa292",
       "type": "manifest-target",
       "from": "manifest-path:frameworks/wordpress/livecanvas-onepager-build/.claude/agents/livecanvas-onepager-build",
@@ -41879,6 +43074,15 @@
       "target": "tools/signals/lib/signal-lifecycle.js",
       "required": true,
       "specifier": "../signal-lifecycle"
+    },
+    {
+      "id": "8a2cac8256a463314853316053a7fb26738701afe5465b6824c84c04ee04b33f",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/train-tick-triad-wiring.test.cjs",
+      "to": "file:tools/ant-hive-world/harness.js",
+      "target": "tools/ant-hive-world/harness.js",
+      "required": true,
+      "specifier": "../harness.js"
     },
     {
       "id": "8a3aeef43fd2f120c987e13805c68cf510166c38229e0e491233834eff1d6cde",
@@ -41971,6 +43175,15 @@
       "target": "frameworks/paid-media/google-ads-search-campaign-build/guardrails.md",
       "required": true,
       "declared_target": "frameworks/paid-media/google-ads-search-campaign-build/guardrails.md"
+    },
+    {
+      "id": "8b1e793a7c05e2d7c01c3753e1b9e66f08fada69887513d1494d081389dd5447",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/run-live.js",
+      "to": "file:tools/ant-hive-world/goal-evaluator.js",
+      "target": "tools/ant-hive-world/goal-evaluator.js",
+      "required": true,
+      "specifier": "./goal-evaluator.js"
     },
     {
       "id": "8b2dd8e2b556c55b26e9a3f7f98f70801adaba2d6df4a9bab86d6cb70cfb8c63",
@@ -42117,6 +43330,15 @@
       "specifier": "./client"
     },
     {
+      "id": "8c97f8d593fdfb07ada0d9d12ec867258c3a1a7f32387f9b544059e21028ca71",
+      "type": "static-import",
+      "from": "file:tools/signals/watch-codex-bridge.js",
+      "to": "file:tools/signals/lib/watcher-ready.cjs",
+      "target": "tools/signals/lib/watcher-ready.cjs",
+      "required": true,
+      "specifier": "./lib/watcher-ready.cjs"
+    },
+    {
       "id": "8caf91cca5238ab2acc4acea8fce29d390a41012f42b5f051bd89f18eb0cf2f5",
       "type": "manifest-target",
       "from": "manifest-path:frameworks/wordpress/page-cro/.claude/commands/page-cro",
@@ -42153,6 +43375,15 @@
       "specifier": "../step-plan-renderer.cjs"
     },
     {
+      "id": "8cf5edf79c03704cd6445f182b67bbda56dc8b49b11dbacf73f86c56e522b2bb",
+      "type": "static-import",
+      "from": "file:tools/signals/__tests__/watch-pipeline-loop-managed-startup.test.cjs",
+      "to": "file:tools/signals/lib/watcher-ready.cjs",
+      "target": "tools/signals/lib/watcher-ready.cjs",
+      "required": true,
+      "specifier": "../lib/watcher-ready.cjs"
+    },
+    {
       "id": "8d0735de4f09b85d3f52102ec544f8607470526b19fd544398c40730a0ebeda9",
       "type": "static-import",
       "from": "file:tools/bundle/lib/copy-prompts.js",
@@ -42169,16 +43400,6 @@
       "target": "tools/framework-execution/transforms/utils.cjs",
       "required": true,
       "specifier": "../transforms/utils.cjs"
-    },
-    {
-      "id": "8d2c21d9a5e9d6950902730942e5923e3b7a82959fb9fec478a69d704523303f",
-      "type": "hook-target",
-      "from": "hook:PostToolUse:660",
-      "to": "file:tools/kernel/hooks/dispatch-posttool.cjs",
-      "target": "tools/kernel/hooks/dispatch-posttool.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-posttool.cjs",
-      "event": "PostToolUse"
     },
     {
       "id": "8d39ad3856fa533f3d2adb214c0e2bf2454d774c2220dc9f5f45c9ae477b05a4",
@@ -42413,6 +43634,15 @@
       "target": ".claude/commands/arc-blocked.md",
       "required": true,
       "declared_target": ".claude/commands/arc-blocked.md"
+    },
+    {
+      "id": "8fa6519de0de85030f147e0eb9cdb0bb61174c55eb3aee4489d8d3c1823243be",
+      "type": "static-import",
+      "from": "file:tools/signals/__tests__/watch-pipeline-loop-managed-startup.test.cjs",
+      "to": "file:tools/signals/watch-pipeline-loop.js",
+      "target": "tools/signals/watch-pipeline-loop.js",
+      "required": true,
+      "specifier": "../watch-pipeline-loop.js"
     },
     {
       "id": "8fb4f31d9c0e53747314f049c5cca552453a0a985024ee49475c7f8bb7c7e126",
@@ -42929,6 +44159,15 @@
       "declared_target": "instructions/canonical/commands/audit-framework.yaml"
     },
     {
+      "id": "94863a0d823cf219c1caf737471d6fdf931a1d73af34694ab4b427269d1fd0a5",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/unreal-export/__tests__/deploy-state-corrections.test.cjs",
+      "to": "file:tools/ant-hive-world/unreal-export/watch-imports.js",
+      "target": "tools/ant-hive-world/unreal-export/watch-imports.js",
+      "required": true,
+      "specifier": "../watch-imports.js"
+    },
+    {
       "id": "948fcc2dd8f674d77e1d7dce3e4a17dc71589d3b770e44fa90f491b463dff242",
       "type": "static-import",
       "from": "file:tools/planning/lib/__tests__/plan-execution-cursor.test.js",
@@ -43326,6 +44565,15 @@
       "specifier": "./ratification-proposal.cjs"
     },
     {
+      "id": "9893f3ed034a7b772d2e57e2d316b9d2d735c9632f984e3c907fb3860a792de2",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/dream-consequence-ledger.test.cjs",
+      "to": "file:tools/ant-hive-world/dream/consequence-ledger.js",
+      "target": "tools/ant-hive-world/dream/consequence-ledger.js",
+      "required": true,
+      "specifier": "../dream/consequence-ledger.js"
+    },
+    {
       "id": "98a5c2527b5a62ece835bf487024abbc38b566274d46ad7df65edd5042e42a97",
       "type": "schema-definition-file",
       "from": "schema-definition:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/dependency-acceptance-map.schema.json",
@@ -43634,6 +44882,15 @@
       "specifier": "../kernel/lib/jurisdiction-data-ban-gate"
     },
     {
+      "id": "9abd34b33d8bfd66bc8ca655ff7c207750d52a352ff66aae56bc8a46c10fdd04",
+      "type": "static-import",
+      "from": "file:tools/signals/__tests__/watch-codex-bridge-managed-startup.test.cjs",
+      "to": "file:tools/signals/watch-codex-bridge.js",
+      "target": "tools/signals/watch-codex-bridge.js",
+      "required": true,
+      "specifier": "../watch-codex-bridge.js"
+    },
+    {
       "id": "9ac4a152857647588f20ba49ca65f1570a61cec719cc5b3300bb3891dfbbd0d0",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/guild-ledger.md",
@@ -43779,6 +45036,15 @@
       "specifier": "./framework-methodology"
     },
     {
+      "id": "9b6bec9b12af3810be41ccae7a41c45291536d40ebba8994e17f4e3b5472b5c6",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/unreal-export/__tests__/simulation-portability.test.cjs",
+      "to": "file:tools/ant-hive-world/unreal-export/watch-imports.js",
+      "target": "tools/ant-hive-world/unreal-export/watch-imports.js",
+      "required": true,
+      "specifier": "../watch-imports.js"
+    },
+    {
       "id": "9b797b87db807aebe6e536c4ed1f2fdbf2e29f425a15e46cd479a346eeaf6944",
       "type": "framework-guardrails",
       "from": "framework:meta/execution-normalization",
@@ -43898,16 +45164,6 @@
       "specifier": "tools/autonomy/schemas/operator-continuity.schema.json"
     },
     {
-      "id": "9c6c6ff41ee3611544061c7b2e2f22733c413a9054a651c7512e87003b949956",
-      "type": "hook-target",
-      "from": "hook:SubagentStop:667",
-      "to": "file:.claude/hooks/subagent-telemetry-writer.cjs",
-      "target": ".claude/hooks/subagent-telemetry-writer.cjs",
-      "required": true,
-      "declared_target": ".claude/hooks/subagent-telemetry-writer.cjs",
-      "event": "SubagentStop"
-    },
-    {
       "id": "9c842e840f01066dcfe9163f9e5b9f851ae76e55ad12d1ad6c7536398d3fc607",
       "type": "package-script-target",
       "from": "package-script:plans:validate-output",
@@ -44000,6 +45256,15 @@
       "specifier": "./lib/csv.cjs"
     },
     {
+      "id": "9d13a752da25d57a59dd920977415decd3869a94113e465638a7723adae463d5",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/verifier-breadth-check.cjs",
+      "to": "file:tools/ant-hive-world/generate-blank-hive-seed.js",
+      "target": "tools/ant-hive-world/generate-blank-hive-seed.js",
+      "required": true,
+      "specifier": "./generate-blank-hive-seed.js"
+    },
+    {
       "id": "9d2065b3c391f080396fbf157a88f8c772bbb2aff0f2a3281e104e93afa1ca77",
       "type": "static-import",
       "from": "file:tools/notify/twilio-call.js",
@@ -44007,6 +45272,15 @@
       "target": "tools/notify/twilio-api.js",
       "required": true,
       "specifier": "./twilio-api"
+    },
+    {
+      "id": "9d257a28fb022c8b980c11caadbafb8bdd1aa58a8c51bdda6cd0102446ea306a",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/planner-divergence-check.cjs",
+      "to": "file:tools/ant-hive-world/planner-lane.js",
+      "target": "tools/ant-hive-world/planner-lane.js",
+      "required": true,
+      "specifier": "./planner-lane.js"
     },
     {
       "id": "9d280cc6bfdfff62eabffd3bf6f21c817c475c5d7aaa11024d9b0e6b24dbc8b5",
@@ -44216,6 +45490,15 @@
       "target": "frameworks/research/business-identity-verification/.claude/skills/business-identity-verification",
       "required": true,
       "declared_target": "frameworks/research/business-identity-verification/.claude/skills/business-identity-verification"
+    },
+    {
+      "id": "9ede74975f9cb5a022b081743b7e353bf2c4dcdf95c9685c2f0b1d4c72c7500b",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/dream/dream-lane.js",
+      "to": "file:tools/ant-hive-world/dream/dream-composer.js",
+      "target": "tools/ant-hive-world/dream/dream-composer.js",
+      "required": true,
+      "specifier": "./dream-composer.js"
     },
     {
       "id": "9ee7991059ac29ee800e727c157f61d2503efcaceb5d94346a9b625c23826250",
@@ -44739,6 +46022,15 @@
       "declared_target": ".claude/commands/run-plan.md"
     },
     {
+      "id": "a46c5f41aa3d23b52dfdcd905f285c49080434e02bb255b0365ec05cbd98f7c3",
+      "type": "static-import",
+      "from": "file:tools/sessions/watcher-lifecycle.cjs",
+      "to": "file:tools/signals/lib/watcher-ready.cjs",
+      "target": "tools/signals/lib/watcher-ready.cjs",
+      "required": true,
+      "specifier": "../signals/lib/watcher-ready.cjs"
+    },
+    {
       "id": "a4c93ac735fc70ef502cb6353ee3997552d2dd85781119cb418bfd9287ad9d5f",
       "type": "static-import",
       "from": "file:tools/signals/watch-workstream-loop.js",
@@ -44782,6 +46074,15 @@
       "target": "tools/ant-hive-world/world-state.js",
       "required": true,
       "specifier": "../world-state.js"
+    },
+    {
+      "id": "a573dcc35a81cb1a4c34b81dbbbe26efc47d47c7298ca91cab36642bb72a8afe",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/planner-divergence-check.cjs",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "./untrained-network.js"
     },
     {
       "id": "a5754924edf1c8c5be543147e686d47ce1e64d28634537bfbd6b654061001de4",
@@ -44864,6 +46165,15 @@
       "target": "tools/ticktock/journal.cjs",
       "required": true,
       "specifier": "./journal.cjs"
+    },
+    {
+      "id": "a64fd435c208a37dff32341197fc4c830d1157f5ea93d220dee4ac6d53ca6d6d",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/world-state-replenishment.test.cjs",
+      "to": "file:tools/ant-hive-world/live-config.js",
+      "target": "tools/ant-hive-world/live-config.js",
+      "required": true,
+      "specifier": "../live-config.js"
     },
     {
       "id": "a66d216988706554b3298b044db12cfd3f66b30f6ae0fb9749f4fb11fb2f4202",
@@ -44974,16 +46284,6 @@
       "target": "tools/reconciliation/lib/normalized-content-hash.cjs",
       "required": true,
       "specifier": "../../reconciliation/lib/normalized-content-hash.cjs"
-    },
-    {
-      "id": "a77b372caf15813c23d4e820b67e2cb6f43a4cb8ccaaa3d29241c4c39ec91b36",
-      "type": "hook-target",
-      "from": "hook:Stop:658",
-      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
-      "target": "tools/kernel/hooks/dispatch-stop.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-stop.cjs",
-      "event": "Stop"
     },
     {
       "id": "a7a3283534d10e3a2a5638f4f9429c82348a3831c36ee3f2fa1926f541809563",
@@ -45121,6 +46421,15 @@
       "specifier": "../../commands/lib/command-aliases.cjs"
     },
     {
+      "id": "a8eec0f7c23eb73c0c75fed791d995bdbf4e6679e837852b8312a39954d2370f",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/verifier-lane.test.cjs",
+      "to": "file:tools/ant-hive-world/verifier-lane.js",
+      "target": "tools/ant-hive-world/verifier-lane.js",
+      "required": true,
+      "specifier": "../verifier-lane.js"
+    },
+    {
       "id": "a8f6d64a2c5d44ac0f62b6e30df4e0f3865a298ae7a39135d211483ef87668da",
       "type": "command-definition-file",
       "from": "command-definition:fw-project-management-feedback-to-tasks",
@@ -45164,6 +46473,15 @@
       "target": "frameworks/paid-media/google-ads-search-campaign-build/manifest.json",
       "required": true,
       "declared_target": "frameworks/paid-media/google-ads-search-campaign-build/manifest.json"
+    },
+    {
+      "id": "a94cd7cf7419e0abd6157f8720342f1efe2c3635d9db748a13ddee4e869a282d",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/run-live.js",
+      "to": "file:tools/ant-hive-world/dream/dream-memory.js",
+      "target": "tools/ant-hive-world/dream/dream-memory.js",
+      "required": true,
+      "specifier": "./dream/dream-memory.js"
     },
     {
       "id": "a9658f541fe3d93b3549760b1d72767ca8f4f035422530f183e765832c402cb5",
@@ -45463,6 +46781,15 @@
       "declared_target": ".claude/skills/prompt-refinement/SKILL.md"
     },
     {
+      "id": "ac9ec1057fcfd0cfc859ddaac0b98ea40e1c0724b0a85ab603fff12caa6c8e18",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/verifier-breadth-check.cjs",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "./untrained-network.js"
+    },
+    {
       "id": "acafb909b71668b6445d892ac063c7cad845d761a9dd6aa8cc567b99cef62e8f",
       "type": "static-import",
       "from": "file:tools/mcp/crm/probe.js",
@@ -45626,6 +46953,15 @@
       "specifier": "tools/workspace/schemas/verification-result.schema.json"
     },
     {
+      "id": "adf30658fd246c84224675e2c19c16bdbb94c731a25744cf04bc28801faa7b8a",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/territory-reassertion.test.cjs",
+      "to": "file:tools/ant-hive-world/generate-blank-hive-seed.js",
+      "target": "tools/ant-hive-world/generate-blank-hive-seed.js",
+      "required": true,
+      "specifier": "../generate-blank-hive-seed.js"
+    },
+    {
       "id": "adf4a40ee4b6360be5b4f468594826963148caa98fae5a59c6ea7573658d1522",
       "type": "static-import",
       "from": "file:tools/workspace/promote-candidate.js",
@@ -45734,6 +47070,15 @@
       "required": true,
       "declared_target": ".claude/commands/cast-grimoire.md",
       "authority": "cast-grimoire"
+    },
+    {
+      "id": "aeb2792714776d50ea1247ad55a061da75ee42d5b15d0d6cb6dd6670475bd28d",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/territory-reassertion.test.cjs",
+      "to": "file:tools/ant-hive-world/checkpoint.js",
+      "target": "tools/ant-hive-world/checkpoint.js",
+      "required": true,
+      "specifier": "../checkpoint.js"
     },
     {
       "id": "aeb4e8ed4475eb56ba5c788fd941595ee3d7582e1f8f7a80f60796cec33d297e",
@@ -45991,6 +47336,16 @@
       "specifier": "./lib/audit.cjs"
     },
     {
+      "id": "b11062a2f103388497ae19016186eb9181fbf3379d266595bf1481117079f2ef",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:665",
+      "to": "file:tools/sessions/session-end-boundary-log.cjs",
+      "target": "tools/sessions/session-end-boundary-log.cjs",
+      "required": true,
+      "declared_target": "tools/sessions/session-end-boundary-log.cjs",
+      "event": "SessionEnd"
+    },
+    {
       "id": "b115fb6a0a9a9f4d63ad855b63bed000c0bab1dbf4b758dd98ac8cdc2b41de4c",
       "type": "package-script-target",
       "from": "package-script:workspace:run:finalize",
@@ -46017,6 +47372,15 @@
       "target": "tools/diagnostics/gtm-container-auditor/lib/readers.js",
       "required": true,
       "specifier": "./lib/readers"
+    },
+    {
+      "id": "b165bbdcee03c7d4bb65cd7ac7517a8c9d7146be14aebc7a171fc33fb3d6ce06",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/dream/dream-lane.js",
+      "to": "file:tools/ant-hive-world/dream/consequence-ledger.js",
+      "target": "tools/ant-hive-world/dream/consequence-ledger.js",
+      "required": true,
+      "specifier": "./consequence-ledger.js"
     },
     {
       "id": "b17d93a87ec95e71f2a03476b3b238e0f67446e6b9e9e6f18a4ea472606ce744",
@@ -46298,6 +47662,15 @@
       "target": "tools/ticktock/journal.cjs",
       "required": true,
       "specifier": "./journal.cjs"
+    },
+    {
+      "id": "b463d606b68acaf4c085d063f0658c1f0b5dcb84ed5ea166ae8eddd137729aef",
+      "type": "static-import",
+      "from": "file:tools/sessions/lib/__tests__/resolve-session-id.test.cjs",
+      "to": "file:tools/sessions/lib/resolve-session-id.cjs",
+      "target": "tools/sessions/lib/resolve-session-id.cjs",
+      "required": true,
+      "specifier": "../resolve-session-id.cjs"
     },
     {
       "id": "b467fd42954f60cf682d47f4857f445c3441205196a810149d84c63d11faaf20",
@@ -46592,6 +47965,15 @@
       "resolution": "tracked"
     },
     {
+      "id": "b6ca03da91b57826ccbe14accbd9d8ddbc9be1a1245368d646b15b9a43146567",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/checkpoint.js",
+      "to": "file:tools/ant-hive-world/checkpoint-schema.json",
+      "target": "tools/ant-hive-world/checkpoint-schema.json",
+      "required": true,
+      "specifier": "./checkpoint-schema.json"
+    },
+    {
       "id": "b6d4a7ec86be827d3de1dc89938ecc972f0eda23de68bd7c69c1cf93f6a4cb2c",
       "type": "static-import",
       "from": "file:tools/google-drive/rename-folder.js",
@@ -46755,6 +48137,15 @@
       "specifier": "../codex-auto"
     },
     {
+      "id": "b84cc2f2b16c324f30ba2cf35b8a4e4d517ac1a4852382167564e90c2deca1d2",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/train-tick-triad-wiring.test.cjs",
+      "to": "file:tools/ant-hive-world/planner-lane.js",
+      "target": "tools/ant-hive-world/planner-lane.js",
+      "required": true,
+      "specifier": "../planner-lane.js"
+    },
+    {
       "id": "b84f66f34e7e8a79144322ee4868bb699bd830bbd4b9d03b981c6a22e2fdb8e5",
       "type": "static-import",
       "from": "file:tools/signals/lib/__tests__/run-openrouter-jurisdiction-gate.test.js",
@@ -46808,6 +48199,15 @@
       "target": "tools/bundle/lib/fs.js",
       "required": true,
       "specifier": "./lib/fs.js"
+    },
+    {
+      "id": "b8ab1b04e21ce68638f711fdf4359ecb0b0347e9d0fee66baabe1d3bb01cc2eb",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/reward-contract-v3.test.cjs",
+      "to": "file:tools/ant-hive-world/live-config.js",
+      "target": "tools/ant-hive-world/live-config.js",
+      "required": true,
+      "specifier": "../live-config.js"
     },
     {
       "id": "b8ad2e89b1ba1f685a212702bd988ec687ae35725811de2483599775caf09ee3",
@@ -46920,6 +48320,25 @@
       "specifier": "./lib/dart-api"
     },
     {
+      "id": "ba01f7ba3ed5e0520c5baba57c6055e679122640307d40c161919ea540e178fb",
+      "type": "hook-target",
+      "from": "hook:PreToolUse:656",
+      "to": "file:tools/kernel/hooks/dispatch-pretool.cjs",
+      "target": "tools/kernel/hooks/dispatch-pretool.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-pretool.cjs",
+      "event": "PreToolUse"
+    },
+    {
+      "id": "ba07bbb3ab519a5965354e9a327e894a42c579c95d5b80498ee0351cb1b03a69",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/run-live.js",
+      "to": "file:tools/ant-hive-world/world-train.js",
+      "target": "tools/ant-hive-world/world-train.js",
+      "required": true,
+      "specifier": "./world-train.js"
+    },
+    {
       "id": "ba2e3e0dc5a10ec759fe823ba118c19bd4b2f9677cda5b2dc7e90d4b63a065b9",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/level-up.md",
@@ -46945,6 +48364,16 @@
       "target": "tools/image-optimize/lib/adapters.cjs",
       "required": true,
       "specifier": "../lib/adapters.cjs"
+    },
+    {
+      "id": "ba42be55f7a3f70df0879fff8fc26ebc94688eaa5dc5cefd60b403543e2e8f80",
+      "type": "hook-target",
+      "from": "hook:SessionStart:660",
+      "to": "file:tools/kernel/hooks/dispatch-session-start.cjs",
+      "target": "tools/kernel/hooks/dispatch-session-start.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-session-start.cjs",
+      "event": "SessionStart"
     },
     {
       "id": "ba4468a22165575b7f7ad1b46049b1de4b51a0d467903694ec83ad4799aa89f4",
@@ -47408,6 +48837,15 @@
       "declared_target": "frameworks/paid-media/meta-creative-iteration/guardrails.md"
     },
     {
+      "id": "bdadd397c1c328ddcde9a9003279424913ad8e937386660a7f7845bc559cdebe",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/world-state-torn-write.test.cjs",
+      "to": "file:tools/ant-hive-world/world-state.js",
+      "target": "tools/ant-hive-world/world-state.js",
+      "required": true,
+      "specifier": "../world-state.js"
+    },
+    {
       "id": "bdbff7de9d5fa1c7563e1b4c8b7fdf8b5723eb78ecc5e3ae834b9598087cb229",
       "type": "static-import",
       "from": "file:tools/maintenance/spider-council.js",
@@ -47424,16 +48862,6 @@
       "target": "tools/lib/canonical-root.cjs",
       "required": true,
       "specifier": "../../lib/canonical-root.cjs"
-    },
-    {
-      "id": "bde7fdd6d2fbe31ac87806e68ad7a28a9db129d4bf6ce12dff3d7e0c1cb12568",
-      "type": "hook-target",
-      "from": "hook:PreToolUse:657",
-      "to": "file:tools/kernel/hooks/dispatch-pretool.cjs",
-      "target": "tools/kernel/hooks/dispatch-pretool.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-pretool.cjs",
-      "event": "PreToolUse"
     },
     {
       "id": "bdedd817d5af079e1071019550902ebe005a027c98237a7869393dc2ead2d5fa",
@@ -47479,6 +48907,15 @@
       "target": "tools/lib/creds.config.schema.json",
       "required": true,
       "declared_target": "tools/lib/creds.config.schema.json"
+    },
+    {
+      "id": "be5b6219d4d5cfe1393f79bd82cc8e3a71ae9518b83ce6ac0fcacfe6c5339887",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/reward-contract-v3.test.cjs",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "../untrained-network.js"
     },
     {
       "id": "be77282455679f48cf88182dcac23890a2aff01e317efc74e1ca10b6587b2f6b",
@@ -47581,6 +49018,15 @@
       "specifier": "./harness.js"
     },
     {
+      "id": "bf522b5f505fc5c8551cbe9944ae7763b9f78871bed191190f844c4cf4e73b66",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/dream/dream-lane.js",
+      "to": "file:tools/ant-hive-world/dream/dream-memory.js",
+      "target": "tools/ant-hive-world/dream/dream-memory.js",
+      "required": true,
+      "specifier": "./dream-memory.js"
+    },
+    {
       "id": "bf59d4cbc0a5d32d159761cb53cc0b564a5f07f5c6168d40b7a50176e5f14d07",
       "type": "static-import",
       "from": "file:tools/retrieval/component-match.cjs",
@@ -47627,6 +49073,15 @@
       "specifier": "./lib/copy-prompts.js"
     },
     {
+      "id": "bf9b900a986584c48e73f12d4f0c3f9934cae53ba7012896e6e195c3a4039854",
+      "type": "manifest-target",
+      "from": "manifest-path:.claude/commands/tt.md",
+      "to": "file:.claude/commands/tt.md",
+      "target": ".claude/commands/tt.md",
+      "required": true,
+      "declared_target": ".claude/commands/tt.md"
+    },
+    {
       "id": "bfa8a3a38445f0b8cbb01282cd614f650fec04b27d157a623c145ea3c66b494e",
       "type": "static-import",
       "from": "file:tools/operator-guidance/index.js",
@@ -47661,6 +49116,15 @@
       "target": "tools/workspace/lib/learning-ledger.js",
       "required": true,
       "specifier": "./lib/learning-ledger"
+    },
+    {
+      "id": "bff8f4a7581621fc0c547c918fd4d1756ddb8df7f88d679597f92e71f4d005a1",
+      "type": "static-import",
+      "from": "file:tools/commands/handlers/shutdown.cjs",
+      "to": "file:tools/sessions/boot-dead-session-reaper.cjs",
+      "target": "tools/sessions/boot-dead-session-reaper.cjs",
+      "required": true,
+      "specifier": "../../sessions/boot-dead-session-reaper.cjs"
     },
     {
       "id": "c0189c5f2605a84c388f3842c47ceab48b8f9598a31d88f43909be407a19be62",
@@ -48004,6 +49468,15 @@
       "target": "tools/export-public/export-public.cjs",
       "required": true,
       "specifier": "./export-public.cjs"
+    },
+    {
+      "id": "c48ce7e893971466a36399285eda1cbf50efa8fed446c8fea65b7670699dec61",
+      "type": "static-import",
+      "from": "file:tools/kernel/hooks/__tests__/dispatch-userprompt-failopen.test.cjs",
+      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
+      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "required": true,
+      "specifier": "../dispatch-userprompt.cjs"
     },
     {
       "id": "c497f294f4af89cc1f13919dde4faac19956158d65e72115f621b03adfc4419a",
@@ -48980,6 +50453,15 @@
       "specifier": "../../commands/__tests__/route-fixtures.cjs"
     },
     {
+      "id": "ce2219d6221dc145d01f9fe23fa17a9eb2dd9e8f3ad6a47db303ffdb753b6422",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/verifier-breadth-check.cjs",
+      "to": "file:tools/ant-hive-world/verifier-lane.js",
+      "target": "tools/ant-hive-world/verifier-lane.js",
+      "required": true,
+      "specifier": "./verifier-lane.js"
+    },
+    {
       "id": "ce25b5af1d0efc8407a4bc6e16f5fe77571685edc6b4d24bfba5d9a936290a82",
       "type": "command-definition-file",
       "from": "command-definition:chronicle",
@@ -49145,6 +50627,24 @@
       "resolution": "tracked"
     },
     {
+      "id": "cfa20c5015b56cd2da96be10a0f470e85e95ebc8f05298f83766cb5ee47eef09",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/checkpoint-lane-state.test.cjs",
+      "to": "file:tools/ant-hive-world/sweeper-lane.js",
+      "target": "tools/ant-hive-world/sweeper-lane.js",
+      "required": true,
+      "specifier": "../sweeper-lane.js"
+    },
+    {
+      "id": "cfc5e30e11de471950a6d599473aab4f377c9f02555fcb754a2db643a8e3cebe",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/planner-lane.js",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "./untrained-network.js"
+    },
+    {
       "id": "cfde0e224fada2b2b37a52e3ed09c4e75cf4631f521529be1ffa440e5301636f",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/reconcile-lessons.md",
@@ -49217,16 +50717,6 @@
       "declared_target": ".claude/commands/advance-pipeline.md"
     },
     {
-      "id": "d0ae1952625eea478e503daa5c4ef22d600c4feb603197ac26fd7c68d20aa114",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:666",
-      "to": "file:tools/sessions/session-end-boundary-log.cjs",
-      "target": "tools/sessions/session-end-boundary-log.cjs",
-      "required": true,
-      "declared_target": "tools/sessions/session-end-boundary-log.cjs",
-      "event": "SessionEnd"
-    },
-    {
       "id": "d0bb7ec5aec0735ac9c75bf0c147598be5d57ad034583c9199208fe4dffadb49",
       "type": "static-import",
       "from": "file:tools/commands/smos-command-runner.cjs",
@@ -49281,6 +50771,15 @@
       "target": "tools/planning/lib/handoff-authority-assessment.js",
       "required": true,
       "specifier": "../handoff-authority-assessment"
+    },
+    {
+      "id": "d11959f7a68c739fc7110a0655c19db98f46679f24a67c3119d2acfdb92fe8c0",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/planner-divergence-check.cjs",
+      "to": "file:tools/ant-hive-world/harness.js",
+      "target": "tools/ant-hive-world/harness.js",
+      "required": true,
+      "specifier": "./harness.js"
     },
     {
       "id": "d12105e960de52ac53ff79b6f258a4e61a1fe2ffb292739cad4b1e92506a1b19",
@@ -50103,6 +51602,15 @@
       "declared_target": ".claude/skills/propose-skill-capture/SKILL.md"
     },
     {
+      "id": "d98d96a5d170cf17a351eb80f70b7068eb193d681d732402dcb3d774675cdf1b",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/checkpoint.js",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "./untrained-network.js"
+    },
+    {
       "id": "d9ad4affd97fd86b6f401272d15b3885b3db3771be35bcaf363c2ae38249f6b7",
       "type": "static-import",
       "from": "file:tools/telemetry/dispatches/seed-root-trace.cjs",
@@ -50110,6 +51618,15 @@
       "target": "tools/telemetry/dispatches/lib/trace-context.cjs",
       "required": true,
       "specifier": "./lib/trace-context.cjs"
+    },
+    {
+      "id": "d9b7aaf0dd29748d24a11c36c520e3dc85c4007f09c1200c4cdc0b70a7381570",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/territory-verifier-blind-spot.test.cjs",
+      "to": "file:tools/ant-hive-world/generate-blank-hive-seed.js",
+      "target": "tools/ant-hive-world/generate-blank-hive-seed.js",
+      "required": true,
+      "specifier": "../generate-blank-hive-seed.js"
     },
     {
       "id": "d9fdc3458c9cb1aa79a7664ee8f16db2ea2dca8408c5b408c0034b4da52ead75",
@@ -50491,16 +52008,6 @@
       "specifier": "./trace-context.cjs"
     },
     {
-      "id": "ddb0a0b2944bdb57c9fab226919491da5936257487aee4472753261bae707b9c",
-      "type": "hook-target",
-      "from": "hook:SessionStart:663",
-      "to": "file:tools/user/inject-mirror.cjs",
-      "target": "tools/user/inject-mirror.cjs",
-      "required": true,
-      "declared_target": "tools/user/inject-mirror.cjs",
-      "event": "SessionStart"
-    },
-    {
       "id": "ddb70877ec103f246906b4e2bab93da241e2ff68ed1ebb8effc3412228eadc4b",
       "type": "static-import",
       "from": "file:tools/actor-promotion/promotion-controller.js",
@@ -50607,6 +52114,24 @@
       "target": "tools/dart-integration/lib/perimeter-classifier-stub.js",
       "required": true,
       "specifier": "./perimeter-classifier-stub"
+    },
+    {
+      "id": "dec78694c486bdf534b6b9792023c3e4e1498892fc011f729973b4cb4349a762",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/planner-divergence-check.cjs",
+      "to": "file:tools/ant-hive-world/generate-blank-hive-seed.js",
+      "target": "tools/ant-hive-world/generate-blank-hive-seed.js",
+      "required": true,
+      "specifier": "./generate-blank-hive-seed.js"
+    },
+    {
+      "id": "decd8dddb3d44966eabc644698d16bd117ebd11c9967c8999cf299c3a4aad26f",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/verifier-breadth-check.cjs",
+      "to": "file:tools/ant-hive-world/world-state.js",
+      "target": "tools/ant-hive-world/world-state.js",
+      "required": true,
+      "specifier": "./world-state.js"
     },
     {
       "id": "ded720f0651c21dfe45b1ca6cb7bce8ea5584a0b66281da27b98adf32d850e24",
@@ -50882,6 +52407,15 @@
       "target": "tools/workspace/lib/fs.js",
       "required": true,
       "specifier": "./lib/fs"
+    },
+    {
+      "id": "e0a741447feb8976eaecdb5fb389fb448efdcf950921b5c19f9cfed43103dac5",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/dream-calibration.test.cjs",
+      "to": "file:tools/ant-hive-world/dream/calibration.js",
+      "target": "tools/ant-hive-world/dream/calibration.js",
+      "required": true,
+      "specifier": "../dream/calibration.js"
     },
     {
       "id": "e0aedb9d1c8e52d8d2eec567dec98e0c65e844f8831aea30a94a5547b4b277e6",
@@ -51321,6 +52855,15 @@
       "declared_target": ".claude/commands/codex-self-help.md"
     },
     {
+      "id": "e44c23d0791e797b3a8fd5eef364a828ddf8af7f49bb5267e4ad3c514863697d",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/territory-verifier-blind-spot.test.cjs",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "../untrained-network.js"
+    },
+    {
       "id": "e450319736cd55e8fec9b78d4083d270d90b0bc6f7844d3f70cecfc487ca6159",
       "type": "static-import",
       "from": "file:tools/ant-hive-world/research/rg01-driver.cjs",
@@ -51337,6 +52880,15 @@
       "target": "tools/planning/lib/resolve-task-plan.js",
       "required": true,
       "specifier": "./lib/resolve-task-plan.js"
+    },
+    {
+      "id": "e45f24153490e7ad21dfdbecedcf7886642ee89f6c68734c97aa0e4af01095b4",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/train-tick-triad-wiring.test.cjs",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "../untrained-network.js"
     },
     {
       "id": "e49342bc1c46b50df1728a6ec6789de65e573b4bdecfc81b0e15deaf3808f7f2",
@@ -51432,6 +52984,15 @@
       "id": "e56affba6c7631be906851d9d318b918b40aca230c502a02138fc35eb3096753",
       "type": "static-import",
       "from": "file:tools/ant-hive-world/__tests__/event-schema.test.cjs",
+      "to": "file:tools/ant-hive-world/harness.js",
+      "target": "tools/ant-hive-world/harness.js",
+      "required": true,
+      "specifier": "../harness.js"
+    },
+    {
+      "id": "e56f30c6c3a0ba4d4e6b0fdc108f9c7de1d75fe52a34d4ab84ecbeb3dabc65ec",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/territory-verifier-blind-spot.test.cjs",
       "to": "file:tools/ant-hive-world/harness.js",
       "target": "tools/ant-hive-world/harness.js",
       "required": true,
@@ -51691,6 +53252,15 @@
       "specifier": "./lib/compat-dispatch.cjs"
     },
     {
+      "id": "e81a02d124126854621359d405d5635c5eda836d97b6035018015994909af349",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/planner-divergence-check.cjs",
+      "to": "file:tools/ant-hive-world/train-tick.js",
+      "target": "tools/ant-hive-world/train-tick.js",
+      "required": true,
+      "specifier": "./train-tick.js"
+    },
+    {
       "id": "e847a818b36aaba785ad2abfc14646190eef6e945d4dcb5f27e96acb98f22a42",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/consult-oracle.md",
@@ -51707,6 +53277,15 @@
       "target": ".claude/commands/forge-grimoire.md",
       "required": true,
       "declared_target": ".claude/commands/forge-grimoire.md"
+    },
+    {
+      "id": "e84e07aa0dd4c32a6ab721afdfe7e54e424f526f8c0695a22547b144328f3d24",
+      "type": "static-import",
+      "from": "file:tools/signals/__tests__/watch-codex-bridge-managed-startup.test.cjs",
+      "to": "file:tools/signals/lib/watcher-ready.cjs",
+      "target": "tools/signals/lib/watcher-ready.cjs",
+      "required": true,
+      "specifier": "../lib/watcher-ready.cjs"
     },
     {
       "id": "e850292cc8a488346363daeb11c92e951eb8ee1169887b92a5bdd1ec7d8cd99b",
@@ -51755,6 +53334,15 @@
       "declared_target": ".claude/skills/outward-inward-loop/SKILL.md"
     },
     {
+      "id": "e8d233e62a96fbab55acbb8e52a4ddb6f3187068936df72833b470294e253179",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/sweeper-lane.test.cjs",
+      "to": "file:tools/ant-hive-world/sweeper-lane.js",
+      "target": "tools/ant-hive-world/sweeper-lane.js",
+      "required": true,
+      "specifier": "../sweeper-lane.js"
+    },
+    {
       "id": "e8dfdf0e27d90ce2ffe5d464c36922d151f96b0c6788fe6c4ad73583b5ddd4d6",
       "type": "static-import",
       "from": "file:tools/workspace/validate-output.js",
@@ -51780,6 +53368,15 @@
       "target": "tools/verify/lib/checks.cjs",
       "required": true,
       "specifier": "./lib/checks.cjs"
+    },
+    {
+      "id": "e931503a26a89a0ec993bd8112d86358c9b3ea61c1e4c673c8d91ea81182f000",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/train-tick.js",
+      "to": "file:tools/ant-hive-world/verifier-lane.js",
+      "target": "tools/ant-hive-world/verifier-lane.js",
+      "required": true,
+      "specifier": "./verifier-lane.js"
     },
     {
       "id": "e9336d0f631547a4dbda82b9928984602635d79510f164c1f4f8e7245d60095e",
@@ -51957,6 +53554,15 @@
       "declared_target": "instructions/canonical/commands/plan-task.yaml"
     },
     {
+      "id": "eb16bed1c5f730df35a2f25a37b6a58675ab8e21401bc4a9a89bf4f5c2b4181e",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/on-policy-fix.test.cjs",
+      "to": "file:tools/ant-hive-world/untrained-network.js",
+      "target": "tools/ant-hive-world/untrained-network.js",
+      "required": true,
+      "specifier": "../untrained-network.js"
+    },
+    {
       "id": "eb2eabc034637ebcd24516053bd22f815b632495291f75500860b67a39e74dae",
       "type": "static-import",
       "from": "file:tools/context/repo-awareness.cjs",
@@ -52075,6 +53681,15 @@
       "specifier": "../signals/lib/tier-routing.cjs"
     },
     {
+      "id": "ebbaec8cf7175defc47c4c03b8c3518648160d15d2e07417c23c14369d7786dd",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/run-live.js",
+      "to": "file:tools/ant-hive-world/dream/dream-lane.js",
+      "target": "tools/ant-hive-world/dream/dream-lane.js",
+      "required": true,
+      "specifier": "./dream/dream-lane.js"
+    },
+    {
       "id": "ebeda7cf3966de4ec82ce3ad256856bb91e05c49bcb172af4f903269ae17b136",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/boot.md",
@@ -52182,16 +53797,6 @@
       "target": "tools/workspace/lib/args.js",
       "required": true,
       "specifier": "../workspace/lib/args"
-    },
-    {
-      "id": "ece77f1ff44c4b644a18178995814d4d701f86b9d9fca6ead3a8f9f3c6d141e6",
-      "type": "package-script-target",
-      "from": "package-script:test",
-      "to": "file:tools/workspace/__tests__/candidate-root.test.js",
-      "target": "tools/workspace/__tests__/candidate-root.test.js",
-      "required": true,
-      "declared_target": "tools/workspace/__tests__/candidate-root.test.js",
-      "resolution": "tracked"
     },
     {
       "id": "ed1f5534c883fb5ec13335ca41d94c700f424bd5dc3a037f1d7be257b3219bdc",
@@ -52312,6 +53917,16 @@
       "target": ".claude/skills/canonical-path-authority-gate/SKILL.md",
       "required": true,
       "declared_target": ".claude/skills/canonical-path-authority-gate/SKILL.md"
+    },
+    {
+      "id": "ee29d6e9e897ec90a9c5687e02156d074c5be06a1fff8f84f4cb4eee16e79f9a",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:664",
+      "to": "file:tools/context/repo-awareness-closeout.cjs",
+      "target": "tools/context/repo-awareness-closeout.cjs",
+      "required": true,
+      "declared_target": "tools/context/repo-awareness-closeout.cjs",
+      "event": "SessionEnd"
     },
     {
       "id": "ee4bcefbdf5bf1a0c1cc814b891beda3e73edcc73a8412e571fa6888bdc315a1",
@@ -52713,6 +54328,15 @@
       "specifier": "../../schemas/completion-audit-packet.schema.json"
     },
     {
+      "id": "f1a33b36e76f32692c55fa9a92d3f427aaa02d77628d2fd66fb0afad726a360e",
+      "type": "static-import",
+      "from": "file:tools/commands/handlers/__tests__/new-session.test.cjs",
+      "to": "file:tools/sessions/lib/resolve-session-id.cjs",
+      "target": "tools/sessions/lib/resolve-session-id.cjs",
+      "required": true,
+      "specifier": "../../../sessions/lib/resolve-session-id.cjs"
+    },
+    {
       "id": "f1e5ea153f249a8c5ab08c03ac9445e5a661aea2aa3e4b332acdfb5eb5c666f6",
       "type": "manifest-target",
       "from": "manifest-path:frameworks/wordpress/seo-validation/.claude/commands/seo-validation",
@@ -52893,6 +54517,15 @@
       "target": ".claude/commands/campaign.md",
       "required": true,
       "declared_target": ".claude/commands/campaign.md"
+    },
+    {
+      "id": "f300abe9b977c58721d28876f32a8529f79ec63ebe32513b42ecdc987277fdfb",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/verifier-breadth-check.cjs",
+      "to": "file:tools/ant-hive-world/train-tick.js",
+      "target": "tools/ant-hive-world/train-tick.js",
+      "required": true,
+      "specifier": "./train-tick.js"
     },
     {
       "id": "f308b988c035e96d9d964c42274f1f5090dbbc83152f2c14e08ead78484848d2",
@@ -53504,6 +55137,15 @@
       "specifier": "../workspace/lib/args"
     },
     {
+      "id": "f80ded194d3cf5c5a976370500bbb7cd6aacbc81c273bb2efa0a79ab97bd72f7",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/territory-reassertion.test.cjs",
+      "to": "file:tools/ant-hive-world/world-state.js",
+      "target": "tools/ant-hive-world/world-state.js",
+      "required": true,
+      "specifier": "../world-state.js"
+    },
+    {
       "id": "f81318fe60c20970f46aca9282a5a9ab363afc9381535d1255444de610f7c308",
       "type": "static-import",
       "from": "file:tools/bundle/lib/copy-artifacts.js",
@@ -53556,6 +55198,15 @@
       "target": "tools/signals/lib/codex-listener.js",
       "required": true,
       "specifier": "./lib/codex-listener"
+    },
+    {
+      "id": "f861625f590d2497570d3441ba16776db13faf570c0c45199e3385cdfcabd656",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/dream-memory.test.cjs",
+      "to": "file:tools/ant-hive-world/dream/dream-memory.js",
+      "target": "tools/ant-hive-world/dream/dream-memory.js",
+      "required": true,
+      "specifier": "../dream/dream-memory.js"
     },
     {
       "id": "f87a1af309ce968126f23c14f830b3cc24c225cdb3ff7ce8c19423f2d1273969",
@@ -53721,6 +55372,16 @@
       "target": "tools/google-drive/config.js",
       "required": true,
       "specifier": "./config"
+    },
+    {
+      "id": "f9d5b341b3e56ca4e3252d0316531dd2142f3172200bb5cd0fe299dded08f49d",
+      "type": "hook-target",
+      "from": "hook:UserPromptSubmit:658",
+      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
+      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "event": "UserPromptSubmit"
     },
     {
       "id": "f9ddd9af08a4560880e08c26821561171c67aab338f1761456568392ea69724f",
@@ -54178,6 +55839,15 @@
       "declared_target": "frameworks/wordpress/design-mockup-validation/schemas/review.schema.json"
     },
     {
+      "id": "fdb0dc5d6d4fe2a153fd5bd30bf688b3739605059338949b04f2c7687c5c194c",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/__tests__/territory-reassertion.test.cjs",
+      "to": "file:tools/ant-hive-world/train-tick.js",
+      "target": "tools/ant-hive-world/train-tick.js",
+      "required": true,
+      "specifier": "../train-tick.js"
+    },
+    {
       "id": "fddd45b0af7ca5f5fdd28fff1c90061da465ee8eecfe34e61f554d862b041690",
       "type": "manifest-target",
       "from": "manifest-path:.claude/skills/orchestrate-loop/SKILL.md",
@@ -54325,6 +55995,15 @@
       "specifier": "../../sessions/lib/boundary-markers.cjs"
     },
     {
+      "id": "fea5e1be770eaa5978f879e942034af2dcba98f0b9b5a4deb852ab3b2de44828",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/checkpoint.js",
+      "to": "file:tools/ant-hive-world/world-train.js",
+      "target": "tools/ant-hive-world/world-train.js",
+      "required": true,
+      "specifier": "./world-train.js"
+    },
+    {
       "id": "feb0bde666708fd1364a759dc78363402b7b84bdcc25a835c9c4aa7d22cfecad",
       "type": "static-import",
       "from": "file:tools/google-drive/rename-folder.js",
@@ -54449,11 +56128,20 @@
       "target": "tools/ai-bridge/lib/verification-contract.js",
       "required": true,
       "specifier": "../lib/verification-contract"
+    },
+    {
+      "id": "ffd5a7470f5c0612b51de91eb22312b713044d5ae7982651725090978a34d1f3",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/run-live.js",
+      "to": "file:tools/ant-hive-world/checkpoint.js",
+      "target": "tools/ant-hive-world/checkpoint.js",
+      "required": true,
+      "specifier": "./checkpoint.js"
     }
   ],
   "counts": {
-    "nodes": 4223,
-    "edges": 2955,
+    "nodes": 4318,
+    "edges": 3069,
     "unresolved": 0
   }
 }

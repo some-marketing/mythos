@@ -9,6 +9,7 @@ const {
   runActorForSignal
 } = require('./lib/actor-auto');
 const { detectInstalledActors } = require('./lib/actor-registry');
+const { createWatcherReadiness } = require('./lib/watcher-ready.cjs');
 
 const PROJECT_ROOT = path.resolve(__dirname, '../..');
 const DEFAULT_INTERVAL_SECONDS = 120;
@@ -34,11 +35,17 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function main() {
-  const args = parseArgs(process.argv);
+async function main(deps = {}) {
+  const projectRoot = deps.projectRoot || PROJECT_ROOT;
+  const processRef = deps.process || process;
+  const parse = deps.parseArgs || parseArgs;
+  const detectActors = deps.detectInstalledActors || detectInstalledActors;
+  const listSignals = deps.listRunnableActorSignals || listRunnableActorSignals;
+  const runSignal = deps.runActorForSignal || runActorForSignal;
+  const args = parse(deps.argv || processRef.argv);
   if (args.help || args.h) {
     help();
-    process.exit(0);
+    return;
   }
 
   const once = Boolean(args.once);
@@ -47,20 +54,29 @@ async function main() {
   const intervalSeconds = Number(args.interval_seconds || DEFAULT_INTERVAL_SECONDS);
   if (!Number.isFinite(intervalSeconds) || intervalSeconds <= 0) {
     console.error('ERROR: --interval-seconds must be a positive number');
-    process.exit(1);
+    throw new Error('--interval-seconds must be a positive number');
+  }
+
+  const discoverSignals = () => {
+    const runtimes = detectActors();
+    return listSignals(projectRoot, { runtimes })
+      .filter((info) => !actorFilter || String(info.signal.recommended_next_actor || '').toLowerCase() === actorFilter);
+  };
+  const readiness = deps.readiness || createWatcherReadiness('watch-actor-bridge', { process: processRef });
+  if (readiness.managed) {
+    discoverSignals();
+    await readiness.prepareAndWait();
   }
 
   do {
-    const runtimes = detectInstalledActors();
-    const signals = listRunnableActorSignals(PROJECT_ROOT, { runtimes })
-      .filter((info) => !actorFilter || String(info.signal.recommended_next_actor || '').toLowerCase() === actorFilter);
+    const signals = discoverSignals();
     const next = signals[0] || null;
 
     if (!next) {
       console.log(`[${new Date().toISOString()}] No live actor-targeted coordination signal found.`);
     } else {
       const actorId = String(next.signal.recommended_next_actor || '').toLowerCase();
-      const result = await runActorForSignal(PROJECT_ROOT, next, {
+      const result = await runSignal(projectRoot, next, {
         actor: actorId,
         dryRun,
         model: args.model || ''
@@ -75,7 +91,7 @@ async function main() {
       } else {
         console.log(`Ran ${actorId} for: ${next.name}`);
         console.log(`Outcome: ${result.outcome}`);
-        console.log(`Completion signal: ${path.relative(PROJECT_ROOT, result.completionSignalPath)}`);
+        console.log(`Completion signal: ${path.relative(projectRoot, result.completionSignalPath)}`);
       }
     }
 
@@ -84,7 +100,11 @@ async function main() {
   } while (true);
 }
 
-main().catch((error) => {
-  console.error(`ERROR: ${error.message}`);
-  process.exit(1);
-});
+if (require.main === module) {
+  main().catch((error) => {
+    console.error(`ERROR: ${error.message}`);
+    process.exit(1);
+  });
+}
+
+module.exports = { main };

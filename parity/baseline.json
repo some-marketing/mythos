@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "622a358c6fb28e76a6d2663ca5a9539034dfdedbd4f72f9437de05a1ed223d99",
+    "expected_tree_sha256": "f38a48666223ebe97572cf456701c35c8b1152bc1f0c8b7f2964c291846b8011",
     "expected_files": [
       {
         "path": ".agents/skills/go/SKILL.md",
@@ -482,7 +482,7 @@
       },
       {
         "path": ".agents/skills/source-command-new-session/SKILL.md",
-        "sha256": "270e5077fc4452915e5f0caaa20af362fd61f73439cb4edb30027086d814d2a6",
+        "sha256": "2dcc903b56e1e98b831811a84182065c6b584625dba044aa5c8905738324182d",
         "mode": 420
       },
       {
@@ -1752,12 +1752,12 @@
       },
       {
         "path": ".claude/project-claude.yml",
-        "sha256": "e5baf157167e2bb9b1e7bfd2b6a9a4212d6c455666221cdb31e63c33233c2b5a",
+        "sha256": "571913aeb034154b024283555125255049a390c317fb866ab12927522fe9ce70",
         "mode": 420
       },
       {
         "path": ".claude/settings.json",
-        "sha256": "2f5ace5b3552ef13dc51a0e9fbdb1b80ed9e7f26cfaff793ee84eae904f85207",
+        "sha256": "7f20ab907b9edf9426ad693ca8302b34cc928fe007f61894944abd547830d2bd",
         "mode": 420
       },
       {
@@ -2182,7 +2182,7 @@
       },
       {
         "path": ".github/workflows/continuity-gate.yml",
-        "sha256": "69d825240264fa927443d5be2cf7cac865e4ef69b0dc003f9ec0a7dbe337907e",
+        "sha256": "65fd759e24b8c444d23a1915c308605c721a67a80db45cd3cd4384d815707dc9",
         "mode": 420
       },
       {
@@ -2942,7 +2942,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/candidates/source-command-new-session/SKILL.md",
-        "sha256": "270e5077fc4452915e5f0caaa20af362fd61f73439cb4edb30027086d814d2a6",
+        "sha256": "2dcc903b56e1e98b831811a84182065c6b584625dba044aa5c8905738324182d",
         "mode": 420
       },
       {
@@ -3252,7 +3252,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/projection-index.json",
-        "sha256": "20cc9dc7c23fc1904dbdc2c1848a7456596f84104bd3ef64c744e7e8233c0446",
+        "sha256": "627fd737ec26beb6aae8221d567aeabaa09545d2ba0dbb52c38fab587ae6266e",
         "mode": 420
       },
       {
@@ -3737,7 +3737,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-new-session.json",
-        "sha256": "583390747ab4872ed9de5882952769a7a15cdf69c1bc3b30f1e3e4b5c30f6290",
+        "sha256": "8b4a81f47f7f50e7d4bd08362c48d05e6222fcac397b2a7f0d35da846734d778",
         "mode": 420
       },
       {
@@ -3922,7 +3922,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-shutdown.json",
-        "sha256": "4f9c0b9e5860a43d87f5eafa5111ae8a2e82852d181f0b141acd007c7057be8e",
+        "sha256": "4e65117c13ce39f8eaadd1b109d11c30884f6657ddca81d6ab6efccac6685de6",
         "mode": 420
       },
       {
@@ -3982,7 +3982,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/direct-outward-inward-loop.json",
-        "sha256": "9cca60abf8704ee6416a7214a9566ffffc162cc6b8bf8cb1be578ff070227163",
+        "sha256": "3564ec35c802161fc5368977144e6e35713a656a9397650defcb3d2864d1c7fe",
         "mode": 420
       },
       {
@@ -4388,6 +4388,11 @@
       {
         "path": "_dev/sim-runs/summarize-carriage.js",
         "sha256": "316777d4dd8583307c3cadb10e7f3bcd55bb8c3322fbe4fdf21a9159b93f59e1",
+        "mode": 420
+      },
+      {
+        "path": "_dev/sim-runs/summarize-reward-contract.js",
+        "sha256": "751a67de9c1490b93fe14f65636453f28d57fe41683784d8f792532c86d029fb",
         "mode": 420
       },
       {
@@ -8737,7 +8742,7 @@
       },
       {
         "path": "instructions/canonical/commands/new-session.yaml",
-        "sha256": "5b6e79d48e8ae94b4ee929c2e4e05ea127f2a6fc6e4b3bfcfca8d0ed2a497b3d",
+        "sha256": "017d1938ac0d57e8a53e0b144f21848ffafd5763ea2f39f249b0f184b69628ab",
         "mode": 420
       },
       {
@@ -8922,7 +8927,7 @@
       },
       {
         "path": "instructions/canonical/commands/shutdown.yaml",
-        "sha256": "ec520fad19bbcaba78e3923cf079646b3c5cce27ab82cd3253ea604e615c3ea5",
+        "sha256": "39781d433f57af6aec323f253156e5bb6c8b3f27be3e2870e8c0eaa22e45be16",
         "mode": 420
       },
       {
@@ -9307,12 +9312,12 @@
       },
       {
         "path": "package-lock.json",
-        "sha256": "c028f9a0e4190af0122cb9f50216bec28ccf62f941618656c6065c66a618d17c",
+        "sha256": "da20396f57bbd2e5906a9196fbb16a3e5b7141e0ec2eb8ee5ea6f1cd83f2145b",
         "mode": 420
       },
       {
         "path": "package.json",
-        "sha256": "9af0243841d0cdc9578105a76edcd7d8c7cdf4294831391406f1699be83d0733",
+        "sha256": "196d498ebf363e5a6fc9a85a6e2bd9e9f21c649f3f5377cf061971272f2ea435",
         "mode": 420
       },
       {
@@ -9342,7 +9347,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "d49bd5235db42698872fc3e4a98bcbc471f54d6f334453b424fe4d8341a85248",
+        "sha256": "e6c8bb8ebc4a3d389907c245780b53f2bd2c91e46bd2e105972fbc78906f0eef",
         "mode": 420
       },
       {
@@ -9682,17 +9687,62 @@
       },
       {
         "path": "tools/ant-hive-world/README.md",
-        "sha256": "3e29f86bd6ecc45351d31531d07a9ae919f7335f86ef15a307571117f3ede92a",
+        "sha256": "91623545cafcac1567ce1b86272a1c9517224f25a24d00c38ce66198d7a2aaff",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/checkpoint-lane-state.test.cjs",
+        "sha256": "cff87d2024ee51ac02c2484d449b80e5566fe3fd7a3aad3adb9ba40bbe7a807e",
         "mode": 420
       },
       {
         "path": "tools/ant-hive-world/__tests__/dashboard.test.cjs",
-        "sha256": "3bec1baadbf811e1898f407cf96abb6fe918bb166b0ae73487f05fee76a21982",
+        "sha256": "8c11e140cbc1ece9e6b554a0b4b17a889200051f4c6ad929ef8299ae593bf0bf",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/dream-calibration.test.cjs",
+        "sha256": "28359a785ce4a54670acc233c2d73047f88b31bd7ab5412d5706ade0e3df363e",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/dream-composer.test.cjs",
+        "sha256": "7ef1999b5c12d74aaade0a6f3222b23a067d0961fbe5c55626e7d4270976daa2",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/dream-consequence-ledger.test.cjs",
+        "sha256": "36d17492003bd84ef651a31be7c29d9ee925b4fe460b0ab47305129bfa51aa24",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/dream-lane.test.cjs",
+        "sha256": "39275bcdca7021def46e661814562d04ce9f4295e5710fec1cab035192c14ada",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/dream-memory.test.cjs",
+        "sha256": "54a055ac22d0b4ec030fe5ef381176dc3f4337060ff176e162af0d064f39711c",
         "mode": 420
       },
       {
         "path": "tools/ant-hive-world/__tests__/event-schema.test.cjs",
         "sha256": "d8e53ff2a450b0600753c1530ce097c32bb4fb80ad221be87c20b94cd8e308a3",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/fixtures/fixture-v1.json",
+        "sha256": "44ad0a4ab6e87523ec047b7512f159e0b6bd4e00796bc7232798220e7e63e9c5",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/fixtures/fixture-v2.json",
+        "sha256": "f8ee5b840b4bb17c8bb10f15e921409fd8479cbc5cb86f693e277157a98de969",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/gather-yield.test.cjs",
+        "sha256": "aaf96cc8dcd981f840df1ba09845f539e7941cd0888daa2d1283df6a9d899ea7",
         "mode": 420
       },
       {
@@ -9726,18 +9776,83 @@
         "mode": 420
       },
       {
+        "path": "tools/ant-hive-world/__tests__/on-policy-fix.test.cjs",
+        "sha256": "3701606ba37a9f6eae778e07944033e2ee57e124110534177e5695ccaf64fa71",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/planner-divergence-check.test.cjs",
+        "sha256": "0eed8bcaa5fa0d89cab968271650d51bf4c18be43ed9864b6004327ead99e30f",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/planner-lane.test.cjs",
+        "sha256": "8c7075a236f4730ad939289ffaf33b9b8fb64f8b9c723314bfd7fa17e04382e1",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/reward-contract-v3.test.cjs",
+        "sha256": "f25a03adf5f124168d192b5a738190da35ae817f571516ecd3d70d3d0533a48b",
+        "mode": 420
+      },
+      {
         "path": "tools/ant-hive-world/__tests__/reward-contract.test.cjs",
-        "sha256": "9dac4bb4d848b33a5a8d83a6c5f2f2eecb2c8e40a2624fb742bfb63e664c4ed0",
+        "sha256": "cd939aec1be79e7b92985e3cd92fc5f39262828368d738ef63c1c41d7bdba204",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/reward-provenance.test.cjs",
+        "sha256": "c05ba5748622ed839b28f6eb1d21fc4dbb2353def662331c1735868f2d22a116",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/run-live-argv.test.cjs",
+        "sha256": "0bc1ea5b633fa688cc41b90de66e038780123ebc0140bfba96d44477d929fa1f",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/sweeper-lane.test.cjs",
+        "sha256": "84398fe4ffc6a3911c5ca224773c34978e51d06709d3896380b2af31cd5bedea",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/territory-reassertion.test.cjs",
+        "sha256": "8c3421ac24152443f99a536d7f8ae014b5c34ecd2ffcfc716ab64b1b32a76024",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/territory-verifier-blind-spot.test.cjs",
+        "sha256": "d786f91264dce6d8603b6ff3844d5ae0ace6aded8aeb34b07eeee92a61d74f80",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/train-tick-triad-wiring.test.cjs",
+        "sha256": "e020cadcaf4913bb68de1759d61a87c657d8c9a0d7e4526d2d9b4b9f9567619b",
         "mode": 420
       },
       {
         "path": "tools/ant-hive-world/__tests__/untrained-network.test.cjs",
-        "sha256": "41c7cd8da5c3509c83cbeeb77aaeae6bfa20a899d9ddd6998ad7973ad9d9c77d",
+        "sha256": "260424f45f00caffb0117da7f75376a550ed6514a1198342283bf4a19ea8c066",
         "mode": 420
       },
       {
         "path": "tools/ant-hive-world/__tests__/validate-hive-mind.test.cjs",
         "sha256": "a884fe3b7737827957d5a69ce5b0fa24fc2a8067d47a5bc2ed709ed0227de404",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/verifier-breadth.test.cjs",
+        "sha256": "4e28670f78ccb134d1ecdcfb20a612bb0c0e33fd5c7a169fd682121e8b28e594",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/verifier-lane.test.cjs",
+        "sha256": "a512806e85f3d8412f2b5f555a55519ffd745a6e231f34d46b62087e477a9c4c",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/world-mind-harness.test.cjs",
+        "sha256": "6bacce6c1b833bf4a1366ab29f5384a27d2eb9a80dff8cc26b7b8960ad462020",
         "mode": 420
       },
       {
@@ -9751,8 +9866,133 @@
         "mode": 420
       },
       {
+        "path": "tools/ant-hive-world/__tests__/world-state-replenishment.test.cjs",
+        "sha256": "c650863602fe760d416bfadbbd35816934e8f63c528a67dfe08a41bfbc657a5d",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/__tests__/world-state-torn-write.test.cjs",
+        "sha256": "1c134255c6b8db758587adb25970c4f02337a4b9fc1cb0f8b607d9aacb7e9bd1",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/_dev/state/session-present.json",
+        "sha256": "ada972141b240214a3c5cafce9e9099c65029f2fff030cd6de3fa421636283b5",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/analysis/README.md",
+        "sha256": "ace97f6d44522f71183611465ee3336576c7044c2a06845afabcf839ab43bd0c",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/analysis/calibration-sweep.cjs",
+        "sha256": "fa55582f05261b274a4dbb401108cad34ff0d22b952e9fbf0fa36b8b5353e460",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/analysis/demand-decomposition.cjs",
+        "sha256": "ac4eb8e5c85fadba272ebc9d65fcbc4b62acc9bb9eca3beb2c3d9d133aed2b5a",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/analysis/reward-ablation-sweep.cjs",
+        "sha256": "6c0d76c6bb3066d832003a34d62e8ddc0ef3bcb096a0b7cadc2971f076511f91",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/analysis/reward-composition.cjs",
+        "sha256": "71b6dbe90ff11497b54824ea3745f330a4dbdba2f5791254c5994ae08bdc6a25",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/checkpoint-schema.json",
+        "sha256": "b1bbddbe12c10f64cf98b1492bdced27273e2675942fe5bbd4c7b152280d77a9",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/checkpoint.js",
+        "sha256": "7fab8d04ac2a3e866ed593f3bb9e5f07dee5fe6be9e418fe4118f0d156f4d4d5",
+        "mode": 420
+      },
+      {
         "path": "tools/ant-hive-world/dashboard.js",
-        "sha256": "d084d46143fde338c0ce01fc927f9e0b314090c1a38afeb7d957b38dc827edf0",
+        "sha256": "519487e479ebde3468380e6155654f305479f71a428020ead4a414b256df0560",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/dream/calibration.js",
+        "sha256": "1749930ba7b5f6029daeb430d315be805dc93c076e215d42540ba867d3bb2ba0",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/dream/consequence-ledger.js",
+        "sha256": "0ce73c715cdac10b4436abfead678bde8225c3cd66734f28c8948d7489d95075",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/dream/dream-composer.js",
+        "sha256": "ed9f9aa7ae7bc3a4bd1f7c6e8d2ef498c3430cbfc04e669effe20af020ef9715",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/dream/dream-lane.js",
+        "sha256": "a22d9eb43abbb1004eb79437c413970776e19970aefd8d2dea98739751d687d9",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/dream/dream-memory.js",
+        "sha256": "23079c7440d0496c1728251bf915faf7f5bf4fbe14c22676c384662ad3d92875",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/Dockerfile",
+        "sha256": "7678b7340d3d9c567fcaf7788e368c10c9c40e59610a27032f13989db4b06adf",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/bridge-client.js",
+        "sha256": "4b8685b8604df75a22ff089b6a7921562a8dfd0f3f5b95b77ab1597fbbe8f528",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/bridge-network.js",
+        "sha256": "b6dc115d81498f5a86511f9372110c8dfd698e79d4cf89f16452eadd730bbe77",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/bridge_scene.xml",
+        "sha256": "6c06cc20b0724aea3b69d80c334110147751f79930c840b5e02795595fcf912c",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/bridge_step.py",
+        "sha256": "cce9513ae13fb1eea3554e3fa1c0dfbf15ce245384b165dd7f17a8ad8575c142",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/check-containment-gate.js",
+        "sha256": "a97c234bf909041979870c95d39e8282f7cc3f33d645539fc659a6c3294ecf7a",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/requirements-lock.txt",
+        "sha256": "e5c10c36a8d8ed18547e264b3255a7607278d5155d95fd874253b7fa2fe64987",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/verify-containment.js",
+        "sha256": "44fe62605c83d7b3c88194735bcd1d7c83a780a15ba5f35189960e1f871ae758",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/verify-s1-roundtrip.js",
+        "sha256": "f3697fa6f9b03d9b42d4f502d3f711037f65c981b4c73a8638e8b3136d587121",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/embodiment-bridge/verify-s2-perception.js",
+        "sha256": "95850f4d23697beaea877d2bb1d0730c6747c6a29186df933c4ddc60cbd3fa67",
         "mode": 420
       },
       {
@@ -9786,13 +10026,28 @@
         "mode": 420
       },
       {
+        "path": "tools/ant-hive-world/goal-evaluator.js",
+        "sha256": "e73b0fbe8db163f4ce7228de56395dc823c8a35f1800825b71612d1720507580",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/goal-packet-schema.json",
+        "sha256": "f5195c92ad629d75b524f30d8047307a8d80883898d95e9e0fcf1ca454dc4c2e",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/goal-rehearsal-evidence-schema.json",
+        "sha256": "eb985455e603943049d6e64d0ad8696d33a3833a95015119580799005e2d01b6",
+        "mode": 420
+      },
+      {
         "path": "tools/ant-hive-world/harness.js",
-        "sha256": "ebde66c096f688ea95976f712e5cfa81d19ecd4ee7199298faad61f8ed913bd7",
+        "sha256": "82925053cd9cea93e66ff0c76e55df3766b4757515a93182769ab0767b014b42",
         "mode": 420
       },
       {
         "path": "tools/ant-hive-world/live-config.js",
-        "sha256": "32f334e8bb75cb01df6f15400bd7c01503c4394f3afc32d1cb61aeed9632c7a0",
+        "sha256": "2eb0af9a45f655094a41de4fb97ed593aa0197acc2f1e6829411a66806a75ed3",
         "mode": 420
       },
       {
@@ -9818,6 +10073,16 @@
       {
         "path": "tools/ant-hive-world/mirror-detector.js",
         "sha256": "37bf9117c5df263bf643bdbab7effb65dd7af1229f42c171201b83e0237a7c23",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/planner-divergence-check.cjs",
+        "sha256": "9835fa36aa167fd0de8d4f390f8f2e0a220f910db64f9f6011e53ad2f23c21c9",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/planner-lane.js",
+        "sha256": "8afd9f4aa24f947e20329344df1c8586f46c38308a100f9dd5d3d47c6322ab98",
         "mode": 420
       },
       {
@@ -9882,7 +10147,7 @@
       },
       {
         "path": "tools/ant-hive-world/run-live.js",
-        "sha256": "5576659e41ac13574ef35e6a3e2c058cd011a5b752031636a5ae2ef6eb0ff445",
+        "sha256": "fc8cc5a8d6ee3e0383e0872d3754683c4986211274d13aa97cba0979881e34f9",
         "mode": 420
       },
       {
@@ -9891,13 +10156,138 @@
         "mode": 420
       },
       {
+        "path": "tools/ant-hive-world/sweeper-lane.js",
+        "sha256": "e8a144ad39eae7e585ccb08c6c4dfd861dd5b202d12d107413e3c2aa91b60481",
+        "mode": 420
+      },
+      {
         "path": "tools/ant-hive-world/train-tick.js",
-        "sha256": "0e8dc54c382966957e0e9fa10d9c4014e40e3dae2a918e7e90c4b1fa2966d057",
+        "sha256": "de7f775df2c128623448a2c5cb354241ed8a2909576b508c9d778bb7c15d0b97",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/unreal-export/README.md",
+        "sha256": "67b200060e2dba91b13f3646172db62e2f0bf243262231ae281e3163a1f942e5",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/unreal-export/__tests__/deploy-state-corrections.test.cjs",
+        "sha256": "214c5e260a99687d17cacc476de77e853ecb72604f66b8372589c9fd58c79a1c",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/unreal-export/__tests__/simulation-portability.test.cjs",
+        "sha256": "5dc759683bfa869e688adb3c6bb4c683b09d26fb7ffcb709fc1fc7720b71b4a4",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/unreal-export/deploy-state.jsonl",
+        "sha256": "562407878f989f3762c855d945892240a7a4b8f4510918331607817a995617a8",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/unreal-export/import-index.jsonl",
+        "sha256": "aad226e21c885323ce001b67be11ed57bb037ae5989b118954457b26573913fb",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/unreal-export/import-turn.js",
+        "sha256": "e6950706d8d385661f2d764f7cc1dd637c812f4da2e9f1893880f93af0d356df",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/unreal-export/schema.json",
+        "sha256": "c8a536e8c18e2a67974f4f681b29609d91485625862ab7abacd7d6f7ab68c5a3",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/unreal-export/ue/AntSimV2.uproject",
+        "sha256": "910a86993ec10da65684c8d49163d5f54b3e791cb3f55e55bf6ed5b49d4a52ba",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/unreal-export/ue/Config/DefaultEngine.ini",
+        "sha256": "d418abc5a8326359e8a6ef9f77b537d7d66929a64f70d2756255a911bd64f82c",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/unreal-export/ue/Config/DefaultGame.ini",
+        "sha256": "34f2aeb0593eeec463c84cae7d7a70742fbb063e289be609b0f709730584ee9f",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/unreal-export/ue/Content/Python/build_world.py",
+        "sha256": "9072d895f08ca5888ce04610002b8e6edf3d070077ab179813d5031b8b7728da",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/unreal-export/ue/Content/Python/init_unreal.py",
+        "sha256": "5f6321c247d7208e3999c42ace66ab364331823b267dcdc7b11cd3acebf039e2",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/unreal-export/ue/README.md",
+        "sha256": "0dcc413caffffce5920822b41181352d13d60e1e231edbc8b3ecdfb830b527f1",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/unreal-export/ue/Tools/BuildLevel.ps1",
+        "sha256": "3c1136107786450534a66706cadfa5e0bdd1ce8d3e619cfa1b3c961877ca222d",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/unreal-export/ue/deploy.sh",
+        "sha256": "f895d5eaf6db2b5bda6c4ca8ceed6021aae949623ae8daf8c0b0e2cc52ca3479",
+        "mode": 493
+      },
+      {
+        "path": "tools/ant-hive-world/unreal-export/unreal-import__baseline-3000-r6.json",
+        "sha256": "79f34b77e3bcf931705fa2aa9cb093560bb61c6752923599e7854e6a7ea424cb",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/unreal-export/unreal-import__baseline-3000-r7.json",
+        "sha256": "f198cc860c7be2fdde9b0d45e8a9c5fd1c4b7a744d93006c545fd3f2db20bc98",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/unreal-export/unreal-import__cc-turn1.json",
+        "sha256": "92f661d5df5f13e24081cbb1f81071616fbdfbc5a22c0d588d468ede524381e2",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/unreal-export/unreal-import__cc-turn2.json",
+        "sha256": "225ee6fe2fba98129d2a9e547ff1b2a4b6332ae7f563785595cfb79f2d63438d",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/unreal-export/unreal-import__cc-turn3.json",
+        "sha256": "13829f0e180d39ac226622ee19542417b9d0c0ae59afd94da9ca73f2e462b6f0",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/unreal-export/unreal-import__tt-run-001-09a6c88b.json",
+        "sha256": "7eabac1d8cd0d502a727324f66763ae526f0fee343e1914636aa12d09578b528",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/unreal-export/unreal-import__tt-run-002r2-6028d083.json",
+        "sha256": "c813e8fccbf3c14ab5f52d32f0b351d12d1a19cc485471d6092f0487dee34650",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/unreal-export/unreal-import__tt-run-003-5c9cbe9d.json",
+        "sha256": "e71328c2ffc76dfac4cfeba5b39b2f8f4329de147a2f7fa613dc87743074ae15",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/unreal-export/watch-imports.js",
+        "sha256": "6281d59c157447d1b78e9d5e24a08e70ccd8812d916bd73970247abc31961cec",
         "mode": 420
       },
       {
         "path": "tools/ant-hive-world/untrained-network.js",
-        "sha256": "ba12fea3115d8e2be4ea8d074ccd3828494d40bb015f97550e90bde25ea0ed6b",
+        "sha256": "c79d621bab5d553f30690cd315d571d5cca0a34b6ab7d7fddd4e66307e4e6f29",
         "mode": 420
       },
       {
@@ -9906,18 +10296,33 @@
         "mode": 420
       },
       {
+        "path": "tools/ant-hive-world/verifier-breadth-check.cjs",
+        "sha256": "ea465b914036e0dfc5df949cc89c2d360f498816cb5de9db20f1ab735b659ed1",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/verifier-lane.js",
+        "sha256": "53b8e7e063452f5a52ad54b7ba059564b7c59be8c59ad24abf58eb3dae39ea02",
+        "mode": 420
+      },
+      {
         "path": "tools/ant-hive-world/world-mind-harness.cjs",
-        "sha256": "eab2f9c0a5e3c88956fc3efe3184b6e45c51ceccf730affd0b0a97cc612882ef",
+        "sha256": "65980773e5371b88f69a79eeaa3fe60506a30b5cbac2385927a64a21cf847b54",
         "mode": 420
       },
       {
         "path": "tools/ant-hive-world/world-mind.js",
-        "sha256": "09a87ac21b493ca4410bd381a15acd2351a1b7dc7eae467ceb464d68adaaaa0d",
+        "sha256": "6d079b2a3d48bc82ec35a8d5f527e2a75fab6a9c2142b4cbd9fbbeaf5bf0521a",
         "mode": 420
       },
       {
         "path": "tools/ant-hive-world/world-state.js",
-        "sha256": "81847138a6171f99da9b8a238e64e58e235ba3c256921420acffc6e80070860d",
+        "sha256": "090dd3026a1770aeffad5b3598a44e507f4c4bd9dacee1aadd546c2355b12b7a",
+        "mode": 420
+      },
+      {
+        "path": "tools/ant-hive-world/world-train.js",
+        "sha256": "0e2dd2e3d0491f4f58248f6e5733525f4038d1f7a23031afacfb188c23daea7c",
         "mode": 420
       },
       {
@@ -10846,6 +11251,11 @@
         "mode": 420
       },
       {
+        "path": "tools/commands/handlers/__tests__/new-session.test.cjs",
+        "sha256": "c9dbbeb9e88c31f4998f6ffdcc00a48607ce6290147d1680b2cd3a8f22cc46a0",
+        "mode": 420
+      },
+      {
         "path": "tools/commands/handlers/concept-promote.cjs",
         "sha256": "bb30f46487f6f38737752feedccc2744e8c9f335d8fd71a3fe39c8a2fe35719c",
         "mode": 420
@@ -10857,7 +11267,7 @@
       },
       {
         "path": "tools/commands/handlers/new-session.cjs",
-        "sha256": "b0daec029400d5ed51e25a96f203f192db27327f81beb3092ab0ef3276447202",
+        "sha256": "d6cedb34413eada8abdc84e7c497fba898858ceebec72e31f9c9dd0a4baf8ad5",
         "mode": 420
       },
       {
@@ -10882,7 +11292,7 @@
       },
       {
         "path": "tools/commands/handlers/shutdown.cjs",
-        "sha256": "e1622e2918d7f8b1efc0b860012de465b60ae4c7d02e8d898155fafb1f7ee3a3",
+        "sha256": "56c3025cc3f2d171369daebd81a7a742e429016c54370418b80423379f82c485",
         "mode": 420
       },
       {
@@ -11907,8 +12317,13 @@
       },
       {
         "path": "tools/hygiene/sync-private-remotes.sh",
-        "sha256": "cc6ea7b6267be6d3503ca8948e65b74841b5ecf3c190e8bfcac6e9bb3e4ffc43",
+        "sha256": "f522292f6b9aa7958752b6bffdc2053cf47011473e28515391062cefd7d1a1ee",
         "mode": 493
+      },
+      {
+        "path": "tools/hygiene/sync-private-remotes.test.cjs",
+        "sha256": "a19ddf7a3e3dc5192517ba1834c4fb0d785194cfd6c03fcd9642d81b5da01882",
+        "mode": 420
       },
       {
         "path": "tools/image-optimize/WORDPRESS-PREUPLOAD.md",
@@ -12376,6 +12791,16 @@
         "mode": 420
       },
       {
+        "path": "tools/kernel/hooks/__tests__/dispatch-stop-failopen.test.cjs",
+        "sha256": "c6f371cd3ed2d7a21e51d23642c2a688255006db556c70dfdc8183e1ef7610e8",
+        "mode": 420
+      },
+      {
+        "path": "tools/kernel/hooks/__tests__/dispatch-userprompt-failopen.test.cjs",
+        "sha256": "771dee97c859b57b88eb91730f944f7f2a80a46e2828d785cf9be0ab7c5a2a91",
+        "mode": 420
+      },
+      {
         "path": "tools/kernel/hooks/__tests__/once-per-session.test.cjs",
         "sha256": "d9a9cb4bc34f11cf3fd52d77abe9c929ca2a1fe69582e58324f3c677419356f9",
         "mode": 420
@@ -12512,12 +12937,12 @@
       },
       {
         "path": "tools/kernel/hooks/dispatch-stop.cjs",
-        "sha256": "a7eb55ef358657251267097fafbd3d9fd80a7a1f3692ecae6c344b2ef68c1977",
+        "sha256": "134e5ec30a7a8765f8980f5ba74519e410c410cbc2315532eb53dc7ed4ea1329",
         "mode": 420
       },
       {
         "path": "tools/kernel/hooks/dispatch-userprompt.cjs",
-        "sha256": "f158cb755cf18e980af478a7bb2b8ea8661cf5b5e9503ba6fb3e694df2b27e33",
+        "sha256": "603fac5b2968f678faa50aaddd389d5c4b76298f276106e47f6d2de4a2ac06e2",
         "mode": 420
       },
       {
@@ -14282,7 +14707,7 @@
       },
       {
         "path": "tools/parity/build-wiring-graph.cjs",
-        "sha256": "12c11bee283fac5ad6bc5b94efdf4bee972f9e40dd69d62cf200efbd1b2ab100",
+        "sha256": "ff4d8beaebd80701a06588312391da7969df90a4a9c0fa1ce7b96cb6e9ea04cf",
         "mode": 420
       },
       {
@@ -15106,6 +15531,16 @@
         "mode": 420
       },
       {
+        "path": "tools/sessions/__tests__/shutdown-boundary.test.cjs",
+        "sha256": "50bfb9ade808fddb0c3b049ac04dfc1833d14bc239a3fc875b8781a176968876",
+        "mode": 420
+      },
+      {
+        "path": "tools/sessions/__tests__/watcher-lifecycle.test.cjs",
+        "sha256": "09f09ea4db767b608b918948ea67045156ccea8bbca518ea222d9b533c032a02",
+        "mode": 420
+      },
+      {
         "path": "tools/sessions/boot-dead-session-reaper.cjs",
         "sha256": "17c5804957aa6f8c903212b03b1e337e621291b5db5c4a590292ee60c6f41a3b",
         "mode": 420
@@ -15146,6 +15581,11 @@
         "mode": 420
       },
       {
+        "path": "tools/sessions/lib/__tests__/resolve-session-id.test.cjs",
+        "sha256": "37336f831ca480b0970c19587f0c817215de7270302c07f0dabe7d75e338b244",
+        "mode": 420
+      },
+      {
         "path": "tools/sessions/lib/active-session-registry.js",
         "sha256": "041d8aa7b2898b8a7ff941a3bad94419179c66267888e3d6875bd6c6bf311959",
         "mode": 420
@@ -15153,6 +15593,11 @@
       {
         "path": "tools/sessions/lib/boundary-markers.cjs",
         "sha256": "9a31937df171cee5629b1a543b229b1c2941aa91800ef138ac2d0af36015ee2e",
+        "mode": 420
+      },
+      {
+        "path": "tools/sessions/lib/resolve-session-id.cjs",
+        "sha256": "3c7a206fe51b6f047462d02e303a8a16f9a6d3ec21aae223e062ea949230b983",
         "mode": 420
       },
       {
@@ -15178,6 +15623,11 @@
       {
         "path": "tools/sessions/spawn-coordinator.cjs",
         "sha256": "381ea42012326efadb62d721b6cfd4ff4e307584a3d1491b88348a7170eb4d9b",
+        "mode": 420
+      },
+      {
+        "path": "tools/sessions/watcher-lifecycle.cjs",
+        "sha256": "be75ac4ac347feb2c84372475a38e0f230329a2922d93432288f48c27ef0a31a",
         "mode": 420
       },
       {
@@ -15248,6 +15698,21 @@
       {
         "path": "tools/signals/__tests__/signal-lane.test.cjs",
         "sha256": "4bfc6ab1f6ce20e59d1b7efba090ce55306f3bed54932fd66f789ed506666378",
+        "mode": 420
+      },
+      {
+        "path": "tools/signals/__tests__/watch-actor-bridge-managed-startup.test.cjs",
+        "sha256": "f513ed7164acabb3ae0cceb0de5eff7c8720a8e5e2ce3537a879269c7f9fd825",
+        "mode": 420
+      },
+      {
+        "path": "tools/signals/__tests__/watch-codex-bridge-managed-startup.test.cjs",
+        "sha256": "2d52512757d2cc004121d6eb9cab7ba3f5b1026f53169e9e792997109129c821",
+        "mode": 420
+      },
+      {
+        "path": "tools/signals/__tests__/watch-pipeline-loop-managed-startup.test.cjs",
+        "sha256": "a6c1acd995445d4aed7ad37fe6c43a858de4cd17cfd8adae510b8f1b257e6bf6",
         "mode": 420
       },
       {
@@ -15626,6 +16091,11 @@
         "mode": 420
       },
       {
+        "path": "tools/signals/lib/watcher-ready.cjs",
+        "sha256": "14296f42f8c2d101540583bc0c86d1180d190a2fe69dbe97192c71d7a19606c5",
+        "mode": 420
+      },
+      {
         "path": "tools/signals/lib/workstream-loop.js",
         "sha256": "6dbdf50b85de832f5d0d6bd77c56a3bd3b48f2519b111ff41eef8768396c3d90",
         "mode": 420
@@ -15742,7 +16212,7 @@
       },
       {
         "path": "tools/signals/watch-actor-bridge.js",
-        "sha256": "618e4c85e754ad0f4e26b96f5ab29022090c6608bc9afc3de9c3833348708929",
+        "sha256": "5920a06a78a8182d721b565bdbe304120e2551afed7f4494e376587048e32ef8",
         "mode": 420
       },
       {
@@ -15752,7 +16222,7 @@
       },
       {
         "path": "tools/signals/watch-codex-bridge.js",
-        "sha256": "a3f061db0d03e9bab7cd49db61227c01aa4dfde86c95059dccea061102dd5b29",
+        "sha256": "4fbb87f84e4f4108c18f4100785685f0dfe78e234b48821f600ed27e364d9bda",
         "mode": 420
       },
       {
@@ -15767,7 +16237,7 @@
       },
       {
         "path": "tools/signals/watch-pipeline-loop.js",
-        "sha256": "be13c68c72c63f4897ee1b73398e054eace192a1ba1ba4dce5776a2be7f6aabd",
+        "sha256": "62ce1c6d293affa0a5ff33a12204bbd6f6dd3c1de5fcbaa6523946511a5cd3dd",
         "mode": 420
       },
       {
@@ -17529,9 +17999,9 @@
     "package_script_count": 206,
     "command_alias_registry_sha256": "bf0f8b941e0dc0d7b7d3938b765ac379a62b1c3bac50984358cd133afd1012d2",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "d49bd5235db42698872fc3e4a98bcbc471f54d6f334453b424fe4d8341a85248",
-    "graph_nodes": 4223,
-    "graph_edges": 2955
+    "graph_sha256": "e6c8bb8ebc4a3d389907c245780b53f2bd2c91e46bd2e105972fbc78906f0eef",
+    "graph_nodes": 4318,
+    "graph_edges": 3069
   },
   "runtime_exclusions": [
     ".git/**",

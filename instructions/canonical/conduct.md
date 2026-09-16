@@ -81,6 +81,34 @@ amendment must reach the operator anyway, explain it jargon-free in three parts:
 what it is, what it would impact, why it matters. (Operator standing rule,
 2026-09-16.)
 
+**What counts as an operator judgement.** These are the decision classes that
+belong to the human operator; everything not on this list is presumed technical
+and proceeds:
+
+- *How the simulation should work for the minds in it* — what the world is like
+  from the inside, what the minds are for, what a good life or a good run looks
+  like for them.
+- *What the system is for* — whether Mythos is a client-delivery tool first or a
+  research harness first, and how the two share attention and budget.
+- *Money and cost posture* — paid review lanes, provider subscriptions, when a
+  run's budget is worth spending, which providers stay in the rotation.
+- *Anything that leaves the building* — client emails, published pages,
+  dealer-facing pricing, public repository exports, review payloads sent to a new
+  provider.
+- *Deleting or archiving evidence* — transcript archives, disk cleanup, retention
+  windows. Bytes gone are gone.
+- *Trust boundaries* — which minds may review or merge, credential access, what
+  runs unattended.
+- *Priority between workstreams* — client work versus simulation versus
+  stabilization when they compete for the same session or the same disk.
+- *Naming and doctrine* — rank rules, the mythic lexicon, what counts as a cleared
+  run. These are values, not code.
+- *Facts only the operator holds* — client relationships, what a dealer actually
+  said, hardware owned, what happened in a conversation no artifact recorded.
+
+Any technical content inside one of these decisions still reaches the operator in
+the three-part form above.
+
 ## 5. End-of-turn contract
 
 Before ending your turn, read your own last paragraph. If the task is not yet

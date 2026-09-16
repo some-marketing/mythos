@@ -19,9 +19,10 @@ RUN_ONLY
 1. State the product opportunity and who experiences it.
 2. Define capabilities as outcomes, not implementation mechanisms.
 3. Record constraints, non-goals, assumptions, and unresolved questions.
-4. Define measurable success signals and evidence needed to trust them.
-5. Write a concise PRFAQ that tests user value, adoption, failure modes, and operational consequences.
-6. Identify which claims remain too weak for downstream planning.
+4. Carry the relevant evidence identifiers or explicit assumption markers into each material product claim.
+5. Define measurable success signals and evidence needed to trust them.
+6. Write a concise PRFAQ that tests user value, adoption, failure modes, and operational consequences.
+7. Identify which claims remain too weak for downstream planning.
 
 ## Outputs
 
@@ -32,4 +33,5 @@ RUN_ONLY
 
 - The brief is useful without requiring hidden conversational context.
 - Capabilities remain implementation-neutral.
+- Material claims remain traceable to evidence or explicit assumptions.
 - The PRFAQ exposes uncertainty rather than marketing the idea.

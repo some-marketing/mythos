@@ -18,10 +18,11 @@ RUN_ONLY
 
 1. State why the change is requested and what outcome it should produce.
 2. Identify affected behaviors and consumers.
-3. Record constraints, non-goals, compatibility expectations, and known risks.
-4. Define observable success signals.
-5. List unresolved baseline or consumer questions.
-6. Select Lite or Full specification depth based on risk and uncertainty.
+3. Attach the supplied source locator or evidence identifier for the request, affected consumers, and material outcome claims; mark missing provenance explicitly.
+4. Record constraints, non-goals, compatibility expectations, and known risks.
+5. Define observable success signals.
+6. List unresolved baseline or consumer questions.
+7. Select Lite or Full specification depth based on risk and uncertainty.
 
 ## Outputs
 
@@ -30,5 +31,6 @@ RUN_ONLY
 ## Success criteria
 
 - Intent and implementation are separate.
+- Material intent and consumer claims have an evidence reference or an explicit gap.
 - The proposal names who could be harmed by an incorrect delta.
 - Specification depth is justified rather than automatic.

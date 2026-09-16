@@ -22,8 +22,9 @@ RUN_ONLY
 2. Separate the problem, requested solution, desired outcome, and success signal.
 3. Identify intended users and affected non-user stakeholders.
 4. Record constraints, non-goals, risks, and decisions already made.
-5. List unknowns that would materially change the product definition.
-6. Define stop conditions for the intake.
+5. Preserve a source locator, revision, or evidence identifier for every supplied material claim; mark unavailable provenance as an explicit evidence gap.
+6. List unknowns that would materially change the product definition.
+7. Define stop conditions for the intake.
 
 ## Outputs
 
@@ -34,4 +35,5 @@ RUN_ONLY
 
 - The problem can be evaluated independently of the requested solution.
 - Unsupported claims are visibly marked.
+- Material scope claims trace to supplied evidence or an explicit evidence gap.
 - Scope, non-goals, and stop conditions are explicit.

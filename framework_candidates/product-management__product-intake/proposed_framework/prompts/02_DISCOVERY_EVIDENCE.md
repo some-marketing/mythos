@@ -16,11 +16,12 @@ RUN_ONLY
 ## Steps
 
 1. Inventory every supplied evidence item and its authority.
-2. Classify each material statement as observation, stakeholder claim, interpretation, assumption, or open question.
-3. Identify contradictory evidence, missing user perspectives, and likely source drift.
-4. Record at least two plausible explanations for the reported problem where evidence permits.
-5. Name the cheapest falsifier for each material product hypothesis.
-6. Stop rather than filling missing evidence with inference.
+2. Assign each evidence item a stable evidence identifier and preserve its source locator, revision, or digest when supplied.
+3. Classify each material statement as observation, stakeholder claim, interpretation, assumption, or open question.
+4. Identify contradictory evidence, missing user perspectives, and likely source drift.
+5. Record at least two plausible explanations for the reported problem where evidence permits.
+6. Name the cheapest falsifier for each material product hypothesis.
+7. Stop rather than filling missing evidence with inference.
 
 ## Outputs
 
@@ -30,5 +31,6 @@ RUN_ONLY
 ## Success criteria
 
 - Every product claim has provenance or an explicit evidence gap.
+- Every evidence item has an origin or an explicit unavailable-provenance marker.
 - The ledger distinguishes confidence from authority.
 - Proposed evidence actions are bounded and non-destructive.

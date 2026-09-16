@@ -1,0 +1,12 @@
+{
+  "schema": "CodexSkillManagedTargets/1.0",
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "targets": [
+    ".agents/skills/source-command-boot/SKILL.md",
+    ".agents/skills/source-command-cross-session/SKILL.md",
+    ".agents/skills/source-command-end-session/SKILL.md",
+    ".agents/skills/source-command-new-session/SKILL.md",
+    ".agents/skills/source-command-next-session/SKILL.md",
+    ".agents/skills/source-command-shutdown/SKILL.md"
+  ]
+}

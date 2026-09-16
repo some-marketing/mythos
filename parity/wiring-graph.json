@@ -124,6 +124,12 @@
       "authority": "blueprint"
     },
     {
+      "id": "alias:chi",
+      "type": "command-alias",
+      "name": "chi",
+      "authority": "outward-inward"
+    },
+    {
       "id": "alias:council-of-owls",
       "type": "command-alias",
       "name": "council-of-owls",
@@ -164,6 +170,12 @@
       "type": "command-alias",
       "name": "oc",
       "authority": "orchestrate-loop"
+    },
+    {
+      "id": "alias:oil",
+      "type": "command-alias",
+      "name": "oil",
+      "authority": "outward-inward"
     },
     {
       "id": "alias:owl",
@@ -331,6 +343,11 @@
       "id": "command-definition:charter-quest",
       "type": "command-definition",
       "name": "charter-quest"
+    },
+    {
+      "id": "command-definition:chi",
+      "type": "command-definition",
+      "name": "chi"
     },
     {
       "id": "command-definition:chron",
@@ -833,6 +850,11 @@
       "name": "oc"
     },
     {
+      "id": "command-definition:oil",
+      "type": "command-definition",
+      "name": "oil"
+    },
+    {
       "id": "command-definition:open-contract",
       "type": "command-definition",
       "name": "open-contract"
@@ -851,6 +873,11 @@
       "id": "command-definition:orchestrate-loop",
       "type": "command-definition",
       "name": "orchestrate-loop"
+    },
+    {
+      "id": "command-definition:outward-inward",
+      "type": "command-definition",
+      "name": "outward-inward"
     },
     {
       "id": "command-definition:owl",
@@ -1510,6 +1537,13 @@
       "mode": 420
     },
     {
+      "id": "file:_dev/sim-runs/summarize-reward-contract.js",
+      "type": "file",
+      "path": "_dev/sim-runs/summarize-reward-contract.js",
+      "sha256": "751a67de9c1490b93fe14f65636453f28d57fe41683784d8f792532c86d029fb",
+      "mode": 420
+    },
+    {
       "id": "file:_dev/sim-runs/vm/ant-world.yaml",
       "type": "file",
       "path": "_dev/sim-runs/vm/ant-world.yaml",
@@ -1703,6 +1737,20 @@
       "type": "file",
       "path": ".agents/skills/go/SKILL.md",
       "sha256": "1a441653a5c5ff6408d0e6b5e175f4b1f1f336b77b08e18a3a28f69eb6cf0f55",
+      "mode": 420
+    },
+    {
+      "id": "file:.agents/skills/outward-inward-loop/references/tt-adaptation.md",
+      "type": "file",
+      "path": ".agents/skills/outward-inward-loop/references/tt-adaptation.md",
+      "sha256": "a2b3b66dc5b9fedf6cc2ff12a3e2699f7ecdfa6776ccee05574693edd1141ffb",
+      "mode": 420
+    },
+    {
+      "id": "file:.agents/skills/outward-inward-loop/SKILL.md",
+      "type": "file",
+      "path": ".agents/skills/outward-inward-loop/SKILL.md",
+      "sha256": "da1ce79b223ff48c7c090860d167f8cb2f9f89ca99020c28aab60c5541291f95",
       "mode": 420
     },
     {
@@ -2364,6 +2412,13 @@
       "mode": 420
     },
     {
+      "id": "file:.agents/skills/source-command-outward-inward/SKILL.md",
+      "type": "file",
+      "path": ".agents/skills/source-command-outward-inward/SKILL.md",
+      "sha256": "6963505634587efba03f24f717ef6bf11319d5ef27a8d755b6093a00b10b5d7f",
+      "mode": 420
+    },
+    {
       "id": "file:.agents/skills/source-command-owl/SKILL.md",
       "type": "file",
       "path": ".agents/skills/source-command-owl/SKILL.md",
@@ -2942,6 +2997,13 @@
       "type": "file",
       "path": ".claude/commands/charter-quest.md",
       "sha256": "f26fc93fc0ffa26093e1b556776ed83719557a33a9e6dc66d060b9b4c66882ed",
+      "mode": 420
+    },
+    {
+      "id": "file:.claude/commands/chi.md",
+      "type": "file",
+      "path": ".claude/commands/chi.md",
+      "sha256": "c8c1c2a5e78c8eb05fdfd2f0d73e65e7695bd31ebb5e31b97fcad3e39bc99d41",
       "mode": 420
     },
     {
@@ -3645,6 +3707,13 @@
       "mode": 420
     },
     {
+      "id": "file:.claude/commands/oil.md",
+      "type": "file",
+      "path": ".claude/commands/oil.md",
+      "sha256": "727eb6eda4cc9678c56ce7dceedd44950e65db151b78d86ef8613062142a314b",
+      "mode": 420
+    },
+    {
       "id": "file:.claude/commands/open-contract.md",
       "type": "file",
       "path": ".claude/commands/open-contract.md",
@@ -3670,6 +3739,13 @@
       "type": "file",
       "path": ".claude/commands/orchestrate.md",
       "sha256": "a1750dc96ec958c9f37a71de97a6e07fa0797b21bce5f5af4cc2793d6a3c276c",
+      "mode": 420
+    },
+    {
+      "id": "file:.claude/commands/outward-inward.md",
+      "type": "file",
+      "path": ".claude/commands/outward-inward.md",
+      "sha256": "964fb629c0a1ff12e9d1faff0e7c8c3119b458c8fb648a8c151e3ba502e332ec",
       "mode": 420
     },
     {
@@ -4047,7 +4123,7 @@
       "id": "file:.claude/project-claude.yml",
       "type": "file",
       "path": ".claude/project-claude.yml",
-      "sha256": "5e4d3c09b8d68745ec88ebe0f58920e404947a690570136f6b4ba332348f639b",
+      "sha256": "e5baf157167e2bb9b1e7bfd2b6a9a4212d6c455666221cdb31e63c33233c2b5a",
       "mode": 420
     },
     {
@@ -4534,6 +4610,20 @@
       "mode": 420
     },
     {
+      "id": "file:.claude/skills/outward-inward-loop/references/tt-adaptation.md",
+      "type": "file",
+      "path": ".claude/skills/outward-inward-loop/references/tt-adaptation.md",
+      "sha256": "a2b3b66dc5b9fedf6cc2ff12a3e2699f7ecdfa6776ccee05574693edd1141ffb",
+      "mode": 420
+    },
+    {
+      "id": "file:.claude/skills/outward-inward-loop/SKILL.md",
+      "type": "file",
+      "path": ".claude/skills/outward-inward-loop/SKILL.md",
+      "sha256": "8f5faab8b55c09c676d8d7eac21aa9b7e12afa03cf17d980b789a77d97093224",
+      "mode": 420
+    },
+    {
       "id": "file:.claude/skills/owl/SKILL.md",
       "type": "file",
       "path": ".claude/skills/owl/SKILL.md",
@@ -4670,14 +4760,14 @@
       "id": "file:AGENTS.md",
       "type": "file",
       "path": "AGENTS.md",
-      "sha256": "d55ae3fa03e903092b1986caf6e0cfe0c6e8890708b215048c602f4afd629d39",
+      "sha256": "4d6df641afffed03ed3d5897c835c0b31e84711bed505b99f742c15b0c514d7a",
       "mode": 420
     },
     {
       "id": "file:CLAUDE.md",
       "type": "file",
       "path": "CLAUDE.md",
-      "sha256": "5f0d58aa93e2ab7488cb41544c2f0c61c968c8413b01c462f4cfb05980d919b3",
+      "sha256": "be26ffd8ddf2cb6f8154c97668584f5e551bc3bf32aebb4eb3748e3e3f48b4e6",
       "mode": 420
     },
     {
@@ -9325,7 +9415,7 @@
       "id": "file:INSTRUCTIONS.md",
       "type": "file",
       "path": "INSTRUCTIONS.md",
-      "sha256": "d2c33ba0a3da55e6c03559c9058328941045fe243863321ba7749d514648d86d",
+      "sha256": "86234640fccb00ef90ba142ada82e97897abaea7d7313c1820b66f60e72a7e73",
       "mode": 420
     },
     {
@@ -9388,14 +9478,14 @@
       "id": "file:instructions/canonical/command-aliases.yaml",
       "type": "file",
       "path": "instructions/canonical/command-aliases.yaml",
-      "sha256": "9bbc50aa1343a5502258e0e067eca0bb4cf4ea9f560abc5b998247a0e04b9901",
+      "sha256": "bf0f8b941e0dc0d7b7d3938b765ac379a62b1c3bac50984358cd133afd1012d2",
       "mode": 420
     },
     {
       "id": "file:instructions/canonical/command-index.md",
       "type": "file",
       "path": "instructions/canonical/command-index.md",
-      "sha256": "b661345b4497d27e7152a9fb262ba8cfd0e9509087938cc5fbb618f9546160b5",
+      "sha256": "9ed4357cc84e9986dc5da4c8bc0a1a8bbe9643d63eb886289eaa7d83e2b46aba",
       "mode": 420
     },
     {
@@ -10064,6 +10154,13 @@
       "mode": 420
     },
     {
+      "id": "file:instructions/canonical/commands/outward-inward.yaml",
+      "type": "file",
+      "path": "instructions/canonical/commands/outward-inward.yaml",
+      "sha256": "e2318666358b549df73bca76b17dbe8eeb5c828c18c9e9c48d8673e555fab1fd",
+      "mode": 420
+    },
+    {
       "id": "file:instructions/canonical/commands/owl.yaml",
       "type": "file",
       "path": "instructions/canonical/commands/owl.yaml",
@@ -10249,7 +10346,7 @@
       "id": "file:instructions/canonical/commands/shutdown.yaml",
       "type": "file",
       "path": "instructions/canonical/commands/shutdown.yaml",
-      "sha256": "c8c8e2e9ba3519b5ee0f3727fd0178e1c8ba1c51c6b562734fb65e04caac9be6",
+      "sha256": "39781d433f57af6aec323f253156e5bb6c8b3f27be3e2870e8c0eaa22e45be16",
       "mode": 420
     },
     {
@@ -10732,7 +10829,7 @@
       "id": "file:instructions/canonical/system.yaml",
       "type": "file",
       "path": "instructions/canonical/system.yaml",
-      "sha256": "4872c667fed2bb7cdeafc8b1ab649256170c0ca661e03616349a03e03d6f3890",
+      "sha256": "28e1f425270ab5eef625961867bfd949e3ea16b0163ac4f632d7021eb9a7e3a6",
       "mode": 420
     },
     {
@@ -10760,21 +10857,21 @@
       "id": "file:instructions/generated/claude/.claude.guardrails.md",
       "type": "file",
       "path": "instructions/generated/claude/.claude.guardrails.md",
-      "sha256": "028de2152a2b9f3af5ea9a750c38910572e4651f2456d664888f5f039c6b09e7",
+      "sha256": "996c11eef57fba5a279cb7bf3cecbf107e35f709f6079b907beb39d6fad781e3",
       "mode": 420
     },
     {
       "id": "file:instructions/generated/claude/CLAUDE.md",
       "type": "file",
       "path": "instructions/generated/claude/CLAUDE.md",
-      "sha256": "4dc4c5d3d956dcda72ce6ed2f3b65f4f9592ad2cbc05569072d5f77e9254c19a",
+      "sha256": "be26ffd8ddf2cb6f8154c97668584f5e551bc3bf32aebb4eb3748e3e3f48b4e6",
       "mode": 420
     },
     {
       "id": "file:instructions/generated/manifest.json",
       "type": "file",
       "path": "instructions/generated/manifest.json",
-      "sha256": "d9b27fdb59309acd67d6b561554350752706fa73eff59ea6a6b72fb12be77c32",
+      "sha256": "9d6710100d39a648f457db238ad34eefcd112f01ede7047c5a6be314a273873e",
       "mode": 420
     },
     {
@@ -10795,7 +10892,7 @@
       "id": "file:OPENCODE.md",
       "type": "file",
       "path": "OPENCODE.md",
-      "sha256": "8e19a625b60570a0eecad6429ce8d956f248da4a9da0e64cae9234bf02e4fb13",
+      "sha256": "d58b14d40f7293ffc4ce6d755a2056e303d18ea04d637e95887dce72e7137e91",
       "mode": 420
     },
     {
@@ -11362,14 +11459,14 @@
       "id": "file:tools/ant-hive-world/__tests__/dream-lane.test.cjs",
       "type": "file",
       "path": "tools/ant-hive-world/__tests__/dream-lane.test.cjs",
-      "sha256": "25134fe9bcd962b434c7402158a0cbb578db7bd5fa5f4db42de69f69ddda7ce8",
+      "sha256": "39275bcdca7021def46e661814562d04ce9f4295e5710fec1cab035192c14ada",
       "mode": 420
     },
     {
       "id": "file:tools/ant-hive-world/__tests__/dream-memory.test.cjs",
       "type": "file",
       "path": "tools/ant-hive-world/__tests__/dream-memory.test.cjs",
-      "sha256": "35bb522e61c8e0a3bfd5f3d0fc3734221278b239f74d6ee486ee311123dd99f3",
+      "sha256": "54a055ac22d0b4ec030fe5ef381176dc3f4337060ff176e162af0d064f39711c",
       "mode": 420
     },
     {
@@ -11670,14 +11767,14 @@
       "id": "file:tools/ant-hive-world/dream/dream-lane.js",
       "type": "file",
       "path": "tools/ant-hive-world/dream/dream-lane.js",
-      "sha256": "d88a0c8b1664646e3432b77e7d7175e19d0f9fab8815ba6d183d9698ba269ba8",
+      "sha256": "a22d9eb43abbb1004eb79437c413970776e19970aefd8d2dea98739751d687d9",
       "mode": 420
     },
     {
       "id": "file:tools/ant-hive-world/dream/dream-memory.js",
       "type": "file",
       "path": "tools/ant-hive-world/dream/dream-memory.js",
-      "sha256": "3110078f86d9591b0a2b90714d3946fbe5b583ee91ee69b13fc5971b045a10dc",
+      "sha256": "23079c7440d0496c1728251bf915faf7f5bf4fbe14c22676c384662ad3d92875",
       "mode": 420
     },
     {
@@ -11978,7 +12075,7 @@
       "id": "file:tools/ant-hive-world/run-live.js",
       "type": "file",
       "path": "tools/ant-hive-world/run-live.js",
-      "sha256": "ef6bb89ac789cf8849ddf4e1bb1ee1c902ee657c76a04b15525fc34db3bacb5f",
+      "sha256": "fc8cc5a8d6ee3e0383e0872d3754683c4986211274d13aa97cba0979881e34f9",
       "mode": 420
     },
     {
@@ -12010,6 +12107,13 @@
       "mode": 420
     },
     {
+      "id": "file:tools/ant-hive-world/unreal-export/__tests__/simulation-portability.test.cjs",
+      "type": "file",
+      "path": "tools/ant-hive-world/unreal-export/__tests__/simulation-portability.test.cjs",
+      "sha256": "5dc759683bfa869e688adb3c6bb4c683b09d26fb7ffcb709fc1fc7720b71b4a4",
+      "mode": 420
+    },
+    {
       "id": "file:tools/ant-hive-world/unreal-export/deploy-state.jsonl",
       "type": "file",
       "path": "tools/ant-hive-world/unreal-export/deploy-state.jsonl",
@@ -12027,7 +12131,7 @@
       "id": "file:tools/ant-hive-world/unreal-export/import-turn.js",
       "type": "file",
       "path": "tools/ant-hive-world/unreal-export/import-turn.js",
-      "sha256": "e227fb099de5b3e3ff4285eacb3f8e7093dba9e3d378f36255333ca99ee5a228",
+      "sha256": "e6950706d8d385661f2d764f7cc1dd637c812f4da2e9f1893880f93af0d356df",
       "mode": 420
     },
     {
@@ -12160,7 +12264,7 @@
       "id": "file:tools/ant-hive-world/unreal-export/watch-imports.js",
       "type": "file",
       "path": "tools/ant-hive-world/unreal-export/watch-imports.js",
-      "sha256": "c4de88e1482d5795a5b9e95c9ec25c454b63aecbadfc1ece89a576667735fa8c",
+      "sha256": "6281d59c157447d1b78e9d5e24a08e70ccd8812d916bd73970247abc31961cec",
       "mode": 420
     },
     {
@@ -13245,7 +13349,7 @@
       "id": "file:tools/codex/lib/managed-command-registry.js",
       "type": "file",
       "path": "tools/codex/lib/managed-command-registry.js",
-      "sha256": "195ac06e84587b58208d3f949f4363742d3ea3b4d1471a491e45033ee7a18abd",
+      "sha256": "2c3c6e1d9e2297eeb214c3baba70a0859beae10250b5c63299a54e21521f69e6",
       "mode": 420
     },
     {
@@ -13494,10 +13598,24 @@
       "mode": 420
     },
     {
+      "id": "file:tools/commands/__tests__/outward-inward-command.test.cjs",
+      "type": "file",
+      "path": "tools/commands/__tests__/outward-inward-command.test.cjs",
+      "sha256": "70087d4072e86e8d0cde6d5bff018ed443b58ed84c584c2bcc819fc6b05a296b",
+      "mode": 420
+    },
+    {
       "id": "file:tools/commands/__tests__/route-fixtures.cjs",
       "type": "file",
       "path": "tools/commands/__tests__/route-fixtures.cjs",
       "sha256": "6e53bd1e4dca54e43b5f6cd0018a2877955d354ea52bb61f8731c8512e283e40",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/commands/handlers/__tests__/new-session.test.cjs",
+      "type": "file",
+      "path": "tools/commands/handlers/__tests__/new-session.test.cjs",
+      "sha256": "c9dbbeb9e88c31f4998f6ffdcc00a48607ce6290147d1680b2cd3a8f22cc46a0",
       "mode": 420
     },
     {
@@ -13518,7 +13636,7 @@
       "id": "file:tools/commands/handlers/new-session.cjs",
       "type": "file",
       "path": "tools/commands/handlers/new-session.cjs",
-      "sha256": "beae8ec29486e22a83bffb54d5d685d4521fede823b9d9f811aeb1f1e0ae170e",
+      "sha256": "d6cedb34413eada8abdc84e7c497fba898858ceebec72e31f9c9dd0a4baf8ad5",
       "mode": 420
     },
     {
@@ -13553,7 +13671,7 @@
       "id": "file:tools/commands/handlers/shutdown.cjs",
       "type": "file",
       "path": "tools/commands/handlers/shutdown.cjs",
-      "sha256": "ce50bee0424d4bd70267f6c1156f9fea746442f32ad9ccec8ffd7abb8be93d70",
+      "sha256": "56c3025cc3f2d171369daebd81a7a742e429016c54370418b80423379f82c485",
       "mode": 420
     },
     {
@@ -13610,6 +13728,13 @@
       "type": "file",
       "path": "tools/commands/smos-command-runner.cjs",
       "sha256": "38d9f9230b8f4edae45bb646bccf0f5a741b3a803ee78a170b63df8a6e6b64a3",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/commands/validate-prompt-provenance-receipt.cjs",
+      "type": "file",
+      "path": "tools/commands/validate-prompt-provenance-receipt.cjs",
+      "sha256": "f330c7beba5278d225c4f9875f0b5edf3ab50c5ead0255ce95e77656f1e67613",
       "mode": 420
     },
     {
@@ -14988,8 +15113,15 @@
       "id": "file:tools/hygiene/sync-private-remotes.sh",
       "type": "file",
       "path": "tools/hygiene/sync-private-remotes.sh",
-      "sha256": "cc6ea7b6267be6d3503ca8948e65b74841b5ecf3c190e8bfcac6e9bb3e4ffc43",
+      "sha256": "f522292f6b9aa7958752b6bffdc2053cf47011473e28515391062cefd7d1a1ee",
       "mode": 493
+    },
+    {
+      "id": "file:tools/hygiene/sync-private-remotes.test.cjs",
+      "type": "file",
+      "path": "tools/hygiene/sync-private-remotes.test.cjs",
+      "sha256": "a19ddf7a3e3dc5192517ba1834c4fb0d785194cfd6c03fcd9642d81b5da01882",
+      "mode": 420
     },
     {
       "id": "file:tools/image-optimize/__tests__/fixtures/sample.png",
@@ -15114,7 +15246,7 @@
       "id": "file:tools/instructions/__tests__/aliases.test.js",
       "type": "file",
       "path": "tools/instructions/__tests__/aliases.test.js",
-      "sha256": "cebf2953e8f06a559b84d719796d93e6251499a035b42dada2bec38182b0dadb",
+      "sha256": "f48ff5e1488b73d4e9c0408a7b1c65e6de3f75e803115ae74400e523e9f5a778",
       "mode": 420
     },
     {
@@ -18313,7 +18445,7 @@
       "id": "file:tools/parity/build-baseline.cjs",
       "type": "file",
       "path": "tools/parity/build-baseline.cjs",
-      "sha256": "6b0eab3b51c6cb73efabd21e62751ddb7a260c7112e734f64cc6c83e966d4797",
+      "sha256": "2ac85252fd0b6525d03b899e99c28d0ee6e3fdaa08ef6fb1100fd620b2648eb0",
       "mode": 420
     },
     {
@@ -19472,10 +19604,17 @@
       "mode": 420
     },
     {
+      "id": "file:tools/sessions/__tests__/shutdown-boundary.test.cjs",
+      "type": "file",
+      "path": "tools/sessions/__tests__/shutdown-boundary.test.cjs",
+      "sha256": "aa9c404ceb976148a2f137f42cd60856e824d452d8ad8b97e8d2b1e5ff93b046",
+      "mode": 420
+    },
+    {
       "id": "file:tools/sessions/__tests__/watcher-lifecycle.test.cjs",
       "type": "file",
       "path": "tools/sessions/__tests__/watcher-lifecycle.test.cjs",
-      "sha256": "e2fcc255ee9187cadb832e5842787ed0a3ea29ce633b730b7f1a58ddb344ef6a",
+      "sha256": "6f12c3412eb980b07c5dc3cf501359249b952f3fbbf2b40c34706bc35a0653d1",
       "mode": 420
     },
     {
@@ -19535,6 +19674,13 @@
       "mode": 420
     },
     {
+      "id": "file:tools/sessions/lib/__tests__/resolve-session-id.test.cjs",
+      "type": "file",
+      "path": "tools/sessions/lib/__tests__/resolve-session-id.test.cjs",
+      "sha256": "37336f831ca480b0970c19587f0c817215de7270302c07f0dabe7d75e338b244",
+      "mode": 420
+    },
+    {
       "id": "file:tools/sessions/lib/active-session-registry.js",
       "type": "file",
       "path": "tools/sessions/lib/active-session-registry.js",
@@ -19552,7 +19698,7 @@
       "id": "file:tools/sessions/lib/resolve-session-id.cjs",
       "type": "file",
       "path": "tools/sessions/lib/resolve-session-id.cjs",
-      "sha256": "447966c8a7e34a07433b6a71e944b026de21eb70f22db6c6a965bb9c5cccd647",
+      "sha256": "3c7a206fe51b6f047462d02e303a8a16f9a6d3ec21aae223e062ea949230b983",
       "mode": 420
     },
     {
@@ -19601,7 +19747,7 @@
       "id": "file:tools/sessions/watcher-lifecycle.cjs",
       "type": "file",
       "path": "tools/sessions/watcher-lifecycle.cjs",
-      "sha256": "7a1c9647db935c68c2161dafe8ac398363c48fa2d11aadf3fbcffbfd759ae682",
+      "sha256": "6eb73c9a4e28d3085dff17204447e212d5de903d7bbf9e33fb14a22ff336510e",
       "mode": 420
     },
     {
@@ -19784,6 +19930,13 @@
       "type": "file",
       "path": "tools/signals/lib/__tests__/actor-return-bubble-up.test.js",
       "sha256": "c1f507c5ca72587d7f3bbe509350d4d1f107c9ba4cfcda4bf2063a71d2c4d4a9",
+      "mode": 420
+    },
+    {
+      "id": "file:tools/signals/lib/__tests__/actor-signal-selection.test.js",
+      "type": "file",
+      "path": "tools/signals/lib/__tests__/actor-signal-selection.test.js",
+      "sha256": "32bf008aebaa0a251c74c87cba231145035571bdfd85502f6a90627ff13fa812",
       "mode": 420
     },
     {
@@ -19972,7 +20125,7 @@
       "id": "file:tools/signals/lib/actor-auto.js",
       "type": "file",
       "path": "tools/signals/lib/actor-auto.js",
-      "sha256": "b26d423b51a00c20df8113f543b72c1573d866aad62c2a73e2c69f15a5eb8f7d",
+      "sha256": "9346a757b91f49f1d1d36197678a26a4c676fd9e0b62232d1a2ea09fc8dc243c",
       "mode": 420
     },
     {
@@ -22955,67 +23108,67 @@
       "name": "wordpress/seo-validation"
     },
     {
-      "id": "hook:PostToolUse:641",
+      "id": "hook:PostToolUse:647",
       "type": "hook",
       "event": "PostToolUse",
       "command_sha256": "e395bd31a35362065002007d044e98d86e484bf829d16ebe2027da8a928db52c"
     },
     {
-      "id": "hook:PreToolUse:638",
+      "id": "hook:PreToolUse:644",
       "type": "hook",
       "event": "PreToolUse",
       "command_sha256": "ce97f4fd7eb07f52a0e9c6352fab2ce0e803f0920ef184d8f42261a46580103b"
     },
     {
-      "id": "hook:SessionEnd:645",
+      "id": "hook:SessionEnd:651",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "35974852e367c31bae49591ac0aa4afd518ec624f233743462e37c4c3863b1ed"
     },
     {
-      "id": "hook:SessionEnd:646",
+      "id": "hook:SessionEnd:652",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "519f522b04afb8471aa7e7ca117deb8af91976de62b5c1f5f4f6f9f60c8c217f"
     },
     {
-      "id": "hook:SessionEnd:647",
+      "id": "hook:SessionEnd:653",
       "type": "hook",
       "event": "SessionEnd",
       "command_sha256": "4ee05b68abff34325a3950761939e20cf2391c7b29d640b29b95233d29943fd4"
     },
     {
-      "id": "hook:SessionStart:642",
+      "id": "hook:SessionStart:648",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "26962e5976f5c689361f18050bb4e718d507df72590fbbc620e356cde47cf86b"
     },
     {
-      "id": "hook:SessionStart:643",
+      "id": "hook:SessionStart:649",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "00253242784e7853b94e1125e7c69f31085961b2dd7b3d1fcb6b4c79d94e9baf"
     },
     {
-      "id": "hook:SessionStart:644",
+      "id": "hook:SessionStart:650",
       "type": "hook",
       "event": "SessionStart",
       "command_sha256": "c738ce0e54e375f17b97f1186b95e5fd1125c0675d2f3e9238e872062f5b7076"
     },
     {
-      "id": "hook:Stop:639",
+      "id": "hook:Stop:645",
       "type": "hook",
       "event": "Stop",
       "command_sha256": "4f226e828c37bc4a712aab7fb0158cc46e64d013ffa001531087941dfd30cca3"
     },
     {
-      "id": "hook:SubagentStop:648",
+      "id": "hook:SubagentStop:654",
       "type": "hook",
       "event": "SubagentStop",
       "command_sha256": "4ca0f2529c8dd4023ade83508a1e40a1728dbdcfa35aadf9ea953cf8ac9a587d"
     },
     {
-      "id": "hook:UserPromptSubmit:640",
+      "id": "hook:UserPromptSubmit:646",
       "type": "hook",
       "event": "UserPromptSubmit",
       "command_sha256": "d4ad7e134fc41713541198d7a3573ced8aea291a0528477528b08ca3c5b1dfe7"
@@ -23322,6 +23475,11 @@
       "id": "manifest-path:.claude/commands/charter-quest.md",
       "type": "manifest-registration",
       "declared_target": ".claude/commands/charter-quest.md"
+    },
+    {
+      "id": "manifest-path:.claude/commands/chi.md",
+      "type": "manifest-registration",
+      "declared_target": ".claude/commands/chi.md"
     },
     {
       "id": "manifest-path:.claude/commands/chron.md",
@@ -23824,6 +23982,11 @@
       "declared_target": ".claude/commands/oc.md"
     },
     {
+      "id": "manifest-path:.claude/commands/oil.md",
+      "type": "manifest-registration",
+      "declared_target": ".claude/commands/oil.md"
+    },
+    {
       "id": "manifest-path:.claude/commands/open-contract.md",
       "type": "manifest-registration",
       "declared_target": ".claude/commands/open-contract.md"
@@ -23842,6 +24005,11 @@
       "id": "manifest-path:.claude/commands/orchestrate.md",
       "type": "manifest-registration",
       "declared_target": ".claude/commands/orchestrate.md"
+    },
+    {
+      "id": "manifest-path:.claude/commands/outward-inward.md",
+      "type": "manifest-registration",
+      "declared_target": ".claude/commands/outward-inward.md"
     },
     {
       "id": "manifest-path:.claude/commands/owl.md",
@@ -24262,6 +24430,11 @@
       "id": "manifest-path:.claude/skills/orchestrate/SKILL.md",
       "type": "manifest-registration",
       "declared_target": ".claude/skills/orchestrate/SKILL.md"
+    },
+    {
+      "id": "manifest-path:.claude/skills/outward-inward-loop/SKILL.md",
+      "type": "manifest-registration",
+      "declared_target": ".claude/skills/outward-inward-loop/SKILL.md"
     },
     {
       "id": "manifest-path:.claude/skills/owl/SKILL.md",
@@ -27318,6 +27491,11 @@
       "name": "orchestrate-loop"
     },
     {
+      "id": "skill-definition:outward-inward-loop",
+      "type": "skill-definition",
+      "name": "outward-inward-loop"
+    },
+    {
       "id": "skill-definition:owl",
       "type": "skill-definition",
       "name": "owl"
@@ -27741,6 +27919,15 @@
       "resolution": "tracked"
     },
     {
+      "id": "032a0ab4618d69d67bdf58c28bf2178e8e9ef408208e52c184dd350adc8011ac",
+      "type": "static-import",
+      "from": "file:tools/sessions/lib/__tests__/resolve-session-id.test.cjs",
+      "to": "file:tools/sessions/lib/active-session-registry.js",
+      "target": "tools/sessions/lib/active-session-registry.js",
+      "required": true,
+      "specifier": "../active-session-registry"
+    },
+    {
       "id": "03383245624918fafd9c46678ba987d1dad6aa28f9919f2b7557679e5362d43f",
       "type": "static-import",
       "from": "file:tools/user/__tests__/resolve-alias.test.cjs",
@@ -27850,16 +28037,6 @@
       "specifier": "./adapters.cjs"
     },
     {
-      "id": "0466f8692fd10baa62ad582645ee8ae8897dfa41f3a93c8ea7c2c647e9b7aa34",
-      "type": "hook-target",
-      "from": "hook:SessionStart:643",
-      "to": "file:tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "required": true,
-      "declared_target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
-      "event": "SessionStart"
-    },
-    {
       "id": "046db4ce8af6ee480fa21d03c81cf6dfa1e558b83712ba293a5d827b374c1f71",
       "type": "schema-consumer",
       "from": "file:tools/verify/lib/__tests__/run-evidence-index.test.cjs",
@@ -27948,6 +28125,15 @@
       "target": "tools/notify/twilio-api.js",
       "required": true,
       "specifier": "./twilio-api"
+    },
+    {
+      "id": "0504ebb965f8950d9fb3887869c90f5acf148f25321fd13fdfd92df721ed3f74",
+      "type": "static-import",
+      "from": "file:tools/sessions/__tests__/shutdown-boundary.test.cjs",
+      "to": "file:tools/commands/handlers/shutdown.cjs",
+      "target": "tools/commands/handlers/shutdown.cjs",
+      "required": true,
+      "specifier": "../../commands/handlers/shutdown.cjs"
     },
     {
       "id": "0527050ce72075753706d400102b9d3e236d20084e851ca2a217b998451043cf",
@@ -28067,6 +28253,16 @@
       "target": ".claude/commands/write-handoff.md",
       "required": true,
       "declared_target": ".claude/commands/write-handoff.md"
+    },
+    {
+      "id": "06515384a8fe27c35b6c09e50077fcab1460a2291d7db0e88f65a88195f753fa",
+      "type": "hook-target",
+      "from": "hook:SessionStart:649",
+      "to": "file:tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "required": true,
+      "declared_target": "tools/hooks/session-lifecycle/session-start-brief.cjs",
+      "event": "SessionStart"
     },
     {
       "id": "065d6f50f3f0c5b63d95bd3034e08f96f6247eb32674271632f1573c0d29bc42",
@@ -29277,6 +29473,15 @@
       "declared_target": ".claude/agents/reusable-template-extractor.md"
     },
     {
+      "id": "122a88de5f0978764266c43a8797f600c211369bef04e20e9d08299baca93c23",
+      "type": "static-import",
+      "from": "file:tools/commands/handlers/__tests__/new-session.test.cjs",
+      "to": "file:tools/commands/handlers/new-session.cjs",
+      "target": "tools/commands/handlers/new-session.cjs",
+      "required": true,
+      "specifier": "../new-session.cjs"
+    },
+    {
       "id": "124635cc32088bf146539caac3b756ba4b959a10038da1ac81247c4c103d283c",
       "type": "skill-definition-file",
       "from": "skill-definition:owl",
@@ -29357,6 +29562,16 @@
       "target": "tools/kernel/lib/bubble-up-gates.cjs",
       "required": true,
       "specifier": "../kernel/lib/bubble-up-gates.cjs"
+    },
+    {
+      "id": "1301809499a5feb29a7dbfef585793ed201f17c156c23f9cbe4e5b7230871ac5",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:652",
+      "to": "file:tools/context/repo-awareness-closeout.cjs",
+      "target": "tools/context/repo-awareness-closeout.cjs",
+      "required": true,
+      "declared_target": "tools/context/repo-awareness-closeout.cjs",
+      "event": "SessionEnd"
     },
     {
       "id": "1312422996c94dc8c34abf9c9549c2b7814c9c3f81350b224e94f37127be5eb4",
@@ -30104,6 +30319,16 @@
       "declared_target": "tools/framework-execution/maturity/stage-maturity.schema.json"
     },
     {
+      "id": "19d9be524d337f95a1b4865d54299881b14f11a73c295561ab7254bca53fd64a",
+      "type": "hook-target",
+      "from": "hook:PostToolUse:647",
+      "to": "file:tools/kernel/hooks/dispatch-posttool.cjs",
+      "target": "tools/kernel/hooks/dispatch-posttool.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-posttool.cjs",
+      "event": "PostToolUse"
+    },
+    {
       "id": "19efbce063aa607d0858f3e43e674badeb1c9a5ef517665681a5f1e163ca2171",
       "type": "manifest-target",
       "from": "manifest-path:frameworks/wordpress/page-cro/.claude/skills/page-cro",
@@ -30120,6 +30345,15 @@
       "target": "tools/ant-hive-world/generate-blank-hive-seed.js",
       "required": true,
       "specifier": "../generate-blank-hive-seed.js"
+    },
+    {
+      "id": "1a38a75b891f8045bf670ba981d9e19505d4f435ed48ac8a2b50ecde80254a48",
+      "type": "manifest-target",
+      "from": "manifest-path:.claude/commands/oil.md",
+      "to": "file:.claude/commands/oil.md",
+      "target": ".claude/commands/oil.md",
+      "required": true,
+      "declared_target": ".claude/commands/oil.md"
     },
     {
       "id": "1a4a43e1b1d4fcf3e6d2670a48e4b723a69fdaa0c7f83f03657170f1528e910a",
@@ -30192,6 +30426,16 @@
       "target": "tools/bundle/schemas/index.schema.json",
       "required": true,
       "declared_target": "tools/bundle/schemas/index.schema.json"
+    },
+    {
+      "id": "1b27a4e83a65380414b8d4c199a142a8f33a55e3f87f43297a6225b0e593f644",
+      "type": "hook-target",
+      "from": "hook:SessionStart:650",
+      "to": "file:tools/user/inject-mirror.cjs",
+      "target": "tools/user/inject-mirror.cjs",
+      "required": true,
+      "declared_target": "tools/user/inject-mirror.cjs",
+      "event": "SessionStart"
     },
     {
       "id": "1b286f033b07e9dbd64657c21c740d36cca407d57a212fa7778bac18400aac44",
@@ -30510,6 +30754,15 @@
       "declared_target": ".claude/commands/reference-compare.md"
     },
     {
+      "id": "1d76422134ee808fe328d4977fef727e983c304e4c8d65f56db2e3c2186d18fc",
+      "type": "alias-resolution",
+      "from": "alias:chi",
+      "to": "file:.claude/commands/outward-inward.md",
+      "target": ".claude/commands/outward-inward.md",
+      "required": true,
+      "declared_target": ".claude/commands/outward-inward.md"
+    },
+    {
       "id": "1da6bf8705d316c5b3a810552f22affbde89db3de416a8a8ef04bf4d406e4e7e",
       "type": "static-import",
       "from": "file:tools/commands/lib/operator-route.cjs",
@@ -30563,16 +30816,6 @@
       "target": "tools/ant-hive-world/research/research-io.cjs",
       "required": true,
       "specifier": "../ant-hive-world/research/research-io.cjs"
-    },
-    {
-      "id": "1e0cee5727533b0047a362f3ddc24b67b0f3b2ead4fdd725a62d8f05a09d1207",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:646",
-      "to": "file:tools/context/repo-awareness-closeout.cjs",
-      "target": "tools/context/repo-awareness-closeout.cjs",
-      "required": true,
-      "declared_target": "tools/context/repo-awareness-closeout.cjs",
-      "event": "SessionEnd"
     },
     {
       "id": "1e18e14510d5df6124c67469e7d98bfee76189af2d827742c3685d981fbe44bc",
@@ -31804,6 +32047,16 @@
       "target": ".claude/skills/propose-skill-capture/SKILL.md",
       "required": true,
       "declared_target": ".claude/skills/propose-skill-capture/SKILL.md"
+    },
+    {
+      "id": "2af584409984fbe0ffcbc6673ca12644f7e0d4c647e32b11c706b92272bdadf3",
+      "type": "hook-target",
+      "from": "hook:SessionStart:648",
+      "to": "file:tools/kernel/hooks/dispatch-session-start.cjs",
+      "target": "tools/kernel/hooks/dispatch-session-start.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-session-start.cjs",
+      "event": "SessionStart"
     },
     {
       "id": "2afb2cf3ea9538276ee024a28a564cccc95e5e8863f66f69b9791be71d0db9c7",
@@ -33170,6 +33423,16 @@
       "specifier": "./planner-lane.js"
     },
     {
+      "id": "37640e915f03733a799d6be8db7cdfc2a55fc2a12125f89ff226ae1f571ab5f7",
+      "type": "command-alias-authority",
+      "from": "command-definition:oil",
+      "to": "file:.claude/commands/outward-inward.md",
+      "target": ".claude/commands/outward-inward.md",
+      "required": true,
+      "declared_target": ".claude/commands/outward-inward.md",
+      "authority": "outward-inward"
+    },
+    {
       "id": "376cfc9ccaae2f45f588c2fe28a722b94dcee178555954399a10ac0cc8d71705",
       "type": "schema-consumer",
       "from": "file:tools/image-optimize/derivative-manifest.schema.json",
@@ -33620,6 +33883,16 @@
       "target": "tools/expressionengine/lib/ee-auth.js",
       "required": true,
       "specifier": "./lib/ee-auth"
+    },
+    {
+      "id": "3b855778c36615bd67c6eea189cff982ebd384b263b935d49236964c3fe4816d",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:653",
+      "to": "file:tools/sessions/session-end-boundary-log.cjs",
+      "target": "tools/sessions/session-end-boundary-log.cjs",
+      "required": true,
+      "declared_target": "tools/sessions/session-end-boundary-log.cjs",
+      "event": "SessionEnd"
     },
     {
       "id": "3b8c82f5dd7bb84dc20a8df908bf363304c32798796bda9ae4984f48c9ca1d8c",
@@ -34281,6 +34554,15 @@
       "specifier": "../shared/http"
     },
     {
+      "id": "413695ec2e8b6b8024fe820ae876c048d4de98eaedf21e5dbeaf7505e5ea2300",
+      "type": "command-definition-file",
+      "from": "command-definition:outward-inward",
+      "to": "file:.claude/commands/outward-inward.md",
+      "target": ".claude/commands/outward-inward.md",
+      "required": true,
+      "declared_target": ".claude/commands/outward-inward.md"
+    },
+    {
       "id": "41471112810d83d7456b82ca33a050d687fe300e577c70363526bba40a7c62cc",
       "type": "static-import",
       "from": "file:tools/verify/hooks/__tests__/convene-unlock.test.cjs",
@@ -34510,6 +34792,15 @@
       "required": true,
       "declared_target": ".claude/commands/debrief-run.md",
       "authority": "debrief-run"
+    },
+    {
+      "id": "439a682f4e7e0a30c7999ef49417481df2a91c358fe142e616cb254cb9ace891",
+      "type": "static-import",
+      "from": "file:tools/commands/__tests__/outward-inward-command.test.cjs",
+      "to": "file:tools/commands/validate-prompt-provenance-receipt.cjs",
+      "target": "tools/commands/validate-prompt-provenance-receipt.cjs",
+      "required": true,
+      "specifier": "../validate-prompt-provenance-receipt.cjs"
     },
     {
       "id": "43a973716ab14e840ee467e3c46fa7d2a52dd7b31124876baa61d9848a4f1342",
@@ -35001,16 +35292,6 @@
       "declared_target": ".claude/commands/list-frameworks.md"
     },
     {
-      "id": "47b605bf09c869fbb87ab77956ea7aaf796ff0c3a8ff6220b11802c3bcdc2413",
-      "type": "hook-target",
-      "from": "hook:SessionStart:644",
-      "to": "file:tools/user/inject-mirror.cjs",
-      "target": "tools/user/inject-mirror.cjs",
-      "required": true,
-      "declared_target": "tools/user/inject-mirror.cjs",
-      "event": "SessionStart"
-    },
-    {
       "id": "47b76c157dfc23baba53b153ce4650c3e53fbdfbd815b110b8e601b89bb7c0e2",
       "type": "mcp-server",
       "from": "mcp:delesign",
@@ -35192,16 +35473,6 @@
       "specifier": "./driver"
     },
     {
-      "id": "49c1ec08da389d2b35737db7f0140ba109ffa1bdab06bd9b7e2d7acd3f2a3157",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:647",
-      "to": "file:tools/sessions/session-end-boundary-log.cjs",
-      "target": "tools/sessions/session-end-boundary-log.cjs",
-      "required": true,
-      "declared_target": "tools/sessions/session-end-boundary-log.cjs",
-      "event": "SessionEnd"
-    },
-    {
       "id": "49d2dd5877f0dff8c7c23d195aa1937dfe8549315a82fadcef5164106adf0eeb",
       "type": "static-import",
       "from": "file:tools/workspace/init-run.js",
@@ -35281,6 +35552,15 @@
       "target": "tools/claude/lib/hook-telemetry.cjs",
       "required": true,
       "specifier": "../claude/lib/hook-telemetry.cjs"
+    },
+    {
+      "id": "4b11b9873e9c1afc62a109c6bc98d30cd1ebc493f51bee350004c2630caec1aa",
+      "type": "static-import",
+      "from": "file:tools/commands/__tests__/outward-inward-command.test.cjs",
+      "to": "file:tools/commands/mythos-command-runner.cjs",
+      "target": "tools/commands/mythos-command-runner.cjs",
+      "required": true,
+      "specifier": "../mythos-command-runner.cjs"
     },
     {
       "id": "4b1554c2646dc99fafd532afc2daa5f6403d4391fbaeb1237e8d92c4c2bde699",
@@ -35676,6 +35956,15 @@
       "resolution": "tracked"
     },
     {
+      "id": "4e126200eaad632d6ab34f610064a26ae207a65e7d6485b2f3a583e19f330bfd",
+      "type": "static-import",
+      "from": "file:tools/sessions/__tests__/shutdown-boundary.test.cjs",
+      "to": "file:tools/sessions/lib/active-session-registry.js",
+      "target": "tools/sessions/lib/active-session-registry.js",
+      "required": true,
+      "specifier": "../lib/active-session-registry.js"
+    },
+    {
       "id": "4e34955bc999836748408a56eb52e55cb5c47e91a589c47bdc926e48f5be489f",
       "type": "static-import",
       "from": "file:tools/ant-hive-world/checkpoint.js",
@@ -35847,6 +36136,15 @@
       "specifier": "../dream/calibration.js"
     },
     {
+      "id": "50bc1e91b7e213b10e89939fd5148f9f236df2430e4eac0f5c080ebb1b9e23d6",
+      "type": "static-import",
+      "from": "file:tools/commands/handlers/__tests__/new-session.test.cjs",
+      "to": "file:tools/sessions/lib/active-session-registry.js",
+      "target": "tools/sessions/lib/active-session-registry.js",
+      "required": true,
+      "specifier": "../../../sessions/lib/active-session-registry"
+    },
+    {
       "id": "50c0517bd057631c7bc3efd1af8ac0c4c5060f63820d2230a7f421a387789b4c",
       "type": "schema-definition-file",
       "from": "schema-definition:tools/workspace/schemas/signal-entry.schema.json",
@@ -35999,16 +36297,6 @@
       "target": "tools/kernel/lib/validate-convene-synthesis.cjs",
       "required": true,
       "specifier": "../validate-convene-synthesis.cjs"
-    },
-    {
-      "id": "51e920aaea77a881b7249e385d20719293780f2588986960e9ad40360ced4610",
-      "type": "hook-target",
-      "from": "hook:PreToolUse:638",
-      "to": "file:tools/kernel/hooks/dispatch-pretool.cjs",
-      "target": "tools/kernel/hooks/dispatch-pretool.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-pretool.cjs",
-      "event": "PreToolUse"
     },
     {
       "id": "5212854b46bf49447132dd17577df17e1f2b2533096fc3d4fa559ad53b12aaa8",
@@ -37815,6 +38103,16 @@
       "specifier": "./lib/live-probe.cjs"
     },
     {
+      "id": "62dc64599480c5483b2a9be7c0ddace9513547553a2af9e4b46a72a5ffa47d00",
+      "type": "command-alias-authority",
+      "from": "command-definition:chi",
+      "to": "file:.claude/commands/outward-inward.md",
+      "target": ".claude/commands/outward-inward.md",
+      "required": true,
+      "declared_target": ".claude/commands/outward-inward.md",
+      "authority": "outward-inward"
+    },
+    {
       "id": "62e3f23f868397d5eb86238aa087ef957448f042ea013b487310d9098e09a374",
       "type": "static-import",
       "from": "file:tools/mcp/google-ads/l0-diagnostic-pull.js",
@@ -37913,16 +38211,6 @@
       "required": true,
       "declared_target": "tools/dart-integration/operator-response-poller.js",
       "resolution": "tracked"
-    },
-    {
-      "id": "63b972645981fb8284aa61e57ecc4421f7d75fe5db2c7aa5c3546170b7f2a57d",
-      "type": "hook-target",
-      "from": "hook:SessionStart:642",
-      "to": "file:tools/kernel/hooks/dispatch-session-start.cjs",
-      "target": "tools/kernel/hooks/dispatch-session-start.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-session-start.cjs",
-      "event": "SessionStart"
     },
     {
       "id": "63c829d49b6bae10de1bde5a7b66ffb4e98c38b3dd439f4c3258a526eba38689",
@@ -38187,6 +38475,15 @@
       "target": "tools/signals/lib/codex-auto.js",
       "required": true,
       "specifier": "../signals/lib/codex-auto"
+    },
+    {
+      "id": "6667a150d2714c5069fe7c1d97de7a94638e3e7e4ff9b2a1f38afc1811880a22",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/unreal-export/__tests__/simulation-portability.test.cjs",
+      "to": "file:tools/ant-hive-world/unreal-export/import-turn.js",
+      "target": "tools/ant-hive-world/unreal-export/import-turn.js",
+      "required": true,
+      "specifier": "../import-turn.js"
     },
     {
       "id": "668930f218ca0bd873189e23d0326d8ac2cc8a2b1da3bb8722a8cd7eb5320269",
@@ -38587,16 +38884,6 @@
       "target": "tools/ant-hive-world/world-state.js",
       "required": true,
       "specifier": "../world-state.js"
-    },
-    {
-      "id": "6a4b099bc3f4be40655314d8dca109b059505285045181998012d09cb0e41415",
-      "type": "hook-target",
-      "from": "hook:SubagentStop:648",
-      "to": "file:.claude/hooks/subagent-telemetry-writer.cjs",
-      "target": ".claude/hooks/subagent-telemetry-writer.cjs",
-      "required": true,
-      "declared_target": ".claude/hooks/subagent-telemetry-writer.cjs",
-      "event": "SubagentStop"
     },
     {
       "id": "6a514c07e57bc5a8440673680b8e9a62dc0570ae7f7614243c2bf7d99f9b6061",
@@ -39000,16 +39287,6 @@
       "target": "tools/workspace/lib/args.js",
       "required": true,
       "specifier": "./lib/args"
-    },
-    {
-      "id": "6d89d075fee5dfe34380e3d464dae275f7090eed3bcb1a306a1c2a77ca019ee2",
-      "type": "hook-target",
-      "from": "hook:UserPromptSubmit:640",
-      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
-      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-userprompt.cjs",
-      "event": "UserPromptSubmit"
     },
     {
       "id": "6d9ab114898bdd3f60857e3b92ad30cc163acc6c05814c3658dd3b5a57b91958",
@@ -39837,16 +40114,6 @@
       "declared_target": "frameworks/research/osint-discovery/schemas/output/discovery-report.schema.json"
     },
     {
-      "id": "74cc467ed010675d7bf21e44d3df2ba3282caaeddbf340e08f40d7ab224f7d20",
-      "type": "hook-target",
-      "from": "hook:PostToolUse:641",
-      "to": "file:tools/kernel/hooks/dispatch-posttool.cjs",
-      "target": "tools/kernel/hooks/dispatch-posttool.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-posttool.cjs",
-      "event": "PostToolUse"
-    },
-    {
       "id": "74d7694a96d71ee50544cbdc47775a59a12bfdb780ac411ef70000035b59939f",
       "type": "static-import",
       "from": "file:tools/verify/verify-run-evidence.cjs",
@@ -40472,6 +40739,15 @@
       "target": "tools/lib/canonical-root.cjs",
       "required": true,
       "specifier": "../../lib/canonical-root.cjs"
+    },
+    {
+      "id": "7bbc48628b8f86460d23581f5f80866183c9293638d165eab52b6c476c151bc8",
+      "type": "command-definition-file",
+      "from": "command-definition:chi",
+      "to": "file:.claude/commands/chi.md",
+      "target": ".claude/commands/chi.md",
+      "required": true,
+      "declared_target": ".claude/commands/chi.md"
     },
     {
       "id": "7bc4b569bebf25debf300bbdf2ce88adce7b6f9b9507cc9979ff19573e1d69e5",
@@ -41342,6 +41618,15 @@
       "resolution": "tracked"
     },
     {
+      "id": "834882c32b2cec7be00632f00b02edbe8660c1375d981d9d24799a65e2d2a67c",
+      "type": "static-import",
+      "from": "file:tools/commands/__tests__/outward-inward-command.test.cjs",
+      "to": "file:tools/commands/lib/command-aliases.cjs",
+      "target": "tools/commands/lib/command-aliases.cjs",
+      "required": true,
+      "specifier": "../lib/command-aliases.cjs"
+    },
+    {
       "id": "835258cfc5090099d51ab1171ab8368b8a366cd56b4dc8fdc58e2369c1d8f07b",
       "type": "package-script-target",
       "from": "package-script:host:manifest:validate",
@@ -41505,6 +41790,15 @@
       "target": "tools/verify/schemas/run-evidence-receipt.schema.json",
       "required": true,
       "specifier": "../../schemas/run-evidence-receipt.schema.json"
+    },
+    {
+      "id": "84edbca3038be0b6dc5d7755e1176eda90cd4b0fde615d3469eabf95191a3ba0",
+      "type": "manifest-target",
+      "from": "manifest-path:.claude/commands/chi.md",
+      "to": "file:.claude/commands/chi.md",
+      "target": ".claude/commands/chi.md",
+      "required": true,
+      "declared_target": ".claude/commands/chi.md"
     },
     {
       "id": "84fc99c732de8ae93143efb59ceec9038a2e08da5a32d6f4ee7b29fe6d0829e3",
@@ -43396,6 +43690,15 @@
       "specifier": "../harness.js"
     },
     {
+      "id": "986918b4483f1ff139f9d2689f140574c87adfa290847401715ab2c61a9ff25a",
+      "type": "manifest-target",
+      "from": "manifest-path:.claude/commands/outward-inward.md",
+      "to": "file:.claude/commands/outward-inward.md",
+      "target": ".claude/commands/outward-inward.md",
+      "required": true,
+      "declared_target": ".claude/commands/outward-inward.md"
+    },
+    {
       "id": "988bee498a463daeb862f4b70bfb38d2df060dbb42914a36a41c103b56e13950",
       "type": "static-import",
       "from": "file:tools/ticktock/test-ratification-proposal.cjs",
@@ -43838,6 +44141,15 @@
       "target": "tools/planning/lib/framework-methodology.js",
       "required": true,
       "specifier": "./framework-methodology"
+    },
+    {
+      "id": "9b6bec9b12af3810be41ccae7a41c45291536d40ebba8994e17f4e3b5472b5c6",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/unreal-export/__tests__/simulation-portability.test.cjs",
+      "to": "file:tools/ant-hive-world/unreal-export/watch-imports.js",
+      "target": "tools/ant-hive-world/unreal-export/watch-imports.js",
+      "required": true,
+      "specifier": "../watch-imports.js"
     },
     {
       "id": "9b797b87db807aebe6e536c4ed1f2fdbf2e29f425a15e46cd479a346eeaf6944",
@@ -44780,6 +45092,15 @@
       "specifier": "../../lib/resolve-credential.cjs"
     },
     {
+      "id": "a4066dfea35f3c6059a0c4e2cf8d05cf4f409b2436dedfb8d9893ee93f5f1ec8",
+      "type": "static-import",
+      "from": "file:tools/commands/validate-prompt-provenance-receipt.cjs",
+      "to": "file:tools/workspace/lib/args.js",
+      "target": "tools/workspace/lib/args.js",
+      "required": true,
+      "specifier": "../workspace/lib/args"
+    },
+    {
       "id": "a40ad677ffb92ef5ad94da781ceaa82b0a9461263589ad09c6182b0bf788cda8",
       "type": "static-import",
       "from": "file:tools/planning/check-existing-work.js",
@@ -45648,6 +45969,15 @@
       "declared_target": ".claude/commands/promote-framework.md"
     },
     {
+      "id": "ad4e45c63639f292d43ff33ede4bd7752b7413cc5e50419407fb38af1bb0caa2",
+      "type": "command-definition-file",
+      "from": "command-definition:oil",
+      "to": "file:.claude/commands/oil.md",
+      "target": ".claude/commands/oil.md",
+      "required": true,
+      "declared_target": ".claude/commands/oil.md"
+    },
+    {
       "id": "ad527692d0c1f640383b2231ee0dd8ddefe3b2f78355a0b171cc0940466bd95e",
       "type": "package-script-target",
       "from": "package-script:manifest:validate",
@@ -46095,6 +46425,16 @@
       "specifier": "./lib/audit.cjs"
     },
     {
+      "id": "b115ef084f5263821fb78b423c36dda966e6e0d912773506ba4f3ffa74c77c3d",
+      "type": "hook-target",
+      "from": "hook:UserPromptSubmit:646",
+      "to": "file:tools/kernel/hooks/dispatch-userprompt.cjs",
+      "target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-userprompt.cjs",
+      "event": "UserPromptSubmit"
+    },
+    {
       "id": "b115fb6a0a9a9f4d63ad855b63bed000c0bab1dbf4b758dd98ac8cdc2b41de4c",
       "type": "package-script-target",
       "from": "package-script:workspace:run:finalize",
@@ -46413,6 +46753,15 @@
       "specifier": "./journal.cjs"
     },
     {
+      "id": "b463d606b68acaf4c085d063f0658c1f0b5dcb84ed5ea166ae8eddd137729aef",
+      "type": "static-import",
+      "from": "file:tools/sessions/lib/__tests__/resolve-session-id.test.cjs",
+      "to": "file:tools/sessions/lib/resolve-session-id.cjs",
+      "target": "tools/sessions/lib/resolve-session-id.cjs",
+      "required": true,
+      "specifier": "../resolve-session-id.cjs"
+    },
+    {
       "id": "b467fd42954f60cf682d47f4857f445c3441205196a810149d84c63d11faaf20",
       "type": "static-import",
       "from": "file:tools/client-storage/__tests__/classify.test.js",
@@ -46675,6 +47024,15 @@
       "target": ".claude/commands/ground-in-philosophy.md",
       "required": true,
       "declared_target": ".claude/commands/ground-in-philosophy.md"
+    },
+    {
+      "id": "b66d27e44ed9c007348ba0f2f09502f13e0a27ccd1ae3b06566697ea69cc351d",
+      "type": "manifest-target",
+      "from": "manifest-path:.claude/skills/outward-inward-loop/SKILL.md",
+      "to": "file:.claude/skills/outward-inward-loop/SKILL.md",
+      "target": ".claude/skills/outward-inward-loop/SKILL.md",
+      "required": true,
+      "declared_target": ".claude/skills/outward-inward-loop/SKILL.md"
     },
     {
       "id": "b6c4da06f6d9668097b584c9e394b590f238fdf784928f79046ed71b7d4a1059",
@@ -46984,6 +47342,15 @@
       "target": "frameworks/research/business-identity-verification/.claude/commands/business-identity-verification",
       "required": true,
       "declared_target": "frameworks/research/business-identity-verification/.claude/commands/business-identity-verification"
+    },
+    {
+      "id": "b94ff247fcfd926dda6e4437ec9c4f1ba244e742db97393f68c0f192d6f6fca2",
+      "type": "static-import",
+      "from": "file:tools/commands/__tests__/outward-inward-command.test.cjs",
+      "to": "file:tools/codex/lib/managed-command-registry.js",
+      "target": "tools/codex/lib/managed-command-registry.js",
+      "required": true,
+      "specifier": "../../codex/lib/managed-command-registry.js"
     },
     {
       "id": "b9701a56a7dc0356eb89921755cbce5a9ff79ca6b8bb67769248416d89a121b0",
@@ -47440,6 +47807,16 @@
       "declared_target": ".claude/commands/clean-house.md"
     },
     {
+      "id": "bcdf1736c4052ca55bf9b4697891c2eb0430a1ebe2f9a3d2a3b8f8c0ac6c831a",
+      "type": "hook-target",
+      "from": "hook:Stop:645",
+      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
+      "target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-stop.cjs",
+      "event": "Stop"
+    },
+    {
       "id": "bd20020a208591ccf4a94d3a9b08d52f12dfcaf877cc8e05b9ab778a7872e164",
       "type": "static-import",
       "from": "file:tools/planning/lib/__tests__/task-custody.test.js",
@@ -47773,6 +48150,16 @@
       "target": "tools/bundle/lib/copy-prompts.js",
       "required": true,
       "specifier": "./lib/copy-prompts.js"
+    },
+    {
+      "id": "bfa02789fccf6f6e83cb512bd48c370bccc05e99a0aea01ac9816645a34c9eb4",
+      "type": "hook-target",
+      "from": "hook:PreToolUse:644",
+      "to": "file:tools/kernel/hooks/dispatch-pretool.cjs",
+      "target": "tools/kernel/hooks/dispatch-pretool.cjs",
+      "required": true,
+      "declared_target": "tools/kernel/hooks/dispatch-pretool.cjs",
+      "event": "PreToolUse"
     },
     {
       "id": "bfa8a3a38445f0b8cbb01282cd614f650fec04b27d157a623c145ea3c66b494e",
@@ -49283,6 +49670,15 @@
       "specifier": "../workspace/lib/args"
     },
     {
+      "id": "cf8452a07e1a2f5d05284f17f97a928aa82fb9d7978f1938b8e14f9fb99a5e63",
+      "type": "static-import",
+      "from": "file:tools/commands/__tests__/outward-inward-command.test.cjs",
+      "to": "file:tools/commands/lib/command-registry.cjs",
+      "target": "tools/commands/lib/command-registry.cjs",
+      "required": true,
+      "specifier": "../lib/command-registry.cjs"
+    },
+    {
       "id": "cf8b21ac6fd53863ad771123c6f2f9f30c61d59b0c6e8d14c24441e06e15a443",
       "type": "package-script-target",
       "from": "package-script:verify:parity:source",
@@ -49575,16 +49971,6 @@
       "specifier": "./landing-pad-classifier"
     },
     {
-      "id": "d2637005fc408234347a9a24cdc48cb0c43f94a4a2f37ca693faa258fbf6e81c",
-      "type": "hook-target",
-      "from": "hook:SessionEnd:645",
-      "to": "file:tools/hooks/session-lifecycle/session-end-close.cjs",
-      "target": "tools/hooks/session-lifecycle/session-end-close.cjs",
-      "required": true,
-      "declared_target": "tools/hooks/session-lifecycle/session-end-close.cjs",
-      "event": "SessionEnd"
-    },
-    {
       "id": "d295d4eb7e375c5b20d6ca90bf176a6c53f7393c73038d5af9b1f785963a7cc4",
       "type": "manifest-target",
       "from": "manifest-path:.claude/commands/route.md",
@@ -49839,6 +50225,25 @@
       "target": "frameworks/wordpress/qa/schemas/output/summary-json.schema.json",
       "required": true,
       "declared_target": "frameworks/wordpress/qa/schemas/output/summary-json.schema.json"
+    },
+    {
+      "id": "d567986a8480e65aff2575fa3caf5e3dd8f79d721190680aa45b248fd9ffdae4",
+      "type": "hook-target",
+      "from": "hook:SubagentStop:654",
+      "to": "file:.claude/hooks/subagent-telemetry-writer.cjs",
+      "target": ".claude/hooks/subagent-telemetry-writer.cjs",
+      "required": true,
+      "declared_target": ".claude/hooks/subagent-telemetry-writer.cjs",
+      "event": "SubagentStop"
+    },
+    {
+      "id": "d56893d3b1edee20fb1adb5bb7fb9d7bef0450049b4e9c1dd61cac72d33b8950",
+      "type": "static-import",
+      "from": "file:tools/signals/lib/__tests__/actor-signal-selection.test.js",
+      "to": "file:tools/signals/lib/actor-auto.js",
+      "target": "tools/signals/lib/actor-auto.js",
+      "required": true,
+      "specifier": "../actor-auto"
     },
     {
       "id": "d583bb997ca12f760873dead02b5616a2f5339b41fbc79ceba7ca405ba595fbb",
@@ -50159,6 +50564,15 @@
       "target": "tools/reconciliation/lib/normalized-content-hash.cjs",
       "required": true,
       "specifier": "./normalized-content-hash.cjs"
+    },
+    {
+      "id": "d8dc8e1188ad5f9616433bd6f7511987707605c49d22f4807072f12c6a60baa6",
+      "type": "alias-resolution",
+      "from": "alias:oil",
+      "to": "file:.claude/commands/outward-inward.md",
+      "target": ".claude/commands/outward-inward.md",
+      "required": true,
+      "declared_target": ".claude/commands/outward-inward.md"
     },
     {
       "id": "d8ea204f2e8960ed8879eb3b9cd2c9cb8753cbde6e8e33fe464e6e5f08a55fb5",
@@ -51522,16 +51936,6 @@
       "specifier": "./lib/resolve-task-plan.js"
     },
     {
-      "id": "e4578fa01596e027596efe011384d6a0df10390673f8db7ad1b1dd21adb888d2",
-      "type": "hook-target",
-      "from": "hook:Stop:639",
-      "to": "file:tools/kernel/hooks/dispatch-stop.cjs",
-      "target": "tools/kernel/hooks/dispatch-stop.cjs",
-      "required": true,
-      "declared_target": "tools/kernel/hooks/dispatch-stop.cjs",
-      "event": "Stop"
-    },
-    {
       "id": "e45f24153490e7ad21dfdbecedcf7886642ee89f6c68734c97aa0e4af01095b4",
       "type": "static-import",
       "from": "file:tools/ant-hive-world/__tests__/train-tick-triad-wiring.test.cjs",
@@ -51966,6 +52370,15 @@
       "resolution": "tracked"
     },
     {
+      "id": "e8b19561b8abded702258184d7bdac46c812d79b92101f261215bd576c6c2b3c",
+      "type": "skill-definition-file",
+      "from": "skill-definition:outward-inward-loop",
+      "to": "file:.claude/skills/outward-inward-loop/SKILL.md",
+      "target": ".claude/skills/outward-inward-loop/SKILL.md",
+      "required": true,
+      "declared_target": ".claude/skills/outward-inward-loop/SKILL.md"
+    },
+    {
       "id": "e8d233e62a96fbab55acbb8e52a4ddb6f3187068936df72833b470294e253179",
       "type": "static-import",
       "from": "file:tools/ant-hive-world/__tests__/sweeper-lane.test.cjs",
@@ -52320,6 +52733,15 @@
       "target": "tools/signals/lib/tier-routing.cjs",
       "required": true,
       "specifier": "../signals/lib/tier-routing.cjs"
+    },
+    {
+      "id": "ebbaec8cf7175defc47c4c03b8c3518648160d15d2e07417c23c14369d7786dd",
+      "type": "static-import",
+      "from": "file:tools/ant-hive-world/run-live.js",
+      "to": "file:tools/ant-hive-world/dream/dream-lane.js",
+      "target": "tools/ant-hive-world/dream/dream-lane.js",
+      "required": true,
+      "specifier": "./dream/dream-lane.js"
     },
     {
       "id": "ebeda7cf3966de4ec82ce3ad256856bb91e05c49bcb172af4f903269ae17b136",
@@ -52941,6 +53363,15 @@
       "specifier": "../../schemas/completion-audit-packet.schema.json"
     },
     {
+      "id": "f1a33b36e76f32692c55fa9a92d3f427aaa02d77628d2fd66fb0afad726a360e",
+      "type": "static-import",
+      "from": "file:tools/commands/handlers/__tests__/new-session.test.cjs",
+      "to": "file:tools/sessions/lib/resolve-session-id.cjs",
+      "target": "tools/sessions/lib/resolve-session-id.cjs",
+      "required": true,
+      "specifier": "../../../sessions/lib/resolve-session-id.cjs"
+    },
+    {
       "id": "f1e5ea153f249a8c5ab08c03ac9445e5a661aea2aa3e4b332acdfb5eb5c666f6",
       "type": "manifest-target",
       "from": "manifest-path:frameworks/wordpress/seo-validation/.claude/commands/seo-validation",
@@ -53539,6 +53970,16 @@
       "target": "tools/signals/schemas/signal-normalization-proposal.schema.json",
       "required": true,
       "declared_target": "tools/signals/schemas/signal-normalization-proposal.schema.json"
+    },
+    {
+      "id": "f65f6c91204ea8bc44a83a998acb3884e30a5f35f78403a787f64456a2d33c7e",
+      "type": "hook-target",
+      "from": "hook:SessionEnd:651",
+      "to": "file:tools/hooks/session-lifecycle/session-end-close.cjs",
+      "target": "tools/hooks/session-lifecycle/session-end-close.cjs",
+      "required": true,
+      "declared_target": "tools/hooks/session-lifecycle/session-end-close.cjs",
+      "event": "SessionEnd"
     },
     {
       "id": "f664a7e91c6d29872fa6c7ad13228ec7551024198b5e1ee7bfefc0a6b8c490e4",
@@ -54725,8 +55166,8 @@
     }
   ],
   "counts": {
-    "nodes": 4187,
-    "edges": 3009,
+    "nodes": 4215,
+    "edges": 3038,
     "unresolved": 0
   }
 }

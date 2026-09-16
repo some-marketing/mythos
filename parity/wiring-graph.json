@@ -4949,14 +4949,14 @@
       "id": "file:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/evidence-ledger.schema.json",
       "type": "file",
       "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/evidence-ledger.schema.json",
-      "sha256": "8ab2a2730e7b675fe3c8e03eece1f54116cc85c81f6131a770e9ecfcb0afe75f",
+      "sha256": "8a5715b8766e1bd7ebcead6363139897ddde1d1f5863fb0b234def89fd412572",
       "mode": 420
     },
     {
       "id": "file:framework_candidates/product-management__product-intake/proposed_framework/schemas/output/hypothesis-tests.schema.json",
       "type": "file",
       "path": "framework_candidates/product-management__product-intake/proposed_framework/schemas/output/hypothesis-tests.schema.json",
-      "sha256": "6378f93a4da38cd78457092e48f53e5a2de51fc7aa8ec783db6951607508e3fd",
+      "sha256": "0f8fbbaf07d2d9d422fe880e148bf7120498c7a68dce43b5c7f17c3c3db2a5d5",
       "mode": 420
     },
     {
@@ -5243,14 +5243,14 @@
       "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/change-proposal.schema.json",
       "type": "file",
       "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/change-proposal.schema.json",
-      "sha256": "6c5702dcafd2312a30e35803891d1679ec92039f41e550ec310fb961ee75ac42",
+      "sha256": "1d7bd7b0ae846ea8174e80cfd85eed06bc5f20738fe2ed8edd61239f2ee98a28",
       "mode": 420
     },
     {
       "id": "file:framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-spec.schema.json",
       "type": "file",
       "path": "framework_candidates/project-management__delta-specification/proposed_framework/schemas/output/delta-spec.schema.json",
-      "sha256": "8afbd1412b63108310cfc9372b0b75ae2b2e55e12c58f921237de55eda39d408",
+      "sha256": "0bf937a5c133717bd0333f7048d6fb71482caf79009514c482a14c7fb05dbaa3",
       "mode": 420
     },
     {
@@ -22498,7 +22498,7 @@
       "id": "file:tools/workspace/__tests__/candidate-root.test.js",
       "type": "file",
       "path": "tools/workspace/__tests__/candidate-root.test.js",
-      "sha256": "ffe1b1a656e11621392ecf570ccc37c685e60e225570828fff9fe586040ddfdc",
+      "sha256": "e53152d72e0acb5d8b98d194e63c24502dda87795d6f9c4ff8e80ba91ea7e22e",
       "mode": 420
     },
     {

@@ -500,6 +500,55 @@ test('meaning-bearing candidate strings reject whitespace-only values', () => {
     open_questions: [],
     stop_conditions: []
   }, scopeSchema, 'scope-and-intent'), /pattern/);
+
+  const evidenceSchema = readCandidateSchema('product-management__product-intake', 'evidence-ledger.schema.json');
+  assert.throws(() => validateRequiredFields([{
+    claim: ' ',
+    classification: 'observation',
+    provenance: 'public source',
+    limitations: []
+  }], evidenceSchema, 'evidence-ledger'), /pattern/);
+
+  const hypothesisSchema = readCandidateSchema('product-management__product-intake', 'hypothesis-tests.schema.json');
+  for (const field of ['hypothesis', 'falsifier', 'next_test']) {
+    assert.throws(() => validateRequiredFields([{
+      hypothesis: 'Hypothesis',
+      falsifier: 'Falsifier',
+      next_test: 'Next test',
+      [field]: ' '
+    }], hypothesisSchema, `hypothesis-tests.${field}`), /pattern/);
+  }
+
+  const proposalSchema = readCandidateSchema('project-management__delta-specification', 'change-proposal.schema.json');
+  assert.throws(() => validateRequiredFields({
+    requested_outcome: ' ',
+    affected_behaviors: [],
+    affected_consumers: ['document-workflow user'],
+    constraints: [],
+    non_goals: [],
+    risks: [],
+    success_signals: [],
+    specification_depth: 'Lite'
+  }, proposalSchema, 'change-proposal'), /pattern/);
+
+  const deltaSchema = readCandidateSchema('project-management__delta-specification', 'delta-spec.schema.json');
+  for (const collection of ['added', 'modified']) {
+    const item = collection === 'added'
+      ? { requirement_id: 'ADD-1', requirement: 'Add behavior', scenarios: [' '] }
+      : {
+        requirement_id: 'MOD-1',
+        baseline_requirement_id: 'BASE-1',
+        behavioral_difference: 'Difference',
+        requirement: 'Modify behavior',
+        scenarios: [' ']
+      };
+    assert.throws(() => validateRequiredFields({
+      added: collection === 'added' ? [item] : [],
+      modified: collection === 'modified' ? [item] : [],
+      removed: [],
+      preserved_invariants: []
+    }, deltaSchema, `delta-spec.${collection}.scenarios`), /pattern/);
+  }
 });
 
 test('candidate status computes learning state without writing the tracked ledger', () => {

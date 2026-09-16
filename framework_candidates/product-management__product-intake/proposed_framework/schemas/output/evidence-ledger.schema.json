@@ -10,7 +10,7 @@
       "limitations"
     ],
     "properties": {
-      "claim": { "type": "string", "minLength": 1 },
+      "claim": { "type": "string", "minLength": 1, "pattern": "\\S" },
       "classification": {
         "type": "string",
         "enum": [

@@ -3,6 +3,7 @@
   "generator_id": "mythos-codex-skill-projector/1.0.0",
   "targets": [
     ".agents/skills/go/SKILL.md",
+    ".agents/skills/outward-inward-loop/SKILL.md",
     ".agents/skills/source-command-ad-copy-dev/SKILL.md",
     ".agents/skills/source-command-advance-pipeline/SKILL.md",
     ".agents/skills/source-command-aider-self-help/SKILL.md",
@@ -97,6 +98,7 @@
     ".agents/skills/source-command-opencode-self-help/SKILL.md",
     ".agents/skills/source-command-orchestrate-loop/SKILL.md",
     ".agents/skills/source-command-orchestrate/SKILL.md",
+    ".agents/skills/source-command-outward-inward/SKILL.md",
     ".agents/skills/source-command-owl/SKILL.md",
     ".agents/skills/source-command-pi-self-help/SKILL.md",
     ".agents/skills/source-command-plan-active-workstreams/SKILL.md",

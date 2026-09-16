@@ -139,6 +139,7 @@ function main() {
     '_dev/reports/analysis/public-export/**',
     '_dev/reports/lifecycle/**',
     '_dev/reports/signals/**',
+    '_dev/reports/telemetry/**',
     '_dev/scratch/**',
     '_dev/state/**',
     '_dev/tmp/**',

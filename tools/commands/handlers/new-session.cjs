@@ -94,11 +94,13 @@ const SPEC_COVERAGE = Object.freeze([
 ]);
 
 function defaultCommands(projectRoot) {
+  const sessionInfo = resolveSessionId(projectRoot);
+  const watcherSessionId = sessionInfo.custody_grade === 'authoritative' ? sessionInfo.session_id : '';
   return {
     // Step 0: watcher-start. Executes tools/sessions/watcher-lifecycle.cjs
     // (startWatchers on DEFAULT_WATCHER_SET, pre-emptive cleanup + partial-
     // start rollback inside the module). Empty session id -> clean no-op exit 0.
-    '0': [process.execPath, path.join('tools', 'sessions', 'watcher-lifecycle.cjs'), 'start', (resolveSessionId(projectRoot).session_id || ''), '--root', projectRoot],
+    '0': [process.execPath, path.join('tools', 'sessions', 'watcher-lifecycle.cjs'), 'start', watcherSessionId || '', '--root', projectRoot],
     // Step 1: auto-commit. Exit 0/2 = continue and record. Exit 1 = HALT.
     '1-auto-commit': [process.execPath, path.join('tools', 'hygiene', 'auto-commit.js'), '--auto', '--foreground'],
     // Step 1: disk quota guard, warn-only by its own contract.

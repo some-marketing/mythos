@@ -1,0 +1,22 @@
+{
+  "schema": "CodexSkillProjectionIndex/1.0",
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "handler_ids": [
+    "concept-promote",
+    "debrief-run",
+    "review-task-plan",
+    "route"
+  ],
+  "managed_targets_sha256": "4af6234533dcd3394495d4312ae564e5907e97024579e39b16ed8fc78ecee2f0",
+  "counts": {
+    "canonical_command:ADVISORY:reviewed_safe:already_aligned": 6
+  },
+  "receipts": [
+    "receipts/command-boot.json",
+    "receipts/command-cross-session.json",
+    "receipts/command-end-session.json",
+    "receipts/command-new-session.json",
+    "receipts/command-next-session.json",
+    "receipts/command-shutdown.json"
+  ]
+}

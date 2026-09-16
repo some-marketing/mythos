@@ -149,14 +149,14 @@ test('parseAliasRegistry rejects duplicate YAML alias fields', () => {
 
 test('loads the shipped typed command registry without losing target or authority', () => {
   const aliases = loadCommandAliases(SURFACE_ROOT);
-  assert.equal(aliases.length, 10);
+  assert.equal(aliases.length, 12);
   assert.deepEqual(
     aliases.map((alias) => alias.id),
-    ['owl', 'oa', 'council-of-owls', 'deliberate', 'dl', 'oc', 'help-me-route', 'blueprint', 'el', 'tt']
+    ['owl', 'oa', 'council-of-owls', 'deliberate', 'dl', 'oc', 'help-me-route', 'blueprint', 'el', 'oil', 'chi', 'tt']
   );
   assert.ok(aliases.every((alias) => alias.id && alias.kind && alias.target && alias.authority_source));
   const byKind = (kind) => aliases.filter((alias) => alias.kind === kind).length;
-  assert.equal(byKind('terminal_alias'), 5);
+  assert.equal(byKind('terminal_alias'), 7);
   assert.equal(byKind('conditional_expansion'), 2);
   assert.equal(byKind('operator_shorthand'), 3);
 

@@ -236,4 +236,6 @@ Command names are mechanical aliases. The typed alias is provenance; authority, 
 - `/help-me-route` -> `/route` [terminal_alias]; authority: `/route`
 - `/blueprint` -> `/blueprint` [terminal_alias]; authority: `/blueprint`
 - `/el` -> `/evidence-loop` [operator_shorthand]; authority: `/evidence-loop`
+- `/oil` -> `/outward-inward` [terminal_alias]; authority: `/outward-inward`
+- `/chi` -> `/outward-inward` [terminal_alias]; authority: `/outward-inward`
 - `/tt` -> `/ticktock` [terminal_alias]; authority: `/ticktock`

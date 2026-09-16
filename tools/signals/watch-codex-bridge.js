@@ -138,13 +138,17 @@ async function main(deps = {}) {
   };
 
   const readiness = deps.readiness || createWatcherReadiness('watch-codex-bridge', { process: processRef });
+  let firstManagedTargets;
+  let hasFirstManagedTargets = false;
   if (readiness.managed) {
     discoverTargets();
-    await readiness.prepareAndWait();
+    firstManagedTargets = await readiness.prepareAndCommit(discoverTargets);
+    hasFirstManagedTargets = true;
   }
 
   do {
-    const targets = discoverTargets();
+    const targets = hasFirstManagedTargets ? firstManagedTargets : discoverTargets();
+    hasFirstManagedTargets = false;
     const next = targets[0] || null;
 
     if (next) {

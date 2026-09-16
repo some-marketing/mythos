@@ -209,18 +209,49 @@ function attachSecondaryError(primary, property, label, secondary) {
   return primary;
 }
 
-function readRegistry(sessionId, projectRoot) {
-  const file = registryFilePath(sessionId, projectRoot);
-  if (!fs.existsSync(file)) return null;
+function isPlainObject(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  const prototype = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
+}
+
+function registryReadError(code, sessionId, file, cause) {
+  return namedError(code, `watcher-lifecycle: ${code} for session ${sessionId} at ${file}`, cause);
+}
+
+function validRegistryIdentity(name, identity) {
+  return isPlainObject(identity) &&
+    identity.name === name &&
+    Number.isInteger(identity.pid) && identity.pid > 0 &&
+    typeof identity.start_time === 'string' && identity.start_time.length > 0 &&
+    typeof identity.executable === 'string' && identity.executable.length > 0 &&
+    Array.isArray(identity.argv) &&
+    typeof identity.argv_fingerprint === 'string' && /^[0-9a-f]{64}$/.test(identity.argv_fingerprint);
+}
+
+function readRegistry(sessionId, projectRoot, options = {}) {
+  const sid = normalizeSessionId(sessionId);
+  const file = registryFilePath(sid, projectRoot);
+  const reader = options.readFileSync || (options.fs && options.fs.readFileSync) || fs.readFileSync;
+  let raw;
   try {
-    const parsed = JSON.parse(fs.readFileSync(file, 'utf8'));
-    if (!parsed || typeof parsed !== 'object' || !parsed.watchers || typeof parsed.watchers !== 'object') {
-      return null;
-    }
-    return parsed;
-  } catch (_) {
-    return null;
+    raw = reader.call(options.fs || fs, file, 'utf8');
+  } catch (error) {
+    if (error && error.code === 'ENOENT') return null;
+    throw registryReadError('WATCHER_REGISTRY_UNREADABLE', sid, file, error);
   }
+
+  let parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (error) {
+    throw registryReadError('WATCHER_REGISTRY_INVALID', sid, file, error);
+  }
+  if (!isPlainObject(parsed) || parsed.schema !== REGISTRY_SCHEMA || parsed.session_id !== sid || !isPlainObject(parsed.watchers) ||
+      Object.entries(parsed.watchers).some(([name, identity]) => !validRegistryIdentity(name, identity))) {
+    throw registryReadError('WATCHER_REGISTRY_INVALID', sid, file);
+  }
+  return parsed;
 }
 
 function writeRegistry(sessionId, registry, projectRoot) {
@@ -586,14 +617,22 @@ function spawnWatcher(entry, opts = {}) {
     let settled = false;
     let settleTimer;
     let preparedWaiter;
+    let startupFailure = null;
+    let startupAccepted = false;
+    const latchStartupFailure = (error) => {
+      if (!startupAccepted && !startupFailure) startupFailure = error;
+      return startupFailure;
+    };
     const fail = (err, reapChild) => {
       if (settled) return;
+      latchStartupFailure(err);
       settled = true;
       clearTimeout(settleTimer);
       if (preparedWaiter) preparedWaiter.cancel();
       if (child) {
         child.removeListener('error', onError);
         child.removeListener('exit', onExit);
+        child.removeListener('disconnect', onDisconnect);
       }
       if (reapChild && child && child.pid != null) {
         reapOwnedChild(child).then((result) => {
@@ -614,9 +653,19 @@ function spawnWatcher(entry, opts = {}) {
         reject(err);
       }
     };
-    const onError = (err) => fail(err, true);
+    const onError = (err) => {
+      latchStartupFailure(err);
+      fail(err, true);
+    };
     const onExit = (code, signal) => {
-      fail(new Error(`watcher-lifecycle: watcher ${name} exited during startup (code ${code}, signal ${signal || 'none'})`), true);
+      const error = new Error(`watcher-lifecycle: watcher ${name} exited during startup (code ${code}, signal ${signal || 'none'})`);
+      latchStartupFailure(error);
+      fail(error, true);
+    };
+    const onDisconnect = () => {
+      const error = new Error(`watcher-lifecycle: watcher ${name} disconnected during startup`);
+      latchStartupFailure(error);
+      fail(error, true);
     };
     try {
       child = spawn(entry.executable, entry.argv.slice(1), {
@@ -635,6 +684,7 @@ function spawnWatcher(entry, opts = {}) {
     // rather than recording a pid-less identity.
     child.once('error', onError);
     child.once('exit', onExit);
+    child.once('disconnect', onDisconnect);
     if (entry.readiness === 'ipc-required') {
       preparedWaiter = protocolWaiter(child, entry, nonce, MESSAGE_TYPES.PREPARED, prepareTimeoutMs);
       preparedWaiter.promise.catch(() => {});
@@ -654,6 +704,10 @@ function spawnWatcher(entry, opts = {}) {
       identity = watcherIdentity(entry, child, startTime);
       const ready = () => {
         if (settled) return;
+        if (startupFailure) {
+          fail(startupFailure, true);
+          return;
+        }
         if (child.exitCode !== null || child.signalCode !== null || !processExists(child.pid)) {
           fail(new Error(`watcher-lifecycle: watcher ${name} exited during startup`), true);
           return;
@@ -665,29 +719,55 @@ function spawnWatcher(entry, opts = {}) {
         }
         spawned.set(`${opts.sessionId}::${name}`, child);
         settled = true;
-        child.removeListener('error', onError);
-        child.removeListener('exit', onExit);
         const control = {
           name, child, identity, entry, nonce,
           async commit() {
+            if (startupFailure) throw startupFailure;
             if (entry.readiness !== 'ipc-required') return;
             const committed = protocolWaiter(child, entry, nonce, MESSAGE_TYPES.COMMITTED, committedTimeoutMs);
             try {
               await sendControl(child, entry, nonce, MESSAGE_TYPES.COMMIT);
               await committed.promise;
+              if (startupFailure) throw startupFailure;
             } catch (error) {
               committed.cancel();
-              throw error;
+              // A direct caller may catch this rejection. Preserve the
+              // terminal startup failure so it cannot later accept/finalize
+              // this control as though COMMIT had succeeded.
+              latchStartupFailure(error);
+              throw startupFailure || error;
             }
           },
           async abort() {
+            // ABORT is a terminal startup decision even when its IPC delivery
+            // succeeds. Latch it before sending so a direct caller cannot
+            // accept this control after requesting rollback.
+            latchStartupFailure(new Error(`watcher-lifecycle: watcher ${name} startup aborted`));
             if (entry.readiness === 'ipc-required' && child.connected) {
-              try { await sendControl(child, entry, nonce, MESSAGE_TYPES.ABORT); } catch (_) { /* reap owns cleanup */ }
+              try { await sendControl(child, entry, nonce, MESSAGE_TYPES.ABORT); } catch (error) {
+                latchStartupFailure(error);
+                /* reap owns cleanup */
+              }
             }
           },
           finalize() {
+            if (startupFailure) throw startupFailure;
+            startupAccepted = true;
+            child.removeListener('error', onError);
+            child.removeListener('exit', onExit);
+            child.removeListener('disconnect', onDisconnect);
             if (child.connected) child.disconnect();
             child.unref();
+          },
+          getStartupFailure() {
+            return startupFailure;
+          },
+          acceptStartup() {
+            if (startupFailure) throw startupFailure;
+            startupAccepted = true;
+            child.removeListener('error', onError);
+            child.removeListener('exit', onExit);
+            child.removeListener('disconnect', onDisconnect);
           }
         };
         resolve(control);
@@ -774,7 +854,7 @@ async function startWatchers(sessionId, watcherSet, opts) {
   try {
     const preemptivelyStopped = [];
     const cleanupRefused = [];
-    const existing = readRegistry(sid, root);
+    const existing = readRegistry(sid, root, opts);
     if (existing && Object.keys(existing.watchers).length > 0) {
       const stop = await stopWatchersUnlocked(sid, Object.assign({}, opts, { projectRoot: root }));
       preemptivelyStopped.push(...stop.signaled, ...stop.stale);
@@ -841,6 +921,14 @@ async function startWatchers(sessionId, watcherSet, opts) {
           throw new Error(`watcher-lifecycle: watcher ${control.name} failed final identity verification (${final.mismatches.join(', ')})`);
         }
       }
+      for (const control of controls) {
+        const failure = control.getStartupFailure();
+        if (failure) throw failure;
+      }
+      // This synchronous acceptance turn is the startup linearization point:
+      // all terminal events observed through the final identity check must be
+      // latched before listeners are removed and the child is detached.
+      for (const control of controls) control.acceptStartup();
       for (const control of controls) control.finalize();
       return {
         ok: true,
@@ -899,7 +987,7 @@ async function stopWatchersUnlocked(sessionId, opts) {
   const escalateSignal = (opts && opts.escalateSignal) || 'SIGKILL';
   const graceMs = (opts && opts.graceMs) || 5000;
 
-  const registry = readRegistry(sid, root);
+  const registry = readRegistry(sid, root, opts);
   if (!registry) {
     return { status: 'stopped', signaled: [], refused: [], stale: [], registry_missing: true, blocked_repair: [] };
   }
@@ -1028,7 +1116,7 @@ async function stopWatchers(sessionId, opts) {
 function listRegistry(sessionId, opts) {
   const root = (opts && opts.projectRoot) || PROJECT_ROOT;
   const sid = normalizeSessionId(sessionId);
-  const registry = readRegistry(sid, root);
+  const registry = readRegistry(sid, root, opts);
   if (!registry) return [];
   return Object.values(registry.watchers);
 }

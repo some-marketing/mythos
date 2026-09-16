@@ -35,6 +35,8 @@ test('actual actor watcher re-discovers a changed signal and dispatches only the
   const stateFile = path.join(projectRoot, 'signal.json');
   fs.writeFileSync(stateFile, JSON.stringify({ name: 'stale', signal: { recommended_next_actor: 'codex' } }));
   const proc = new ManagedProcess();
+  const order = [];
+  proc.on('sent', (message) => order.push(message.type));
   let scans = 0;
   const dispatched = [];
   const running = main({
@@ -42,8 +44,9 @@ test('actual actor watcher re-discovers a changed signal and dispatches only the
     process: proc,
     argv: proc.argv,
     detectInstalledActors: () => ({ codex: true }),
-    listRunnableActorSignals: () => { scans += 1; return [JSON.parse(fs.readFileSync(stateFile, 'utf8'))]; },
+    listRunnableActorSignals: () => { scans += 1; order.push(`scan-${scans}`); return [JSON.parse(fs.readFileSync(stateFile, 'utf8'))]; },
     runActorForSignal: async (_root, info) => {
+      order.push('dispatch');
       dispatched.push(info.name);
       return { mode: 'skipped', reason: 'fixture' };
     }
@@ -57,4 +60,31 @@ test('actual actor watcher re-discovers a changed signal and dispatches only the
   await running;
   assert.equal(scans, 2);
   assert.deepStrictEqual(dispatched, ['fresh']);
+  assert.deepStrictEqual(order, ['scan-1', MESSAGE_TYPES.PREPARED, 'scan-2', MESSAGE_TYPES.COMMITTED, 'dispatch']);
+});
+
+test('actual actor watcher sends no COMMITTED or actor dispatch when the fresh post-COMMIT scan fails', async () => {
+  const projectRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'actor-managed-fresh-fail-'));
+  const proc = new ManagedProcess();
+  proc.env[ENV.NONCE] = 'actor-fresh-fail-nonce';
+  let scans = 0;
+  let dispatches = 0;
+  const running = main({
+    projectRoot,
+    process: proc,
+    argv: proc.argv,
+    detectInstalledActors: () => ({ codex: true }),
+    listRunnableActorSignals: () => {
+      scans += 1;
+      if (scans === 2) throw new Error('fixture fresh actor discovery failed');
+      return [{ name: 'prepared-only', signal: { recommended_next_actor: 'codex' } }];
+    },
+    runActorForSignal: async () => { dispatches += 1; return { mode: 'skipped', reason: 'fixture' }; }
+  });
+  await waitForSent(proc, MESSAGE_TYPES.PREPARED);
+  proc.emit('message', makeWatcherMessage(MESSAGE_TYPES.COMMIT, 'watch-actor-bridge', proc.pid, 'actor-fresh-fail-nonce'));
+  await assert.rejects(running, /fixture fresh actor discovery failed/);
+  assert.equal(scans, 2);
+  assert.equal(proc.sent.some((message) => message.type === MESSAGE_TYPES.COMMITTED), false);
+  assert.equal(dispatches, 0);
 });

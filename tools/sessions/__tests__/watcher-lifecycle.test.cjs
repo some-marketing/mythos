@@ -5,7 +5,7 @@ const assert = require('node:assert');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const { spawn } = require('child_process');
+const { spawn, spawnSync } = require('child_process');
 
 const lifecyclePath = path.resolve(__dirname, '..', 'watcher-lifecycle.cjs');
 const readyPath = path.resolve(__dirname, '..', '..', 'signals', 'lib', 'watcher-ready.cjs');
@@ -49,7 +49,7 @@ const fs = require('fs');
 const { createWatcherReadiness } = require(${JSON.stringify(readyPath)});
 (async () => {
   ${extra}
-  await createWatcherReadiness(${JSON.stringify(name)}).prepareAndWait();
+  await createWatcherReadiness(${JSON.stringify(name)}).prepareAndCommit(() => undefined);
   ${afterCommit}
   setInterval(() => {}, 1000);
 })().catch(() => process.exit(17));`);
@@ -112,7 +112,7 @@ test('managed caller observes no completed start before PREPARED/COMMIT settles'
   const session = sid();
   const prepared = path.join(projectRoot, 'prepared');
   const completed = path.join(projectRoot, 'completed');
-  const script = managedFixture(projectRoot, 'delayed', `fs.writeFileSync(${JSON.stringify(prepared)}, 'yes');`);
+  const script = managedFixture(projectRoot, 'delayed', `fs.writeFileSync(${JSON.stringify(prepared)}, 'yes'); await new Promise((resolve) => setTimeout(resolve, 150));`);
   const runner = writeFixture(projectRoot, 'runner', `
 const { startWatchers } = require(${JSON.stringify(lifecyclePath)});
 startWatchers(${JSON.stringify(session)}, [${JSON.stringify(entry('delayed', script))}], { projectRoot: ${JSON.stringify(projectRoot)} }).then((r) => require('fs').writeFileSync(${JSON.stringify(completed)}, JSON.stringify(r)));`);
@@ -154,6 +154,60 @@ const { spawnWatcher } = require(${JSON.stringify(lifecyclePath)});
   assert.equal(processExists(daemonPid), true);
   process.kill(daemonPid, 'SIGKILL');
   await waitFor(() => !processExists(daemonPid));
+});
+
+test('direct controls latch failed COMMIT and explicit ABORT before acceptance', async () => {
+  const projectRoot = root();
+
+  const commitSession = sid();
+  const commitScript = writeFixture(projectRoot, 'direct-commit-failure', `
+const { MESSAGE_TYPES, ENV, makeWatcherMessage, isExactWatcherMessage } = require(${JSON.stringify(readyPath)});
+const nonce = process.env[ENV.NONCE];
+process.send(makeWatcherMessage(MESSAGE_TYPES.PREPARED, 'direct-commit-failure', process.pid, nonce));
+process.on('message', (message) => {
+  if (isExactWatcherMessage(message, MESSAGE_TYPES.COMMIT, { name: 'direct-commit-failure', pid: process.pid, nonce })) {
+    process.send({ type: 'not-committed', nonce });
+  } else if (isExactWatcherMessage(message, MESSAGE_TYPES.ABORT, { name: 'direct-commit-failure', pid: process.pid, nonce })) {
+    process.exit(0);
+  }
+});
+setInterval(() => {}, 1000);`);
+  const commitControl = await spawnWatcher({
+    name: 'direct-commit-failure', executable: process.execPath,
+    argv: [process.execPath, commitScript], script: commitScript,
+    readiness: 'ipc-required', env: {}
+  }, { sessionId: commitSession, projectRoot, committedTimeoutMs: 250 });
+  let commitFailure;
+  await assert.rejects(commitControl.commit(), (error) => {
+    commitFailure = error;
+    return /malformed or unexpected|timed out/.test(error.message);
+  });
+  assert.strictEqual(commitControl.getStartupFailure(), commitFailure);
+  assert.throws(() => commitControl.finalize(), (error) => error === commitFailure);
+  assert.throws(() => commitControl.acceptStartup(), (error) => error === commitFailure);
+  await commitControl.abort();
+  await waitExit(commitControl.child);
+
+  const abortSession = sid();
+  const abortScript = writeFixture(projectRoot, 'direct-abort', `
+const { MESSAGE_TYPES, ENV, makeWatcherMessage, isExactWatcherMessage } = require(${JSON.stringify(readyPath)});
+const nonce = process.env[ENV.NONCE];
+process.send(makeWatcherMessage(MESSAGE_TYPES.PREPARED, 'direct-abort', process.pid, nonce));
+process.on('message', (message) => {
+  if (isExactWatcherMessage(message, MESSAGE_TYPES.ABORT, { name: 'direct-abort', pid: process.pid, nonce })) process.exit(0);
+});
+setInterval(() => {}, 1000);`);
+  const abortControl = await spawnWatcher({
+    name: 'direct-abort', executable: process.execPath,
+    argv: [process.execPath, abortScript], script: abortScript,
+    readiness: 'ipc-required', env: {}
+  }, { sessionId: abortSession, projectRoot, committedTimeoutMs: 250 });
+  await abortControl.abort();
+  const abortFailure = abortControl.getStartupFailure();
+  assert.match(abortFailure.message, /startup aborted/);
+  assert.throws(() => abortControl.finalize(), (error) => error === abortFailure);
+  assert.throws(() => abortControl.acceptStartup(), (error) => error === abortFailure);
+  await waitExit(abortControl.child);
 });
 
 test('in-bound delayed PREPARED and COMMITTED acknowledgements settle', async () => {
@@ -710,6 +764,321 @@ test('missing registry is a clean stop and traversal session ids fail closed', a
   assert.deepStrictEqual(missing.stale, []);
   await assert.rejects(stopWatchers('../escape', { projectRoot }), /invalid session_id/);
   await assert.rejects(startWatchers('../escape', [entry('x', __filename, 'liveness-only')], { projectRoot }), /invalid session_id/);
+});
+
+test('present malformed or invalid registry fails closed without spawn, signal, or byte mutation', async () => {
+  for (const [label, bytes, expectedCode] of [
+    ['malformed', '{"schema":"watcher-registry/1",', 'WATCHER_REGISTRY_INVALID'],
+    ['wrong-shape', JSON.stringify({ schema: 'watcher-registry/1', session_id: 'wrong-shape', watchers: [] }), 'WATCHER_REGISTRY_INVALID']
+  ]) {
+    const projectRoot = root();
+    const session = sid();
+    const registry = registryFilePath(session, projectRoot);
+    fs.mkdirSync(path.dirname(registry), { recursive: true });
+    fs.writeFileSync(registry, bytes, 'utf8');
+    const before = fs.readFileSync(registry);
+    const marker = path.join(projectRoot, 'must-not-spawn');
+    const script = writeFixture(projectRoot, `bad-${label}`, `fs.writeFileSync(${JSON.stringify(marker)}, 'spawned'); setInterval(() => {}, 1000);`);
+    const defaultScripts = path.join(projectRoot, 'tools', 'signals');
+    fs.mkdirSync(defaultScripts, { recursive: true });
+    for (const name of DEFAULT_WATCHER_SET) fs.writeFileSync(path.join(defaultScripts, `${name}.js`), '', 'utf8');
+
+    await assert.rejects(
+      startWatchers(session, [entry(`bad-${label}`, script, 'liveness-only')], { projectRoot }),
+      (error) => error.code === expectedCode && !error.message.includes(bytes)
+    );
+    await assert.rejects(
+      stopWatchers(session, { projectRoot }),
+      (error) => error.code === expectedCode && !error.message.includes(bytes)
+    );
+    assert.throws(
+      () => listRegistry(session, { projectRoot }),
+      (error) => error.code === expectedCode && !error.message.includes(bytes)
+    );
+    assert.equal(fs.existsSync(marker), false);
+    assert.deepStrictEqual(fs.readFileSync(registry), before);
+
+    const startCli = spawnSync(process.execPath, [lifecyclePath, 'start', session, '--root', projectRoot], { encoding: 'utf8' });
+    const stopCli = spawnSync(process.execPath, [lifecyclePath, 'stop', session, '--root', projectRoot], { encoding: 'utf8' });
+    for (const result of [startCli, stopCli]) {
+      assert.notEqual(result.status, 0, `${label} CLI must fail`);
+      assert.match(result.stderr, new RegExp(expectedCode));
+      assert.equal(result.stdout, '');
+      assert.equal(result.stderr.includes(bytes), false);
+    }
+    assert.deepStrictEqual(fs.readFileSync(registry), before);
+  }
+});
+
+test('registry read denial has a named content-free error before lifecycle effects', async () => {
+  const projectRoot = root();
+  const session = sid();
+  const marker = path.join(projectRoot, 'must-not-spawn');
+  const script = writeFixture(projectRoot, 'denied', `fs.writeFileSync(${JSON.stringify(marker)}, 'spawned'); setInterval(() => {}, 1000);`);
+  const readFileSync = () => {
+    const error = new Error('fixture access denied with opaque bytes');
+    error.code = 'EACCES';
+    throw error;
+  };
+  const options = { projectRoot, readFileSync };
+
+  await assert.rejects(startWatchers(session, [entry('denied', script, 'liveness-only')], options), (error) => {
+    return error.code === 'WATCHER_REGISTRY_UNREADABLE' && !error.message.includes('opaque bytes');
+  });
+  await assert.rejects(stopWatchers(session, options), (error) => error.code === 'WATCHER_REGISTRY_UNREADABLE');
+  assert.throws(() => listRegistry(session, options), (error) => error.code === 'WATCHER_REGISTRY_UNREADABLE');
+  assert.equal(fs.existsSync(marker), false);
+});
+
+test('malformed watcher identity is not reclassified as stale or overwritten', async () => {
+  const projectRoot = root();
+  const session = sid();
+  const registry = registryFilePath(session, projectRoot);
+  fs.mkdirSync(path.dirname(registry), { recursive: true });
+  const bytes = JSON.stringify({
+    schema: 'watcher-registry/1',
+    session_id: session,
+    watchers: { damaged: { pid: 'not-a-pid', start_time: 'unknown' } }
+  });
+  fs.writeFileSync(registry, bytes, 'utf8');
+  await assert.rejects(stopWatchers(session, { projectRoot }), (error) => error.code === 'WATCHER_REGISTRY_INVALID');
+  assert.throws(() => listRegistry(session, { projectRoot }), (error) => error.code === 'WATCHER_REGISTRY_INVALID');
+  assert.equal(fs.readFileSync(registry, 'utf8'), bytes);
+});
+
+test('child terminal event after COMMITTED cannot produce a successful start', async () => {
+  const projectRoot = root();
+  const session = sid();
+  const effect = path.join(projectRoot, 'must-not-dispatch');
+  const script = writeFixture(projectRoot, 'terminal-after-commit', `
+const { MESSAGE_TYPES, ENV, makeWatcherMessage, isExactWatcherMessage } = require(${JSON.stringify(readyPath)});
+const nonce = process.env[ENV.NONCE];
+process.send(makeWatcherMessage(MESSAGE_TYPES.PREPARED, 'terminal-after-commit', process.pid, nonce));
+process.on('message', (message) => {
+  if (!isExactWatcherMessage(message, MESSAGE_TYPES.COMMIT, { name: 'terminal-after-commit', pid: process.pid, nonce })) process.exit(21);
+  process.send(makeWatcherMessage(MESSAGE_TYPES.COMMITTED, 'terminal-after-commit', process.pid, nonce), () => process.exit(22));
+});
+setInterval(() => { require('fs').writeFileSync(${JSON.stringify(effect)}, 'unexpected'); }, 1000);`);
+
+  await assert.rejects(
+    startWatchers(session, [entry('terminal-after-commit', script)], { projectRoot, committedTimeoutMs: 500 }),
+    (error) => /startup|identity|exited/.test(error.message)
+  );
+  assert.equal(fs.existsSync(effect), false);
+  assert.deepStrictEqual(listRegistry(session, { projectRoot }), []);
+});
+
+test('parent-observed IPC disconnect stays latched while a sibling finishes COMMIT', async () => {
+  const projectRoot = root();
+  const session = sid();
+  const events = path.join(projectRoot, 'events.log');
+  const releaseSecondScan = path.join(projectRoot, 'release-second-scan');
+  const report = path.join(projectRoot, 'parent-report.json');
+  const effectA = path.join(projectRoot, 'effect-a');
+  const effectB = path.join(projectRoot, 'effect-b');
+
+  const first = writeFixture(projectRoot, 'disconnect-latch-a', `
+const fs = require('fs');
+const { createWatcherReadiness, MESSAGE_TYPES } = require(${JSON.stringify(readyPath)});
+const events = ${JSON.stringify(events)};
+const originalSend = process.send.bind(process);
+process.send = (message, callback) => {
+  if (message && message.type === MESSAGE_TYPES.COMMITTED) {
+    return originalSend(message, (error) => {
+      process.once('disconnect', () => setImmediate(() => callback(error)));
+      process.disconnect();
+    });
+  }
+  return originalSend(message, callback);
+};
+(async () => {
+  try {
+    await createWatcherReadiness('disconnect-latch-a').prepareAndCommit(() => {
+      fs.appendFileSync(events, 'a-fresh-scan-complete\\n');
+      return 'fresh-a';
+    });
+    fs.writeFileSync(${JSON.stringify(effectA)}, 'unexpected');
+  } catch (error) {
+    fs.appendFileSync(events, 'a-helper-rejected\\n');
+    setInterval(() => {}, 1000);
+  }
+})().catch(() => process.exit(17));`);
+
+  const second = writeFixture(projectRoot, 'disconnect-latch-b', `
+const fs = require('fs');
+const path = require('path');
+const { createWatcherReadiness, MESSAGE_TYPES } = require(${JSON.stringify(readyPath)});
+const events = ${JSON.stringify(events)};
+const gate = ${JSON.stringify(releaseSecondScan)};
+const originalSend = process.send.bind(process);
+process.send = (message, callback) => {
+  if (message && message.type === MESSAGE_TYPES.COMMITTED) {
+    return originalSend(message, () => {});
+  }
+  return originalSend(message, callback);
+};
+function waitForGate() {
+  if (fs.existsSync(gate)) return Promise.resolve();
+  return new Promise((resolve, reject) => {
+    const watcher = fs.watch(path.dirname(gate), (eventType, filename) => {
+      if (filename !== path.basename(gate) || !fs.existsSync(gate)) return;
+      watcher.close();
+      resolve();
+    });
+    watcher.once('error', reject);
+    if (fs.existsSync(gate)) {
+      watcher.close();
+      resolve();
+    }
+  });
+}
+(async () => {
+  try {
+    await createWatcherReadiness('disconnect-latch-b').prepareAndCommit(async () => {
+      fs.appendFileSync(events, 'b-fresh-scan-waiting\\n');
+      await waitForGate();
+      fs.appendFileSync(events, 'b-fresh-scan-complete\\n');
+      return 'fresh-b';
+    });
+    fs.writeFileSync(${JSON.stringify(effectB)}, 'unexpected');
+  } catch (error) {
+    fs.appendFileSync(events, 'b-helper-rejected\\n');
+    setInterval(() => {}, 1000);
+  }
+})().catch(() => process.exit(17));`);
+
+  const runner = writeFixture(projectRoot, 'disconnect-latch-parent', `
+const fs = require('fs');
+const childProcess = require('child_process');
+const originalSpawn = childProcess.spawn;
+const events = ${JSON.stringify(events)};
+const gate = ${JSON.stringify(releaseSecondScan)};
+const report = ${JSON.stringify(report)};
+const observed = [];
+const log = (value) => fs.appendFileSync(events, value + '\\n');
+childProcess.spawn = function wrappedSpawn(command, args, options) {
+  const child = originalSpawn.call(this, command, args, options);
+  const name = options && options.env && options.env.MYTHOS_WATCHER_MANAGED_NAME;
+  if (name === 'disconnect-latch-a' || name === 'disconnect-latch-b') {
+    observed.push({ name, child });
+    child.on('message', (message) => {
+      if (message && message.type === 'mythos-watcher-committed') log('parent-observed-' + name + '-committed');
+    });
+    child.once('exit', () => log('parent-observed-' + name + '-exit'));
+  }
+  if (name === 'disconnect-latch-a') {
+    child.once('disconnect', () => {
+      log('parent-observed-a-disconnect');
+      fs.writeFileSync(gate, 'release');
+      log('parent-released-b-gate');
+    });
+  }
+  return child;
+};
+const { startWatchers, listRegistry, processExists } = require(${JSON.stringify(lifecyclePath)});
+(async () => {
+  try {
+    await startWatchers(${JSON.stringify(session)}, ${JSON.stringify([
+      entry('disconnect-latch-a', first),
+      entry('disconnect-latch-b', second)
+    ])}, { projectRoot: ${JSON.stringify(projectRoot)}, prepareTimeoutMs: 1000, committedTimeoutMs: 1000 });
+    fs.writeFileSync(report, JSON.stringify({ rejected: false }));
+  } catch (error) {
+    log('parent-start-rejected');
+    fs.writeFileSync(report, JSON.stringify({
+      rejected: true,
+      error: error.message,
+      children: observed.map(({ name, child }) => ({ name, pid: child.pid, alive: processExists(child.pid) })),
+      registry: listRegistry(${JSON.stringify(session)}, { projectRoot: ${JSON.stringify(projectRoot)} })
+    }));
+  }
+})().catch((error) => {
+  fs.writeFileSync(report, JSON.stringify({ rejected: false, runner_error: error.stack }));
+  process.exitCode = 1;
+});`);
+
+  const parent = track(spawn(process.execPath, [runner], { stdio: ['ignore', 'pipe', 'pipe'] }));
+  let stderr = '';
+  parent.stderr.on('data', (chunk) => { stderr += chunk; });
+  const exited = await waitExit(parent, 5000);
+  assert.equal(exited.timedOut, undefined, 'fixture parent exits after lifecycle cleanup');
+  assert.equal(exited.code, 0, stderr);
+
+  const result = JSON.parse(fs.readFileSync(report, 'utf8'));
+  assert.equal(result.rejected, true, JSON.stringify(result));
+  assert.match(result.error, /disconnect-latch-a disconnected during startup/);
+  assert.deepStrictEqual(result.children.map((item) => item.name), ['disconnect-latch-a', 'disconnect-latch-b']);
+  assert.deepStrictEqual(result.children.map((item) => item.alive), [false, false]);
+  assert.deepStrictEqual(result.registry, []);
+  assert.equal(fs.existsSync(effectA), false);
+  assert.equal(fs.existsSync(effectB), false);
+
+  const order = fs.readFileSync(events, 'utf8').trim().split('\n');
+  const index = (event) => {
+    const position = order.indexOf(event);
+    assert.notEqual(position, -1, `${event} missing from ${JSON.stringify(order)}`);
+    return position;
+  };
+  assert.ok(index('a-fresh-scan-complete') < index('parent-observed-disconnect-latch-a-committed'));
+  assert.ok(index('parent-observed-disconnect-latch-a-committed') < index('parent-observed-a-disconnect'));
+  assert.ok(index('parent-observed-a-disconnect') < index('parent-released-b-gate'));
+  assert.ok(index('parent-released-b-gate') < index('b-fresh-scan-complete'));
+  assert.ok(index('b-fresh-scan-complete') < index('parent-observed-disconnect-latch-b-committed'));
+  assert.ok(index('parent-observed-disconnect-latch-b-committed') < index('parent-start-rejected'));
+});
+
+test('successful COMMITTED startup is paired with identity acceptance before a later terminal event', async () => {
+  const projectRoot = root();
+  const session = sid();
+  const registry = registryFilePath(session, projectRoot);
+  const events = path.join(projectRoot, 'events.log');
+  const exitTrigger = path.join(projectRoot, 'exit-now');
+  const script = writeFixture(projectRoot, 'paired-success', `
+const fs = require('fs');
+const { MESSAGE_TYPES, ENV, makeWatcherMessage, isExactWatcherMessage } = require(${JSON.stringify(readyPath)});
+const nonce = process.env[ENV.NONCE];
+const events = ${JSON.stringify(events)};
+const exitTrigger = ${JSON.stringify(exitTrigger)};
+const log = (value) => fs.appendFileSync(events, value + '\\n');
+log('prepared');
+process.send(makeWatcherMessage(MESSAGE_TYPES.PREPARED, 'paired-success', process.pid, nonce));
+process.on('message', (message) => {
+  if (!isExactWatcherMessage(message, MESSAGE_TYPES.COMMIT, { name: 'paired-success', pid: process.pid, nonce })) process.exit(21);
+  if (!fs.existsSync(${JSON.stringify(registry)})) process.exit(22);
+  log('commit-received');
+  process.send(makeWatcherMessage(MESSAGE_TYPES.COMMITTED, 'paired-success', process.pid, nonce), () => {
+    log('committed-callback');
+    fs.watchFile(exitTrigger, { interval: 10 }, (current, previous) => {
+      if (current.mtimeMs === previous.mtimeMs) return;
+      fs.unwatchFile(exitTrigger);
+      log('later-exit');
+      process.exit(23);
+    });
+  });
+});`);
+
+  const result = await startWatchers(session, [entry('paired-success', script)], {
+    projectRoot, prepareTimeoutMs: 1000, committedTimeoutMs: 1000
+  });
+  assert.equal(result.ok, true, JSON.stringify(result));
+  assert.equal(result.status, 'committed');
+  assert.deepStrictEqual(fs.readFileSync(events, 'utf8').trim().split('\n'), [
+    'prepared', 'commit-received', 'committed-callback'
+  ]);
+  const identity = result.started[0];
+  assert.equal(verifyIdentity(identity, { projectRoot }).ok, true);
+  assert.deepStrictEqual(listRegistry(session, { projectRoot })[0], identity);
+
+  const child = spawnedChildren().get(`${session}::paired-success`);
+  assert.ok(child, 'accepted child remains available for later terminal-event observation');
+  fs.writeFileSync(exitTrigger, 'exit');
+  const exited = await waitExit(child);
+  assert.equal(exited.code, 23);
+  assert.deepStrictEqual(fs.readFileSync(events, 'utf8').trim().split('\n'), [
+    'prepared', 'commit-received', 'committed-callback', 'later-exit'
+  ]);
+  assert.equal(result.ok, true, 'later terminal event occurs after the already-returned success');
+  assert.deepStrictEqual(listRegistry(session, { projectRoot })[0], identity);
 });
 
 test('stopping one session leaves a different session in the same root live and registered', async () => {

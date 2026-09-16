@@ -49,8 +49,8 @@ function buildSnapshot(deps = {}) {
   return { state, recommendation };
 }
 
-function printSnapshot(asJson, deps = {}) {
-  const snapshot = buildSnapshot(deps);
+function printSnapshot(asJson, deps = {}, preparedSnapshot, usePreparedSnapshot = false) {
+  const snapshot = usePreparedSnapshot ? preparedSnapshot : buildSnapshot(deps);
   const log = deps.log || console.log;
   const buildDirective = deps.buildClaudeDirective || buildClaudeDirective;
   const formatStatus = deps.formatLoopStatus || formatLoopStatus;
@@ -99,14 +99,18 @@ async function main(deps = {}) {
   }
 
   const readiness = deps.readiness || createWatcherReadiness('watch-pipeline-loop', { process: processRef });
+  let firstManagedSnapshot;
+  let hasFirstManagedSnapshot = false;
   if (readiness.managed) {
     buildSnapshot(deps);
-    await readiness.prepareAndWait();
+    firstManagedSnapshot = await readiness.prepareAndCommit(() => buildSnapshot(deps));
+    hasFirstManagedSnapshot = true;
   }
 
   let lastOutput = '';
   do {
-    const output = printSnapshot(asJson, deps);
+    const output = printSnapshot(asJson, deps, firstManagedSnapshot, hasFirstManagedSnapshot);
+    hasFirstManagedSnapshot = false;
     if (!once && output === lastOutput && !asJson) {
       log('[unchanged] no new signal or planning transition since the previous poll');
     }

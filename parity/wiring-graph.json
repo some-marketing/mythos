@@ -10675,7 +10675,7 @@
       "id": "file:instructions/canonical/commands/new-session.yaml",
       "type": "file",
       "path": "instructions/canonical/commands/new-session.yaml",
-      "sha256": "017d1938ac0d57e8a53e0b144f21848ffafd5763ea2f39f249b0f184b69628ab",
+      "sha256": "83909ec118943e5d0bc71e9b0af06f38405a8521a94753fb843c18eb64cd1b5e",
       "mode": 420
     },
     {
@@ -20202,7 +20202,7 @@
       "id": "file:tools/sessions/__tests__/watcher-lifecycle.test.cjs",
       "type": "file",
       "path": "tools/sessions/__tests__/watcher-lifecycle.test.cjs",
-      "sha256": "09f09ea4db767b608b918948ea67045156ccea8bbca518ea222d9b533c032a02",
+      "sha256": "eb112ea200b05e142f9f6a8766a010b740e73d0c845e97bb713a5ad34706cb09",
       "mode": 420
     },
     {
@@ -20335,7 +20335,7 @@
       "id": "file:tools/sessions/watcher-lifecycle.cjs",
       "type": "file",
       "path": "tools/sessions/watcher-lifecycle.cjs",
-      "sha256": "be75ac4ac347feb2c84372475a38e0f230329a2922d93432288f48c27ef0a31a",
+      "sha256": "d7ff97914b838a4ac96a3c295c92a7585d665d13054091dceea34944f9b86401",
       "mode": 420
     },
     {
@@ -20433,21 +20433,21 @@
       "id": "file:tools/signals/__tests__/watch-actor-bridge-managed-startup.test.cjs",
       "type": "file",
       "path": "tools/signals/__tests__/watch-actor-bridge-managed-startup.test.cjs",
-      "sha256": "f513ed7164acabb3ae0cceb0de5eff7c8720a8e5e2ce3537a879269c7f9fd825",
+      "sha256": "e8703bd15a282f4e0620ab2cd832fd01a480cb9ba16b8d83fa01865099624df6",
       "mode": 420
     },
     {
       "id": "file:tools/signals/__tests__/watch-codex-bridge-managed-startup.test.cjs",
       "type": "file",
       "path": "tools/signals/__tests__/watch-codex-bridge-managed-startup.test.cjs",
-      "sha256": "2d52512757d2cc004121d6eb9cab7ba3f5b1026f53169e9e792997109129c821",
+      "sha256": "882484bb5aca4e7d13080b46951c07fa53150f1d54fb710b399261b74895d59c",
       "mode": 420
     },
     {
       "id": "file:tools/signals/__tests__/watch-pipeline-loop-managed-startup.test.cjs",
       "type": "file",
       "path": "tools/signals/__tests__/watch-pipeline-loop-managed-startup.test.cjs",
-      "sha256": "a6c1acd995445d4aed7ad37fe6c43a858de4cd17cfd8adae510b8f1b257e6bf6",
+      "sha256": "35a2d14a8102a670a400f4d507f86794fceb617fda5c4191b8670710cdc69760",
       "mode": 420
     },
     {
@@ -20979,7 +20979,7 @@
       "id": "file:tools/signals/lib/watcher-ready.cjs",
       "type": "file",
       "path": "tools/signals/lib/watcher-ready.cjs",
-      "sha256": "14296f42f8c2d101540583bc0c86d1180d190a2fe69dbe97192c71d7a19606c5",
+      "sha256": "2225c4290064063f83e7a11bd825a079b940b554e55c67c65b9dc744b600b748",
       "mode": 420
     },
     {
@@ -21154,7 +21154,7 @@
       "id": "file:tools/signals/watch-actor-bridge.js",
       "type": "file",
       "path": "tools/signals/watch-actor-bridge.js",
-      "sha256": "5920a06a78a8182d721b565bdbe304120e2551afed7f4494e376587048e32ef8",
+      "sha256": "b859944b0ab4535debf7d2b753fc087cbe648c97a0607f0688fd1fce1ae7a43e",
       "mode": 420
     },
     {
@@ -21168,7 +21168,7 @@
       "id": "file:tools/signals/watch-codex-bridge.js",
       "type": "file",
       "path": "tools/signals/watch-codex-bridge.js",
-      "sha256": "4fbb87f84e4f4108c18f4100785685f0dfe78e234b48821f600ed27e364d9bda",
+      "sha256": "e3f774da9975955e1f36a15fbbe70ef0b7ecd06201f5d8680aaf2c1325881d4f",
       "mode": 420
     },
     {
@@ -21189,7 +21189,7 @@
       "id": "file:tools/signals/watch-pipeline-loop.js",
       "type": "file",
       "path": "tools/signals/watch-pipeline-loop.js",
-      "sha256": "62ce1c6d293affa0a5ff33a12204bbd6f6dd3c1de5fcbaa6523946511a5cd3dd",
+      "sha256": "103d6ad082a6734a17ceff45f924462f27dbdaaf39d6f86915ddd5aab8e37c61",
       "mode": 420
     },
     {

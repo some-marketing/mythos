@@ -63,13 +63,17 @@ async function main(deps = {}) {
       .filter((info) => !actorFilter || String(info.signal.recommended_next_actor || '').toLowerCase() === actorFilter);
   };
   const readiness = deps.readiness || createWatcherReadiness('watch-actor-bridge', { process: processRef });
+  let firstManagedSignals;
+  let hasFirstManagedSignals = false;
   if (readiness.managed) {
     discoverSignals();
-    await readiness.prepareAndWait();
+    firstManagedSignals = await readiness.prepareAndCommit(discoverSignals);
+    hasFirstManagedSignals = true;
   }
 
   do {
-    const signals = discoverSignals();
+    const signals = hasFirstManagedSignals ? firstManagedSignals : discoverSignals();
+    hasFirstManagedSignals = false;
     const next = signals[0] || null;
 
     if (!next) {

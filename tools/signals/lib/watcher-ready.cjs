@@ -55,7 +55,7 @@ function createWatcherReadiness(name, opts = {}) {
   if (!nonce && !managedName) {
     return {
       managed: false,
-      prepareAndWait: async () => ({ managed: false, committed: true })
+      prepareAndCommit: async () => ({ managed: false, committed: true })
     };
   }
   if (!nonce || !managedName) throw protocolError('managed name and nonce must be provided together');
@@ -70,47 +70,64 @@ function createWatcherReadiness(name, opts = {}) {
   let used = false;
   return {
     managed: true,
-    async prepareAndWait() {
-      if (used) throw protocolError('prepareAndWait may only be called once');
+    async prepareAndCommit(freshLocalAuthorityScan) {
+      if (used) throw protocolError('prepareAndCommit may only be called once');
+      if (typeof freshLocalAuthorityScan !== 'function') {
+        throw protocolError('prepareAndCommit requires a fresh local authority scan callback');
+      }
       used = true;
       const expected = { name, pid: proc.pid, nonce };
 
       return await new Promise((resolve, reject) => {
         let settled = false;
         let commitSeen = false;
-        const finish = (error, value) => {
+        let phase = 'waiting-commit';
+        const settle = (kind, value) => {
           if (settled) return;
           settled = true;
+          phase = 'settled';
           clearTimeout(timer);
           proc.removeListener('message', onMessage);
           proc.removeListener('disconnect', onDisconnect);
-          if (error) reject(error);
+          if (kind === 'reject') reject(value);
           else resolve(value);
         };
-        const onDisconnect = () => finish(protocolError('IPC disconnected before COMMIT'));
-        const onMessage = async (message) => {
+        const fail = (reason) => settle('reject', reason);
+        const succeed = (value) => settle('resolve', value);
+        const cancellationError = (kind) => protocolError(`${kind} during ${phase}`);
+        const onDisconnect = () => fail(cancellationError('IPC disconnected'));
+        const onMessage = (message) => {
           if (isExactWatcherMessage(message, MESSAGE_TYPES.ABORT, expected)) {
-            finish(protocolError('startup aborted before COMMIT'));
+            fail(cancellationError('startup aborted'));
             return;
           }
-          if (!isExactWatcherMessage(message, MESSAGE_TYPES.COMMIT, expected)) {
-            finish(protocolError('unexpected managed startup message'));
+          if (isExactWatcherMessage(message, MESSAGE_TYPES.COMMIT, expected)) {
+            if (commitSeen) return;
+            commitSeen = true;
+            phase = 'fresh-scan';
+            let scan;
+            try {
+              scan = freshLocalAuthorityScan();
+            } catch (error) {
+              fail(error);
+              return;
+            }
+            Promise.resolve(scan).then((freshValue) => {
+              if (settled) return;
+              phase = 'committed-send';
+              sendMessage(proc, makeWatcherMessage(MESSAGE_TYPES.COMMITTED, name, proc.pid, nonce))
+                .then(() => succeed(freshValue))
+                .catch((error) => fail(protocolError(`unable to send COMMITTED: ${error.message}`)));
+            }, fail);
             return;
           }
-          if (commitSeen) return;
-          commitSeen = true;
-          try {
-            await sendMessage(proc, makeWatcherMessage(MESSAGE_TYPES.COMMITTED, name, proc.pid, nonce));
-            finish(null, { managed: true, committed: true });
-          } catch (error) {
-            finish(protocolError(`unable to send COMMITTED: ${error.message}`));
-          }
+          fail(protocolError('unexpected managed startup message'));
         };
-        const timer = setTimeout(() => finish(protocolError('timed out waiting for COMMIT')), configuredTimeout);
+        const timer = setTimeout(() => fail(cancellationError('managed startup timed out')), configuredTimeout);
         proc.on('message', onMessage);
         proc.once('disconnect', onDisconnect);
         sendMessage(proc, makeWatcherMessage(MESSAGE_TYPES.PREPARED, name, proc.pid, nonce))
-          .catch((error) => finish(protocolError(`unable to send PREPARED: ${error.message}`)));
+          .catch((error) => fail(protocolError(`unable to send PREPARED: ${error.message}`)));
       });
     }
   };

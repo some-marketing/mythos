@@ -217,6 +217,74 @@ test('spawnWatcher settles an asynchronous nonexistent-executable failure before
   assert.deepStrictEqual(report.registry, [], 'failed spawn must record no identity');
 });
 
+test('spawnWatcher bounds unavailable start-time retries and reaps only its owned child', { skip: POSIX ? false : 'POSIX ps simulation only' }, async () => {
+  const root = freshRoot();
+  const sid = freshSession(root);
+  const daemonPath = path.join(root, 'daemon.cjs');
+  const fakePsPath = path.join(root, 'ps');
+  const psCountPath = path.join(root, 'ps.count');
+  const runnerPath = path.join(root, 'runner.cjs');
+  const pidPath = path.join(root, 'daemon.pid');
+  const modulePath = path.resolve(__dirname, '..', 'watcher-lifecycle.cjs');
+  fs.writeFileSync(daemonPath, [
+    `'use strict';`,
+    `require('fs').writeFileSync(${JSON.stringify(pidPath)}, String(process.pid));`,
+    `setInterval(() => {}, 1000);`
+  ].join('\n'), 'utf8');
+  fs.writeFileSync(fakePsPath, '#!/bin/sh\nprintf x >> "$MYTHOS_FAKE_PS_COUNT"\nexit 1\n', 'utf8');
+  fs.chmodSync(fakePsPath, 0o755);
+  fs.writeFileSync(runnerPath, [
+    `'use strict';`,
+    `const fs = require('fs');`,
+    `const { startWatchers, listRegistry } = require(${JSON.stringify(modulePath)});`,
+    `(async () => {`,
+    `  const result = await startWatchers(${JSON.stringify(sid)}, [{ name: 'uninspectable', command: process.execPath, args: [${JSON.stringify(daemonPath)}] }], { projectRoot: ${JSON.stringify(root)} });`,
+    `  const pid = fs.existsSync(${JSON.stringify(pidPath)}) ? Number(fs.readFileSync(${JSON.stringify(pidPath)}, 'utf8')) : null;`,
+    `  const psCalls = fs.existsSync(${JSON.stringify(psCountPath)}) ? fs.readFileSync(${JSON.stringify(psCountPath)}, 'utf8').length : 0;`,
+    `  process.stdout.write(JSON.stringify({ ok: result.ok, failed: result.failed, pid, psCalls, registry: listRegistry(${JSON.stringify(sid)}, { projectRoot: ${JSON.stringify(root)} }) }));`,
+    `})().catch((err) => { process.stderr.write(String(err && err.stack || err)); process.exitCode = 1; });`
+  ].join('\n'), 'utf8');
+
+  const caller = spawn(process.execPath, [runnerPath], {
+    env: Object.assign({}, process.env, {
+      PATH: `${root}:${process.env.PATH || ''}`,
+      MYTHOS_FAKE_PS_COUNT: psCountPath
+    }),
+    stdio: ['ignore', 'pipe', 'pipe']
+  });
+  let stdout = '';
+  let stderr = '';
+  let report;
+  try {
+    caller.stdout.on('data', (chunk) => { stdout += chunk.toString(); });
+    caller.stderr.on('data', (chunk) => { stderr += chunk.toString(); });
+    const result = await waitExit(caller, 2000);
+    assert.notEqual(result.timedOut, true, 'unavailable identity caller must settle promptly');
+    assert.equal(result.code, 0, stderr);
+    report = JSON.parse(stdout);
+    assert.equal(report.ok, false);
+    assert.equal(report.failed.length, 1);
+    assert.equal(report.failed[0].name, 'uninspectable');
+    assert.match(report.failed[0].error, /unable to determine start time/);
+    assert.equal(report.psCalls, 5, 'start-time probing must be bounded to five attempts');
+    assert.ok(Number.isInteger(report.pid) && report.pid > 0, 'owned child pid must be recorded by the child');
+    assert.equal(processExists(report.pid), false, 'uninspectable child must be reaped');
+    assert.deepStrictEqual(report.registry, [], 'uninspectable spawn must record no identity');
+  } finally {
+    if (caller.exitCode === null && caller.signalCode === null) {
+      try { caller.kill('SIGKILL'); } catch (_) { /* already gone */ }
+      await waitExit(caller, 1000);
+    }
+    const pid = report && report.pid
+      ? report.pid
+      : (fs.existsSync(pidPath) ? Number(fs.readFileSync(pidPath, 'utf8')) : null);
+    if (Number.isInteger(pid) && pid > 0 && processExists(pid)) {
+      try { process.kill(pid, 'SIGKILL'); } catch (_) { /* already gone */ }
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+  }
+});
+
 test('stop signals exactly the session-start set after identity verification (SIGTERM)', async () => {
   const root = freshRoot();
   const sid = freshSession(root);

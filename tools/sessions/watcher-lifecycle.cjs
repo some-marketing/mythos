@@ -168,6 +168,39 @@ function liveCommand(pid) {
   return psQuery(['-o', 'command=', '-p', String(pid)]).trim();
 }
 
+// Terminate and reap a child whose identity was never recorded. This is safe
+// only for the child handle created by the current spawn attempt.
+function reapOwnedChild(child) {
+  return new Promise((resolve) => {
+    if (!child || child.exitCode !== null || child.signalCode !== null) {
+      resolve();
+      return;
+    }
+
+    let finished = false;
+    let killTimer;
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(killTimer);
+      child.removeListener('exit', finish);
+      resolve();
+    };
+    child.once('exit', finish);
+    try {
+      child.kill('SIGTERM');
+    } catch (_) {
+      finish();
+      return;
+    }
+    killTimer = setTimeout(() => {
+      if (child.exitCode === null && child.signalCode === null) {
+        try { child.kill('SIGKILL'); } catch (_) { /* already gone */ }
+      }
+    }, START_TIME_RETRY_MS);
+  });
+}
+
 function processExists(pid) {
   if (!Number.isInteger(pid) || pid <= 0) return false;
   try {
@@ -333,12 +366,17 @@ function spawnWatcher(entry, opts) {
     const name = entry.name;
     let child;
     let settled = false;
-    const onError = (err) => {
+    const fail = (err, reapChild) => {
       if (settled) return;
       settled = true;
       if (child) child.removeListener('error', onError);
-      reject(err);
+      if (reapChild && child && child.pid != null) {
+        reapOwnedChild(child).then(() => reject(err));
+      } else {
+        reject(err);
+      }
     };
+    const onError = (err) => fail(err, true);
     try {
       child = spawn(entry.executable, entry.argv.slice(1), {
         stdio: (opts && opts.stdio) || 'ignore'
@@ -351,15 +389,16 @@ function spawnWatcher(entry, opts) {
     // rather than recording a pid-less identity.
     child.once('error', onError);
 
-    const record = () => {
+    const record = (attempt = 0) => {
       if (settled || child.pid == null) return; // settles via 'error' or next retry
-      let startTime = null;
-      for (let i = 0; i < START_TIME_RETRIES && !startTime; i += 1) {
-        startTime = liveStartTime(child.pid);
-        if (!startTime && i < START_TIME_RETRIES - 1) {
-          setTimeout(record, START_TIME_RETRY_MS);
+      const startTime = liveStartTime(child.pid);
+      if (!startTime) {
+        if (attempt < START_TIME_RETRIES - 1) {
+          setTimeout(() => record(attempt + 1), START_TIME_RETRY_MS);
           return;
         }
+        fail(new Error(`watcher-lifecycle: unable to determine start time for spawned watcher ${name} (pid ${child.pid})`), true);
+        return;
       }
       const identity = {
         name,

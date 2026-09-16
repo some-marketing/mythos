@@ -1,0 +1,8 @@
+{
+  "case_id": "neutral-internal-tool",
+  "name": "Ambiguous internal request intake",
+  "source": "Synthetic, organization-agnostic replay input created to test candidate structure and prompt-chain behavior.",
+  "variant_type": "synthetic",
+  "ready": true,
+  "expected_success": true
+}

@@ -561,7 +561,7 @@ writeJson(path.join(candidateRoot, 'candidate.json'), {
   source_origins: captures.map((capture) => capture.meta.source_root),
   created_at: new Date().toISOString(),
   updated_at: new Date().toISOString(),
-  owner: process.env.USER || 'unknown',
+  owner: 'human framework steward',
   promotion_ready: false,
   blocking_issues: [
     'Preflight checks have not been run yet. Run replay-candidate.js first.',

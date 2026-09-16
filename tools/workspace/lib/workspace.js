@@ -1,6 +1,8 @@
 'use strict';
 
+const fs = require('fs');
 const path = require('path');
+const { resolveCanonicalRoot } = require('../../lib/canonical-root.cjs');
 const {
   ensureDir,
   exists,
@@ -80,17 +82,29 @@ function requireCaptureRoot(inputPath) {
   return { captureRoot, projectRoot, workspaceRoot };
 }
 
-function requireCandidateRoot(inputPath) {
+function requireCandidateRoot(inputPath, { resolveRepositoryRoot = resolveCanonicalRoot } = {}) {
   const candidateRoot = path.resolve(String(inputPath));
   if (!exists(path.join(candidateRoot, 'candidate.json'))) {
     die(`Not a candidate root (missing candidate.json): ${candidateRoot}`);
   }
   if (path.basename(path.dirname(candidateRoot)) !== 'framework_candidates') {
-    die(`Candidate root must live under <project>/framework_candidates/: ${candidateRoot}`);
+    die(`Candidate root must live under <project-or-repo>/framework_candidates/: ${candidateRoot}`);
   }
   const projectRoot = path.dirname(path.dirname(candidateRoot));
-  const { workspaceRoot } = requireProjectRoot(projectRoot);
-  return { candidateRoot, projectRoot, workspaceRoot };
+  if (exists(path.join(projectRoot, 'project.json'))) {
+    const { workspaceRoot } = requireProjectRoot(projectRoot);
+    return { candidateRoot, projectRoot, workspaceRoot, candidateScope: 'project' };
+  }
+  const repositoryRoot = resolveRepositoryRoot({ mode: 'hard' });
+  if (fs.realpathSync.native(projectRoot) === fs.realpathSync.native(repositoryRoot)) {
+    return {
+      candidateRoot,
+      projectRoot: repositoryRoot,
+      workspaceRoot: repositoryRoot,
+      candidateScope: 'repository'
+    };
+  }
+  die(`Candidate root is neither project-scoped nor under the canonical repository root: ${candidateRoot}`);
 }
 
 function relPosix(fromPath, toPath) {

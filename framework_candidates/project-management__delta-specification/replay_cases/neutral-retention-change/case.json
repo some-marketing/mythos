@@ -1,0 +1,8 @@
+{
+  "case_id": "neutral-retention-change",
+  "name": "Brownfield retention behavior change",
+  "source": "Synthetic, organization-agnostic replay input created to test delta semantics and dependency mapping.",
+  "variant_type": "synthetic",
+  "ready": true,
+  "expected_success": true
+}

@@ -44,7 +44,6 @@ function validate(data, schema, options = {}) {
     if (!valid) {
       errors.push({ path: dataPath, message: 'Value does not match any allowed schema shape' });
     }
-    return errors;
   }
 
   if (schema.type) {
@@ -69,6 +68,9 @@ function validate(data, schema, options = {}) {
   if (typeof data === 'string') {
     if (schema.minLength !== undefined && data.length < schema.minLength) {
       errors.push({ path: dataPath, message: `String length ${data.length} < minLength ${schema.minLength}` });
+    }
+    if (typeof schema.pattern === 'string' && !new RegExp(schema.pattern).test(data)) {
+      errors.push({ path: dataPath, message: `String does not match pattern: ${schema.pattern}` });
     }
   }
 

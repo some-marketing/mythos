@@ -1,0 +1,101 @@
+{
+  "schema": "PromptProvenanceReceipt/1.0",
+  "prompts": [
+    {
+      "prompt_id": "01_SCOPE_AND_INTENT",
+      "prompt_sha256": "f9696e1ca8a65402eec0f72b35db046f758447519405578ea22a22951ca4118f",
+      "source_envelope_id": "pr26-public-product-source-envelope-05c1bcbc34a3",
+      "source_envelope_sha256": "d914b43bfb3ecd6afa70ab333973ea782b1178bc73a2fee81a99040875819577",
+      "source_revisions": [
+        {
+          "source_id": "bmad-readme",
+          "content_sha256": "c1c3467ddc0274d239899b279bcd951d0eb502762594067d86e00d0ee4419079"
+        },
+        {
+          "source_id": "bmad-workflow-map",
+          "content_sha256": "84927b828a99db51e7dd451c2db08df1e55dd451c72cd143308afe75c04dd3e7"
+        }
+      ],
+      "rewrite_performed": true,
+      "rewriter_actor_id": "pr26-gemini-rewriter",
+      "rewriter_model_provider_family": "google",
+      "rewriter_resolved_model_id": "gemini-3.1-pro-preview",
+      "attester_actor_id": "pr26-openrouter-attester",
+      "attester_model_provider_family": "openai",
+      "attester_resolved_model_id": "openai/gpt-5.1",
+      "attestation": "pass"
+    },
+    {
+      "prompt_id": "02_DISCOVERY_EVIDENCE",
+      "prompt_sha256": "111bd7499958c7afb9dd06ba98f5c1d10d3c289275cb83ced748183962b0fab6",
+      "source_envelope_id": "pr26-public-product-source-envelope-05c1bcbc34a3",
+      "source_envelope_sha256": "d914b43bfb3ecd6afa70ab333973ea782b1178bc73a2fee81a99040875819577",
+      "source_revisions": [
+        {
+          "source_id": "bmad-readme",
+          "content_sha256": "c1c3467ddc0274d239899b279bcd951d0eb502762594067d86e00d0ee4419079"
+        },
+        {
+          "source_id": "bmad-workflow-map",
+          "content_sha256": "84927b828a99db51e7dd451c2db08df1e55dd451c72cd143308afe75c04dd3e7"
+        }
+      ],
+      "rewrite_performed": true,
+      "rewriter_actor_id": "pr26-gemini-rewriter",
+      "rewriter_model_provider_family": "google",
+      "rewriter_resolved_model_id": "gemini-3.1-pro-preview",
+      "attester_actor_id": "pr26-openrouter-attester",
+      "attester_model_provider_family": "openai",
+      "attester_resolved_model_id": "openai/gpt-5.1",
+      "attestation": "pass"
+    },
+    {
+      "prompt_id": "03_PRODUCT_BRIEF_AND_PRFAQ",
+      "prompt_sha256": "cc6721f12a894b2162ae42371ee6fed84dde123500484fe31bcfc52dc257b47e",
+      "source_envelope_id": "pr26-public-product-source-envelope-05c1bcbc34a3",
+      "source_envelope_sha256": "d914b43bfb3ecd6afa70ab333973ea782b1178bc73a2fee81a99040875819577",
+      "source_revisions": [
+        {
+          "source_id": "bmad-readme",
+          "content_sha256": "c1c3467ddc0274d239899b279bcd951d0eb502762594067d86e00d0ee4419079"
+        },
+        {
+          "source_id": "bmad-workflow-map",
+          "content_sha256": "84927b828a99db51e7dd451c2db08df1e55dd451c72cd143308afe75c04dd3e7"
+        }
+      ],
+      "rewrite_performed": true,
+      "rewriter_actor_id": "pr26-gemini-rewriter",
+      "rewriter_model_provider_family": "google",
+      "rewriter_resolved_model_id": "gemini-3.1-pro-preview",
+      "attester_actor_id": "pr26-openrouter-attester",
+      "attester_model_provider_family": "openai",
+      "attester_resolved_model_id": "openai/gpt-5.1",
+      "attestation": "pass"
+    },
+    {
+      "prompt_id": "04_READINESS_REVIEW",
+      "prompt_sha256": "eee78ff7f863808ce8546a2c37ba77350f56dd9859a92cc8e124211043f6ed5e",
+      "source_envelope_id": "pr26-public-product-source-envelope-05c1bcbc34a3",
+      "source_envelope_sha256": "d914b43bfb3ecd6afa70ab333973ea782b1178bc73a2fee81a99040875819577",
+      "source_revisions": [
+        {
+          "source_id": "bmad-commands",
+          "content_sha256": "688a87c956e98508869b554809b2163e4b003a729db1a7521ef03cb00cb7321a"
+        },
+        {
+          "source_id": "bmad-workflow-map",
+          "content_sha256": "84927b828a99db51e7dd451c2db08df1e55dd451c72cd143308afe75c04dd3e7"
+        }
+      ],
+      "rewrite_performed": true,
+      "rewriter_actor_id": "pr26-gemini-rewriter",
+      "rewriter_model_provider_family": "google",
+      "rewriter_resolved_model_id": "gemini-3.1-pro-preview",
+      "attester_actor_id": "pr26-openrouter-attester",
+      "attester_model_provider_family": "openai",
+      "attester_resolved_model_id": "openai/gpt-5.1",
+      "attestation": "pass"
+    }
+  ]
+}

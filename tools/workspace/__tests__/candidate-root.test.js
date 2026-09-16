@@ -1,0 +1,994 @@
+'use strict';
+
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
+const test = require('node:test');
+
+const { resolveCanonicalRoot } = require('../../lib/canonical-root.cjs');
+const { inspectBundle, inspectOutputDir, loadOutputContract } = require('../lib/output-contract');
+const { collectCandidateBlockingIssues } = require('../lib/capture-candidate');
+const { loadSchema, validateRequiredFields } = require('../lib/models');
+const { validate: validateSchema } = require('../../verify/lib/schema.cjs');
+const { requireCandidateRoot } = require('../lib/workspace');
+const { computeLedger } = require('../lib/learning-ledger');
+
+test('recognizes candidates staged at the repository framework_candidates root', () => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const candidateRoot = path.join(
+    repositoryRoot,
+    'framework_candidates',
+    'product-management__product-intake'
+  );
+
+  const result = requireCandidateRoot(candidateRoot);
+
+  assert.equal(result.candidateRoot, candidateRoot);
+  assert.equal(result.projectRoot, repositoryRoot);
+  assert.equal(result.workspaceRoot, repositoryRoot);
+  assert.equal(result.candidateScope, 'repository');
+});
+
+test('recognizes repository candidates through a symlinked repository path', (t) => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-candidate-symlink-'));
+  t.after(() => fs.rmSync(tempRoot, { recursive: true, force: true }));
+
+  const linkedRoot = path.join(tempRoot, 'linked-repository');
+  fs.symlinkSync(repositoryRoot, linkedRoot, 'dir');
+  const candidateRoot = path.join(
+    linkedRoot,
+    'framework_candidates',
+    'product-management__product-intake'
+  );
+
+  const result = requireCandidateRoot(candidateRoot);
+
+  assert.equal(result.candidateRoot, candidateRoot);
+  assert.equal(result.projectRoot, repositoryRoot);
+  assert.equal(result.workspaceRoot, repositoryRoot);
+  assert.equal(result.candidateScope, 'repository');
+});
+
+test('preserves project-scoped framework candidate resolution', (t) => {
+  const workspaceRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-candidate-root-'));
+  t.after(() => fs.rmSync(workspaceRoot, { recursive: true, force: true }));
+
+  const projectRoot = path.join(workspaceRoot, 'projects', 'sample-project');
+  const candidateRoot = path.join(projectRoot, 'framework_candidates', 'sample-candidate');
+  fs.mkdirSync(candidateRoot, { recursive: true });
+  fs.writeFileSync(path.join(workspaceRoot, 'WORKSPACE_MANIFEST.json'), '{}\n');
+  fs.writeFileSync(path.join(projectRoot, 'project.json'), '{}\n');
+  fs.writeFileSync(path.join(candidateRoot, 'candidate.json'), '{}\n');
+
+  let repositoryResolutionAttempted = false;
+  const result = requireCandidateRoot(candidateRoot, {
+    resolveRepositoryRoot: () => {
+      repositoryResolutionAttempted = true;
+      throw new Error('project-scoped candidates must not resolve the canonical repository');
+    }
+  });
+
+  assert.equal(result.candidateRoot, candidateRoot);
+  assert.equal(result.projectRoot, projectRoot);
+  assert.equal(result.workspaceRoot, workspaceRoot);
+  assert.equal(result.candidateScope, 'project');
+  assert.equal(repositoryResolutionAttempted, false);
+});
+
+test('imported candidates authorize report outputs and declare consumed artifacts', (t) => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const emptyOutputRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-candidate-output-'));
+  t.after(() => fs.rmSync(emptyOutputRoot, { recursive: true, force: true }));
+  const candidateSpecs = [
+    {
+      root: 'product-management__product-intake',
+      producerPrompts: [
+        '01_SCOPE_AND_INTENT.md',
+        '02_DISCOVERY_EVIDENCE.md',
+        '03_PRODUCT_BRIEF_AND_PRFAQ.md'
+      ],
+      producerStages: [
+        '01_SCOPE_AND_INTENT',
+        '02_DISCOVERY_EVIDENCE',
+        '03_PRODUCT_BRIEF_AND_PRFAQ'
+      ],
+      requiredArtifacts: [
+        'outputs/product-intake/scope-and-intent.json',
+        'outputs/product-intake/hypothesis-tests.json'
+      ]
+    },
+    {
+      root: 'project-management__delta-specification',
+      producerPrompts: [
+        '01_BASELINE_INVENTORY.md',
+        '02_CHANGE_PROPOSAL.md',
+        '03_DELTA_REQUIREMENTS.md',
+        '04_DEPENDENCY_AND_ACCEPTANCE_MAP.md'
+      ],
+      producerStages: [
+        '01_BASELINE_INVENTORY',
+        '02_CHANGE_PROPOSAL',
+        '03_DELTA_REQUIREMENTS',
+        '04_DEPENDENCY_AND_ACCEPTANCE_MAP'
+      ],
+      requiredArtifacts: []
+    }
+  ];
+
+  for (const candidate of candidateSpecs) {
+    const proposedRoot = path.join(
+      repositoryRoot,
+      'framework_candidates',
+      candidate.root,
+      'proposed_framework'
+    );
+    const manifestPath = path.join(proposedRoot, 'manifest.json');
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+    assert.ok(manifest.execution_modes.includes('RUN_ONLY'));
+    assert.ok(manifest.output_contract_v2);
+    assert.ok(manifest.output_contract_v2.directories.every((entry) => entry.required));
+    assert.ok(manifest.output_contract_v2.artifacts.every((entry) => entry.required && entry.path_pattern));
+    assert.deepEqual(
+      manifest.output_contract_v2.artifacts.map((entry) => entry.path_pattern),
+      manifest.output_contract.artifacts
+    );
+    const bundleType = manifest.output_contract_v2.bundle_types[0];
+    assert.deepEqual(bundleType.producer_stages, candidate.producerStages);
+    assert.deepEqual(
+      Object.keys(bundleType.file_schemas).sort(),
+      bundleType.required_files.filter((file) => file.endsWith('.json')).sort()
+    );
+    const candidateRecord = JSON.parse(fs.readFileSync(path.join(proposedRoot, '..', 'candidate.json'), 'utf8'));
+    assert.equal(candidateRecord.owner, 'human framework steward');
+    const loaded = loadOutputContract(manifestPath);
+    assert.equal(loaded.compatibility, false);
+    const missingArtifacts = inspectOutputDir(emptyOutputRoot, loaded.contract)
+      .filter((finding) => finding.code === 'ARTIFACT_MISSING');
+    assert.equal(missingArtifacts.length, manifest.output_contract_v2.artifacts.length);
+    assert.ok(missingArtifacts.every((finding) => finding.severity === 'blocker'));
+    for (const artifact of candidate.requiredArtifacts) {
+      assert.ok(manifest.output_contract.artifacts.includes(artifact));
+    }
+    for (const prompt of candidate.producerPrompts) {
+      const content = fs.readFileSync(path.join(proposedRoot, 'prompts', prompt), 'utf8');
+      assert.match(content, /## (?:Mode|Execution Mode)\n+RUN_ONLY/);
+    }
+  }
+});
+
+test('imported candidate review gates require distinct minds and complete intake', () => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const productRoot = path.join(
+    repositoryRoot,
+    'framework_candidates',
+    'product-management__product-intake',
+    'proposed_framework'
+  );
+  const productManifest = JSON.parse(fs.readFileSync(path.join(productRoot, 'manifest.json'), 'utf8'));
+  assert.ok(productManifest.input_contract.optional.some((entry) => entry.name === 'risk_level'));
+
+  const reviewPrompts = [
+    path.join(productRoot, 'prompts', '04_READINESS_REVIEW.md'),
+    path.join(
+      repositoryRoot,
+      'framework_candidates',
+      'project-management__delta-specification',
+      'proposed_framework',
+      'prompts',
+      '05_INDEPENDENT_REVIEW.md'
+    )
+  ];
+  for (const promptPath of reviewPrompts) {
+    const content = fs.readFileSync(promptPath, 'utf8');
+    assert.match(content, /actor id, harness id, and model-provider family/);
+    assert.match(
+      content,
+      /same-provider subagent is not a distinct reviewing mind|(?:[Aa] )?subagent from the same provider(?: or a wiped context window)? does not (?:constitute|satisfy) (?:the distinct reviewing mind requirement|a distinct reviewing mind)/
+    );
+    assert.match(
+      content,
+      /missing provenance forces `FAIL`|Absent provenance must trigger a `FAIL`|If provenance is missing, you must fail the review \(`FAIL`\)/
+    );
+  }
+});
+
+test('legacy candidate owners remain readable but block promotion until migrated', () => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const candidate = JSON.parse(fs.readFileSync(path.join(
+    repositoryRoot,
+    'framework_candidates',
+    'product-management__product-intake',
+    'candidate.json'
+  ), 'utf8'));
+  const schema = loadSchema('candidate.schema.json');
+  assert.doesNotThrow(() => validateRequiredFields(candidate, schema, 'candidate.json'));
+  const legacyCandidate = { ...candidate, owner: 'unknown' };
+  assert.doesNotThrow(() => validateRequiredFields(legacyCandidate, schema, 'candidate.json'));
+  const blocking = collectCandidateBlockingIssues(
+    path.join(repositoryRoot, 'framework_candidates', 'product-management__product-intake'),
+    legacyCandidate,
+    { workspaceRoot: repositoryRoot, projectRoot: repositoryRoot }
+  );
+  assert.ok(blocking.issues.includes(
+    'Candidate owner must be migrated to human framework steward before promotion.'
+  ));
+  assert.ok(!collectCandidateBlockingIssues(
+    path.join(repositoryRoot, 'framework_candidates', 'product-management__product-intake'),
+    candidate,
+    { workspaceRoot: repositoryRoot, projectRoot: repositoryRoot }
+  ).issues.some((issue) => /owner must be migrated/.test(issue)));
+});
+
+test('schema validation preserves implicit object semantics', () => {
+  const schema = {
+    properties: {
+      wrapper: {
+        required: ['value'],
+        properties: { value: { type: 'string' } }
+      }
+    }
+  };
+  assert.throws(
+    () => validateRequiredFields({ wrapper: {} }, schema, 'implicit-object'),
+    /implicit-object\.wrapper is missing required fields: value/
+  );
+});
+
+test('imported source captures have promotion-readable normalized evidence bundles', () => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  for (const root of [
+    'product-management__product-intake',
+    'project-management__delta-specification'
+  ]) {
+    const candidateRoot = path.join(repositoryRoot, 'framework_candidates', root);
+    const candidate = JSON.parse(fs.readFileSync(path.join(candidateRoot, 'candidate.json'), 'utf8'));
+    for (const captureId of candidate.source_captures) {
+      const evidenceRoot = path.join(candidateRoot, 'evidence', captureId);
+      for (const file of ['CAPTURE_META.json', 'goal.md', 'context.md', 'steps.jsonl', 'success_criteria.json']) {
+        assert.ok(fs.existsSync(path.join(evidenceRoot, file)), `${root}/${captureId}/${file} should exist`);
+      }
+      const steps = fs.readFileSync(path.join(evidenceRoot, 'steps.jsonl'), 'utf8')
+        .trim().split('\n').filter(Boolean).map((line) => JSON.parse(line));
+      assert.ok(steps.length >= 2, `${root}/${captureId} should have at least two substantive steps`);
+    }
+  }
+});
+
+test('imported candidate review schemas reject incomplete or non-distinct PASS verdicts', (t) => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const candidates = [
+    {
+      root: 'product-management__product-intake',
+      bundle: 'product-intake-output',
+      reviewFile: 'readiness-review.json',
+      producerStages: [
+        '01_SCOPE_AND_INTENT',
+        '02_DISCOVERY_EVIDENCE',
+        '03_PRODUCT_BRIEF_AND_PRFAQ'
+      ]
+    },
+    {
+      root: 'project-management__delta-specification',
+      bundle: 'delta-specification-output',
+      reviewFile: 'review.json',
+      producerStages: [
+        '01_BASELINE_INVENTORY',
+        '02_CHANGE_PROPOSAL',
+        '03_DELTA_REQUIREMENTS',
+        '04_DEPENDENCY_AND_ACCEPTANCE_MAP'
+      ]
+    }
+  ];
+
+  for (const candidate of candidates) {
+    const proposedRoot = path.join(repositoryRoot, 'framework_candidates', candidate.root, 'proposed_framework');
+    const manifest = JSON.parse(fs.readFileSync(path.join(proposedRoot, 'manifest.json'), 'utf8'));
+    const bundleType = manifest.output_contract_v2.bundle_types
+      .find((entry) => entry.type_id === candidate.bundle);
+    const bundleRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-candidate-review-'));
+    t.after(() => fs.rmSync(bundleRoot, { recursive: true, force: true }));
+
+    for (const file of bundleType.required_files) {
+      const content = file === candidate.reviewFile
+        ? JSON.stringify({ verdict: 'PASS', findings: [], falsifier: 'none' })
+        : file.endsWith('.json') ? '{}\n' : '\n';
+      fs.writeFileSync(path.join(bundleRoot, file), content);
+    }
+
+    const reviewSchemaFailed = (findings) => findings.some((finding) =>
+      finding.code === 'BUNDLE_SCHEMA_FAIL' && finding.path === path.join(bundleRoot, candidate.reviewFile)
+    );
+    const findings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+    assert.ok(reviewSchemaFailed(findings));
+
+    fs.writeFileSync(path.join(bundleRoot, candidate.reviewFile), JSON.stringify({
+      verdict: 'PASS',
+      findings: [],
+      falsifier: 'none',
+      producer_provenance: [{}],
+      reviewer_provenance: {}
+    }));
+    const hollowFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+    assert.ok(hollowFindings.some((finding) =>
+      finding.path === path.join(bundleRoot, candidate.reviewFile) &&
+      finding.code === 'BUNDLE_SCHEMA_FAIL' && /missing required fields|non-empty string/.test(finding.message)
+    ));
+
+    const producer = {
+      actor_id: 'producer-actor',
+      harness_id: 'producer-harness',
+      model_provider_family: 'Anthropic'
+    };
+    const producers = candidate.producerStages.map((stage, index) => ({
+      ...producer,
+      actor_id: `${producer.actor_id}-${index}`,
+      harness_id: `${producer.harness_id}-${index}`,
+      stage
+    }));
+    fs.writeFileSync(path.join(bundleRoot, candidate.reviewFile), JSON.stringify({
+      verdict: 'PASS',
+      findings: [],
+      falsifier: 'none',
+      producer_provenance: producers,
+      reviewer_provenance: {
+        ...producer,
+        actor_id: 'reviewer-actor',
+        harness_id: 'reviewer-harness',
+        model_provider_family: ' anthropic '
+      }
+    }));
+    const sameMindFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+    assert.ok(sameMindFindings.some((finding) =>
+      finding.path === path.join(bundleRoot, candidate.reviewFile) &&
+      finding.code === 'BUNDLE_SCHEMA_FAIL' && /must differ/.test(finding.message)
+    ));
+
+    fs.writeFileSync(path.join(bundleRoot, candidate.reviewFile), JSON.stringify({
+      verdict: 'PASS',
+      findings: [],
+      falsifier: 'none',
+      producer_provenance: producers.slice(1),
+      reviewer_provenance: {
+        actor_id: 'reviewer-actor',
+        harness_id: 'reviewer-harness',
+        model_provider_family: 'reviewer-family'
+      }
+    }));
+    const missingStageFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+    assert.ok(missingStageFindings.some((finding) =>
+      finding.path === path.join(bundleRoot, candidate.reviewFile) &&
+      finding.code === 'BUNDLE_SCHEMA_FAIL' && /exactly one entry for each producer stage/.test(finding.message)
+    ));
+
+    fs.writeFileSync(path.join(bundleRoot, candidate.reviewFile), JSON.stringify({
+      verdict: 'PASS',
+      findings: [],
+      falsifier: 'none',
+      producer_provenance: producers,
+      reviewer_provenance: {
+        actor_id: 'reviewer-actor',
+        harness_id: 'reviewer-harness',
+        model_provider_family: 'reviewer-family'
+      }
+    }));
+    const distinctMindFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+    assert.ok(!reviewSchemaFailed(distinctMindFindings));
+
+    fs.writeFileSync(path.join(bundleRoot, candidate.reviewFile), JSON.stringify({
+      verdict: 'PASS',
+      findings: [],
+      falsifier: '   ',
+      producer_provenance: producers,
+      reviewer_provenance: {
+        actor_id: 'reviewer-actor',
+        harness_id: 'reviewer-harness',
+        model_provider_family: 'reviewer-family'
+      }
+    }));
+    const blankFalsifierFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+    assert.ok(blankFalsifierFindings.some((finding) =>
+      finding.path === path.join(bundleRoot, candidate.reviewFile) &&
+      finding.code === 'BUNDLE_SCHEMA_FAIL' && /falsifier must match pattern/.test(finding.message)
+    ));
+  }
+});
+
+test('imported candidate producer schemas reject empty JSON artifacts', (t) => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const roots = [
+    'product-management__product-intake',
+    'project-management__delta-specification'
+  ];
+
+  for (const root of roots) {
+    const proposedRoot = path.join(repositoryRoot, 'framework_candidates', root, 'proposed_framework');
+    const manifest = JSON.parse(fs.readFileSync(path.join(proposedRoot, 'manifest.json'), 'utf8'));
+    const bundleType = manifest.output_contract_v2.bundle_types[0];
+    const bundleRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-candidate-producer-'));
+    t.after(() => fs.rmSync(bundleRoot, { recursive: true, force: true }));
+
+    for (const file of bundleType.required_files) {
+      const content = file.endsWith('.json') ? '{}\n' : '\n';
+      fs.writeFileSync(path.join(bundleRoot, file), content);
+    }
+
+    const findings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+    for (const file of Object.keys(bundleType.file_schemas).filter((file) => !/review/.test(file))) {
+      assert.ok(findings.some((finding) =>
+        finding.code === 'BUNDLE_SCHEMA_FAIL' && finding.path === path.join(bundleRoot, file)
+      ), `${root}/${file} should reject an empty JSON object`);
+    }
+
+    if (root === 'project-management__delta-specification') {
+      fs.writeFileSync(path.join(bundleRoot, 'delta-spec.json'), JSON.stringify({
+        added: [{}],
+        modified: [{}],
+        removed: [{}],
+        preserved_invariants: []
+      }));
+      fs.writeFileSync(path.join(bundleRoot, 'dependency-acceptance-map.json'), JSON.stringify({
+        read_first: [],
+        dependencies: [{}],
+        acceptance_criteria: [{}]
+      }));
+      const nestedFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+      for (const file of ['delta-spec.json', 'dependency-acceptance-map.json']) {
+        assert.ok(nestedFindings.some((finding) =>
+          finding.code === 'BUNDLE_SCHEMA_FAIL' &&
+          finding.path === path.join(bundleRoot, file) &&
+          /missing required fields/.test(finding.message)
+        ), `${root}/${file} should reject hollow nested entries`);
+      }
+    }
+  }
+});
+
+test('required text and delta contracts reject empty content', (t) => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const productRoot = path.join(repositoryRoot, 'framework_candidates', 'product-management__product-intake', 'proposed_framework');
+  const productManifest = JSON.parse(fs.readFileSync(path.join(productRoot, 'manifest.json'), 'utf8'));
+  const productBundle = productManifest.output_contract_v2.bundle_types[0];
+  const productOutput = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-empty-product-output-'));
+  t.after(() => fs.rmSync(productOutput, { recursive: true, force: true }));
+  fs.writeFileSync(path.join(productOutput, 'prfaq.md'), ' \n');
+  const productFindings = inspectBundle(productOutput, productBundle, productRoot);
+  assert.ok(productFindings.some((finding) => finding.code === 'BUNDLE_FILE_EMPTY'));
+
+  const deltaRoot = path.join(repositoryRoot, 'framework_candidates', 'project-management__delta-specification', 'proposed_framework');
+  const deltaManifest = JSON.parse(fs.readFileSync(path.join(deltaRoot, 'manifest.json'), 'utf8'));
+  const deltaBundle = deltaManifest.output_contract_v2.bundle_types[0];
+  const deltaOutput = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-empty-delta-output-'));
+  t.after(() => fs.rmSync(deltaOutput, { recursive: true, force: true }));
+  fs.writeFileSync(path.join(deltaOutput, 'delta-spec.json'), JSON.stringify({
+    added: [], modified: [], removed: [], preserved_invariants: []
+  }));
+  fs.writeFileSync(path.join(deltaOutput, 'dependency-acceptance-map.json'), JSON.stringify({
+    read_first: [], dependencies: [], acceptance_criteria: []
+  }));
+  const deltaFindings = inspectBundle(deltaOutput, deltaBundle, deltaRoot);
+  assert.ok(deltaFindings.some((finding) => finding.code === 'DELTA_EMPTY'));
+});
+
+test('delta schema requires at least one valid change collection', (t) => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const proposedRoot = path.join(
+    repositoryRoot,
+    'framework_candidates',
+    'project-management__delta-specification',
+    'proposed_framework'
+  );
+  const manifest = JSON.parse(fs.readFileSync(path.join(proposedRoot, 'manifest.json'), 'utf8'));
+  const bundleType = manifest.output_contract_v2.bundle_types[0];
+  const deltaSchema = JSON.parse(fs.readFileSync(
+    path.join(proposedRoot, 'schemas', 'output', 'delta-spec.schema.json'),
+    'utf8'
+  ));
+  const additions = [{
+    requirement_id: 'ADD-1',
+    requirement: 'System MUST add the requested behavior.',
+    provenance: { status: 'source', reference: 'source.md#L10' },
+    scenarios: [{
+      text: 'The added behavior is observable.',
+      provenance: { status: 'source', reference: 'source.md#L12' }
+    }]
+  }];
+  const modifications = [{
+    requirement_id: 'MOD-1',
+    baseline_requirement_id: 'BASE-1',
+    behavioral_difference: 'The behavior changes in the requested way.',
+    requirement: 'System MUST change the existing behavior.',
+    provenance: { status: 'source', reference: 'source.md#L20' },
+    scenarios: [{
+      text: 'The changed behavior is observable.',
+      provenance: { status: 'source', reference: 'source.md#L22' }
+    }]
+  }];
+  const removals = [{
+    requirement_id: 'REM-1',
+    baseline_requirement_id: 'BASE-2',
+    intended_absence: 'The obsolete behavior is intentionally absent.',
+    provenance: { status: 'source', reference: 'source.md#L30' }
+  }];
+  const empty = {
+    added: [],
+    modified: [],
+    removed: [],
+    preserved_invariants: []
+  };
+  const validCases = [
+    { added: additions },
+    { modified: modifications },
+    { removed: removals },
+    { added: additions, modified: modifications },
+    { added: additions, removed: removals },
+    { modified: modifications, removed: removals },
+    { added: additions, modified: modifications, removed: removals }
+  ].map((change) => ({ ...empty, ...change }));
+
+  assert.ok(validateSchema(empty, deltaSchema).length > 0, 'all-empty delta must fail the schema');
+  assert.ok(validateSchema({ added: [], modified: [], removed: [] }, deltaSchema).length > 0, 'missing required fields must fail the schema');
+  assert.ok(validateSchema({ ...empty, added: null }, deltaSchema).length > 0, 'invalid collection type must fail the schema');
+  for (const delta of validCases) {
+    assert.deepEqual(validateSchema(delta, deltaSchema), [], 'each non-empty collection shape must pass');
+  }
+  for (const collection of ['added', 'modified', 'removed']) {
+    const invalid = { ...empty, [collection]: [{}] };
+    assert.ok(validateSchema(invalid, deltaSchema).length > 0, `${collection} with a hollow entry must fail the shared schema validator`);
+    assert.throws(
+      () => validateRequiredFields(invalid, deltaSchema, `delta-spec.${collection}`),
+      /missing required fields/,
+      `${collection} with a hollow entry must fail native model validation`
+    );
+  }
+
+  const bundleRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-delta-schema-contract-'));
+  t.after(() => fs.rmSync(bundleRoot, { recursive: true, force: true }));
+  fs.writeFileSync(path.join(bundleRoot, 'dependency-acceptance-map.json'), JSON.stringify({
+    read_first: [],
+    dependencies: [],
+    acceptance_criteria: []
+  }));
+  fs.writeFileSync(path.join(bundleRoot, 'delta-spec.json'), JSON.stringify(empty));
+  const emptyFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+  assert.ok(emptyFindings.some((finding) =>
+    finding.code === 'DELTA_EMPTY' && finding.path === path.join(bundleRoot, 'delta-spec.json')
+  ), 'native output validator must reject the all-empty fixture');
+
+  for (const delta of validCases) {
+    fs.writeFileSync(path.join(bundleRoot, 'delta-spec.json'), JSON.stringify(delta));
+    const findings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+    assert.ok(!findings.some((finding) =>
+      finding.code === 'BUNDLE_SCHEMA_FAIL' && finding.path === path.join(bundleRoot, 'delta-spec.json')
+    ), 'native output validator must accept each non-empty collection shape');
+  }
+
+  fs.writeFileSync(path.join(bundleRoot, 'delta-spec.json'), JSON.stringify({ ...empty, added: [{}] }));
+  const invalidFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+  assert.ok(invalidFindings.some((finding) =>
+    finding.code === 'BUNDLE_SCHEMA_FAIL' && finding.path === path.join(bundleRoot, 'delta-spec.json')
+  ), 'native output validator must reject hollow entries');
+
+  const inspectSchemaFailure = (delta) => {
+    fs.writeFileSync(path.join(bundleRoot, 'delta-spec.json'), JSON.stringify(delta));
+    const findings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+    return findings.some((finding) =>
+      finding.code === 'BUNDLE_SCHEMA_FAIL' && finding.path === path.join(bundleRoot, 'delta-spec.json')
+    );
+  };
+  const sharedSchemaFailure = (delta) => validateSchema(delta, deltaSchema).length > 0;
+  const sourcedEntries = {
+    added: additions[0],
+    modified: modifications[0],
+    removed: removals[0]
+  };
+
+  for (const collection of ['added', 'modified', 'removed']) {
+    const missingRequirementProvenance = {
+      ...empty,
+      [collection]: [{ ...sourcedEntries[collection], provenance: undefined }]
+    };
+    delete missingRequirementProvenance[collection][0].provenance;
+    assert.equal(sharedSchemaFailure(missingRequirementProvenance), true,
+      `${collection} without requirement provenance must fail shared schema validation`);
+    assert.equal(inspectSchemaFailure(missingRequirementProvenance), true,
+      `${collection} without requirement provenance must fail native output validation`);
+  }
+
+  for (const collection of ['added', 'modified']) {
+    const missingScenarioProvenance = {
+      ...empty,
+      [collection]: [{
+        ...sourcedEntries[collection],
+        scenarios: [{ text: sourcedEntries[collection].scenarios[0].text }]
+      }]
+    };
+    assert.equal(sharedSchemaFailure(missingScenarioProvenance), true,
+      `${collection} scenario without provenance must fail shared schema validation`);
+    assert.equal(inspectSchemaFailure(missingScenarioProvenance), true,
+      `${collection} scenario without provenance must fail native output validation`);
+
+    const blankScenarioReference = {
+      ...empty,
+      [collection]: [{
+        ...sourcedEntries[collection],
+        scenarios: [{
+          ...sourcedEntries[collection].scenarios[0],
+          provenance: { status: 'source', reference: '' }
+        }]
+      }]
+    };
+    assert.equal(sharedSchemaFailure(blankScenarioReference), true,
+      `${collection} scenario with blank provenance must fail shared schema validation`);
+    assert.equal(inspectSchemaFailure(blankScenarioReference), true,
+      `${collection} scenario with blank provenance must fail native output validation`);
+
+    const whitespaceScenarioReference = {
+      ...empty,
+      [collection]: [{
+        ...sourcedEntries[collection],
+        scenarios: [{
+          ...sourcedEntries[collection].scenarios[0],
+          provenance: { status: 'source', reference: '  ' }
+        }]
+      }]
+    };
+    assert.equal(sharedSchemaFailure(whitespaceScenarioReference), true,
+      `${collection} scenario with whitespace-only provenance must fail shared schema validation`);
+    assert.equal(inspectSchemaFailure(whitespaceScenarioReference), true,
+      `${collection} scenario with whitespace-only provenance must fail native output validation`);
+  }
+
+  for (const collection of ['added', 'modified', 'removed']) {
+    const whitespaceRequirementReference = {
+      ...empty,
+      [collection]: [{
+        ...sourcedEntries[collection],
+        provenance: { status: 'source', reference: '  ' }
+      }]
+    };
+    assert.equal(sharedSchemaFailure(whitespaceRequirementReference), true,
+      `${collection} requirement with whitespace-only provenance must fail shared schema validation`);
+    assert.equal(inspectSchemaFailure(whitespaceRequirementReference), true,
+      `${collection} requirement with whitespace-only provenance must fail native output validation`);
+  }
+
+  for (const invalidStatus of ['unknown', undefined]) {
+    const invalidProvenance = {
+      ...empty,
+      added: [{
+        ...additions[0],
+        provenance: { status: invalidStatus, reference: 'source.md#L10' }
+      }]
+    };
+    if (invalidStatus === undefined) delete invalidProvenance.added[0].provenance.status;
+    assert.equal(sharedSchemaFailure(invalidProvenance), true,
+      `invalid or missing status (${invalidStatus ?? 'missing'}) must fail shared schema validation`);
+    assert.equal(inspectSchemaFailure(invalidProvenance), true,
+      `invalid or missing status (${invalidStatus ?? 'missing'}) must fail native output validation`);
+  }
+
+  const stringScenario = {
+    ...empty,
+    added: [{ ...additions[0], scenarios: ['The old string scenario shape.'] }]
+  };
+  assert.equal(sharedSchemaFailure(stringScenario), true,
+    'string scenarios must fail shared schema validation');
+  assert.equal(inspectSchemaFailure(stringScenario), true,
+    'string scenarios must fail native output validation');
+
+  for (const collection of ['added', 'modified', 'removed']) {
+    const gapEntry = JSON.parse(JSON.stringify(sourcedEntries[collection]));
+    gapEntry.provenance = {
+      status: 'evidence_gap',
+      reference: 'No authoritative source was available for this requirement.'
+    };
+    if (gapEntry.scenarios) {
+      gapEntry.scenarios[0].provenance = {
+        status: 'evidence_gap',
+        reference: 'No authoritative source was available for this scenario.'
+      };
+    }
+    const gapDelta = { ...empty, [collection]: [gapEntry] };
+    assert.deepEqual(validateSchema(gapDelta, deltaSchema), [],
+      `${collection} explicit evidence gaps must pass shared schema validation`);
+    assert.equal(inspectSchemaFailure(gapDelta), false,
+      `${collection} explicit evidence gaps must pass native output validation`);
+  }
+});
+
+test('meaning-bearing candidate strings reject whitespace-only values', () => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const readCandidateSchema = (candidate, schema) => JSON.parse(fs.readFileSync(path.join(
+    repositoryRoot,
+    'framework_candidates',
+    candidate,
+    'proposed_framework',
+    'schemas',
+    'output',
+    schema
+  ), 'utf8'));
+  const baselineSchema = readCandidateSchema('project-management__delta-specification', 'baseline-inventory.schema.json');
+  assert.throws(() => validateRequiredFields([{
+    baseline_requirement_id: ' ',
+    behavior: 'Current behavior',
+    source_locator: 'docs/current.md',
+    authority: 'repository',
+    consumers: []
+  }], baselineSchema, 'baseline-inventory'), /pattern/);
+
+  const dependencySchema = readCandidateSchema('project-management__delta-specification', 'dependency-acceptance-map.schema.json');
+  assert.throws(() => validateRequiredFields({
+    read_first: [],
+    dependencies: [{ delta_id: 'D-1', depends_on: ['D-0'], rationale: 'Reason' }],
+    acceptance_criteria: [{ criterion_id: 'AC-1', delta_id: 'D-1', condition: ' ', observable_result: 'Observed' }]
+  }, dependencySchema, 'dependency-map'), /pattern/);
+
+  const scopeSchema = readCandidateSchema('product-management__product-intake', 'scope-and-intent.schema.json');
+  assert.throws(() => validateRequiredFields({
+    problem: ' ',
+    users: ['document-workflow user'],
+    constraints: [],
+    non_goals: [],
+    open_questions: [],
+    stop_conditions: []
+  }, scopeSchema, 'scope-and-intent'), /pattern/);
+
+  const evidenceSchema = readCandidateSchema('product-management__product-intake', 'evidence-ledger.schema.json');
+  assert.throws(() => validateRequiredFields([{
+    claim: ' ',
+    classification: 'observation',
+    provenance: 'public source',
+    limitations: []
+  }], evidenceSchema, 'evidence-ledger'), /pattern/);
+
+  const hypothesisSchema = readCandidateSchema('product-management__product-intake', 'hypothesis-tests.schema.json');
+  for (const field of ['hypothesis', 'falsifier', 'next_test']) {
+    assert.throws(() => validateRequiredFields([{
+      hypothesis: 'Hypothesis',
+      falsifier: 'Falsifier',
+      next_test: 'Next test',
+      [field]: ' '
+    }], hypothesisSchema, `hypothesis-tests.${field}`), /pattern/);
+  }
+
+  const proposalSchema = readCandidateSchema('project-management__delta-specification', 'change-proposal.schema.json');
+  assert.throws(() => validateRequiredFields({
+    requested_outcome: ' ',
+    affected_behaviors: [],
+    affected_consumers: ['document-workflow user'],
+    constraints: [],
+    non_goals: [],
+    risks: [],
+    success_signals: [],
+    specification_depth: 'Lite'
+  }, proposalSchema, 'change-proposal'), /pattern/);
+
+  const deltaSchema = readCandidateSchema('project-management__delta-specification', 'delta-spec.schema.json');
+  for (const collection of ['added', 'modified']) {
+    const item = collection === 'added'
+      ? {
+        requirement_id: 'ADD-1',
+        requirement: 'Add behavior',
+        provenance: { status: 'source', reference: 'source.md#L10' },
+        scenarios: [{
+          text: ' ',
+          provenance: { status: 'source', reference: 'source.md#L12' }
+        }]
+      }
+      : {
+        requirement_id: 'MOD-1',
+        baseline_requirement_id: 'BASE-1',
+        behavioral_difference: 'Difference',
+        requirement: 'Modify behavior',
+        provenance: { status: 'source', reference: 'source.md#L20' },
+        scenarios: [{
+          text: ' ',
+          provenance: { status: 'source', reference: 'source.md#L22' }
+        }]
+      };
+    assert.throws(() => validateRequiredFields({
+      added: collection === 'added' ? [item] : [],
+      modified: collection === 'modified' ? [item] : [],
+      removed: [],
+      preserved_invariants: []
+    }, deltaSchema, `delta-spec.${collection}.scenarios`), /pattern/);
+  }
+});
+
+test('candidate status computes learning state without writing the tracked ledger', () => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const candidateRoot = path.join(repositoryRoot, 'framework_candidates', 'product-management__product-intake');
+  const ledgerPath = path.join(candidateRoot, 'learning', 'learning-ledger.json');
+  const before = fs.readFileSync(ledgerPath);
+  const ledger = computeLedger(candidateRoot, 'product-management/product-intake');
+  const after = fs.readFileSync(ledgerPath);
+  assert.equal(ledger.framework_id, 'product-management/product-intake');
+  assert.deepEqual(after, before);
+});
+
+test('delta replay names a domain consumer distinct from the framework reviewer', () => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const intakePath = path.join(
+    repositoryRoot,
+    'framework_candidates',
+    'project-management__delta-specification',
+    'replay_cases',
+    'neutral-retention-change',
+    'inputs',
+    'intake.json'
+  );
+  const intake = JSON.parse(fs.readFileSync(intakePath, 'utf8'));
+  assert.deepEqual(intake.affected_consumers, ['document-workflow user', 'document-retention auditor']);
+  assert.ok(!intake.affected_consumers.includes('audit reviewer'));
+});
+
+test('product evidence provenance rejects blank values', (t) => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const proposedRoot = path.join(
+    repositoryRoot,
+    'framework_candidates',
+    'product-management__product-intake',
+    'proposed_framework'
+  );
+  const manifest = JSON.parse(fs.readFileSync(path.join(proposedRoot, 'manifest.json'), 'utf8'));
+  const bundleType = manifest.output_contract_v2.bundle_types[0];
+  const bundleRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-product-provenance-'));
+  t.after(() => fs.rmSync(bundleRoot, { recursive: true, force: true }));
+  fs.writeFileSync(path.join(bundleRoot, 'evidence-ledger.json'), JSON.stringify([{
+    claim: 'Observed behavior',
+    classification: 'observation',
+    provenance: '   ',
+    limitations: []
+  }]));
+  const findings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+  assert.ok(findings.some((finding) =>
+    finding.code === 'BUNDLE_SCHEMA_FAIL' &&
+    finding.path === path.join(bundleRoot, 'evidence-ledger.json') &&
+    /must match pattern/.test(finding.message)
+  ));
+});
+
+test('delta bundle consistency rejects cyclic dependency graphs', (t) => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const proposedRoot = path.join(
+    repositoryRoot,
+    'framework_candidates',
+    'project-management__delta-specification',
+    'proposed_framework'
+  );
+  const manifest = JSON.parse(fs.readFileSync(path.join(proposedRoot, 'manifest.json'), 'utf8'));
+  const bundleType = manifest.output_contract_v2.bundle_types[0];
+  const bundleRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'mythos-delta-cycle-'));
+  t.after(() => fs.rmSync(bundleRoot, { recursive: true, force: true }));
+  fs.writeFileSync(path.join(bundleRoot, 'delta-spec.json'), JSON.stringify({
+    added: [
+      {
+        requirement_id: 'A',
+        requirement: 'System MUST emit A.',
+        provenance: { status: 'source', reference: 'source-a' },
+        scenarios: [{ text: 'A is observable.', provenance: { status: 'source', reference: 'source-a#scenario' } }]
+      },
+      {
+        requirement_id: 'B',
+        requirement: 'System MUST emit B.',
+        provenance: { status: 'source', reference: 'source-b' },
+        scenarios: [{ text: 'B is observable.', provenance: { status: 'source', reference: 'source-b#scenario' } }]
+      }
+    ],
+    modified: [],
+    removed: [],
+    preserved_invariants: []
+  }));
+  fs.writeFileSync(path.join(bundleRoot, 'dependency-acceptance-map.json'), JSON.stringify({
+    read_first: [],
+    dependencies: [
+      { delta_id: 'A', depends_on: ['B'], rationale: 'A requires B.' },
+      { delta_id: 'B', depends_on: ['A'], rationale: 'B requires A.' }
+    ],
+    acceptance_criteria: [
+      { criterion_id: 'AC-A', delta_id: 'A', condition: 'Run A.', observable_result: 'A passes.' },
+      { criterion_id: 'AC-B', delta_id: 'B', condition: 'Run B.', observable_result: 'B passes.' }
+    ]
+  }));
+  const findings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+  assert.ok(findings.some((finding) =>
+    finding.code === 'DELTA_DEPENDENCY_CYCLE' && /A -> B -> A|B -> A -> B/.test(finding.message)
+  ));
+
+  fs.writeFileSync(path.join(bundleRoot, 'dependency-acceptance-map.json'), JSON.stringify({
+    read_first: [],
+    dependencies: [
+      { delta_id: 'A', depends_on: ['UNKNOWN'], rationale: 'Invalid reference for regression coverage.' }
+    ],
+    acceptance_criteria: [
+      { criterion_id: 'AC-A', delta_id: 'A', condition: 'Run A.', observable_result: 'A passes.' }
+    ]
+  }));
+  const referenceFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+  assert.ok(referenceFindings.some((finding) =>
+    finding.code === 'DELTA_REF_UNKNOWN' && /UNKNOWN/.test(finding.message)
+  ));
+  assert.ok(referenceFindings.some((finding) =>
+    finding.code === 'DELTA_ACCEPTANCE_MISSING' && /B/.test(finding.message)
+  ));
+
+  fs.writeFileSync(path.join(bundleRoot, 'delta-spec.json'), JSON.stringify({
+    added: [
+      {
+        requirement_id: 'DUP',
+        requirement: 'First behavior.',
+        provenance: { status: 'source', reference: 'source-a' },
+        scenarios: [{ text: 'First is observable.', provenance: { status: 'source', reference: 'source-a#scenario' } }]
+      },
+      {
+        requirement_id: 'DUP',
+        requirement: 'Second behavior.',
+        provenance: { status: 'source', reference: 'source-b' },
+        scenarios: [{ text: 'Second is observable.', provenance: { status: 'source', reference: 'source-b#scenario' } }]
+      }
+    ],
+    modified: [],
+    removed: [],
+    preserved_invariants: []
+  }));
+  fs.writeFileSync(path.join(bundleRoot, 'dependency-acceptance-map.json'), JSON.stringify({
+    read_first: [],
+    dependencies: [],
+    acceptance_criteria: [
+      { criterion_id: 'AC-DUP', delta_id: 'DUP', condition: 'Run duplicate.', observable_result: 'Duplicate passes.' }
+    ]
+  }));
+  const duplicateFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+  assert.ok(duplicateFindings.some((finding) => finding.code === 'DELTA_ID_DUPLICATE'));
+
+  fs.writeFileSync(path.join(bundleRoot, 'baseline-inventory.json'), JSON.stringify([
+    { baseline_requirement_id: 'BASE-1', behavior: 'First baseline.', source_locator: 'source-a', authority: 'canonical', consumers: [] },
+    { baseline_requirement_id: 'BASE-1', behavior: 'Duplicate baseline.', source_locator: 'source-b', authority: 'canonical', consumers: [] }
+  ]));
+  fs.writeFileSync(path.join(bundleRoot, 'delta-spec.json'), JSON.stringify({
+    added: [],
+    modified: [{
+      requirement_id: 'MOD-1',
+      baseline_requirement_id: 'DOES-NOT-EXIST',
+      behavioral_difference: 'Behavior changes.',
+      requirement: 'System MUST change.',
+      provenance: { status: 'source', reference: 'source.md#change' },
+      scenarios: [{ text: 'Change is observable.', provenance: { status: 'source', reference: 'source.md#scenario' } }]
+    }],
+    removed: [],
+    preserved_invariants: []
+  }));
+  fs.writeFileSync(path.join(bundleRoot, 'dependency-acceptance-map.json'), JSON.stringify({
+    read_first: [],
+    dependencies: [],
+    acceptance_criteria: [
+      { criterion_id: 'AC-MOD', delta_id: 'MOD-1', condition: 'Run modified behavior.', observable_result: 'Modified behavior passes.' }
+    ]
+  }));
+  const baselineFindings = inspectBundle(bundleRoot, bundleType, proposedRoot);
+  assert.ok(baselineFindings.some((finding) =>
+    finding.code === 'BASELINE_REF_UNKNOWN' && /DOES-NOT-EXIST/.test(finding.message)
+  ));
+  assert.ok(baselineFindings.some((finding) => finding.code === 'BASELINE_ID_DUPLICATE'));
+});
+
+test('delta replay keeps current-state baseline separate from requested behavior', () => {
+  const repositoryRoot = resolveCanonicalRoot({ mode: 'hard' });
+  const inputsRoot = path.join(
+    repositoryRoot,
+    'framework_candidates',
+    'project-management__delta-specification',
+    'replay_cases',
+    'neutral-retention-change',
+    'inputs'
+  );
+  const baseline = fs.readFileSync(path.join(inputsRoot, 'baseline.md'), 'utf8');
+  const intake = JSON.parse(fs.readFileSync(path.join(inputsRoot, 'intake.json'), 'utf8'));
+
+  assert.doesNotMatch(baseline, /proposed change/i);
+  assert.doesNotMatch(baseline, /\bOperators\b/);
+  assert.match(intake.change_request, /hide expired bundles/);
+  assert.match(intake.change_request, /remove the legacy fixed-duration assumption/);
+});

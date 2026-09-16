@@ -1,0 +1,46 @@
+{
+  "schema": "PromptProvenanceSourceManifest/1.0",
+  "source_envelope_id": "pr26-public-product-source-envelope-05c1bcbc34a3",
+  "candidate_head": "05c1bcbc34a38db9c79240bd920642c5edc4ea8b",
+  "sources": [
+    {
+      "source_id": "bmad-readme",
+      "content_sha256": "c1c3467ddc0274d239899b279bcd951d0eb502762594067d86e00d0ee4419079",
+      "repository": "bmad-code-org/BMAD-METHOD",
+      "revision": "5247108ba3f45b2e9731fa41919029b3d2623023",
+      "path": "README.md"
+    },
+    {
+      "source_id": "bmad-workflow-map",
+      "content_sha256": "84927b828a99db51e7dd451c2db08df1e55dd451c72cd143308afe75c04dd3e7",
+      "repository": "bmad-code-org/BMAD-METHOD",
+      "revision": "47bab7d15cf8a9146d43dda0a6f35cda263577db",
+      "path": "docs/reference/workflow-map.md"
+    },
+    {
+      "source_id": "bmad-commands",
+      "content_sha256": "688a87c956e98508869b554809b2163e4b003a729db1a7521ef03cb00cb7321a",
+      "repository": "bmad-code-org/BMAD-METHOD",
+      "revision": "022bcbc66d12ba43eb9028f1aa770fe42698b06b",
+      "path": "docs/reference/commands.md"
+    }
+  ],
+  "prompt_sources": {
+    "01_SCOPE_AND_INTENT": [
+      "bmad-readme",
+      "bmad-workflow-map"
+    ],
+    "02_DISCOVERY_EVIDENCE": [
+      "bmad-readme",
+      "bmad-workflow-map"
+    ],
+    "03_PRODUCT_BRIEF_AND_PRFAQ": [
+      "bmad-readme",
+      "bmad-workflow-map"
+    ],
+    "04_READINESS_REVIEW": [
+      "bmad-commands",
+      "bmad-workflow-map"
+    ]
+  }
+}

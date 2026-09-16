@@ -1,0 +1,115 @@
+{
+  "type": "object",
+  "required": [
+    "added",
+    "modified",
+    "removed",
+    "preserved_invariants"
+  ],
+  "anyOf": [
+    { "properties": { "added": { "minItems": 1 } } },
+    { "properties": { "modified": { "minItems": 1 } } },
+    { "properties": { "removed": { "minItems": 1 } } }
+  ],
+  "properties": {
+    "added": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["requirement_id", "requirement", "provenance", "scenarios"],
+        "properties": {
+          "requirement_id": { "type": "string", "minLength": 1, "pattern": "\\S" },
+          "requirement": { "type": "string", "minLength": 1, "pattern": "\\S" },
+          "provenance": {
+            "type": "object",
+            "required": ["status", "reference"],
+            "properties": {
+              "status": { "type": "string", "enum": ["source", "evidence_gap"], "minLength": 1, "pattern": "\\S" },
+              "reference": { "type": "string", "minLength": 1, "pattern": "\\S" }
+            }
+          },
+          "scenarios": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["text", "provenance"],
+              "properties": {
+                "text": { "type": "string", "minLength": 1, "pattern": "\\S" },
+                "provenance": {
+                  "type": "object",
+                  "required": ["status", "reference"],
+                  "properties": {
+                    "status": { "type": "string", "enum": ["source", "evidence_gap"], "minLength": 1, "pattern": "\\S" },
+                    "reference": { "type": "string", "minLength": 1, "pattern": "\\S" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "modified": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["requirement_id", "baseline_requirement_id", "behavioral_difference", "requirement", "provenance", "scenarios"],
+        "properties": {
+          "requirement_id": { "type": "string", "minLength": 1, "pattern": "\\S" },
+          "baseline_requirement_id": { "type": "string", "minLength": 1, "pattern": "\\S" },
+          "behavioral_difference": { "type": "string", "minLength": 1, "pattern": "\\S" },
+          "requirement": { "type": "string", "minLength": 1, "pattern": "\\S" },
+          "provenance": {
+            "type": "object",
+            "required": ["status", "reference"],
+            "properties": {
+              "status": { "type": "string", "enum": ["source", "evidence_gap"], "minLength": 1, "pattern": "\\S" },
+              "reference": { "type": "string", "minLength": 1, "pattern": "\\S" }
+            }
+          },
+          "scenarios": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["text", "provenance"],
+              "properties": {
+                "text": { "type": "string", "minLength": 1, "pattern": "\\S" },
+                "provenance": {
+                  "type": "object",
+                  "required": ["status", "reference"],
+                  "properties": {
+                    "status": { "type": "string", "enum": ["source", "evidence_gap"], "minLength": 1, "pattern": "\\S" },
+                    "reference": { "type": "string", "minLength": 1, "pattern": "\\S" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "removed": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["requirement_id", "baseline_requirement_id", "intended_absence", "provenance"],
+        "properties": {
+          "requirement_id": { "type": "string", "minLength": 1, "pattern": "\\S" },
+          "baseline_requirement_id": { "type": "string", "minLength": 1, "pattern": "\\S" },
+          "intended_absence": { "type": "string", "minLength": 1, "pattern": "\\S" },
+          "provenance": {
+            "type": "object",
+            "required": ["status", "reference"],
+            "properties": {
+              "status": { "type": "string", "enum": ["source", "evidence_gap"], "minLength": 1, "pattern": "\\S" },
+              "reference": { "type": "string", "minLength": 1, "pattern": "\\S" }
+            }
+          }
+        }
+      }
+    },
+    "preserved_invariants": { "type": "array", "items": { "type": "string" } }
+  }
+}

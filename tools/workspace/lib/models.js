@@ -13,52 +13,55 @@ function loadSchema(name) {
   return readJson(filePath);
 }
 
-function validateObjectFields(obj, schema, label) {
-  const required = Array.isArray(schema.required) ? schema.required : [];
-  const missing = required.filter((key) => !(key in obj));
-  if (missing.length) {
-    throw new Error(`${label} is missing required fields: ${missing.join(', ')}`);
-  }
-
-  const properties = schema.properties || {};
-  for (const [key, rule] of Object.entries(properties)) {
-    if (!(key in obj)) continue;
-    validateSchemaValue(obj[key], rule, `${label}.${key}`);
-  }
-}
-
-function validateSchemaValue(obj, schema, label) {
-  if (Array.isArray(schema.enum) && !schema.enum.includes(obj)) {
-    throw new Error(`${label} must be one of: ${schema.enum.join(', ')}`);
-  }
-  if (schema.type === 'array') {
-    if (!Array.isArray(obj)) {
-      throw new Error(`${label} must be an array`);
-    }
-    if (schema.items) {
-      obj.forEach((item, index) => validateSchemaValue(item, schema.items, `${label}[${index}]`));
-    }
-  }
-  if (schema.type === 'object') {
-    if (typeof obj !== 'object' || obj === null || Array.isArray(obj)) {
-      throw new Error(`${label} must be an object`);
-    }
-    validateObjectFields(obj, schema, label);
-  }
-  if (schema.type === 'string' && typeof obj !== 'string') {
-    throw new Error(`${label} must be a string`);
-  }
-  if (schema.type === 'boolean' && typeof obj !== 'boolean') {
-    throw new Error(`${label} must be a boolean`);
-  }
-}
-
 function validateRequiredFields(obj, schema, label) {
-  if (schema.type === 'array') {
-    validateSchemaValue(obj, schema, label);
+  validateValue(obj, schema, label);
+}
+
+function validateValue(value, rule, label) {
+  const ruleType = rule.type || (rule.properties || Array.isArray(rule.required) ? 'object' : undefined);
+  if (Array.isArray(rule.enum) && !rule.enum.includes(value)) {
+    throw new Error(`${label} must be one of: ${rule.enum.join(', ')}`);
+  }
+  if (ruleType === 'array') {
+    if (!Array.isArray(value)) throw new Error(`${label} must be an array`);
+    if (Number.isInteger(rule.minItems) && value.length < rule.minItems) {
+      throw new Error(`${label} must contain at least ${rule.minItems} items`);
+    }
+    if (rule.items) {
+      value.forEach((item, index) => validateValue(item, rule.items, `${label}[${index}]`));
+    }
     return;
   }
-  validateObjectFields(obj, schema, label);
+  if (ruleType === 'object') {
+    if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+      throw new Error(`${label} must be an object`);
+    }
+    const required = Array.isArray(rule.required) ? rule.required : [];
+    const missing = required.filter((key) => !(key in value));
+    if (missing.length) {
+      throw new Error(`${label} is missing required fields: ${missing.join(', ')}`);
+    }
+    for (const [key, childRule] of Object.entries(rule.properties || {})) {
+      if (key in value) validateValue(value[key], childRule, `${label}.${key}`);
+    }
+    return;
+  }
+  if (ruleType === 'string') {
+    if (typeof value !== 'string') throw new Error(`${label} must be a string`);
+    if (Number.isInteger(rule.minLength) && value.length < rule.minLength) {
+      throw new Error(`${label} must contain at least ${rule.minLength} characters`);
+    }
+    if (typeof rule.pattern === 'string' && !new RegExp(rule.pattern).test(value)) {
+      throw new Error(`${label} must match pattern: ${rule.pattern}`);
+    }
+    return;
+  }
+  if (ruleType === 'boolean' && typeof value !== 'boolean') {
+    throw new Error(`${label} must be a boolean`);
+  }
+  if (ruleType === 'integer' && !Number.isInteger(value)) {
+    throw new Error(`${label} must be an integer`);
+  }
 }
 
 function validateNamedModel(name, obj, label) {

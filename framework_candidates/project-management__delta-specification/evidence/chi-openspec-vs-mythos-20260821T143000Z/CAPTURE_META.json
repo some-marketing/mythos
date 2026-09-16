@@ -1,0 +1,14 @@
+{
+  "capture_id": "chi-openspec-vs-mythos-20260821T143000Z",
+  "task_type": "external-framework-analysis",
+  "service_category": "project-management",
+  "source_mode": "hybrid",
+  "source_type": "summary",
+  "source_root": "[summary-only]",
+  "imported_files": [],
+  "normalization_status": "normalized",
+  "normalization_notes": ["External repositories were observed read-only and were not copied or executed."],
+  "operator": "human framework steward",
+  "created_at": "2026-08-21T15:00:32Z",
+  "status": "ready_for_scaffold"
+}

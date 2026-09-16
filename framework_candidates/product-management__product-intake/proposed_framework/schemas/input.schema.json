@@ -1,0 +1,51 @@
+{
+  "type": "object",
+  "required": [
+    "problem_statement",
+    "intended_users",
+    "constraints"
+  ],
+  "properties": {
+    "problem_statement": {
+      "type": "string",
+      "minLength": 20
+    },
+    "intended_users": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "desired_outcome": {
+      "type": "string"
+    },
+    "constraints": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "available_evidence": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "known_alternatives": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

@@ -19,7 +19,7 @@
 const path = require('path');
 const crypto = require('node:crypto');
 const fs = require('node:fs');
-const { exists, isDir, isFile, readJson, listFiles, listFilesRecursive } = require('./fs');
+const { exists, isDir, isFile, readJson, readText, listFiles, listFilesRecursive } = require('./fs');
 const { loadSchema, validateRequiredFields } = require('./models');
 
 /**
@@ -91,6 +91,53 @@ function simpleGlob(baseDir, pattern) {
       '$'
   );
   return allFiles.filter((f) => regex.test(f));
+}
+
+function validateDistinctReviewProvenance(content, label, expectedProducerStages = []) {
+  const fields = ['actor_id', 'harness_id', 'model_provider_family'];
+  const normalizeIdentity = (value) => value.trim().toLowerCase();
+  const producers = content.producer_provenance;
+  const reviewer = content.reviewer_provenance;
+
+  if (!Array.isArray(producers) || producers.length === 0) {
+    throw new Error(`${label}.producer_provenance must contain at least one producer`);
+  }
+  if (!reviewer || typeof reviewer !== 'object' || Array.isArray(reviewer)) {
+    throw new Error(`${label}.reviewer_provenance must be an object`);
+  }
+  for (const [index, producer] of producers.entries()) {
+    if (!producer || typeof producer !== 'object' || Array.isArray(producer)) {
+      throw new Error(`${label}.producer_provenance[${index}] must be an object`);
+    }
+    for (const field of fields) {
+      if (typeof producer[field] !== 'string' || producer[field].trim() === '') {
+        throw new Error(`${label}.producer_provenance[${index}].${field} must be a non-empty string`);
+      }
+    }
+  }
+  for (const field of fields) {
+    if (typeof reviewer[field] !== 'string' || reviewer[field].trim() === '') {
+      throw new Error(`${label}.reviewer_provenance.${field} must be a non-empty string`);
+    }
+    for (const [index, producer] of producers.entries()) {
+      if (normalizeIdentity(reviewer[field]) === normalizeIdentity(producer[field])) {
+        throw new Error(`${label}.reviewer_provenance.${field} must differ from producer_provenance[${index}].${field}`);
+      }
+    }
+  }
+
+  if (expectedProducerStages.length > 0) {
+    const actualStages = producers.map((producer) => producer.stage);
+    const uniqueStages = new Set(actualStages);
+    const missingStages = expectedProducerStages.filter((stage) => !uniqueStages.has(stage));
+    const unexpectedStages = actualStages.filter((stage) => !expectedProducerStages.includes(stage));
+    if (uniqueStages.size !== actualStages.length || missingStages.length > 0 || unexpectedStages.length > 0) {
+      throw new Error(
+        `${label}.producer_provenance must contain exactly one entry for each producer stage; ` +
+        `missing=${missingStages.join(',') || 'none'} unexpected=${unexpectedStages.join(',') || 'none'}`
+      );
+    }
+  }
 }
 
 /**
@@ -172,6 +219,18 @@ function inspectBundle(bundleRoot, bundleType, frameworkRoot) {
     }
   }
 
+  for (const file of bundleType.non_empty_files || []) {
+    const filePath = path.join(bundleRoot, file);
+    if (exists(filePath) && isFile(filePath) && readText(filePath).trim() === '') {
+      findings.push({
+        severity: 'blocker',
+        code: 'BUNDLE_FILE_EMPTY',
+        message: `Required bundle file is empty: ${file}`,
+        path: filePath
+      });
+    }
+  }
+
   // Validate JSON artifacts against file_schemas
   for (const [fileName, schemaRef] of Object.entries(bundleType.file_schemas || {})) {
     const filePath = path.join(bundleRoot, fileName);
@@ -203,6 +262,9 @@ function inspectBundle(bundleRoot, bundleType, frameworkRoot) {
 
     try {
       validateRequiredFields(content, schema, fileName);
+      if (schema.x_mythos_distinct_review_provenance === true) {
+        validateDistinctReviewProvenance(content, fileName, bundleType.producer_stages || []);
+      }
     } catch (err) {
       findings.push({
         severity: 'blocker',
@@ -225,6 +287,151 @@ function inspectBundle(bundleRoot, bundleType, frameworkRoot) {
  */
 function checkBundleConsistency(bundleRoot, frameworkRoot) {
   const findings = [];
+
+  const deltaSpecPath = path.join(bundleRoot, 'delta-spec.json');
+  const dependencyMapPath = path.join(bundleRoot, 'dependency-acceptance-map.json');
+  const baselineInventoryPath = path.join(bundleRoot, 'baseline-inventory.json');
+  if (isFile(deltaSpecPath) && isFile(dependencyMapPath)) {
+    try {
+      const deltaSpec = readJson(deltaSpecPath);
+      const dependencyMap = readJson(dependencyMapPath);
+      const deltaEntries = ['added', 'modified', 'removed']
+        .flatMap((section) => (Array.isArray(deltaSpec[section]) ? deltaSpec[section] : [])
+          .map((entry) => ({ ...entry, section })));
+      if (deltaEntries.length === 0) {
+        findings.push({
+          severity: 'blocker',
+          code: 'DELTA_EMPTY',
+          message: 'Delta specification must contain at least one added, modified, or removed requirement.',
+          path: deltaSpecPath
+        });
+      }
+      const deltaIdCounts = new Map();
+      for (const entry of deltaEntries) {
+        if (!entry.requirement_id) continue;
+        deltaIdCounts.set(entry.requirement_id, (deltaIdCounts.get(entry.requirement_id) || 0) + 1);
+      }
+      for (const [deltaId, count] of deltaIdCounts) {
+        if (count > 1) {
+          findings.push({
+            severity: 'blocker',
+            code: 'DELTA_ID_DUPLICATE',
+            message: `Delta requirement_id is duplicated across added, modified, or removed entries: ${deltaId}`,
+            path: deltaSpecPath
+          });
+        }
+      }
+      const deltaIds = new Set(deltaIdCounts.keys());
+
+      if (isFile(baselineInventoryPath)) {
+        const baselineInventory = readJson(baselineInventoryPath);
+        const baselineIdCounts = new Map();
+        for (const entry of Array.isArray(baselineInventory) ? baselineInventory : []) {
+          if (!entry.baseline_requirement_id) continue;
+          baselineIdCounts.set(
+            entry.baseline_requirement_id,
+            (baselineIdCounts.get(entry.baseline_requirement_id) || 0) + 1
+          );
+        }
+        for (const [baselineId, count] of baselineIdCounts) {
+          if (count > 1) {
+            findings.push({
+              severity: 'blocker',
+              code: 'BASELINE_ID_DUPLICATE',
+              message: `Baseline requirement id is duplicated: ${baselineId}`,
+              path: baselineInventoryPath
+            });
+          }
+        }
+        const baselineIds = new Set(baselineIdCounts.keys());
+        for (const entry of deltaEntries.filter((candidate) => candidate.section === 'modified' || candidate.section === 'removed')) {
+          if (!baselineIds.has(entry.baseline_requirement_id)) {
+            findings.push({
+              severity: 'blocker',
+              code: 'BASELINE_REF_UNKNOWN',
+              message: `${entry.section} delta ${entry.requirement_id} references an unknown baseline requirement: ${entry.baseline_requirement_id}`,
+              path: deltaSpecPath
+            });
+          }
+        }
+      }
+      const graph = new Map(Array.from(deltaIds, (id) => [id, []]));
+      for (const dependency of Array.isArray(dependencyMap.dependencies) ? dependencyMap.dependencies : []) {
+        if (!deltaIds.has(dependency.delta_id)) {
+          findings.push({
+            severity: 'blocker',
+            code: 'DELTA_REF_UNKNOWN',
+            message: `Dependency delta_id does not reference an emitted delta: ${dependency.delta_id}`,
+            path: dependencyMapPath
+          });
+          continue;
+        }
+        for (const requiredId of Array.isArray(dependency.depends_on) ? dependency.depends_on : []) {
+          if (!deltaIds.has(requiredId)) {
+            findings.push({
+              severity: 'blocker',
+              code: 'DELTA_REF_UNKNOWN',
+              message: `Dependency depends_on does not reference an emitted delta: ${requiredId}`,
+              path: dependencyMapPath
+            });
+          } else {
+            graph.get(dependency.delta_id).push(requiredId);
+          }
+        }
+      }
+
+      const acceptedIds = new Set();
+      for (const criterion of Array.isArray(dependencyMap.acceptance_criteria) ? dependencyMap.acceptance_criteria : []) {
+        if (!deltaIds.has(criterion.delta_id)) {
+          findings.push({
+            severity: 'blocker',
+            code: 'DELTA_REF_UNKNOWN',
+            message: `Acceptance criterion does not reference an emitted delta: ${criterion.delta_id}`,
+            path: dependencyMapPath
+          });
+        } else {
+          acceptedIds.add(criterion.delta_id);
+        }
+      }
+      for (const deltaId of deltaIds) {
+        if (!acceptedIds.has(deltaId)) {
+          findings.push({
+            severity: 'blocker',
+            code: 'DELTA_ACCEPTANCE_MISSING',
+            message: `Emitted delta has no acceptance criterion: ${deltaId}`,
+            path: dependencyMapPath
+          });
+        }
+      }
+
+      const visited = new Set();
+      const visiting = new Set();
+      let cycle = null;
+      function visit(node, trail) {
+        if (cycle || visited.has(node)) return;
+        if (visiting.has(node)) {
+          const start = trail.indexOf(node);
+          cycle = [...trail.slice(start), node];
+          return;
+        }
+        visiting.add(node);
+        for (const dependency of graph.get(node) || []) visit(dependency, [...trail, node]);
+        visiting.delete(node);
+        visited.add(node);
+      }
+      for (const node of graph.keys()) visit(node, []);
+      if (cycle) {
+        findings.push({
+          severity: 'blocker',
+          code: 'DELTA_DEPENDENCY_CYCLE',
+          message: `Delta dependency graph contains a cycle: ${cycle.join(' -> ')}`,
+          path: dependencyMapPath
+        });
+      }
+    } catch {
+      // Invalid JSON is reported by file schema validation.
+    }
+  }
 
   // Load manifest and index if they exist
   const manifestPath = path.join(bundleRoot, 'LLM_MANIFEST.json');

@@ -118,7 +118,7 @@ function acquireVaultLock(vaultPath) {
     try {
       holder = JSON.parse(fs.readFileSync(lockPath, 'utf8'));
     } catch (err) {
-      if (err instanceof SyntaxError && Date.now() < deadline) {
+      if ((err.code === 'ENOENT' || err instanceof SyntaxError) && Date.now() < deadline) {
         const wait = new Int32Array(new SharedArrayBuffer(4));
         Atomics.wait(wait, 0, 0, VAULT_LOCK_RETRY_MS);
         continue;
@@ -129,7 +129,11 @@ function acquireVaultLock(vaultPath) {
       throw new Error(`dream vault lock ${lockPath} has no valid pid; refusing concurrent write`);
     }
     if (!isPidAlive(holder.pid)) {
-      fs.unlinkSync(lockPath);
+      try {
+        fs.unlinkSync(lockPath);
+      } catch (err) {
+        if (err.code !== 'ENOENT') throw err;
+      }
       continue;
     }
     if (Date.now() >= deadline) {

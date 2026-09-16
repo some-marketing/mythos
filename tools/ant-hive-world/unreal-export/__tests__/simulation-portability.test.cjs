@@ -44,4 +44,5 @@ test('goal projection carries the packet hash without exporting its source path'
   assert.match(source, /packet_path: null/);
   assert.doesNotMatch(source, /packet_path:\s*GOAL_PACKET_PATH/);
   assert.match(source, /commitGenerationEntries\(VAULT_PATH, commitResult\.generation_id, WORLD_STATE_PATH\)/);
+  assert.match(source, /const finalized = dreamLane\.finalizeRun\(WORLD_STATE_PATH\)/);
 });

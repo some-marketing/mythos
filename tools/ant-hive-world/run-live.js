@@ -96,6 +96,7 @@ const checkpoint = require('./checkpoint.js');
 // activity -- see commitGenerationEntries()/reconcileOnResume()'s own
 // existence guards.
 const dreamMemory = require('./dream/dream-memory.js');
+const dreamLane = require('./dream/dream-lane.js');
 const VAULT_PATH = path.join(__dirname, '..', '..', '_dev', 'state', 'ant-world-mind-memory', 'dream-memory.jsonl');
 // Required HERE and nowhere else in the simulation. The isolation audit greps
 // for `goal-evaluator` across tools/ant-hive-world/: this driver is the only
@@ -1150,6 +1151,10 @@ async function runTicks() {
 runTicks()
   .then((absoluteTick) => {
     if (NO_CHECKPOINT) {
+      const finalized = dreamLane.finalizeRun(WORLD_STATE_PATH);
+      if (finalized.flipped.length) {
+        process.stdout.write(`dream vault: finalized ${finalized.flipped.length} trial entr${finalized.flipped.length === 1 ? 'y' : 'ies'}\n`);
+      }
       process.stdout.write('checkpoint skipped (--no-checkpoint)\n');
       return;
     }

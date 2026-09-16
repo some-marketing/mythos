@@ -1,0 +1,11 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "instructions/canonical/commands/discord-access.yaml",
+  "source_sha256": "c14339a6293f52e3c50877fead9a149e896c7d060eedac69708bb9eb4700085f",
+  "projection_kind": "canonical_command",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "reviewed_safe",
+  "target_exact_path": ".agents/skills/source-command-discord-access/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "already_aligned"
+}

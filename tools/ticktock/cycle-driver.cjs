@@ -16,6 +16,7 @@
 // is the result -- this driver never converts a refusal into a warning.
 
 const fs = require('fs');
+const crypto = require('crypto');
 const path = require('path');
 const { execFileSync } = require('child_process');
 
@@ -81,30 +82,47 @@ function runNodeTool(scriptPath, args) {
   }
 }
 
-const commands = {
-  // create-charter <specPath> <outPath>
-  'create-charter': (specPath, outPath) => {
-    const charter = charterMod.createCharter(readJson(specPath));
-    const abs = writeJson(outPath, charter);
-    // Independent read-back: re-read from disk and revalidate, so the receipt
-    // proves delivery rather than self-consistency of an in-memory object.
-    const readBack = charterMod.readCharter(abs);
-    const immut = charterMod.checkImmutability(readBack);
-    out({
-      wrote: path.relative(REPO_ROOT, abs),
-      charter_id: readBack.charter_id,
-      charter_hash: readBack.charter_hash,
-      lane_binding_hash: readBack.reviewer_roster.lane_binding_hash,
-      readback_immutability: immut
-    });
-    return immut.ok ? 0 : 1;
-  },
+function researchOptions(args, allowed) {
+  const tokens = [...args];
+  let repoRoot = REPO_ROOT;
+  if (tokens.length && typeof tokens[tokens.length - 1] === 'object') {
+    const options = tokens.pop();
+    if (!options || Array.isArray(options) || Object.keys(options).some(k => k !== 'repoRoot')
+        || (options.repoRoot !== undefined && typeof options.repoRoot !== 'string')) {
+      throw new Error('RESEARCH-OPTIONS: expected module-only {repoRoot}');
+    }
+    repoRoot = path.resolve(options.repoRoot || REPO_ROOT);
+  }
+  const flags = {};
+  for (let i = 0; i < tokens.length; i += 1) {
+    const token = tokens[i];
+    if (!allowed.includes(token) || Object.hasOwn(flags, token)) {
+      throw new Error(`RESEARCH-ARGUMENT: unknown or duplicate option ${token}`);
+    }
+    if (token === '--quick' || token === '--authorized') flags[token] = true;
+    else {
+      const value = tokens[++i];
+      if (typeof value !== 'string' || !value || value.startsWith('--')) {
+        throw new Error(`RESEARCH-ARGUMENT: ${token} requires a value`);
+      }
+      flags[token] = value;
+    }
+  }
+  return { repoRoot, flags };
+}
 
-  // benchmark <charterPath> <outPath> [cycleIndex] [signalsDir]
-  benchmark: (charterPath, outPath, cycleIndexArg, signalsDirArg) => {
+function parseCycle(value) {
+  const cycle = Number(value === undefined ? 0 : value);
+  if (!Number.isSafeInteger(cycle) || cycle < 0 || value === '') {
+    throw new Error('RESEARCH-CYCLE: expected a nonnegative integer');
+  }
+  return cycle;
+}
+
+function benchmarkCheck(charterPath, cycleIndexArg, signalsDirArg, repoRoot = REPO_ROOT) {
     const charter = charterMod.readCharter(charterPath);
-    const cycleIndex = Number(cycleIndexArg || 0);
-    const fingerprintPath = path.resolve(REPO_ROOT, charter.benchmark.fingerprint_path);
+    const cycleIndex = parseCycle(cycleIndexArg);
+    const fingerprintPath = path.resolve(repoRoot, charter.benchmark.fingerprint_path);
     const recorded = JSON.parse(fs.readFileSync(fingerprintPath, 'utf8'));
     // EXPLICIT type guard (C-F4b, S2): a non-array lineage is an unreadable
     // safety record and must halt LOUDLY. Passing it through would be worse
@@ -148,7 +166,7 @@ const commands = {
     let error = null;
     try {
       result = bench.check({
-        specPath: path.resolve(REPO_ROOT, charter.benchmark.colony_spec_path),
+        specPath: path.resolve(repoRoot, charter.benchmark.colony_spec_path),
         fingerprintPath
       });
     } catch (e) {
@@ -159,10 +177,6 @@ const commands = {
       || (fingerprintBindingMismatch ? 'FINGERPRINT-BINDING-MISMATCH' : null)
       || (!lineageChain.chain_unbroken ? 'LINEAGE-CHAIN-BROKEN' : null)
       || (error ? 'BENCHMARK-ERROR' : null)
-      // Codex PR#20 (round 2): bench.check() returns { result, observed, recorded }
-      // -- the comparison verdict is nested at result.result.identical, not
-      // result.identical (which is always undefined on the wrapper object).
-      // The bare `result.identical` check above silently never fired.
       || (result && result.result && result.result.identical === false ? 'BENCHMARK-DIVERGENCE' : null);
 
     const payload = {
@@ -179,10 +193,115 @@ const commands = {
       result,
       halt_state: halt
     };
-    writeJson(outPath, payload);
-    out(payload);
-    return halt ? 1 : 0;
+    return { charter, payload };
+}
+
+function writeBenchmark(outPath, payload, repoRoot) {
+  if (typeof outPath !== 'string' || !outPath) throw new Error('BENCHMARK-OUTPUT: a path is required');
+  const abs = path.resolve(repoRoot, outPath);
+  fs.mkdirSync(path.dirname(abs), { recursive: true });
+  fs.writeFileSync(abs, JSON.stringify(payload, null, 2) + '\n');
+}
+
+// This admission is read-only and precedes benchmarkCheck: the rebaseline
+// detector can emit a signal, so checking only its final output would be late.
+function benchmarkAdmission(charterPath, cycleIndexArg, specPath, outPath, signalsDir, repoRoot) {
+  const charter = charterMod.readCharter(charterPath);
+  const cycleIndex = parseCycle(cycleIndexArg);
+  const io = require('../ant-hive-world/research/research-io.cjs');
+  const params = { repoRoot, charterHash: charter.charter_hash, cycleIndex, specPath, bind: false };
+  const context = io.selectionReadiness(params);
+  if (context.status === 'unassigned') {
+    return { io, params, context, signalsDir, write: payload => writeBenchmark(outPath, payload, repoRoot) };
+  }
+  const prefix = `_dev/sim-runs/research/_benchmark/${charter.charter_hash}/${cycleIndex}`;
+  function relativeInput(value) {
+    if (typeof value !== 'string' || !value || value.includes('\\')
+        || value.split('/').some(part => part === '..' || part === '.')) {
+      throw new Error('RESEARCH-DIAGNOSTIC-PATH: unsafe path');
+    }
+    return path.isAbsolute(value) ? path.relative(fs.realpathSync(repoRoot), value) : value;
+  }
+  const relative = relativeInput(outPath);
+  if (path.posix.dirname(relative) !== prefix || !/^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}\.json$/.test(path.posix.basename(relative))) {
+    throw new Error('RESEARCH-DIAGNOSTIC-PATH: expected exclusive _benchmark/<charter>/<cycle>/<unique-id>.json');
+  }
+  const abs = io.safePath(repoRoot, relative);
+  if (fs.existsSync(abs)) throw new Error('RESEARCH-DIAGNOSTIC-EXISTS: choose a new diagnostic ID');
+  const signalsRelative = prefix + '/signals';
+  if (signalsDir !== undefined && relativeInput(signalsDir) !== signalsRelative) {
+    throw new Error('RESEARCH-SIGNALS-PATH: selected signals must use the cycle diagnostic signals directory');
+  }
+  const signalsAbs = io.safePath(repoRoot, signalsRelative);
+  if (fs.existsSync(signalsAbs) && !fs.statSync(signalsAbs).isDirectory()) throw new Error('RESEARCH-SIGNALS-PATH: expected a directory');
+  // The existing emitter derives this leaf from charter_id. Check the complete
+  // destination as well as its directory, including a preexisting dangling link.
+  const leaf = `ticktock-rebaseline-frequency__${charter.charter_id}__${cycleIndex}.json`;
+  if (leaf.includes('/') || leaf.includes('\\')) throw new Error('RESEARCH-SIGNALS-PATH: unsafe charter ID');
+  io.safePath(repoRoot, signalsRelative + '/' + leaf);
+  return { io, params, context, signalsDir: signalsAbs, write: payload => {
+    const admitted = io.safePath(repoRoot, relative);
+    fs.mkdirSync(path.dirname(admitted), { recursive: true });
+    fs.writeFileSync(admitted, JSON.stringify(payload, null, 2) + '\n', { flag: 'wx' });
+  } };
+}
+
+function researchPhase(kind, charterPath, cycleIndexArg, args) {
+  const allowed = ['--research-spec', '--benchmark-out', '--signals-dir'];
+  if (kind === 'tick') allowed.push('--authorized');
+  if (kind === 'debrief') allowed.push('--quick');
+  const { repoRoot, flags } = researchOptions(args, allowed);
+  if (!flags['--benchmark-out']) throw new Error('RESEARCH-ARGUMENT: --benchmark-out is required');
+  const admission = benchmarkAdmission(charterPath, cycleIndexArg, flags['--research-spec'], flags['--benchmark-out'], flags['--signals-dir'], repoRoot);
+  const { payload } = benchmarkCheck(charterPath, cycleIndexArg, admission.signalsDir, repoRoot);
+  admission.write(payload);
+  if (payload.halt_state) { out(payload); return 1; }
+  const { io, params, context } = admission;
+  // An absent selector is ordinary only if the canonical receipt lookup agrees.
+  if (context.status === 'unassigned') { out(context); return 0; }
+  const run = kind === 'tick' ? io.runResearch : kind === 'observe' ? io.observeResearch : io.debriefResearch;
+  const result = run({ ...params, authorized: flags['--authorized'] === true,
+    driftPassed: true, quick: flags['--quick'] === true });
+  if (result && typeof result.then === 'function') return result.then(r => { out(r); return 0; });
+  out(result);
+  return 0;
+}
+
+const commands = {
+  // create-charter <specPath> <outPath>
+  'create-charter': (specPath, outPath) => {
+    const charter = charterMod.createCharter(readJson(specPath));
+    const abs = writeJson(outPath, charter);
+    // Independent read-back: re-read from disk and revalidate, so the receipt
+    // proves delivery rather than self-consistency of an in-memory object.
+    const readBack = charterMod.readCharter(abs);
+    const immut = charterMod.checkImmutability(readBack);
+    out({
+      wrote: path.relative(REPO_ROOT, abs),
+      charter_id: readBack.charter_id,
+      charter_hash: readBack.charter_hash,
+      lane_binding_hash: readBack.reviewer_roster.lane_binding_hash,
+      readback_immutability: immut
+    });
+    return immut.ok ? 0 : 1;
   },
+
+  // benchmark <charterPath> <outPath> [cycleIndex] [signalsDir] [--research-spec <path>]
+  benchmark: (charterPath, outPath, cycleIndexArg, signalsDirArg, ...args) => {
+    const { repoRoot, flags } = researchOptions(args, ['--research-spec']);
+    const admission = benchmarkAdmission(charterPath, cycleIndexArg, flags['--research-spec'], outPath, signalsDirArg, repoRoot);
+    const { payload } = benchmarkCheck(charterPath, cycleIndexArg, admission.signalsDir, repoRoot);
+    // No binding or research execution follows a failed drift comparison.
+    if (payload.halt_state) { admission.write(payload); out(payload); return 1; }
+    payload.research_context = admission.io.selectionReadiness({ ...admission.params, bind: true });
+    admission.write(payload);
+    out(payload);
+    return 0;
+  },
+
+  'research-tick': (charterPath, cycleIndex, ...args) => researchPhase('tick', charterPath, cycleIndex, args),
+  'research-observe': (charterPath, cycleIndex, ...args) => researchPhase('observe', charterPath, cycleIndex, args),
+  'research-debrief': (charterPath, cycleIndex, ...args) => researchPhase('debrief', charterPath, cycleIndex, args),
 
   // idem <charterPath> <phaseId> <cycleIndex> <discriminator>
   idem: (charterPath, phaseId, cycleIndex, discriminator) => {

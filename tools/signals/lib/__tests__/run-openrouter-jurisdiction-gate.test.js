@@ -2,7 +2,7 @@
 
 // S4 enforcement tests for the cross-jurisdiction DATA-BAN gate wired into the
 // OpenRouter bridge. These prove that a sensitive payload bound for a PRC-hosted
-// endpoint (the GLM-5.2 hosted target) can NEVER reach egress, that normal
+// endpoint (the GLM-5.2 and Qwen3.8 Max hosted targets) can NEVER reach egress, that normal
 // non-PRC openrouter calls pass through UNCHANGED, that a missing/garbled
 // descriptor fails closed, and that a valid operator exception is honored AND
 // produces a durable receipt. NO real network call is ever made — egress is a
@@ -49,6 +49,15 @@ function writeDescriptor(root, content) {
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(
     path.join(dir, 'glm-5.2-hosted.json'),
+    typeof content === 'string' ? content : JSON.stringify(content, null, 2)
+  );
+}
+
+function writeQwenDescriptor(root, content) {
+  const dir = path.join(root, '_dev', 'config', 'dispatch-targets');
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(
+    path.join(dir, 'qwen3.8-max-hosted.json'),
     typeof content === 'string' ? content : JSON.stringify(content, null, 2)
   );
 }
@@ -332,5 +341,53 @@ describe('run-openrouter-bridge — jurisdiction data-ban enforcement (S4)', () 
     assert.equal(res.source, 'non-prc-default');
     assert.ok(Array.isArray(res.descriptor.labels));
     assert.ok(!res.descriptor.labels.includes('prc-origin-risk'));
+  });
+
+  it('resolveDispatchTarget loads the Qwen3.8 Max PRC descriptor', () => {
+    const root = makeTempRoot();
+    try {
+      writeQwenDescriptor(root, {
+        id: 'qwen3.8-max-hosted',
+        provider: 'openrouter',
+        model_slug: 'qwen/qwen3.8-max-0902',
+        labels: ['hosted-open-weight', 'not-local', 'text-only', 'prc-origin-risk', 'anthropic-compatible'],
+        jurisdiction: 'PRC',
+        migration_path: 'self-host on onshore metal then repoint slug',
+        credential: '<operator-gated, stubbed>'
+      });
+      const res = resolveDispatchTarget(root, 'qwen/qwen3.8-max-0902');
+      assert.equal(res.source, 'descriptor-file');
+      assert.equal(res.descriptor.model_slug, 'qwen/qwen3.8-max-0902');
+      assert.ok(res.descriptor.labels.includes('prc-origin-risk'));
+    } finally {
+      cleanupTempRoot(root);
+    }
+  });
+
+  it('a declared-stale model slug is blocked before egress, before the jurisdiction gate even runs', async () => {
+    // Regression test for PR #33 Codex review (P2): bridge-target-policy.js's
+    // openrouter stale_models array now declares qwen/qwen3-coder stale, but
+    // nothing previously consulted that list at dispatch time -- the slug
+    // would have reached egress unchanged. This proves it is rejected, and
+    // that the adapter is never invoked (no egress, same guarantee as the
+    // jurisdiction gate above, for a different reason).
+    const root = makeTempRoot();
+    try {
+      const signalInfo = setupSignal(root, BENIGN_PROMPT, 'stale-model-block');
+      const adapter = recordingAdapter();
+
+      const result = await runOpenRouterForSignal(root, signalInfo, {
+        model: 'qwen/qwen3-coder',
+        adapter,
+        timestamp: 'STAMP-STALE'
+      });
+
+      assert.equal(result.mode, 'blocked');
+      assert.equal(result.reason, 'stale_bridge_model');
+      assert.equal(result.success, false);
+      assert.equal(adapter.calls.length, 0, 'a stale model must never reach egress');
+    } finally {
+      cleanupTempRoot(root);
+    }
   });
 });

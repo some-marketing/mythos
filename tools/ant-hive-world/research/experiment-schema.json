@@ -1,0 +1,216 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "batch_id",
+    "primary_goal",
+    "question",
+    "falsifier",
+    "charter_hash",
+    "arms",
+    "seeds",
+    "seed_role",
+    "rounds",
+    "hive_ids",
+    "limits",
+    "stream_version",
+    "config",
+    "config_sha256",
+    "source_identities",
+    "component_inventory",
+    "utility",
+    "contrast",
+    "supersedes",
+    "experiment_sha256"
+  ],
+  "properties": {
+    "schema": {
+      "const": "ResearchExperiment/1.0"
+    },
+    "batch_id": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$"
+    },
+    "primary_goal": {
+      "enum": [
+        "RG-01",
+        "RG-02",
+        "RG-03",
+        "RG-04",
+        "RG-05"
+      ]
+    },
+    "question": {
+      "type": "string",
+      "minLength": 1
+    },
+    "falsifier": {
+      "type": "string",
+      "minLength": 1
+    },
+    "charter_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "arms": {
+      "const": [
+        "random",
+        "frozen-neural",
+        "greedy-food"
+      ]
+    },
+    "seeds": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
+      "uniqueItems": true,
+      "items": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 4294967295
+      }
+    },
+    "seed_role": {
+      "const": "development"
+    },
+    "rounds": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10000
+    },
+    "hive_ids": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9-]*$"
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_decisions",
+        "max_ticks",
+        "max_wall_ms"
+      ],
+      "properties": {
+        "max_decisions": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1600000
+        },
+        "max_ticks": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1600000
+        },
+        "max_wall_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3600000
+        }
+      }
+    },
+    "stream_version": {
+      "const": "rg01-split-v1"
+    },
+    "config": {
+      "type": "object"
+    },
+    "config_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "source_identities": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      }
+    },
+    "component_inventory": {
+      "type": "object",
+      "minProperties": 1
+    },
+    "utility": {
+      "const": "equal-hive mean post-upkeep food_stockpile > 0"
+    },
+    "contrast": {
+      "const": "greedy-food minus random; development diagnostic only"
+    },
+    "supersedes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "experiment_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "charter_hash",
+        "cycle_index",
+        "batch_id",
+        "spec_path",
+        "spec_bytes_sha256",
+        "experiment_sha256",
+        "source_identities",
+        "config_sha256"
+      ],
+      "properties": {
+        "schema": {
+          "const": "ResearchSelection/1.0"
+        },
+        "charter_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "cycle_index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "batch_id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$"
+        },
+        "spec_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "spec_bytes_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "experiment_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "source_identities": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "config_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    }
+  }
+}

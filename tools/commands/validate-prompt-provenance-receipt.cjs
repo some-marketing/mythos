@@ -84,25 +84,42 @@ function validatePromptProvenanceReceipt(receipt, expectedPrompts = [], expected
   }
   for (const [index, prompt] of receipt.prompts.entries()) {
     const label = `prompts[${index}]`;
+    if (!prompt || typeof prompt !== 'object' || Array.isArray(prompt)) {
+      errors.push(`${label} must be a non-null object`);
+      continue;
+    }
     for (const field of [
       'prompt_id',
       'prompt_sha256',
       'source_envelope_id',
       'source_envelope_sha256',
-      'rewriter_actor_id',
-      'rewriter_model_provider_family',
       'attester_actor_id',
-      'attester_model_provider_family'
+      'attester_model_provider_family',
+      'attester_resolved_model_id'
     ]) {
       if (typeof prompt[field] !== 'string' || prompt[field].trim() === '') {
         errors.push(`${label}.${field} must be a non-empty string`);
       }
     }
-    if (normalizeIdentity(prompt.rewriter_actor_id) === normalizeIdentity(prompt.attester_actor_id)) {
-      errors.push(`${label} rewriter_actor_id and attester_actor_id must be distinct`);
-    }
-    if (normalizeIdentity(prompt.rewriter_model_provider_family) === normalizeIdentity(prompt.attester_model_provider_family)) {
-      errors.push(`${label} rewriter_model_provider_family and attester_model_provider_family must be distinct`);
+    if (typeof prompt.rewrite_performed !== 'boolean') {
+      errors.push(`${label}.rewrite_performed must be a boolean`);
+    } else if (prompt.rewrite_performed) {
+      for (const field of ['rewriter_actor_id', 'rewriter_model_provider_family', 'rewriter_resolved_model_id']) {
+        if (typeof prompt[field] !== 'string' || prompt[field].trim() === '') {
+          errors.push(`${label}.${field} must be a non-empty string when rewrite_performed is true`);
+        }
+      }
+      if (normalizeIdentity(prompt.rewriter_actor_id) === normalizeIdentity(prompt.attester_actor_id)) {
+        errors.push(`${label} rewriter_actor_id and attester_actor_id must be distinct`);
+      }
+      if (normalizeIdentity(prompt.rewriter_model_provider_family) === normalizeIdentity(prompt.attester_model_provider_family)) {
+        errors.push(`${label} rewriter_model_provider_family and attester_model_provider_family must be distinct`);
+      }
+      if (normalizeIdentity(prompt.rewriter_resolved_model_id) === normalizeIdentity(prompt.attester_resolved_model_id)) {
+        errors.push(`${label} rewriter_resolved_model_id and attester_resolved_model_id must be distinct`);
+      }
+    } else if (prompt.rewriter_actor_id || prompt.rewriter_model_provider_family || prompt.rewriter_resolved_model_id) {
+      errors.push(`${label} must omit rewriter identity when rewrite_performed is false`);
     }
     if (prompt.attestation !== 'pass') {
       errors.push(`${label}.attestation must be pass`);
@@ -154,6 +171,7 @@ function validatePromptProvenanceReceipt(receipt, expectedPrompts = [], expected
     const expected = new Map(expectedPrompts.map((prompt) => [prompt.prompt_id, prompt.prompt_sha256]));
     const observed = new Map();
     for (const prompt of receipt.prompts) {
+      if (!prompt || typeof prompt !== 'object' || Array.isArray(prompt)) continue;
       if (observed.has(prompt.prompt_id)) errors.push(`duplicate prompt receipt: ${prompt.prompt_id}`);
       observed.set(prompt.prompt_id, prompt.prompt_sha256);
     }

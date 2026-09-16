@@ -42,6 +42,7 @@
     "manifest:sync": "node tools/verify/sync-manifest.cjs",
     "manifest:check": "node tools/verify/sync-manifest.cjs --check",
     "verify:parity": "node tools/parity/verify-parity.cjs",
+    "verify:codex-skills": "node tools/skills/sync-codex-skills.cjs --check && node tools/skills/sync-lifecycle-command-skills.cjs --check && node --test tools/skills/__tests__/sync-codex-skills.test.cjs tools/skills/__tests__/sync-lifecycle-command-skills.test.cjs tools/instructions/__tests__/aliases.test.js",
     "parity:graph": "node tools/parity/build-wiring-graph.cjs",
     "parity:baseline:repair": "node tools/parity/surgical-baseline-repair.cjs",
     "verify:parity:source": "node tools/parity/verify-parity.cjs",

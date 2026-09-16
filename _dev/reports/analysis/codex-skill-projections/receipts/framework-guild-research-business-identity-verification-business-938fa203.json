@@ -1,0 +1,13 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "frameworks/research/business-identity-verification/.claude/skills/business-identity-verification/SKILL.md",
+  "source_sha256": "a0aeb839ef152a2be01f81746eff75713bf56e21494cfe937ef12c4eee5eeee2",
+  "projection_kind": "framework_helper",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "pending_review",
+  "target_exact_path": ".agents/skills/guild-research-business-identity-verification-business-938fa203/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "candidate",
+  "resource_manifest": [],
+  "package_sha256": "2ee00db6dc2ac33b00816e0360f253c5031348c870b0ed1b8f0e9267b9937e0a"
+}

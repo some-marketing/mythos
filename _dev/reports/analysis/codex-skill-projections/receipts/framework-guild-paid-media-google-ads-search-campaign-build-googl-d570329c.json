@@ -1,0 +1,13 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "frameworks/paid-media/google-ads-search-campaign-build/.claude/skills/google-ads-search-campaign-build/SKILL.md",
+  "source_sha256": "50ed9e6a4c8dbefa422f9813fd8c64d654d5c6996031b0c13af8f20e94a322e3",
+  "projection_kind": "framework_helper",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "pending_review",
+  "target_exact_path": ".agents/skills/guild-paid-media-google-ads-search-campaign-build-googl-d570329c/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "candidate",
+  "resource_manifest": [],
+  "package_sha256": "185ed09a2edb2ccf33932ee8b08397ea6e9a555e136f4c6ef014d167cd8beac5"
+}

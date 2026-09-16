@@ -1,0 +1,11 @@
+{
+  "generator_id": "mythos-codex-skill-projector/1.0.0",
+  "source_relative_path": "instructions/canonical/commands/fw-wordpress-content-editing.yaml",
+  "source_sha256": "2ccd979a4881a4007ad744ac1f60097e9633045949d96e5510487779e91c8f66",
+  "projection_kind": "canonical_command",
+  "capability_tier": "ADVISORY",
+  "semantic_review_state": "reviewed_safe",
+  "target_exact_path": ".agents/skills/source-command-fw-wordpress-content-editing/SKILL.md",
+  "collision_state": "clear",
+  "application_status": "already_aligned"
+}

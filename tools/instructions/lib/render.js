@@ -47,42 +47,63 @@ function orchestrationSummary(policy) {
   ].join('\n');
 }
 
-// Render one domain's aliases as bullet lines, grouped primary -> cross-alias ->
-// compatibility (and any remaining statuses treated as compatibility). `prefix`
-// is `/` for slash commands and '' for framework/skill/tool names.
+// Render one domain's aliases as bullet lines. Canonical typed records retain
+// their declared order and target/execution/authority distinctions. Legacy
+// records retain the older primary -> cross-alias -> compatibility grouping.
+// `prefix` is `/` for slash commands and '' for framework/skill/tool names.
 function renderAliasGroup(aliases, prefix) {
-  // primary alias id -> its authority, so a cross-alias that resolves to a
-  // primary alias still reports the underlying canonical id.
-  const primaryAuthorityById = new Map();
+  const isTyped = (alias) => Boolean(alias.kind || alias.target || alias.execution_target || alias.authority_source);
+  const aliasById = new Map();
   for (const alias of aliases) {
-    if (alias.status === 'primary') {
-      primaryAuthorityById.set(alias.id, alias.authority_source || alias.resolves_to);
-    }
+    aliasById.set(alias.id, alias);
   }
   const authorityOf = (alias) => {
-    if (alias.authority_source) return alias.authority_source;
-    const target = alias.resolves_to;
-    return primaryAuthorityById.has(target) ? primaryAuthorityById.get(target) : target;
+    let target = alias.authority_source || alias.execution_target || alias.target || alias.resolves_to;
+    const seen = new Set([alias.id]);
+    while (aliasById.has(target) && !seen.has(target)) {
+      seen.add(target);
+      const next = aliasById.get(target);
+      target = next.authority_source || next.execution_target || next.target || next.resolves_to;
+    }
+    return target;
   };
-  const executionNote = (alias) => (
-    alias.execution_target && alias.execution_target !== alias.resolves_to
-      ? `; executes: \`${prefix}${alias.execution_target}\``
-      : ''
-  );
+  const renderLegacy = (alias) => {
+    const authority = authorityOf(alias);
+    if (alias.status === 'primary') {
+      return `- \`${prefix}${alias.id}\` (\`${prefix}${authority}\`) [primary]; authority: \`${prefix}${authority}\``;
+    }
+    return `- \`${prefix}${alias.id}\` -> \`${prefix}${alias.resolves_to}\` [${alias.status || 'compatibility'}]; authority: \`${prefix}${authority}\``;
+  };
 
+  if (aliases.some(isTyped)) {
+    return aliases.map((alias) => {
+      if (!isTyped(alias)) return renderLegacy(alias);
+      const target = alias.target || alias.resolves_to;
+      const kind = alias.kind || alias.status || 'compatibility';
+      const executionTarget = alias.execution_target;
+      const authority = authorityOf(alias);
+      const execution = executionTarget && executionTarget !== target
+        ? `; execution: \`${prefix}${executionTarget}\``
+        : '';
+      return `- \`${prefix}${alias.id}\` -> \`${prefix}${target}\` [${kind}]${execution}; authority: \`${prefix}${authority}\``;
+    });
+  }
+
+  // primary alias id -> its authority, so a cross-alias that resolves to a
+  // primary alias still reports the underlying canonical id.
   const primaries = aliases.filter((a) => a.status === 'primary');
   const crossAliases = aliases.filter((a) => a.status === 'cross-alias');
   const compatibility = aliases.filter((a) => a.status !== 'primary' && a.status !== 'cross-alias');
 
   const lines = [];
   for (const alias of primaries) {
-    lines.push(`- \`${prefix}${alias.id}\` (\`${prefix}${alias.resolves_to}\`) [primary]${executionNote(alias)}; authority: \`${prefix}${authorityOf(alias)}\``);
+    lines.push(renderLegacy(alias));
   }
   for (const alias of crossAliases) {
-    lines.push(`- \`${prefix}${alias.id}\` -> \`${prefix}${alias.resolves_to}\` [cross-alias]${executionNote(alias)}; authority: \`${prefix}${authorityOf(alias)}\``);
+    lines.push(renderLegacy(alias));
   }
   for (const alias of compatibility) {
-    lines.push(`- \`${prefix}${alias.id}\` -> \`${prefix}${alias.resolves_to}\` [${alias.status || 'compatibility'}]${executionNote(alias)}; authority: \`${prefix}${authorityOf(alias)}\``);
+    lines.push(renderLegacy(alias));
   }
   return lines;
 }

@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "3b43f456b03a9d4df3997a69f4db91505c17ad1176500eae137a32477d42a5b2",
+    "expected_tree_sha256": "2c8f908420e4b73543ba269edaca86b2955ef4d3cb13f58131e9986f95a2420a",
     "expected_files": [
       {
         "path": ".agents/skills/go/SKILL.md",
@@ -9322,7 +9322,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "3caee99e500cc079eb135a7638931d40cfa33b09d73361c14b0de1c7f063592c",
+        "sha256": "24ed3270b1563279709f08f13bd0c43426d8d861d511b1aa40f9d4a0a5f64ac2",
         "mode": 420
       },
       {
@@ -15296,6 +15296,11 @@
         "mode": 420
       },
       {
+        "path": "tools/signals/lib/__tests__/actor-signal-selection.test.js",
+        "sha256": "32bf008aebaa0a251c74c87cba231145035571bdfd85502f6a90627ff13fa812",
+        "mode": 420
+      },
+      {
         "path": "tools/signals/lib/__tests__/actor-work-order.test.js",
         "sha256": "bfd02ddffee5caea4885ffd3b8681b1f72a07495df73d3667f6c5b0fd884c5c2",
         "mode": 420
@@ -15427,7 +15432,7 @@
       },
       {
         "path": "tools/signals/lib/actor-auto.js",
-        "sha256": "b26d423b51a00c20df8113f543b72c1573d866aad62c2a73e2c69f15a5eb8f7d",
+        "sha256": "9346a757b91f49f1d1d36197678a26a4c676fd9e0b62232d1a2ea09fc8dc243c",
         "mode": 420
       },
       {
@@ -17499,9 +17504,9 @@
     "package_script_count": 206,
     "command_alias_registry_sha256": "bf0f8b941e0dc0d7b7d3938b765ac379a62b1c3bac50984358cd133afd1012d2",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "3caee99e500cc079eb135a7638931d40cfa33b09d73361c14b0de1c7f063592c",
-    "graph_nodes": 4217,
-    "graph_edges": 2952
+    "graph_sha256": "24ed3270b1563279709f08f13bd0c43426d8d861d511b1aa40f9d4a0a5f64ac2",
+    "graph_nodes": 4218,
+    "graph_edges": 2953
   },
   "runtime_exclusions": [
     ".git/**",
@@ -17520,7 +17525,6 @@
     "_dev/reports/analysis/public-export/**",
     "_dev/reports/lifecycle/**",
     "_dev/reports/signals/**",
-    "_dev/reports/telemetry/**",
     "_dev/scratch/**",
     "_dev/state/**",
     "_dev/tmp/**",

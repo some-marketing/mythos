@@ -156,7 +156,9 @@ test('commitGenerationEntries binds provisional run entries to the committed gen
   });
   const result = dreamMemory.commitGenerationEntries(vaultPath, 'gen-3-run', '/tmp/run/shared/world-state.json');
   assert.deepEqual(result.flipped, [1]);
-  assert.equal(dreamMemory.materialize(vaultPath)[1].commit_status, 'committed');
+  const entry = dreamMemory.materialize(vaultPath)[1];
+  assert.equal(entry.commit_status, 'committed');
+  assert.equal(entry.generation_id, 'gen-3-run');
 });
 
 test('concurrent processes receive unique vault entry IDs', async () => {

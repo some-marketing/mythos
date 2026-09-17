@@ -19,6 +19,7 @@ Load an existing task plan, compare it against new execution facts, record chang
 - Write the amendment artifacts: a markdown summary and a JSON artifact with structured divergences.
 - The original plan JSON and markdown are NOT mutated. The amendment artifact is a companion that records what changed and why. The original plan remains the historical baseline.
 - Emit one truthful exact next command based on the amended state.
+- Do NOT ask the human operator for permission to amend or to run the follow-on /repair-plan. Amendments are review-gated overlays and are safe by default: proceed, then report what changed with the review reference. Ask for operator input only when a divergence encodes an operator judgement about the larger workings of the system (how the simulation should function for the minds in it, what the system is for, a named operator gate in the plan, or a fact only the operator knows); technical and mechanical divergences are not operator questions. Otherwise state "no operator decision required" and emit the next command. Any technical item that must reach the operator is explained jargon-free as: what it is, what it would impact, why it matters. (Operator standing rule 2026-09-16.)
 </process>
 
 <success_criteria>

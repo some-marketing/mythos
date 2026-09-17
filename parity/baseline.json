@@ -43,7 +43,7 @@
   },
   "target": {
     "base_commit": "1d1f241ee542ec8ccdf6f97dadf9115c2efa8f14",
-    "expected_tree_sha256": "a82da8f442c2ad5215b53e41ac4aa59857d820596c877a94b207cff96a83428d",
+    "expected_tree_sha256": "3280374c3b1ccd931f75b21d6c4f03e3165962116d1385499d4e04e405c1d59d",
     "expected_files": [
       {
         "path": ".agents/skills/go/SKILL.md",
@@ -717,7 +717,7 @@
       },
       {
         "path": ".claude/CLAUDE.md",
-        "sha256": "2796760540fd283fe497ef30be01b697ae1d91fcf5dc2aecafd1c562811839a5",
+        "sha256": "1b790a173367e4e321c95c2a6d3d0f2cccfcdcc828c408b8e04d0960ad0a374c",
         "mode": 420
       },
       {
@@ -817,7 +817,7 @@
       },
       {
         "path": ".claude/commands/amend-plan.md",
-        "sha256": "f8876110499caf3ce4b6db681f75fb3b3273f7126a44295eae807caa84d480c2",
+        "sha256": "df067b074ee18ffa3c2d056366274fe06fd6cb8f6fc3fe028879ce81fe156f6c",
         "mode": 420
       },
       {
@@ -2157,7 +2157,7 @@
       },
       {
         "path": ".cursor/rules/llmos.mdc",
-        "sha256": "fe5ab3c7eaf14782da324060f8ad4874245c1cc03b2e8dcc734723925efae247",
+        "sha256": "e08dc0b54cbbb3ea8f0d4d47a8ce1571dcfe61b5b72ca6d341d661fbd32a4395",
         "mode": 420
       },
       {
@@ -2207,17 +2207,17 @@
       },
       {
         "path": "AGENTS.md",
-        "sha256": "4d6df641afffed03ed3d5897c835c0b31e84711bed505b99f742c15b0c514d7a",
+        "sha256": "5ef9e1e1d3769cb3c36c8866cc9d6c1d0a2247fdd57031adad36027597f3a082",
         "mode": 420
       },
       {
         "path": "CLAUDE.md",
-        "sha256": "be26ffd8ddf2cb6f8154c97668584f5e551bc3bf32aebb4eb3748e3e3f48b4e6",
+        "sha256": "685440742412f647b5d70603cd641dbea0660daa2ffa770fe88828f242141368",
         "mode": 420
       },
       {
         "path": "INSTRUCTIONS.md",
-        "sha256": "86234640fccb00ef90ba142ada82e97897abaea7d7313c1820b66f60e72a7e73",
+        "sha256": "dacd4d1da89b664c71dc7d646b7558a562d6fe91f366c300821aa7872385bf76",
         "mode": 420
       },
       {
@@ -2227,7 +2227,7 @@
       },
       {
         "path": "OPENCODE.md",
-        "sha256": "d58b14d40f7293ffc4ce6d755a2056e303d18ea04d637e95887dce72e7137e91",
+        "sha256": "e635db6582ae48acec89f5fd5fe6d7326cc6538f1780d23e5d35caf662ea243b",
         "mode": 420
       },
       {
@@ -3332,7 +3332,7 @@
       },
       {
         "path": "_dev/reports/analysis/codex-skill-projections/receipts/command-amend-plan.json",
-        "sha256": "32b932e9c8d3ee0d58d6d67b165da6f23034b9123e576a04fba27189d76550e0",
+        "sha256": "190f085c75e5bd5feb33b31b028c8075d9e8868e9a0f2c9708332d563c1b7fb2",
         "mode": 420
       },
       {
@@ -8337,7 +8337,7 @@
       },
       {
         "path": "instructions/canonical/commands/amend-plan.yaml",
-        "sha256": "5c15a98ee1d589b6d753f02446afaeb80ae51fbace73dddd8e4bfd081a8bf9d2",
+        "sha256": "1cf2fc9535ba509a751e3acd99cb40903a6217fc0ba37094469a754b77f09875",
         "mode": 420
       },
       {
@@ -8977,7 +8977,7 @@
       },
       {
         "path": "instructions/canonical/conduct.md",
-        "sha256": "51a0783b3556bf2629710d6d4173679a542e02f5a44298adf6280b4ec783508c",
+        "sha256": "2479b0527b13c97d5b917a3878b38ba32af6e3e9ca79576b38e68d95fcf21262",
         "mode": 420
       },
       {
@@ -9272,7 +9272,7 @@
       },
       {
         "path": "instructions/canonical/system.yaml",
-        "sha256": "28e1f425270ab5eef625961867bfd949e3ea16b0163ac4f632d7021eb9a7e3a6",
+        "sha256": "ddb312332d5c594f3924c4abf5d5a2acde32a66e82ecb9b644761d1396ae840f",
         "mode": 420
       },
       {
@@ -9287,7 +9287,7 @@
       },
       {
         "path": "instructions/generated/claude/.claude.CLAUDE.md",
-        "sha256": "2796760540fd283fe497ef30be01b697ae1d91fcf5dc2aecafd1c562811839a5",
+        "sha256": "1b790a173367e4e321c95c2a6d3d0f2cccfcdcc828c408b8e04d0960ad0a374c",
         "mode": 420
       },
       {
@@ -9297,7 +9297,7 @@
       },
       {
         "path": "instructions/generated/claude/CLAUDE.md",
-        "sha256": "be26ffd8ddf2cb6f8154c97668584f5e551bc3bf32aebb4eb3748e3e3f48b4e6",
+        "sha256": "685440742412f647b5d70603cd641dbea0660daa2ffa770fe88828f242141368",
         "mode": 420
       },
       {
@@ -9347,7 +9347,7 @@
       },
       {
         "path": "parity/wiring-graph.json",
-        "sha256": "b83f24fd4e74fff615ea568561b93fb4b2d1f1eb155415247cd2565ee80582ff",
+        "sha256": "b5a7c69cda5bdb77ea9cc1b5b07a63a961b9ff882018960ecfd9aba6ef52a80d",
         "mode": 420
       },
       {
@@ -17999,7 +17999,7 @@
     "package_script_count": 206,
     "command_alias_registry_sha256": "bf0f8b941e0dc0d7b7d3938b765ac379a62b1c3bac50984358cd133afd1012d2",
     "graph_path": "parity/wiring-graph.json",
-    "graph_sha256": "b83f24fd4e74fff615ea568561b93fb4b2d1f1eb155415247cd2565ee80582ff",
+    "graph_sha256": "b5a7c69cda5bdb77ea9cc1b5b07a63a961b9ff882018960ecfd9aba6ef52a80d",
     "graph_nodes": 4318,
     "graph_edges": 3069
   },

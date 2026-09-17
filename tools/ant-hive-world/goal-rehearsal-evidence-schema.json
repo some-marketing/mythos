@@ -1,0 +1,397 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://mythos.local/schemas/ant-hive-world/goal-round-rehearsal-evidence-1.0.json",
+  "title": "GoalRoundRehearsalEvidence/1.0",
+  "description": "Machine-readable evidence for the local goal-round rehearsal (plan ant-world-goal-round-1, S1). Emitted as a FILE so a distinct trial can schema-compare rather than prose-compare (codex F9). Every top-level section is required: an evidence bundle that can omit its own control arm, its isolation audit or its tamper probe is not evidence, it is a report of the parts that went well.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "task_id",
+    "produced_at",
+    "produced_by",
+    "environment",
+    "goal_packet",
+    "arms",
+    "evaluator_trace_digest",
+    "isolation_call_graph_audit",
+    "tamper_result",
+    "passthrough_validation",
+    "coord7_events",
+    "lineage_chain",
+    "confound_results",
+    "reachability",
+    "learning_continuity",
+    "contamination_alarm",
+    "deviations",
+    "overall_verdict"
+  ],
+  "properties": {
+    "schema": { "const": "GoalRoundRehearsalEvidence/1.0" },
+    "task_id": { "type": "string" },
+    "produced_at": { "type": "string", "format": "date-time" },
+    "produced_by": { "type": "string" },
+    "environment": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["host", "node_version", "local_only"],
+      "properties": {
+        "host": { "type": "string" },
+        "node_version": { "type": "string" },
+        "local_only": {
+          "const": true,
+          "description": "The rehearsal is local by constraint. A rehearsal that touched the VM would be a deployment, and the gate for that is still pending."
+        },
+        "repo_head": { "type": "string" }
+      }
+    },
+    "goal_packet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "goal_id", "packet_sha256", "file_sha256", "evaluator_version", "validated"],
+      "properties": {
+        "path": { "type": "string" },
+        "goal_id": { "type": "string" },
+        "packet_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "file_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "evaluator_version": { "type": "string" },
+        "validated": { "type": "boolean" },
+        "validation_errors": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "arms": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["goal", "control", "seed_parity", "behavioral_delta"],
+      "description": "GOAL vs CONTROL at identical seeds. Under one-way isolation the PREDICTED behavioral delta is exactly zero; a nonzero delta falsifies the isolation claim and is the whole reason the control arm exists.",
+      "properties": {
+        "goal": { "$ref": "#/definitions/arm" },
+        "control": { "$ref": "#/definitions/arm" },
+        "seed_parity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["root_seed", "identical"],
+          "properties": {
+            "root_seed": { "type": "integer" },
+            "identical": { "type": "boolean" },
+            "note": { "type": "string" }
+          }
+        },
+        "behavioral_delta": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["predicted", "measured", "decision_stream_sha256", "diverging_rows", "verdict"],
+          "properties": {
+            "predicted": { "type": "string" },
+            "measured": { "type": "string" },
+            "decision_stream_sha256": {
+              "type": "object",
+              "additionalProperties": { "type": "string" },
+              "description": "Per-arm sha256 of the concatenated decision streams across all turns. The decision stream deliberately carries no goal column, so equality here is a real behavioral comparison and not a tautology."
+            },
+            "diverging_rows": { "type": "integer", "minimum": 0 },
+            "first_divergence": { "type": ["object", "null"] },
+            "verdict": { "enum": ["ISOLATION_HELD", "ISOLATION_BREACHED", "INCONCLUSIVE"] }
+          }
+        }
+      }
+    },
+    "evaluator_trace_digest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["trace_files", "rows", "sha256", "post_decision_rows", "order_proof"],
+      "properties": {
+        "trace_files": { "type": "array", "items": { "type": "string" } },
+        "rows": { "type": "integer", "minimum": 0 },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "post_decision_rows": { "type": "integer", "minimum": 0 },
+        "order_proof": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["method", "rows_checked", "rows_with_prior_decisions", "verdict"],
+          "description": "Proof the evaluator ran AFTER the tick's decisions: every trace row's tick must already have its hive and world decision rows present in the decision stream.",
+          "properties": {
+            "method": { "type": "string" },
+            "rows_checked": { "type": "integer" },
+            "rows_with_prior_decisions": { "type": "integer" },
+            "verdict": { "enum": ["PASS", "FAIL"] }
+          }
+        }
+      }
+    },
+    "isolation_call_graph_audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "importers", "forbidden_importers", "return_value_consumers", "verdict"],
+      "description": "GREP-PROOF, not assertion. `importers` lists every file that requires the evaluator; `forbidden_importers` is the mind/hive/training call graph that must contain none of them; `return_value_consumers` enumerates every expression that reads the evaluator's return value.",
+      "properties": {
+        "method": { "type": "string" },
+        "importers": { "type": "array", "items": { "type": "string" } },
+        "forbidden_importers": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["files_checked", "hits"],
+          "properties": {
+            "files_checked": { "type": "array", "items": { "type": "string" } },
+            "hits": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "return_value_consumers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["file", "line", "expression", "sink", "affects_simulation"],
+            "properties": {
+              "file": { "type": "string" },
+              "line": { "type": "integer" },
+              "expression": { "type": "string" },
+              "sink": { "type": "string" },
+              "affects_simulation": { "type": "boolean" }
+            }
+          }
+        },
+        "verdict": { "enum": ["ONE_WAY_CONFIRMED", "LEAK_FOUND", "INCONCLUSIVE"] }
+      }
+    },
+    "tamper_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["probes", "verdict"],
+      "description": "Packet-hash and shape tampering must refuse BEFORE the run: nonzero exit, a named STATUS token, and no state constructed.",
+      "properties": {
+        "probes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["probe", "mutation", "exit_code", "status_token", "state_constructed", "refused"],
+            "properties": {
+              "probe": { "type": "string" },
+              "mutation": { "type": "string" },
+              "exit_code": { "type": "integer" },
+              "status_token": { "type": "string" },
+              "state_constructed": { "type": "boolean" },
+              "refused": { "type": "boolean" },
+              "stderr_excerpt": { "type": "string" }
+            }
+          }
+        },
+        "verdict": { "enum": ["PASS", "FAIL"] }
+      }
+    },
+    "passthrough_validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["host_script", "executed", "method", "cases", "verdict"],
+      "description": "Host-side job.env / courier passthrough validation. `executed` says honestly whether the PowerShell script itself ran or whether only its rule set was exercised in parity - a rule-parity check is not an execution receipt and must not be reported as one.",
+      "properties": {
+        "host_script": { "type": "string" },
+        "executed": { "type": "boolean" },
+        "method": { "type": "string" },
+        "cases": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["case", "expected", "actual", "pass"],
+            "properties": {
+              "case": { "type": "string" },
+              "expected": { "type": "string" },
+              "actual": { "type": "string" },
+              "pass": { "type": "boolean" }
+            }
+          }
+        },
+        "verdict": { "enum": ["PASS", "FAIL", "RULE_PARITY_ONLY"] }
+      }
+    },
+    "coord7_events": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["definition", "activation", "per_tick_series", "measurement_only_note"],
+      "description": "Coord 7 is the encoder's starvation-pressure coordinate. Activation is an ECOLOGY measurement that would enable future learning on that coordinate; it is explicitly NOT a learning or convergence claim.",
+      "properties": {
+        "definition": { "type": "string" },
+        "activation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["activated", "ticks_nonzero", "ticks_total", "first_activation_tick", "window"],
+          "properties": {
+            "activated": { "type": "boolean" },
+            "ticks_nonzero": { "type": "integer" },
+            "ticks_total": { "type": "integer" },
+            "first_activation_tick": { "type": ["integer", "null"] },
+            "window": { "type": ["array", "null"], "items": { "type": "integer" } }
+          }
+        },
+        "per_tick_series": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Per-arm series of the coordinate's encoded value, plus any independently measured predicate used to cross-check it."
+        },
+        "cross_check": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "An independent measurement of the underlying condition (e.g. per-tick hive food exhaustion from the run log). A divergence between the encoder coordinate and the independent measurement is a finding about the ENCODER, and must be reported as such rather than smoothed over."
+        },
+        "measurement_only_note": { "type": "string" }
+      }
+    },
+    "lineage_chain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["goal", "control", "resume_stages_passed", "verdict"],
+      "properties": {
+        "goal": { "type": "array", "items": { "type": "string" } },
+        "control": { "type": "array", "items": { "type": "string" } },
+        "resume_stages_passed": { "type": "object", "additionalProperties": true },
+        "verdict": { "enum": ["PASS", "FAIL"] }
+      }
+    },
+    "confound_results": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["d1_predicate", "applicable", "policy_path_divergence", "mirror_test", "feature_density_parity", "verdict"],
+      "properties": {
+        "d1_predicate": {
+          "type": "string",
+          "description": "The applicability rule, stated so it can be applied by someone who was not here: policy-path divergence counts as CONFOUND only when it is attributable to evaluator or goal data rather than to the ecology state itself."
+        },
+        "applicable": { "type": "boolean" },
+        "policy_path_divergence": { "type": "object", "additionalProperties": true },
+        "mirror_test": { "type": "object", "additionalProperties": true },
+        "feature_density_parity": { "type": "object", "additionalProperties": true },
+        "verdict": { "enum": ["NO_CONFOUND", "CONFOUND", "NOT_APPLICABLE", "INCONCLUSIVE"] }
+      }
+    },
+    "reachability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "per_threshold", "verdict"],
+      "description": "THE REACHABILITY TEST (codex F2). Each threshold must show measurable progress toward it under the NO-GOAL control dynamics. A threshold with no progress pathway at all must be re-derived, and the revision recorded here rather than quietly kept.",
+      "properties": {
+        "method": { "type": "string" },
+        "per_threshold": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["condition", "threshold", "control_max", "control_final", "progress_ratio", "pathway", "verdict"],
+            "properties": {
+              "condition": { "type": "string" },
+              "threshold": { "type": "number" },
+              "control_max": { "type": "number" },
+              "control_final": { "type": "number" },
+              "progress_ratio": { "type": "number" },
+              "pathway": {
+                "type": "string",
+                "description": "The mechanism by which the quantity can move at all, named explicitly. 'No pathway' is the finding that forces a re-derivation."
+              },
+              "series_source": { "type": "string" },
+              "revision": {
+                "type": ["object", "null"],
+                "description": "Present and non-null only when the threshold was re-derived; carries the old value, the new value and why."
+              },
+              "verdict": { "enum": ["PROGRESS_OBSERVED", "NO_PROGRESS_PATHWAY", "REVISED", "INCONCLUSIVE"] }
+            }
+          }
+        },
+        "verdict": { "enum": ["PASS", "FAIL", "REVISED"] }
+      }
+    },
+    "learning_continuity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["per_turn", "spans_resumes", "verdict"],
+      "description": "Loss trajectory across the chained turns. A learning claim that does not span the resume boundaries is a claim about one turn.",
+      "properties": {
+        "per_turn": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+        "spans_resumes": { "type": "boolean" },
+        "parameter_displacement": { "type": "object", "additionalProperties": true },
+        "verdict": { "enum": ["PASS", "FAIL", "INCONCLUSIVE"] }
+      }
+    },
+    "contamination_alarm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["definition", "verb_weights_unchanged", "quiet", "verdict"],
+      "description": "The inverted falsifier: a LARGE policy displacement is evidence of contamination, not success. The mechanical form of the check is that the verb-preference weights W2/b2 are never written by the learning signal.",
+      "properties": {
+        "definition": { "type": "string" },
+        "verb_weights_unchanged": { "type": "object", "additionalProperties": true },
+        "quiet": { "type": "boolean" },
+        "verdict": { "enum": ["QUIET", "ALARM", "INCONCLUSIVE"] }
+      }
+    },
+    "deviations": {
+      "type": "array",
+      "description": "Everything that differed from the plan's stated shape, including work deferred because it fell outside the declared write set. An empty array is a claim that nothing deviated.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "what", "why", "impact", "owner"],
+        "properties": {
+          "id": { "type": "string" },
+          "what": { "type": "string" },
+          "why": { "type": "string" },
+          "impact": { "type": "string" },
+          "owner": { "type": "string" },
+          "blocks_s2": { "type": "boolean" }
+        }
+      }
+    },
+    "overall_verdict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "rationale", "falsifiers"],
+      "properties": {
+        "verdict": { "enum": ["PASS", "PASS_WITH_FINDINGS", "FAIL"] },
+        "rationale": { "type": "string" },
+        "falsifiers": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" },
+          "description": "For each acceptance-grade claim in this bundle, the evidence that would disprove it. A claim with no falsifier is a belief and must be marked as such."
+        }
+      }
+    }
+  },
+  "definitions": {
+    "arm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["arm_id", "packet_supplied", "turns", "sandbox_roots", "checkpoint_root"],
+      "properties": {
+        "arm_id": { "type": "string" },
+        "packet_supplied": { "type": "boolean" },
+        "checkpoint_root": { "type": "string" },
+        "sandbox_roots": { "type": "array", "items": { "type": "string" } },
+        "turns": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["turn_index", "run_name", "ticks", "resume_from", "exit_code", "generation_id", "absolute_tick", "lineage_depth"],
+            "properties": {
+              "turn_index": { "type": "integer" },
+              "run_name": { "type": "string" },
+              "ticks": { "type": "integer" },
+              "resume_from": { "type": ["string", "null"] },
+              "resume_stages_passed": { "type": ["integer", "null"] },
+              "exit_code": { "type": "integer" },
+              "generation_id": { "type": "string" },
+              "absolute_tick": { "type": "integer" },
+              "lineage_depth": { "type": "integer" },
+              "goal_in_manifest": { "type": ["object", "null"] },
+              "goal_result": { "type": ["object", "null"] },
+              "world_state_endpoint": { "type": ["object", "null"] }
+            }
+          }
+        }
+      }
+    }
+  }
+}

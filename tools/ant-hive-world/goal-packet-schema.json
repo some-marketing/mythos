@@ -1,0 +1,196 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://mythos.local/schemas/ant-hive-world/goal-packet-1.0.json",
+  "title": "GoalPacket/1.0",
+  "description": "A machine-evaluable goal for one ant-world round. Emitted as a FILE (not prose) so a distinct trial can schema-compare instead of prose-compare (plan ant-world-goal-round-1, amendment r2 disposition, codex F9). Every threshold carries its own derivation object, so no number in a packet can be asserted without the observed datum it came from. The evaluator (tools/ant-hive-world/goal-evaluator.js) is read-only and reads only allowlisted ecology fields of the sanitized world-state; spatial and build surfaces are unreachable through it by construction.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "goal_id",
+    "created_at",
+    "created_for",
+    "evaluator_version",
+    "deadline",
+    "safety_bounds",
+    "conditions",
+    "derivation_provenance",
+    "packet_sha256"
+  ],
+  "properties": {
+    "schema": { "const": "GoalPacket/1.0" },
+    "goal_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{2,63}$",
+      "description": "Stable identity. Travels into every evaluator trace row and into the checkpoint manifest's goal field, so a goal-bearing lineage can never silently become goal:null."
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "created_for": {
+      "type": "string",
+      "description": "The plan/task id this packet was derived for."
+    },
+    "evaluator_version": {
+      "type": "string",
+      "description": "Must equal the runtime EVALUATOR_VERSION exported by goal-evaluator.js. A mismatch is a validation failure, not a warning: an evaluation is only meaningful against the evaluator that defined its aggregations."
+    },
+    "deadline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["absolute_tick", "turns", "ticks_per_turn", "formula", "rationale"],
+      "description": "The explicit bound the convene synthesis requires. absolute_tick MUST equal turns * ticks_per_turn.",
+      "properties": {
+        "absolute_tick": { "type": "integer", "minimum": 1 },
+        "turns": { "type": "integer", "minimum": 1 },
+        "ticks_per_turn": { "type": "integer", "minimum": 1 },
+        "formula": { "type": "string" },
+        "rationale": { "type": "string" }
+      }
+    },
+    "safety_bounds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evaluator_read_only",
+        "grants_new_verbs",
+        "reads_spatial_or_build_fields",
+        "intervenes_on_extinction",
+        "note"
+      ],
+      "description": "Bounds asserted by the packet AND enforced by the evaluator's allowlist. The first three flags have fixed required values; a packet asserting otherwise fails validation.",
+      "properties": {
+        "evaluator_read_only": { "const": true },
+        "grants_new_verbs": { "const": false },
+        "reads_spatial_or_build_fields": { "const": false },
+        "intervenes_on_extinction": {
+          "const": false,
+          "description": "The deterministic extinction rule: if a hive reaches zero the round runs to its deadline unmodified and the outcome is recorded. Extinction is data, not a fault to be prevented by evaluator design."
+        },
+        "note": { "type": "string" }
+      }
+    },
+    "conditions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/condition" }
+    },
+    "derivation_provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reference_artifacts", "horizon_matching_rule", "measured_by", "measured_at"],
+      "properties": {
+        "reference_artifacts": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" },
+          "description": "Repo-relative paths of the artifacts every derivation_datum was read from."
+        },
+        "horizon_matching_rule": {
+          "type": "string",
+          "description": "Why these observations and not others. Observations at a different horizon than the round's deadline are corroboration, never the primary datum."
+        },
+        "measured_by": { "type": "string" },
+        "measured_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "packet_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "sha256 over the canonical (key-sorted, whitespace-free) JSON of this packet with packet_sha256 removed. Same rule as the checkpoint manifest's manifest_self_checksum. A mismatch is the tamper gate: the driver refuses before constructing any state."
+    }
+  },
+  "definitions": {
+    "condition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["condition_id", "description", "comparator", "threshold"],
+      "properties": {
+        "condition_id": { "type": "string", "minLength": 1 },
+        "description": { "type": "string", "minLength": 1 },
+        "comparator": { "enum": [">=", "<=", ">", "<", "=="] },
+        "threshold": { "$ref": "#/definitions/threshold" }
+      }
+    },
+    "threshold": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "units", "formula", "source_field", "aggregation_scope", "derivation_datum"],
+      "description": "THE NUMERIC DERIVATION CONTRACT (codex F2). Every threshold ships the number, its units, the formula that produced it, the exact world-state path it is compared against, the aggregation scope, and the observed datum it derives from. A threshold missing any of these is a validation failure, which is what makes 'derived, not invented' checkable rather than claimed.",
+      "properties": {
+        "value": { "type": "number" },
+        "units": { "type": "string", "minLength": 1 },
+        "formula": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The arithmetic that produced `value` from `derivation_datum`, written so a reviewer can recompute it."
+        },
+        "source_field": {
+          "type": "string",
+          "description": "Exact path in the sanitized world-state. MUST be one of the evaluator's allowlisted ecology fields; territory, geometry_log, food_source_coords and pheromones are rejected.",
+          "enum": [
+            "food_sources",
+            "resources.food",
+            "resources.water",
+            "resources.wood",
+            "resources.stone",
+            "water_sources",
+            "prey_population",
+            "predator_population",
+            "hives.count",
+            "hives.starvation_pressure"
+          ]
+        },
+        "aggregation_scope": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Per-hive vs combined, and which ticks the comparison applies to (e.g. 'combined world total, evaluated every tick, verdict at the deadline tick')."
+        },
+        "derivation_datum": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["artifact", "note"],
+          "anyOf": [
+            { "required": ["observed_value"] },
+            { "required": ["observed_values"] }
+          ],
+          "properties": {
+            "observed_value": { "type": "number" },
+            "observed_values": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["label", "value"],
+                "properties": {
+                  "label": { "type": "string" },
+                  "value": { "type": "number" },
+                  "absolute_tick": { "type": ["integer", "null"] }
+                }
+              }
+            },
+            "artifact": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Repo-relative path of the record the number was read from."
+            },
+            "corroboration": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["label", "value", "artifact"],
+                "properties": {
+                  "label": { "type": "string" },
+                  "value": { "type": "number" },
+                  "artifact": { "type": "string" },
+                  "absolute_tick": { "type": ["integer", "null"] }
+                }
+              },
+              "description": "Observations at a different horizon that bound the threshold from outside. Never the primary datum."
+            },
+            "note": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    }
+  }
+}

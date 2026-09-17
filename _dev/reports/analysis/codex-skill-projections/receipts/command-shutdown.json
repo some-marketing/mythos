@@ -1,7 +1,7 @@
 {
   "generator_id": "mythos-codex-skill-projector/1.0.0",
   "source_relative_path": "instructions/canonical/commands/shutdown.yaml",
-  "source_sha256": "ec520fad19bbcaba78e3923cf079646b3c5cce27ab82cd3253ea604e615c3ea5",
+  "source_sha256": "39781d433f57af6aec323f253156e5bb6c8b3f27be3e2870e8c0eaa22e45be16",
   "projection_kind": "canonical_command",
   "capability_tier": "ADVISORY",
   "semantic_review_state": "reviewed_safe",

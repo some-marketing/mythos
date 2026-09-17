@@ -1,0 +1,36 @@
+# tools/ant-hive-world/embodiment-bridge/requirements-lock.txt -- plan
+# ant-hive-world-orwell-sim-containment, S2.
+#
+# Full transitive dependency set for bridge_step.py's only third-party
+# import (`import mujoco`), resolved for linux/amd64 cp311 (manylinux2014 /
+# manylinux_2_17), pinned by exact version + sha256 wheel hash so
+# `pip install --require-hashes` can verify every artifact fetched during
+# the (networked) build stage. Regenerated via:
+#
+#   pip download mujoco==3.2.7 \
+#     --platform manylinux2014_x86_64 --platform manylinux_2_17_x86_64 \
+#     --python-version 311 --implementation cp --abi cp311 \
+#     --only-binary=:all: -d <dir>
+#   sha256sum <dir>/*.whl
+#
+# No sim/mind code is imported or executed while these are installed --
+# this file only drives `pip install` in the builder stage.
+
+absl-py==2.5.0 \
+    --hash=sha256:0f17b89f2a4eaaedc4f28c622998aa690564b3012a396a4ffad0821007fe03ba
+etils==1.14.0 \
+    --hash=sha256:b5df7341f54dbe1405a4450b2741207b4a8c279780402b45f87202b94dfc52b4
+fsspec==2026.6.0 \
+    --hash=sha256:02e0b71817df9b2169dc30a16832045764def1191b43dcff5bb85bdee212d2a1
+glfw==2.10.1 \
+    --hash=sha256:e032324ae5e431d877ec46fb2ef5ae1d4ca76cfcb9ed60bfef5b6fc42638bda2
+mujoco==3.2.7 \
+    --hash=sha256:43c1cba5cb44d36840721166feb74600c193452f8510c0b249c4208cb534a171
+numpy==2.2.6 \
+    --hash=sha256:ba10f8411898fc418a521833e014a77d3ca01c15b0c6cdcce6a0d2897e6dbbdf
+pyopengl==3.1.10 \
+    --hash=sha256:794a943daced39300879e4e47bd94525280685f42dbb5a998d336cfff151d74f
+typing_extensions==4.16.0 \
+    --hash=sha256:481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8
+zipp==4.1.0 \
+    --hash=sha256:25ad4e16390cd314347dd8f1de67a2ac538ae658ed4ab9db16029c07c188e97f

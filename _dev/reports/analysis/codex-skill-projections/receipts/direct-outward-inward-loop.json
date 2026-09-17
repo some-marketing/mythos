@@ -7,7 +7,7 @@
   "semantic_review_state": "reviewed_safe",
   "target_exact_path": ".agents/skills/outward-inward-loop/SKILL.md",
   "collision_state": "clear",
-  "application_status": "blocked_existing_preserved",
+  "application_status": "already_aligned",
   "resource_manifest": [
     {
       "path": "references/tt-adaptation.md",
@@ -15,6 +15,5 @@
       "mode": "0644"
     }
   ],
-  "package_sha256": "b752cdfe9f65e38fa959ff896de0979cd32501129ad4e785018b45e6bb66352a",
-  "detail": "conflicting existing package file(s): .agents/skills/outward-inward-loop/SKILL.md"
+  "package_sha256": "b752cdfe9f65e38fa959ff896de0979cd32501129ad4e785018b45e6bb66352a"
 }

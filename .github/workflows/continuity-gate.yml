@@ -37,7 +37,15 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22.13.0"
+
+      - name: Run managed watcher startup tests
+        run: >-
+          node --test
+          tools/sessions/__tests__/watcher-lifecycle.test.cjs
+          tools/signals/__tests__/watch-codex-bridge-managed-startup.test.cjs
+          tools/signals/__tests__/watch-actor-bridge-managed-startup.test.cjs
+          tools/signals/__tests__/watch-pipeline-loop-managed-startup.test.cjs
 
       - name: Determine base ref
         id: baseref

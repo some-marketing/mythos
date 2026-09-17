@@ -175,9 +175,9 @@ required_commands:
     - path: .claude/commands/cast-grimoire.md
     - path: .claude/commands/cast.md
     - path: .claude/commands/charter-quest.md
+    - path: .claude/commands/chi.md
     - path: .claude/commands/chron.md
     - path: .claude/commands/chronicle.md
-    - path: .claude/commands/chi.md
     - path: .claude/commands/claim-intake.md
     - path: .claude/commands/claim-spoils.md
     - path: .claude/commands/clean-house.md
@@ -329,6 +329,7 @@ required_commands:
     - path: .claude/commands/ticktock.md
     - path: .claude/commands/triage-client-board.md
     - path: .claude/commands/trial-quest.md
+    - path: .claude/commands/tt.md
     - path: .claude/commands/validate-all-frameworks.md
     - path: .claude/commands/whats-next.md
     - path: .claude/commands/write-handoff.md

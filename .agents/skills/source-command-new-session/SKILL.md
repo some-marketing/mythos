@@ -1,6 +1,6 @@
 ---
 name: source-command-new-session
-description: "Open a session — auto-commit, clean-house if dirty, then daily briefing + kernel read"
+description: "Open a session — start managed watchers with bounded custody, auto-commit, clean-house if dirty, then daily briefing + kernel read"
 ---
 
 # /new-session

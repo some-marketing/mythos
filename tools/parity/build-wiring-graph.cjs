@@ -18,7 +18,7 @@ function posix(value) {
 }
 function operandTokens(command) {
   return String(command)
-    .replace(/\$\{CLAUDE_PROJECT_DIR\}\/?/g, '')
+    .replace(/\$\{CLAUDE_PROJECT_DIR(?::-[^}]*)?\}\/?/g, '')
     .replace(/\$CLAUDE_PROJECT_DIR\/?/g, '')
     .split(/&&|;|\|\||\s+/)
     .map(token => token.replace(/^["']|["'],?$/g, ''))

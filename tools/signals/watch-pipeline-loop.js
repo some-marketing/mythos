@@ -10,6 +10,7 @@ const {
   deriveLoopRecommendation,
   formatLoopStatus
 } = require('./lib/pipeline-loop');
+const { createWatcherReadiness } = require('./lib/watcher-ready.cjs');
 
 const PROJECT_ROOT = path.resolve(__dirname, '../..');
 const DEFAULT_INTERVAL_SECONDS = 120;
@@ -39,14 +40,20 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function buildSnapshot() {
-  const state = buildLoopState(PROJECT_ROOT);
-  const recommendation = deriveLoopRecommendation(state);
+function buildSnapshot(deps = {}) {
+  const projectRoot = deps.projectRoot || PROJECT_ROOT;
+  const buildState = deps.buildLoopState || buildLoopState;
+  const deriveRecommendation = deps.deriveLoopRecommendation || deriveLoopRecommendation;
+  const state = buildState(projectRoot);
+  const recommendation = deriveRecommendation(state);
   return { state, recommendation };
 }
 
-function printSnapshot(asJson) {
-  const snapshot = buildSnapshot();
+function printSnapshot(asJson, deps = {}, preparedSnapshot, usePreparedSnapshot = false) {
+  const snapshot = usePreparedSnapshot ? preparedSnapshot : buildSnapshot(deps);
+  const log = deps.log || console.log;
+  const buildDirective = deps.buildClaudeDirective || buildClaudeDirective;
+  const formatStatus = deps.formatLoopStatus || formatLoopStatus;
   if (asJson) {
     const latestSignal = snapshot.recommendation.latest_signal;
     const payload = {
@@ -62,22 +69,25 @@ function printSnapshot(asJson) {
       recommended_next_command: snapshot.recommendation.command || '',
       reason: snapshot.recommendation.reason,
       blocked_by: snapshot.recommendation.blocked_by || [],
-      claude_directive: buildClaudeDirective(snapshot.recommendation)
+      claude_directive: buildDirective(snapshot.recommendation)
     };
-    console.log(JSON.stringify(payload, null, 2));
+    log(JSON.stringify(payload, null, 2));
     return JSON.stringify(payload);
   }
 
-  const text = formatLoopStatus(snapshot.state, snapshot.recommendation);
-  console.log(text);
+  const text = formatStatus(snapshot.state, snapshot.recommendation);
+  log(text);
   return text;
 }
 
-async function main() {
-  const args = parseArgs(process.argv);
+async function main(deps = {}) {
+  const processRef = deps.process || process;
+  const parse = deps.parseArgs || parseArgs;
+  const log = deps.log || console.log;
+  const args = parse(deps.argv || processRef.argv);
   if (args.help || args.h) {
     help();
-    process.exit(0);
+    return;
   }
 
   const once = Boolean(args.once);
@@ -85,14 +95,24 @@ async function main() {
   const intervalSeconds = Number(args.interval_seconds || DEFAULT_INTERVAL_SECONDS);
   if (!Number.isFinite(intervalSeconds) || intervalSeconds <= 0) {
     console.error('ERROR: --interval-seconds must be a positive number');
-    process.exit(1);
+    throw new Error('--interval-seconds must be a positive number');
+  }
+
+  const readiness = deps.readiness || createWatcherReadiness('watch-pipeline-loop', { process: processRef });
+  let firstManagedSnapshot;
+  let hasFirstManagedSnapshot = false;
+  if (readiness.managed) {
+    buildSnapshot(deps);
+    firstManagedSnapshot = await readiness.prepareAndCommit(() => buildSnapshot(deps));
+    hasFirstManagedSnapshot = true;
   }
 
   let lastOutput = '';
   do {
-    const output = printSnapshot(asJson);
+    const output = printSnapshot(asJson, deps, firstManagedSnapshot, hasFirstManagedSnapshot);
+    hasFirstManagedSnapshot = false;
     if (!once && output === lastOutput && !asJson) {
-      console.log('[unchanged] no new signal or planning transition since the previous poll');
+      log('[unchanged] no new signal or planning transition since the previous poll');
     }
     lastOutput = output;
 
@@ -101,7 +121,11 @@ async function main() {
   } while (true);
 }
 
-main().catch((err) => {
-  console.error(`ERROR: ${err.message}`);
-  process.exit(1);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(`ERROR: ${err.message}`);
+    process.exit(1);
+  });
+}
+
+module.exports = { buildSnapshot, printSnapshot, main };

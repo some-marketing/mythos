@@ -16,6 +16,7 @@ const {
   writeListenerError,
   STATUS_SCHEMA
 } = require('./lib/codex-listener');
+const { createWatcherReadiness } = require('./lib/watcher-ready.cjs');
 
 const PROJECT_ROOT = path.resolve(__dirname, '../..');
 const DEFAULT_INTERVAL_SECONDS = 120;
@@ -40,21 +41,21 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function watchLogPath() {
-  return path.join(PROJECT_ROOT, '_dev', 'logs', 'codex-watch.log');
+function watchLogPath(projectRoot = PROJECT_ROOT) {
+  return path.join(projectRoot, '_dev', 'logs', 'codex-watch.log');
 }
 
-function appendWatchLog(message) {
-  const logPath = watchLogPath();
-  fs.mkdirSync(path.dirname(logPath), { recursive: true });
-  fs.appendFileSync(logPath, `[${new Date().toISOString()}] ${message}\n`);
+function appendWatchLog(message, projectRoot = PROJECT_ROOT, fsImpl = fs) {
+  const logPath = watchLogPath(projectRoot);
+  fsImpl.mkdirSync(path.dirname(logPath), { recursive: true });
+  fsImpl.appendFileSync(logPath, `[${new Date().toISOString()}] ${message}\n`);
 }
 
-function writeRunningStatus(intervalSeconds) {
+function writeRunningStatus(intervalSeconds, projectRoot = PROJECT_ROOT, fsImpl = fs, writeStatus = writeListenerStatus) {
   const now = new Date().toISOString();
-  const statusDir = path.dirname(statusPathFor(PROJECT_ROOT));
-  fs.mkdirSync(statusDir, { recursive: true });
-  writeListenerStatus(PROJECT_ROOT, {
+  const statusDir = path.dirname(statusPathFor(projectRoot));
+  fsImpl.mkdirSync(statusDir, { recursive: true });
+  writeStatus(projectRoot, {
     schema: STATUS_SCHEMA,
     listener: 'codex-watch',
     status: 'running',
@@ -69,24 +70,36 @@ function writeRunningStatus(intervalSeconds) {
   });
 }
 
-function writeStoppedStatus() {
-  const statusPath = statusPathFor(PROJECT_ROOT);
+function writeStoppedStatus(projectRoot = PROJECT_ROOT, fsImpl = fs, writeStatus = writeListenerStatus) {
+  const statusPath = statusPathFor(projectRoot);
   let data = {};
-  if (fs.existsSync(statusPath)) {
-    try { data = JSON.parse(fs.readFileSync(statusPath, 'utf8')); } catch { /* ignore */ }
+  if (fsImpl.existsSync(statusPath)) {
+    try { data = JSON.parse(fsImpl.readFileSync(statusPath, 'utf8')); } catch { /* ignore */ }
   }
   data.status = 'stopped';
   data.active = false;
   data.stopped_at = new Date().toISOString();
   data.error = null;
-  writeListenerStatus(PROJECT_ROOT, data);
+  writeStatus(projectRoot, data);
 }
 
-async function main() {
-  const args = parseArgs(process.argv);
+async function main(deps = {}) {
+  const projectRoot = deps.projectRoot || PROJECT_ROOT;
+  const fsImpl = deps.fs || fs;
+  const processRef = deps.process || process;
+  const parse = deps.parseArgs || parseArgs;
+  const listSignals = deps.listCodexTargetSignals || listCodexTargetSignals;
+  const runSignal = deps.runCodexForSignal || runCodexForSignal;
+  const updatePoll = deps.updateListenerPoll || updateListenerPoll;
+  const writeStatus = deps.writeListenerStatus || writeListenerStatus;
+  const readBridgeStatus = deps.readBridgeStatus || (() => {
+    const bridgeStatus = require('../status/bridge-status');
+    return bridgeStatus.readLatestSnapshot(projectRoot);
+  });
+  const args = parse(deps.argv || processRef.argv);
   if (args.help || args.h) {
     help();
-    process.exit(0);
+    return;
   }
 
   const once = Boolean(args.once);
@@ -94,66 +107,75 @@ async function main() {
   const intervalSeconds = Number(args.interval_seconds || DEFAULT_INTERVAL_SECONDS);
   if (!Number.isFinite(intervalSeconds) || intervalSeconds <= 0) {
     console.error('ERROR: --interval-seconds must be a positive number');
-    process.exit(1);
+    throw new Error('--interval-seconds must be a positive number');
   }
 
   // Write running status on start
-  writeRunningStatus(intervalSeconds);
-  appendWatchLog(`Watcher started (pid=${process.pid}, interval=${intervalSeconds}s, once=${once})`);
+  writeRunningStatus(intervalSeconds, projectRoot, fsImpl, writeStatus);
+  appendWatchLog(`Watcher started (pid=${processRef.pid}, interval=${intervalSeconds}s, once=${once})`, projectRoot, fsImpl);
 
   // Ensure stopped status is written on clean exit
-  process.on('SIGTERM', () => {
-    writeStoppedStatus();
-    appendWatchLog('Watcher stopped (SIGTERM)');
-    process.exit(0);
+  processRef.on('SIGTERM', () => {
+    writeStoppedStatus(projectRoot, fsImpl, writeStatus);
+    appendWatchLog('Watcher stopped (SIGTERM)', projectRoot, fsImpl);
+    processRef.exit(0);
   });
-  process.on('SIGINT', () => {
-    writeStoppedStatus();
-    appendWatchLog('Watcher stopped (SIGINT)');
-    process.exit(0);
+  processRef.on('SIGINT', () => {
+    writeStoppedStatus(projectRoot, fsImpl, writeStatus);
+    appendWatchLog('Watcher stopped (SIGINT)', projectRoot, fsImpl);
+    processRef.exit(0);
   });
 
-  do {
-    // Update last_poll_at on each cycle
-    updateListenerPoll(PROJECT_ROOT);
-
-    // Read canonical bridge status for observability
+  const discoverTargets = () => {
+    updatePoll(projectRoot);
     try {
-      var bridgeStatus = require('../status/bridge-status');
-      var latest = bridgeStatus.readLatestSnapshot(PROJECT_ROOT);
+      const latest = readBridgeStatus();
       if (latest && latest.summary) {
-        appendWatchLog('Bridge status: ' + latest.summary.total_scopes + ' scopes, ' + latest.summary.active + ' active, ' + latest.summary.blocked + ' blocked');
+        appendWatchLog('Bridge status: ' + latest.summary.total_scopes + ' scopes, ' + latest.summary.active + ' active, ' + latest.summary.blocked + ' blocked', projectRoot, fsImpl);
       }
     } catch (_) { /* status read is informational */ }
+    return listSignals(projectRoot);
+  };
 
-    const targets = listCodexTargetSignals(PROJECT_ROOT);
+  const readiness = deps.readiness || createWatcherReadiness('watch-codex-bridge', { process: processRef });
+  let firstManagedTargets;
+  let hasFirstManagedTargets = false;
+  if (readiness.managed) {
+    discoverTargets();
+    firstManagedTargets = await readiness.prepareAndCommit(discoverTargets);
+    hasFirstManagedTargets = true;
+  }
+
+  do {
+    const targets = hasFirstManagedTargets ? firstManagedTargets : discoverTargets();
+    hasFirstManagedTargets = false;
     const next = targets[0] || null;
 
     if (next) {
-      appendWatchLog(`Found target signal: ${next.name}`);
-      const result = await runCodexForSignal(PROJECT_ROOT, next, {
+      appendWatchLog(`Found target signal: ${next.name}`, projectRoot, fsImpl);
+      const result = await runSignal(projectRoot, next, {
         dryRun,
         model: args.model || ''
       });
 
       if (result.mode === 'skipped') {
         console.log(`[${new Date().toISOString()}] Skipped ${next.name}: ${result.reason}`);
-        appendWatchLog(`Skipped ${next.name}: ${result.reason}`);
+        appendWatchLog(`Skipped ${next.name}: ${result.reason}`, projectRoot, fsImpl);
       } else if (dryRun) {
         console.log(`Dry-run target: ${next.name}`);
         console.log(`Command: ${result.commandLine}`);
         if (result.executionOptions) {
           console.log(`Approval mode: ${result.executionOptions.approvalMode}`);
         }
-        appendWatchLog(`Dry-run: ${next.name}`);
+        appendWatchLog(`Dry-run: ${next.name}`, projectRoot, fsImpl);
       } else {
         console.log(`Ran Codex for: ${next.name}`);
         console.log(`Outcome: ${result.outcome}`);
-        console.log(`Completion signal: ${path.relative(PROJECT_ROOT, result.completionSignalPath)}`);
+        console.log(`Completion signal: ${path.relative(projectRoot, result.completionSignalPath)}`);
         if (result.lessonsReconciliationSignalPath) {
-          console.log(`Lessons reconciliation signal: ${path.relative(PROJECT_ROOT, result.lessonsReconciliationSignalPath)}`);
+          console.log(`Lessons reconciliation signal: ${path.relative(projectRoot, result.lessonsReconciliationSignalPath)}`);
         }
-        appendWatchLog(`Ran Codex for ${next.name}: outcome=${result.outcome}`);
+        appendWatchLog(`Ran Codex for ${next.name}: outcome=${result.outcome}`, projectRoot, fsImpl);
       }
     } else {
       console.log(`[${new Date().toISOString()}] No live Codex-targeted coordination signal found.`);
@@ -164,13 +186,17 @@ async function main() {
   } while (true);
 
   // Write stopped status on normal exit (--once mode)
-  writeStoppedStatus();
-  appendWatchLog('Watcher stopped (normal exit)');
+  writeStoppedStatus(projectRoot, fsImpl, writeStatus);
+  appendWatchLog('Watcher stopped (normal exit)', projectRoot, fsImpl);
 }
 
-main().catch((err) => {
-  console.error(`ERROR: ${err.message}`);
-  writeListenerError(PROJECT_ROOT, err.message);
-  appendWatchLog(`Watcher error: ${err.message}`);
-  process.exit(1);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(`ERROR: ${err.message}`);
+    writeListenerError(PROJECT_ROOT, err.message);
+    appendWatchLog(`Watcher error: ${err.message}`);
+    process.exit(1);
+  });
+}
+
+module.exports = { main };

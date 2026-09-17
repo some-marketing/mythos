@@ -1,0 +1,8 @@
+{"turn_id":"baseline-3000-r6","ticks":3000,"absolute_day_start":0,"ingested_at":"2026-08-05T00:23:04.373Z","payload_hash":"42b449ddddc72c1f76c45cab38bde06eaaeb557068d6b549d583446c52c3cbf3"}
+{"turn_id":"baseline-3000-r7","ticks":3000,"absolute_day_start":3000,"ingested_at":"2026-08-05T00:23:04.450Z","payload_hash":"434015367eecaf7090bf4138769637257b12f80820d254f05a4ad9fa1e5753ae"}
+{"turn_id":"cc-turn1","ticks":150,"absolute_day_start":6000,"ingested_at":"2026-08-05T03:26:14.048Z","payload_hash":"232bd0e906029d9f56a39d0e9710f5fb1cf5b42d8ec3f94608324ce36edea3d4"}
+{"turn_id":"cc-turn2","ticks":150,"absolute_day_start":6150,"ingested_at":"2026-08-05T03:26:18.044Z","payload_hash":"56a05c52db4579470b6ff098d938fc07574928f754e26c5be8406ab3c8ac941d"}
+{"turn_id":"cc-turn3","ticks":150,"absolute_day_start":6300,"ingested_at":"2026-08-05T03:26:18.129Z","payload_hash":"42cdf25f2bd9e39f724246140a35dca52600fd21191fdb0fe41ab6a630c27775"}
+{"turn_id":"tt-run-001-09a6c88b","ticks":300,"absolute_day_start":6450,"ingested_at":"2026-08-12T03:54:23.079Z","payload_hash":"611c1fc226ef8888ccc110a7dc1b36d6c1f6b6ebcaf6d98c59653d85542a62d9"}
+{"turn_id":"tt-run-002r2-6028d083","ticks":300,"absolute_day_start":6750,"ingested_at":"2026-08-12T16:14:57.337Z","payload_hash":"7db4a941f9eb74c2dd912329d63408cd06ddccae226bef3f1e6cc96fb89d868a"}
+{"turn_id":"tt-run-003-5c9cbe9d","ticks":300,"absolute_day_start":7050,"ingested_at":"2026-08-14T01:13:27.650Z","payload_hash":"0e14e723c4455c2027c58b5e8cd0b1325bbabcdd4fe324e0962d9063525491f3"}

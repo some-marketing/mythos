@@ -18,7 +18,47 @@
 const fs = require('fs');
 const path = require('path');
 
-const SCHEMA_VERSION = '1.0.0';
+// 1.1.0 (plan ant-world-mind-learning-path, S1b): ADDITIVE only -- the shared
+// world-state may now carry a `hives` summary, `{ count, starvation_pressure }`,
+// written by the driver's world block from the per-hive state it already holds
+// in memory. Every 1.0.0 field keeps its meaning and its type, so a 1.0.0 reader
+// that ignores unknown keys reads a 1.1.0 file correctly; the version moves
+// because a consumer that WANTS the summary needs a way to know whether its
+// absence means "old file" or "no hives".
+//
+// WHY THE SUMMARY AND NOT THE PER-HIVE STATES: the hive states live in their own
+// per-hive files behind their own isolation boundary, and copying them into the
+// shared file would put one hive's internals in the other hive's read path. The
+// summary is the two aggregate numbers the world mind's encoder actually reads
+// (see world-mind.js encodeWorldState coordinates 4 and 7) and nothing else.
+const SCHEMA_VERSION = '1.1.0';
+
+// Derive the shared world-state's `hives` summary from per-hive states.
+// `starvation_pressure` is a COUNT of starving hives (not a ratio), because
+// that count is what the encoder normalizes with normalizeWorldResource. A
+// hive is starving when its per-hive stockpile is present and its FOOD
+// component is at or below zero (D-COORD7-DEAD: the live stockpile shape is
+// { food, wood }, an object, not a scalar -- treating it as a bare scalar
+// makes `stock <= 0` structurally always false).
+// Pure: reads only the object it is handed, touches no file.
+function summarizeHives(hiveStates) {
+  const ids = Object.keys(hiveStates || {});
+  let starving = 0;
+  for (const id of ids) {
+    const entry = hiveStates[id];
+    // Accepts either the per-hive state object ({ hive_state: { stockpile } })
+    // or an already-unwrapped hive_state, since run-live holds the first and
+    // checkpoint.js holds the second.
+    const inner = entry && entry.hive_state ? entry.hive_state : entry;
+    const stock = inner && inner.stockpile;
+    // Bug fix (D-COORD7-DEAD): stockpile is an object ({ food, wood }), not a
+    // scalar -- `stock <= 0` was structurally always false, so
+    // starvation_pressure never left 0. A hive is starving when its FOOD
+    // stockpile is at or below zero.
+    if (stock && typeof stock.food === 'number' && stock.food <= 0) starving += 1;
+  }
+  return { count: ids.length, starvation_pressure: starving };
+}
 
 function readWorldState(statePath) {
   try {
@@ -191,13 +231,43 @@ function appendGeometry(state, entry) {
 // Claim territory. A territory tile already claimed by the OTHER hive is a
 // genuine contested-resource event -- this is where circumstance-driven
 // tension (not scripted rivalry) actually surfaces.
+//
+// plan ant-sim-reward-specification-repair, S2: `ok` alone cannot distinguish
+// a first acquisition from a RE-ASSERTION of a tile this hive already holds.
+// Both were `{ok: true}`, so the reward function paid full territory weight
+// for a call that changed nothing -- an unbounded free-reward pump the policy
+// found on its own (198 of 302 claims "applied" over the reference run).
+// `territory_outcome` names the three real cases explicitly:
+//   'newly_acquired' -- the tile was unowned and is now this hive's
+//   'already_owned'  -- this hive already held it; the world is unchanged
+//   'contested'      -- the OTHER hive holds it; the claim did not land
+// `ok` semantics are deliberately UNCHANGED: a re-assertion is still
+// `ok: true`, because it did not fail -- it did nothing. Callers that map
+// `applied` from `ok` keep their published meaning; the reward function reads
+// `territory_outcome` instead of inferring value from `ok`.
+//
+// Bounded by construction: this function never releases a held tile (there is
+// no path here that deletes a key or reassigns one away from its owner), so
+// territory is monotonically non-decreasing and 'newly_acquired' can fire at
+// most once per tile. The grid is ONE 10x10 board SHARED by both hives
+// (TILE_GRID_SIZE above), so cumulative 'newly_acquired' across ALL hives can
+// never exceed 100.
 function claimTerritory(state, tileId, hiveIdentity) {
   const territory = state.territory || {};
   const existing = territory[tileId];
   if (existing && existing !== hiveIdentity) {
-    return { ok: false, contested_by: existing, state };
+    return { ok: false, territory_outcome: 'contested', contested_by: existing, state };
   }
-  return { ok: true, state: { ...state, territory: { ...territory, [tileId]: hiveIdentity } } };
+  if (existing && existing === hiveIdentity) {
+    // Re-assertion: return the state object untouched, not a rebuilt copy --
+    // nothing about the world changed.
+    return { ok: true, territory_outcome: 'already_owned', state };
+  }
+  return {
+    ok: true,
+    territory_outcome: 'newly_acquired',
+    state: { ...state, territory: { ...territory, [tileId]: hiveIdentity } }
+  };
 }
 
 // Pheromone trails -- operator (2026-07-16): "we wanted an ant based world
@@ -315,6 +385,49 @@ function depleteFoodSourcesTotal(foodSources, totalAmount) {
     remaining -= take;
   }
   return next;
+}
+
+// Fallow/regrowth mechanic (plan sim-replenishment-dynamics, S2; discrete
+// logistic per Perplexity P1, accepted by both codewhale and codex return
+// legs). Rewards leaving a patch partially unharvested instead of stripping
+// it -- but a patch stripped to zero stays gone forever, preserving the
+// operator's 2026-07-16 "food sources have to be depleted" ruling exactly:
+// depleteFoodSourcesTotal (above) already DELETES a zeroed patch's key, and
+// this function only ever touches keys still present in food_sources, so a
+// deleted patch is structurally unreachable here -- there is no key for it
+// to regrow under.
+//
+// PURE FUNCTION OF STATE, NO rng PARAMETER -- stronger than a
+// rate-0-only guarantee: the function's signature makes a stream draw
+// structurally impossible at ANY rate, not just inert by convention at the
+// default. At rate 0 it returns the same object reference before the loop
+// body runs, so it is also allocation-free at the default.
+//
+// For each patch with amount x where 0 < x < K: x += r*x*(1-x/K) (discrete
+// logistic growth, clamped to K). x <= 0 (never happens -- zeroed patches
+// are deleted) and x >= K are both left untouched: 0 is absorbing (there is
+// no key to grow), and K is the ceiling a patch cannot cross.
+const DEFAULT_FOOD_SOURCE_REGROW_RATE = 0;
+const DEFAULT_FOOD_SOURCE_REGROW_CAP = INITIAL_FOOD_SOURCE_AMOUNT;
+
+function regrowFoodSources(state, opts = {}) {
+  const rate = opts.regrowRate === undefined ? DEFAULT_FOOD_SOURCE_REGROW_RATE : opts.regrowRate;
+  if (!rate) return state; // rate 0 (or falsy) -- hard no-op, before any patch is touched
+  const cap = opts.regrowCap === undefined ? DEFAULT_FOOD_SOURCE_REGROW_CAP : opts.regrowCap;
+  const sources = state.food_sources || {};
+  const nextSources = {};
+  let changed = false;
+  for (const [tileId, amount] of Object.entries(sources)) {
+    if (amount > 0 && amount < cap) {
+      const grown = amount + rate * amount * (1 - amount / cap);
+      nextSources[tileId] = Math.min(cap, grown);
+      changed = true;
+    } else {
+      nextSources[tileId] = amount;
+    }
+  }
+  if (!changed) return state;
+  return { ...state, food_sources: nextSources, resources: { ...state.resources, food: sumFoodSources(nextSources) } };
 }
 
 // Population-level predator/prey dynamics (operator, 2026-07-16: "there
@@ -487,6 +600,7 @@ module.exports = {
   readWorldState,
   initialWorldState,
   writeWorldState,
+  summarizeHives,
   foodSourceCoords,
   claimResource,
   appendGeometry,
@@ -498,5 +612,8 @@ module.exports = {
   claimFoodSource,
   maybeSpawnFoodSource,
   depleteFoodSourcesTotal,
+  DEFAULT_FOOD_SOURCE_REGROW_RATE,
+  DEFAULT_FOOD_SOURCE_REGROW_CAP,
+  regrowFoodSources,
   applyEcosystemDynamics
 };

@@ -131,10 +131,24 @@ push_remote() {
   fi
 }
 
+# The ignored local binding is the allowlist. Public/default remotes are never
+# valid redundancy targets, even if accidentally included in that binding.
+is_allowed_redundancy_remote() {
+  case "$1" in
+    origin|upstream|github) return 1 ;;
+    *) return 0 ;;
+  esac
+}
+
 for remote in "${REDUNDANCY_REMOTES[@]}"; do
   remote="${remote#"${remote%%[![:space:]]*}"}"
   remote="${remote%"${remote##*[![:space:]]}"}"
-  [ -n "$remote" ] && push_remote "$remote"
+  [ -z "$remote" ] && continue
+  if ! is_allowed_redundancy_remote "$remote"; then
+    echo "[sync-private-remotes] WARN  $remote — public/default remote is not an eligible redundancy target, skipping"
+    continue
+  fi
+  push_remote "$remote"
 done
 
 echo ""
